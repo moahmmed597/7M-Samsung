@@ -271,6 +271,14 @@ export function create() {
     try {
       AV.setSelectTrack('AUDIO', avIndex);
       log.info('avplay audio ->', avIndex);
+      // Many Samsung firmwares keep playing the old track's buffered audio until the stream is
+      // re-read: a small seek back flushes it so the new language is heard right away.
+      if (readState() === 'PLAYING') {
+        const back = Math.max(0, curMs - 800);
+        setTimeout(() => {
+          if (readState() === 'PLAYING') doSeek(back);
+        }, 250);
+      }
       return true;
     } catch (e) {
       log.warn('avplay setSelectTrack', e && (e.name || e.message));

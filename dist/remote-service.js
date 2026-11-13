@@ -50,6 +50,77 @@ function fetchHeaders(req) {
   return h;
 }
 
+// GET a small binary file (follows up to 3 redirects, max 5 MB).
+function fetchBinary(target, hops, done) {
+  var r = require('https').get({ hostname: target.hostname, path: target.path, headers: { 'User-Agent': 'stremio-7m-tizen' }, timeout: 15000 }, function (resp) {
+    if (resp.statusCode >= 300 && resp.statusCode < 400 && resp.headers.location && hops < 3) {
+      resp.resume();
+      var next = require('url').parse(require('url').resolve('https://' + target.hostname + target.path, resp.headers.location));
+      if (next.protocol !== 'https:') return done(new Error('redirect'));
+      return fetchBinary(next, hops + 1, done);
+    }
+    if (resp.statusCode !== 200) { resp.resume(); return done(new Error('HTTP ' + resp.statusCode)); }
+    var chunks = [], size = 0;
+    resp.on('data', function (c) { size += c.length; if (size > 5242880) { r.abort(); return; } chunks.push(c); });
+    resp.on('end', function () { done(null, Buffer.concat(chunks)); });
+  });
+  r.on('error', function (e) { done(e); });
+  r.on('timeout', function () { r.abort(); });
+}
+
+// Windows-1256 (Arabic) bytes 0x80-0xFF.
+var CP1256 = '€پ‚ƒ„…†‡ˆ‰ٹ‹Œچژڈگ‘’“”•–—ک™ڑ›œ‌‍ں ،¢£¤¥¦§¨©ھ«¬­®¯°±²³´µ¶·¸¹؛»¼½¾؟ہءآأؤإئابةتثجحخدذرزسشصض×طظعغـفقكàلâمنهوçèéêëىيîïًٌٍَôُِ÷ّùْûü‎‏ے';
+
+function decodeSub(buf) {
+  if (buf.length >= 2 && buf[0] === 0xff && buf[1] === 0xfe) return buf.slice(2).toString('utf16le');
+  var utf = buf.toString('utf8');
+  if (utf.indexOf('�') < 0) return utf.replace(/^﻿/, '');
+  var out = '';
+  for (var i = 0; i < buf.length; i++) out += buf[i] < 128 ? String.fromCharCode(buf[i]) : CP1256.charAt(buf[i] - 128);
+  return out;
+}
+
+// Reads a ZIP's central directory and returns the best .srt/.vtt/.ass as text (null if none).
+function subFromZip(buf, ep) {
+  try {
+    var eocd = -1;
+    for (var i = buf.length - 22; i >= Math.max(0, buf.length - 65557); i--) {
+      if (buf.readUInt32LE(i) === 0x06054b50) { eocd = i; break; }
+    }
+    if (eocd < 0) return null;
+    var count = buf.readUInt16LE(eocd + 10);
+    var pos = buf.readUInt32LE(eocd + 16);
+    var files = [];
+    for (var n = 0; n < count && pos + 46 <= buf.length; n++) {
+      if (buf.readUInt32LE(pos) !== 0x02014b50) break;
+      var method = buf.readUInt16LE(pos + 10);
+      var csize = buf.readUInt32LE(pos + 20);
+      var nameLen = buf.readUInt16LE(pos + 28);
+      var extraLen = buf.readUInt16LE(pos + 30);
+      var commentLen = buf.readUInt16LE(pos + 32);
+      var local = buf.readUInt32LE(pos + 42);
+      var name = buf.slice(pos + 46, pos + 46 + nameLen).toString('utf8');
+      if (/\.(srt|vtt|ass|ssa)$/i.test(name)) files.push({ name: name, method: method, csize: csize, local: local });
+      pos += 46 + nameLen + extraLen + commentLen;
+    }
+    if (!files.length) return null;
+    var pick = files[0];
+    var m = /^S(\d+)E(\d+)$/i.exec(ep);
+    if (m && files.length > 1) {
+      var re = new RegExp('(s0*' + (+m[1]) + '[ ._-]*e0*' + (+m[2]) + '(?!\\d))|(\\b' + (+m[1]) + 'x0*' + (+m[2]) + '(?!\\d))', 'i');
+      for (var k = 0; k < files.length; k++) if (re.test(files[k].name)) { pick = files[k]; break; }
+    }
+    var lh = pick.local;
+    if (buf.readUInt32LE(lh) !== 0x04034b50) return null;
+    var start = lh + 30 + buf.readUInt16LE(lh + 26) + buf.readUInt16LE(lh + 28);
+    var data = buf.slice(start, start + pick.csize);
+    var raw = pick.method === 8 ? require('zlib').inflateRawSync(data) : pick.method === 0 ? data : null;
+    return raw ? decodeSub(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 function send(res, status, body, type) {
   res.writeHead(status, {
     'Content-Type': type || 'application/json; charset=utf-8',
@@ -160,7 +231,7 @@ function handle(req, res) {
   if (url.pathname === '/api/fetch') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
     var target = require('url').parse(String(q.url || ''));
-    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev', 'api.anime-skip.com', 'api.tiffara.com', 'api.mdblist.com'];
+    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev', 'api.anime-skip.com', 'api.tiffara.com', 'api.mdblist.com', 'api.subdl.com'];
     if (target.protocol !== 'https:' || okHosts.indexOf(target.hostname) < 0) return send(res, 400, { error: 'host not allowed' });
     var isPost = req.method === 'POST';
     // POST only for the Anime-Skip GraphQL endpoint.
@@ -183,6 +254,19 @@ function handle(req, res) {
     };
     if (isPost) return readBody(req, function (body) { run(typeof body === 'string' ? body : JSON.stringify(body)); });
     return run('');
+  }
+  // SubDL subtitles come as ZIP files (often Windows-1256 Arabic): download, unzip the .srt
+  // (the one for ?ep=S01E02 when there are several) and return it as UTF-8 text.
+  if (url.pathname === '/api/subzip') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    var zt = require('url').parse(String(q.url || ''));
+    if (zt.protocol !== 'https:' || zt.hostname !== 'dl.subdl.com') return send(res, 400, { error: 'host not allowed' });
+    return fetchBinary(zt, 0, function (err, buf) {
+      if (err) return send(res, 502, { error: 'download failed' });
+      var text = subFromZip(buf, String(q.ep || ''));
+      if (text === null) return send(res, 404, { error: 'no subtitle in zip' });
+      send(res, 200, text, 'text/plain; charset=utf-8');
+    });
   }
   if (url.pathname === '/api/info') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });

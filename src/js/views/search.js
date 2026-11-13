@@ -8,6 +8,7 @@ import { openDetails } from './details.js';
 import { t } from '../lib/i18n.js';
 import * as extras from '../api/extras.js';
 import { PersonView } from './person.js';
+import * as store from '../lib/store.js';
 
 export function SearchView() {
   const el = h('div.view');
@@ -16,12 +17,54 @@ export function SearchView() {
   const input = h('input.input', { type: 'text', placeholder: t('Buscar filmes e séries...'), focusable: true, 'data-autofocus': '' });
   const results = h('div.rows');
   scroller.appendChild(bar);
+  const history = h('div.filters.search-history', { 'data-group': '' });
   scroller.appendChild(h('div.search-box', null, input));
+  scroller.appendChild(history);
   scroller.appendChild(results);
   el.appendChild(scroller);
 
   let token = 0;
   input.__submit = (q) => run(q);
+
+  // Recent searches (Settings → Appearance), per profile.
+  const HIST = 'searchHistory';
+  function renderHistory() {
+    clear(history);
+    if (store.settings().searchHistory === false) return;
+    const list = store.get(HIST, []) || [];
+    if (!list.length) return;
+    history.appendChild(h('span.hist-label', { text: t('Buscas recentes:') }));
+    list.forEach((q) =>
+      history.appendChild(
+        h('div.chip', {
+          focusable: true,
+          text: q,
+          onSelect: () => {
+            input.value = q;
+            run(q);
+          },
+        })
+      )
+    );
+    history.appendChild(
+      h('div.chip', {
+        focusable: true,
+        text: '✕ ' + t('Limpar'),
+        onSelect: () => {
+          store.set(HIST, []);
+          renderHistory();
+        },
+      })
+    );
+  }
+  function remember(q) {
+    if (store.settings().searchHistory === false) return;
+    const list = (store.get(HIST, []) || []).filter((x) => x.toLowerCase() !== q.toLowerCase());
+    list.unshift(q);
+    store.set(HIST, list.slice(0, 8));
+    renderHistory();
+  }
+  renderHistory();
 
   function run(q) {
     const query = (q || '').trim();
@@ -31,6 +74,7 @@ export function SearchView() {
       return;
     }
     const my = ++token;
+    remember(query);
     results.appendChild(spinnerLine(t('Buscando "{q}"...', { q: query })));
     // People first: a row of actors/directors (TMDB), each opening their profile.
     const people = h('div.row.people-row', { 'data-anchor': '30' });

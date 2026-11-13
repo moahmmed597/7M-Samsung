@@ -542,6 +542,7 @@ export const FRANCHISES = [
   },
   {
     id: 'toystory',
+    cat: 'cartoon',
     name: 'Toy Story',
     ar: 'حكاية لعبة',
     items: [
@@ -685,6 +686,128 @@ export const FRANCHISES = [
       ['tt9466298', 'Ghost in the Shell: SAC_2045', 2020, 's'],
     ],
   },
+  // ---------- Series universes ----------
+  {
+    id: 'breakingbad',
+    cat: 'series',
+    name: 'Breaking Bad universe',
+    ar: 'عالم بريكنج باد (Breaking Bad)',
+    items: [
+      ['tt0903747', 'Breaking Bad', 2008, 's'],
+      ['tt3032476', 'Better Call Saul', 2015, 's'],
+      ['tt9243946', 'El Camino: A Breaking Bad Movie', 2019],
+    ],
+    chrono: ['tt3032476', 'tt0903747', 'tt9243946'],
+  },
+  {
+    id: 'got',
+    cat: 'series',
+    name: 'Game of Thrones universe',
+    ar: 'عالم صراع العروش (Game of Thrones)',
+    items: [
+      ['tt0944947', 'Game of Thrones', 2011, 's'],
+      ['tt11198330', 'House of the Dragon', 2022, 's'],
+      ['tt27497448', 'A Knight of the Seven Kingdoms', 2026, 's'],
+    ],
+    chrono: ['tt11198330', 'tt27497448', 'tt0944947'],
+  },
+  {
+    id: 'walkingdead',
+    cat: 'series',
+    name: 'The Walking Dead universe',
+    ar: 'عالم الموتى السائرون (The Walking Dead)',
+    items: [
+      ['tt1520211', 'The Walking Dead', 2010, 's'],
+      ['tt3743822', 'Fear the Walking Dead', 2015, 's'],
+      ['tt10148174', 'The Walking Dead: World Beyond', 2020, 's'],
+      ['tt15669534', 'Tales of the Walking Dead', 2022, 's'],
+      ['tt18546730', 'The Walking Dead: Dead City', 2023, 's'],
+      ['tt13062500', 'The Walking Dead: Daryl Dixon', 2023, 's'],
+      ['tt9859436', 'The Walking Dead: The Ones Who Live', 2024, 's'],
+    ],
+  },
+  {
+    id: 'yellowstone',
+    cat: 'series',
+    name: 'Yellowstone universe',
+    ar: 'عالم يلوستون (Yellowstone)',
+    items: [
+      ['tt4236770', 'Yellowstone', 2018, 's'],
+      ['tt13991232', '1883', 2021, 's'],
+      ['tt18335752', '1923', 2022, 's'],
+    ],
+    chrono: ['tt13991232', 'tt18335752', 'tt4236770'],
+  },
+  {
+    id: 'theboys',
+    cat: 'series',
+    name: 'The Boys universe',
+    ar: 'عالم ذا بويز (The Boys)',
+    items: [
+      ['tt1190634', 'The Boys', 2019, 's'],
+      ['tt16350094', 'The Boys Presents: Diabolical', 2022, 's'],
+      ['tt13159924', 'Gen V', 2023, 's'],
+    ],
+  },
+  {
+    id: 'dexter',
+    cat: 'series',
+    name: 'Dexter',
+    ar: 'دكستر (Dexter)',
+    items: [
+      ['tt0773262', 'Dexter', 2006, 's'],
+      ['tt14164730', 'Dexter: New Blood', 2021, 's'],
+      ['tt32252772', 'Dexter: Original Sin', 2024, 's'],
+      ['tt33043892', 'Dexter: Resurrection', 2025, 's'],
+    ],
+    chrono: ['tt32252772', 'tt0773262', 'tt14164730', 'tt33043892'],
+  },
+  {
+    id: 'marvel-netflix',
+    cat: 'series',
+    name: 'Marvel Defenders saga',
+    ar: 'مسلسلات مارفل المدافعون (Defenders)',
+    items: [
+      ['tt3322312', 'Daredevil', 2015, 's'],
+      ['tt2357547', 'Jessica Jones', 2015, 's'],
+      ['tt3322314', 'Luke Cage', 2016, 's'],
+      ['tt3322310', 'Iron Fist', 2017, 's'],
+      ['tt4230076', 'The Defenders', 2017, 's'],
+      ['tt5675620', 'The Punisher', 2017, 's'],
+      ['tt18923754', 'Daredevil: Born Again', 2025, 's'],
+    ],
+  },
+  {
+    id: 'arrowverse',
+    cat: 'series',
+    name: 'Arrowverse',
+    ar: 'عالم آرو (Arrowverse)',
+    items: [
+      ['tt2193021', 'Arrow', 2012, 's'],
+      ['tt3107288', 'The Flash', 2014, 's'],
+      ['tt4016454', 'Supergirl', 2015, 's'],
+      ['tt4532368', "DC's Legends of Tomorrow", 2016, 's'],
+      ['tt6045840', 'Black Lightning', 2018, 's'],
+      ['tt8712204', 'Batwoman', 2019, 's'],
+    ],
+  },
+  {
+    id: 'startrek-tv',
+    cat: 'series',
+    name: 'Star Trek (series)',
+    ar: 'ستار تريك المسلسلات (Star Trek)',
+    items: [
+      ['tt0060028', 'Star Trek: The Original Series', 1966, 's'],
+      ['tt0092455', 'Star Trek: The Next Generation', 1987, 's'],
+      ['tt0106145', 'Star Trek: Deep Space Nine', 1993, 's'],
+      ['tt0112178', 'Star Trek: Voyager', 1995, 's'],
+      ['tt0244365', 'Star Trek: Enterprise', 2001, 's'],
+      ['tt5171438', 'Star Trek: Discovery', 2017, 's'],
+      ['tt8806524', 'Star Trek: Picard', 2020, 's'],
+      ['tt12327578', 'Star Trek: Strange New Worlds', 2022, 's'],
+    ],
+    chrono: ['tt0244365', 'tt5171438', 'tt12327578', 'tt0060028', 'tt0092455', 'tt0106145', 'tt0112178', 'tt8806524'],
+  },
   {
     id: 'xmen-cartoon',
     cat: 'cartoon',
@@ -765,9 +888,10 @@ export function franchisesOf(imdb) {
   return FRANCHISES.filter((f) => f.items.some((it) => it[0] === imdb));
 }
 
-// Section order in the Collections tab: movies first, anime last.
+// Section order in the Collections tab: movies, series, cartoons, anime.
 export const CATS = [
-  { id: 'movies', label: 'Filmes e séries' },
+  { id: 'movies', label: 'Filmes' },
+  { id: 'series', label: 'Séries' },
   { id: 'cartoon', label: 'Desenhos animados' },
   { id: 'anime', label: 'Animes' },
 ];

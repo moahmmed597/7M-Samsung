@@ -16,7 +16,7 @@ function TrackLinkView(provider, onDone) {
   const name = NAMES[provider];
   const el = h('div.view');
   const codeEl = h('div.code', { text: '····' });
-  const qr = h('img.qr', { alt: '' });
+  const qr = h('img.qr.qr-big', { alt: '' });
   const urlEl = h('p');
   const status = h('p', { text: t('Gerando código...') });
   el.appendChild(
@@ -53,10 +53,14 @@ function TrackLinkView(provider, onDone) {
       if (!alive) return;
       codeEl.textContent = link.code;
       urlEl.innerHTML = '';
-      urlEl.appendChild(document.createTextNode(t('No celular ou PC, abra') + ' '));
+      urlEl.appendChild(h('b', { text: t('Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.') }));
+      urlEl.appendChild(h('br'));
+      urlEl.appendChild(document.createTextNode(t('Ou abra') + ' '));
       urlEl.appendChild(h('b', { text: link.url.replace(/^https?:\/\//, '') }));
       urlEl.appendChild(document.createTextNode(' ' + t('e digite o código:')));
-      qr.src = phone.qrImage(link.url, 260);
+      // The QR carries the code too, so the phone opens the page with it already filled in.
+      const direct = provider === 'trakt' ? 'https://trakt.tv/activate/' + encodeURIComponent(link.code) : 'https://simkl.com/pin/' + encodeURIComponent(link.code);
+      qr.src = phone.qrImage(direct, 360);
       status.textContent = t('Aguardando confirmação...');
     })
     .catch(() => {});

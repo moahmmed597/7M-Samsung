@@ -21,6 +21,7 @@ import * as phone from '../lib/phone.js';
 import * as avvideo from '../lib/avvideo.js';
 import * as tracker from '../api/tracker.js';
 import * as chapters from '../lib/chapters.js';
+import * as subdl from '../api/subdl.js';
 
 const HIDE_MS = 5000;
 const SAVE_MS = 15000;
@@ -30,6 +31,20 @@ const LANG_NAMES = {
   ger: 'Alemão', deu: 'Alemão', de: 'Alemão', ita: 'Italiano', it: 'Italiano', kor: 'Coreano', ko: 'Coreano',
   chi: 'Chinês', zho: 'Chinês', rus: 'Russo', ara: 'Árabe', hin: 'Hindi', und: 'Indefinido',
 };
+
+// Any language label ("en", "eng", "English", "en-US") → a 2-letter code, so preferences match
+// whatever the TV or the add-on reports.
+const LANG2 = {
+  eng: 'en', english: 'en', ara: 'ar', arabic: 'ar', rus: 'ru', russian: 'ru', jpn: 'ja', japanese: 'ja', spa: 'es', spanish: 'es',
+  fre: 'fr', fra: 'fr', french: 'fr', ger: 'de', deu: 'de', german: 'de', ita: 'it', italian: 'it', por: 'pt', pob: 'pt', portuguese: 'pt',
+  tur: 'tr', turkish: 'tr', hin: 'hi', hindi: 'hi', kor: 'ko', korean: 'ko', chi: 'zh', zho: 'zh', chinese: 'zh', per: 'fa', fas: 'fa', persian: 'fa',
+  urd: 'ur', urdu: 'ur', heb: 'he', hebrew: 'he', ind: 'id', indonesian: 'id', may: 'ms', msa: 'ms', malay: 'ms', tha: 'th', thai: 'th',
+  ukr: 'uk', ukrainian: 'uk', pol: 'pl', polish: 'pl', dut: 'nl', nld: 'nl', dutch: 'nl', gre: 'el', ell: 'el', greek: 'el', swe: 'sv', swedish: 'sv',
+};
+export function lang2(x) {
+  const v = String(x || '').toLowerCase().trim().split(/[-_ (]/)[0];
+  return LANG2[v] || v;
+}
 
 function langName(code) {
   if (!code) return t('Desconhecido');
@@ -68,7 +83,8 @@ function PlayerView(opts) {
   const srcBtn = h('div.btn', { focusable: true, html: '<span class="ico">⇄</span>' + t('Fontes'), onSelect: () => sourcesMenu() });
   const nextBtn = h('div.btn', { focusable: true, html: '<span class="ico">⏭</span>' + t('Próximo'), onSelect: () => playNext() });
   const chapBtn = h('div.btn', { focusable: true, html: '<span class="ico">☰</span>' + t('Capítulos'), onSelect: () => chaptersMenu() });
-  const buttons = h('div.p-buttons', { 'data-group': '' }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, nextBtn]);
+  const sleepBtn = h('div.btn', { focusable: true, html: '<span class="ico">☾</span>' + t('Dormir'), onSelect: () => sleepMenu() });
+  const buttons = h('div.p-buttons', { 'data-group': '' }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, sleepBtn, nextBtn]);
   const spinner = h('div.p-center', null, h('div.spinner'));
   const msgEl = h('div.p-msg');
   const skipFill = h('i');
@@ -208,28 +224,57 @@ function PlayerView(opts) {
       .catch(() => {
         if (!addonSubs) addonSubs = [];
       });
+    // SubDL (Settings → Subtitles), when the user has a key.
+    if (subdl.key())
+      subdl.search(meta.type, video.id).then((list) => {
+        if (!alive || forVideo !== video || !list.length) return;
+        addonSubs = (addonSubs || []).concat(list);
+        autoPick();
+      });
   }
 
   // Seleção automática no estilo do Smart Track Selector do Kai (versão leve).
   // Legenda: prefere a dos addons (arquivo pequeno à parte, não mexe no vídeo). Faixas embutidas
   // só são lidas se o usuário pediu um áudio preferido, e só depois de o vídeo estar rodando.
   let autoDone = { sub: false, audio: false };
+  // Remembered per series (Settings → Subtitles: remember per series): what was picked by hand.
+  const TRACKS_KEY = 'seriesTracks';
+  function rememberedTracks() {
+    if (!opts.isSeries || settings.rememberTracks === false) return {};
+    return (store.get(TRACKS_KEY, {}) || {})[meta.id] || {};
+  }
+  function rememberTrack(kind, lang) {
+    if (!opts.isSeries || settings.rememberTracks === false || !lang) return;
+    const all = store.get(TRACKS_KEY, {}) || {};
+    const ids = Object.keys(all);
+    if (ids.length > 200) delete all[ids[0]];
+    all[meta.id] = Object.assign({}, all[meta.id], { [kind]: String(lang).toLowerCase() });
+    store.set(TRACKS_KEY, all);
+  }
+
   function autoPick() {
-    const prefSubs = (settings.subtitleLangs || []).map((x) => x.toLowerCase());
-    const prefAudio = (settings.audioLangs || []).map((x) => x.toLowerCase());
+    const mem = rememberedTracks();
+    if (mem.sub === 'off') autoDone.sub = true;
+    const prefSubs = (mem.sub ? [mem.sub] : []).concat((settings.subtitleLangs || []).map((x) => x.toLowerCase()));
+    const prefAudio = mem.audio ? [mem.audio] : (settings.audioLangs || []).map((x) => x.toLowerCase());
     const avList = videoEl.isAVPlay ? videoEl.audioTrackList().map((x) => ({ lang: x.language })) : [];
     const audioList = avList.length > 1 ? avList : embedded ? embedded.audio : [];
     if (!autoDone.audio && prefAudio.length && audioList.length > 1) {
       autoDone.audio = true;
-      const already = audioList[0] && prefAudio.indexOf(String(audioList[0].lang).toLowerCase()) >= 0;
+      const want = prefAudio.map(lang2);
+      // The track playing now (AVPlay marks it), else the file's first one.
+      const avNow = videoEl.isAVPlay ? videoEl.audioTrackList().findIndex((x) => x.enabled) : 0;
+      const nowIdx = avNow >= 0 ? avNow : 0;
+      const already = audioList[nowIdx] && want.indexOf(lang2(audioList[nowIdx].lang)) >= 0;
       if (!already) {
-        const idx = audioList.findIndex((tr) => prefAudio.indexOf(String(tr.lang).toLowerCase()) >= 0);
-        if (idx > 0) selectEmbeddedAudio(idx, true);
+        let idx = -1;
+        for (let w = 0; w < want.length && idx < 0; w++) idx = audioList.findIndex((tr) => lang2(tr.lang) === want[w]);
+        if (idx >= 0 && idx !== nowIdx) selectEmbeddedAudio(idx, true);
       }
     }
-    if (autoDone.sub || !settings.subtitlesAuto || !prefSubs.length || !addonSubs) return;
+    if (autoDone.sub || !(settings.subtitlesAuto || mem.sub) || !prefSubs.length || !addonSubs) return;
     for (let p = 0; p < prefSubs.length; p++) {
-      const s = addonSubs.find((x) => String(x.lang).toLowerCase() === prefSubs[p]);
+      const s = addonSubs.find((x) => lang2(x.lang) === lang2(prefSubs[p]));
       if (s) {
         autoDone.sub = true;
         selectAddonSub(s, true);
@@ -240,7 +285,7 @@ function PlayerView(opts) {
 
   // Áudio preferido configurado: lê as faixas uma vez, 20s depois de o vídeo começar.
   function scheduleAudioPick() {
-    if (!(settings.audioLangs || []).length) return;
+    if (!(settings.audioLangs || []).length && !rememberedTracks().audio) return;
     // AVPlay knows the tracks itself: no need to ask the PC server.
     if (videoEl.isAVPlay) {
       setTimeout(() => alive && hasPlayed && autoPick(), 1500);
@@ -298,7 +343,12 @@ function PlayerView(opts) {
     saveProgress();
     watched.record(video.id, 1);
     tracker.onStop(1);
-    if (opts.isSeries && nextVideo() && !upNextCancelled) playNext();
+    if (sleepAt === -1) {
+      sleepAt = 0;
+      toast(t('Boa noite!'), 5000);
+      return router.pop();
+    }
+    if (opts.isSeries && nextVideo() && !upNextCancelled && settings.autoNext !== false) playNext();
     else if (!(opts.isSeries && nextVideo()) && store.settings().postPlay !== false) showPostPlay();
     else router.pop();
   });
@@ -331,6 +381,47 @@ function PlayerView(opts) {
         nav.focus(postTrack.firstChild, { noScroll: true });
       })
       .catch(() => alive && router.pop());
+  }
+
+  // ---------- Sleep timer ----------
+  let sleepTimer = null;
+  let sleepAt = 0; // ms timestamp, or -1 = at the end of this episode/film
+  function sleepNow() {
+    clearTimeout(sleepTimer);
+    sleepTimer = null;
+    sleepAt = 0;
+    saveProgress();
+    videoEl.pause();
+    toast(t('Boa noite! O vídeo foi pausado.'), 6000);
+    setTimeout(() => alive && videoEl.paused && close(), 60000);
+  }
+  function sleepMenu() {
+    const left = sleepAt > 0 ? Math.max(1, Math.round((sleepAt - Date.now()) / 60000)) : 0;
+    const opts2 = [
+      { label: t('Desligado'), value: 0, checked: !sleepAt },
+      { label: t('{n} minutos', { n: 15 }), value: 15 },
+      { label: t('{n} minutos', { n: 30 }), value: 30 },
+      { label: t('{n} minutos', { n: 60 }), value: 60 },
+      { label: t('{n} minutos', { n: 90 }), value: 90 },
+      { label: t('No fim deste vídeo'), value: -1, checked: sleepAt === -1 },
+    ];
+    menu(t('Dormir') + (left ? ' · ' + t('faltam {n} min', { n: left }) : ''), opts2, {
+      onPick: (v) => {
+        clearTimeout(sleepTimer);
+        sleepTimer = null;
+        sleepAt = 0;
+        sleepBtn.classList.remove('on');
+        if (!v) return toast(t('Timer desligado'));
+        sleepBtn.classList.add('on');
+        if (v === -1) {
+          sleepAt = -1;
+          return toast(t('O vídeo para no fim deste episódio'));
+        }
+        sleepAt = Date.now() + v * 60000;
+        sleepTimer = setTimeout(sleepNow, v * 60000);
+        toast(t('O vídeo para em {n} minutos', { n: v }));
+      },
+    });
   }
 
   // ---------- Chapters (Matroska files) ----------
@@ -386,7 +477,7 @@ function PlayerView(opts) {
   // ---------- Up next ----------
   // Starts at the credits (the outro segment, when known) or UP_NEXT_SECONDS before the end.
   const UP_NEXT_SECONDS = 25;
-  const UP_NEXT_COUNT = 10;
+  const UP_NEXT_COUNT = Math.max(3, +settings.upNextSeconds || 10); // Settings → Playback
   let upNextTimer = null;
   let upNextLeft = 0;
   let upNextCancelled = false;
@@ -398,7 +489,7 @@ function PlayerView(opts) {
   }
 
   function checkUpNext() {
-    if (upNextTimer || upNextCancelled || !opts.isSeries || seekTarget !== null || videoEl.paused) return;
+    if (upNextTimer || upNextCancelled || !opts.isSeries || seekTarget !== null || videoEl.paused || settings.autoNext === false || sleepAt === -1) return;
     const d = videoEl.duration;
     const nv = nextVideo();
     if (!nv || !(d > 300) || !isFinite(d) || videoEl.currentTime < upNextStart()) return;
@@ -878,7 +969,7 @@ function PlayerView(opts) {
       return;
     }
     const id = mediaId();
-    if (!id || !hasLuna()) return toast(t('Troca de áudio indisponível agora.'));
+    if (!id || !hasLuna()) return toast(avvideo.available() ? t('Troca de áudio indisponível agora.') : t('Para trocar o áudio, o app precisa do player da Samsung (AVPlay), que não carregou. Veja Ajustes → Reprodução.'), 6000);
     luna('luna://com.webos.media', 'selectTrack', { mediaId: id, type: 'audio', index: index })
       .then(() => (currentAudio = index))
       .catch((e) => toast(t('Falha ao trocar áudio: {msg}', { msg: e.message })));
@@ -1020,7 +1111,12 @@ function PlayerView(opts) {
     }
     menu(t('Áudio'), list, {
       empty: server.isAvailable() || videoEl.isAVPlay ? t('Só uma faixa de áudio.') : t('Para listar as faixas, conecte o servidor do PC em Ajustes.'),
-      onPick: (i) => selectEmbeddedAudio(i),
+      onPick: (i) => {
+        selectEmbeddedAudio(i);
+        const av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
+        const tr = (embedded && embedded.audio[i]) || av[i] || (native && native[i]);
+        rememberTrack('audio', tr && (tr.lang || tr.language));
+      },
     });
   }
 
@@ -1060,6 +1156,9 @@ function PlayerView(opts) {
       empty: addonSubs === null ? t('Carregando legendas...') : t('Nenhuma legenda.'),
       onPick: (v) => {
         if (v.kind === 'off' || v.kind === 'embedded' || v.kind === 'addon') autoDone.sub = true;
+        if (v.kind === 'off') rememberTrack('sub', 'off');
+        else if (v.kind === 'addon') rememberTrack('sub', v.sub.lang);
+        else if (v.kind === 'embedded') rememberTrack('sub', embedded.subs[v.index] && embedded.subs[v.index].lang);
         if (v.kind === 'off') {
           disableEmbeddedSubs();
           renderer.clear();
@@ -1276,6 +1375,7 @@ function PlayerView(opts) {
     },
     destroy: () => {
       alive = false;
+      clearTimeout(sleepTimer);
       clearInterval(nowTimer);
       phone.onSeek(null);
       phone.nowPlaying(null);

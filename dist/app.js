@@ -5,7 +5,7 @@ function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-(function (_EN, _AR) {
+(function () {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -25,12 +25,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         _step;
       try {
         var _loop = function _loop() {
-          var key2 = _step.value;
-          if (!__hasOwnProp.call(to, key2) && key2 !== except) __defProp(to, key2, {
+          var key3 = _step.value;
+          if (!__hasOwnProp.call(to, key3) && key3 !== except) __defProp(to, key3, {
             get: function get() {
-              return from[key2];
+              return from[key3];
             },
-            enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable
+            enumerable: !(desc = __getOwnPropDesc(from, key3)) || desc.enumerable
           });
         };
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -473,15 +473,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var globalThis2 = require_global_this();
       var defineProperty = Object.defineProperty;
-      module.exports = function (key2, value) {
+      module.exports = function (key3, value) {
         try {
-          defineProperty(globalThis2, key2, {
+          defineProperty(globalThis2, key3, {
             value: value,
             configurable: true,
             writable: true
           });
         } catch (error) {
-          globalThis2[key2] = value;
+          globalThis2[key3] = value;
         }
         return value;
       };
@@ -515,8 +515,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var store = require_shared_store();
       var create2 = Object.create || Object;
-      module.exports = function (key2, value) {
-        return store[key2] || (store[key2] = value || create2(null));
+      module.exports = function (key3, value) {
+        return store[key3] || (store[key3] = value || create2(null));
       };
     }
   });
@@ -542,8 +542,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var uncurryThis = require_function_uncurry_this();
       var toObject = require_to_object();
       var hasOwnProperty = uncurryThis({}.hasOwnProperty);
-      module.exports = Object.hasOwn || function hasOwn(it, key2) {
-        return hasOwnProperty(toObject(it), key2);
+      module.exports = Object.hasOwn || function hasOwn(it, key3) {
+        return hasOwnProperty(toObject(it), key3);
       };
     }
   });
@@ -557,8 +557,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var id = 0;
       var postfix = Math.random();
       var toString = uncurryThis(1.1.toString);
-      module.exports = function (key2) {
-        return "Symbol(" + (key2 === void 0 ? "" : key2) + ")_" + toString(++id + postfix, 36);
+      module.exports = function (key3) {
+        return "Symbol(" + (key3 === void 0 ? "" : key3) + ")_" + toString(++id + postfix, 36);
       };
     }
   });
@@ -623,8 +623,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var toPrimitive = require_to_primitive();
       var isSymbol = require_is_symbol();
       module.exports = function (argument) {
-        var key2 = toPrimitive(argument, "string");
-        return isSymbol(key2) ? key2 : key2 + "";
+        var key3 = toPrimitive(argument, "string");
+        return isSymbol(key3) ? key3 : key3 + "";
       };
     }
   });
@@ -772,10 +772,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var DESCRIPTORS = require_descriptors();
       var definePropertyModule = require_object_define_property();
       var createPropertyDescriptor = require_create_property_descriptor();
-      module.exports = DESCRIPTORS ? function (object, key2, value) {
-        return definePropertyModule.f(object, key2, createPropertyDescriptor(1, value));
-      } : function (object, key2, value) {
-        object[key2] = value;
+      module.exports = DESCRIPTORS ? function (object, key3, value) {
+        return definePropertyModule.f(object, key3, createPropertyDescriptor(1, value));
+      } : function (object, key3, value) {
+        object[key3] = value;
         return object;
       };
     }
@@ -839,8 +839,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var shared = require_shared();
       var uid = require_uid();
       var keys2 = shared("keys");
-      module.exports = function (key2) {
-        return keys2[key2] || (keys2[key2] = uid(key2));
+      module.exports = function (key3) {
+        return keys2[key3] || (keys2[key3] = uid(key3));
       };
     }
   });
@@ -1001,18 +1001,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var definePropertyModule = require_object_define_property();
       var makeBuiltIn = require_make_built_in();
       var defineGlobalProperty = require_define_global_property();
-      module.exports = function (O, key2, value, options) {
+      module.exports = function (O, key3, value, options) {
         if (!options) options = {};
         var simple = options.enumerable;
-        var name = options.name !== void 0 ? options.name : key2;
+        var name = options.name !== void 0 ? options.name : key3;
         if (isCallable(value)) makeBuiltIn(value, name, options);
         if (options.global) {
-          if (simple) O[key2] = value;else defineGlobalProperty(key2, value);
+          if (simple) O[key3] = value;else defineGlobalProperty(key3, value);
         } else {
           try {
-            if (!options.unsafe) delete O[key2];else if (O[key2]) simple = true;
+            if (!options.unsafe) delete O[key3];else if (O[key3]) simple = true;
           } catch (error) {}
-          if (simple) O[key2] = value;else definePropertyModule.f(O, key2, {
+          if (simple) O[key3] = value;else definePropertyModule.f(O, key3, {
             value: value,
             enumerable: false,
             configurable: !options.nonConfigurable,
@@ -1059,8 +1059,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var toIntegerOrInfinity = require_to_integer_or_infinity();
       var max = Math.max;
       var min = Math.min;
-      module.exports = function (index, length) {
-        var integer = toIntegerOrInfinity(index);
+      module.exports = function (index2, length) {
+        var integer = toIntegerOrInfinity(index2);
         return integer < 0 ? max(integer + length, 0) : min(integer, length);
       };
     }
@@ -1105,13 +1105,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var O = toIndexedObject($this);
           var length = lengthOfArrayLike(O);
           if (length === 0) return !IS_INCLUDES && -1;
-          var index = toAbsoluteIndex(fromIndex, length);
+          var index2 = toAbsoluteIndex(fromIndex, length);
           var value;
-          if (IS_INCLUDES && el !== el) while (length > index) {
-            value = O[index++];
+          if (IS_INCLUDES && el !== el) while (length > index2) {
+            value = O[index2++];
             if (value !== value) return true;
-          } else for (; length > index; index++) {
-            if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
+          } else for (; length > index2; index2++) {
+            if ((IS_INCLUDES || index2 in O) && O[index2] === el) return IS_INCLUDES || index2 || 0;
           }
           return !IS_INCLUDES && -1;
         };
@@ -1142,10 +1142,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var O = toIndexedObject(object);
         var i = 0;
         var result = [];
-        var key2;
-        for (key2 in O) !hasOwn(hiddenKeys, key2) && hasOwn(O, key2) && push2(result, key2);
-        while (names.length > i) if (hasOwn(O, key2 = names[i++])) {
-          ~indexOf(result, key2) || push2(result, key2);
+        var key3;
+        for (key3 in O) !hasOwn(hiddenKeys, key3) && hasOwn(O, key3) && push2(result, key3);
+        while (names.length > i) if (hasOwn(O, key3 = names[i++])) {
+          ~indexOf(result, key3) || push2(result, key3);
         }
         return result;
       };
@@ -1217,9 +1217,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var defineProperty = definePropertyModule.f;
         var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
         for (var i = 0; i < keys2.length; i++) {
-          var key2 = keys2[i];
-          if (!hasOwn(target, key2) && !(exceptions && hasOwn(exceptions, key2))) {
-            defineProperty(target, key2, getOwnPropertyDescriptor(source, key2));
+          var key3 = keys2[i];
+          if (!hasOwn(target, key3) && !(exceptions && hasOwn(exceptions, key3))) {
+            defineProperty(target, key3, getOwnPropertyDescriptor(source, key3));
           }
         }
       };
@@ -1264,7 +1264,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var TARGET = options.target;
         var GLOBAL = options.global;
         var STATIC = options.stat;
-        var FORCED, target, key2, targetProperty, sourceProperty, descriptor;
+        var FORCED, target, key3, targetProperty, sourceProperty, descriptor;
         if (GLOBAL) {
           target = globalThis2;
         } else if (STATIC) {
@@ -1272,13 +1272,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         } else {
           target = globalThis2[TARGET] && globalThis2[TARGET].prototype;
         }
-        if (target) for (key2 in source) {
-          sourceProperty = source[key2];
+        if (target) for (key3 in source) {
+          sourceProperty = source[key3];
           if (options.dontCallGetSet) {
-            descriptor = getOwnPropertyDescriptor(target, key2);
+            descriptor = getOwnPropertyDescriptor(target, key3);
             targetProperty = descriptor && descriptor.value;
-          } else targetProperty = target[key2];
-          FORCED = isForced(GLOBAL ? key2 : TARGET + (STATIC ? "." : "#") + key2, options.forced);
+          } else targetProperty = target[key3];
+          FORCED = isForced(GLOBAL ? key3 : TARGET + (STATIC ? "." : "#") + key3, options.forced);
           if (!FORCED && targetProperty !== void 0) {
             if (_typeof(sourceProperty) == _typeof(targetProperty)) continue;
             copyConstructorProperties(sourceProperty, targetProperty);
@@ -1286,7 +1286,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (options.sham || targetProperty && targetProperty.sham) {
             createNonEnumerableProperty(sourceProperty, "sham", true);
           }
-          defineBuiltIn(target, key2, sourceProperty, options);
+          defineBuiltIn(target, key3, sourceProperty, options);
         }
       };
     }
@@ -1348,18 +1348,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }) ? function assign(target, source) {
         var T = toObject(target);
         var argumentsLength = arguments.length;
-        var index = 1;
+        var index2 = 1;
         var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
         var propertyIsEnumerable = propertyIsEnumerableModule.f;
-        while (argumentsLength > index) {
-          var S = IndexedObject(arguments[index++]);
+        while (argumentsLength > index2) {
+          var S = IndexedObject(arguments[index2++]);
           var keys2 = getOwnPropertySymbols ? concat(objectKeys(S), getOwnPropertySymbols(S)) : objectKeys(S);
           var length = keys2.length;
           var j = 0;
-          var key2;
+          var key3;
           while (length > j) {
-            key2 = keys2[j++];
-            if (!DESCRIPTORS || call4(propertyIsEnumerable, S, key2)) T[key2] = S[key2];
+            key3 = keys2[j++];
+            if (!DESCRIPTORS || call4(propertyIsEnumerable, S, key3)) T[key3] = S[key3];
           }
         }
         return T;
@@ -1472,11 +1472,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var length = keys2.length;
           var i = 0;
           var result = [];
-          var key2;
+          var key3;
           while (length > i) {
-            key2 = keys2[i++];
-            if (!DESCRIPTORS || (IE_WORKAROUND ? key2 in O : propertyIsEnumerable(O, key2))) {
-              push2(result, TO_ENTRIES ? [key2, O[key2]] : O[key2]);
+            key3 = keys2[i++];
+            if (!DESCRIPTORS || (IE_WORKAROUND ? key3 in O : propertyIsEnumerable(O, key3))) {
+              push2(result, TO_ENTRIES ? [key3, O[key3]] : O[key3]);
             }
           }
           return result;
@@ -1578,9 +1578,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var CORRECT_ARGUMENTS = classofRaw(/* @__PURE__ */function () {
         return arguments;
       }()) === "Arguments";
-      var tryGet = function tryGet(it, key2) {
+      var tryGet = function tryGet(it, key3) {
         try {
-          return it[key2];
+          return it[key3];
         } catch (error) {}
       };
       module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
@@ -1654,9 +1654,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var props = toIndexedObject(Properties);
         var keys2 = objectKeys(Properties);
         var length = keys2.length;
-        var index = 0;
-        var key2;
-        while (length > index) definePropertyModule.f(O, key2 = keys2[index++], props[key2]);
+        var index2 = 0;
+        var key3;
+        while (length > index2) definePropertyModule.f(O, key3 = keys2[index2++], props[key3]);
         return O;
       };
     }
@@ -1841,9 +1841,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var uncurryThis = require_function_uncurry_this();
       var aCallable = require_a_callable();
-      module.exports = function (object, key2, method) {
+      module.exports = function (object, key3, method) {
         try {
-          return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key2)[method]));
+          return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key3)[method]));
         } catch (error) {}
       };
     }
@@ -2052,10 +2052,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, function next() {
         var state = getInternalState(this);
         var string = state.string;
-        var index = state.index;
+        var index2 = state.index;
         var point;
-        if (index >= string.length) return createIterResultObject(void 0, true);
-        point = charAt(string, index);
+        if (index2 >= string.length) return createIterResultObject(void 0, true);
+        point = charAt(string, index2);
         state.index += point.length;
         return createIterResultObject(point, false);
       });
@@ -2212,8 +2212,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var DESCRIPTORS = require_descriptors();
       var definePropertyModule = require_object_define_property();
       var createPropertyDescriptor = require_create_property_descriptor();
-      module.exports = function (object, key2, value) {
-        if (DESCRIPTORS) definePropertyModule.f(object, key2, createPropertyDescriptor(0, value));else object[key2] = value;
+      module.exports = function (object, key3, value) {
+        if (DESCRIPTORS) definePropertyModule.f(object, key3, createPropertyDescriptor(0, value));else object[key3] = value;
       };
     }
   });
@@ -2337,21 +2337,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (mapping) mapfn = bind(mapfn, argumentsLength > 2 ? arguments[2] : void 0);
         var O = toObject(arrayLike);
         var iteratorMethod = getIteratorMethod(O);
-        var index = 0;
+        var index2 = 0;
         var length, result, step, iterator, next, value;
         if (iteratorMethod && !(this === $Array && isArrayIteratorMethod(iteratorMethod))) {
           result = IS_CONSTRUCTOR ? new this() : [];
           iterator = getIterator(O, iteratorMethod);
           next = iterator.next;
-          for (; !(step = call4(next, iterator)).done; index++) {
+          for (; !(step = call4(next, iterator)).done; index2++) {
             try {
-              doesNotExceedSafeInteger(index);
+              doesNotExceedSafeInteger(index2);
             } catch (error) {
               iteratorClose(iterator, "throw", error);
             }
-            value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [step.value, index], true) : step.value;
+            value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [step.value, index2], true) : step.value;
             try {
-              createProperty(result, index, value);
+              createProperty(result, index2, value);
             } catch (error) {
               iteratorClose(iterator, "throw", error);
             }
@@ -2359,12 +2359,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         } else {
           length = lengthOfArrayLike(O);
           result = IS_CONSTRUCTOR ? new this(length) : $Array(length);
-          for (; length > index; index++) {
-            value = mapping ? mapfn(O[index], index) : O[index];
-            createProperty(result, index, value);
+          for (; length > index2; index2++) {
+            value = mapping ? mapfn(O[index2], index2) : O[index2];
+            createProperty(result, index2, value);
           }
         }
-        setArrayLength(result, index);
+        setArrayLength(result, index2);
         return result;
       };
     }
@@ -2518,15 +2518,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var self2 = IndexedObject(O);
           var length = lengthOfArrayLike(self2);
           var boundFunction = bind(callbackfn, that);
-          var index = 0;
+          var index2 = 0;
           var resIndex = 0;
           var target = IS_MAP ? arraySpeciesCreate($this, length) : IS_FILTER || IS_FILTER_REJECT ? arraySpeciesCreate($this, 0) : void 0;
           var value, result;
-          for (; length > index; index++) if (NO_HOLES || index in self2) {
-            value = self2[index];
-            result = boundFunction(value, index, O);
+          for (; length > index2; index2++) if (NO_HOLES || index2 in self2) {
+            value = self2[index2];
+            result = boundFunction(value, index2, O);
             if (TYPE) {
-              if (IS_MAP) createProperty(target, index, result);else if (result) switch (TYPE) {
+              if (IS_MAP) createProperty(target, index2, result);else if (result) switch (TYPE) {
                 case 3:
                   return true;
                 // some
@@ -2534,7 +2534,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                   return value;
                 // find
                 case 6:
-                  return index;
+                  return index2;
                 // findIndex
                 case 2:
                   createProperty(target, resIndex++, value);
@@ -2595,8 +2595,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           value: create2(null)
         });
       }
-      module.exports = function (key2) {
-        ArrayPrototype[UNSCOPABLES][key2] = true;
+      module.exports = function (key3) {
+        ArrayPrototype[UNSCOPABLES][key3] = true;
       };
     }
   });
@@ -2739,10 +2739,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var O = toObject(this);
         var length = lengthOfArrayLike(O);
         var argumentsLength = arguments.length;
-        var index = toAbsoluteIndex(argumentsLength > 1 ? arguments[1] : void 0, length);
+        var index2 = toAbsoluteIndex(argumentsLength > 1 ? arguments[1] : void 0, length);
         var end = argumentsLength > 2 ? arguments[2] : void 0;
         var endPos = end === void 0 ? length : toAbsoluteIndex(end, length);
-        while (endPos > index) O[index++] = value;
+        while (endPos > index2) O[index2++] = value;
         return O;
       };
     }
@@ -2895,9 +2895,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         startsWith: function startsWith(searchString) {
           var that = toString(requireObjectCoercible(this));
           notARegExp(searchString);
-          var search = toString(searchString);
-          var index = toLength(min(arguments.length > 1 ? arguments[1] : void 0, that.length));
-          return stringSlice(that, index, index + search.length) === search;
+          var search2 = toString(searchString);
+          var index2 = toLength(min(arguments.length > 1 ? arguments[1] : void 0, that.length));
+          return stringSlice(that, index2, index2 + search2.length) === search2;
         }
       });
     }
@@ -2943,11 +2943,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         endsWith: function endsWith(searchString) {
           var that = toString(requireObjectCoercible(this));
           notARegExp(searchString);
-          var search = toString(searchString);
+          var search2 = toString(searchString);
           var endPosition = arguments.length > 1 ? arguments[1] : void 0;
           var len = that.length;
           var end = endPosition === void 0 ? len : min(toLength(endPosition), len);
-          return slice(that, end - search.length, end) === search;
+          return slice(that, end - search2.length, end) === search2;
         }
       });
     }
@@ -3363,20 +3363,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               totalCodeCount += rsBlocks[i].totalCount;
             }
             var data = new Array(totalCodeCount);
-            var index = 0;
+            var index2 = 0;
             for (var i = 0; i < maxDcCount; i += 1) {
               for (var r = 0; r < rsBlocks.length; r += 1) {
                 if (i < dcdata[r].length) {
-                  data[index] = dcdata[r][i];
-                  index += 1;
+                  data[index2] = dcdata[r][i];
+                  index2 += 1;
                 }
               }
             }
             for (var i = 0; i < maxEcCount; i += 1) {
               for (var r = 0; r < rsBlocks.length; r += 1) {
                 if (i < ecdata[r].length) {
-                  data[index] = ecdata[r][i];
-                  index += 1;
+                  data[index2] = ecdata[r][i];
+                  index2 += 1;
                 }
               }
             }
@@ -4019,8 +4019,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             return _num2;
           }();
           var _this = {};
-          _this.getAt = function (index) {
-            return _num[index];
+          _this.getAt = function (index2) {
+            return _num[index2];
           };
           _this.getLength = function () {
             return _num.length;
@@ -4184,9 +4184,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           _this.getBuffer = function () {
             return _buffer;
           };
-          _this.getAt = function (index) {
-            var bufIndex = Math.floor(index / 8);
-            return (_buffer[bufIndex] >>> 7 - index % 8 & 1) == 1;
+          _this.getAt = function (index2) {
+            var bufIndex = Math.floor(index2 / 8);
+            return (_buffer[bufIndex] >>> 7 - index2 % 8 & 1) == 1;
           };
           _this.put = function (num, length) {
             for (var i = 0; i < length; i += 1) {
@@ -4605,21 +4605,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var _map = {};
             var _size = 0;
             var _this2 = {};
-            _this2.add = function (key2) {
-              if (_this2.contains(key2)) {
-                throw "dup key:" + key2;
+            _this2.add = function (key3) {
+              if (_this2.contains(key3)) {
+                throw "dup key:" + key3;
               }
-              _map[key2] = _size;
+              _map[key3] = _size;
               _size += 1;
             };
             _this2.size = function () {
               return _size;
             };
-            _this2.indexOf = function (key2) {
-              return _map[key2];
+            _this2.indexOf = function (key3) {
+              return _map[key3];
             };
-            _this2.contains = function (key2) {
-              return typeof _map[key2] != "undefined";
+            _this2.contains = function (key3) {
+              return typeof _map[key3] != "undefined";
             };
             return _this2;
           };
@@ -4773,12 +4773,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   };
 
   // src/js/lib/i18n-en.js
-  var EN = (_EN = {
+  var EN = {
     // Navegação e geral
     "Início": "Home",
     "Buscar": "Search",
     "Biblioteca": "Library",
-    "Animes": "Anime",
     "Ajustes": "Settings",
     "Cancelar": "Cancel",
     "Voltar": "Back",
@@ -4822,7 +4821,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Direção": "Directing",
     "Atuação": "Acting",
     "Sem biografia disponível.": "No biography available.",
-    "Filmes e séries": "Movies and series",
     "Esse título ainda não tem página no Stremio.": "This title doesn't have a Stremio page yet.",
     "Não foi possível carregar este perfil.": "Couldn't load this profile.",
     "Controle pelo celular": "Phone remote",
@@ -5283,16 +5281,232 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Integrações": "Integrations",
     "Contas, fontes e recursos do Trakt": "Accounts, sources and Trakt features",
     "Abertura, recapitulação e encerramento": "Intro, recap and outro",
-    "Ligado": "On"
-  }, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Filmes e s\xE9ries", "Movies and series"), "Desenhos animados", "Cartoons"), "Animes", "Anime"), "{name}: este torrent ainda não está no cache. Escolha outra fonte.", "{name}: this torrent is not cached yet. Pick another source."), "Chave inválida", "Invalid key"), "Endereço inválido", "Invalid address"), "Usuário ou senha errados", "Wrong user name or password"), "Leve", "Mild"), "Moderado", "Moderate"), "Forte", "Severe"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Nudez", "Nudity"), "Violência", "Violence"), "Palavrões", "Profanity"), "Álcool e drogas", "Alcohol and drugs"), "Cenas assustadoras", "Frightening scenes"), "Torrent · via {name}", "Torrent · via {name}"), "Debrid", "Debrid"), "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.", "Plays torrent sources through your debrid account, no PC server needed. Everyone uses their own key, kept only on this TV."), "Usar debrid", "Use debrid"), "Usando {name}", "Using {name}"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Preencha uma chave abaixo", "Fill in a key below"), "Serviço preferido", "Preferred service"), "Usado quando há mais de uma chave", "Used when there is more than one key"), "Chaves de API", "API keys"), "Sua chave de API em {site}", "Your API key at {site}"), "Testar {name}", "Test {name}"), "Testando...", "Testing..."), "{name} OK: {user}", "{name} OK: {user}"), "{name} recusou a chave: {msg}", "{name} rejected the key: {msg}"), "Servidores de mídia (Jellyfin e Emby)", "Media servers (Jellyfin and Emby)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.", "Movies and series on your server show up as a source, next to the add-ons."), "Mostrar como fonte", "Show as a source"), "Lista os arquivos do servidor nas fontes", "Lists the server files among the sources"), "Tipo de servidor", "Server type"), "Endereço do servidor", "Server address"), "Ex.: 192.168.0.20:8096", "E.g. 192.168.0.20:8096"), "Usuário", "User name"), "Usada só para entrar; não fica salva", "Only used to sign in; it is not saved"), "Conectar", "Connect"), "Preencha o endereço e o usuário", "Fill in the address and the user name"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Conectando...", "Connecting..."), "Conectado a {name}", "Connected to {name}"), "Não foi possível conectar: {msg}", "Could not connect: {msg}"), "Seu próprio servidor como fonte", "Your own server as a source"), "Chave RPDB", "RPDB key"), "Pôsteres com as notas desenhadas (ratingposterdb.com)", "Posters with the ratings drawn on them (ratingposterdb.com)"), "Guia para os pais", "Parental guide"), "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)", "Violence, profanity and intense scenes on the title page (IMDb via tiffara.com)"), "Abrir", "Open"), 'Adicionado a "{name}"', 'Added to "{name}"'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Adicionar a esta coleção", "Add to this collection"), "Adicionar lista pública", "Add a public list"), "Ajustes copiados de {name}", "Settings copied from {name}"), 'Ao terminar um filme, mostra "Mais como este"', 'When a film ends, shows "More like this"'), 'Apagar a coleção "{name}"?', 'Delete the collection "{name}"?'), "Apagar coleção", "Delete collection"), "Baixando arquivo de teste...", "Downloading a test file..."), "Capítulo {n}", "Chapter {n}"), "Capítulos", "Chapters"), 'Coleção "{name}" criada', 'Collection "{name}" created'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Coleção sua", "Your collection"), "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.", "Put your MDBList key in Settings → Extra metadata to use lists."), "Copiar", "Copy"), "Copiar ajustes de", "Copy settings from"), "Copiar ajustes de outro perfil", "Copy settings from another profile"), "Descer", "Move down"), "Escolha quais das suas listas aparecem na tela inicial", "Choose which of your lists show on the home screen"), "Esconder", "Hide"), "Escondida", "Hidden"), "Este arquivo não tem capítulos.", "This file has no chapters."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Ex.: Para ver no fim de semana", "E.g. For the weekend"), "Ex.: usuario/nome-da-lista ou o link do mdblist.com", "E.g. user/list-name or the mdblist.com link"), "Fechar", "Close"), "Fileiras", "Rows"), "Internet: {mbps} Mbps, ping {ms} ms ({verdict})", "Internet: {mbps} Mbps, ping {ms} ms ({verdict})"), "Legendas, aparência, tela inicial e coleções (a conta não é copiada)", "Subtitles, appearance, home screen and collections (the account is not copied)"), 'Lista "{name}" adicionada', 'List "{name}" added'), "Lista não encontrada", "List not found"), "Listas do MDBList", "MDBList lists"), "Mais como este", "More like this"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Medindo o ping...", "Measuring ping..."), "Minhas coleções", "My collections"), "Minhas listas", "My lists"), "Modo ambiente", "Ambient mode"), "Mostrar", "Show"), "Nome da nova coleção", "New collection name"), "Nova coleção", "New collection"), "Nova coleção...", "New collection..."), "O teste falhou: {msg}", "The test failed: {msg}"), "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)", "The trailer plays muted behind the Hero Banner (heavier on the TV)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "OK numa fileira: subir, descer ou esconder.", "OK on a row: move up, move down or hide."), "Ordem das fileiras, listas do MDBList e Continuar assistindo", "Row order, MDBList lists and Continue watching"), "Ordem do Continuar assistindo", "Continue watching order"), "Ordem padrão restaurada", "Default order restored"), "Ping e velocidade de download (Cloudflare)", "Ping and download speed (Cloudflare)"), "Procurando capítulos...", "Looking for chapters..."), "Qualidade, HDR, áudio, idioma, tamanho...", "Quality, HDR, audio, language, size..."), 'Removido de "{name}"', 'Removed from "{name}"'), "Renomear", "Rename"), "Restaurar ordem padrão", "Restore default order"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Selos das fontes", "Stream badges"), "Subir", "Move up"), "Sugestões no fim", "Suggestions at the end"), "Tela inicial", "Home screen"), "Testar a internet", "Test the internet"), "Tirar desta coleção", "Remove from this collection"), "Toque para tirar desta coleção", "Select to remove it from this collection"), 'Trocar os ajustes de "{to}" pelos de "{from}"?', 'Replace the settings of "{to}" with those of "{from}"?'), "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.", "Empty. On a film or series page, use the Collection button to add it."), "Visível", "Visible"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Você ainda não tem listas no MDBList.", "You have no MDBList lists yet."), "bom para 1080p", "good for 1080p"), "dá para 4K", "enough for 4K"), "lenta para vídeo", "slow for video"), "só 720p com folga", "720p only, comfortably"), "Assistidos por último", "Last watched"), "Quase terminados primeiro", "Almost finished first"), "Nome (A–Z)", "Name (A–Z)"), "Qualidade (4K, 1080p, 720p)", "Quality (4K, 1080p, 720p)"), "HDR e Dolby Vision", "HDR and Dolby Vision"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "REMUX", "REMUX"), "Codec (HEVC, AV1)", "Codec (HEVC, AV1)"), "Áudio (Atmos, DTS, 5.1)", "Audio (Atmos, DTS, 5.1)"), "Idioma (Árabe, Multi)", "Language (Arabic, Multi)"), "Tamanho do arquivo", "File size"), "Taxa estimada (Mbps)", "Estimated bitrate (Mbps)"), "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", "{name}: the API key was rejected. Check Settings → Debrid."));
+    "Ligado": "On",
+    "Filmes e séries": "Movies and series",
+    "Desenhos animados": "Cartoons",
+    "Animes": "Anime",
+    "{name}: este torrent ainda não está no cache. Escolha outra fonte.": "{name}: this torrent is not cached yet. Pick another source.",
+    "Chave inválida": "Invalid key",
+    "Endereço inválido": "Invalid address",
+    "Usuário ou senha errados": "Wrong user name or password",
+    "Leve": "Mild",
+    "Moderado": "Moderate",
+    "Forte": "Severe",
+    "Nudez": "Nudity",
+    "Violência": "Violence",
+    "Palavrões": "Profanity",
+    "Álcool e drogas": "Alcohol and drugs",
+    "Cenas assustadoras": "Frightening scenes",
+    "Torrent · via {name}": "Torrent · via {name}",
+    "Debrid": "Debrid",
+    "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.": "Plays torrent sources through your debrid account, no PC server needed. Everyone uses their own key, kept only on this TV.",
+    "Usar debrid": "Use debrid",
+    "Usando {name}": "Using {name}",
+    "Preencha uma chave abaixo": "Fill in a key below",
+    "Serviço preferido": "Preferred service",
+    "Usado quando há mais de uma chave": "Used when there is more than one key",
+    "Chaves de API": "API keys",
+    "Sua chave de API em {site}": "Your API key at {site}",
+    "Testar {name}": "Test {name}",
+    "Testando...": "Testing...",
+    "{name} OK: {user}": "{name} OK: {user}",
+    "{name} recusou a chave: {msg}": "{name} rejected the key: {msg}",
+    "Servidores de mídia (Jellyfin e Emby)": "Media servers (Jellyfin and Emby)",
+    "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.": "Movies and series on your server show up as a source, next to the add-ons.",
+    "Mostrar como fonte": "Show as a source",
+    "Lista os arquivos do servidor nas fontes": "Lists the server files among the sources",
+    "Tipo de servidor": "Server type",
+    "Endereço do servidor": "Server address",
+    "Ex.: 192.168.0.20:8096": "E.g. 192.168.0.20:8096",
+    "Usuário": "User name",
+    "Usada só para entrar; não fica salva": "Only used to sign in; it is not saved",
+    "Conectar": "Connect",
+    "Preencha o endereço e o usuário": "Fill in the address and the user name",
+    "Conectando...": "Connecting...",
+    "Conectado a {name}": "Connected to {name}",
+    "Não foi possível conectar: {msg}": "Could not connect: {msg}",
+    "Seu próprio servidor como fonte": "Your own server as a source",
+    "Chave RPDB": "RPDB key",
+    "Pôsteres com as notas desenhadas (ratingposterdb.com)": "Posters with the ratings drawn on them (ratingposterdb.com)",
+    "Guia para os pais": "Parental guide",
+    "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)": "Violence, profanity and intense scenes on the title page (IMDb via tiffara.com)",
+    "Abrir": "Open",
+    'Adicionado a "{name}"': 'Added to "{name}"',
+    "Adicionar a esta coleção": "Add to this collection",
+    "Adicionar lista pública": "Add a public list",
+    "Ajustes copiados de {name}": "Settings copied from {name}",
+    'Ao terminar um filme, mostra "Mais como este"': 'When a film ends, shows "More like this"',
+    'Apagar a coleção "{name}"?': 'Delete the collection "{name}"?',
+    "Apagar coleção": "Delete collection",
+    "Baixando arquivo de teste...": "Downloading a test file...",
+    "Capítulo {n}": "Chapter {n}",
+    "Capítulos": "Chapters",
+    'Coleção "{name}" criada': 'Collection "{name}" created',
+    "Coleção sua": "Your collection",
+    "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.": "Put your MDBList key in Settings → Extra metadata to use lists.",
+    "Copiar": "Copy",
+    "Copiar ajustes de": "Copy settings from",
+    "Copiar ajustes de outro perfil": "Copy settings from another profile",
+    "Descer": "Move down",
+    "Escolha quais das suas listas aparecem na tela inicial": "Choose which of your lists show on the home screen",
+    "Esconder": "Hide",
+    "Escondida": "Hidden",
+    "Este arquivo não tem capítulos.": "This file has no chapters.",
+    "Ex.: Para ver no fim de semana": "E.g. For the weekend",
+    "Ex.: usuario/nome-da-lista ou o link do mdblist.com": "E.g. user/list-name or the mdblist.com link",
+    "Fechar": "Close",
+    "Fileiras": "Rows",
+    "Internet: {mbps} Mbps, ping {ms} ms ({verdict})": "Internet: {mbps} Mbps, ping {ms} ms ({verdict})",
+    "Legendas, aparência, tela inicial e coleções (a conta não é copiada)": "Subtitles, appearance, home screen and collections (the account is not copied)",
+    'Lista "{name}" adicionada': 'List "{name}" added',
+    "Lista não encontrada": "List not found",
+    "Listas do MDBList": "MDBList lists",
+    "Mais como este": "More like this",
+    "Medindo o ping...": "Measuring ping...",
+    "Minhas coleções": "My collections",
+    "Minhas listas": "My lists",
+    "Modo ambiente": "Ambient mode",
+    "Mostrar": "Show",
+    "Nome da nova coleção": "New collection name",
+    "Nova coleção": "New collection",
+    "Nova coleção...": "New collection...",
+    "O teste falhou: {msg}": "The test failed: {msg}",
+    "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)": "The trailer plays muted behind the Hero Banner (heavier on the TV)",
+    "OK numa fileira: subir, descer ou esconder.": "OK on a row: move up, move down or hide.",
+    "Ordem das fileiras, listas do MDBList e Continuar assistindo": "Row order, MDBList lists and Continue watching",
+    "Ordem do Continuar assistindo": "Continue watching order",
+    "Ordem padrão restaurada": "Default order restored",
+    "Ping e velocidade de download (Cloudflare)": "Ping and download speed (Cloudflare)",
+    "Procurando capítulos...": "Looking for chapters...",
+    "Qualidade, HDR, áudio, idioma, tamanho...": "Quality, HDR, audio, language, size...",
+    'Removido de "{name}"': 'Removed from "{name}"',
+    "Renomear": "Rename",
+    "Restaurar ordem padrão": "Restore default order",
+    "Selos das fontes": "Stream badges",
+    "Subir": "Move up",
+    "Sugestões no fim": "Suggestions at the end",
+    "Tela inicial": "Home screen",
+    "Testar a internet": "Test the internet",
+    "Tirar desta coleção": "Remove from this collection",
+    "Toque para tirar desta coleção": "Select to remove it from this collection",
+    'Trocar os ajustes de "{to}" pelos de "{from}"?': 'Replace the settings of "{to}" with those of "{from}"?',
+    "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.": "Empty. On a film or series page, use the Collection button to add it.",
+    "Visível": "Visible",
+    "Você ainda não tem listas no MDBList.": "You have no MDBList lists yet.",
+    "bom para 1080p": "good for 1080p",
+    "dá para 4K": "enough for 4K",
+    "lenta para vídeo": "slow for video",
+    "só 720p com folga": "720p only, comfortably",
+    "Assistidos por último": "Last watched",
+    "Quase terminados primeiro": "Almost finished first",
+    "Nome (A–Z)": "Name (A–Z)",
+    "Qualidade (4K, 1080p, 720p)": "Quality (4K, 1080p, 720p)",
+    "HDR e Dolby Vision": "HDR and Dolby Vision",
+    "REMUX": "REMUX",
+    "Codec (HEVC, AV1)": "Codec (HEVC, AV1)",
+    "Áudio (Atmos, DTS, 5.1)": "Audio (Atmos, DTS, 5.1)",
+    "Idioma (Árabe, Multi)": "Language (Arabic, Multi)",
+    "Tamanho do arquivo": "File size",
+    "Taxa estimada (Mbps)": "Estimated bitrate (Mbps)",
+    "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.": "{name}: the API key was rejected. Check Settings → Debrid.",
+    "A legenda e o áudio que você escolher valem para os outros episódios": "The subtitle and audio you pick apply to the other episodes",
+    "Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.": "Point your phone camera at the QR, sign in and that is it: it links by itself.",
+    "Boa noite!": "Good night!",
+    "Boa noite! O vídeo foi pausado.": "Good night! The video was paused.",
+    "Buscas recentes": "Recent searches",
+    "Buscas recentes:": "Recent searches:",
+    "Cantos dos pôsteres e botões": "Corners of posters and buttons",
+    "Chave SubDL": "SubDL key",
+    "Como o item selecionado aparece": "How the selected item looks",
+    "Contagem regressiva": "Countdown",
+    "Contagem regressiva nos créditos e toca o próximo": "Counts down at the credits and plays the next one",
+    "Cor de destaque de botões, foco e barras": "Accent colour of buttons, focus and bars",
+    "Cor do app": "App colour",
+    "Cores e formas": "Colours and shapes",
+    "Depois de {n} min": "After {n} min",
+    "Desempenho": "Performance",
+    "Diagnóstico": "Diagnostics",
+    "Dormir": "Sleep",
+    "Escuro, preto puro ou com brilho da cor": "Dark, pure black or with a colour glow",
+    "Estilo do foco": "Focus style",
+    "Ex.: só os pais abrem este perfil": "E.g. only parents can open this profile",
+    "Fileiras e Continuar assistindo": "Rows and Continue watching",
+    "Formato dos cartões": "Card shape",
+    "Funciona (direto)": "Works (direct)",
+    "Funciona (pelo servidor do PC)": "Works (through the PC server)",
+    "Funciona (pelo serviço da TV)": "Works (through the TV service)",
+    "Fundo": "Background",
+    "Fundos de filmes e o relógio quando a TV fica parada": "Film backdrops and the clock when the TV sits idle",
+    "Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)": "Arabic subtitles from subdl.com (get a free key at subdl.com/panel/api)",
+    "Lembrar por série": "Remember per series",
+    "Limpar": "Clear",
+    "Mais pôsteres por linha ou pôsteres maiores": "More posters per row or bigger posters",
+    "Minha lista do Trakt": "My Trakt watchlist",
+    "Mostra as últimas buscas na tela de busca": "Shows your last searches on the search screen",
+    "No fim deste vídeo": "At the end of this video",
+    "Novo PIN (4 a 8 números)": "New PIN (4 to 8 digits)",
+    "Não funciona: o serviço da TV não respondeu. Feche o app e abra de novo pelo TizenBrew.": "Not working: the TV service did not answer. Close the app and open it again from TizenBrew.",
+    "O player da Samsung (AVPlay) não carregou nesta TV, então o app usa o do navegador e não consegue trocar o áudio. Feche o app e abra de novo pelo TizenBrew; se continuar, avise.": "The Samsung player (AVPlay) did not load on this TV, so the app uses the browser one and cannot switch audio. Close the app and open it again from TizenBrew; if it stays like this, let us know.",
+    "O vídeo para em {n} minutos": "The video stops in {n} minutes",
+    "O vídeo para no fim deste episódio": "The video stops at the end of this episode",
+    "Ou abra": "Or open",
+    "PIN de {name}": "PIN for {name}",
+    "PIN errado. Tente de novo.": "Wrong PIN. Try again.",
+    "PIN removido": "PIN removed",
+    "PIN salvo": "PIN saved",
+    "Para trocar o áudio, o app precisa do player da Samsung (AVPlay), que não carregou. Veja Ajustes → Reprodução.": "To switch audio the app needs the Samsung player (AVPlay), which did not load. See Settings → Playback.",
+    "Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou": "Asks IntroDB for the WandaVision S1E1 intro and says which way worked",
+    "Pede o PIN para abrir este perfil": "Asks for the PIN to open this profile",
+    "Proteção de tela": "Screensaver",
+    "Próximo episódio automático": "Play next episode automatically",
+    "Quanto tempo o aviso do próximo episódio espera": "How long the next episode notice waits",
+    "Tamanho dos pôsteres": "Poster size",
+    "Testar o pulo de abertura": "Test intro skipping",
+    "Timer desligado": "Timer off",
+    "Tirar o PIN": "Remove the PIN",
+    "Trancar com PIN": "Lock with a PIN",
+    "Trocar o PIN": "Change the PIN",
+    "faltam {n} min": "{n} min left",
+    "{n} minutos": "{n} minutes",
+    "{n} segundos": "{n} seconds",
+    "Conta e perfis": "Account and profiles",
+    "Idioma, perfis, conta Stremio, controle pelo celular": "Language, profiles, Stremio account, phone remote",
+    "Reprodução": "Playback",
+    "Servidor do PC, player, próximo episódio, selos das fontes": "PC server, player, next episode, stream badges",
+    "Idiomas, SubDL, aparência da legenda": "Languages, SubDL, subtitle look",
+    "Aparência": "Appearance",
+    "Tema, tela inicial, modo ambiente, proteção de tela": "Theme, home screen, ambient mode, screensaver",
+    "Trakt, Simkl, pular trechos, debrid, Jellyfin, chaves, addons": "Trakt, Simkl, skip segments, debrid, Jellyfin, keys, add-ons",
+    "Sobre": "About",
+    "Atualizações, teste de internet, log": "Updates, internet test, log",
+    "Arredondado": "Rounded",
+    "Reto": "Square",
+    "Bem redondo": "Very round",
+    "Pequeno": "Small",
+    "Médio": "Medium",
+    "Grande": "Large",
+    "Contorno e aumento": "Outline and zoom",
+    "Só contorno": "Outline only",
+    "Só aumento": "Zoom only",
+    "Escuro (padrão)": "Dark (default)",
+    "Preto puro (OLED)": "Pure black (OLED)",
+    "Escuro com brilho da cor": "Dark with a colour glow",
+    "Índigo": "Indigo",
+    "Prata": "Silver",
+    "Turco": "Turkish",
+    "Persa": "Persian",
+    "Urdu": "Urdu",
+    "Indonésio": "Indonesian",
+    "Malaio": "Malay",
+    "Use de 4 a 8 números.": "Use 4 to 8 digits."
+  };
 
   // src/js/lib/i18n-ar.js
-  var AR = (_AR = {
+  var AR = {
     // Navegação e geral
     "Início": "الرئيسية",
     "Buscar": "بحث",
     "Biblioteca": "المكتبة",
-    "Animes": "أنمي",
     "Ajustes": "الإعدادات",
     "Cancelar": "إلغاء",
     "Voltar": "رجوع",
@@ -5336,7 +5550,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Direção": "الإخراج",
     "Atuação": "التمثيل",
     "Sem biografia disponível.": "لا تتوفر سيرة ذاتية.",
-    "Filmes e séries": "الأفلام والمسلسلات",
     "Esse título ainda não tem página no Stremio.": "لا توجد صفحة لهذا العنوان في Stremio بعد.",
     "Não foi possível carregar este perfil.": "تعذّر تحميل هذا الملف الشخصي.",
     "Controle pelo celular": "التحكم بالهاتف",
@@ -5797,8 +6010,225 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Integrações": "التكاملات",
     "Contas, fontes e recursos do Trakt": "الحسابات والمصادر وميزات Trakt",
     "Abertura, recapitulação e encerramento": "المقدمة والملخص والخاتمة",
-    "Ligado": "شغّال"
-  }, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Filmes e s\xE9ries", "أفلام ومسلسلات"), "Desenhos animados", "كرتون"), "Animes", "أنمي"), "{name}: este torrent ainda não está no cache. Escolha outra fonte.", "{name}: هذا التورنت مو موجود بالكاش. اختر مصدر ثاني."), "Chave inválida", "المفتاح غلط"), "Endereço inválido", "العنوان غلط"), "Usuário ou senha errados", "اسم المستخدم أو كلمة المرور غلط"), "Leve", "خفيف"), "Moderado", "متوسط"), "Forte", "قوي"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Nudez", "عُري"), "Violência", "عنف"), "Palavrões", "ألفاظ"), "Álcool e drogas", "كحول ومخدرات"), "Cenas assustadoras", "مشاهد مخيفة"), "Torrent · via {name}", "تورنت · عبر {name}"), "Debrid", "Debrid"), "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.", "يشغّل مصادر التورنت عن طريق حسابك في الـ debrid بدون سيرفر الكمبيوتر. كل واحد يحط مفتاحه، ويبقى بس في هالتلفزيون."), "Usar debrid", "استخدم الـ debrid"), "Usando {name}", "يستخدم {name}"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Preencha uma chave abaixo", "حط مفتاح تحت"), "Serviço preferido", "الخدمة المفضلة"), "Usado quando há mais de uma chave", "تُستخدم إذا عندك أكثر من مفتاح"), "Chaves de API", "مفاتيح API"), "Sua chave de API em {site}", "مفتاح API حقك من {site}"), "Testar {name}", "اختبر {name}"), "Testando...", "جاري الاختبار..."), "{name} OK: {user}", "{name} شغّال: {user}"), "{name} recusou a chave: {msg}", "{name} رفض المفتاح: {msg}"), "Servidores de mídia (Jellyfin e Emby)", "سيرفرات الوسائط (Jellyfin و Emby)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.", "الأفلام والمسلسلات اللي في سيرفرك تطلع كمصدر مع الإضافات."), "Mostrar como fonte", "اعرضه كمصدر"), "Lista os arquivos do servidor nas fontes", "يعرض ملفات السيرفر مع المصادر"), "Tipo de servidor", "نوع السيرفر"), "Endereço do servidor", "عنوان السيرفر"), "Ex.: 192.168.0.20:8096", "مثال: 192.168.0.20:8096"), "Usuário", "اسم المستخدم"), "Usada só para entrar; não fica salva", "تُستخدم للدخول بس وما تنحفظ"), "Conectar", "اتصال"), "Preencha o endereço e o usuário", "حط العنوان واسم المستخدم"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Conectando...", "جاري الاتصال..."), "Conectado a {name}", "متصل بـ {name}"), "Não foi possível conectar: {msg}", "ما قدر يتصل: {msg}"), "Seu próprio servidor como fonte", "سيرفرك الخاص كمصدر"), "Chave RPDB", "مفتاح RPDB"), "Pôsteres com as notas desenhadas (ratingposterdb.com)", "بوسترات عليها التقييمات (ratingposterdb.com)"), "Guia para os pais", "دليل الأهل"), "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)", "العنف والألفاظ والمشاهد القوية في صفحة العمل (IMDb عن طريق tiffara.com)"), "Abrir", "افتح"), 'Adicionado a "{name}"', 'انضاف إلى "{name}"'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Adicionar a esta coleção", "أضف لهالمجموعة"), "Adicionar lista pública", "أضف قائمة عامة"), "Ajustes copiados de {name}", "انتسخت الإعدادات من {name}"), 'Ao terminar um filme, mostra "Mais como este"', 'لما يخلص الفيلم يعرض "أعمال مشابهة"'), 'Apagar a coleção "{name}"?', 'تحذف مجموعة "{name}"؟'), "Apagar coleção", "احذف المجموعة"), "Baixando arquivo de teste...", "جاري تنزيل ملف الاختبار..."), "Capítulo {n}", "الفصل {n}"), "Capítulos", "الفصول"), 'Coleção "{name}" criada', 'انسوّت مجموعة "{name}"'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Coleção sua", "مجموعتك"), "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.", "حط مفتاح MDBList في الإعدادات ← بيانات إضافية عشان تستخدم القوائم."), "Copiar", "انسخ"), "Copiar ajustes de", "انسخ الإعدادات من"), "Copiar ajustes de outro perfil", "انسخ الإعدادات من بروفايل ثاني"), "Descer", "نزّل"), "Escolha quais das suas listas aparecem na tela inicial", "اختر أي قوائمك تطلع في الرئيسية"), "Esconder", "إخفاء"), "Escondida", "مخفية"), "Este arquivo não tem capítulos.", "هالملف ما فيه فصول."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Ex.: Para ver no fim de semana", "مثال: للويكند"), "Ex.: usuario/nome-da-lista ou o link do mdblist.com", "مثال: user/list-name أو رابط mdblist.com"), "Fechar", "إغلاق"), "Fileiras", "الصفوف"), "Internet: {mbps} Mbps, ping {ms} ms ({verdict})", "النت: {mbps} ميغابت، البنق {ms} ms ({verdict})"), "Legendas, aparência, tela inicial e coleções (a conta não é copiada)", "الترجمة والشكل والرئيسية والمجموعات (الحساب ما ينسخ)"), 'Lista "{name}" adicionada', 'انضافت قائمة "{name}"'), "Lista não encontrada", "ما لقيت القائمة"), "Listas do MDBList", "قوائم MDBList"), "Mais como este", "أعمال مشابهة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Medindo o ping...", "جاري قياس البنق..."), "Minhas coleções", "مجموعاتي"), "Minhas listas", "قوائمي"), "Modo ambiente", "وضع الأجواء (Ambient)"), "Mostrar", "إظهار"), "Nome da nova coleção", "اسم المجموعة الجديدة"), "Nova coleção", "مجموعة جديدة"), "Nova coleção...", "مجموعة جديدة..."), "O teste falhou: {msg}", "الاختبار فشل: {msg}"), "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)", "التريلر يشتغل بدون صوت خلف البانر (أثقل على التلفزيون)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "OK numa fileira: subir, descer ou esconder.", "اضغط OK على صف: طلّعه أو نزّله أو اخفه."), "Ordem das fileiras, listas do MDBList e Continuar assistindo", "ترتيب الصفوف وقوائم MDBList وأكمل المشاهدة"), "Ordem do Continuar assistindo", "ترتيب أكمل المشاهدة"), "Ordem padrão restaurada", "رجع الترتيب الأصلي"), "Ping e velocidade de download (Cloudflare)", "البنق وسرعة التنزيل (Cloudflare)"), "Procurando capítulos...", "جاري البحث عن الفصول..."), "Qualidade, HDR, áudio, idioma, tamanho...", "الجودة و HDR والصوت واللغة والحجم..."), 'Removido de "{name}"', 'انشال من "{name}"'), "Renomear", "إعادة تسمية"), "Restaurar ordem padrão", "رجّع الترتيب الأصلي"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Selos das fontes", "شارات المصادر"), "Subir", "طلّع"), "Sugestões no fim", "اقتراحات بعد النهاية"), "Tela inicial", "الصفحة الرئيسية"), "Testar a internet", "اختبر النت"), "Tirar desta coleção", "شيله من هالمجموعة"), "Toque para tirar desta coleção", "اضغط عشان تشيله من هالمجموعة"), 'Trocar os ajustes de "{to}" pelos de "{from}"?', 'تستبدل إعدادات "{to}" بإعدادات "{from}"؟'), "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.", "فاضية. من صفحة أي فيلم أو مسلسل اضغط زر المجموعة عشان تضيفه."), "Visível", "ظاهرة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Você ainda não tem listas no MDBList.", "ما عندك قوائم في MDBList للحين."), "bom para 1080p", "زين للـ 1080p"), "dá para 4K", "يكفي للـ 4K"), "lenta para vídeo", "بطيء على الفيديو"), "só 720p com folga", "720p بس براحة"), "Assistidos por último", "آخر شي شفته"), "Quase terminados primeiro", "اللي قربت تخلصه أول"), "Nome (A–Z)", "الاسم (أ–ي)"), "Qualidade (4K, 1080p, 720p)", "الجودة (4K و 1080p و 720p)"), "HDR e Dolby Vision", "HDR و Dolby Vision"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "REMUX", "REMUX"), "Codec (HEVC, AV1)", "الترميز (HEVC و AV1)"), "Áudio (Atmos, DTS, 5.1)", "الصوت (Atmos و DTS و 5.1)"), "Idioma (Árabe, Multi)", "اللغة (عربي، متعدد)"), "Tamanho do arquivo", "حجم الملف"), "Taxa estimada (Mbps)", "معدل البت التقريبي (Mbps)"), "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", "{name}: المفتاح انرفض. تأكد منه في الإعدادات ← Debrid."));
+    "Ligado": "شغّال",
+    "Filmes e séries": "أفلام ومسلسلات",
+    "Desenhos animados": "كرتون",
+    "Animes": "أنمي",
+    "{name}: este torrent ainda não está no cache. Escolha outra fonte.": "{name}: هذا التورنت مو موجود بالكاش. اختر مصدر ثاني.",
+    "Chave inválida": "المفتاح غلط",
+    "Endereço inválido": "العنوان غلط",
+    "Usuário ou senha errados": "اسم المستخدم أو كلمة المرور غلط",
+    "Leve": "خفيف",
+    "Moderado": "متوسط",
+    "Forte": "قوي",
+    "Nudez": "عُري",
+    "Violência": "عنف",
+    "Palavrões": "ألفاظ",
+    "Álcool e drogas": "كحول ومخدرات",
+    "Cenas assustadoras": "مشاهد مخيفة",
+    "Torrent · via {name}": "تورنت · عبر {name}",
+    "Debrid": "Debrid",
+    "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.": "يشغّل مصادر التورنت عن طريق حسابك في الـ debrid بدون سيرفر الكمبيوتر. كل واحد يحط مفتاحه، ويبقى بس في هالتلفزيون.",
+    "Usar debrid": "استخدم الـ debrid",
+    "Usando {name}": "يستخدم {name}",
+    "Preencha uma chave abaixo": "حط مفتاح تحت",
+    "Serviço preferido": "الخدمة المفضلة",
+    "Usado quando há mais de uma chave": "تُستخدم إذا عندك أكثر من مفتاح",
+    "Chaves de API": "مفاتيح API",
+    "Sua chave de API em {site}": "مفتاح API حقك من {site}",
+    "Testar {name}": "اختبر {name}",
+    "Testando...": "جاري الاختبار...",
+    "{name} OK: {user}": "{name} شغّال: {user}",
+    "{name} recusou a chave: {msg}": "{name} رفض المفتاح: {msg}",
+    "Servidores de mídia (Jellyfin e Emby)": "سيرفرات الوسائط (Jellyfin و Emby)",
+    "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.": "الأفلام والمسلسلات اللي في سيرفرك تطلع كمصدر مع الإضافات.",
+    "Mostrar como fonte": "اعرضه كمصدر",
+    "Lista os arquivos do servidor nas fontes": "يعرض ملفات السيرفر مع المصادر",
+    "Tipo de servidor": "نوع السيرفر",
+    "Endereço do servidor": "عنوان السيرفر",
+    "Ex.: 192.168.0.20:8096": "مثال: 192.168.0.20:8096",
+    "Usuário": "اسم المستخدم",
+    "Usada só para entrar; não fica salva": "تُستخدم للدخول بس وما تنحفظ",
+    "Conectar": "اتصال",
+    "Preencha o endereço e o usuário": "حط العنوان واسم المستخدم",
+    "Conectando...": "جاري الاتصال...",
+    "Conectado a {name}": "متصل بـ {name}",
+    "Não foi possível conectar: {msg}": "ما قدر يتصل: {msg}",
+    "Seu próprio servidor como fonte": "سيرفرك الخاص كمصدر",
+    "Chave RPDB": "مفتاح RPDB",
+    "Pôsteres com as notas desenhadas (ratingposterdb.com)": "بوسترات عليها التقييمات (ratingposterdb.com)",
+    "Guia para os pais": "دليل الأهل",
+    "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)": "العنف والألفاظ والمشاهد القوية في صفحة العمل (IMDb عن طريق tiffara.com)",
+    "Abrir": "افتح",
+    'Adicionado a "{name}"': 'انضاف إلى "{name}"',
+    "Adicionar a esta coleção": "أضف لهالمجموعة",
+    "Adicionar lista pública": "أضف قائمة عامة",
+    "Ajustes copiados de {name}": "انتسخت الإعدادات من {name}",
+    'Ao terminar um filme, mostra "Mais como este"': 'لما يخلص الفيلم يعرض "أعمال مشابهة"',
+    'Apagar a coleção "{name}"?': 'تحذف مجموعة "{name}"؟',
+    "Apagar coleção": "احذف المجموعة",
+    "Baixando arquivo de teste...": "جاري تنزيل ملف الاختبار...",
+    "Capítulo {n}": "الفصل {n}",
+    "Capítulos": "الفصول",
+    'Coleção "{name}" criada': 'انسوّت مجموعة "{name}"',
+    "Coleção sua": "مجموعتك",
+    "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.": "حط مفتاح MDBList في الإعدادات ← بيانات إضافية عشان تستخدم القوائم.",
+    "Copiar": "انسخ",
+    "Copiar ajustes de": "انسخ الإعدادات من",
+    "Copiar ajustes de outro perfil": "انسخ الإعدادات من بروفايل ثاني",
+    "Descer": "نزّل",
+    "Escolha quais das suas listas aparecem na tela inicial": "اختر أي قوائمك تطلع في الرئيسية",
+    "Esconder": "إخفاء",
+    "Escondida": "مخفية",
+    "Este arquivo não tem capítulos.": "هالملف ما فيه فصول.",
+    "Ex.: Para ver no fim de semana": "مثال: للويكند",
+    "Ex.: usuario/nome-da-lista ou o link do mdblist.com": "مثال: user/list-name أو رابط mdblist.com",
+    "Fechar": "إغلاق",
+    "Fileiras": "الصفوف",
+    "Internet: {mbps} Mbps, ping {ms} ms ({verdict})": "النت: {mbps} ميغابت، البنق {ms} ms ({verdict})",
+    "Legendas, aparência, tela inicial e coleções (a conta não é copiada)": "الترجمة والشكل والرئيسية والمجموعات (الحساب ما ينسخ)",
+    'Lista "{name}" adicionada': 'انضافت قائمة "{name}"',
+    "Lista não encontrada": "ما لقيت القائمة",
+    "Listas do MDBList": "قوائم MDBList",
+    "Mais como este": "أعمال مشابهة",
+    "Medindo o ping...": "جاري قياس البنق...",
+    "Minhas coleções": "مجموعاتي",
+    "Minhas listas": "قوائمي",
+    "Modo ambiente": "وضع الأجواء (Ambient)",
+    "Mostrar": "إظهار",
+    "Nome da nova coleção": "اسم المجموعة الجديدة",
+    "Nova coleção": "مجموعة جديدة",
+    "Nova coleção...": "مجموعة جديدة...",
+    "O teste falhou: {msg}": "الاختبار فشل: {msg}",
+    "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)": "التريلر يشتغل بدون صوت خلف البانر (أثقل على التلفزيون)",
+    "OK numa fileira: subir, descer ou esconder.": "اضغط OK على صف: طلّعه أو نزّله أو اخفه.",
+    "Ordem das fileiras, listas do MDBList e Continuar assistindo": "ترتيب الصفوف وقوائم MDBList وأكمل المشاهدة",
+    "Ordem do Continuar assistindo": "ترتيب أكمل المشاهدة",
+    "Ordem padrão restaurada": "رجع الترتيب الأصلي",
+    "Ping e velocidade de download (Cloudflare)": "البنق وسرعة التنزيل (Cloudflare)",
+    "Procurando capítulos...": "جاري البحث عن الفصول...",
+    "Qualidade, HDR, áudio, idioma, tamanho...": "الجودة و HDR والصوت واللغة والحجم...",
+    'Removido de "{name}"': 'انشال من "{name}"',
+    "Renomear": "إعادة تسمية",
+    "Restaurar ordem padrão": "رجّع الترتيب الأصلي",
+    "Selos das fontes": "شارات المصادر",
+    "Subir": "طلّع",
+    "Sugestões no fim": "اقتراحات بعد النهاية",
+    "Tela inicial": "الصفحة الرئيسية",
+    "Testar a internet": "اختبر النت",
+    "Tirar desta coleção": "شيله من هالمجموعة",
+    "Toque para tirar desta coleção": "اضغط عشان تشيله من هالمجموعة",
+    'Trocar os ajustes de "{to}" pelos de "{from}"?': 'تستبدل إعدادات "{to}" بإعدادات "{from}"؟',
+    "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.": "فاضية. من صفحة أي فيلم أو مسلسل اضغط زر المجموعة عشان تضيفه.",
+    "Visível": "ظاهرة",
+    "Você ainda não tem listas no MDBList.": "ما عندك قوائم في MDBList للحين.",
+    "bom para 1080p": "زين للـ 1080p",
+    "dá para 4K": "يكفي للـ 4K",
+    "lenta para vídeo": "بطيء على الفيديو",
+    "só 720p com folga": "720p بس براحة",
+    "Assistidos por último": "آخر شي شفته",
+    "Quase terminados primeiro": "اللي قربت تخلصه أول",
+    "Nome (A–Z)": "الاسم (أ–ي)",
+    "Qualidade (4K, 1080p, 720p)": "الجودة (4K و 1080p و 720p)",
+    "HDR e Dolby Vision": "HDR و Dolby Vision",
+    "REMUX": "REMUX",
+    "Codec (HEVC, AV1)": "الترميز (HEVC و AV1)",
+    "Áudio (Atmos, DTS, 5.1)": "الصوت (Atmos و DTS و 5.1)",
+    "Idioma (Árabe, Multi)": "اللغة (عربي، متعدد)",
+    "Tamanho do arquivo": "حجم الملف",
+    "Taxa estimada (Mbps)": "معدل البت التقريبي (Mbps)",
+    "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.": "{name}: المفتاح انرفض. تأكد منه في الإعدادات ← Debrid.",
+    "A legenda e o áudio que você escolher valem para os outros episódios": "الترجمة والصوت اللي تختارهم ينطبقون على باقي الحلقات",
+    "Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.": "وجّه كاميرا الجوال على الباركود، سجّل دخول بحسابك، ويرتبط لحاله.",
+    "Boa noite!": "تصبح على خير!",
+    "Boa noite! O vídeo foi pausado.": "تصبح على خير! وقّفت الفيديو.",
+    "Buscas recentes": "آخر عمليات البحث",
+    "Buscas recentes:": "آخر عمليات البحث:",
+    "Cantos dos pôsteres e botões": "زوايا البوسترات والأزرار",
+    "Chave SubDL": "مفتاح SubDL",
+    "Como o item selecionado aparece": "شكل العنصر المحدد",
+    "Contagem regressiva": "العد التنازلي",
+    "Contagem regressiva nos créditos e toca o próximo": "يعد تنازلي عند النهاية ويشغّل الحلقة الجاية",
+    "Cor de destaque de botões, foco e barras": "لون الأزرار والتحديد والأشرطة",
+    "Cor do app": "لون التطبيق",
+    "Cores e formas": "الألوان والأشكال",
+    "Depois de {n} min": "بعد {n} دقيقة",
+    "Desempenho": "الأداء",
+    "Diagnóstico": "الفحص",
+    "Dormir": "مؤقت النوم",
+    "Escuro, preto puro ou com brilho da cor": "داكن، أسود خالص أو مع توهج اللون",
+    "Estilo do foco": "شكل التحديد",
+    "Ex.: só os pais abrem este perfil": "مثال: بس الأهل يفتحون هالبروفايل",
+    "Fileiras e Continuar assistindo": "الصفوف وأكمل المشاهدة",
+    "Formato dos cartões": "شكل البطاقات",
+    "Funciona (direto)": "شغّال (مباشر)",
+    "Funciona (pelo servidor do PC)": "شغّال (عن طريق سيرفر الكمبيوتر)",
+    "Funciona (pelo serviço da TV)": "شغّال (عن طريق خدمة التلفزيون)",
+    "Fundo": "الخلفية",
+    "Fundos de filmes e o relógio quando a TV fica parada": "خلفيات أفلام والساعة لما يكون التلفزيون واقف",
+    "Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)": "ترجمات عربية من subdl.com (المفتاح مجاني من subdl.com/panel/api)",
+    "Lembrar por série": "تذكّر لكل مسلسل",
+    "Limpar": "مسح",
+    "Mais pôsteres por linha ou pôsteres maiores": "بوسترات أكثر في الصف أو بوسترات أكبر",
+    "Minha lista do Trakt": "قائمتي في Trakt",
+    "Mostra as últimas buscas na tela de busca": "يعرض آخر عمليات البحث في شاشة البحث",
+    "No fim deste vídeo": "في نهاية هالفيديو",
+    "Novo PIN (4 a 8 números)": "رقم سري جديد (من 4 إلى 8 أرقام)",
+    "Não funciona: o serviço da TV não respondeu. Feche o app e abra de novo pelo TizenBrew.": "ما يشتغل: خدمة التلفزيون ما ردّت. سكّر التطبيق وافتحه من TizenBrew من جديد.",
+    "O player da Samsung (AVPlay) não carregou nesta TV, então o app usa o do navegador e não consegue trocar o áudio. Feche o app e abra de novo pelo TizenBrew; se continuar, avise.": "مشغّل سامسونج (AVPlay) ما اشتغل في هالتلفزيون، فالتطبيق يستخدم مشغّل المتصفح وما يقدر يغيّر الصوت. سكّر التطبيق وافتحه من TizenBrew من جديد، وإذا استمر قول لنا.",
+    "O vídeo para em {n} minutos": "الفيديو بيوقف بعد {n} دقيقة",
+    "O vídeo para no fim deste episódio": "الفيديو بيوقف في نهاية هالحلقة",
+    "Ou abra": "أو افتح",
+    "PIN de {name}": "الرقم السري لـ {name}",
+    "PIN errado. Tente de novo.": "الرقم السري غلط. جرّب مرة ثانية.",
+    "PIN removido": "انشال الرقم السري",
+    "PIN salvo": "انحفظ الرقم السري",
+    "Para trocar o áudio, o app precisa do player da Samsung (AVPlay), que não carregou. Veja Ajustes → Reprodução.": "عشان يتغيّر الصوت لازم مشغّل سامسونج (AVPlay)، وهو ما اشتغل. شوف الإعدادات ← التشغيل.",
+    "Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou": "يطلب من IntroDB مقدمة WandaVision الموسم 1 الحلقة 1 ويقول لك أي طريق اشتغل",
+    "Pede o PIN para abrir este perfil": "يطلب الرقم السري لفتح هالبروفايل",
+    "Proteção de tela": "شاشة التوقف",
+    "Próximo episódio automático": "تشغيل الحلقة الجاية تلقائياً",
+    "Quanto tempo o aviso do próximo episódio espera": "كم ينتظر تنبيه الحلقة الجاية",
+    "Tamanho dos pôsteres": "حجم البوسترات",
+    "Testar o pulo de abertura": "اختبر تخطي المقدمة",
+    "Timer desligado": "المؤقت طافي",
+    "Tirar o PIN": "شيل الرقم السري",
+    "Trancar com PIN": "قفل برقم سري",
+    "Trocar o PIN": "غيّر الرقم السري",
+    "faltam {n} min": "باقي {n} دقيقة",
+    "{n} minutos": "{n} دقيقة",
+    "{n} segundos": "{n} ثانية",
+    "Conta e perfis": "الحساب والبروفايلات",
+    "Idioma, perfis, conta Stremio, controle pelo celular": "اللغة، البروفايلات، حساب Stremio، التحكم بالجوال",
+    "Reprodução": "التشغيل",
+    "Servidor do PC, player, próximo episódio, selos das fontes": "سيرفر الكمبيوتر، المشغّل، الحلقة الجاية، شارات المصادر",
+    "Idiomas, SubDL, aparência da legenda": "اللغات، SubDL، شكل الترجمة",
+    "Aparência": "المظهر",
+    "Tema, tela inicial, modo ambiente, proteção de tela": "الألوان، الرئيسية، وضع الأجواء، شاشة التوقف",
+    "Trakt, Simkl, pular trechos, debrid, Jellyfin, chaves, addons": "Trakt و Simkl، التخطي، Debrid، Jellyfin، المفاتيح، الإضافات",
+    "Sobre": "حول التطبيق",
+    "Atualizações, teste de internet, log": "التحديثات، اختبار النت، السجل",
+    "Arredondado": "مدوّر",
+    "Reto": "حاد",
+    "Bem redondo": "مدوّر كثير",
+    "Pequeno": "صغير",
+    "Médio": "متوسط",
+    "Grande": "كبير",
+    "Contorno e aumento": "إطار وتكبير",
+    "Só contorno": "إطار بس",
+    "Só aumento": "تكبير بس",
+    "Escuro (padrão)": "داكن (الافتراضي)",
+    "Preto puro (OLED)": "أسود خالص (OLED)",
+    "Escuro com brilho da cor": "داكن مع توهج اللون",
+    "Índigo": "نيلي",
+    "Prata": "فضي",
+    "Turco": "تركي",
+    "Persa": "فارسي",
+    "Urdu": "أردو",
+    "Indonésio": "إندونيسي",
+    "Malaio": "ملايو",
+    "Use de 4 a 8 números.": "استخدم من 4 إلى 8 أرقام."
+  };
 
   // src/js/lib/i18n.js
   var lang = "en";
@@ -5928,8 +6358,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (!url2) return url2;
     return String(url2).replace(/(images\.metahub\.space\/poster\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w185/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?posters\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2").replace(/(static\.tvmaze\.com\/uploads\/images\/)(original_untouched|large_landscape|medium_landscape)\//, "$1medium_portrait/").replace(/(kitsu\.app\/anime\/poster_images\/\d+\/)(original|large|medium)\.(jpg|jpeg|png)/, "$1small.jpg");
   }
-  function ratedPoster(id, key2) {
-    var k = String(key2 || "").trim();
+  function ratedPoster(id, key3) {
+    var k = String(key3 || "").trim();
     var m = String(id || "").match(/^tt\d+/);
     if (!k || !m || !/^[\w-]+$/.test(k)) return null;
     return "https://api.ratingposterdb.com/" + k + "/imdb/poster-default/" + m[0] + ".jpg?fallback=true";
@@ -5989,9 +6419,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
   }
   function kitsuSmall(info2) {
-    var key2 = info2.id + ":" + info2.kind;
-    if (!kitsuCache[key2]) {
-      kitsuCache[key2] = new Promise(function (resolve2) {
+    var key3 = info2.id + ":" + info2.kind;
+    if (!kitsuCache[key3]) {
+      kitsuCache[key3] = new Promise(function (resolve2) {
         (batch[info2.id] = batch[info2.id] || []).push({
           kind: info2.kind,
           resolve: resolve2
@@ -5999,7 +6429,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (!batchTimer) batchTimer = setTimeout(flush2, 60);
       });
     }
-    return kitsuCache[key2];
+    return kitsuCache[key3];
   }
 
   // src/js/lib/dom.js
@@ -6011,12 +6441,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (p[0] === ".") el.classList.add(p.slice(1));else if (p[0] === "#") el.id = p.slice(1);
     }
     if (props) {
-      for (var key2 in props) {
-        var val = props[key2];
+      for (var key3 in props) {
+        var val = props[key3];
         if (val === void 0 || val === null || val === false) continue;
-        if (key2 === "text") el.textContent = val;else if (key2 === "html") el.innerHTML = val;else if (key2 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key2 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key2 === "onSelect") el.__select = val;else if (key2 === "onFocus") el.__focus = val;else if (key2 === "focusable") el.setAttribute("data-focus", "");else if (key2 === "cls") String(val).split(" ").forEach(function (c) {
+        if (key3 === "text") el.textContent = val;else if (key3 === "html") el.innerHTML = val;else if (key3 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key3 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key3 === "onSelect") el.__select = val;else if (key3 === "onFocus") el.__focus = val;else if (key3 === "focusable") el.setAttribute("data-focus", "");else if (key3 === "cls") String(val).split(" ").forEach(function (c) {
           return c && el.classList.add(c);
-        });else el.setAttribute(key2, val === true ? "" : val);
+        });else el.setAttribute(key3, val === true ? "" : val);
       }
     }
     append(el, children);
@@ -6426,22 +6856,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
   // src/js/lib/store.js
   var PREFIX = "kai.";
-  function rawGet(key2, fallback) {
+  function rawGet(key3, fallback) {
     try {
-      var raw = window.localStorage.getItem(PREFIX + key2);
+      var raw = window.localStorage.getItem(PREFIX + key3);
       return raw === null ? fallback : JSON.parse(raw);
     } catch (e) {
       return fallback;
     }
   }
-  function rawSet(key2, value) {
+  function rawSet(key3, value) {
     try {
-      if (value === void 0 || value === null) window.localStorage.removeItem(PREFIX + key2);else window.localStorage.setItem(PREFIX + key2, JSON.stringify(value));
+      if (value === void 0 || value === null) window.localStorage.removeItem(PREFIX + key3);else window.localStorage.setItem(PREFIX + key3, JSON.stringify(value));
     } catch (e) {}
   }
   var COLORS = ["#7b5bf5", "#e5508c", "#2bb6a3", "#f0a030", "#3d8bfd", "#e55353", "#8bc34a", "#9e9e9e"];
-  function profileKey(id, key2) {
-    return "p." + id + "." + key2;
+  function profileKey(id, key3) {
+    return "p." + id + "." + key3;
   }
   function ensureProfiles() {
     var list2 = rawGet("profiles", null);
@@ -6522,16 +6952,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (rawGet("activeProfile", null) === id) rawSet("activeProfile", list2[0].id);
     return true;
   }
-  function getFor(profileId, key2, fallback) {
-    return rawGet(profileKey(profileId, key2), fallback);
+  function getFor(profileId, key3, fallback) {
+    return rawGet(profileKey(profileId, key3), fallback);
   }
-  function get(key2, fallback) {
-    return rawGet(profileKey(activeProfile().id, key2), fallback);
+  function get(key3, fallback) {
+    return rawGet(profileKey(activeProfile().id, key3), fallback);
   }
-  function set(key2, value) {
-    rawSet(profileKey(activeProfile().id, key2), value);
+  function set(key3, value) {
+    rawSet(profileKey(activeProfile().id, key3), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -6599,8 +7029,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     // [{ id, name }]
     ambientMode: false,
     postPlay: true,
-    streamBadges: null
+    streamBadges: null,
     // { quality, hdr, remux, bitrate, size, audio, codec, lang } → false hides
+    subdlKey: "",
+    // SubDL API key (TV)
+    screensaver: 0,
+    // minutes idle before the screensaver (TV); 0 = off
+    autoNext: true,
+    upNextSeconds: 10,
+    rememberTracks: true,
+    traktWatchlistRow: true,
+    searchHistory: true,
+    cardShape: "rounded",
+    // rounded | square | soft
+    cardSize: "medium",
+    // small | medium | large
+    focusStyle: "glow"
+    // glow | outline | lift
   };
   function settings() {
     var subs = {
@@ -6711,14 +7156,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function logout() {
-    var key2 = authKey();
+    var key3 = authKey();
     auth = null;
     set("auth", null);
     set("addons", null);
     setLibrary([]);
-    if (key2) call("logout", {
+    if (key3) call("logout", {
       type: "Logout",
-      authKey: key2
+      authKey: key3
     }).catch(function () {});
   }
   function getAddonCollection() {
@@ -6778,8 +7223,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       collection: "libraryItem",
       ids: [],
       all: true
-    }).then(function (items2) {
-      var list2 = Array.isArray(items2) ? items2 : [];
+    }).then(function (items3) {
+      var list2 = Array.isArray(items3) ? items3 : [];
       setLibrary(list2);
       return list2;
     });
@@ -6800,9 +7245,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (!libMem) libMem = get("library", []);
     return libMem;
   }
-  function putLibraryItems(items2) {
+  function putLibraryItems(items3) {
     var lib = cachedLibrary();
-    items2.forEach(function (it) {
+    items3.forEach(function (it) {
       var i = lib.findIndex(function (x) {
         return x._id === it._id;
       });
@@ -6813,7 +7258,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return call("datastorePut", {
       authKey: auth.authKey,
       collection: "libraryItem",
-      changes: items2
+      changes: items3
     }).catch(function (e) {
       log.warn("Falha ao salvar na biblioteca", e.message);
     });
@@ -6936,10 +7381,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/views/profiles.js
   var SESSION_PICKED = "kai.profilePicked";
   var SESSION_NEW = "kai.newProfile";
-  function session(key2, value) {
+  function session(key3, value) {
     try {
-      if (value === void 0) return window.sessionStorage.getItem(key2);
-      if (value === null) window.sessionStorage.removeItem(key2);else window.sessionStorage.setItem(key2, value);
+      if (value === void 0) return window.sessionStorage.getItem(key3);
+      if (value === null) window.sessionStorage.removeItem(key3);else window.sessionStorage.setItem(key3, value);
     } catch (e) {}
     return null;
   }
@@ -6954,9 +7399,66 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function switchProfile(id) {
-    setActiveProfile(id);
-    session(SESSION_PICKED, "1");
-    window.location.reload();
+    var target = profiles().find(function (p) {
+      return p.id === id;
+    });
+    checkPin(target, function () {
+      setActiveProfile(id);
+      session(SESSION_PICKED, "1");
+      window.location.reload();
+    });
+  }
+  function checkPin(profile, onOk) {
+    if (!profile || !profile.pin) return onOk();
+    pinDialog(t("PIN de {name}", {
+      name: profile.name
+    }), function (pin) {
+      if (pin === profile.pin) {
+        onOk();
+        return true;
+      }
+      return false;
+    });
+  }
+  function pinDialog(title, onSubmit, badText) {
+    var err = h("div.modal-text.err-text");
+    var input = h("input.input.pin-input", {
+      type: "password",
+      inputmode: "numeric",
+      maxlength: "8",
+      placeholder: "••••",
+      focusable: true,
+      "data-autofocus": ""
+    });
+    var box = h("div.modal-box.center", null, [h("h3", {
+      text: title
+    }), input, err]);
+    var modal = h("div.modal", null, box);
+    document.getElementById("app").appendChild(modal);
+    var layer = pushLayer(modal, {
+      onBack: function onBack() {
+        return close();
+      }
+    });
+    focusFirst(modal);
+    setTimeout(function () {
+      return select(input);
+    }, 50);
+    input.__submit = function (v) {
+      var pin = String(v || "").trim();
+      if (!pin) return;
+      if (onSubmit(pin) === false) {
+        err.textContent = badText || t("PIN errado. Tente de novo.");
+        input.value = "";
+        focus(input);
+        return;
+      }
+      close();
+    };
+    function close() {
+      popLayer(layer);
+      if (modal.parentNode) modal.parentNode.removeChild(modal);
+    }
   }
   function askProfileName(title, initial, okLabel, onOk, onCancel) {
     var err = h("div.modal-text.err-text");
@@ -7029,7 +7531,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     session(SESSION_NEW, null);
   }
   function needsPicker() {
-    return profiles().length > 1 && settings().askProfile && !session(SESSION_PICKED);
+    if (session(SESSION_PICKED)) return false;
+    return profiles().length > 1 && settings().askProfile || !!activeProfile().pin;
   }
   function showPicker(onPicked) {
     var list2 = profiles();
@@ -7042,7 +7545,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return pick2(p.id);
         }
       }, [avatar(p, "big"), h("div.profile-name", {
-        text: p.name
+        text: (p.pin ? "🔒 " : "") + p.name
       })]);
     });
     cards.push(h("div.profile-card", {
@@ -7072,6 +7575,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     focusFirst(el);
     function pick2(id) {
+      checkPin(list2.find(function (p) {
+        return p.id === id;
+      }), function () {
+        return done(id);
+      });
+    }
+    function done(id) {
       setActiveProfile(id);
       session(SESSION_PICKED, "1");
       popLayer(layer);
@@ -7710,23 +8220,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }));
   }
   var RD = "https://api.real-debrid.com/rest/1.0/";
-  function rd(key2, method, path, body) {
+  function rd(key3, method, path, body) {
     return request(method, RD + path, body, {
       form: true,
       timeout: 2e4,
       headers: {
-        Authorization: "Bearer " + key2
+        Authorization: "Bearer " + key3
       }
     });
   }
-  function realDebrid(key2, mag, hint) {
-    return rd(key2, "POST", "torrents/addMagnet", {
+  function realDebrid(key3, mag, hint) {
+    return rd(key3, "POST", "torrents/addMagnet", {
       magnet: mag
     }).then(function (added) {
       var id = added && added.id;
       if (!id) throw new Error("Real-Debrid: addMagnet");
       var info2 = function info2() {
-        return rd(key2, "GET", "torrents/info/" + encodeURIComponent(id));
+        return rd(key3, "GET", "torrents/info/" + encodeURIComponent(id));
       };
       return info2().then(function (tor) {
         var files = (tor.files || []).map(function (f) {
@@ -7738,7 +8248,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         var file = pickFile(files, hint);
         if (!file) throw new Error("Real-Debrid: no files");
-        return rd(key2, "POST", "torrents/selectFiles/" + encodeURIComponent(id), {
+        return rd(key3, "POST", "torrents/selectFiles/" + encodeURIComponent(id), {
           files: String(file.id)
         });
       }).then(function poll2(_, n) {
@@ -7746,7 +8256,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return info2().then(function (tor) {
           if (tor.status === "downloaded" && tor.links && tor.links.length) return tor.links[0];
           if (n >= 3 || /error|dead|virus|magnet_error/.test(tor.status)) {
-            rd(key2, "DELETE", "torrents/delete/" + encodeURIComponent(id)).catch(function () {});
+            rd(key3, "DELETE", "torrents/delete/" + encodeURIComponent(id)).catch(function () {});
             throw notCached("Real-Debrid");
           }
           return wait(1500).then(function () {
@@ -7754,7 +8264,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
         });
       }).then(function (link) {
-        return rd(key2, "POST", "unrestrict/link", {
+        return rd(key3, "POST", "unrestrict/link", {
           link: link
         });
       }).then(function (r) {
@@ -7764,9 +8274,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   var TB = "https://api.torbox.app/v1/api/";
-  function torbox(key2, mag, hint) {
+  function torbox(key3, mag, hint) {
     var auth2 = {
-      Authorization: "Bearer " + key2
+      Authorization: "Bearer " + key3
     };
     return request("POST", TB + "torrents/createtorrent", {
       magnet: mag,
@@ -7801,7 +8311,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         var file = pickFile(files, hint);
         if (!file) throw new Error("TorBox: no files");
-        return getJSON(TB + "torrents/requestdl?token=" + encodeURIComponent(key2) + "&torrent_id=" + encodeURIComponent(id) + "&file_id=" + encodeURIComponent(file.id), {
+        return getJSON(TB + "torrents/requestdl?token=" + encodeURIComponent(key3) + "&torrent_id=" + encodeURIComponent(id) + "&file_id=" + encodeURIComponent(file.id), {
           timeout: 15e3
         }).then(function (d) {
           if (!d || !d.data) throw new Error("TorBox: requestdl");
@@ -7810,10 +8320,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
-  function premiumize(key2, mag, hint) {
+  function premiumize(key3, mag, hint) {
     return request("POST", "https://www.premiumize.me/api/transfer/directdl", {
       src: mag,
-      apikey: key2
+      apikey: key3
     }, {
       form: true,
       timeout: 25e3
@@ -7844,11 +8354,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       throw e;
     });
   }
-  function testKey(id, key2) {
+  function testKey(id, key3) {
     if (id === "realdebrid") return request("GET", RD + "user", null, {
       timeout: 15e3,
       headers: {
-        Authorization: "Bearer " + key2
+        Authorization: "Bearer " + key3
       }
     }).then(function (u) {
       return u && u.username || "OK";
@@ -7856,12 +8366,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (id === "torbox") return getJSON(TB + "user/me", {
       timeout: 15e3,
       headers: {
-        Authorization: "Bearer " + key2
+        Authorization: "Bearer " + key3
       }
     }).then(function (u) {
       return u && u.data && u.data.email ? u.data.email : "OK";
     });
-    return getJSON("https://www.premiumize.me/api/account/info?apikey=" + encodeURIComponent(key2), {
+    return getJSON("https://www.premiumize.me/api/account/info?apikey=" + encodeURIComponent(key3), {
       timeout: 15e3
     }).then(function (u) {
       if (!u || u.status !== "success") throw new Error(t("Chave inválida"));
@@ -8284,10 +8794,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var credits = (p.combined_credits && p.combined_credits.cast || []).concat((p.combined_credits && p.combined_credits.crew || []).filter(function (c) {
           return c.job === "Director";
         })).filter(function (c) {
-          var key2 = c.media_type + c.id;
-          if (!c.poster_path || seen[key2] || c.media_type !== "movie" && c.media_type !== "tv") return false;
+          var key3 = c.media_type + c.id;
+          if (!c.poster_path || seen[key3] || c.media_type !== "movie" && c.media_type !== "tv") return false;
           if (c.media_type === "tv" && /^(Self|Himself|Herself|Host)/i.test(c.character || "")) return false;
-          seen[key2] = true;
+          seen[key3] = true;
           return true;
         }).sort(function (a, b) {
           return (b.popularity || 0) - (a.popularity || 0);
@@ -8354,11 +8864,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function mdblist(meta) {
-    var key2 = (settings().mdblistKey || "").trim();
+    var key3 = (settings().mdblistKey || "").trim();
     var imdb = imdbOf(meta.id);
-    if (!key2 || !imdb) return Promise.resolve([]);
+    if (!key3 || !imdb) return Promise.resolve([]);
     var type = meta.type === "series" ? "show" : "movie";
-    return getJSONViaProxy("https://api.mdblist.com/imdb/" + type + "/" + imdb + "?apikey=" + encodeURIComponent(key2), {
+    return getJSONViaProxy("https://api.mdblist.com/imdb/" + type + "/" + imdb + "?apikey=" + encodeURIComponent(key3), {
       timeout: 12e3
     }).then(function (d) {
       var out = [];
@@ -8755,9 +9265,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var c = connection();
     var m = String(id).match(/^(tt\d+)(?::(\d+):(\d+))?$/);
     if (!c || !m) return Promise.resolve([]);
-    return findItem(c, type, m[1]).then(function (items2) {
-      if (items2.length !== 1) return [];
-      var item2 = items2[0];
+    return findItem(c, type, m[1]).then(function (items3) {
+      if (items3.length !== 1) return [];
+      var item2 = items3[0];
       var pick2 = type === "movie" ? Promise.resolve(item2) : call2(c, "GET", "/Shows/" + encodeURIComponent(item2.Id) + "/Episodes?" + q({
         UserId: c.userId,
         Season: m[2],
@@ -9097,9 +9607,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return interleave(r[0], r[1]);
     });
   }
-  function localize(items2) {
-    if (!hasTmdb()) return items2;
-    return Promise.all(items2.map(function (it) {
+  function localize(items3) {
+    if (!hasTmdb()) return items3;
+    return Promise.all(items3.map(function (it) {
       return tmdbFind(it.id).then(function (f) {
         if (f && f.overview) it.description = f.overview;
         if (f && f.title) it.name = f.title;
@@ -9110,8 +9620,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }));
   }
   function load2() {
-    return loadRaw().then(function (items2) {
-      return localize(items2.slice(0, 12));
+    return loadRaw().then(function (items3) {
+      return localize(items3.slice(0, 12));
     });
   }
   function loadRaw() {
@@ -9359,7 +9869,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var s = settings();
     return s.animeSkip === false ? "" : (s.animeSkipClientId || "").trim();
   }
-  function animeSkipQuery(query, key2) {
+  function animeSkipQuery(query, key3) {
     var body = {
       query: query
     };
@@ -9367,7 +9877,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       timeout: 1e4,
       quiet: true,
       headers: {
-        "X-Client-ID": key2
+        "X-Client-ID": key3
       }
     };
     return postJSON(ANIMESKIP, body, opts).catch(function (e) {
@@ -9407,10 +9917,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return out;
   }
   var showCache = {};
-  function animeSkipSegments(anilist, season, episode, key2) {
+  function animeSkipSegments(anilist, season, episode, key3) {
     if (!anilist || !episode) return Promise.resolve([]);
     var ck = String(anilist);
-    if (!showCache[ck]) showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key2).then(function (r) {
+    if (!showCache[ck]) showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key3).then(function (r) {
       return (r && r.data && r.data.findShowsByExternalId || []).map(function (x) {
         return String(x.id);
       }).filter(function (x) {
@@ -9425,7 +9935,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       ids2.forEach(function (id) {
         chain = chain.then(function (found) {
           if (found.length) return found;
-          return animeSkipQuery('{ findEpisodesByShowId(showId: "' + id + '") { season number baseDuration timestamps { at type { name } } } }', key2).then(function (r) {
+          return animeSkipQuery('{ findEpisodesByShowId(showId: "' + id + '") { season number baseDuration timestamps { at type { name } } } }', key3).then(function (r) {
             var eps = r && r.data && r.data.findEpisodesByShowId || [];
             var same = eps.filter(function (e) {
               return Number(e.number) === Number(episode);
@@ -9492,8 +10002,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   var malCache = {};
   function idsFromAnime(a) {
-    var key2 = a.source + ":" + a.id;
-    if (!malCache[key2]) malCache[key2] = getJSON(ARM2 + "ids?source=" + a.source + "&id=" + a.id, {
+    var key3 = a.source + ":" + a.id;
+    if (!malCache[key3]) malCache[key3] = getJSON(ARM2 + "ids?source=" + a.source + "&id=" + a.id, {
       quiet: true
     }).then(function (r) {
       return {
@@ -9506,11 +10016,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         anilist: a.source === "anilist" ? parseInt(a.id, 10) : null
       };
     });
-    return malCache[key2];
+    return malCache[key3];
   }
   function idsFromImdb(imdb, season) {
-    var key2 = imdb + ":" + season;
-    if (!malCache[key2]) malCache[key2] = getJSON(ARM2 + "imdb?id=" + imdb, {
+    var key3 = imdb + ":" + season;
+    if (!malCache[key3]) malCache[key3] = getJSON(ARM2 + "imdb?id=" + imdb, {
       quiet: true
     }).then(function (list2) {
       var arr = Array.isArray(list2) ? list2 : [];
@@ -9527,7 +10037,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         anilist: null
       };
     });
-    return malCache[key2];
+    return malCache[key3];
   }
   function isAnime(meta) {
     var g = (meta.genres || meta.genre || []).map(function (x) {
@@ -9557,8 +10067,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       if (!idsPromise || !ep) return [];
       return idsPromise.then(function (ids2) {
-        var key2 = animeSkipKey();
-        var fromAs = key2 && ids2.anilist ? animeSkipSegments(ids2.anilist, seasonForSkip, ep, key2).catch(function () {
+        var key3 = animeSkipKey();
+        var fromAs = key3 && ids2.anilist ? animeSkipSegments(ids2.anilist, seasonForSkip, ep, key3).catch(function () {
           return [];
         }) : Promise.resolve([]);
         return fromAs.then(function (found) {
@@ -9577,6 +10087,34 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return s.type + " " + s.start.toFixed(0) + "-" + s.end.toFixed(0) + " (" + s.source + ")";
       }).join(", "));
       return segs;
+    });
+  }
+  function selfTest() {
+    var url2 = INTRODB + "?imdb_id=tt9140560&season=1&episode=1";
+    var ok = function ok(r) {
+      return !!(r && r.intro);
+    };
+    var tryOne = function tryOne(u) {
+      return getJSON(u, {
+        timeout: 8e3,
+        quiet: true
+      }).then(ok, function () {
+        return false;
+      });
+    };
+    return tryOne(url2).then(function (direct) {
+      if (direct) return "direct";
+      return tryOne(fetchUrl(url2)).then(function (viaTv) {
+        if (viaTv) return "tv";
+        var p = getJSONViaProxy(url2, {
+          timeout: 8e3
+        }).then(ok, function () {
+          return false;
+        });
+        return p.then(function (viaPc) {
+          return viaPc ? "pc" : "none";
+        });
+      });
     });
   }
 
@@ -9825,6 +10363,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       try {
         AV.setSelectTrack("AUDIO", avIndex);
         log.info("avplay audio ->", avIndex);
+        if (readState() === "PLAYING") {
+          var back2 = Math.max(0, curMs - 800);
+          setTimeout(function () {
+            if (readState() === "PLAYING") doSeek(back2);
+          }, 250);
+        }
         return true;
       } catch (e) {
         log.warn("avplay setSelectTrack", e && (e.name || e.message));
@@ -10038,8 +10582,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var a = account(provider);
     return !!(a && a.invalid);
   }
-  function useFor(key2, p) {
-    var v = settings()[key2];
+  function useFor(key3, p) {
+    var v = settings()[key3];
     return v !== "trakt" && v !== "simkl" ? true : v === p;
   }
   function connected() {
@@ -10308,10 +10852,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       playing = null;
       return;
     }
-    var key2 = JSON.stringify(body);
-    if (playing && playing.key !== key2 && playing.lastAction !== "stop") scrobble("pause", playing.progress || 0);
-    if (!playing || playing.key !== key2) playing = {
-      key: key2,
+    var key3 = JSON.stringify(body);
+    if (playing && playing.key !== key3 && playing.lastAction !== "stop") scrobble("pause", playing.progress || 0);
+    if (!playing || playing.key !== key3) playing = {
+      key: key3,
       body: body,
       progress: fraction
     };
@@ -10439,6 +10983,37 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       if (playbackSink && out.length) playbackSink(out);
     });
+  }
+  function watchlistEntry() {
+    if (!isConnected("trakt") || settings().traktWatchlistRow === false) return null;
+    return {
+      addon: {
+        transportUrl: "trakt",
+        manifest: {
+          id: "trakt",
+          name: "Trakt"
+        }
+      },
+      catalog: {
+        id: "watchlist",
+        name: t("Minha lista do Trakt"),
+        type: "movie"
+      },
+      fetch: function fetch() {
+        return trakt("GET", "/sync/watchlist?sort=added,desc").then(function (list2) {
+          return (list2 || []).map(function (x) {
+            var m = x.movie || x.show;
+            var imdb = m && m.ids && m.ids.imdb;
+            return imdb ? {
+              id: imdb,
+              type: x.movie ? "movie" : "series",
+              name: m.title,
+              poster: "https://images.metahub.space/poster/medium/" + imdb + "/img"
+            } : null;
+          }).filter(Boolean).slice(0, 40);
+        });
+      }
+    };
   }
 
   // src/js/lib/chapters.js
@@ -10651,6 +11226,67 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/api/subdl.js
+  var API2 = "https://api.subdl.com/api/v1/subtitles";
+  var DL = "https://dl.subdl.com";
+  var LANGS = {
+    AR: "ara",
+    EN: "eng",
+    FR: "fre",
+    ES: "spa",
+    TR: "tur",
+    FA: "per",
+    UR: "urd"
+  };
+  function key() {
+    return (settings().subdlKey || "").trim();
+  }
+  function prefLangs() {
+    var map = {
+      ara: "AR",
+      ar: "AR",
+      eng: "EN",
+      en: "EN",
+      spa: "ES",
+      es: "ES",
+      fre: "FR",
+      fr: "FR",
+      tur: "TR",
+      tr: "TR"
+    };
+    var out = [];
+    (settings().subtitleLangs || []).forEach(function (l) {
+      var c = map[String(l).toLowerCase()];
+      if (c && out.indexOf(c) < 0) out.push(c);
+    });
+    if (out.indexOf("AR") < 0) out.unshift("AR");
+    return out.join(",");
+  }
+  function search(type, videoId) {
+    var k = key();
+    var m = String(videoId || "").match(/^(tt\d+)(?::(\d+):(\d+))?$/);
+    if (!k || !m) return Promise.resolve([]);
+    var params = ["api_key=" + encodeURIComponent(k), "imdb_id=" + m[1], "type=" + (type === "series" ? "tv" : "movie"), "languages=" + prefLangs(), "subs_per_page=30"];
+    if (m[2]) params.push("season_number=" + m[2], "episode_number=" + m[3]);
+    var ep = m[2] ? "S" + ("0" + m[2]).slice(-2) + "E" + ("0" + m[3]).slice(-2) : "";
+    return getJSONViaProxy(API2 + "?" + params.join("&"), {
+      timeout: 12e3
+    }).then(function (r) {
+      return (r && r.subtitles || []).filter(function (s) {
+        return s && s.url;
+      }).map(function (s, i) {
+        return {
+          id: "subdl-" + i + "-" + s.url,
+          lang: LANGS[String(s.language || s.lang || "").toUpperCase()] || String(s.lang || s.language || "").toLowerCase(),
+          url: "http://127.0.0.1:" + PORT + "/api/subzip?url=" + encodeURIComponent(DL + s.url) + (ep ? "&ep=" + ep : ""),
+          addon: "SubDL" + (s.release_name ? " · " + s.release_name : "")
+        };
+      });
+    }).catch(function () {
+      return [];
+    });
+  }
+
   // src/js/views/player.js
   var HIDE_MS = 5e3;
   var SAVE_MS = 15e3;
@@ -10682,6 +11318,68 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     hin: "Hindi",
     und: "Indefinido"
   };
+  var LANG2 = {
+    eng: "en",
+    english: "en",
+    ara: "ar",
+    arabic: "ar",
+    rus: "ru",
+    russian: "ru",
+    jpn: "ja",
+    japanese: "ja",
+    spa: "es",
+    spanish: "es",
+    fre: "fr",
+    fra: "fr",
+    french: "fr",
+    ger: "de",
+    deu: "de",
+    german: "de",
+    ita: "it",
+    italian: "it",
+    por: "pt",
+    pob: "pt",
+    portuguese: "pt",
+    tur: "tr",
+    turkish: "tr",
+    hin: "hi",
+    hindi: "hi",
+    kor: "ko",
+    korean: "ko",
+    chi: "zh",
+    zho: "zh",
+    chinese: "zh",
+    per: "fa",
+    fas: "fa",
+    persian: "fa",
+    urd: "ur",
+    urdu: "ur",
+    heb: "he",
+    hebrew: "he",
+    ind: "id",
+    indonesian: "id",
+    may: "ms",
+    msa: "ms",
+    malay: "ms",
+    tha: "th",
+    thai: "th",
+    ukr: "uk",
+    ukrainian: "uk",
+    pol: "pl",
+    polish: "pl",
+    dut: "nl",
+    nld: "nl",
+    dutch: "nl",
+    gre: "el",
+    ell: "el",
+    greek: "el",
+    swe: "sv",
+    swedish: "sv"
+  };
+  function lang2(x) {
+    var v = String(x || "").toLowerCase().trim().split(/[-_ (]/)[0];
+    return LANG2[v] || v;
+  }
   function langName(code) {
     if (!code) return t("Desconhecido");
     var name = LANG_NAMES[String(code).toLowerCase()];
@@ -10757,9 +11455,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return chaptersMenu();
       }
     });
+    var sleepBtn = h("div.btn", {
+      focusable: true,
+      html: '<span class="ico">☾</span>' + t("Dormir"),
+      onSelect: function onSelect() {
+        return sleepMenu();
+      }
+    });
     var buttons = h("div.p-buttons", {
       "data-group": ""
-    }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, nextBtn]);
+    }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, sleepBtn, nextBtn]);
     var spinner = h("div.p-center", null, h("div.spinner"));
     var msgEl = h("div.p-msg");
     var skipFill = h("i");
@@ -10770,7 +11475,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     });
     var skipBox = h("div.p-skip", null, [skipBtn, h("div.bar", null, skipFill)]);
-    var overlay = h("div.p-overlay", null, [h("div.p-top", null, [titleEl, clockEl]), h("div.p-bottom", null, [bar, h("div.p-times", null, [curTimeEl, h("div.spacer"), durEl]), buttons])]);
+    var overlay2 = h("div.p-overlay", null, [h("div.p-top", null, [titleEl, clockEl]), h("div.p-bottom", null, [bar, h("div.p-times", null, [curTimeEl, h("div.spacer"), durEl]), buttons])]);
     var upNextTitle = h("div.un-title");
     var upNextCount = h("div.un-count");
     var upNextPlay = h("div.btn.primary", {
@@ -10807,7 +11512,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }), postTrack, h("div.un-buttons", {
       "data-group": ""
     }, [postClose])]);
-    var el = h("div.view.player", null, [videoNode, subsEl, overlay, skipBox, upNextBox, postBox, spinner, msgEl]);
+    var el = h("div.view.player", null, [videoNode, subsEl, overlay2, skipBox, upNextBox, postBox, spinner, msgEl]);
     var renderer = Renderer(subsEl);
     apply(subsEl, settings2);
     var alive = true;
@@ -10915,16 +11620,36 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).catch(function () {
         if (!addonSubs) addonSubs = [];
       });
+      if (key()) search(meta.type, video.id).then(function (list2) {
+        if (!alive || forVideo !== video || !list2.length) return;
+        addonSubs = (addonSubs || []).concat(list2);
+        autoPick();
+      });
     }
     var autoDone = {
       sub: false,
       audio: false
     };
+    var TRACKS_KEY = "seriesTracks";
+    function rememberedTracks() {
+      if (!opts.isSeries || settings2.rememberTracks === false) return {};
+      return (get(TRACKS_KEY, {}) || {})[meta.id] || {};
+    }
+    function rememberTrack(kind, lang3) {
+      if (!opts.isSeries || settings2.rememberTracks === false || !lang3) return;
+      var all2 = get(TRACKS_KEY, {}) || {};
+      var ids2 = Object.keys(all2);
+      if (ids2.length > 200) delete all2[ids2[0]];
+      all2[meta.id] = Object.assign({}, all2[meta.id], _defineProperty({}, kind, String(lang3).toLowerCase()));
+      set(TRACKS_KEY, all2);
+    }
     function autoPick() {
-      var prefSubs = (settings2.subtitleLangs || []).map(function (x) {
+      var mem = rememberedTracks();
+      if (mem.sub === "off") autoDone.sub = true;
+      var prefSubs = (mem.sub ? [mem.sub] : []).concat((settings2.subtitleLangs || []).map(function (x) {
         return x.toLowerCase();
-      });
-      var prefAudio = (settings2.audioLangs || []).map(function (x) {
+      }));
+      var prefAudio = mem.audio ? [mem.audio] : (settings2.audioLangs || []).map(function (x) {
         return x.toLowerCase();
       });
       var avList = videoEl.isAVPlay ? videoEl.audioTrackList().map(function (x) {
@@ -10935,18 +11660,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var audioList = avList.length > 1 ? avList : embedded ? embedded.audio : [];
       if (!autoDone.audio && prefAudio.length && audioList.length > 1) {
         autoDone.audio = true;
-        var already = audioList[0] && prefAudio.indexOf(String(audioList[0].lang).toLowerCase()) >= 0;
+        var want = prefAudio.map(lang2);
+        var avNow = videoEl.isAVPlay ? videoEl.audioTrackList().findIndex(function (x) {
+          return x.enabled;
+        }) : 0;
+        var nowIdx = avNow >= 0 ? avNow : 0;
+        var already = audioList[nowIdx] && want.indexOf(lang2(audioList[nowIdx].lang)) >= 0;
         if (!already) {
-          var idx = audioList.findIndex(function (tr) {
-            return prefAudio.indexOf(String(tr.lang).toLowerCase()) >= 0;
-          });
-          if (idx > 0) selectEmbeddedAudio(idx, true);
+          var idx = -1;
+          var _loop4 = function _loop4(w) {
+            idx = audioList.findIndex(function (tr) {
+              return lang2(tr.lang) === want[w];
+            });
+          };
+          for (var w = 0; w < want.length && idx < 0; w++) {
+            _loop4(w);
+          }
+          if (idx >= 0 && idx !== nowIdx) selectEmbeddedAudio(idx, true);
         }
       }
-      if (autoDone.sub || !settings2.subtitlesAuto || !prefSubs.length || !addonSubs) return;
-      var _loop4 = function _loop4(p) {
+      if (autoDone.sub || !(settings2.subtitlesAuto || mem.sub) || !prefSubs.length || !addonSubs) return;
+      var _loop5 = function _loop5(p) {
           var s = addonSubs.find(function (x) {
-            return String(x.lang).toLowerCase() === prefSubs[p];
+            return lang2(x.lang) === lang2(prefSubs[p]);
           });
           if (s) {
             autoDone.sub = true;
@@ -10958,12 +11694,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret2;
       for (var p = 0; p < prefSubs.length; p++) {
-        _ret2 = _loop4(p);
+        _ret2 = _loop5(p);
         if (_ret2) return _ret2.v;
       }
     }
     function scheduleAudioPick() {
-      if (!(settings2.audioLangs || []).length) return;
+      if (!(settings2.audioLangs || []).length && !rememberedTracks().audio) return;
       if (videoEl.isAVPlay) {
         setTimeout(function () {
           return alive && hasPlayed && autoPick();
@@ -11024,7 +11760,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       saveProgress2();
       record(video.id, 1);
       onStop(1);
-      if (opts.isSeries && nextVideo() && !upNextCancelled) playNext();else if (!(opts.isSeries && nextVideo()) && settings().postPlay !== false) showPostPlay();else pop();
+      if (sleepAt === -1) {
+        sleepAt = 0;
+        toast(t("Boa noite!"), 5e3);
+        return pop();
+      }
+      if (opts.isSeries && nextVideo() && !upNextCancelled && settings2.autoNext !== false) playNext();else if (!(opts.isSeries && nextVideo()) && settings().postPlay !== false) showPostPlay();else pop();
     });
     var postPlayOn = false;
     function showPostPlay() {
@@ -11058,6 +11799,72 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }).catch(function () {
         return alive && pop();
+      });
+    }
+    var sleepTimer = null;
+    var sleepAt = 0;
+    function sleepNow() {
+      clearTimeout(sleepTimer);
+      sleepTimer = null;
+      sleepAt = 0;
+      saveProgress2();
+      videoEl.pause();
+      toast(t("Boa noite! O vídeo foi pausado."), 6e3);
+      setTimeout(function () {
+        return alive && videoEl.paused && close();
+      }, 6e4);
+    }
+    function sleepMenu() {
+      var left = sleepAt > 0 ? Math.max(1, Math.round((sleepAt - Date.now()) / 6e4)) : 0;
+      var opts2 = [{
+        label: t("Desligado"),
+        value: 0,
+        checked: !sleepAt
+      }, {
+        label: t("{n} minutos", {
+          n: 15
+        }),
+        value: 15
+      }, {
+        label: t("{n} minutos", {
+          n: 30
+        }),
+        value: 30
+      }, {
+        label: t("{n} minutos", {
+          n: 60
+        }),
+        value: 60
+      }, {
+        label: t("{n} minutos", {
+          n: 90
+        }),
+        value: 90
+      }, {
+        label: t("No fim deste vídeo"),
+        value: -1,
+        checked: sleepAt === -1
+      }];
+      menu(t("Dormir") + (left ? " · " + t("faltam {n} min", {
+        n: left
+      }) : ""), opts2, {
+        onPick: function onPick(v) {
+          clearTimeout(sleepTimer);
+          sleepTimer = null;
+          sleepAt = 0;
+          sleepBtn.classList.remove("on");
+          if (!v) return toast(t("Timer desligado"));
+          sleepBtn.classList.add("on");
+          if (v === -1) {
+            sleepAt = -1;
+            return toast(t("O vídeo para no fim deste episódio"));
+          }
+          sleepAt = Date.now() + v * 6e4;
+          sleepTimer = setTimeout(sleepNow, v * 6e4);
+          toast(t("O vídeo para em {n} minutos", {
+            n: v
+          }));
+        }
       });
     }
     var chapterList = null;
@@ -11121,7 +11928,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return alive && !videoEl.paused && sendNowPlaying();
     }, 15e3);
     var UP_NEXT_SECONDS = 25;
-    var UP_NEXT_COUNT = 10;
+    var UP_NEXT_COUNT = Math.max(3, +settings2.upNextSeconds || 10);
     var upNextTimer = null;
     var upNextLeft = 0;
     var upNextCancelled = false;
@@ -11133,7 +11940,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return outro ? outro.start : d - UP_NEXT_SECONDS;
     }
     function checkUpNext() {
-      if (upNextTimer || upNextCancelled || !opts.isSeries || seekTarget !== null || videoEl.paused) return;
+      if (upNextTimer || upNextCancelled || !opts.isSeries || seekTarget !== null || videoEl.paused || settings2.autoNext === false || sleepAt === -1) return;
       var d = videoEl.duration;
       var nv = nextVideo();
       if (!nv || !(d > 300) || !isFinite(d) || videoEl.currentTime < upNextStart()) return;
@@ -11513,7 +12320,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         el.classList.add("controls-on");
         updateTimes();
         updatePlayBtn();
-        if (!current2() || !overlay.contains(current2())) focus(focusEl || bar);
+        if (!current2() || !overlay2.contains(current2())) focus(focusEl || bar);
       } else if (focusEl) focus(focusEl);
       scheduleHide();
     }
@@ -11571,33 +12378,33 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var id = String(videoEl.mediaId || "").trim();
       return id && id !== "<invalid mediaId>" ? id : null;
     }
-    function selectEmbeddedAudio(index, silent) {
+    function selectEmbeddedAudio(index2, silent) {
       if (videoEl.isAVPlay) {
-        if (videoEl.selectAudio(index)) {
-          currentAudio = index;
+        if (videoEl.selectAudio(index2)) {
+          currentAudio = index2;
           if (!silent) toast(t("Áudio: {lang}", {
-            lang: audioName(index)
+            lang: audioName(index2)
           }));
         } else toast(t("Troca de áudio indisponível agora."));
         return;
       }
       var native = videoEl.audioTracks;
-      if (native && native.length > index) {
-        for (var i = 0; i < native.length; i++) native[i].enabled = i === index;
-        currentAudio = index;
+      if (native && native.length > index2) {
+        for (var i = 0; i < native.length; i++) native[i].enabled = i === index2;
+        currentAudio = index2;
         try {
           if (!videoEl.paused) videoEl.currentTime = Math.max(0, videoEl.currentTime - 0.2);
         } catch (e) {}
         return;
       }
       var id = mediaId();
-      if (!id || !hasLuna()) return toast(t("Troca de áudio indisponível agora."));
+      if (!id || !hasLuna()) return toast(available() ? t("Troca de áudio indisponível agora.") : t("Para trocar o áudio, o app precisa do player da Samsung (AVPlay), que não carregou. Veja Ajustes → Reprodução."), 6e3);
       luna("luna://com.webos.media", "selectTrack", {
         mediaId: id,
         type: "audio",
-        index: index
+        index: index2
       }).then(function () {
-        return currentAudio = index;
+        return currentAudio = index2;
       }).catch(function (e) {
         return toast(t("Falha ao trocar áudio: {msg}", {
           msg: e.message
@@ -11614,18 +12421,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         enable: false
       }).catch(function () {});
     }
-    function selectEmbeddedSub(index) {
+    function selectEmbeddedSub(index2) {
       renderer.clear();
       streamProgress(mediaUrl).then(function (p) {
         if (!alive) return;
-        if (p !== null && p >= 0.999) extractedSub(index);else nativeEmbeddedSub(index);
+        if (p !== null && p >= 0.999) extractedSub(index2);else nativeEmbeddedSub(index2);
       });
     }
-    function extractedSub(index) {
+    function extractedSub(index2) {
       nativeSubsOff();
       var cs = {
         kind: "embedded",
-        index: index,
+        index: index2,
         extracted: true,
         sid: "kai" + Math.random().toString(36).slice(2),
         segs: {},
@@ -11667,11 +12474,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return cs.busy = false;
       });
     }
-    function nativeEmbeddedSub(index) {
+    function nativeEmbeddedSub(index2) {
       var id = mediaId();
       if (!id || !hasLuna()) {
         setTimeout(function () {
-          return alive && mediaId() && nativeEmbeddedSub(index);
+          return alive && mediaId() && nativeEmbeddedSub(index2);
         }, 1200);
         return;
       }
@@ -11683,12 +12490,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return luna("luna://com.webos.media", "selectTrack", {
           mediaId: id,
           type: "text",
-          index: index
+          index: index2
         });
       }).then(function () {
         currentSub = {
           kind: "embedded",
-          index: index
+          index: index2
         };
       }).catch(function (e) {
         return toast(t("Falha na legenda embutida: {msg}", {
@@ -11777,7 +12584,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       menu(t("Áudio"), list2, {
         empty: isAvailable() || videoEl.isAVPlay ? t("Só uma faixa de áudio.") : t("Para listar as faixas, conecte o servidor do PC em Ajustes."),
         onPick: function onPick(i) {
-          return selectEmbeddedAudio(i);
+          selectEmbeddedAudio(i);
+          var av2 = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
+          var tr = embedded && embedded.audio[i] || av2[i] || native && native[i];
+          rememberTrack("audio", tr && (tr.lang || tr.language));
         }
       });
     }
@@ -11845,6 +12655,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         empty: addonSubs === null ? t("Carregando legendas...") : t("Nenhuma legenda."),
         onPick: function onPick(v) {
           if (v.kind === "off" || v.kind === "embedded" || v.kind === "addon") autoDone.sub = true;
+          if (v.kind === "off") rememberTrack("sub", "off");else if (v.kind === "addon") rememberTrack("sub", v.sub.lang);else if (v.kind === "embedded") rememberTrack("sub", embedded.subs[v.index] && embedded.subs[v.index].lang);
           if (v.kind === "off") {
             disableEmbeddedSubs();
             renderer.clear();
@@ -12067,6 +12878,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       destroy: function destroy() {
         alive = false;
+        clearTimeout(sleepTimer);
         clearInterval(nowTimer);
         onSeek(null);
         nowPlaying(null);
@@ -12216,8 +13028,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     push(TrailerView(ids2, title));
   }
   function TrailerView(ids2, title) {
-    var index = 0;
-    var playing2 = true;
+    var index2 = 0;
+    var playing3 = true;
     var el = h("div.view.trailer");
     var frame = h("iframe.trailer-frame", {
       tabindex: "-1",
@@ -12235,8 +13047,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }));
     function load6() {
       var params = "autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&enablejsapi=1&hl=" + current();
-      frame.src = "https://www.youtube-nocookie.com/embed/" + ids2[index] + "?" + params;
-      playing2 = true;
+      frame.src = "https://www.youtube-nocookie.com/embed/" + ids2[index2] + "?" + params;
+      playing3 = true;
     }
     function command(func, args) {
       try {
@@ -12264,18 +13076,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var k = e.keyCode;
         showHint();
         if (k === KEY.PLAYPAUSE || k === KEY.PLAY || k === KEY.PAUSE || k === KEY.ENTER) {
-          playing2 = k === KEY.PLAY ? true : k === KEY.PAUSE ? false : !playing2;
-          command(playing2 ? "playVideo" : "pauseVideo");
+          playing3 = k === KEY.PLAY ? true : k === KEY.PAUSE ? false : !playing3;
+          command(playing3 ? "playVideo" : "pauseVideo");
           return true;
         }
         if ((k === KEY.RIGHT || k === KEY.FF) && ids2.length > 1) {
-          index = (index + 1) % ids2.length;
+          index2 = (index2 + 1) % ids2.length;
           load6();
           return true;
         }
         if (k === KEY.LEFT || k === KEY.RW) {
           if (ids2.length > 1 && k === KEY.LEFT) {
-            index = (index - 1 + ids2.length) % ids2.length;
+            index2 = (index2 - 1 + ids2.length) % ids2.length;
             load6();
           }
           return true;
@@ -12290,7 +13102,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/parental.js
-  var API2 = "https://api.tiffara.com/titles/";
+  var API3 = "https://api.tiffara.com/titles/";
   var CATS = [{
     key: "SEXUAL_CONTENT",
     label: "Nudez"
@@ -12331,7 +13143,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var id = (String(imdbId || "").match(/^tt\d+/) || [])[0];
     if (!id) return Promise.resolve([]);
     if (cache3[id]) return cache3[id];
-    var p = getJSONViaProxy(API2 + id + "/parentsGuide", {
+    var p = getJSONViaProxy(API3 + id + "/parentsGuide", {
       timeout: 6e3
     }).then(function (r) {
       var map = {};
@@ -12999,8 +13811,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         filterBtn.textContent = (g ? g.addon.manifest.name : t("Todos")) + " ▾";
       }
       function firstVisibleItem() {
-        var items2 = list2.querySelectorAll(".stream");
-        for (var i = 0; i < items2.length; i++) if (items2[i].offsetParent !== null && !items2[i].classList.contains("disabled")) return items2[i];
+        var items3 = list2.querySelectorAll(".stream");
+        for (var i = 0; i < items3.length; i++) if (items3[i].offsetParent !== null && !items3[i].classList.contains("disabled")) return items3[i];
         return null;
       }
       function applyFilter() {
@@ -13395,6 +14207,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     chrono: ["tt10545296", "tt1392170", "tt1951264", "tt1951265", "tt1951266"]
   }, {
     id: "toystory",
+    cat: "cartoon",
     name: "Toy Story",
     ar: "حكاية لعبة",
     items: [["tt0114709", "Toy Story", 1995], ["tt0120363", "Toy Story 2", 1999], ["tt0435761", "Toy Story 3", 2010], ["tt1979376", "Toy Story 4", 2019]]
@@ -13447,6 +14260,67 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     name: "Ghost in the Shell",
     ar: "شبح في القوقعة (Ghost in the Shell)",
     items: [["tt0113568", "Ghost in the Shell", 1995], ["tt0346314", "Ghost in the Shell: Stand Alone Complex", 2002, "s"], ["tt0347246", "Ghost in the Shell 2: Innocence", 2004], ["tt4337072", "Ghost in the Shell: The New Movie", 2015], ["tt9466298", "Ghost in the Shell: SAC_2045", 2020, "s"]]
+  },
+  // ---------- Series universes ----------
+  {
+    id: "breakingbad",
+    cat: "series",
+    name: "Breaking Bad universe",
+    ar: "عالم بريكنج باد (Breaking Bad)",
+    items: [["tt0903747", "Breaking Bad", 2008, "s"], ["tt3032476", "Better Call Saul", 2015, "s"], ["tt9243946", "El Camino: A Breaking Bad Movie", 2019]],
+    chrono: ["tt3032476", "tt0903747", "tt9243946"]
+  }, {
+    id: "got",
+    cat: "series",
+    name: "Game of Thrones universe",
+    ar: "عالم صراع العروش (Game of Thrones)",
+    items: [["tt0944947", "Game of Thrones", 2011, "s"], ["tt11198330", "House of the Dragon", 2022, "s"], ["tt27497448", "A Knight of the Seven Kingdoms", 2026, "s"]],
+    chrono: ["tt11198330", "tt27497448", "tt0944947"]
+  }, {
+    id: "walkingdead",
+    cat: "series",
+    name: "The Walking Dead universe",
+    ar: "عالم الموتى السائرون (The Walking Dead)",
+    items: [["tt1520211", "The Walking Dead", 2010, "s"], ["tt3743822", "Fear the Walking Dead", 2015, "s"], ["tt10148174", "The Walking Dead: World Beyond", 2020, "s"], ["tt15669534", "Tales of the Walking Dead", 2022, "s"], ["tt18546730", "The Walking Dead: Dead City", 2023, "s"], ["tt13062500", "The Walking Dead: Daryl Dixon", 2023, "s"], ["tt9859436", "The Walking Dead: The Ones Who Live", 2024, "s"]]
+  }, {
+    id: "yellowstone",
+    cat: "series",
+    name: "Yellowstone universe",
+    ar: "عالم يلوستون (Yellowstone)",
+    items: [["tt4236770", "Yellowstone", 2018, "s"], ["tt13991232", "1883", 2021, "s"], ["tt18335752", "1923", 2022, "s"]],
+    chrono: ["tt13991232", "tt18335752", "tt4236770"]
+  }, {
+    id: "theboys",
+    cat: "series",
+    name: "The Boys universe",
+    ar: "عالم ذا بويز (The Boys)",
+    items: [["tt1190634", "The Boys", 2019, "s"], ["tt16350094", "The Boys Presents: Diabolical", 2022, "s"], ["tt13159924", "Gen V", 2023, "s"]]
+  }, {
+    id: "dexter",
+    cat: "series",
+    name: "Dexter",
+    ar: "دكستر (Dexter)",
+    items: [["tt0773262", "Dexter", 2006, "s"], ["tt14164730", "Dexter: New Blood", 2021, "s"], ["tt32252772", "Dexter: Original Sin", 2024, "s"], ["tt33043892", "Dexter: Resurrection", 2025, "s"]],
+    chrono: ["tt32252772", "tt0773262", "tt14164730", "tt33043892"]
+  }, {
+    id: "marvel-netflix",
+    cat: "series",
+    name: "Marvel Defenders saga",
+    ar: "مسلسلات مارفل المدافعون (Defenders)",
+    items: [["tt3322312", "Daredevil", 2015, "s"], ["tt2357547", "Jessica Jones", 2015, "s"], ["tt3322314", "Luke Cage", 2016, "s"], ["tt3322310", "Iron Fist", 2017, "s"], ["tt4230076", "The Defenders", 2017, "s"], ["tt5675620", "The Punisher", 2017, "s"], ["tt18923754", "Daredevil: Born Again", 2025, "s"]]
+  }, {
+    id: "arrowverse",
+    cat: "series",
+    name: "Arrowverse",
+    ar: "عالم آرو (Arrowverse)",
+    items: [["tt2193021", "Arrow", 2012, "s"], ["tt3107288", "The Flash", 2014, "s"], ["tt4016454", "Supergirl", 2015, "s"], ["tt4532368", "DC's Legends of Tomorrow", 2016, "s"], ["tt6045840", "Black Lightning", 2018, "s"], ["tt8712204", "Batwoman", 2019, "s"]]
+  }, {
+    id: "startrek-tv",
+    cat: "series",
+    name: "Star Trek (series)",
+    ar: "ستار تريك المسلسلات (Star Trek)",
+    items: [["tt0060028", "Star Trek: The Original Series", 1966, "s"], ["tt0092455", "Star Trek: The Next Generation", 1987, "s"], ["tt0106145", "Star Trek: Deep Space Nine", 1993, "s"], ["tt0112178", "Star Trek: Voyager", 1995, "s"], ["tt0244365", "Star Trek: Enterprise", 2001, "s"], ["tt5171438", "Star Trek: Discovery", 2017, "s"], ["tt8806524", "Star Trek: Picard", 2020, "s"], ["tt12327578", "Star Trek: Strange New Worlds", 2022, "s"]],
+    chrono: ["tt0244365", "tt5171438", "tt12327578", "tt0060028", "tt0092455", "tt0106145", "tt0112178", "tt8806524"]
   }, {
     id: "xmen-cartoon",
     cat: "cartoon",
@@ -13498,7 +14372,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   var CATS2 = [{
     id: "movies",
-    label: "Filmes e séries"
+    label: "Filmes"
+  }, {
+    id: "series",
+    label: "Séries"
   }, {
     id: "cartoon",
     label: "Desenhos animados"
@@ -13839,7 +14716,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         focusable: true
       });
       input.__submit = function (q2) {
-        return search(q2);
+        return search2(q2);
       };
       searchBox.appendChild(input);
     } else {
@@ -13848,7 +14725,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));
     }
     var token = 0;
-    function search(q2) {
+    function search2(q2) {
       var query = (q2 || "").trim();
       clear(results);
       if (query.length < 2) return;
@@ -14035,14 +14912,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           title: next[1]
         })));
       }
-      var chip = function chip(key2, label, active2, onSelect) {
+      var chip = function chip(key3, label, active2, onSelect) {
         var c = h("div.chip", {
           focusable: true,
           cls: active2 ? "active" : "",
           text: label,
           onSelect: onSelect
         });
-        c.__key = key2;
+        c.__key = key3;
         return c;
       };
       filters.appendChild(chip("release", t("Ordem de lançamento"), order === "release", function () {
@@ -14206,13 +15083,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       metas.forEach(function (m) {
         if (!m || seen[m.id]) return;
         seen[m.id] = true;
-        var index = count++;
+        var index2 = count++;
         grid.appendChild(card(m, {
           onSelect: function onSelect() {
             return openDetails(m.type || entry.catalog.type, m.id);
           },
           onFocus: function onFocus() {
-            if (count - index <= PER_ROW * 2) more();
+            if (count - index2 <= PER_ROW * 2) more();
           }
         }));
       });
@@ -14246,7 +15123,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/lib/homeRows.js
-  function key(entry) {
+  function key2(entry) {
     return (entry.addon.transportUrl || entry.addon.manifest.id || "") + "|" + entry.catalog.type + "|" + entry.catalog.id;
   }
   function prefs() {
@@ -14265,7 +15142,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function isHidden(entry) {
-    return prefs().hidden.indexOf(key(entry)) >= 0;
+    return prefs().hidden.indexOf(key2(entry)) >= 0;
   }
   function sort(entries) {
     var order = prefs().order;
@@ -14273,7 +15150,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return {
         e: e,
         i: i,
-        o: order.indexOf(key(e))
+        o: order.indexOf(key2(e))
       };
     }).sort(function (a, b) {
       return (a.o < 0 ? 1e6 + a.i : a.o) - (b.o < 0 ? 1e6 + b.i : b.o);
@@ -14284,19 +15161,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function visible(entries) {
     var hidden = prefs().hidden;
     return sort(entries).filter(function (e) {
-      return hidden.indexOf(key(e)) < 0;
+      return hidden.indexOf(key2(e)) < 0;
     });
   }
   function toggleHidden(entry) {
     var p = prefs();
-    var k = key(entry);
+    var k = key2(entry);
     var i = p.hidden.indexOf(k);
     if (i >= 0) p.hidden.splice(i, 1);else p.hidden.push(k);
     save(p);
   }
   function move2(entries, entry, delta) {
-    var list2 = sort(entries).map(key);
-    var k = key(entry);
+    var list2 = sort(entries).map(key2);
+    var k = key2(entry);
     var i = list2.indexOf(k);
     var j = i + delta;
     if (i < 0 || j < 0 || j >= list2.length) return;
@@ -14313,7 +15190,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/mdblistRows.js
-  var API3 = "https://api.mdblist.com/";
+  var API4 = "https://api.mdblist.com/";
   var POSTER2 = function POSTER2(imdb) {
     return "https://images.metahub.space/poster/medium/" + imdb + "/img";
   };
@@ -14325,7 +15202,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function call3(path) {
     var sep = path.indexOf("?") >= 0 ? "&" : "?";
-    return getJSONViaProxy(API3 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
+    return getJSONViaProxy(API4 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
       timeout: 15e3
     });
   }
@@ -14564,8 +15441,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderContinue() {
       clear(cwRow);
-      var items2 = sortContinue(continueWatching()).slice(0, 20);
-      if (!items2.length) {
+      var items3 = sortContinue(continueWatching()).slice(0, 20);
+      if (!items3.length) {
         cwRow.style.display = "none";
         return;
       }
@@ -14577,7 +15454,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         "data-scroll-x": "",
         "data-group": ""
       });
-      items2.forEach(function (it) {
+      items3.forEach(function (it) {
         var s = it.state;
         var ep = episodeLabel(s.video_id, it._id);
         var bg = /^tt\d+/.test(it._id) ? background(it._id) : it.poster;
@@ -14605,7 +15482,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop5 = function _loop5() {
+      var _loop6 = function _loop6() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -14623,7 +15500,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret3;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret3 = _loop5();
+        _ret3 = _loop6();
         if (_ret3 === 0) continue;
         if (_ret3 === 1) break;
       }
@@ -14635,7 +15512,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       rows2.appendChild(spinnerLine(t("Carregando catálogos...")));
       load().then(function () {
         clear(rows2);
-        var cats = visible(boardCatalogs().concat(boardEntries()));
+        var wl = watchlistEntry();
+        var cats = visible((wl ? [wl] : []).concat(boardCatalogs(), boardEntries()));
         if (!cats.length) rows2.appendChild(h("div.row-empty", {
           text: t("Nenhum catálogo. Entre na sua conta em Ajustes.")
         }));
@@ -14822,8 +15700,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var el = h("div.hero", {
       "data-anchor": "0"
     }, [bgA, bgB, ambient, h("div.hero-shade-left"), h("div.hero-shade-bottom"), h("div.hero-info", null, [logo2, title, meta, desc, buttons, dots])]);
-    var items2 = [];
-    var index = 0;
+    var items3 = [];
+    var index2 = 0;
     var timer = null;
     var front = bgA;
     var paused = true;
@@ -14844,14 +15722,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function queueAmbient() {
       stopAmbient();
       if (!settings().ambientMode || paused) return;
-      var it = items2[index];
+      var it = items3[index2];
       ambientTimer = setTimeout(function () {
-        if (paused || items2[index] !== it || el.getBoundingClientRect().bottom < 200) return;
+        if (paused || items3[index2] !== it || el.getBoundingClientRect().bottom < 200) return;
         var ids2 = it.trailers && it.trailers.length ? Promise.resolve(it.trailers) : fetchMeta(it.type, it.id).then(function (m) {
           return it.trailers = trailerIds(m || {});
         });
         ids2.then(function (list2) {
-          if (paused || items2[index] !== it || !list2.length) return;
+          if (paused || items3[index2] !== it || !list2.length) return;
           clearTimeout(timer);
           ambientOn = true;
           var frame = h("iframe", {
@@ -14874,13 +15752,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, 4e3);
     }
     function open(play) {
-      var it = items2[index];
+      var it = items3[index2];
       if (it) openDetails(it.type, it.id, {
         autoStreams: play
       });
     }
     function render() {
-      var it = items2[index];
+      var it = items3[index2];
       if (!it) {
         el.style.display = "none";
         return;
@@ -14916,29 +15794,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       meta.innerHTML = (it.rating ? '<span class="imdb">★ ' + escapeHtml(it.rating) + "</span> · " : "") + escapeHtml(parts.join(" · "));
       desc.textContent = it.description || "";
       clear(dots);
-      items2.forEach(function (_, i) {
+      items3.forEach(function (_, i) {
         return dots.appendChild(h("span", {
-          cls: i === index ? "on" : ""
+          cls: i === index2 ? "on" : ""
         }));
       });
-      var nx = items2[(index + 1) % items2.length];
+      var nx = items3[(index2 + 1) % items3.length];
       if (nx) new Image().src = nx.background;
       queueAmbient();
     }
     function schedule() {
       clearTimeout(timer);
-      if (paused || ambientOn || items2.length < 2 || perf()) return;
+      if (paused || ambientOn || items3.length < 2 || perf()) return;
       timer = setTimeout(function () {
         if (el.getBoundingClientRect().bottom > 0) {
-          index = (index + 1) % items2.length;
+          index2 = (index2 + 1) % items3.length;
           render();
         }
         schedule();
       }, ROTATE_MS);
     }
     function go(delta) {
-      if (!items2.length) return;
-      index = (index + delta + items2.length) % items2.length;
+      if (!items3.length) return;
+      index2 = (index2 + delta + items3.length) % items3.length;
       render();
       schedule();
     }
@@ -14946,12 +15824,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       el: el,
       load: function load() {
         return load2().then(function (list2) {
-          items2 = list2.slice(0, 12);
-          index = 0;
+          items3 = list2.slice(0, 12);
+          index2 = 0;
           render();
           schedule();
         }).catch(function () {
-          items2 = [];
+          items3 = [];
           render();
         });
       },
@@ -14968,7 +15846,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       resume: function resume() {
         paused = false;
-        if (items2.length) render();
+        if (items3.length) render();
         schedule();
       },
       // Esquerda no primeiro botão / direita no último: troca o destaque.
@@ -15013,13 +15891,55 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     var results = h("div.rows");
     scroller.appendChild(bar);
+    var history = h("div.filters.search-history", {
+      "data-group": ""
+    });
     scroller.appendChild(h("div.search-box", null, input));
+    scroller.appendChild(history);
     scroller.appendChild(results);
     el.appendChild(scroller);
     var token = 0;
     input.__submit = function (q2) {
       return run3(q2);
     };
+    var HIST = "searchHistory";
+    function renderHistory() {
+      clear(history);
+      if (settings().searchHistory === false) return;
+      var list2 = get(HIST, []) || [];
+      if (!list2.length) return;
+      history.appendChild(h("span.hist-label", {
+        text: t("Buscas recentes:")
+      }));
+      list2.forEach(function (q2) {
+        return history.appendChild(h("div.chip", {
+          focusable: true,
+          text: q2,
+          onSelect: function onSelect() {
+            input.value = q2;
+            run3(q2);
+          }
+        }));
+      });
+      history.appendChild(h("div.chip", {
+        focusable: true,
+        text: "✕ " + t("Limpar"),
+        onSelect: function onSelect() {
+          set(HIST, []);
+          renderHistory();
+        }
+      }));
+    }
+    function remember(q2) {
+      if (settings().searchHistory === false) return;
+      var list2 = (get(HIST, []) || []).filter(function (x) {
+        return x.toLowerCase() !== q2.toLowerCase();
+      });
+      list2.unshift(q2);
+      set(HIST, list2.slice(0, 8));
+      renderHistory();
+    }
+    renderHistory();
     function run3(q2) {
       var query = (q2 || "").trim();
       clear(results);
@@ -15030,6 +15950,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return;
       }
       var my = ++token;
+      remember(query);
       results.appendChild(spinnerLine(t('Buscando "{q}"...', {
         q: query
       })));
@@ -15170,18 +16091,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderGrid() {
       clear(grid);
-      var items2 = cachedLibrary().filter(function (it) {
+      var items3 = cachedLibrary().filter(function (it) {
         return !it.removed && (filter === "all" || it.type === filter);
       }).sort(function (a, b) {
         return String(b._mtime || "").localeCompare(String(a._mtime || ""));
       });
-      if (!items2.length) {
+      if (!items3.length) {
         grid.appendChild(h("div.hint", {
           text: isLoggedIn() ? t("Sua biblioteca está vazia.") : t("Entre na sua conta em Ajustes para ver a biblioteca.")
         }));
         return;
       }
-      items2.forEach(function (it) {
+      items3.forEach(function (it) {
         return grid.appendChild(card({
           name: it.name,
           poster: it.poster
@@ -15213,7 +16134,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-13T16:24:04.394Z";
+  var BUILD = "2026-11-13T17:56:26.622Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -15417,7 +16338,91 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     main: "#2e9e57",
     light: "#4fc27a",
     pale: "#b6e8c8"
+  }, {
+    id: "pink",
+    label: "Rosa",
+    main: "#d43f8d",
+    light: "#ec6aae",
+    pale: "#f7bcdb"
+  }, {
+    id: "orange",
+    label: "Laranja",
+    main: "#e0661f",
+    light: "#f58c4c",
+    pale: "#fbcfae"
+  }, {
+    id: "cyan",
+    label: "Ciano",
+    main: "#1595b8",
+    light: "#3ec0e0",
+    pale: "#a9e5f4"
+  }, {
+    id: "indigo",
+    label: "Índigo",
+    main: "#4652d6",
+    light: "#6f7af0",
+    pale: "#c3c8fa"
+  }, {
+    id: "silver",
+    label: "Prata",
+    main: "#6f7a8c",
+    light: "#9aa5b8",
+    pale: "#d5dbe6"
   }];
+  var SHAPES = [{
+    id: "rounded",
+    label: "Arredondado"
+  }, {
+    id: "square",
+    label: "Reto"
+  }, {
+    id: "soft",
+    label: "Bem redondo"
+  }];
+  var SIZES2 = [{
+    id: "small",
+    label: "Pequeno"
+  }, {
+    id: "medium",
+    label: "Médio"
+  }, {
+    id: "large",
+    label: "Grande"
+  }];
+  var FOCUS = [{
+    id: "glow",
+    label: "Contorno e aumento"
+  }, {
+    id: "outline",
+    label: "Só contorno"
+  }, {
+    id: "lift",
+    label: "Só aumento"
+  }];
+  var BACKGROUNDS = [{
+    id: "default",
+    label: "Escuro (padrão)"
+  }, {
+    id: "oled",
+    label: "Preto puro (OLED)"
+  }, {
+    id: "glow",
+    label: "Escuro com brilho da cor"
+  }];
+  function applyLook(s) {
+    var b = document.body;
+    var set2 = function set2(prefix, value, all2) {
+      return all2.forEach(function (x) {
+        return b.classList.toggle(prefix + x.id, x.id === value);
+      });
+    };
+    set2("shape-", s.cardShape || "rounded", SHAPES);
+    set2("cards-", s.cardSize || "medium", SIZES2);
+    set2("focus-", s.focusStyle || "glow", FOCUS);
+    var bg = s.bgStyle || (s.oled ? "oled" : "default");
+    b.classList.toggle("oled", bg === "oled");
+    b.classList.toggle("bg-glow", bg === "glow");
+  }
   var BASE2 = THEMES[0];
   function rgb(hex) {
     var n = parseInt(hex.slice(1), 16);
@@ -15463,7 +16468,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var codeEl = h("div.code", {
       text: "····"
     });
-    var qr = h("img.qr", {
+    var qr = h("img.qr.qr-big", {
       alt: ""
     });
     var urlEl = h("p");
@@ -15504,12 +16509,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (!alive) return;
       codeEl.textContent = link.code;
       urlEl.innerHTML = "";
-      urlEl.appendChild(document.createTextNode(t("No celular ou PC, abra") + " "));
+      urlEl.appendChild(h("b", {
+        text: t("Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.")
+      }));
+      urlEl.appendChild(h("br"));
+      urlEl.appendChild(document.createTextNode(t("Ou abra") + " "));
       urlEl.appendChild(h("b", {
         text: link.url.replace(/^https?:\/\//, "")
       }));
       urlEl.appendChild(document.createTextNode(" " + t("e digite o código:")));
-      qr.src = qrImage(link.url, 260);
+      var direct = provider === "trakt" ? "https://trakt.tv/activate/" + encodeURIComponent(link.code) : "https://simkl.com/pin/" + encodeURIComponent(link.code);
+      qr.src = qrImage(direct, 360);
       status2.textContent = t("Aguardando confirmação...");
     }).catch(function () {});
     return {
@@ -15572,32 +16582,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/views/settings.js
-  var SUB_LANGS = [{
-    label: "Inglês",
-    value: ["eng", "en"]
-  }, {
-    label: "Árabe",
-    value: ["ara", "ar"]
-  }, {
-    label: "Espanhol",
-    value: ["spa", "es"]
-  }, {
+  var LANGS2 = [["Árabe", ["ara", "ar"]], ["Inglês", ["eng", "en"]], ["Francês", ["fre", "fra", "fr"]], ["Espanhol", ["spa", "es"]], ["Turco", ["tur", "tr"]], ["Persa", ["per", "fas", "fa"]], ["Urdu", ["urd", "ur"]], ["Hindi", ["hin", "hi"]], ["Russo", ["rus", "ru"]], ["Alemão", ["ger", "deu", "de"]], ["Italiano", ["ita", "it"]], ["Português", ["por", "pob", "pt"]], ["Japonês", ["jpn", "ja"]], ["Coreano", ["kor", "ko"]], ["Chinês", ["chi", "zho", "zh"]], ["Indonésio", ["ind", "id"]], ["Malaio", ["may", "msa", "ms"]]];
+  var SUB_LANGS = LANGS2.map(function (l) {
+    return {
+      label: l[0],
+      value: l[1]
+    };
+  }).concat([{
     label: "Nenhum (não ligar sozinho)",
     value: []
-  }];
+  }]);
   var AUDIO_LANGS = [{
     label: "Original do arquivo",
     value: []
-  }, {
-    label: "Inglês quando houver",
-    value: ["eng", "en"]
-  }, {
-    label: "Árabe quando houver",
-    value: ["ara", "ar"]
-  }, {
-    label: "Japonês quando houver",
-    value: ["jpn", "ja"]
-  }];
+  }].concat(LANGS2.map(function (l) {
+    return {
+      label: l[0],
+      value: l[1]
+    };
+  }));
   var RECOMMENDED = [{
     id: "community.anime.kitsu",
     name: "Anime Kitsu",
@@ -15616,9 +16619,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     var bar = topbar("settings", goTab);
     var body = h("div.settings");
+    var rail = h("div.set-rail", {
+      "data-group": ""
+    });
     scroller.appendChild(bar);
     scroller.appendChild(body);
     el.appendChild(scroller);
+    el.appendChild(rail);
     var device = "";
     deviceInfo().then(function (d) {
       device = [d.modelName, d.firmwareVersion, d.sdkVersion ? "webOS " + d.sdkVersion : ""].filter(Boolean).join(" · ");
@@ -15685,17 +16692,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         cls: on ? "on" : ""
       }, h("i"));
     }
-    var page = "main";
-    function keyInput(title, sub, key2, placeholder) {
+    var page = "c-account";
+    var focusContent = false;
+    function keyInput(title, sub, key3, placeholder) {
       var s = settings();
       var input = h("input.input", {
         type: "text",
-        value: s[key2] || "",
+        value: s[key3] || "",
         placeholder: placeholder
       });
       input.__submit = function (v) {
         var patch = {};
-        patch[key2] = v.trim();
+        patch[key3] = v.trim();
         saveSettings(patch);
         toast(v.trim() ? t("Chave salva") : t("Chave removida"));
         render();
@@ -15709,16 +16717,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: sub
       })]), input]);
     }
-    function goMain() {
-      page = "main";
+    var PARENT = {
+      tracking: "c-integrations",
+      skip: "c-integrations",
+      debrid: "c-integrations",
+      servers: "c-integrations",
+      home: "c-appearance",
+      badges: "c-playback"
+    };
+    function openPage(name, focus2) {
+      page = name;
+      focusContent = focus2 !== false;
       render();
       scroller.scrollTop = 0;
     }
+    function goMain() {
+      openPage(PARENT[page] || page);
+    }
     function pageHeader(title) {
-      body.appendChild(row("‹ " + t("Voltar"), "", "", function () {
+      if (PARENT[page]) body.appendChild(row("‹ " + t("Voltar"), "", "", function () {
         return goMain();
       }));
-      body.appendChild(h("div.set-section", {
+      body.appendChild(h("div.set-title", {
         text: title
       }));
     }
@@ -15790,9 +16810,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         id: "simkl",
         label: "Simkl"
       }];
-      var srcRow = function srcRow(title, sub, key2) {
+      var srcRow = function srcRow(title, sub, key3) {
         var cur = SRC.find(function (x) {
-          return x.id === s[key2];
+          return x.id === s[key3];
         }) || SRC[0];
         body.appendChild(row(title, sub, cur.label, function () {
           return menu(title, SRC.map(function (x) {
@@ -15804,7 +16824,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }), {
             onPick: function onPick(v) {
               var patch = {};
-              patch[key2] = v;
+              patch[key3] = v;
               saveSettings(patch);
               render();
             }
@@ -15856,6 +16876,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       });
       body.appendChild(keyInput(t("AnimeSkip Client ID"), t("Sua chave do anime-skip.com (fica só nesta TV)"), "animeSkipClientId", "Client ID"));
+      body.appendChild(h("div.set-section", {
+        text: t("Diagnóstico")
+      }));
+      var testRow = row(t("Testar o pulo de abertura"), t("Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou"), "", function () {
+        var v = testRow.querySelector(".value");
+        v.textContent = t("Testando...");
+        selfTest().then(function (how) {
+          var msg = {
+            direct: t("Funciona (direto)"),
+            tv: t("Funciona (pelo serviço da TV)"),
+            pc: t("Funciona (pelo servidor do PC)"),
+            none: t("Não funciona: o serviço da TV não respondeu. Feche o app e abra de novo pelo TizenBrew.")
+          }[how];
+          v.textContent = how === "none" ? "✕" : "✓";
+          toast(msg, 8e3);
+        });
+      });
+      body.appendChild(testRow);
     }
     function renderDebrid(s) {
       pageHeader(t("Debrid"));
@@ -16020,7 +17058,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         text: t("OK numa fileira: subir, descer ou esconder.")
       }));
-      var all2 = boardCatalogs().concat(boardEntries());
+      var wl = watchlistEntry();
+      var all2 = (wl ? [wl] : []).concat(boardCatalogs(), boardEntries());
       sort(all2).forEach(function (e) {
         var hidden = isHidden(e);
         var name = e.catalog.name || e.catalog.id;
@@ -16168,438 +17207,83 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }));
     }
+    var GROUPS = [{
+      id: "c-account",
+      icon: "👤",
+      label: "Conta e perfis",
+      sub: "Idioma, perfis, conta Stremio, controle pelo celular"
+    }, {
+      id: "c-playback",
+      icon: "▶",
+      label: "Reprodução",
+      sub: "Servidor do PC, player, próximo episódio, selos das fontes"
+    }, {
+      id: "c-subs",
+      icon: "💬",
+      label: "Legendas e áudio",
+      sub: "Idiomas, SubDL, aparência da legenda"
+    }, {
+      id: "c-appearance",
+      icon: "🎨",
+      label: "Aparência",
+      sub: "Tema, tela inicial, modo ambiente, proteção de tela"
+    }, {
+      id: "c-integrations",
+      icon: "🔗",
+      label: "Integrações",
+      sub: "Trakt, Simkl, pular trechos, debrid, Jellyfin, chaves, addons"
+    }, {
+      id: "c-about",
+      icon: "ⓘ",
+      label: "Sobre",
+      sub: "Atualizações, teste de internet, log"
+    }];
+    function renderRail() {
+      clear(rail);
+      var current3 = PARENT[page] || page;
+      GROUPS.forEach(function (g) {
+        rail.appendChild(h("div.rail-item", {
+          focusable: true,
+          cls: g.id === current3 ? "active" : "",
+          onSelect: function onSelect() {
+            return openPage(g.id, true);
+          },
+          // Moving along the rail shows each group right away; the focus stays on the rail.
+          onFocus: function onFocus() {
+            return g.id !== (PARENT[page] || page) && openPage(g.id, false);
+          }
+        }, [h("span.rail-ico", {
+          text: g.icon
+        }), h("span.rail-text", null, [t(g.label), h("small", {
+          text: t(g.sub)
+        })])]));
+      });
+    }
     function render() {
       var s = settings();
       var keep = current2();
-      var keepIndex = keep ? Array.prototype.indexOf.call(body.querySelectorAll(".set-row"), keep) : -1;
+      var keepIndex = keep && body.contains(keep) ? Array.prototype.indexOf.call(body.querySelectorAll(".set-row"), keep) : -1;
+      var wantFocus = focusContent;
+      focusContent = false;
+      applyLook(s);
       clear(body);
-      if (page !== "main") {
+      renderRail();
+      var placeFocus = function placeFocus() {
+        var rows2 = body.querySelectorAll(".set-row");
+        if (keepIndex >= 0 && rows2[keepIndex]) focus(rows2[keepIndex]);else if (wantFocus && rows2[0]) focus(rows2[PARENT[page] ? 1 : 0] || rows2[0]);
+      };
+      if (page.indexOf("c-") !== 0) {
         if (page === "tracking") renderTracking(s);else if (page === "debrid") renderDebrid(s);else if (page === "servers") renderServers(s);else if (page === "home") renderHomePage(s);else if (page === "badges") renderBadges(s);else renderSkip(s);
-        var sub = body.querySelectorAll(".set-row");
-        if (keepIndex >= 0 && sub[keepIndex]) focus(sub[keepIndex]);else if (sub[0]) focus(sub[0]);
+        placeFocus();
         return;
       }
-      var LANGS = [{
-        id: "auto",
-        label: t("Automático (idioma da TV)")
-      }, {
-        id: "en",
-        label: "English"
-      }, {
-        id: "ar",
-        label: "العربية"
-      }];
-      body.appendChild(h("div.set-section", {
-        text: "Language / اللغة"
-      }));
-      body.appendChild(row("Language / اللغة", "", (LANGS.find(function (l) {
-        return l.id === s.language;
-      }) || LANGS[0]).label, function () {
-        return menu("Language / اللغة", LANGS.map(function (l) {
-          return {
-            label: l.label,
-            value: l.id,
-            checked: l.id === s.language
-          };
-        }), {
-          onPick: function onPick(v) {
-            if (v === s.language) return;
-            saveSettings({
-              language: v
-            });
-            window.location.reload();
-          }
-        });
-      }));
-      var prof = activeProfile();
-      var allProfiles = profiles();
-      body.appendChild(h("div.set-section", {
-        text: t("Perfil")
-      }));
-      var nameInput = h("input.input", {
-        type: "text",
-        value: prof.name
+      var GROUP = GROUPS.find(function (g) {
+        return g.id === page;
       });
-      nameInput.__submit = function (v) {
-        var name = v.trim();
-        if (!name) return;
-        updateProfile(prof.id, {
-          name: name
-        });
-        refreshProfileChips();
-        toast(t("Nome do perfil salvo"));
-        render();
-      };
-      body.appendChild(h("div.set-row", {
-        focusable: true,
-        onSelect: function onSelect() {
-          return select(nameInput);
-        }
-      }, [h("div.label", null, [avatar(prof, "small"), " " + t("Nome do perfil"), h("small", {
-        text: t("Este perfil usa a conta Stremio abaixo")
-      })]), nameInput]));
-      body.appendChild(row(t("Cor do perfil"), "", "", function () {
-        return menu(t("Cor do perfil"), COLORS.map(function (c, i) {
-          return {
-            label: [t("Roxo"), t("Rosa"), t("Verde-água"), t("Laranja"), t("Azul"), t("Vermelho"), t("Verde"), t("Cinza")][i],
-            value: c,
-            checked: c === prof.color
-          };
-        }), {
-          onPick: function onPick(c) {
-            updateProfile(prof.id, {
-              color: c
-            });
-            refreshProfileChips();
-            render();
-          }
-        });
-      }, h("div.avatar.small", {
-        style: {
-          backgroundColor: prof.color
-        },
-        text: " "
-      })));
-      if (allProfiles.length > 1) {
-        body.appendChild(row(t("Trocar de perfil"), t("{n} perfis nesta TV", {
-          n: allProfiles.length
-        }), "", function () {
-          return menu(t("Trocar de perfil"), allProfiles.map(function (p) {
-            return {
-              label: p.name,
-              value: p.id,
-              checked: p.id === prof.id
-            };
-          }), {
-            onPick: function onPick(id) {
-              return id !== prof.id && switchProfile(id);
-            }
-          });
-        }));
-      }
-      body.appendChild(row(t("Adicionar perfil"), t("Para outra pessoa, com outra conta Stremio"), "", function () {
-        return createProfile();
-      }));
-      if (allProfiles.length > 1) {
-        body.appendChild(row(t("Copiar ajustes de outro perfil"), t("Legendas, aparência, tela inicial e coleções (a conta não é copiada)"), "", function () {
-          return menu(t("Copiar ajustes de"), allProfiles.filter(function (p) {
-            return p.id !== prof.id;
-          }).map(function (p) {
-            return {
-              label: p.name,
-              value: p.id
-            };
-          }), {
-            onPick: function onPick(id) {
-              var from = allProfiles.find(function (p) {
-                return p.id === id;
-              });
-              confirmDialog(t('Trocar os ajustes de "{to}" pelos de "{from}"?', {
-                to: prof.name,
-                from: from.name
-              }), t("Copiar"), function () {
-                copySettingsFrom(id);
-                apply3(settings().theme);
-                document.body.classList.toggle("oled", !!settings().oled);
-                dropTab("home");
-                toast(t("Ajustes copiados de {name}", {
-                  name: from.name
-                }));
-                render();
-              });
-            }
-          });
-        }));
-      }
-      if (allProfiles.length > 1) {
-        body.appendChild(row(t('Perguntar "Quem está assistindo?" ao abrir'), "", "", function () {
-          saveSettings({
-            askProfile: !settings().askProfile
-          });
-          render();
-        }, toggle(s.askProfile)));
-        body.appendChild(row(t("Apagar este perfil"), t("Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)"), "", function () {
-          return confirmDialog(t('Apagar o perfil "{name}" desta TV?', {
-            name: prof.name
-          }), t("Apagar"), function () {
-            removeProfile(prof.id);
-            switchProfile(activeProfile().id);
-          });
-        }));
-      }
-      body.appendChild(h("div.set-section", {
-        text: t("Conta Stremio")
-      }));
-      if (isLoggedIn()) {
-        var u = user();
-        body.appendChild(row(t("Conectado"), t("Addons e biblioteca sincronizados com a conta"), u && u.email || t("conta Stremio"), null));
-        body.appendChild(row(t("Atualizar addons e biblioteca"), t("Busca de novo a lista de addons instalados"), "", function () {
-          Promise.all([load(true), getLibrary()]).then(function () {
-            toast(t("Atualizado"));
-            dropTab("home");
-          }).catch(function (e) {
-            return toast(t("Erro: {msg}", {
-              msg: e.message
-            }));
-          });
-        }));
-        body.appendChild(row(t("Sair da conta"), "", "", function () {
-          return confirmDialog(t("Sair da conta Stremio?"), t("Sair"), function () {
-            logout();
-            load(true).then(function () {
-              dropTab("home");
-              render();
-            });
-          });
-        }));
-      } else {
-        body.appendChild(row(t("Entrar na conta"), t("Traz seus addons (Torrentio, debrid...) e a biblioteca"), "", function () {
-          return openLogin(function () {
-            Promise.all([refreshUser().catch(function () {}), load(true), getLibrary()]).then(function () {
-              dropTab("home");
-              render();
-            });
-          });
-        }));
-      }
-      body.appendChild(h("div.set-section", {
-        text: t("Controle pelo celular")
-      }));
-      var phoneBox = h("div.set-row.phone-remote", {
-        focusable: true
-      }, h("div.phone-sub", {
-        text: t("Carregando...")
-      }));
-      body.appendChild(phoneBox);
-      info().then(function (i) {
-        clear(phoneBox);
-        if (!i) {
-          phoneBox.appendChild(h("div.phone-sub", {
-            text: t("O controle pelo celular não está rodando. Feche o app e abra de novo pelo TizenBrew.")
-          }));
-          return;
-        }
-        phoneBox.appendChild(h("img.phone-qr", {
-          src: qrImage(i.url, 300),
-          alt: ""
-        }));
-        phoneBox.appendChild(h("div.phone-text", null, [h("div.phone-title", {
-          text: t("Aponte a câmera do celular para o código")
-        }), h("div.phone-sub", {
-          text: t("Ou abra no navegador do celular (mesmo Wi-Fi):")
-        }), h("div.phone-url", {
-          text: "http://" + i.ip + ":" + i.port
-        }), h("div.phone-sub", {
-          text: t("PIN: {pin}", {
-            pin: i.pin
-          })
-        })]));
-      });
-      body.appendChild(h("div.set-section", {
-        text: t("Servidor de streaming (PC)")
-      }));
-      var st = lastStatus();
-      var stText = !s.serverUrl ? t("não configurado") : st.ok && st.url === baseUrl() ? t("conectado ✓") : t("sem resposta");
-      var urlInput = h("input.input", {
-        type: "text",
-        value: s.serverUrl || "",
-        placeholder: "ex.: 192.168.0.10"
-      });
-      urlInput.__submit = function (v) {
-        saveSettings({
-          serverUrl: v.trim()
-        });
-        check().then(function (r) {
-          toast(r.ok ? t("Servidor conectado") : t("Servidor não respondeu em {url}", {
-            url: baseUrl()
-          }));
-          render();
-        });
-      };
-      body.appendChild(h("div.set-row", {
-        focusable: true,
-        onSelect: function onSelect() {
-          return select(urlInput);
-        }
-      }, [h("div.label", null, [t("Endereço do PC"), h("small", {
-        text: t("Rode o stremio-service no PC (porta 11470). Status: {s}", {
-          s: stText
-        })
-      })]), urlInput]));
-      body.appendChild(row(t("Procurar na rede"), t("Varre a rede local atrás do servidor"), "", function () {
-        toast(t("Procurando servidor na rede..."), 2e4);
-        scan().then(function (ip) {
-          if (!ip) return toast(t("Nenhum servidor encontrado. Ele está aberto no PC?"));
-          saveSettings({
-            serverUrl: ip
-          });
-          return check().then(function () {
-            toast(t("Servidor encontrado em {ip}", {
-              ip: ip
-            }));
-            render();
-          });
-        }).catch(function (e) {
-          return toast(t("Falha na busca: {msg}", {
-            msg: e.message
-          }));
-        });
-      }));
-      body.appendChild(row(t("Testar conexão"), "", "", function () {
-        return check().then(function (r) {
-          toast(r.ok ? t("Servidor OK") + (r.version ? " (v" + r.version + ")" : "") : t("Sem resposta de {url}", {
-            url: baseUrl() || "-"
-          }));
-          render();
-        });
-      }));
-      body.appendChild(h("div.set-section", {
-        text: t("Aparência (Kai)")
-      }));
-      var heroName = t((SOURCES.find(function (x) {
-        return x.id === s.heroSource;
-      }) || SOURCES[0]).name);
-      body.appendChild(row(t("Hero Banner"), t("Destaques no topo da tela inicial"), heroName, function () {
-        return menu(t("Fonte do Hero Banner"), SOURCES.map(function (x) {
-          return {
-            label: t(x.name),
-            value: x.id,
-            checked: x.id === s.heroSource
-          };
-        }), {
-          onPick: function onPick(v) {
-            saveSettings({
-              heroSource: v
-            });
-            dropTab("home");
-            render();
-          }
-        });
-      }));
-      var curTheme = THEMES.find(function (x) {
-        return x.id === s.theme;
-      }) || THEMES[0];
-      body.appendChild(row(t("Tema de cores"), t("Cor de destaque do app"), t(curTheme.label), function () {
-        return menu(t("Tema de cores"), THEMES.map(function (x) {
-          return {
-            label: t(x.label),
-            value: x.id,
-            checked: x.id === curTheme.id
-          };
-        }), {
-          onPick: function onPick(v) {
-            saveSettings({
-              theme: v
-            });
-            apply3(v);
-            render();
-          }
-        });
-      }));
-      body.appendChild(row(t("Tela inicial"), t("Ordem das fileiras, listas do MDBList e Continuar assistindo"), "", function () {
-        page = "home";
-        render();
-        scroller.scrollTop = 0;
-      }));
-      body.appendChild(row(t("Modo ambiente"), t("O trailer toca sem som atrás do Hero Banner (mais pesado na TV)"), "", function () {
-        saveSettings({
-          ambientMode: !settings().ambientMode
-        });
-        dropTab("home");
-        render();
-      }, toggle(!!s.ambientMode)));
-      body.appendChild(row(t("Tema OLED (preto puro)"), t("Fundo totalmente preto"), "", function () {
-        var on = !settings().oled;
-        saveSettings({
-          oled: on
-        });
-        document.body.classList.toggle("oled", on);
-        render();
-      }, toggle(s.oled)));
-      body.appendChild(row(t("Escolha inteligente"), t("Assistir já toca a melhor fonte; o botão Fontes mostra a lista"), "", function () {
-        saveSettings({
-          smartChoice: settings().smartChoice === false
-        });
-        render();
-      }, toggle(s.smartChoice !== false)));
-      body.appendChild(row(t("Modo desempenho"), t("Mais rápido na TV: sem animações, sem Novos episódios e sem sincronizar em segundo plano"), "", function () {
-        var on = settings().perfMode === false;
-        saveSettings({
-          perfMode: on
-        });
-        document.body.classList.toggle("perf", on);
-        dropTab("home");
-        render();
-      }, toggle(settings().perfMode !== false)));
-      body.appendChild(row(t("Rolagem animada"), t("Mais bonita, porém mais pesada na TV"), "", function () {
-        var on = !settings().smoothScroll;
-        saveSettings({
-          smoothScroll: on
-        });
-        setSmooth(on);
-        render();
-      }, toggle(s.smoothScroll)));
-      body.appendChild(h("div.set-section", {
-        text: t("Legendas e áudio")
-      }));
-      var subName = (SUB_LANGS.find(function (x) {
-        return JSON.stringify(x.value) === JSON.stringify(s.subtitleLangs);
-      }) || {
-        label: (s.subtitleLangs || []).join(", ")
-      }).label;
-      body.appendChild(row(t("Idioma da legenda"), t("Escolhida sozinha ao abrir o vídeo"), t(subName), function () {
-        return menu(t("Idioma da legenda"), SUB_LANGS.map(function (x) {
-          return {
-            label: t(x.label),
-            value: x.value,
-            checked: x.label === subName
-          };
-        }), {
-          onPick: function onPick(v) {
-            saveSettings({
-              subtitleLangs: v
-            });
-            render();
-          }
-        });
-      }));
-      body.appendChild(row(t("Ligar legenda automaticamente"), t("Se o áudio não estiver no seu idioma"), "", function () {
-        saveSettings({
-          subtitlesAuto: !settings().subtitlesAuto
-        });
-        render();
-      }, toggle(s.subtitlesAuto)));
-      var audName = (AUDIO_LANGS.find(function (x) {
-        return JSON.stringify(x.value) === JSON.stringify(s.audioLangs);
-      }) || AUDIO_LANGS[0]).label;
-      body.appendChild(row(t("Áudio preferido"), available() && s.playerEngine !== "html5" ? t("Escolhido sozinho ao abrir o vídeo") : t("Precisa do servidor do PC para ler as faixas"), t(audName), function () {
-        return menu(t("Áudio preferido"), AUDIO_LANGS.map(function (x) {
-          return {
-            label: t(x.label),
-            value: x.value,
-            checked: x.label === audName
-          };
-        }), {
-          onPick: function onPick(v) {
-            saveSettings({
-              audioLangs: v
-            });
-            render();
-          }
-        });
-      }));
-      body.appendChild(h("div.set-section", {
-        text: t("Aparência da legenda")
-      }));
-      var preview = h("div.subs", null, h("span", {
-        html: t("Oi. Meu nome é Peter Parker.") + "\n<i>" + t("Você não lembra de mim...") + "</i>"
-      }));
-      apply(preview, s);
-      body.appendChild(h("div.sub-preview", null, preview));
-      var lb = labels(s);
-      var choose = function choose(title, sub, list3, key2, value, label) {
+      pageHeader(t(GROUP.label));
+      var choose = function choose(title, sub, list2, key3, value, label) {
         return body.appendChild(row(title, sub, t(String(label)), function () {
-          return menu(title, list3.map(function (x) {
+          return menu(title, list2.map(function (x) {
             return {
               label: t(String(x.label)),
               value: x.id,
@@ -16608,240 +17292,787 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }), {
             onPick: function onPick(v) {
               var patch = {};
-              patch[key2] = v;
+              patch[key3] = v;
               saveSettings(patch);
               render();
             }
           });
         }));
       };
-      choose(t("Fonte"), t("Vale para legendas de addons (OpenSubtitles etc.)"), FONTS, "subtitleFont", s.subtitleFont, lb.font);
-      choose(t("Estilo"), t("Contorno, sombra ou caixa de fundo"), STYLES, "subtitleStyle", s.subtitleStyle, lb.style);
-      choose(t("Cor do texto"), "", COLORS2, "subtitleColor", s.subtitleColor, lb.color);
-      choose(t("Tamanho"), "", SIZES.map(function (v) {
-        return {
-          id: v,
-          label: v + "%"
-        };
-      }), "subtitleSize", s.subtitleSize || 100, (s.subtitleSize || 100) + "%");
-      choose(t("Posição"), t("Distância da borda de baixo"), POSITIONS, "subtitlePosition", s.subtitlePosition, lb.position);
-      body.appendChild(row(t("Negrito"), t("O Kai usa negrito"), "", function () {
-        saveSettings({
-          subtitleBold: settings().subtitleBold === false
-        });
-        render();
-      }, toggle(s.subtitleBold !== false)));
-      body.appendChild(h("div.hint", {
-        style: {
-          padding: "6px 4px 0"
-        },
-        text: t("Legendas embutidas no arquivo são desenhadas pela própria TV: só cor, tamanho, posição e caixa se aplicam a elas.")
-      }));
-      body.appendChild(h("div.set-section", {
-        text: t("Player")
-      }));
-      choose(t("Player de vídeo"), t("O player da Samsung troca a faixa de áudio; o do navegador é o antigo"), [{
-        id: "auto",
-        label: available() ? t("Samsung (AVPlay)") : t("Samsung (AVPlay) · indisponível nesta TV")
-      }, {
-        id: "html5",
-        label: t("Navegador (HTML5)")
-      }], "playerEngine", s.playerEngine === "html5" ? "html5" : "auto", s.playerEngine === "html5" ? t("Navegador (HTML5)") : t("Samsung (AVPlay)"));
-      body.appendChild(row(t("Sugestões no fim"), t('Ao terminar um filme, mostra "Mais como este"'), "", function () {
-        saveSettings({
-          postPlay: settings().postPlay === false
-        });
-        render();
-      }, toggle(s.postPlay !== false)));
-      body.appendChild(row(t("Selos das fontes"), t("Qualidade, HDR, áudio, idioma, tamanho..."), "", function () {
-        page = "badges";
-        render();
-        scroller.scrollTop = 0;
-      }));
-      body.appendChild(h("div.set-section", {
-        text: t("Integrações")
-      }));
-      body.appendChild(row(t("Rastreamento (Trakt e Simkl)"), t("Contas, fontes e recursos do Trakt"), connected().length ? t("Conectado") : t("Desconectado"), function () {
-        page = "tracking";
-        render();
-        scroller.scrollTop = 0;
-      }));
-      body.appendChild(row(t("Pular trechos"), t("Abertura, recapitulação e encerramento"), s.skipMode === "off" ? t("Desligado") : t("Ligado"), function () {
-        page = "skip";
-        render();
-        scroller.scrollTop = 0;
-      }));
-      body.appendChild(row(t("Debrid"), "Real-Debrid · TorBox · Premiumize", active() ? active().name : t("Desligado"), function () {
-        page = "debrid";
-        render();
-        scroller.scrollTop = 0;
-      }));
-      body.appendChild(row(t("Servidores de mídia (Jellyfin e Emby)"), t("Seu próprio servidor como fonte"), enabled() ? connection().name : t("Desconectado"), function () {
-        page = "servers";
-        render();
-        scroller.scrollTop = 0;
-      }));
-      body.appendChild(h("div.set-section", {
-        text: t("Metadados extras (opcional)")
-      }));
-      var keyRow = function keyRow(title, sub, key2, placeholder) {
-        var input = h("input.input", {
+      if (page === "c-account") {
+        var LANGS3 = [{
+          id: "auto",
+          label: t("Automático (idioma da TV)")
+        }, {
+          id: "en",
+          label: "English"
+        }, {
+          id: "ar",
+          label: "العربية"
+        }];
+        body.appendChild(h("div.set-section", {
+          text: "Language / اللغة"
+        }));
+        body.appendChild(row("Language / اللغة", "", (LANGS3.find(function (l) {
+          return l.id === s.language;
+        }) || LANGS3[0]).label, function () {
+          return menu("Language / اللغة", LANGS3.map(function (l) {
+            return {
+              label: l.label,
+              value: l.id,
+              checked: l.id === s.language
+            };
+          }), {
+            onPick: function onPick(v) {
+              if (v === s.language) return;
+              saveSettings({
+                language: v
+              });
+              window.location.reload();
+            }
+          });
+        }));
+        var prof = activeProfile();
+        var allProfiles = profiles();
+        body.appendChild(h("div.set-section", {
+          text: t("Perfil")
+        }));
+        var nameInput = h("input.input", {
           type: "text",
-          value: s[key2] || "",
-          placeholder: placeholder
+          value: prof.name
         });
-        input.__submit = function (v) {
-          var patch = {};
-          patch[key2] = v.trim();
-          saveSettings(patch);
-          toast(v.trim() ? t("Chave salva") : t("Chave removida"));
+        nameInput.__submit = function (v) {
+          var name = v.trim();
+          if (!name) return;
+          updateProfile(prof.id, {
+            name: name
+          });
+          refreshProfileChips();
+          toast(t("Nome do perfil salvo"));
           render();
         };
         body.appendChild(h("div.set-row", {
           focusable: true,
           onSelect: function onSelect() {
-            return select(input);
+            return select(nameInput);
           }
-        }, [h("div.label", null, [title, h("small", {
-          text: sub
-        })]), input]));
-      };
-      keyRow(t("Chave TMDB"), t("Descrições em árabe, perfis de atores, calendário de filmes, logos e elenco com fotos (grátis em themoviedb.org)"), "tmdbKey", "API key (v3)");
-      keyRow(t("Chave MDBList"), t("Notas do Rotten Tomatoes, Metacritic, Trakt e Letterboxd (grátis em mdblist.com)"), "mdblistKey", "API key");
-      keyRow(t("Chave RPDB"), t("Pôsteres com as notas desenhadas (ratingposterdb.com)"), "rpdbKey", "API key");
-      body.appendChild(row(t("Guia para os pais"), t("Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)"), "", function () {
-        saveSettings({
-          parentalGuide: !settings().parentalGuide
-        });
-        render();
-      }, toggle(!!s.parentalGuide)));
-      body.appendChild(h("div.set-section", {
-        text: t("Addons")
-      }));
-      var list2 = list();
-      body.appendChild(row(t("Addons ativos"), isLoggedIn() ? t("Gerencie pela sua conta em web.stremio.com") : t("Sem conta: Cinemeta, OpenSubtitles e os adicionados aqui"), t("{n} addon(s)", {
-        n: list2.length
-      }), function () {
-        return menu(t("Addons ativos"), list2.map(function (a) {
-          return {
-            label: a.manifest.name || a.manifest.id,
-            sub: a.transportUrl
+        }, [h("div.label", null, [avatar(prof, "small"), " " + t("Nome do perfil"), h("small", {
+          text: t("Este perfil usa a conta Stremio abaixo")
+        })]), nameInput]));
+        body.appendChild(row(t("Cor do perfil"), "", "", function () {
+          return menu(t("Cor do perfil"), COLORS.map(function (c, i) {
+            return {
+              label: [t("Roxo"), t("Rosa"), t("Verde-água"), t("Laranja"), t("Azul"), t("Vermelho"), t("Verde"), t("Cinza")][i],
+              value: c,
+              checked: c === prof.color
+            };
+          }), {
+            onPick: function onPick(c) {
+              updateProfile(prof.id, {
+                color: c
+              });
+              refreshProfileChips();
+              render();
+            }
+          });
+        }, h("div.avatar.small", {
+          style: {
+            backgroundColor: prof.color
+          },
+          text: " "
+        })));
+        if (allProfiles.length > 1) {
+          body.appendChild(row(t("Trocar de perfil"), t("{n} perfis nesta TV", {
+            n: allProfiles.length
+          }), "", function () {
+            return menu(t("Trocar de perfil"), allProfiles.map(function (p) {
+              return {
+                label: p.name,
+                value: p.id,
+                checked: p.id === prof.id
+              };
+            }), {
+              onPick: function onPick(id) {
+                return id !== prof.id && switchProfile(id);
+              }
+            });
+          }));
+        }
+        body.appendChild(row(t("Trancar com PIN"), prof.pin ? t("Pede o PIN para abrir este perfil") : t("Ex.: só os pais abrem este perfil"), prof.pin ? "🔒 " + t("Ligado") : t("Desligado"), function () {
+          var setNew = function setNew() {
+            return pinDialog(t("Novo PIN (4 a 8 números)"), function (pin) {
+              if (!/^\d{4,8}$/.test(pin)) return false;
+              updateProfile(prof.id, {
+                pin: pin
+              });
+              toast(t("PIN salvo"));
+              render();
+              return true;
+            }, t("Use de 4 a 8 números."));
           };
-        }), {});
-      }));
-      RECOMMENDED.filter(function (r) {
-        return !list2.some(function (a) {
-          return a.transportUrl === r.url || a.manifest && a.manifest.id === r.id;
-        });
-      }).forEach(function (r) {
-        return body.appendChild(row(t("Instalar {name}", {
-          name: r.name
-        }), t(r.desc), "", function () {
-          return installFromUrl(r.url, r.name);
+          if (!prof.pin) return setNew();
+          menu(t("Trancar com PIN"), [{
+            label: t("Trocar o PIN"),
+            value: "change"
+          }, {
+            label: t("Tirar o PIN"),
+            value: "off"
+          }], {
+            onPick: function onPick(v) {
+              return checkPin(prof, function () {
+                if (v === "change") return setNew();
+                updateProfile(prof.id, {
+                  pin: ""
+                });
+                toast(t("PIN removido"));
+                render();
+              });
+            }
+          });
         }));
-      });
-      var addInput = h("input.input", {
-        type: "text",
-        placeholder: "https://.../manifest.json"
-      });
-      addInput.__submit = function (v) {
-        var u = v.trim();
-        if (!/^https?:\/\/.+manifest\.json/.test(u)) return toast(t("Cole a URL do manifest.json do addon"));
-        if (isLoggedIn()) return installFromUrl(u, t("o addon"));
-        var cur = settings().localAddons || [];
-        saveSettings({
-          localAddons: cur.concat([u])
+        body.appendChild(row(t("Adicionar perfil"), t("Para outra pessoa, com outra conta Stremio"), "", function () {
+          return createProfile();
+        }));
+        if (allProfiles.length > 1) {
+          body.appendChild(row(t("Copiar ajustes de outro perfil"), t("Legendas, aparência, tela inicial e coleções (a conta não é copiada)"), "", function () {
+            return menu(t("Copiar ajustes de"), allProfiles.filter(function (p) {
+              return p.id !== prof.id;
+            }).map(function (p) {
+              return {
+                label: p.name,
+                value: p.id
+              };
+            }), {
+              onPick: function onPick(id) {
+                var from = allProfiles.find(function (p) {
+                  return p.id === id;
+                });
+                confirmDialog(t('Trocar os ajustes de "{to}" pelos de "{from}"?', {
+                  to: prof.name,
+                  from: from.name
+                }), t("Copiar"), function () {
+                  copySettingsFrom(id);
+                  apply3(settings().theme);
+                  document.body.classList.toggle("oled", !!settings().oled);
+                  dropTab("home");
+                  toast(t("Ajustes copiados de {name}", {
+                    name: from.name
+                  }));
+                  render();
+                });
+              }
+            });
+          }));
+        }
+        if (allProfiles.length > 1) {
+          body.appendChild(row(t('Perguntar "Quem está assistindo?" ao abrir'), "", "", function () {
+            saveSettings({
+              askProfile: !settings().askProfile
+            });
+            render();
+          }, toggle(s.askProfile)));
+          body.appendChild(row(t("Apagar este perfil"), t("Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)"), "", function () {
+            return confirmDialog(t('Apagar o perfil "{name}" desta TV?', {
+              name: prof.name
+            }), t("Apagar"), function () {
+              removeProfile(prof.id);
+              switchProfile(activeProfile().id);
+            });
+          }));
+        }
+        body.appendChild(h("div.set-section", {
+          text: t("Conta Stremio")
+        }));
+        if (isLoggedIn()) {
+          var u = user();
+          body.appendChild(row(t("Conectado"), t("Addons e biblioteca sincronizados com a conta"), u && u.email || t("conta Stremio"), null));
+          body.appendChild(row(t("Atualizar addons e biblioteca"), t("Busca de novo a lista de addons instalados"), "", function () {
+            Promise.all([load(true), getLibrary()]).then(function () {
+              toast(t("Atualizado"));
+              dropTab("home");
+            }).catch(function (e) {
+              return toast(t("Erro: {msg}", {
+                msg: e.message
+              }));
+            });
+          }));
+          body.appendChild(row(t("Sair da conta"), "", "", function () {
+            return confirmDialog(t("Sair da conta Stremio?"), t("Sair"), function () {
+              logout();
+              load(true).then(function () {
+                dropTab("home");
+                render();
+              });
+            });
+          }));
+        } else {
+          body.appendChild(row(t("Entrar na conta"), t("Traz seus addons (Torrentio, debrid...) e a biblioteca"), "", function () {
+            return openLogin(function () {
+              Promise.all([refreshUser().catch(function () {}), load(true), getLibrary()]).then(function () {
+                dropTab("home");
+                render();
+              });
+            });
+          }));
+        }
+        body.appendChild(h("div.set-section", {
+          text: t("Controle pelo celular")
+        }));
+        var phoneBox = h("div.set-row.phone-remote", {
+          focusable: true
+        }, h("div.phone-sub", {
+          text: t("Carregando...")
+        }));
+        body.appendChild(phoneBox);
+        info().then(function (i) {
+          clear(phoneBox);
+          if (!i) {
+            phoneBox.appendChild(h("div.phone-sub", {
+              text: t("O controle pelo celular não está rodando. Feche o app e abra de novo pelo TizenBrew.")
+            }));
+            return;
+          }
+          phoneBox.appendChild(h("img.phone-qr", {
+            src: qrImage(i.url, 300),
+            alt: ""
+          }));
+          phoneBox.appendChild(h("div.phone-text", null, [h("div.phone-title", {
+            text: t("Aponte a câmera do celular para o código")
+          }), h("div.phone-sub", {
+            text: t("Ou abra no navegador do celular (mesmo Wi-Fi):")
+          }), h("div.phone-url", {
+            text: "http://" + i.ip + ":" + i.port
+          }), h("div.phone-sub", {
+            text: t("PIN: {pin}", {
+              pin: i.pin
+            })
+          })]));
         });
-        load(true).then(function () {
+      }
+      if (page === "c-appearance") {
+        body.appendChild(h("div.set-section", {
+          text: t("Cores e formas")
+        }));
+        var curTheme = THEMES.find(function (x) {
+          return x.id === s.theme;
+        }) || THEMES[0];
+        body.appendChild(row(t("Cor do app"), t("Cor de destaque de botões, foco e barras"), t(curTheme.label), function () {
+          return menu(t("Cor do app"), THEMES.map(function (x) {
+            return {
+              label: "● " + t(x.label),
+              value: x.id,
+              checked: x.id === curTheme.id
+            };
+          }), {
+            onPick: function onPick(v) {
+              saveSettings({
+                theme: v
+              });
+              apply3(v);
+              render();
+            }
+          });
+        }, h("div.swatch", {
+          style: {
+            backgroundColor: curTheme.main
+          }
+        })));
+        var lookChoose = function lookChoose(title, sub, list2, key3, dflt) {
+          var cur = list2.find(function (x) {
+            return x.id === s[key3];
+          }) || list2.find(function (x) {
+            return x.id === dflt;
+          });
+          choose(title, sub, list2, key3, cur.id, cur.label);
+        };
+        var bg = s.bgStyle || (s.oled ? "oled" : "default");
+        body.appendChild(row(t("Fundo"), t("Escuro, preto puro ou com brilho da cor"), t((BACKGROUNDS.find(function (x) {
+          return x.id === bg;
+        }) || BACKGROUNDS[0]).label), function () {
+          return menu(t("Fundo"), BACKGROUNDS.map(function (x) {
+            return {
+              label: t(x.label),
+              value: x.id,
+              checked: x.id === bg
+            };
+          }), {
+            onPick: function onPick(v) {
+              saveSettings({
+                bgStyle: v,
+                oled: v === "oled"
+              });
+              render();
+            }
+          });
+        }));
+        lookChoose(t("Formato dos cartões"), t("Cantos dos pôsteres e botões"), SHAPES, "cardShape", "rounded");
+        lookChoose(t("Tamanho dos pôsteres"), t("Mais pôsteres por linha ou pôsteres maiores"), SIZES2, "cardSize", "medium");
+        lookChoose(t("Estilo do foco"), t("Como o item selecionado aparece"), FOCUS, "focusStyle", "glow");
+        body.appendChild(h("div.set-section", {
+          text: t("Tela inicial")
+        }));
+        var heroName = t((SOURCES.find(function (x) {
+          return x.id === s.heroSource;
+        }) || SOURCES[0]).name);
+        body.appendChild(row(t("Hero Banner"), t("Destaques no topo da tela inicial"), heroName, function () {
+          return menu(t("Fonte do Hero Banner"), SOURCES.map(function (x) {
+            return {
+              label: t(x.name),
+              value: x.id,
+              checked: x.id === s.heroSource
+            };
+          }), {
+            onPick: function onPick(v) {
+              saveSettings({
+                heroSource: v
+              });
+              dropTab("home");
+              render();
+            }
+          });
+        }));
+        body.appendChild(row(t("Modo ambiente"), t("O trailer toca sem som atrás do Hero Banner (mais pesado na TV)"), "", function () {
+          saveSettings({
+            ambientMode: !settings().ambientMode
+          });
           dropTab("home");
-          toast(t("Addon adicionado"));
           render();
+        }, toggle(!!s.ambientMode)));
+        body.appendChild(row(t("Fileiras e Continuar assistindo"), t("Ordem das fileiras, listas do MDBList e Continuar assistindo"), "›", function () {
+          return openPage("home");
+        }));
+        body.appendChild(row(t("Buscas recentes"), t("Mostra as últimas buscas na tela de busca"), "", function () {
+          saveSettings({
+            searchHistory: settings().searchHistory === false
+          });
+          render();
+        }, toggle(s.searchHistory !== false)));
+        var SS = [0, 5, 10, 15, 30].map(function (m) {
+          return {
+            id: m,
+            label: m ? t("Depois de {n} min", {
+              n: m
+            }) : t("Desligada")
+          };
         });
-      };
-      body.appendChild(h("div.set-row", {
-        focusable: true,
-        onSelect: function onSelect() {
-          return select(addInput);
+        var ssCur = SS.find(function (x) {
+          return x.id === (+s.screensaver || 0);
+        }) || SS[0];
+        body.appendChild(row(t("Proteção de tela"), t("Fundos de filmes e o relógio quando a TV fica parada"), ssCur.label, function () {
+          return menu(t("Proteção de tela"), SS.map(function (x) {
+            return {
+              label: x.label,
+              value: x.id,
+              checked: x.id === ssCur.id
+            };
+          }), {
+            onPick: function onPick(v) {
+              saveSettings({
+                screensaver: v
+              });
+              render();
+            }
+          });
+        }));
+        body.appendChild(h("div.set-section", {
+          text: t("Desempenho")
+        }));
+        body.appendChild(row(t("Modo desempenho"), t("Mais rápido na TV: sem animações, sem Novos episódios e sem sincronizar em segundo plano"), "", function () {
+          var on = settings().perfMode === false;
+          saveSettings({
+            perfMode: on
+          });
+          document.body.classList.toggle("perf", on);
+          dropTab("home");
+          render();
+        }, toggle(settings().perfMode !== false)));
+        body.appendChild(row(t("Rolagem animada"), t("Mais bonita, porém mais pesada na TV"), "", function () {
+          var on = !settings().smoothScroll;
+          saveSettings({
+            smoothScroll: on
+          });
+          setSmooth(on);
+          render();
+        }, toggle(s.smoothScroll)));
+      }
+      if (page === "c-subs") {
+        body.appendChild(h("div.set-section", {
+          text: t("Legendas e áudio")
+        }));
+        body.appendChild(row(t("Lembrar por série"), t("A legenda e o áudio que você escolher valem para os outros episódios"), "", function () {
+          saveSettings({
+            rememberTracks: settings().rememberTracks === false
+          });
+          render();
+        }, toggle(s.rememberTracks !== false)));
+        body.appendChild(keyInput(t("Chave SubDL"), t("Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)"), "subdlKey", "API key"));
+        var subName = (SUB_LANGS.find(function (x) {
+          return JSON.stringify(x.value) === JSON.stringify(s.subtitleLangs);
+        }) || {
+          label: (s.subtitleLangs || []).join(", ")
+        }).label;
+        body.appendChild(row(t("Idioma da legenda"), t("Escolhida sozinha ao abrir o vídeo"), t(subName), function () {
+          return menu(t("Idioma da legenda"), SUB_LANGS.map(function (x) {
+            return {
+              label: t(x.label),
+              value: x.value,
+              checked: x.label === subName
+            };
+          }), {
+            onPick: function onPick(v) {
+              saveSettings({
+                subtitleLangs: v
+              });
+              render();
+            }
+          });
+        }));
+        body.appendChild(row(t("Ligar legenda automaticamente"), t("Se o áudio não estiver no seu idioma"), "", function () {
+          saveSettings({
+            subtitlesAuto: !settings().subtitlesAuto
+          });
+          render();
+        }, toggle(s.subtitlesAuto)));
+        var audName = (AUDIO_LANGS.find(function (x) {
+          return JSON.stringify(x.value) === JSON.stringify(s.audioLangs);
+        }) || AUDIO_LANGS[0]).label;
+        body.appendChild(row(t("Áudio preferido"), available() && s.playerEngine !== "html5" ? t("Escolhido sozinho ao abrir o vídeo") : t("Precisa do servidor do PC para ler as faixas"), t(audName), function () {
+          return menu(t("Áudio preferido"), AUDIO_LANGS.map(function (x) {
+            return {
+              label: t(x.label),
+              value: x.value,
+              checked: x.label === audName
+            };
+          }), {
+            onPick: function onPick(v) {
+              saveSettings({
+                audioLangs: v
+              });
+              render();
+            }
+          });
+        }));
+        body.appendChild(h("div.set-section", {
+          text: t("Aparência da legenda")
+        }));
+        var preview = h("div.subs", null, h("span", {
+          html: t("Oi. Meu nome é Peter Parker.") + "\n<i>" + t("Você não lembra de mim...") + "</i>"
+        }));
+        apply(preview, s);
+        body.appendChild(h("div.sub-preview", null, preview));
+        var lb = labels(s);
+        choose(t("Fonte"), t("Vale para legendas de addons (OpenSubtitles etc.)"), FONTS, "subtitleFont", s.subtitleFont, lb.font);
+        choose(t("Estilo"), t("Contorno, sombra ou caixa de fundo"), STYLES, "subtitleStyle", s.subtitleStyle, lb.style);
+        choose(t("Cor do texto"), "", COLORS2, "subtitleColor", s.subtitleColor, lb.color);
+        choose(t("Tamanho"), "", SIZES.map(function (v) {
+          return {
+            id: v,
+            label: v + "%"
+          };
+        }), "subtitleSize", s.subtitleSize || 100, (s.subtitleSize || 100) + "%");
+        choose(t("Posição"), t("Distância da borda de baixo"), POSITIONS, "subtitlePosition", s.subtitlePosition, lb.position);
+        body.appendChild(row(t("Negrito"), t("O Kai usa negrito"), "", function () {
+          saveSettings({
+            subtitleBold: settings().subtitleBold === false
+          });
+          render();
+        }, toggle(s.subtitleBold !== false)));
+        body.appendChild(h("div.hint", {
+          style: {
+            padding: "6px 4px 0"
+          },
+          text: t("Legendas embutidas no arquivo são desenhadas pela própria TV: só cor, tamanho, posição e caixa se aplicam a elas.")
+        }));
+      }
+      if (page === "c-playback") {
+        body.appendChild(h("div.set-section", {
+          text: t("Player")
+        }));
+        body.appendChild(row(t("Escolha inteligente"), t("Assistir já toca a melhor fonte; o botão Fontes mostra a lista"), "", function () {
+          saveSettings({
+            smartChoice: settings().smartChoice === false
+          });
+          render();
+        }, toggle(s.smartChoice !== false)));
+        body.appendChild(row(t("Próximo episódio automático"), t("Contagem regressiva nos créditos e toca o próximo"), "", function () {
+          saveSettings({
+            autoNext: settings().autoNext === false
+          });
+          render();
+        }, toggle(s.autoNext !== false)));
+        if (s.autoNext !== false) {
+          var UN = [5, 10, 15, 20].map(function (n) {
+            return {
+              id: n,
+              label: t("{n} segundos", {
+                n: n
+              })
+            };
+          });
+          var unCur = UN.find(function (x) {
+            return x.id === (+s.upNextSeconds || 10);
+          }) || UN[1];
+          choose(t("Contagem regressiva"), t("Quanto tempo o aviso do próximo episódio espera"), UN, "upNextSeconds", unCur.id, unCur.label);
         }
-      }, [h("div.label", null, [t("Adicionar addon por URL"), h("small", {
-        text: isLoggedIn() ? t("Instala na sua conta Stremio") : t("Fica só nesta TV")
-      })]), addInput]));
-      body.appendChild(h("div.set-section", {
-        text: t("Sobre e depuração")
-      }));
-      var logInput = h("input.input", {
-        type: "text",
-        value: s.devlogUrl || "",
-        placeholder: "http://IP-DO-PC:8099/log"
-      });
-      logInput.__submit = function (v) {
-        saveSettings({
-          devlogUrl: v.trim()
+        choose(t("Player de vídeo"), t("O player da Samsung troca a faixa de áudio; o do navegador é o antigo"), [{
+          id: "auto",
+          label: available() ? t("Samsung (AVPlay)") : t("Samsung (AVPlay) · indisponível nesta TV")
+        }, {
+          id: "html5",
+          label: t("Navegador (HTML5)")
+        }], "playerEngine", s.playerEngine === "html5" ? "html5" : "auto", s.playerEngine === "html5" ? t("Navegador (HTML5)") : available() ? t("Samsung (AVPlay)") : t("Samsung (AVPlay) · indisponível nesta TV"));
+        if (s.playerEngine !== "html5" && !available()) body.appendChild(h("div.hint.warn-hint", {
+          text: t("O player da Samsung (AVPlay) não carregou nesta TV, então o app usa o do navegador e não consegue trocar o áudio. Feche o app e abra de novo pelo TizenBrew; se continuar, avise.")
+        }));
+        body.appendChild(row(t("Sugestões no fim"), t('Ao terminar um filme, mostra "Mais como este"'), "", function () {
+          saveSettings({
+            postPlay: settings().postPlay === false
+          });
+          render();
+        }, toggle(s.postPlay !== false)));
+        body.appendChild(row(t("Selos das fontes"), t("Qualidade, HDR, áudio, idioma, tamanho..."), "", function () {
+          return openPage("badges");
+        }));
+      }
+      if (page === "c-playback") {
+        body.appendChild(h("div.set-section", {
+          text: t("Servidor de streaming (PC)")
+        }));
+        var st = lastStatus();
+        var stText = !s.serverUrl ? t("não configurado") : st.ok && st.url === baseUrl() ? t("conectado ✓") : t("sem resposta");
+        var urlInput = h("input.input", {
+          type: "text",
+          value: s.serverUrl || "",
+          placeholder: "ex.: 192.168.0.10"
         });
-        log.setRemote(v.trim());
-        log.info(t("Log remoto ligado"));
-        toast(v.trim() ? t("Enviando logs para o PC") : t("Log remoto desligado"));
-      };
-      body.appendChild(h("div.set-row", {
-        focusable: true,
-        onSelect: function onSelect() {
-          return select(logInput);
-        }
-      }, [h("div.label", null, [t("Log remoto"), h("small", {
-        text: t("npm run logs no PC")
-      })]), logInput]));
-      var netRow = row(t("Testar a internet"), t("Ping e velocidade de download (Cloudflare)"), "", function () {
-        var v = netRow.querySelector(".value");
-        v.textContent = t("Medindo o ping...");
-        run2(function (step) {
-          return v.textContent = step === "ping" ? t("Medindo o ping...") : t("Baixando arquivo de teste...");
-        }).then(function (r) {
-          var verdict = r.mbps >= 40 ? t("dá para 4K") : r.mbps >= 15 ? t("bom para 1080p") : r.mbps >= 6 ? t("só 720p com folga") : t("lenta para vídeo");
-          v.textContent = r.mbps + " Mbps · " + r.pingMs + " ms";
-          toast(t("Internet: {mbps} Mbps, ping {ms} ms ({verdict})", {
-            mbps: r.mbps,
-            ms: r.pingMs,
-            verdict: verdict
-          }), 8e3);
-        }).catch(function (e) {
-          v.textContent = "";
-          toast(t("O teste falhou: {msg}", {
-            msg: e.message
-          }), 5e3);
+        urlInput.__submit = function (v) {
+          saveSettings({
+            serverUrl: v.trim()
+          });
+          check().then(function (r) {
+            toast(r.ok ? t("Servidor conectado") : t("Servidor não respondeu em {url}", {
+              url: baseUrl()
+            }));
+            render();
+          });
+        };
+        body.appendChild(h("div.set-row", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return select(urlInput);
+          }
+        }, [h("div.label", null, [t("Endereço do PC"), h("small", {
+          text: t("Rode o stremio-service no PC (porta 11470). Status: {s}", {
+            s: stText
+          })
+        })]), urlInput]));
+        body.appendChild(row(t("Procurar na rede"), t("Varre a rede local atrás do servidor"), "", function () {
+          toast(t("Procurando servidor na rede..."), 2e4);
+          scan().then(function (ip) {
+            if (!ip) return toast(t("Nenhum servidor encontrado. Ele está aberto no PC?"));
+            saveSettings({
+              serverUrl: ip
+            });
+            return check().then(function () {
+              toast(t("Servidor encontrado em {ip}", {
+                ip: ip
+              }));
+              render();
+            });
+          }).catch(function (e) {
+            return toast(t("Falha na busca: {msg}", {
+              msg: e.message
+            }));
+          });
+        }));
+        body.appendChild(row(t("Testar conexão"), "", "", function () {
+          return check().then(function (r) {
+            toast(r.ok ? t("Servidor OK") + (r.version ? " (v" + r.version + ")" : "") : t("Sem resposta de {url}", {
+              url: baseUrl() || "-"
+            }));
+            render();
+          });
+        }));
+      }
+      if (page === "c-integrations") {
+        body.appendChild(h("div.set-section", {
+          text: t("Integrações")
+        }));
+        body.appendChild(row(t("Rastreamento (Trakt e Simkl)"), t("Contas, fontes e recursos do Trakt"), connected().length ? t("Conectado") : t("Desconectado"), function () {
+          return openPage("tracking");
+        }));
+        body.appendChild(row(t("Pular trechos"), t("Abertura, recapitulação e encerramento"), s.skipMode === "off" ? t("Desligado") : t("Ligado"), function () {
+          return openPage("skip");
+        }));
+        body.appendChild(row(t("Debrid"), "Real-Debrid · TorBox · Premiumize", active() ? active().name : t("Desligado"), function () {
+          return openPage("debrid");
+        }));
+        body.appendChild(row(t("Servidores de mídia (Jellyfin e Emby)"), t("Seu próprio servidor como fonte"), enabled() ? connection().name : t("Desconectado"), function () {
+          return openPage("servers");
+        }));
+        body.appendChild(h("div.set-section", {
+          text: t("Metadados extras (opcional)")
+        }));
+        var keyRow = function keyRow(title, sub, key3, placeholder) {
+          var input = h("input.input", {
+            type: "text",
+            value: s[key3] || "",
+            placeholder: placeholder
+          });
+          input.__submit = function (v) {
+            var patch = {};
+            patch[key3] = v.trim();
+            saveSettings(patch);
+            toast(v.trim() ? t("Chave salva") : t("Chave removida"));
+            render();
+          };
+          body.appendChild(h("div.set-row", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return select(input);
+            }
+          }, [h("div.label", null, [title, h("small", {
+            text: sub
+          })]), input]));
+        };
+        keyRow(t("Chave TMDB"), t("Descrições em árabe, perfis de atores, calendário de filmes, logos e elenco com fotos (grátis em themoviedb.org)"), "tmdbKey", "API key (v3)");
+        keyRow(t("Chave MDBList"), t("Notas do Rotten Tomatoes, Metacritic, Trakt e Letterboxd (grátis em mdblist.com)"), "mdblistKey", "API key");
+        keyRow(t("Chave RPDB"), t("Pôsteres com as notas desenhadas (ratingposterdb.com)"), "rpdbKey", "API key");
+        body.appendChild(row(t("Guia para os pais"), t("Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)"), "", function () {
+          saveSettings({
+            parentalGuide: !settings().parentalGuide
+          });
+          render();
+        }, toggle(!!s.parentalGuide)));
+        body.appendChild(h("div.set-section", {
+          text: t("Addons")
+        }));
+        var list2 = list();
+        body.appendChild(row(t("Addons ativos"), isLoggedIn() ? t("Gerencie pela sua conta em web.stremio.com") : t("Sem conta: Cinemeta, OpenSubtitles e os adicionados aqui"), t("{n} addon(s)", {
+          n: list2.length
+        }), function () {
+          return menu(t("Addons ativos"), list2.map(function (a) {
+            return {
+              label: a.manifest.name || a.manifest.id,
+              sub: a.transportUrl
+            };
+          }), {});
+        }));
+        RECOMMENDED.filter(function (r) {
+          return !list2.some(function (a) {
+            return a.transportUrl === r.url || a.manifest && a.manifest.id === r.id;
+          });
+        }).forEach(function (r) {
+          return body.appendChild(row(t("Instalar {name}", {
+            name: r.name
+          }), t(r.desc), "", function () {
+            return installFromUrl(r.url, r.name);
+          }));
         });
-      });
-      body.appendChild(netRow);
-      body.appendChild(h("div.set-section", {
-        text: t("Atualizações")
-      }));
-      body.appendChild(row(t("Versão instalada"), device || "Stremio Kai", shortDate(BUILD), null));
-      var latestRow = row(t("Versão mais nova no GitHub"), REPO, t("Verificando..."), function () {
-        return checkForUpdate();
-      });
-      body.appendChild(latestRow);
-      latest().then(function (info2) {
-        var v = latestRow.querySelector(".value");
-        if (!v) return;
-        var newer = info2.build && info2.build !== BUILD && Date.parse(info2.build) > Date.parse(BUILD);
-        v.textContent = shortDate(info2.date) + (newer ? "  ·  " + t("nova!") : "  ·  " + t("em dia"));
-        if (info2.message) latestRow.querySelector(".label small").textContent = info2.message;
-      }).catch(function () {
-        var v = latestRow.querySelector(".value");
-        if (v) v.textContent = t("sem conexão");
-      });
-      body.appendChild(row(t("Procurar atualização"), t("Baixa a versão nova do GitHub ({repo})", {
-        repo: REPO
-      }), "", function () {
-        return checkForUpdate();
-      }));
-      var rows2 = body.querySelectorAll(".set-row");
-      if (keepIndex >= 0 && rows2[keepIndex]) focus(rows2[keepIndex]);
+        var addInput = h("input.input", {
+          type: "text",
+          placeholder: "https://.../manifest.json"
+        });
+        addInput.__submit = function (v) {
+          var u = v.trim();
+          if (!/^https?:\/\/.+manifest\.json/.test(u)) return toast(t("Cole a URL do manifest.json do addon"));
+          if (isLoggedIn()) return installFromUrl(u, t("o addon"));
+          var cur = settings().localAddons || [];
+          saveSettings({
+            localAddons: cur.concat([u])
+          });
+          load(true).then(function () {
+            dropTab("home");
+            toast(t("Addon adicionado"));
+            render();
+          });
+        };
+        body.appendChild(h("div.set-row", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return select(addInput);
+          }
+        }, [h("div.label", null, [t("Adicionar addon por URL"), h("small", {
+          text: isLoggedIn() ? t("Instala na sua conta Stremio") : t("Fica só nesta TV")
+        })]), addInput]));
+      }
+      if (page === "c-about") {
+        body.appendChild(h("div.set-section", {
+          text: t("Sobre e depuração")
+        }));
+        var logInput = h("input.input", {
+          type: "text",
+          value: s.devlogUrl || "",
+          placeholder: "http://IP-DO-PC:8099/log"
+        });
+        logInput.__submit = function (v) {
+          saveSettings({
+            devlogUrl: v.trim()
+          });
+          log.setRemote(v.trim());
+          log.info(t("Log remoto ligado"));
+          toast(v.trim() ? t("Enviando logs para o PC") : t("Log remoto desligado"));
+        };
+        body.appendChild(h("div.set-row", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return select(logInput);
+          }
+        }, [h("div.label", null, [t("Log remoto"), h("small", {
+          text: t("npm run logs no PC")
+        })]), logInput]));
+        var netRow = row(t("Testar a internet"), t("Ping e velocidade de download (Cloudflare)"), "", function () {
+          var v = netRow.querySelector(".value");
+          v.textContent = t("Medindo o ping...");
+          run2(function (step) {
+            return v.textContent = step === "ping" ? t("Medindo o ping...") : t("Baixando arquivo de teste...");
+          }).then(function (r) {
+            var verdict = r.mbps >= 40 ? t("dá para 4K") : r.mbps >= 15 ? t("bom para 1080p") : r.mbps >= 6 ? t("só 720p com folga") : t("lenta para vídeo");
+            v.textContent = r.mbps + " Mbps · " + r.pingMs + " ms";
+            toast(t("Internet: {mbps} Mbps, ping {ms} ms ({verdict})", {
+              mbps: r.mbps,
+              ms: r.pingMs,
+              verdict: verdict
+            }), 8e3);
+          }).catch(function (e) {
+            v.textContent = "";
+            toast(t("O teste falhou: {msg}", {
+              msg: e.message
+            }), 5e3);
+          });
+        });
+        body.appendChild(netRow);
+        body.appendChild(h("div.set-section", {
+          text: t("Atualizações")
+        }));
+        body.appendChild(row(t("Versão instalada"), device || "Stremio Kai", shortDate(BUILD), null));
+        var latestRow = row(t("Versão mais nova no GitHub"), REPO, t("Verificando..."), function () {
+          return checkForUpdate();
+        });
+        body.appendChild(latestRow);
+        latest().then(function (info2) {
+          var v = latestRow.querySelector(".value");
+          if (!v) return;
+          var newer = info2.build && info2.build !== BUILD && Date.parse(info2.build) > Date.parse(BUILD);
+          v.textContent = shortDate(info2.date) + (newer ? "  ·  " + t("nova!") : "  ·  " + t("em dia"));
+          if (info2.message) latestRow.querySelector(".label small").textContent = info2.message;
+        }).catch(function () {
+          var v = latestRow.querySelector(".value");
+          if (v) v.textContent = t("sem conexão");
+        });
+        body.appendChild(row(t("Procurar atualização"), t("Baixa a versão nova do GitHub ({repo})", {
+          repo: REPO
+        }), "", function () {
+          return checkForUpdate();
+        }));
+      }
+      placeFocus();
     }
     render();
     return {
       el: el,
       onBack: function onBack() {
-        if (page === "main") return false;
+        if (!PARENT[page]) return false;
         goMain();
         return true;
       },
@@ -16976,22 +18207,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var seen = {};
       var out = [];
       lists[0].concat(lists[1]).forEach(function (e) {
-        var show2 = e.show || e._embedded && e._embedded.show;
-        if (!show2 || !show2.externals || !show2.externals.imdb || NOT_SERIES.test(show2.type || "")) return;
-        var key2 = show2.id + ":" + e.season + ":" + e.number;
-        if (seen[key2]) return;
-        seen[key2] = true;
-        var network = show2.webChannel && show2.webChannel.name || show2.network && show2.network.name || "";
+        var show3 = e.show || e._embedded && e._embedded.show;
+        if (!show3 || !show3.externals || !show3.externals.imdb || NOT_SERIES.test(show3.type || "")) return;
+        var key3 = show3.id + ":" + e.season + ":" + e.number;
+        if (seen[key3]) return;
+        seen[key3] = true;
+        var network = show3.webChannel && show3.webChannel.name || show3.network && show3.network.name || "";
         var at = e.airstamp ? Date.parse(e.airstamp) : 0;
         out.push({
-          name: show2.name,
-          poster: show2.image && (show2.image.original || show2.image.medium),
+          name: show3.name,
+          poster: show3.image && (show3.image.original || show3.image.medium),
           at: at,
           slot: (at ? timeHM(new Date(at)) + " · " : "") + "S" + e.season + " E" + (e.number || "?"),
-          score: show2.rating && show2.rating.average ? Math.round(show2.rating.average * 10) : 0,
+          score: show3.rating && show3.rating.average ? Math.round(show3.rating.average * 10) : 0,
           tag: network,
           open: function open() {
-            return openDetails("series", show2.externals.imdb);
+            return openDetails("series", show3.externals.imdb);
           }
         });
       });
@@ -17072,7 +18303,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop6 = function _loop6() {
+      var _loop7 = function _loop7() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -17088,7 +18319,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop6();
+        _loop7();
       }
       days.__last = days.children[current3 + 1];
     }
@@ -17355,6 +18586,83 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/lib/screensaver.js
+  var SLIDE_MS = 12e3;
+  var lastKey = Date.now();
+  var overlay = null;
+  var slideTimer = null;
+  var items2 = [];
+  var index = 0;
+  function minutes() {
+    return +settings().screensaver || 0;
+  }
+  function playing2() {
+    return !!document.querySelector(".view.player:not(.hidden)") || document.documentElement.classList.contains("av-playing");
+  }
+  function show2() {
+    if (overlay) return;
+    var img = h("div.ss-bg");
+    var title = h("div.ss-title");
+    var clock = h("div.ss-clock");
+    overlay = h("div.screensaver", null, [img, h("div.ss-shade"), h("div.ss-info", null, [clock, title])]);
+    document.body.appendChild(overlay);
+    var next = function next() {
+      clock.textContent = timeHM(/* @__PURE__ */new Date());
+      var it = items2.length ? items2[index++ % items2.length] : null;
+      if (it) {
+        img.classList.remove("show");
+        setTimeout(function () {
+          if (!overlay) return;
+          img.style.backgroundImage = 'url("' + it.background + '")';
+          title.textContent = it.name || "";
+          img.classList.add("show");
+        }, 900);
+      }
+    };
+    var ready = items2.length ? Promise.resolve() : load2().then(function (l) {
+      return items2 = (l || []).filter(function (x) {
+        return x.background;
+      });
+    }).catch(function () {});
+    ready.then(function () {
+      if (!overlay) return;
+      next();
+      slideTimer = setInterval(next, SLIDE_MS);
+    });
+  }
+  function hide2() {
+    clearInterval(slideTimer);
+    slideTimer = null;
+    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    if (overlay) clear(overlay);
+    overlay = null;
+  }
+  function init2() {
+    document.addEventListener("keydown", function (e) {
+      lastKey = Date.now();
+      if (overlay) {
+        hide2();
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+    ["mousemove", "click"].forEach(function (ev) {
+      return document.addEventListener(ev, function () {
+        lastKey = Date.now();
+        if (overlay) hide2();
+      }, true);
+    });
+    setInterval(function () {
+      var m = minutes();
+      if (!m || overlay) return;
+      if (playing2()) {
+        lastKey = Date.now();
+        return;
+      }
+      if (Date.now() - lastKey >= m * 6e4) show2();
+    }, 15e3);
+  }
+
   // src/js/main.js
   function boot() {
     var s = settings();
@@ -17363,6 +18671,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     log.info("Iniciando", navigator.userAgent);
     registerTizenKeys();
     start();
+    init2();
     onOpen(function (ev) {
       goTab("home");
       openDetails(ev.kind, ev.item, ev.video ? {
@@ -17411,7 +18720,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function start2() {
     reloadProfile();
     var s = settings();
-    document.body.classList.toggle("oled", !!s.oled);
+    applyLook(s);
     apply3(s.theme);
     document.body.classList.toggle("perf", s.perfMode !== false);
     log.info("Perfil", activeProfile().name);

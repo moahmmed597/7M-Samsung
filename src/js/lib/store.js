@@ -114,7 +114,7 @@ export function set(key, value) {
 
 // ---------- Preferências ----------
 // Da TV (iguais para todos os perfis):
-const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource', 'debridEnabled', 'debridProvider', 'realDebridKey', 'torboxKey', 'premiumizeKey', 'mediaServer', 'mediaServerEnabled', 'mediaServerDeviceId', 'rpdbKey', 'parentalGuide'];
+const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource', 'debridEnabled', 'debridProvider', 'realDebridKey', 'torboxKey', 'premiumizeKey', 'mediaServer', 'mediaServerEnabled', 'mediaServerDeviceId', 'rpdbKey', 'parentalGuide', 'subdlKey', 'screensaver'];
 
 const DEFAULT_SETTINGS = {
   // TV
@@ -169,6 +169,16 @@ const DEFAULT_SETTINGS = {
   ambientMode: false,
   postPlay: true,
   streamBadges: null, // { quality, hdr, remux, bitrate, size, audio, codec, lang } → false hides
+  subdlKey: '', // SubDL API key (TV)
+  screensaver: 0, // minutes idle before the screensaver (TV); 0 = off
+  autoNext: true,
+  upNextSeconds: 10,
+  rememberTracks: true,
+  traktWatchlistRow: true,
+  searchHistory: true,
+  cardShape: 'rounded', // rounded | square | soft
+  cardSize: 'medium', // small | medium | large
+  focusStyle: 'glow', // glow | outline | lift
 };
 
 export function settings() {

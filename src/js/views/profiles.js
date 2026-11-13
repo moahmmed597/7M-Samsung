@@ -26,9 +26,52 @@ export function avatar(p, cls) {
 
 // Troca de perfil recarregando o app: conta, biblioteca e addons do outro perfil entram limpos.
 export function switchProfile(id) {
-  store.setActiveProfile(id);
-  session(SESSION_PICKED, '1');
-  window.location.reload();
+  const target = store.profiles().find((p) => p.id === id);
+  checkPin(target, () => {
+    store.setActiveProfile(id);
+    session(SESSION_PICKED, '1');
+    window.location.reload();
+  });
+}
+
+// ---------- PIN lock (Settings → Profile) ----------
+// Asks for the profile's PIN when it has one; onOk runs only with the right PIN.
+export function checkPin(profile, onOk) {
+  if (!profile || !profile.pin) return onOk();
+  pinDialog(t('PIN de {name}', { name: profile.name }), (pin) => {
+    if (pin === profile.pin) {
+      onOk();
+      return true;
+    }
+    return false;
+  });
+}
+
+// onSubmit(pin) returns true to close; false shows "wrong PIN" and keeps it open.
+export function pinDialog(title, onSubmit, badText) {
+  const err = h('div.modal-text.err-text');
+  const input = h('input.input.pin-input', { type: 'password', inputmode: 'numeric', maxlength: '8', placeholder: '••••', focusable: true, 'data-autofocus': '' });
+  const box = h('div.modal-box.center', null, [h('h3', { text: title }), input, err]);
+  const modal = h('div.modal', null, box);
+  document.getElementById('app').appendChild(modal);
+  const layer = nav.pushLayer(modal, { onBack: () => close() });
+  nav.focusFirst(modal);
+  setTimeout(() => nav.select(input), 50);
+  input.__submit = (v) => {
+    const pin = String(v || '').trim();
+    if (!pin) return;
+    if (onSubmit(pin) === false) {
+      err.textContent = badText || t('PIN errado. Tente de novo.');
+      input.value = '';
+      nav.focus(input);
+      return;
+    }
+    close();
+  };
+  function close() {
+    nav.popLayer(layer);
+    if (modal.parentNode) modal.parentNode.removeChild(modal);
+  }
 }
 
 // Pede o nome do perfil num modal (no TV o teclado virtual abre ao confirmar no campo).
@@ -90,7 +133,8 @@ export function clearNewProfileFlag() {
 }
 
 export function needsPicker() {
-  return store.profiles().length > 1 && store.settings().askProfile && !session(SESSION_PICKED);
+  if (session(SESSION_PICKED)) return false;
+  return (store.profiles().length > 1 && store.settings().askProfile) || !!store.activeProfile().pin;
 }
 
 // Tela de escolha mostrada antes de o app carregar a conta.
@@ -105,7 +149,7 @@ export function showPicker(onPicked) {
         'data-autofocus': p.id === active.id ? '' : null,
         onSelect: () => pick(p.id),
       },
-      [avatar(p, 'big'), h('div.profile-name', { text: p.name })]
+      [avatar(p, 'big'), h('div.profile-name', { text: (p.pin ? '🔒 ' : '') + p.name })]
     )
   );
   cards.push(
@@ -125,6 +169,12 @@ export function showPicker(onPicked) {
   nav.focusFirst(el);
 
   function pick(id) {
+    checkPin(
+      list.find((p) => p.id === id),
+      () => done(id)
+    );
+  }
+  function done(id) {
     store.setActiveProfile(id);
     session(SESSION_PICKED, '1');
     nav.popLayer(layer);

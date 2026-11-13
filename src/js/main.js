@@ -25,6 +25,7 @@ import { openLogin } from './views/login.js';
 import { registerTizenKeys } from './lib/platform.js';
 import * as phone from './lib/phone.js';
 import * as theme from './lib/theme.js';
+import * as screensaver from './lib/screensaver.js';
 
 function boot() {
   const s = store.settings();
@@ -34,6 +35,7 @@ function boot() {
 
   registerTizenKeys();
   phone.start();
+  screensaver.init();
   // Opened from the phone's Browse tab: the title's page, ready on the episode when there is one.
   phone.onOpen((ev) => {
     router.goTab('home');
@@ -88,7 +90,7 @@ function boot() {
 function start() {
   stremio.reloadProfile();
   const s = store.settings();
-  document.body.classList.toggle('oled', !!s.oled);
+  theme.applyLook(s);
   theme.apply(s.theme);
   document.body.classList.toggle('perf', s.perfMode !== false);
   log.info('Perfil', store.activeProfile().name);

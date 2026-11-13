@@ -218,7 +218,8 @@ export function HomeView() {
       .then(() => {
         clear(rows);
         // Add-on catalogs plus MDBList lists, in the order the user chose (Settings → Home rows).
-        const cats = homeRows.visible(addons.boardCatalogs().concat(mdblistRows.boardEntries()));
+        const wl = tracker.watchlistEntry();
+        const cats = homeRows.visible((wl ? [wl] : []).concat(addons.boardCatalogs(), mdblistRows.boardEntries()));
         if (!cats.length) rows.appendChild(h('div.row-empty', { text: t('Nenhum catálogo. Entre na sua conta em Ajustes.') }));
         pending = cats.map((c) => Object.assign(buildRow(c, rows), { state: 'idle' }));
         loadNearby();

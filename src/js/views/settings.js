@@ -13,12 +13,13 @@ import * as hero from '../api/hero.js';
 import { topbar, toast, menu, confirmDialog, refreshProfileChips } from '../ui.js';
 import * as router from '../router.js';
 import { openLogin } from './login.js';
-import { avatar, switchProfile, createProfile } from './profiles.js';
+import { avatar, switchProfile, createProfile, checkPin, pinDialog } from './profiles.js';
 import { t } from '../lib/i18n.js';
 import * as phone from '../lib/phone.js';
 import * as theme from '../lib/theme.js';
 import * as tracker from '../api/tracker.js';
 import * as avvideo from '../lib/avvideo.js';
+import * as skip from '../api/skip.js';
 import { openTrackLink } from './trackLink.js';
 import * as debrid from '../api/debrid.js';
 import * as mediaserver from '../api/mediaserver.js';
@@ -29,18 +30,28 @@ import * as speedtest from '../lib/speedtest.js';
 import { CW_SORTS } from './home.js';
 import { promptText } from '../ui.js';
 
-const SUB_LANGS = [
-  { label: 'Inglês', value: ['eng', 'en'] },
-  { label: 'Árabe', value: ['ara', 'ar'] },
-  { label: 'Espanhol', value: ['spa', 'es'] },
-  { label: 'Nenhum (não ligar sozinho)', value: [] },
+// Languages for automatic subtitle and audio picks (codes as add-ons and the TV report them).
+const LANGS = [
+  ['Árabe', ['ara', 'ar']],
+  ['Inglês', ['eng', 'en']],
+  ['Francês', ['fre', 'fra', 'fr']],
+  ['Espanhol', ['spa', 'es']],
+  ['Turco', ['tur', 'tr']],
+  ['Persa', ['per', 'fas', 'fa']],
+  ['Urdu', ['urd', 'ur']],
+  ['Hindi', ['hin', 'hi']],
+  ['Russo', ['rus', 'ru']],
+  ['Alemão', ['ger', 'deu', 'de']],
+  ['Italiano', ['ita', 'it']],
+  ['Português', ['por', 'pob', 'pt']],
+  ['Japonês', ['jpn', 'ja']],
+  ['Coreano', ['kor', 'ko']],
+  ['Chinês', ['chi', 'zho', 'zh']],
+  ['Indonésio', ['ind', 'id']],
+  ['Malaio', ['may', 'msa', 'ms']],
 ];
-const AUDIO_LANGS = [
-  { label: 'Original do arquivo', value: [] },
-  { label: 'Inglês quando houver', value: ['eng', 'en'] },
-  { label: 'Árabe quando houver', value: ['ara', 'ar'] },
-  { label: 'Japonês quando houver', value: ['jpn', 'ja'] },
-];
+const SUB_LANGS = LANGS.map((l) => ({ label: l[0], value: l[1] })).concat([{ label: 'Nenhum (não ligar sozinho)', value: [] }]);
+const AUDIO_LANGS = [{ label: 'Original do arquivo', value: [] }].concat(LANGS.map((l) => ({ label: l[0], value: l[1] })));
 
 // Addons úteis que o app aproveita (Anime Kitsu: catálogos de anime e IDs do calendário/AniSkip).
 const RECOMMENDED = [
@@ -53,9 +64,12 @@ export function SettingsView() {
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   const bar = topbar('settings', router.goTab);
   const body = h('div.settings');
+  // Two panes (like Nuvio): the categories stay on the side, the chosen one opens beside them.
+  const rail = h('div.set-rail', { 'data-group': '' });
   scroller.appendChild(bar);
   scroller.appendChild(body);
   el.appendChild(scroller);
+  el.appendChild(rail);
 
   let device = '';
   deviceInfo()
@@ -117,7 +131,8 @@ export function SettingsView() {
     return h('div.toggle', { cls: on ? 'on' : '' }, h('i'));
   }
 
-  let page = 'main';
+  let page = 'c-account';
+  let focusContent = false; // move the focus into the content after the next render
 
   function keyInput(title, sub, key, placeholder) {
     const s = store.settings();
@@ -132,15 +147,21 @@ export function SettingsView() {
     return h('div.set-row', { focusable: true, onSelect: () => nav.select(input) }, [h('div.label', null, [title, h('small', { text: sub })]), input]);
   }
 
-  function goMain() {
-    page = 'main';
+  // Sub-pages go back to their group; groups go back to the main list.
+  const PARENT = { tracking: 'c-integrations', skip: 'c-integrations', debrid: 'c-integrations', servers: 'c-integrations', home: 'c-appearance', badges: 'c-playback' };
+  function openPage(name, focus) {
+    page = name;
+    focusContent = focus !== false;
     render();
     scroller.scrollTop = 0;
   }
+  function goMain() {
+    openPage(PARENT[page] || page);
+  }
 
   function pageHeader(title) {
-    body.appendChild(row('‹ ' + t('Voltar'), '', '', () => goMain()));
-    body.appendChild(h('div.set-section', { text: title }));
+    if (PARENT[page]) body.appendChild(row('‹ ' + t('Voltar'), '', '', () => goMain()));
+    body.appendChild(h('div.set-title', { text: title }));
   }
 
   function accountCard(p) {
@@ -238,6 +259,22 @@ export function SettingsView() {
     body.appendChild(h('div.set-section', { text: t('Animes') }));
     flip(t('Anime Skip'), t('Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes'), s.animeSkip !== false, (v) => store.saveSettings({ animeSkip: v }));
     body.appendChild(keyInput(t('AnimeSkip Client ID'), t('Sua chave do anime-skip.com (fica só nesta TV)'), 'animeSkipClientId', 'Client ID'));
+    body.appendChild(h('div.set-section', { text: t('Diagnóstico') }));
+    const testRow = row(t('Testar o pulo de abertura'), t('Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou'), '', () => {
+      const v = testRow.querySelector('.value');
+      v.textContent = t('Testando...');
+      skip.selfTest().then((how) => {
+        const msg = {
+          direct: t('Funciona (direto)'),
+          tv: t('Funciona (pelo serviço da TV)'),
+          pc: t('Funciona (pelo servidor do PC)'),
+          none: t('Não funciona: o serviço da TV não respondeu. Feche o app e abra de novo pelo TizenBrew.'),
+        }[how];
+        v.textContent = how === 'none' ? '✕' : '✓';
+        toast(msg, 8000);
+      });
+    });
+    body.appendChild(testRow);
   }
 
   function renderDebrid(s) {
@@ -341,7 +378,8 @@ export function SettingsView() {
     // ---- Rows: order and hidden ----
     body.appendChild(h('div.set-section', { text: t('Fileiras') }));
     body.appendChild(h('div.hint', { style: { padding: '0 4px 10px' }, text: t('OK numa fileira: subir, descer ou esconder.') }));
-    const all = addons.boardCatalogs().concat(mdblistRows.boardEntries());
+    const wl = tracker.watchlistEntry();
+    const all = (wl ? [wl] : []).concat(addons.boardCatalogs(), mdblistRows.boardEntries());
     homeRows.sort(all).forEach((e) => {
       const hidden = homeRows.isHidden(e);
       const name = e.catalog.name || e.catalog.id;
@@ -456,342 +494,63 @@ export function SettingsView() {
     );
   }
 
+  const GROUPS = [
+    { id: 'c-account', icon: '👤', label: 'Conta e perfis', sub: 'Idioma, perfis, conta Stremio, controle pelo celular' },
+    { id: 'c-playback', icon: '▶', label: 'Reprodução', sub: 'Servidor do PC, player, próximo episódio, selos das fontes' },
+    { id: 'c-subs', icon: '💬', label: 'Legendas e áudio', sub: 'Idiomas, SubDL, aparência da legenda' },
+    { id: 'c-appearance', icon: '🎨', label: 'Aparência', sub: 'Tema, tela inicial, modo ambiente, proteção de tela' },
+    { id: 'c-integrations', icon: '🔗', label: 'Integrações', sub: 'Trakt, Simkl, pular trechos, debrid, Jellyfin, chaves, addons' },
+    { id: 'c-about', icon: 'ⓘ', label: 'Sobre', sub: 'Atualizações, teste de internet, log' },
+  ];
+
+  function renderRail() {
+    clear(rail);
+    const current = PARENT[page] || page;
+    GROUPS.forEach((g) => {
+      rail.appendChild(
+        h(
+          'div.rail-item',
+          {
+            focusable: true,
+            cls: g.id === current ? 'active' : '',
+            onSelect: () => openPage(g.id, true),
+            // Moving along the rail shows each group right away; the focus stays on the rail.
+            onFocus: () => g.id !== (PARENT[page] || page) && openPage(g.id, false),
+          },
+          [h('span.rail-ico', { text: g.icon }), h('span.rail-text', null, [t(g.label), h('small', { text: t(g.sub) })])]
+        )
+      );
+    });
+  }
+
   function render() {
     const s = store.settings();
     const keep = nav.current();
-    const keepIndex = keep ? Array.prototype.indexOf.call(body.querySelectorAll('.set-row'), keep) : -1;
+    const keepIndex = keep && body.contains(keep) ? Array.prototype.indexOf.call(body.querySelectorAll('.set-row'), keep) : -1;
+    const wantFocus = focusContent;
+    focusContent = false;
+    theme.applyLook(s);
     clear(body);
-    if (page !== 'main') {
+    renderRail();
+    const placeFocus = () => {
+      const rows = body.querySelectorAll('.set-row');
+      if (keepIndex >= 0 && rows[keepIndex]) nav.focus(rows[keepIndex]);
+      else if (wantFocus && rows[0]) nav.focus(rows[PARENT[page] ? 1 : 0] || rows[0]);
+    };
+    if (page.indexOf('c-') !== 0) {
       if (page === 'tracking') renderTracking(s);
       else if (page === 'debrid') renderDebrid(s);
       else if (page === 'servers') renderServers(s);
       else if (page === 'home') renderHomePage(s);
       else if (page === 'badges') renderBadges(s);
       else renderSkip(s);
-      const sub = body.querySelectorAll('.set-row');
-      if (keepIndex >= 0 && sub[keepIndex]) nav.focus(sub[keepIndex]);
-      else if (sub[0]) nav.focus(sub[0]);
+      placeFocus();
       return;
     }
 
-    // ---- Idioma do app (vale para a TV inteira; o nome fica bilíngue para quem não lê o atual) ----
-    const LANGS = [
-      { id: 'auto', label: t('Automático (idioma da TV)') },
-      { id: 'en', label: 'English' },
-      { id: 'ar', label: 'العربية' },
-    ];
-    body.appendChild(h('div.set-section', { text: 'Language / اللغة' }));
-    body.appendChild(
-      row('Language / اللغة', '', (LANGS.find((l) => l.id === s.language) || LANGS[0]).label, () =>
-        menu('Language / اللغة', LANGS.map((l) => ({ label: l.label, value: l.id, checked: l.id === s.language })), {
-          onPick: (v) => {
-            if (v === s.language) return;
-            store.saveSettings({ language: v });
-            window.location.reload(); // recarrega para todas as telas mudarem de idioma
-          },
-        })
-      )
-    );
-
-    // ---- Perfil (cada perfil tem sua conta Stremio, histórico e preferências) ----
-    const prof = store.activeProfile();
-    const allProfiles = store.profiles();
-    body.appendChild(h('div.set-section', { text: t('Perfil') }));
-    const nameInput = h('input.input', { type: 'text', value: prof.name });
-    nameInput.__submit = (v) => {
-      const name = v.trim();
-      if (!name) return;
-      store.updateProfile(prof.id, { name: name });
-      refreshProfileChips();
-      toast(t('Nome do perfil salvo'));
-      render();
-    };
-    body.appendChild(
-      h('div.set-row', { focusable: true, onSelect: () => nav.select(nameInput) }, [
-        h('div.label', null, [avatar(prof, 'small'), ' ' + t('Nome do perfil'), h('small', { text: t('Este perfil usa a conta Stremio abaixo') })]),
-        nameInput,
-      ])
-    );
-    body.appendChild(
-      row(t('Cor do perfil'), '', '', () =>
-        menu(
-          t('Cor do perfil'),
-          store.COLORS.map((c, i) => ({ label: [t('Roxo'), t('Rosa'), t('Verde-água'), t('Laranja'), t('Azul'), t('Vermelho'), t('Verde'), t('Cinza')][i], value: c, checked: c === prof.color })),
-          {
-            onPick: (c) => {
-              store.updateProfile(prof.id, { color: c });
-              refreshProfileChips();
-              render();
-            },
-          }
-        ),
-        h('div.avatar.small', { style: { backgroundColor: prof.color }, text: ' ' })
-      )
-    );
-    if (allProfiles.length > 1) {
-      body.appendChild(
-        row(t('Trocar de perfil'), t('{n} perfis nesta TV', { n: allProfiles.length }), '', () =>
-          menu(
-            t('Trocar de perfil'),
-            allProfiles.map((p) => ({ label: p.name, value: p.id, checked: p.id === prof.id })),
-            { onPick: (id) => id !== prof.id && switchProfile(id) }
-          )
-        )
-      );
-    }
-    body.appendChild(row(t('Adicionar perfil'), t('Para outra pessoa, com outra conta Stremio'), '', () => createProfile()));
-    if (allProfiles.length > 1) {
-      body.appendChild(
-        row(t('Copiar ajustes de outro perfil'), t('Legendas, aparência, tela inicial e coleções (a conta não é copiada)'), '', () =>
-          menu(t('Copiar ajustes de'), allProfiles.filter((p) => p.id !== prof.id).map((p) => ({ label: p.name, value: p.id })), {
-            onPick: (id) => {
-              const from = allProfiles.find((p) => p.id === id);
-              confirmDialog(t('Trocar os ajustes de "{to}" pelos de "{from}"?', { to: prof.name, from: from.name }), t('Copiar'), () => {
-                store.copySettingsFrom(id);
-                theme.apply(store.settings().theme);
-                document.body.classList.toggle('oled', !!store.settings().oled);
-                router.dropTab('home');
-                toast(t('Ajustes copiados de {name}', { name: from.name }));
-                render();
-              });
-            },
-          })
-        )
-      );
-    }
-    if (allProfiles.length > 1) {
-      body.appendChild(
-        row(t('Perguntar "Quem está assistindo?" ao abrir'), '', '', () => {
-          store.saveSettings({ askProfile: !store.settings().askProfile });
-          render();
-        }, toggle(s.askProfile))
-      );
-      body.appendChild(
-        row(t('Apagar este perfil'), t('Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)'), '', () =>
-          confirmDialog(t('Apagar o perfil "{name}" desta TV?', { name: prof.name }), t('Apagar'), () => {
-            store.removeProfile(prof.id);
-            switchProfile(store.activeProfile().id);
-          })
-        )
-      );
-    }
-
-    body.appendChild(h('div.set-section', { text: t('Conta Stremio') }));
-    if (stremio.isLoggedIn()) {
-      const u = stremio.user();
-      body.appendChild(row(t('Conectado'), t('Addons e biblioteca sincronizados com a conta'), (u && u.email) || t('conta Stremio'), null));
-      body.appendChild(
-        row(t('Atualizar addons e biblioteca'), t('Busca de novo a lista de addons instalados'), '', () => {
-          Promise.all([addons.load(true), stremio.getLibrary()])
-            .then(() => {
-              toast(t('Atualizado'));
-              router.dropTab('home');
-            })
-            .catch((e) => toast(t('Erro: {msg}', { msg: e.message })));
-        })
-      );
-      body.appendChild(
-        row(t('Sair da conta'), '', '', () =>
-          confirmDialog(t('Sair da conta Stremio?'), t('Sair'), () => {
-            stremio.logout();
-            addons.load(true).then(() => {
-              router.dropTab('home');
-              render();
-            });
-          })
-        )
-      );
-    } else {
-      body.appendChild(
-        row(t('Entrar na conta'), t('Traz seus addons (Torrentio, debrid...) e a biblioteca'), '', () =>
-          openLogin(() => {
-            Promise.all([stremio.refreshUser().catch(() => {}), addons.load(true), stremio.getLibrary()]).then(() => {
-              router.dropTab('home');
-              render();
-            });
-          })
-        )
-      );
-    }
-
-    // ---- Phone remote: QR code that opens the remote page with the PIN already filled in ----
-    body.appendChild(h('div.set-section', { text: t('Controle pelo celular') }));
-    const phoneBox = h('div.set-row.phone-remote', { focusable: true }, h('div.phone-sub', { text: t('Carregando...') }));
-    body.appendChild(phoneBox);
-    phone.info().then((i) => {
-      clear(phoneBox);
-      if (!i) {
-        phoneBox.appendChild(h('div.phone-sub', { text: t('O controle pelo celular não está rodando. Feche o app e abra de novo pelo TizenBrew.') }));
-        return;
-      }
-      phoneBox.appendChild(h('img.phone-qr', { src: phone.qrImage(i.url, 300), alt: '' }));
-      phoneBox.appendChild(
-        h('div.phone-text', null, [
-          h('div.phone-title', { text: t('Aponte a câmera do celular para o código') }),
-          h('div.phone-sub', { text: t('Ou abra no navegador do celular (mesmo Wi-Fi):') }),
-          h('div.phone-url', { text: 'http://' + i.ip + ':' + i.port }),
-          h('div.phone-sub', { text: t('PIN: {pin}', { pin: i.pin }) }),
-        ])
-      );
-    });
-
-    body.appendChild(h('div.set-section', { text: t('Servidor de streaming (PC)') }));
-    const st = server.lastStatus();
-    const stText = !s.serverUrl ? t('não configurado') : st.ok && st.url === server.baseUrl() ? t('conectado ✓') : t('sem resposta');
-    const urlInput = h('input.input', { type: 'text', value: s.serverUrl || '', placeholder: 'ex.: 192.168.0.10' });
-    urlInput.__submit = (v) => {
-      store.saveSettings({ serverUrl: v.trim() });
-      server.check().then((r) => {
-        toast(r.ok ? t('Servidor conectado') : t('Servidor não respondeu em {url}', { url: server.baseUrl() }));
-        render();
-      });
-    };
-    body.appendChild(
-      h('div.set-row', { focusable: true, onSelect: () => nav.select(urlInput) }, [
-        h('div.label', null, [t('Endereço do PC'), h('small', { text: t('Rode o stremio-service no PC (porta 11470). Status: {s}', { s: stText }) })]),
-        urlInput,
-      ])
-    );
-    body.appendChild(
-      row(t('Procurar na rede'), t('Varre a rede local atrás do servidor'), '', () => {
-        toast(t('Procurando servidor na rede...'), 20000);
-        server
-          .scan()
-          .then((ip) => {
-            if (!ip) return toast(t('Nenhum servidor encontrado. Ele está aberto no PC?'));
-            store.saveSettings({ serverUrl: ip });
-            return server.check().then(() => {
-              toast(t('Servidor encontrado em {ip}', { ip: ip }));
-              render();
-            });
-          })
-          .catch((e) => toast(t('Falha na busca: {msg}', { msg: e.message })));
-      })
-    );
-    body.appendChild(
-      row(t('Testar conexão'), '', '', () =>
-        server.check().then((r) => {
-          toast(r.ok ? t('Servidor OK') + (r.version ? ' (v' + r.version + ')' : '') : t('Sem resposta de {url}', { url: server.baseUrl() || '-' }));
-          render();
-        })
-      )
-    );
-
-    body.appendChild(h('div.set-section', { text: t('Aparência (Kai)') }));
-    const heroName = t((hero.SOURCES.find((x) => x.id === s.heroSource) || hero.SOURCES[0]).name);
-    body.appendChild(
-      row(t('Hero Banner'), t('Destaques no topo da tela inicial'), heroName, () =>
-        menu(
-          t('Fonte do Hero Banner'),
-          hero.SOURCES.map((x) => ({ label: t(x.name), value: x.id, checked: x.id === s.heroSource })),
-          {
-            onPick: (v) => {
-              store.saveSettings({ heroSource: v });
-              router.dropTab('home');
-              render();
-            },
-          }
-        )
-      )
-    );
-    const curTheme = theme.THEMES.find((x) => x.id === s.theme) || theme.THEMES[0];
-    body.appendChild(
-      row(t('Tema de cores'), t('Cor de destaque do app'), t(curTheme.label), () =>
-        menu(
-          t('Tema de cores'),
-          theme.THEMES.map((x) => ({ label: t(x.label), value: x.id, checked: x.id === curTheme.id })),
-          {
-            onPick: (v) => {
-              store.saveSettings({ theme: v });
-              theme.apply(v);
-              render();
-            },
-          }
-        )
-      )
-    );
-    body.appendChild(
-      row(t('Tela inicial'), t('Ordem das fileiras, listas do MDBList e Continuar assistindo'), '', () => {
-        page = 'home';
-        render();
-        scroller.scrollTop = 0;
-      })
-    );
-    body.appendChild(
-      row(t('Modo ambiente'), t('O trailer toca sem som atrás do Hero Banner (mais pesado na TV)'), '', () => {
-        store.saveSettings({ ambientMode: !store.settings().ambientMode });
-        router.dropTab('home');
-        render();
-      }, toggle(!!s.ambientMode))
-    );
-    body.appendChild(
-      row(t('Tema OLED (preto puro)'), t('Fundo totalmente preto'), '', () => {
-        const on = !store.settings().oled;
-        store.saveSettings({ oled: on });
-        document.body.classList.toggle('oled', on);
-        render();
-      }, toggle(s.oled))
-    );
-    body.appendChild(
-      row(t('Escolha inteligente'), t('Assistir já toca a melhor fonte; o botão Fontes mostra a lista'), '', () => {
-        store.saveSettings({ smartChoice: store.settings().smartChoice === false });
-        render();
-      }, toggle(s.smartChoice !== false))
-    );
-    body.appendChild(
-      row(t('Modo desempenho'), t('Mais rápido na TV: sem animações, sem Novos episódios e sem sincronizar em segundo plano'), '', () => {
-        const on = store.settings().perfMode === false;
-        store.saveSettings({ perfMode: on });
-        document.body.classList.toggle('perf', on);
-        router.dropTab('home'); // rebuilt with or without the extras
-        render();
-      }, toggle(store.settings().perfMode !== false))
-    );
-    body.appendChild(
-      row(t('Rolagem animada'), t('Mais bonita, porém mais pesada na TV'), '', () => {
-        const on = !store.settings().smoothScroll;
-        store.saveSettings({ smoothScroll: on });
-        nav.setSmooth(on);
-        render();
-      }, toggle(s.smoothScroll))
-    );
-
-    body.appendChild(h('div.set-section', { text: t('Legendas e áudio') }));
-    const subName = (SUB_LANGS.find((x) => JSON.stringify(x.value) === JSON.stringify(s.subtitleLangs)) || { label: (s.subtitleLangs || []).join(', ') }).label;
-    body.appendChild(
-      row(t('Idioma da legenda'), t('Escolhida sozinha ao abrir o vídeo'), t(subName), () =>
-        menu(t('Idioma da legenda'), SUB_LANGS.map((x) => ({ label: t(x.label), value: x.value, checked: x.label === subName })), {
-          onPick: (v) => {
-            store.saveSettings({ subtitleLangs: v });
-            render();
-          },
-        })
-      )
-    );
-    body.appendChild(
-      row(t('Ligar legenda automaticamente'), t('Se o áudio não estiver no seu idioma'), '', () => {
-        store.saveSettings({ subtitlesAuto: !store.settings().subtitlesAuto });
-        render();
-      }, toggle(s.subtitlesAuto))
-    );
-    const audName = (AUDIO_LANGS.find((x) => JSON.stringify(x.value) === JSON.stringify(s.audioLangs)) || AUDIO_LANGS[0]).label;
-    body.appendChild(
-      row(t('Áudio preferido'), avvideo.available() && s.playerEngine !== 'html5' ? t('Escolhido sozinho ao abrir o vídeo') : t('Precisa do servidor do PC para ler as faixas'), t(audName), () =>
-        menu(t('Áudio preferido'), AUDIO_LANGS.map((x) => ({ label: t(x.label), value: x.value, checked: x.label === audName })), {
-          onPick: (v) => {
-            store.saveSettings({ audioLangs: v });
-            render();
-          },
-        })
-      )
-    );
-
-    // ---- Aparência da legenda (padrão Kai: Nata Sans, negrito, contorno fino + sombra) ----
-    body.appendChild(h('div.set-section', { text: t('Aparência da legenda') }));
-    const preview = h('div.subs', null, h('span', { html: t('Oi. Meu nome é Peter Parker.') + '\n<i>' + t('Você não lembra de mim...') + '</i>' }));
-    substyle.apply(preview, s);
-    body.appendChild(h('div.sub-preview', null, preview));
-    const lb = substyle.labels(s);
+    const GROUP = GROUPS.find((g) => g.id === page);
+    pageHeader(t(GROUP.label));
+    // Shared by the subtitle and player groups.
     const choose = (title, sub, list, key, value, label) =>
       body.appendChild(
         row(title, sub, t(String(label)), () =>
@@ -805,199 +564,589 @@ export function SettingsView() {
           })
         )
       );
-    choose(t('Fonte'), t('Vale para legendas de addons (OpenSubtitles etc.)'), substyle.FONTS, 'subtitleFont', s.subtitleFont, lb.font);
-    choose(t('Estilo'), t('Contorno, sombra ou caixa de fundo'), substyle.STYLES, 'subtitleStyle', s.subtitleStyle, lb.style);
-    choose(t('Cor do texto'), '', substyle.COLORS, 'subtitleColor', s.subtitleColor, lb.color);
-    choose(
-      t('Tamanho'),
-      '',
-      substyle.SIZES.map((v) => ({ id: v, label: v + '%' })),
-      'subtitleSize',
-      s.subtitleSize || 100,
-      (s.subtitleSize || 100) + '%'
-    );
-    choose(t('Posição'), t('Distância da borda de baixo'), substyle.POSITIONS, 'subtitlePosition', s.subtitlePosition, lb.position);
-    body.appendChild(
-      row(t('Negrito'), t('O Kai usa negrito'), '', () => {
-        store.saveSettings({ subtitleBold: store.settings().subtitleBold === false });
-        render();
-      }, toggle(s.subtitleBold !== false))
-    );
-    body.appendChild(
-      h('div.hint', { style: { padding: '6px 4px 0' }, text: t('Legendas embutidas no arquivo são desenhadas pela própria TV: só cor, tamanho, posição e caixa se aplicam a elas.') })
-    );
 
-    // ---- Player ----
-    body.appendChild(h('div.set-section', { text: t('Player') }));
-    choose(
-      t('Player de vídeo'),
-      t('O player da Samsung troca a faixa de áudio; o do navegador é o antigo'),
-      [
-        { id: 'auto', label: avvideo.available() ? t('Samsung (AVPlay)') : t('Samsung (AVPlay) · indisponível nesta TV') },
-        { id: 'html5', label: t('Navegador (HTML5)') },
-      ],
-      'playerEngine',
-      s.playerEngine === 'html5' ? 'html5' : 'auto',
-      s.playerEngine === 'html5' ? t('Navegador (HTML5)') : t('Samsung (AVPlay)')
-    );
+    if (page === 'c-account') {
+      // ---- Idioma do app (vale para a TV inteira; o nome fica bilíngue para quem não lê o atual) ----
+      const LANGS = [
+        { id: 'auto', label: t('Automático (idioma da TV)') },
+        { id: 'en', label: 'English' },
+        { id: 'ar', label: 'العربية' },
+      ];
+      body.appendChild(h('div.set-section', { text: 'Language / اللغة' }));
+      body.appendChild(
+        row('Language / اللغة', '', (LANGS.find((l) => l.id === s.language) || LANGS[0]).label, () =>
+          menu('Language / اللغة', LANGS.map((l) => ({ label: l.label, value: l.id, checked: l.id === s.language })), {
+            onPick: (v) => {
+              if (v === s.language) return;
+              store.saveSettings({ language: v });
+              window.location.reload(); // recarrega para todas as telas mudarem de idioma
+            },
+          })
+        )
+      );
 
-    body.appendChild(
-      row(t('Sugestões no fim'), t('Ao terminar um filme, mostra "Mais como este"'), '', () => {
-        store.saveSettings({ postPlay: store.settings().postPlay === false });
-        render();
-      }, toggle(s.postPlay !== false))
-    );
-    body.appendChild(
-      row(t('Selos das fontes'), t('Qualidade, HDR, áudio, idioma, tamanho...'), '', () => {
-        page = 'badges';
-        render();
-        scroller.scrollTop = 0;
-      })
-    );
-
-    // ---- Tracking and skip segments live on their own pages ----
-    body.appendChild(h('div.set-section', { text: t('Integrações') }));
-    body.appendChild(
-      row(t('Rastreamento (Trakt e Simkl)'), t('Contas, fontes e recursos do Trakt'), tracker.connected().length ? t('Conectado') : t('Desconectado'), () => {
-        page = 'tracking';
-        render();
-        scroller.scrollTop = 0;
-      })
-    );
-    body.appendChild(
-      row(t('Pular trechos'), t('Abertura, recapitulação e encerramento'), s.skipMode === 'off' ? t('Desligado') : t('Ligado'), () => {
-        page = 'skip';
-        render();
-        scroller.scrollTop = 0;
-      })
-    );
-
-    body.appendChild(
-      row(t('Debrid'), 'Real-Debrid · TorBox · Premiumize', debrid.active() ? debrid.active().name : t('Desligado'), () => {
-        page = 'debrid';
-        render();
-        scroller.scrollTop = 0;
-      })
-    );
-    body.appendChild(
-      row(t('Servidores de mídia (Jellyfin e Emby)'), t('Seu próprio servidor como fonte'), mediaserver.enabled() ? mediaserver.connection().name : t('Desconectado'), () => {
-        page = 'servers';
-        render();
-        scroller.scrollTop = 0;
-      })
-    );
-
-    // ---- Metadados (opcional, como no Kai) ----
-    body.appendChild(h('div.set-section', { text: t('Metadados extras (opcional)') }));
-    const keyRow = (title, sub, key, placeholder) => {
-      const input = h('input.input', { type: 'text', value: s[key] || '', placeholder: placeholder });
-      input.__submit = (v) => {
-        const patch = {};
-        patch[key] = v.trim();
-        store.saveSettings(patch);
-        toast(v.trim() ? t('Chave salva') : t('Chave removida'));
+      // ---- Perfil (cada perfil tem sua conta Stremio, histórico e preferências) ----
+      const prof = store.activeProfile();
+      const allProfiles = store.profiles();
+      body.appendChild(h('div.set-section', { text: t('Perfil') }));
+      const nameInput = h('input.input', { type: 'text', value: prof.name });
+      nameInput.__submit = (v) => {
+        const name = v.trim();
+        if (!name) return;
+        store.updateProfile(prof.id, { name: name });
+        refreshProfileChips();
+        toast(t('Nome do perfil salvo'));
         render();
       };
       body.appendChild(
-        h('div.set-row', { focusable: true, onSelect: () => nav.select(input) }, [
-          h('div.label', null, [title, h('small', { text: sub })]),
-          input,
+        h('div.set-row', { focusable: true, onSelect: () => nav.select(nameInput) }, [
+          h('div.label', null, [avatar(prof, 'small'), ' ' + t('Nome do perfil'), h('small', { text: t('Este perfil usa a conta Stremio abaixo') })]),
+          nameInput,
         ])
       );
-    };
-    keyRow(t('Chave TMDB'), t('Descrições em árabe, perfis de atores, calendário de filmes, logos e elenco com fotos (grátis em themoviedb.org)'), 'tmdbKey', 'API key (v3)');
-    keyRow(t('Chave MDBList'), t('Notas do Rotten Tomatoes, Metacritic, Trakt e Letterboxd (grátis em mdblist.com)'), 'mdblistKey', 'API key');
-    keyRow(t('Chave RPDB'), t('Pôsteres com as notas desenhadas (ratingposterdb.com)'), 'rpdbKey', 'API key');
-    body.appendChild(
-      row(t('Guia para os pais'), t('Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)'), '', () => {
-        store.saveSettings({ parentalGuide: !store.settings().parentalGuide });
-        render();
-      }, toggle(!!s.parentalGuide))
-    );
-
-    body.appendChild(h('div.set-section', { text: t('Addons') }));
-    const list = addons.list();
-    body.appendChild(
-      row(t('Addons ativos'), stremio.isLoggedIn() ? t('Gerencie pela sua conta em web.stremio.com') : t('Sem conta: Cinemeta, OpenSubtitles e os adicionados aqui'), t('{n} addon(s)', { n: list.length }), () =>
-        menu(t('Addons ativos'), list.map((a) => ({ label: a.manifest.name || a.manifest.id, sub: a.transportUrl })), {})
-      )
-    );
-    // Addons recomendados (só aparecem se ainda não estiverem instalados).
-    RECOMMENDED.filter((r) => !list.some((a) => a.transportUrl === r.url || (a.manifest && a.manifest.id === r.id))).forEach((r) =>
-      body.appendChild(row(t('Instalar {name}', { name: r.name }), t(r.desc), '', () => installFromUrl(r.url, r.name)))
-    );
-    const addInput = h('input.input', { type: 'text', placeholder: 'https://.../manifest.json' });
-    addInput.__submit = (v) => {
-      const u = v.trim();
-      if (!/^https?:\/\/.+manifest\.json/.test(u)) return toast(t('Cole a URL do manifest.json do addon'));
-      if (stremio.isLoggedIn()) return installFromUrl(u, t('o addon'));
-      const cur = store.settings().localAddons || [];
-      store.saveSettings({ localAddons: cur.concat([u]) });
-      addons.load(true).then(() => {
-        router.dropTab('home');
-        toast(t('Addon adicionado'));
-        render();
-      });
-    };
-    body.appendChild(
-      h('div.set-row', { focusable: true, onSelect: () => nav.select(addInput) }, [
-        h('div.label', null, [t('Adicionar addon por URL'), h('small', { text: stremio.isLoggedIn() ? t('Instala na sua conta Stremio') : t('Fica só nesta TV') })]),
-        addInput,
-      ])
-    );
-
-    body.appendChild(h('div.set-section', { text: t('Sobre e depuração') }));
-    const logInput = h('input.input', { type: 'text', value: s.devlogUrl || '', placeholder: 'http://IP-DO-PC:8099/log' });
-    logInput.__submit = (v) => {
-      store.saveSettings({ devlogUrl: v.trim() });
-      log.setRemote(v.trim());
-      log.info(t('Log remoto ligado'));
-      toast(v.trim() ? t('Enviando logs para o PC') : t('Log remoto desligado'));
-    };
-    body.appendChild(
-      h('div.set-row', { focusable: true, onSelect: () => nav.select(logInput) }, [
-        h('div.label', null, [t('Log remoto'), h('small', { text: t('npm run logs no PC') })]),
-        logInput,
-      ])
-    );
-    const netRow = row(t('Testar a internet'), t('Ping e velocidade de download (Cloudflare)'), '', () => {
-      const v = netRow.querySelector('.value');
-      v.textContent = t('Medindo o ping...');
-      speedtest
-        .run((step) => (v.textContent = step === 'ping' ? t('Medindo o ping...') : t('Baixando arquivo de teste...')))
-        .then((r) => {
-          const verdict = r.mbps >= 40 ? t('dá para 4K') : r.mbps >= 15 ? t('bom para 1080p') : r.mbps >= 6 ? t('só 720p com folga') : t('lenta para vídeo');
-          v.textContent = r.mbps + ' Mbps · ' + r.pingMs + ' ms';
-          toast(t('Internet: {mbps} Mbps, ping {ms} ms ({verdict})', { mbps: r.mbps, ms: r.pingMs, verdict: verdict }), 8000);
+      body.appendChild(
+        row(t('Cor do perfil'), '', '', () =>
+          menu(
+            t('Cor do perfil'),
+            store.COLORS.map((c, i) => ({ label: [t('Roxo'), t('Rosa'), t('Verde-água'), t('Laranja'), t('Azul'), t('Vermelho'), t('Verde'), t('Cinza')][i], value: c, checked: c === prof.color })),
+            {
+              onPick: (c) => {
+                store.updateProfile(prof.id, { color: c });
+                refreshProfileChips();
+                render();
+              },
+            }
+          ),
+          h('div.avatar.small', { style: { backgroundColor: prof.color }, text: ' ' })
+        )
+      );
+      if (allProfiles.length > 1) {
+        body.appendChild(
+          row(t('Trocar de perfil'), t('{n} perfis nesta TV', { n: allProfiles.length }), '', () =>
+            menu(
+              t('Trocar de perfil'),
+              allProfiles.map((p) => ({ label: p.name, value: p.id, checked: p.id === prof.id })),
+              { onPick: (id) => id !== prof.id && switchProfile(id) }
+            )
+          )
+        );
+      }
+      // PIN lock: asked when opening or switching to this profile.
+      body.appendChild(
+        row(t('Trancar com PIN'), prof.pin ? t('Pede o PIN para abrir este perfil') : t('Ex.: só os pais abrem este perfil'), prof.pin ? '🔒 ' + t('Ligado') : t('Desligado'), () => {
+          const setNew = () =>
+            pinDialog(t('Novo PIN (4 a 8 números)'), (pin) => {
+              if (!/^\d{4,8}$/.test(pin)) return false;
+              store.updateProfile(prof.id, { pin: pin });
+              toast(t('PIN salvo'));
+              render();
+              return true;
+            }, t('Use de 4 a 8 números.'));
+          if (!prof.pin) return setNew();
+          menu(t('Trancar com PIN'), [{ label: t('Trocar o PIN'), value: 'change' }, { label: t('Tirar o PIN'), value: 'off' }], {
+            onPick: (v) =>
+              checkPin(prof, () => {
+                if (v === 'change') return setNew();
+                store.updateProfile(prof.id, { pin: '' });
+                toast(t('PIN removido'));
+                render();
+              }),
+          });
         })
-        .catch((e) => {
-          v.textContent = '';
-          toast(t('O teste falhou: {msg}', { msg: e.message }), 5000);
-        });
-    });
-    body.appendChild(netRow);
+      );
+      body.appendChild(row(t('Adicionar perfil'), t('Para outra pessoa, com outra conta Stremio'), '', () => createProfile()));
+      if (allProfiles.length > 1) {
+        body.appendChild(
+          row(t('Copiar ajustes de outro perfil'), t('Legendas, aparência, tela inicial e coleções (a conta não é copiada)'), '', () =>
+            menu(t('Copiar ajustes de'), allProfiles.filter((p) => p.id !== prof.id).map((p) => ({ label: p.name, value: p.id })), {
+              onPick: (id) => {
+                const from = allProfiles.find((p) => p.id === id);
+                confirmDialog(t('Trocar os ajustes de "{to}" pelos de "{from}"?', { to: prof.name, from: from.name }), t('Copiar'), () => {
+                  store.copySettingsFrom(id);
+                  theme.apply(store.settings().theme);
+                  document.body.classList.toggle('oled', !!store.settings().oled);
+                  router.dropTab('home');
+                  toast(t('Ajustes copiados de {name}', { name: from.name }));
+                  render();
+                });
+              },
+            })
+          )
+        );
+      }
+      if (allProfiles.length > 1) {
+        body.appendChild(
+          row(t('Perguntar "Quem está assistindo?" ao abrir'), '', '', () => {
+            store.saveSettings({ askProfile: !store.settings().askProfile });
+            render();
+          }, toggle(s.askProfile))
+        );
+        body.appendChild(
+          row(t('Apagar este perfil'), t('Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)'), '', () =>
+            confirmDialog(t('Apagar o perfil "{name}" desta TV?', { name: prof.name }), t('Apagar'), () => {
+              store.removeProfile(prof.id);
+              switchProfile(store.activeProfile().id);
+            })
+          )
+        );
+      }
 
-    body.appendChild(h('div.set-section', { text: t('Atualizações') }));
-    body.appendChild(row(t('Versão instalada'), device || 'Stremio Kai', shortDate(update.BUILD), null));
-    const latestRow = row(t('Versão mais nova no GitHub'), update.REPO, t('Verificando...'), () => checkForUpdate());
-    body.appendChild(latestRow);
-    update
-      .latest()
-      .then((info) => {
-        const v = latestRow.querySelector('.value');
-        if (!v) return;
-        const newer = info.build && info.build !== update.BUILD && Date.parse(info.build) > Date.parse(update.BUILD);
-        v.textContent = shortDate(info.date) + (newer ? '  ·  ' + t('nova!') : '  ·  ' + t('em dia'));
-        if (info.message) latestRow.querySelector('.label small').textContent = info.message;
-      })
-      .catch(() => {
-        const v = latestRow.querySelector('.value');
-        if (v) v.textContent = t('sem conexão');
+      body.appendChild(h('div.set-section', { text: t('Conta Stremio') }));
+      if (stremio.isLoggedIn()) {
+        const u = stremio.user();
+        body.appendChild(row(t('Conectado'), t('Addons e biblioteca sincronizados com a conta'), (u && u.email) || t('conta Stremio'), null));
+        body.appendChild(
+          row(t('Atualizar addons e biblioteca'), t('Busca de novo a lista de addons instalados'), '', () => {
+            Promise.all([addons.load(true), stremio.getLibrary()])
+              .then(() => {
+                toast(t('Atualizado'));
+                router.dropTab('home');
+              })
+              .catch((e) => toast(t('Erro: {msg}', { msg: e.message })));
+          })
+        );
+        body.appendChild(
+          row(t('Sair da conta'), '', '', () =>
+            confirmDialog(t('Sair da conta Stremio?'), t('Sair'), () => {
+              stremio.logout();
+              addons.load(true).then(() => {
+                router.dropTab('home');
+                render();
+              });
+            })
+          )
+        );
+      } else {
+        body.appendChild(
+          row(t('Entrar na conta'), t('Traz seus addons (Torrentio, debrid...) e a biblioteca'), '', () =>
+            openLogin(() => {
+              Promise.all([stremio.refreshUser().catch(() => {}), addons.load(true), stremio.getLibrary()]).then(() => {
+                router.dropTab('home');
+                render();
+              });
+            })
+          )
+        );
+      }
+
+      // ---- Phone remote: QR code that opens the remote page with the PIN already filled in ----
+      body.appendChild(h('div.set-section', { text: t('Controle pelo celular') }));
+      const phoneBox = h('div.set-row.phone-remote', { focusable: true }, h('div.phone-sub', { text: t('Carregando...') }));
+      body.appendChild(phoneBox);
+      phone.info().then((i) => {
+        clear(phoneBox);
+        if (!i) {
+          phoneBox.appendChild(h('div.phone-sub', { text: t('O controle pelo celular não está rodando. Feche o app e abra de novo pelo TizenBrew.') }));
+          return;
+        }
+        phoneBox.appendChild(h('img.phone-qr', { src: phone.qrImage(i.url, 300), alt: '' }));
+        phoneBox.appendChild(
+          h('div.phone-text', null, [
+            h('div.phone-title', { text: t('Aponte a câmera do celular para o código') }),
+            h('div.phone-sub', { text: t('Ou abra no navegador do celular (mesmo Wi-Fi):') }),
+            h('div.phone-url', { text: 'http://' + i.ip + ':' + i.port }),
+            h('div.phone-sub', { text: t('PIN: {pin}', { pin: i.pin }) }),
+          ])
+        );
       });
-    body.appendChild(row(t('Procurar atualização'), t('Baixa a versão nova do GitHub ({repo})', { repo: update.REPO }), '', () => checkForUpdate()));
 
-    const rows = body.querySelectorAll('.set-row');
-    if (keepIndex >= 0 && rows[keepIndex]) nav.focus(rows[keepIndex]);
+    }
+
+    if (page === 'c-appearance') {
+      body.appendChild(h('div.set-section', { text: t('Cores e formas') }));
+      const curTheme = theme.THEMES.find((x) => x.id === s.theme) || theme.THEMES[0];
+      body.appendChild(
+        row(t('Cor do app'), t('Cor de destaque de botões, foco e barras'), t(curTheme.label), () =>
+          menu(
+            t('Cor do app'),
+            theme.THEMES.map((x) => ({ label: '● ' + t(x.label), value: x.id, checked: x.id === curTheme.id })),
+            {
+              onPick: (v) => {
+                store.saveSettings({ theme: v });
+                theme.apply(v);
+                render();
+              },
+            }
+          ),
+          h('div.swatch', { style: { backgroundColor: curTheme.main } })
+        )
+      );
+      const lookChoose = (title, sub, list, key, dflt) => {
+        const cur = list.find((x) => x.id === s[key]) || list.find((x) => x.id === dflt);
+        choose(title, sub, list, key, cur.id, cur.label);
+      };
+      const bg = s.bgStyle || (s.oled ? 'oled' : 'default');
+      body.appendChild(
+        row(t('Fundo'), t('Escuro, preto puro ou com brilho da cor'), t((theme.BACKGROUNDS.find((x) => x.id === bg) || theme.BACKGROUNDS[0]).label), () =>
+          menu(t('Fundo'), theme.BACKGROUNDS.map((x) => ({ label: t(x.label), value: x.id, checked: x.id === bg })), {
+            onPick: (v) => {
+              store.saveSettings({ bgStyle: v, oled: v === 'oled' });
+              render();
+            },
+          })
+        )
+      );
+      lookChoose(t('Formato dos cartões'), t('Cantos dos pôsteres e botões'), theme.SHAPES, 'cardShape', 'rounded');
+      lookChoose(t('Tamanho dos pôsteres'), t('Mais pôsteres por linha ou pôsteres maiores'), theme.SIZES, 'cardSize', 'medium');
+      lookChoose(t('Estilo do foco'), t('Como o item selecionado aparece'), theme.FOCUS, 'focusStyle', 'glow');
+
+      body.appendChild(h('div.set-section', { text: t('Tela inicial') }));
+      const heroName = t((hero.SOURCES.find((x) => x.id === s.heroSource) || hero.SOURCES[0]).name);
+      body.appendChild(
+        row(t('Hero Banner'), t('Destaques no topo da tela inicial'), heroName, () =>
+          menu(
+            t('Fonte do Hero Banner'),
+            hero.SOURCES.map((x) => ({ label: t(x.name), value: x.id, checked: x.id === s.heroSource })),
+            {
+              onPick: (v) => {
+                store.saveSettings({ heroSource: v });
+                router.dropTab('home');
+                render();
+              },
+            }
+          )
+        )
+      );
+      body.appendChild(
+        row(t('Modo ambiente'), t('O trailer toca sem som atrás do Hero Banner (mais pesado na TV)'), '', () => {
+          store.saveSettings({ ambientMode: !store.settings().ambientMode });
+          router.dropTab('home');
+          render();
+        }, toggle(!!s.ambientMode))
+      );
+      body.appendChild(row(t('Fileiras e Continuar assistindo'), t('Ordem das fileiras, listas do MDBList e Continuar assistindo'), '›', () => openPage('home')));
+      body.appendChild(
+        row(t('Buscas recentes'), t('Mostra as últimas buscas na tela de busca'), '', () => {
+          store.saveSettings({ searchHistory: store.settings().searchHistory === false });
+          render();
+        }, toggle(s.searchHistory !== false))
+      );
+      const SS = [0, 5, 10, 15, 30].map((m) => ({ id: m, label: m ? t('Depois de {n} min', { n: m }) : t('Desligada') }));
+      const ssCur = SS.find((x) => x.id === (+s.screensaver || 0)) || SS[0];
+      body.appendChild(
+        row(t('Proteção de tela'), t('Fundos de filmes e o relógio quando a TV fica parada'), ssCur.label, () =>
+          menu(t('Proteção de tela'), SS.map((x) => ({ label: x.label, value: x.id, checked: x.id === ssCur.id })), {
+            onPick: (v) => {
+              store.saveSettings({ screensaver: v });
+              render();
+            },
+          })
+        )
+      );
+
+      body.appendChild(h('div.set-section', { text: t('Desempenho') }));
+      body.appendChild(
+        row(t('Modo desempenho'), t('Mais rápido na TV: sem animações, sem Novos episódios e sem sincronizar em segundo plano'), '', () => {
+          const on = store.settings().perfMode === false;
+          store.saveSettings({ perfMode: on });
+          document.body.classList.toggle('perf', on);
+          router.dropTab('home'); // rebuilt with or without the extras
+          render();
+        }, toggle(store.settings().perfMode !== false))
+      );
+      body.appendChild(
+        row(t('Rolagem animada'), t('Mais bonita, porém mais pesada na TV'), '', () => {
+          const on = !store.settings().smoothScroll;
+          store.saveSettings({ smoothScroll: on });
+          nav.setSmooth(on);
+          render();
+        }, toggle(s.smoothScroll))
+      );
+    }
+
+    if (page === 'c-subs') {
+      body.appendChild(h('div.set-section', { text: t('Legendas e áudio') }));
+      body.appendChild(
+        row(t('Lembrar por série'), t('A legenda e o áudio que você escolher valem para os outros episódios'), '', () => {
+          store.saveSettings({ rememberTracks: store.settings().rememberTracks === false });
+          render();
+        }, toggle(s.rememberTracks !== false))
+      );
+      body.appendChild(keyInput(t('Chave SubDL'), t('Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)'), 'subdlKey', 'API key'));
+      const subName = (SUB_LANGS.find((x) => JSON.stringify(x.value) === JSON.stringify(s.subtitleLangs)) || { label: (s.subtitleLangs || []).join(', ') }).label;
+      body.appendChild(
+        row(t('Idioma da legenda'), t('Escolhida sozinha ao abrir o vídeo'), t(subName), () =>
+          menu(t('Idioma da legenda'), SUB_LANGS.map((x) => ({ label: t(x.label), value: x.value, checked: x.label === subName })), {
+            onPick: (v) => {
+              store.saveSettings({ subtitleLangs: v });
+              render();
+            },
+          })
+        )
+      );
+      body.appendChild(
+        row(t('Ligar legenda automaticamente'), t('Se o áudio não estiver no seu idioma'), '', () => {
+          store.saveSettings({ subtitlesAuto: !store.settings().subtitlesAuto });
+          render();
+        }, toggle(s.subtitlesAuto))
+      );
+      const audName = (AUDIO_LANGS.find((x) => JSON.stringify(x.value) === JSON.stringify(s.audioLangs)) || AUDIO_LANGS[0]).label;
+      body.appendChild(
+        row(t('Áudio preferido'), avvideo.available() && s.playerEngine !== 'html5' ? t('Escolhido sozinho ao abrir o vídeo') : t('Precisa do servidor do PC para ler as faixas'), t(audName), () =>
+          menu(t('Áudio preferido'), AUDIO_LANGS.map((x) => ({ label: t(x.label), value: x.value, checked: x.label === audName })), {
+            onPick: (v) => {
+              store.saveSettings({ audioLangs: v });
+              render();
+            },
+          })
+        )
+      );
+
+      // ---- Aparência da legenda (padrão Kai: Nata Sans, negrito, contorno fino + sombra) ----
+      body.appendChild(h('div.set-section', { text: t('Aparência da legenda') }));
+      const preview = h('div.subs', null, h('span', { html: t('Oi. Meu nome é Peter Parker.') + '\n<i>' + t('Você não lembra de mim...') + '</i>' }));
+      substyle.apply(preview, s);
+      body.appendChild(h('div.sub-preview', null, preview));
+      const lb = substyle.labels(s);
+      choose(t('Fonte'), t('Vale para legendas de addons (OpenSubtitles etc.)'), substyle.FONTS, 'subtitleFont', s.subtitleFont, lb.font);
+      choose(t('Estilo'), t('Contorno, sombra ou caixa de fundo'), substyle.STYLES, 'subtitleStyle', s.subtitleStyle, lb.style);
+      choose(t('Cor do texto'), '', substyle.COLORS, 'subtitleColor', s.subtitleColor, lb.color);
+      choose(
+        t('Tamanho'),
+        '',
+        substyle.SIZES.map((v) => ({ id: v, label: v + '%' })),
+        'subtitleSize',
+        s.subtitleSize || 100,
+        (s.subtitleSize || 100) + '%'
+      );
+      choose(t('Posição'), t('Distância da borda de baixo'), substyle.POSITIONS, 'subtitlePosition', s.subtitlePosition, lb.position);
+      body.appendChild(
+        row(t('Negrito'), t('O Kai usa negrito'), '', () => {
+          store.saveSettings({ subtitleBold: store.settings().subtitleBold === false });
+          render();
+        }, toggle(s.subtitleBold !== false))
+      );
+      body.appendChild(
+        h('div.hint', { style: { padding: '6px 4px 0' }, text: t('Legendas embutidas no arquivo são desenhadas pela própria TV: só cor, tamanho, posição e caixa se aplicam a elas.') })
+      );
+
+    }
+
+    if (page === 'c-playback') {
+      body.appendChild(h('div.set-section', { text: t('Player') }));
+      body.appendChild(
+        row(t('Escolha inteligente'), t('Assistir já toca a melhor fonte; o botão Fontes mostra a lista'), '', () => {
+          store.saveSettings({ smartChoice: store.settings().smartChoice === false });
+          render();
+        }, toggle(s.smartChoice !== false))
+      );
+      body.appendChild(
+        row(t('Próximo episódio automático'), t('Contagem regressiva nos créditos e toca o próximo'), '', () => {
+          store.saveSettings({ autoNext: store.settings().autoNext === false });
+          render();
+        }, toggle(s.autoNext !== false))
+      );
+      if (s.autoNext !== false) {
+        const UN = [5, 10, 15, 20].map((n) => ({ id: n, label: t('{n} segundos', { n: n }) }));
+        const unCur = UN.find((x) => x.id === (+s.upNextSeconds || 10)) || UN[1];
+        choose(t('Contagem regressiva'), t('Quanto tempo o aviso do próximo episódio espera'), UN, 'upNextSeconds', unCur.id, unCur.label);
+      }
+      choose(
+        t('Player de vídeo'),
+        t('O player da Samsung troca a faixa de áudio; o do navegador é o antigo'),
+        [
+          { id: 'auto', label: avvideo.available() ? t('Samsung (AVPlay)') : t('Samsung (AVPlay) · indisponível nesta TV') },
+          { id: 'html5', label: t('Navegador (HTML5)') },
+        ],
+        'playerEngine',
+        s.playerEngine === 'html5' ? 'html5' : 'auto',
+        s.playerEngine === 'html5' ? t('Navegador (HTML5)') : avvideo.available() ? t('Samsung (AVPlay)') : t('Samsung (AVPlay) · indisponível nesta TV')
+      );
+      // Tells the user plainly when the Samsung player could not be loaded (audio can't switch then).
+      if (s.playerEngine !== 'html5' && !avvideo.available())
+        body.appendChild(
+          h('div.hint.warn-hint', {
+            text: t('O player da Samsung (AVPlay) não carregou nesta TV, então o app usa o do navegador e não consegue trocar o áudio. Feche o app e abra de novo pelo TizenBrew; se continuar, avise.'),
+          })
+        );
+
+      body.appendChild(
+        row(t('Sugestões no fim'), t('Ao terminar um filme, mostra "Mais como este"'), '', () => {
+          store.saveSettings({ postPlay: store.settings().postPlay === false });
+          render();
+        }, toggle(s.postPlay !== false))
+      );
+      body.appendChild(
+        row(t('Selos das fontes'), t('Qualidade, HDR, áudio, idioma, tamanho...'), '', () => openPage('badges'))
+      );
+
+    }
+
+    if (page === 'c-playback') {
+      body.appendChild(h('div.set-section', { text: t('Servidor de streaming (PC)') }));
+      const st = server.lastStatus();
+      const stText = !s.serverUrl ? t('não configurado') : st.ok && st.url === server.baseUrl() ? t('conectado ✓') : t('sem resposta');
+      const urlInput = h('input.input', { type: 'text', value: s.serverUrl || '', placeholder: 'ex.: 192.168.0.10' });
+      urlInput.__submit = (v) => {
+        store.saveSettings({ serverUrl: v.trim() });
+        server.check().then((r) => {
+          toast(r.ok ? t('Servidor conectado') : t('Servidor não respondeu em {url}', { url: server.baseUrl() }));
+          render();
+        });
+      };
+      body.appendChild(
+        h('div.set-row', { focusable: true, onSelect: () => nav.select(urlInput) }, [
+          h('div.label', null, [t('Endereço do PC'), h('small', { text: t('Rode o stremio-service no PC (porta 11470). Status: {s}', { s: stText }) })]),
+          urlInput,
+        ])
+      );
+      body.appendChild(
+        row(t('Procurar na rede'), t('Varre a rede local atrás do servidor'), '', () => {
+          toast(t('Procurando servidor na rede...'), 20000);
+          server
+            .scan()
+            .then((ip) => {
+              if (!ip) return toast(t('Nenhum servidor encontrado. Ele está aberto no PC?'));
+              store.saveSettings({ serverUrl: ip });
+              return server.check().then(() => {
+                toast(t('Servidor encontrado em {ip}', { ip: ip }));
+                render();
+              });
+            })
+            .catch((e) => toast(t('Falha na busca: {msg}', { msg: e.message })));
+        })
+      );
+      body.appendChild(
+        row(t('Testar conexão'), '', '', () =>
+          server.check().then((r) => {
+            toast(r.ok ? t('Servidor OK') + (r.version ? ' (v' + r.version + ')' : '') : t('Sem resposta de {url}', { url: server.baseUrl() || '-' }));
+            render();
+          })
+        )
+      );
+
+    }
+
+    if (page === 'c-integrations') {
+      body.appendChild(h('div.set-section', { text: t('Integrações') }));
+      body.appendChild(
+        row(t('Rastreamento (Trakt e Simkl)'), t('Contas, fontes e recursos do Trakt'), tracker.connected().length ? t('Conectado') : t('Desconectado'), () => openPage('tracking'))
+      );
+      body.appendChild(
+        row(t('Pular trechos'), t('Abertura, recapitulação e encerramento'), s.skipMode === 'off' ? t('Desligado') : t('Ligado'), () => openPage('skip'))
+      );
+
+      body.appendChild(
+        row(t('Debrid'), 'Real-Debrid · TorBox · Premiumize', debrid.active() ? debrid.active().name : t('Desligado'), () => openPage('debrid'))
+      );
+      body.appendChild(
+        row(t('Servidores de mídia (Jellyfin e Emby)'), t('Seu próprio servidor como fonte'), mediaserver.enabled() ? mediaserver.connection().name : t('Desconectado'), () => openPage('servers'))
+      );
+
+      // ---- Metadados (opcional, como no Kai) ----
+      body.appendChild(h('div.set-section', { text: t('Metadados extras (opcional)') }));
+      const keyRow = (title, sub, key, placeholder) => {
+        const input = h('input.input', { type: 'text', value: s[key] || '', placeholder: placeholder });
+        input.__submit = (v) => {
+          const patch = {};
+          patch[key] = v.trim();
+          store.saveSettings(patch);
+          toast(v.trim() ? t('Chave salva') : t('Chave removida'));
+          render();
+        };
+        body.appendChild(
+          h('div.set-row', { focusable: true, onSelect: () => nav.select(input) }, [
+            h('div.label', null, [title, h('small', { text: sub })]),
+            input,
+          ])
+        );
+      };
+      keyRow(t('Chave TMDB'), t('Descrições em árabe, perfis de atores, calendário de filmes, logos e elenco com fotos (grátis em themoviedb.org)'), 'tmdbKey', 'API key (v3)');
+      keyRow(t('Chave MDBList'), t('Notas do Rotten Tomatoes, Metacritic, Trakt e Letterboxd (grátis em mdblist.com)'), 'mdblistKey', 'API key');
+      keyRow(t('Chave RPDB'), t('Pôsteres com as notas desenhadas (ratingposterdb.com)'), 'rpdbKey', 'API key');
+      body.appendChild(
+        row(t('Guia para os pais'), t('Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)'), '', () => {
+          store.saveSettings({ parentalGuide: !store.settings().parentalGuide });
+          render();
+        }, toggle(!!s.parentalGuide))
+      );
+
+      body.appendChild(h('div.set-section', { text: t('Addons') }));
+      const list = addons.list();
+      body.appendChild(
+        row(t('Addons ativos'), stremio.isLoggedIn() ? t('Gerencie pela sua conta em web.stremio.com') : t('Sem conta: Cinemeta, OpenSubtitles e os adicionados aqui'), t('{n} addon(s)', { n: list.length }), () =>
+          menu(t('Addons ativos'), list.map((a) => ({ label: a.manifest.name || a.manifest.id, sub: a.transportUrl })), {})
+        )
+      );
+      // Addons recomendados (só aparecem se ainda não estiverem instalados).
+      RECOMMENDED.filter((r) => !list.some((a) => a.transportUrl === r.url || (a.manifest && a.manifest.id === r.id))).forEach((r) =>
+        body.appendChild(row(t('Instalar {name}', { name: r.name }), t(r.desc), '', () => installFromUrl(r.url, r.name)))
+      );
+      const addInput = h('input.input', { type: 'text', placeholder: 'https://.../manifest.json' });
+      addInput.__submit = (v) => {
+        const u = v.trim();
+        if (!/^https?:\/\/.+manifest\.json/.test(u)) return toast(t('Cole a URL do manifest.json do addon'));
+        if (stremio.isLoggedIn()) return installFromUrl(u, t('o addon'));
+        const cur = store.settings().localAddons || [];
+        store.saveSettings({ localAddons: cur.concat([u]) });
+        addons.load(true).then(() => {
+          router.dropTab('home');
+          toast(t('Addon adicionado'));
+          render();
+        });
+      };
+      body.appendChild(
+        h('div.set-row', { focusable: true, onSelect: () => nav.select(addInput) }, [
+          h('div.label', null, [t('Adicionar addon por URL'), h('small', { text: stremio.isLoggedIn() ? t('Instala na sua conta Stremio') : t('Fica só nesta TV') })]),
+          addInput,
+        ])
+      );
+
+    }
+
+    if (page === 'c-about') {
+      body.appendChild(h('div.set-section', { text: t('Sobre e depuração') }));
+      const logInput = h('input.input', { type: 'text', value: s.devlogUrl || '', placeholder: 'http://IP-DO-PC:8099/log' });
+      logInput.__submit = (v) => {
+        store.saveSettings({ devlogUrl: v.trim() });
+        log.setRemote(v.trim());
+        log.info(t('Log remoto ligado'));
+        toast(v.trim() ? t('Enviando logs para o PC') : t('Log remoto desligado'));
+      };
+      body.appendChild(
+        h('div.set-row', { focusable: true, onSelect: () => nav.select(logInput) }, [
+          h('div.label', null, [t('Log remoto'), h('small', { text: t('npm run logs no PC') })]),
+          logInput,
+        ])
+      );
+      const netRow = row(t('Testar a internet'), t('Ping e velocidade de download (Cloudflare)'), '', () => {
+        const v = netRow.querySelector('.value');
+        v.textContent = t('Medindo o ping...');
+        speedtest
+          .run((step) => (v.textContent = step === 'ping' ? t('Medindo o ping...') : t('Baixando arquivo de teste...')))
+          .then((r) => {
+            const verdict = r.mbps >= 40 ? t('dá para 4K') : r.mbps >= 15 ? t('bom para 1080p') : r.mbps >= 6 ? t('só 720p com folga') : t('lenta para vídeo');
+            v.textContent = r.mbps + ' Mbps · ' + r.pingMs + ' ms';
+            toast(t('Internet: {mbps} Mbps, ping {ms} ms ({verdict})', { mbps: r.mbps, ms: r.pingMs, verdict: verdict }), 8000);
+          })
+          .catch((e) => {
+            v.textContent = '';
+            toast(t('O teste falhou: {msg}', { msg: e.message }), 5000);
+          });
+      });
+      body.appendChild(netRow);
+
+      body.appendChild(h('div.set-section', { text: t('Atualizações') }));
+      body.appendChild(row(t('Versão instalada'), device || 'Stremio Kai', shortDate(update.BUILD), null));
+      const latestRow = row(t('Versão mais nova no GitHub'), update.REPO, t('Verificando...'), () => checkForUpdate());
+      body.appendChild(latestRow);
+      update
+        .latest()
+        .then((info) => {
+          const v = latestRow.querySelector('.value');
+          if (!v) return;
+          const newer = info.build && info.build !== update.BUILD && Date.parse(info.build) > Date.parse(update.BUILD);
+          v.textContent = shortDate(info.date) + (newer ? '  ·  ' + t('nova!') : '  ·  ' + t('em dia'));
+          if (info.message) latestRow.querySelector('.label small').textContent = info.message;
+        })
+        .catch(() => {
+          const v = latestRow.querySelector('.value');
+          if (v) v.textContent = t('sem conexão');
+        });
+      body.appendChild(row(t('Procurar atualização'), t('Baixa a versão nova do GitHub ({repo})', { repo: update.REPO }), '', () => checkForUpdate()));
+    }
+
+    placeFocus();
   }
 
   render();
@@ -1005,7 +1154,7 @@ export function SettingsView() {
   return {
     el: el,
     onBack: () => {
-      if (page === 'main') return false;
+      if (!PARENT[page]) return false;
       goMain();
       return true;
     },

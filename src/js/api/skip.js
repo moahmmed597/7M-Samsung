@@ -181,3 +181,19 @@ export function getSegments(meta, video, durationSec) {
     return segs;
   });
 }
+
+// Settings → Skip segments → Test: asks IntroDB for WandaVision S1E1 the three ways the app can
+// (straight, through the TV service, through the PC server) and says which one answered.
+export function selfTest() {
+  const url = INTRODB + '?imdb_id=tt9140560&season=1&episode=1';
+  const ok = (r) => !!(r && r.intro);
+  const tryOne = (u) => getJSON(u, { timeout: 8000, quiet: true }).then(ok, () => false);
+  return tryOne(url).then((direct) => {
+    if (direct) return 'direct';
+    return tryOne(phoneFetchUrl(url)).then((viaTv) => {
+      if (viaTv) return 'tv';
+      const p = server.getJSONViaProxy(url, { timeout: 8000 }).then(ok, () => false);
+      return p.then((viaPc) => (viaPc ? 'pc' : 'none'));
+    });
+  });
+}

@@ -12,6 +12,7 @@ import { request } from '../lib/http.js';
 import * as store from '../lib/store.js';
 import { log } from '../lib/log.js';
 import * as watched from '../lib/watched.js';
+import { t } from '../lib/i18n.js';
 
 const TRAKT_API = 'https://api.trakt.tv';
 const SIMKL_API = 'https://api.simkl.com';
@@ -403,4 +404,24 @@ export function markWatched(meta, video) {
   const payload = body.movie ? { movies: [Object.assign({ watched_at: now }, body.movie)] } : { shows: [Object.assign({}, body.show, { seasons: [{ number: body.episode.season, episodes: [{ number: body.episode.number, watched_at: now }] }] })] };
   if (isConnected('trakt')) trakt('POST', '/sync/history', payload).catch((e) => log.warn('trakt history', e.message));
   if (isConnected('simkl')) simkl('POST', '/sync/history', payload).catch((e) => log.warn('simkl history', e.message));
+}
+
+// Trakt watchlist as a home row (Settings → Appearance → Home screen), newest first.
+export function watchlistEntry() {
+  if (!isConnected('trakt') || store.settings().traktWatchlistRow === false) return null;
+  return {
+    addon: { transportUrl: 'trakt', manifest: { id: 'trakt', name: 'Trakt' } },
+    catalog: { id: 'watchlist', name: t('Minha lista do Trakt'), type: 'movie' },
+    fetch: () =>
+      trakt('GET', '/sync/watchlist?sort=added,desc').then((list) =>
+        (list || [])
+          .map((x) => {
+            const m = x.movie || x.show;
+            const imdb = m && m.ids && m.ids.imdb;
+            return imdb ? { id: imdb, type: x.movie ? 'movie' : 'series', name: m.title, poster: 'https://images.metahub.space/poster/medium/' + imdb + '/img' } : null;
+          })
+          .filter(Boolean)
+          .slice(0, 40)
+      ),
+  };
 }

@@ -7,7 +7,45 @@ export const THEMES = [
   { id: 'red', label: 'Vermelho', main: '#d6334a', light: '#f0596c', pale: '#f7b8c1' },
   { id: 'blue', label: 'Azul', main: '#2f6fe0', light: '#5b93f5', pale: '#b9d0fb' },
   { id: 'green', label: 'Verde', main: '#2e9e57', light: '#4fc27a', pale: '#b6e8c8' },
+  { id: 'pink', label: 'Rosa', main: '#d43f8d', light: '#ec6aae', pale: '#f7bcdb' },
+  { id: 'orange', label: 'Laranja', main: '#e0661f', light: '#f58c4c', pale: '#fbcfae' },
+  { id: 'cyan', label: 'Ciano', main: '#1595b8', light: '#3ec0e0', pale: '#a9e5f4' },
+  { id: 'indigo', label: 'Índigo', main: '#4652d6', light: '#6f7af0', pale: '#c3c8fa' },
+  { id: 'silver', label: 'Prata', main: '#6f7a8c', light: '#9aa5b8', pale: '#d5dbe6' },
 ];
+
+// Shapes and sizes (Settings → Appearance), applied as classes on <body>.
+export const SHAPES = [
+  { id: 'rounded', label: 'Arredondado' },
+  { id: 'square', label: 'Reto' },
+  { id: 'soft', label: 'Bem redondo' },
+];
+export const SIZES = [
+  { id: 'small', label: 'Pequeno' },
+  { id: 'medium', label: 'Médio' },
+  { id: 'large', label: 'Grande' },
+];
+export const FOCUS = [
+  { id: 'glow', label: 'Contorno e aumento' },
+  { id: 'outline', label: 'Só contorno' },
+  { id: 'lift', label: 'Só aumento' },
+];
+export const BACKGROUNDS = [
+  { id: 'default', label: 'Escuro (padrão)' },
+  { id: 'oled', label: 'Preto puro (OLED)' },
+  { id: 'glow', label: 'Escuro com brilho da cor' },
+];
+
+export function applyLook(s) {
+  const b = document.body;
+  const set = (prefix, value, all) => all.forEach((x) => b.classList.toggle(prefix + x.id, x.id === value));
+  set('shape-', s.cardShape || 'rounded', SHAPES);
+  set('cards-', s.cardSize || 'medium', SIZES);
+  set('focus-', s.focusStyle || 'glow', FOCUS);
+  const bg = s.bgStyle || (s.oled ? 'oled' : 'default');
+  b.classList.toggle('oled', bg === 'oled');
+  b.classList.toggle('bg-glow', bg === 'glow');
+}
 
 const BASE = THEMES[0];
 
