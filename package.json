@@ -30,7 +30,7 @@
     "url": "https://github.com/moahmmed597/7M-Samsung.git"
   },
   "packageType": "app",
-  "appName": "Stremio Kai",
+  "appName": "Stremio 7M",
   "appPath": "dist/index.html",
   "keys": [
     "MediaPlayPause",
