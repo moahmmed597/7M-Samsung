@@ -1,3 +1,6 @@
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, e) { if ("object" != _typeof(t) || !t) return t; var r; if ("undefined" != typeof Symbol && void 0 !== (r = t[Symbol.toPrimitive])) { var i = r.call(t, e || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === e ? String : Number)(t); }
 function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
@@ -4770,7 +4773,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   };
 
   // src/js/lib/i18n-en.js
-  var EN = {
+  var EN = _defineProperty(_defineProperty(_defineProperty({
     // Navegação e geral
     "Início": "Home",
     "Buscar": "Search",
@@ -5274,17 +5277,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "IntroDB (séries e filmes) — introdb.app": "IntroDB (series and movies) — introdb.app",
     'Desligado: mostra o botão "Pular"': 'Off: shows the "Skip" button',
     "Anime Skip": "Anime Skip",
-    "AniSkip: abertura e encerramento de animes": "AniSkip: anime openings and endings",
+    "Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes": "Anime-Skip (anime-skip.com) and AniSkip: anime openings and endings",
     "AnimeSkip Client ID": "AnimeSkip Client ID",
-    "Opcional: enviado ao AniSkip como x-client-id": "Optional: sent to AniSkip as x-client-id",
+    "Sua chave do anime-skip.com (fica só nesta TV)": "Your anime-skip.com key (stays on this TV only)",
     "Integrações": "Integrations",
     "Contas, fontes e recursos do Trakt": "Accounts, sources and Trakt features",
     "Abertura, recapitulação e encerramento": "Intro, recap and outro",
     "Ligado": "On"
-  };
+  }, "Filmes e s\xE9ries", "Movies and series"), "Desenhos animados", "Cartoons"), "Animes", "Anime");
 
   // src/js/lib/i18n-ar.js
-  var AR = {
+  var AR = _defineProperty(_defineProperty(_defineProperty({
     // Navegação e geral
     "Início": "الرئيسية",
     "Buscar": "بحث",
@@ -5788,14 +5791,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "IntroDB (séries e filmes) — introdb.app": "IntroDB (مسلسلات وأفلام) — introdb.app",
     'Desligado: mostra o botão "Pular"': "مطفي: يطلع زر «تخطي»",
     "Anime Skip": "Anime Skip",
-    "AniSkip: abertura e encerramento de animes": "AniSkip: مقدمات ونهايات الأنمي",
+    "Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes": "Anime-Skip (anime-skip.com) و AniSkip: مقدمات ونهايات الأنمي",
     "AnimeSkip Client ID": "AnimeSkip Client ID",
-    "Opcional: enviado ao AniSkip como x-client-id": "اختياري: يُرسل لـ AniSkip كـ x-client-id",
+    "Sua chave do anime-skip.com (fica só nesta TV)": "مفتاحك من anime-skip.com (يبقى في هالتلفزيون فقط)",
     "Integrações": "التكاملات",
     "Contas, fontes e recursos do Trakt": "الحسابات والمصادر وميزات Trakt",
     "Abertura, recapitulação e encerramento": "المقدمة والملخص والخاتمة",
     "Ligado": "شغّال"
-  };
+  }, "Filmes e s\xE9ries", "أفلام ومسلسلات"), "Desenhos animados", "كرتون"), "Animes", "أنمي");
 
   // src/js/lib/i18n.js
   var lang = "en";
@@ -8812,18 +8815,102 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/api/skip.js
   var INTRODB = "https://api.introdb.app/segments";
   var ANISKIP = "https://api.aniskip.com/v2/skip-times/";
+  var ANIMESKIP = "https://api.anime-skip.com/graphql";
   var ARM2 = "https://arm.haglund.dev/api/v2/";
-  function getJSONWithProxy(url2, headers) {
+  function getJSONWithProxy(url2) {
     return getJSONViaProxy(url2, {
-      timeout: 1e4,
-      headers: headers
+      timeout: 1e4
     });
   }
-  function aniSkipHeaders() {
-    var id = (settings().animeSkipClientId || "").trim();
-    return id ? {
-      "x-client-id": id
-    } : void 0;
+  function animeSkipKey() {
+    var s = settings();
+    return s.animeSkip === false ? "" : (s.animeSkipClientId || "").trim();
+  }
+  function animeSkipQuery(query, key) {
+    var body = {
+      query: query
+    };
+    var opts = {
+      timeout: 1e4,
+      quiet: true,
+      headers: {
+        "X-Client-ID": key
+      }
+    };
+    return postJSON(ANIMESKIP, body, opts).catch(function (e) {
+      if (e.status && e.status !== 0) throw e;
+      return postJSON(fetchUrl(ANIMESKIP), body, opts);
+    });
+  }
+  function fromAnimeSkipTimestamps(list2, baseDuration) {
+    var map = {
+      intro: "intro",
+      "new intro": "intro",
+      "mixed intro": "intro",
+      recap: "recap",
+      credits: "outro",
+      "new credits": "outro",
+      "mixed credits": "outro"
+    };
+    var sorted = (list2 || []).filter(function (x) {
+      return isFinite(x.at) && x.at >= 0;
+    }).sort(function (a, b) {
+      return a.at - b.at;
+    });
+    var out = [];
+    sorted.forEach(function (x, i) {
+      var type = map[String(x.type && x.type.name || "").toLowerCase()];
+      if (!type) return;
+      var next = sorted[i + 1];
+      var end = next && next.at > x.at ? next.at : null;
+      if (end === null && type === "outro" && (!baseDuration || x.at >= baseDuration / 2)) end = 1e5;
+      if (end !== null && end > x.at) out.push({
+        type: type,
+        start: x.at,
+        end: end,
+        source: "Anime-Skip"
+      });
+    });
+    return out;
+  }
+  var showCache = {};
+  function animeSkipSegments(anilist, season, episode, key) {
+    if (!anilist || !episode) return Promise.resolve([]);
+    var ck = String(anilist);
+    if (!showCache[ck]) showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key).then(function (r) {
+      return (r && r.data && r.data.findShowsByExternalId || []).map(function (x) {
+        return String(x.id);
+      }).filter(function (x) {
+        return /^[\w-]+$/.test(x);
+      });
+    }).catch(function (e) {
+      delete showCache[ck];
+      throw e;
+    });
+    return showCache[ck].then(function (ids2) {
+      var chain = Promise.resolve([]);
+      ids2.forEach(function (id) {
+        chain = chain.then(function (found) {
+          if (found.length) return found;
+          return animeSkipQuery('{ findEpisodesByShowId(showId: "' + id + '") { season number baseDuration timestamps { at type { name } } } }', key).then(function (r) {
+            var eps = r && r.data && r.data.findEpisodesByShowId || [];
+            var same = eps.filter(function (e) {
+              return Number(e.number) === Number(episode);
+            });
+            var bySeason = season ? same.filter(function (e) {
+              return Number(e.season) === Number(season);
+            }) : same;
+            var best = [];
+            (bySeason.length ? bySeason : same).forEach(function (e) {
+              var segs = fromAnimeSkipTimestamps(e.timestamps, e.baseDuration);
+              if (segs.length > best.length) best = segs;
+            });
+            return best;
+          });
+        });
+      });
+      return chain;
+    });
   }
   function fromIntroDb(data) {
     var out = [];
@@ -8871,28 +8958,41 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     } : null;
   }
   var malCache = {};
-  function malFromAnime(a) {
-    if (a.source === "myanimelist") return Promise.resolve(parseInt(a.id, 10));
+  function idsFromAnime(a) {
     var key = a.source + ":" + a.id;
     if (!malCache[key]) malCache[key] = getJSON(ARM2 + "ids?source=" + a.source + "&id=" + a.id, {
       quiet: true
     }).then(function (r) {
-      return r && r.myanimelist || null;
+      return {
+        mal: a.source === "myanimelist" ? parseInt(a.id, 10) : r && r.myanimelist || null,
+        anilist: a.source === "anilist" ? parseInt(a.id, 10) : r && r.anilist || null
+      };
+    }).catch(function () {
+      return {
+        mal: a.source === "myanimelist" ? parseInt(a.id, 10) : null,
+        anilist: a.source === "anilist" ? parseInt(a.id, 10) : null
+      };
     });
     return malCache[key];
   }
-  function malFromImdb(imdb, season) {
+  function idsFromImdb(imdb, season) {
     var key = imdb + ":" + season;
     if (!malCache[key]) malCache[key] = getJSON(ARM2 + "imdb?id=" + imdb, {
       quiet: true
     }).then(function (list2) {
       var arr = Array.isArray(list2) ? list2 : [];
       var hit = arr.find(function (x) {
-        return x.myanimelist && (x["thetvdb-season"] === season || x["themoviedb-season"] === season);
+        return (x.myanimelist || x.anilist) && (x["thetvdb-season"] === season || x["themoviedb-season"] === season);
       }) || (arr.length === 1 ? arr[0] : null);
-      return hit ? hit.myanimelist : null;
+      return {
+        mal: hit && hit.myanimelist || null,
+        anilist: hit && hit.anilist || null
+      };
     }).catch(function () {
-      return null;
+      return {
+        mal: null,
+        anilist: null
+      };
     });
     return malCache[key];
   }
@@ -8912,21 +9012,32 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }) : Promise.resolve([]);
     return intro.then(function (segs) {
       if (segs.length) return segs;
-      var malPromise = null;
+      var idsPromise = null;
       var ep = episode;
+      var seasonForSkip = null;
       if (anime) {
-        malPromise = malFromAnime(anime);
+        idsPromise = idsFromAnime(anime);
         ep = anime.episode;
-      } else if (imdb && isAnime(meta) && isFinite(episode)) malPromise = malFromImdb(imdb, season || 1);
-      if (!malPromise || settings().animeSkip === false) return [];
-      return malPromise.then(function (mal) {
-        if (!mal || !ep) return [];
-        var q = ["op", "ed", "recap", "mixed-op", "mixed-ed"].map(function (t2) {
-          return "types%5B%5D=" + t2;
-        }).join("&");
-        return getJSONWithProxy(ANISKIP + mal + "/" + ep + "?" + q + "&episodeLength=" + Math.round(durationSec || 0), aniSkipHeaders()).then(fromAniSkip);
-      }).catch(function () {
-        return [];
+      } else if (imdb && isAnime(meta) && isFinite(episode)) {
+        idsPromise = idsFromImdb(imdb, season || 1);
+        seasonForSkip = season || 1;
+      }
+      if (!idsPromise || !ep) return [];
+      return idsPromise.then(function (ids2) {
+        var key = animeSkipKey();
+        var fromAs = key && ids2.anilist ? animeSkipSegments(ids2.anilist, seasonForSkip, ep, key).catch(function () {
+          return [];
+        }) : Promise.resolve([]);
+        return fromAs.then(function (found) {
+          if (found.length) return found;
+          if (!ids2.mal) return [];
+          var q = ["op", "ed", "recap", "mixed-op", "mixed-ed"].map(function (t2) {
+            return "types%5B%5D=" + t2;
+          }).join("&");
+          return getJSONWithProxy(ANISKIP + ids2.mal + "/" + ep + "?" + q + "&episodeLength=" + Math.round(durationSec || 0)).then(fromAniSkip).catch(function () {
+            return [];
+          });
+        });
       });
     }).then(function (segs) {
       if (segs.length) log.info("Pular: " + segs.map(function (s) {
@@ -12316,6 +12427,42 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     name: "Ghost in the Shell",
     ar: "شبح في القوقعة (Ghost in the Shell)",
     items: [["tt0113568", "Ghost in the Shell", 1995], ["tt0346314", "Ghost in the Shell: Stand Alone Complex", 2002, "s"], ["tt0347246", "Ghost in the Shell 2: Innocence", 2004], ["tt4337072", "Ghost in the Shell: The New Movie", 2015], ["tt9466298", "Ghost in the Shell: SAC_2045", 2020, "s"]]
+  }, {
+    id: "xmen-cartoon",
+    cat: "cartoon",
+    name: "X-Men (animated)",
+    ar: "إكس-مين الكرتون (X-Men Animated)",
+    items: [["tt0103584", "X-Men: The Animated Series", 1992, "s"], ["tt0247827", "X-Men: Evolution", 2e3, "s"], ["tt16026746", "X-Men '97", 2024, "s"]]
+  }, {
+    id: "dcau",
+    cat: "cartoon",
+    name: "DC Animated Universe",
+    ar: "عالم DC الكرتوني (DCAU)",
+    items: [["tt0103359", "Batman: The Animated Series", 1992, "s"], ["tt0106364", "Batman: Mask of the Phantasm", 1993], ["tt0115378", "Superman: The Animated Series", 1996, "s"], ["tt0147746", "Batman Beyond", 1999, "s"], ["tt0275137", "Justice League", 2001, "s"], ["tt6025022", "Justice League Unlimited", 2004, "s"]]
+  }, {
+    id: "avatar",
+    cat: "cartoon",
+    name: "Avatar: The Last Airbender",
+    ar: "أفاتار: آخر سيد للهواء",
+    items: [["tt0417299", "Avatar: The Last Airbender", 2005, "s"], ["tt1695360", "The Legend of Korra", 2012, "s"]]
+  }, {
+    id: "starwars-animated",
+    cat: "cartoon",
+    name: "Star Wars (animated)",
+    ar: "ستار وورز الكرتونية",
+    items: [["tt0458290", "Star Wars: The Clone Wars", 2008, "s"], ["tt2930604", "Star Wars Rebels", 2014, "s"], ["tt12708542", "Star Wars: The Bad Batch", 2021, "s"]]
+  }, {
+    id: "dragonball",
+    cat: "anime",
+    name: "Dragon Ball",
+    ar: "دراقون بول (Dragon Ball)",
+    items: [["tt0088509", "Dragon Ball", 1986, "s"], ["tt0121220", "Dragon Ball Z", 1989, "s"], ["tt0139774", "Dragon Ball GT", 1996, "s"], ["tt4644488", "Dragon Ball Super", 2015, "s"]]
+  }, {
+    id: "naruto",
+    cat: "anime",
+    name: "Naruto",
+    ar: "ناروتو (Naruto)",
+    items: [["tt0409591", "Naruto", 2002, "s"], ["tt0988824", "Naruto Shippuden", 2007, "s"], ["tt6342474", "Boruto: Naruto Next Generations", 2017, "s"]]
   }];
   function findFranchise(id) {
     return FRANCHISES.find(function (f) {
@@ -12328,6 +12475,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return it[0] === imdb;
       });
     });
+  }
+  var CATS = [{
+    id: "movies",
+    label: "Filmes e séries"
+  }, {
+    id: "cartoon",
+    label: "Desenhos animados"
+  }, {
+    id: "anime",
+    label: "Animes"
+  }];
+  var ANIME_IDS = ["fate", "evangelion", "gundam-uc", "gundam-alt", "macross", "monogatari", "madoka", "gits"];
+  function catOf(f) {
+    return f.cat || (ANIME_IDS.indexOf(f.id) >= 0 ? "anime" : "movies");
   }
 
   // src/js/views/collections.js
@@ -12473,7 +12634,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var searchBox = h("div.search-box");
     var results = h("div");
     var favBox = h("div");
-    var grid = h("div.grid");
+    var grid = h("div");
     scroller.appendChild(bar);
     scroller.appendChild(searchBox);
     scroller.appendChild(results);
@@ -12573,10 +12734,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var pinnedIds = pinned.map(function (e) {
         return e.f.id;
       });
-      FRANCHISES.filter(function (f) {
-        return pinnedIds.indexOf(f.id) < 0;
-      }).forEach(function (f) {
-        return grid.appendChild(franchiseCard(f));
+      CATS.forEach(function (c) {
+        var list2 = FRANCHISES.filter(function (f) {
+          return pinnedIds.indexOf(f.id) < 0 && catOf(f) === c.id;
+        });
+        if (!list2.length) return;
+        grid.appendChild(h("div.row-title.cat-title", {
+          text: t(c.label)
+        }));
+        var g = h("div.grid");
+        list2.forEach(function (f) {
+          return g.appendChild(franchiseCard(f));
+        });
+        grid.appendChild(g);
       });
       loadVisibleImages(el, 400);
     }
@@ -13585,7 +13755,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-13T12:02:27.131Z";
+  var BUILD = "2026-11-13T12:13:02.270Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -14172,12 +14342,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       body.appendChild(h("div.set-section", {
         text: t("Animes")
       }));
-      flip(t("Anime Skip"), t("AniSkip: abertura e encerramento de animes"), s.animeSkip !== false, function (v) {
+      flip(t("Anime Skip"), t("Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes"), s.animeSkip !== false, function (v) {
         return saveSettings({
           animeSkip: v
         });
       });
-      body.appendChild(keyInput(t("AnimeSkip Client ID"), t("Opcional: enviado ao AniSkip como x-client-id"), "animeSkipClientId", "Client ID"));
+      body.appendChild(keyInput(t("AnimeSkip Client ID"), t("Sua chave do anime-skip.com (fica só nesta TV)"), "animeSkipClientId", "Client ID"));
     }
     function render() {
       var s = settings();

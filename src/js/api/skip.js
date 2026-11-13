@@ -1,24 +1,84 @@
 // Trechos para pular (abertura, recapitulação, encerramento), como o notify_skip do Kai:
 // 1) IntroDB (por IMDb + temporada/episódio) tem prioridade;
 // 2) AniSkip (por ID do MyAnimeList) para animes, com o ID convertido via arm.haglund.dev.
-import { getJSON } from '../lib/http.js';
+import { getJSON, postJSON } from '../lib/http.js';
+import { fetchUrl as phoneFetchUrl } from '../lib/phone.js';
 import * as server from './server.js';
 import { log } from '../lib/log.js';
 import * as store from '../lib/store.js';
 
 const INTRODB = 'https://api.introdb.app/segments';
 const ANISKIP = 'https://api.aniskip.com/v2/skip-times/';
+const ANIMESKIP = 'https://api.anime-skip.com/graphql';
 const ARM = 'https://arm.haglund.dev/api/v2/';
 
-// O IntroDB só libera CORS para o próprio site; se a TV bloquear, vai pelo proxy do servidor do PC.
-function getJSONWithProxy(url, headers) {
-  return server.getJSONViaProxy(url, { timeout: 10000, headers: headers });
+// O IntroDB só libera CORS para o próprio site; se a TV bloquear, vai pelo proxy do serviço da TV.
+function getJSONWithProxy(url) {
+  return server.getJSONViaProxy(url, { timeout: 10000 });
 }
 
-// AniSkip v2 may want an x-client-id; the user's own id is sent when set.
-function aniSkipHeaders() {
-  const id = (store.settings().animeSkipClientId || '').trim();
-  return id ? { 'x-client-id': id } : undefined;
+// Anime-Skip (api.anime-skip.com, GraphQL) needs the user's own Client ID, kept only in this TV's settings.
+function animeSkipKey() {
+  const s = store.settings();
+  return s.animeSkip === false ? '' : (s.animeSkipClientId || '').trim();
+}
+
+function animeSkipQuery(query, key) {
+  const body = { query: query };
+  const opts = { timeout: 10000, quiet: true, headers: { 'X-Client-ID': key } };
+  return postJSON(ANIMESKIP, body, opts).catch((e) => {
+    if (e.status && e.status !== 0) throw e;
+    return postJSON(phoneFetchUrl(ANIMESKIP), body, opts);
+  });
+}
+
+// Anime-Skip marks where a segment starts; it ends where the next one starts.
+function fromAnimeSkipTimestamps(list, baseDuration) {
+  const map = { intro: 'intro', 'new intro': 'intro', 'mixed intro': 'intro', recap: 'recap', credits: 'outro', 'new credits': 'outro', 'mixed credits': 'outro' };
+  const sorted = (list || []).filter((x) => isFinite(x.at) && x.at >= 0).sort((a, b) => a.at - b.at);
+  const out = [];
+  sorted.forEach((x, i) => {
+    const type = map[String((x.type && x.type.name) || '').toLowerCase()];
+    if (!type) return;
+    const next = sorted[i + 1];
+    let end = next && next.at > x.at ? next.at : null;
+    if (end === null && type === 'outro' && (!baseDuration || x.at >= baseDuration / 2)) end = 100000;
+    if (end !== null && end > x.at) out.push({ type: type, start: x.at, end: end, source: 'Anime-Skip' });
+  });
+  return out;
+}
+
+const showCache = {};
+function animeSkipSegments(anilist, season, episode, key) {
+  if (!anilist || !episode) return Promise.resolve([]);
+  const ck = String(anilist);
+  if (!showCache[ck])
+    showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key)
+      .then((r) => ((r && r.data && r.data.findShowsByExternalId) || []).map((x) => String(x.id)).filter((x) => /^[\w-]+$/.test(x)))
+      .catch((e) => {
+        delete showCache[ck];
+        throw e;
+      });
+  return showCache[ck].then((ids) => {
+    let chain = Promise.resolve([]);
+    ids.forEach((id) => {
+      chain = chain.then((found) => {
+        if (found.length) return found;
+        return animeSkipQuery('{ findEpisodesByShowId(showId: "' + id + '") { season number baseDuration timestamps { at type { name } } } }', key).then((r) => {
+          const eps = (r && r.data && r.data.findEpisodesByShowId) || [];
+          const same = eps.filter((e) => Number(e.number) === Number(episode));
+          const bySeason = season ? same.filter((e) => Number(e.season) === Number(season)) : same;
+          let best = [];
+          (bySeason.length ? bySeason : same).forEach((e) => {
+            const segs = fromAnimeSkipTimestamps(e.timestamps, e.baseDuration);
+            if (segs.length > best.length) best = segs;
+          });
+          return best;
+        });
+      });
+    });
+    return chain;
+  });
 }
 
 function fromIntroDb(data) {
@@ -44,28 +104,33 @@ function parseAnimeId(videoId) {
   return m ? { source: m[1] === 'mal' ? 'myanimelist' : m[1], id: m[2], episode: m[3] ? parseInt(m[3], 10) : 1 } : null;
 }
 
+// arm.haglund.dev gives the MyAnimeList and AniList ids; { mal, anilist }.
 const malCache = {};
-function malFromAnime(a) {
-  if (a.source === 'myanimelist') return Promise.resolve(parseInt(a.id, 10));
+function idsFromAnime(a) {
   const key = a.source + ':' + a.id;
   if (!malCache[key])
-    malCache[key] = getJSON(ARM + 'ids?source=' + a.source + '&id=' + a.id, { quiet: true }).then((r) => (r && r.myanimelist) || null);
+    malCache[key] = getJSON(ARM + 'ids?source=' + a.source + '&id=' + a.id, { quiet: true })
+      .then((r) => ({
+        mal: a.source === 'myanimelist' ? parseInt(a.id, 10) : (r && r.myanimelist) || null,
+        anilist: a.source === 'anilist' ? parseInt(a.id, 10) : (r && r.anilist) || null,
+      }))
+      .catch(() => ({ mal: a.source === 'myanimelist' ? parseInt(a.id, 10) : null, anilist: a.source === 'anilist' ? parseInt(a.id, 10) : null }));
   return malCache[key];
 }
 
-// IMDb + temporada → MAL (o arm devolve uma entrada por temporada do TVDB/TMDB).
-function malFromImdb(imdb, season) {
+// IMDb + temporada → ids (o arm devolve uma entrada por temporada do TVDB/TMDB).
+function idsFromImdb(imdb, season) {
   const key = imdb + ':' + season;
   if (!malCache[key])
     malCache[key] = getJSON(ARM + 'imdb?id=' + imdb, { quiet: true })
       .then((list) => {
         const arr = Array.isArray(list) ? list : [];
         const hit =
-          arr.find((x) => x.myanimelist && (x['thetvdb-season'] === season || x['themoviedb-season'] === season)) ||
+          arr.find((x) => (x.myanimelist || x.anilist) && (x['thetvdb-season'] === season || x['themoviedb-season'] === season)) ||
           (arr.length === 1 ? arr[0] : null);
-        return hit ? hit.myanimelist : null;
+        return { mal: (hit && hit.myanimelist) || null, anilist: (hit && hit.anilist) || null };
       })
-      .catch(() => null);
+      .catch(() => ({ mal: null, anilist: null }));
   return malCache[key];
 }
 
@@ -88,20 +153,29 @@ export function getSegments(meta, video, durationSec) {
 
   return intro.then((segs) => {
     if (segs.length) return segs;
-    let malPromise = null;
+    let idsPromise = null;
     let ep = episode;
+    let seasonForSkip = null;
     if (anime) {
-      malPromise = malFromAnime(anime);
+      idsPromise = idsFromAnime(anime);
       ep = anime.episode;
-    } else if (imdb && isAnime(meta) && isFinite(episode)) malPromise = malFromImdb(imdb, season || 1);
-    if (!malPromise || store.settings().animeSkip === false) return [];
-    return malPromise
-      .then((mal) => {
-        if (!mal || !ep) return [];
+    } else if (imdb && isAnime(meta) && isFinite(episode)) {
+      idsPromise = idsFromImdb(imdb, season || 1);
+      seasonForSkip = season || 1;
+    }
+    if (!idsPromise || !ep) return [];
+    return idsPromise.then((ids) => {
+      const key = animeSkipKey();
+      const fromAs = key && ids.anilist ? animeSkipSegments(ids.anilist, seasonForSkip, ep, key).catch(() => []) : Promise.resolve([]);
+      return fromAs.then((found) => {
+        if (found.length) return found;
+        if (!ids.mal) return [];
         const q = ['op', 'ed', 'recap', 'mixed-op', 'mixed-ed'].map((t) => 'types%5B%5D=' + t).join('&');
-        return getJSONWithProxy(ANISKIP + mal + '/' + ep + '?' + q + '&episodeLength=' + Math.round(durationSec || 0), aniSkipHeaders()).then(fromAniSkip);
-      })
-      .catch(() => []);
+        return getJSONWithProxy(ANISKIP + ids.mal + '/' + ep + '?' + q + '&episodeLength=' + Math.round(durationSec || 0))
+          .then(fromAniSkip)
+          .catch(() => []);
+      });
+    });
   }).then((segs) => {
     if (segs.length) log.info('Pular: ' + segs.map((s) => s.type + ' ' + s.start.toFixed(0) + '-' + s.end.toFixed(0) + ' (' + s.source + ')').join(', '));
     return segs;

@@ -685,6 +685,75 @@ export const FRANCHISES = [
       ['tt9466298', 'Ghost in the Shell: SAC_2045', 2020, 's'],
     ],
   },
+  {
+    id: 'xmen-cartoon',
+    cat: 'cartoon',
+    name: 'X-Men (animated)',
+    ar: 'إكس-مين الكرتون (X-Men Animated)',
+    items: [
+      ['tt0103584', 'X-Men: The Animated Series', 1992, 's'],
+      ['tt0247827', 'X-Men: Evolution', 2000, 's'],
+      ['tt16026746', "X-Men '97", 2024, 's'],
+    ],
+  },
+  {
+    id: 'dcau',
+    cat: 'cartoon',
+    name: 'DC Animated Universe',
+    ar: 'عالم DC الكرتوني (DCAU)',
+    items: [
+      ['tt0103359', 'Batman: The Animated Series', 1992, 's'],
+      ['tt0106364', 'Batman: Mask of the Phantasm', 1993],
+      ['tt0115378', 'Superman: The Animated Series', 1996, 's'],
+      ['tt0147746', 'Batman Beyond', 1999, 's'],
+      ['tt0275137', 'Justice League', 2001, 's'],
+      ['tt6025022', 'Justice League Unlimited', 2004, 's'],
+    ],
+  },
+  {
+    id: 'avatar',
+    cat: 'cartoon',
+    name: 'Avatar: The Last Airbender',
+    ar: 'أفاتار: آخر سيد للهواء',
+    items: [
+      ['tt0417299', 'Avatar: The Last Airbender', 2005, 's'],
+      ['tt1695360', 'The Legend of Korra', 2012, 's'],
+    ],
+  },
+  {
+    id: 'starwars-animated',
+    cat: 'cartoon',
+    name: 'Star Wars (animated)',
+    ar: 'ستار وورز الكرتونية',
+    items: [
+      ['tt0458290', 'Star Wars: The Clone Wars', 2008, 's'],
+      ['tt2930604', 'Star Wars Rebels', 2014, 's'],
+      ['tt12708542', 'Star Wars: The Bad Batch', 2021, 's'],
+    ],
+  },
+  {
+    id: 'dragonball',
+    cat: 'anime',
+    name: 'Dragon Ball',
+    ar: 'دراقون بول (Dragon Ball)',
+    items: [
+      ['tt0088509', 'Dragon Ball', 1986, 's'],
+      ['tt0121220', 'Dragon Ball Z', 1989, 's'],
+      ['tt0139774', 'Dragon Ball GT', 1996, 's'],
+      ['tt4644488', 'Dragon Ball Super', 2015, 's'],
+    ],
+  },
+  {
+    id: 'naruto',
+    cat: 'anime',
+    name: 'Naruto',
+    ar: 'ناروتو (Naruto)',
+    items: [
+      ['tt0409591', 'Naruto', 2002, 's'],
+      ['tt0988824', 'Naruto Shippuden', 2007, 's'],
+      ['tt6342474', 'Boruto: Naruto Next Generations', 2017, 's'],
+    ],
+  },
 ];
 
 export function findFranchise(id) {
@@ -694,4 +763,15 @@ export function findFranchise(id) {
 // Franchises a title belongs to (a film can be in two, e.g. Spider-Man and the MCU).
 export function franchisesOf(imdb) {
   return FRANCHISES.filter((f) => f.items.some((it) => it[0] === imdb));
+}
+
+// Section order in the Collections tab: movies first, anime last.
+export const CATS = [
+  { id: 'movies', label: 'Filmes e séries' },
+  { id: 'cartoon', label: 'Desenhos animados' },
+  { id: 'anime', label: 'Animes' },
+];
+const ANIME_IDS = ['fate', 'evangelion', 'gundam-uc', 'gundam-alt', 'macross', 'monogatari', 'madoka', 'gits'];
+export function catOf(f) {
+  return f.cat || (ANIME_IDS.indexOf(f.id) >= 0 ? 'anime' : 'movies');
 }

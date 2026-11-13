@@ -11,7 +11,7 @@ import { topbar, card, spinnerLine, toast, menu } from '../ui.js';
 import * as router from '../router.js';
 import { openDetails } from './details.js';
 import { t, current } from '../lib/i18n.js';
-import { FRANCHISES, franchisesOf, findFranchise } from '../data/franchises.js';
+import { FRANCHISES, CATS, catOf, franchisesOf, findFranchise } from '../data/franchises.js';
 
 const POSTER = (imdb) => 'https://images.metahub.space/poster/medium/' + imdb + '/img';
 const ORDER_KEY = 'franchiseOrder';
@@ -136,7 +136,7 @@ export function CollectionsView() {
   const searchBox = h('div.search-box');
   const results = h('div');
   const favBox = h('div');
-  const grid = h('div.grid');
+  const grid = h('div');
   scroller.appendChild(bar);
   scroller.appendChild(searchBox);
   scroller.appendChild(results);
@@ -205,7 +205,14 @@ export function CollectionsView() {
     }
     clear(grid);
     const pinnedIds = pinned.map((e) => e.f.id);
-    FRANCHISES.filter((f) => pinnedIds.indexOf(f.id) < 0).forEach((f) => grid.appendChild(franchiseCard(f)));
+    CATS.forEach((c) => {
+      const list = FRANCHISES.filter((f) => pinnedIds.indexOf(f.id) < 0 && catOf(f) === c.id);
+      if (!list.length) return;
+      grid.appendChild(h('div.row-title.cat-title', { text: t(c.label) }));
+      const g = h('div.grid');
+      list.forEach((f) => g.appendChild(franchiseCard(f)));
+      grid.appendChild(g);
+    });
     loadVisibleImages(el, 400);
   }
 

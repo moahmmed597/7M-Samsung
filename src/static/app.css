@@ -427,3 +427,4 @@ html.av-playing, html.av-playing body, html.av-playing .view.player, html.av-pla
 .filters .chip { margin-bottom: 12px; }
 [dir="rtl"] .chip { margin-right: 0; margin-left: 14px; }
 .fav-grid { padding-bottom: 20px; }
+.cat-title { margin-top: 28px; color: #c9bbff; }

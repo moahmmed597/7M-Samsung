@@ -228,8 +228,8 @@ export function SettingsView() {
       flip(t('Pular automaticamente'), t('Desligado: mostra o botão "Pular"'), s.skipMode === 'auto', (v) => store.saveSettings({ skipMode: v ? 'auto' : 'prompt', skipAuto: v }));
     }
     body.appendChild(h('div.set-section', { text: t('Animes') }));
-    flip(t('Anime Skip'), t('AniSkip: abertura e encerramento de animes'), s.animeSkip !== false, (v) => store.saveSettings({ animeSkip: v }));
-    body.appendChild(keyInput(t('AnimeSkip Client ID'), t('Opcional: enviado ao AniSkip como x-client-id'), 'animeSkipClientId', 'Client ID'));
+    flip(t('Anime Skip'), t('Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes'), s.animeSkip !== false, (v) => store.saveSettings({ animeSkip: v }));
+    body.appendChild(keyInput(t('AnimeSkip Client ID'), t('Sua chave do anime-skip.com (fica só nesta TV)'), 'animeSkipClientId', 'Client ID'));
   }
 
   function render() {

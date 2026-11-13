@@ -45,7 +45,7 @@ function isLocal(req) {
 function fetchHeaders(req) {
   var h = { Accept: 'application/json', 'User-Agent': 'stremio-kai-tizen' };
   var id = String(req.headers['x-client-id'] || '').trim();
-  if (id && /^[\w.\-]{1,128}$/.test(id)) h['x-client-id'] = id;
+  if (id && /^[\w.\-]{1,128}$/.test(id)) h['X-Client-ID'] = id;
   return h;
 }
 
@@ -159,16 +159,29 @@ function handle(req, res) {
   if (url.pathname === '/api/fetch') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
     var target = require('url').parse(String(q.url || ''));
-    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev'];
+    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev', 'api.anime-skip.com'];
     if (target.protocol !== 'https:' || okHosts.indexOf(target.hostname) < 0) return send(res, 400, { error: 'host not allowed' });
-    var upstream = require('https').get({ hostname: target.hostname, path: target.path, headers: fetchHeaders(req), timeout: 8000 }, function (r) {
-      var chunks = [];
-      r.on('data', function (c) { chunks.push(c); });
-      r.on('end', function () { send(res, r.statusCode || 502, Buffer.concat(chunks).toString('utf8')); });
-    });
-    upstream.on('error', function () { send(res, 502, { error: 'upstream failed' }); });
-    upstream.on('timeout', function () { upstream.abort(); });
-    return;
+    var isPost = req.method === 'POST';
+    // POST only for the Anime-Skip GraphQL endpoint.
+    if (isPost && (target.hostname !== 'api.anime-skip.com' || target.pathname !== '/graphql')) return send(res, 400, { error: 'post not allowed' });
+    var run = function (payload) {
+      var headers = fetchHeaders(req);
+      if (isPost) {
+        headers['Content-Type'] = 'application/json';
+        headers['Content-Length'] = Buffer.byteLength(payload);
+      }
+      var upstream = require('https').request({ method: isPost ? 'POST' : 'GET', hostname: target.hostname, path: target.path, headers: headers, timeout: 8000 }, function (r) {
+        var chunks = [];
+        r.on('data', function (c) { chunks.push(c); });
+        r.on('end', function () { send(res, r.statusCode || 502, Buffer.concat(chunks).toString('utf8')); });
+      });
+      upstream.on('error', function () { send(res, 502, { error: 'upstream failed' }); });
+      upstream.on('timeout', function () { upstream.abort(); });
+      if (isPost) upstream.write(payload);
+      upstream.end();
+    };
+    if (isPost) return readBody(req, function (body) { run(typeof body === 'string' ? body : JSON.stringify(body)); });
+    return run('');
   }
   if (url.pathname === '/api/info') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
