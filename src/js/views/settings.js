@@ -109,11 +109,142 @@ export function SettingsView() {
     return h('div.toggle', { cls: on ? 'on' : '' }, h('i'));
   }
 
+  let page = 'main';
+
+  function keyInput(title, sub, key, placeholder) {
+    const s = store.settings();
+    const input = h('input.input', { type: 'text', value: s[key] || '', placeholder: placeholder });
+    input.__submit = (v) => {
+      const patch = {};
+      patch[key] = v.trim();
+      store.saveSettings(patch);
+      toast(v.trim() ? t('Chave salva') : t('Chave removida'));
+      render();
+    };
+    return h('div.set-row', { focusable: true, onSelect: () => nav.select(input) }, [h('div.label', null, [title, h('small', { text: sub })]), input]);
+  }
+
+  function goMain() {
+    page = 'main';
+    render();
+    scroller.scrollTop = 0;
+  }
+
+  function pageHeader(title) {
+    body.appendChild(row('‹ ' + t('Voltar'), '', '', () => goMain()));
+    body.appendChild(h('div.set-section', { text: title }));
+  }
+
+  function accountCard(p) {
+    const name = p === 'trakt' ? 'Trakt' : 'Simkl';
+    const acc = tracker.account(p);
+    const on = tracker.isConnected(p);
+    const state = on ? (acc && acc.user ? t('Conectado: {user}', { user: acc.user }) : t('Conectado')) : tracker.needsReconnect(p) ? t('Reconectar') : t('Desconectado');
+    const sub = p === 'trakt' ? t('Sincroniza assistidos, progresso e Continuar assistindo com o Trakt') : t('Sincroniza assistidos e progresso com o Simkl');
+    const card = row(name, sub, state, () => {
+      if (on) {
+        menu(name, [{ label: t('Sincronizar agora'), value: 'sync' }, { label: t('Desconectar'), value: 'off' }], {
+          onPick: (v) => {
+            if (v === 'sync') {
+              toast(t('Sincronizando...'));
+              tracker.syncNow().then(() => {
+                router.dropTab('home');
+                toast(t('Sincronizado'));
+              });
+            } else {
+              tracker.disconnect(p);
+              toast(t('{name} desconectado', { name: name }));
+              render();
+            }
+          },
+        });
+        return;
+      }
+      if (!tracker.hasKeys(p)) return toast(p === 'trakt' ? t('Preencha o Client ID e o Client Secret do Trakt abaixo.') : t('Preencha o Client ID do Simkl abaixo.'), 5000);
+      openTrackLink(p, () => render());
+    });
+    card.classList.add('acct-card', 'acct-' + p);
+    if (on) card.classList.add('acct-on');
+    return card;
+  }
+
+  function renderTracking(s) {
+    pageHeader(t('Rastreamento (Trakt e Simkl)'));
+    body.appendChild(h('div.set-section', { text: t('Contas conectadas') }));
+    tracker.PROVIDERS.forEach((p) => body.appendChild(accountCard(p)));
+    body.appendChild(keyInput(t('Trakt Client ID'), t('Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)'), 'traktClientId', 'Client ID'));
+    body.appendChild(keyInput(t('Trakt Client Secret'), t('Do mesmo app do Trakt'), 'traktClientSecret', 'Client Secret'));
+    body.appendChild(keyInput(t('Simkl Client ID'), t('Crie um app grátis em simkl.com/settings/developer'), 'simklClientId', 'Client ID'));
+
+    body.appendChild(h('div.set-section', { text: t('Fontes') }));
+    const SRC = [
+      { id: 'both', label: t('Trakt e Simkl') },
+      { id: 'trakt', label: 'Trakt' },
+      { id: 'simkl', label: 'Simkl' },
+    ];
+    const srcRow = (title, sub, key) => {
+      const cur = SRC.find((x) => x.id === s[key]) || SRC[0];
+      body.appendChild(
+        row(title, sub, cur.label, () =>
+          menu(title, SRC.map((x) => ({ label: x.label, value: x.id, checked: x.id === cur.id })), {
+            onPick: (v) => {
+              const patch = {};
+              patch[key] = v;
+              store.saveSettings(patch);
+              render();
+            },
+          })
+        )
+      );
+    };
+    srcRow(t('Fonte da biblioteca'), t('De onde vêm os assistidos e o Continuar assistindo'), 'librarySource');
+    srcRow(t('Fonte do progresso'), t('Para onde o progresso de reprodução é enviado'), 'progressSource');
+
+    body.appendChild(h('div.set-section', { text: t('Recursos do Trakt') }));
+    body.appendChild(
+      row(t('Sincronizar agora'), t('Atualiza assistidos e Continuar assistindo'), '', () => {
+        if (!tracker.connected().length) return toast(t('Conecte uma conta primeiro'));
+        toast(t('Sincronizando...'));
+        tracker.syncNow().then(() => {
+          router.dropTab('home');
+          toast(t('Sincronizado'));
+        });
+      })
+    );
+  }
+
+  function renderSkip(s) {
+    pageHeader(t('Pular trechos'));
+    const flip = (title, sub, on, apply) =>
+      body.appendChild(
+        row(title, sub, '', () => {
+          apply(!on);
+          render();
+        }, toggle(on))
+      );
+    const skipOn = s.skipMode !== 'off';
+    flip(t('Pular abertura'), t('IntroDB (séries e filmes) — introdb.app'), skipOn, (v) => store.saveSettings({ skipMode: v ? (s.skipAuto === false ? 'prompt' : 'auto') : 'off' }));
+    if (skipOn) {
+      flip(t('Pular automaticamente'), t('Desligado: mostra o botão "Pular"'), s.skipMode === 'auto', (v) => store.saveSettings({ skipMode: v ? 'auto' : 'prompt', skipAuto: v }));
+    }
+    body.appendChild(h('div.set-section', { text: t('Animes') }));
+    flip(t('Anime Skip'), t('AniSkip: abertura e encerramento de animes'), s.animeSkip !== false, (v) => store.saveSettings({ animeSkip: v }));
+    body.appendChild(keyInput(t('AnimeSkip Client ID'), t('Opcional: enviado ao AniSkip como x-client-id'), 'animeSkipClientId', 'Client ID'));
+  }
+
   function render() {
     const s = store.settings();
     const keep = nav.current();
     const keepIndex = keep ? Array.prototype.indexOf.call(body.querySelectorAll('.set-row'), keep) : -1;
     clear(body);
+    if (page === 'tracking' || page === 'skip') {
+      if (page === 'tracking') renderTracking(s);
+      else renderSkip(s);
+      const sub = body.querySelectorAll('.set-row');
+      if (keepIndex >= 0 && sub[keepIndex]) nav.focus(sub[keepIndex]);
+      else if (sub[0]) nav.focus(sub[0]);
+      return;
+    }
 
     // ---- Idioma do app (vale para a TV inteira; o nome fica bilíngue para quem não lê o atual) ----
     const LANGS = [
@@ -438,19 +569,6 @@ export function SettingsView() {
     // ---- Player ----
     body.appendChild(h('div.set-section', { text: t('Player') }));
     choose(
-      t('Pular abertura e encerramento'),
-      t('IntroDB (séries e filmes) e AniSkip (animes)'),
-      [
-        { id: 'auto', label: t('Pular automaticamente') },
-        { id: 'prompt', label: t('Mostrar botão "Pular"') },
-        { id: 'off', label: t('Desligado') },
-      ],
-      'skipMode',
-      s.skipMode,
-      { prompt: t('Mostrar botão'), auto: t('Automático'), off: t('Desligado') }[s.skipMode] || t('Automático')
-    );
-
-    choose(
       t('Player de vídeo'),
       t('O player da Samsung troca a faixa de áudio; o do navegador é o antigo'),
       [
@@ -462,69 +580,22 @@ export function SettingsView() {
       s.playerEngine === 'html5' ? t('Navegador (HTML5)') : t('Samsung (AVPlay)')
     );
 
-    // ---- Tracking: Trakt and Simkl built in ----
-    body.appendChild(h('div.set-section', { text: t('Rastreamento (Trakt e Simkl)') }));
-    tracker.PROVIDERS.forEach((p) => {
-      const name = p === 'trakt' ? 'Trakt' : 'Simkl';
-      const acc = tracker.account(p);
-      const state = tracker.isConnected(p)
-        ? acc.user
-          ? t('Conectado: {user}', { user: acc.user })
-          : t('Conectado')
-        : tracker.needsReconnect(p)
-          ? t('Reconectar')
-          : t('Desconectado');
-      const sub =
-        p === 'trakt'
-          ? t('Sincroniza assistidos, progresso e Continuar assistindo com o Trakt')
-          : t('Sincroniza assistidos e progresso com o Simkl');
-      body.appendChild(
-        row(name, sub, state, () => {
-          if (tracker.isConnected(p)) {
-            menu(name, [
-              { label: t('Sincronizar agora'), value: 'sync' },
-              { label: t('Desconectar'), value: 'off' },
-            ], {
-              onPick: (v) => {
-                if (v === 'sync') {
-                  toast(t('Sincronizando...'));
-                  tracker.syncNow().then(() => {
-                    router.dropTab('home');
-                    toast(t('Sincronizado'));
-                  });
-                } else {
-                  tracker.disconnect(p);
-                  toast(t('{name} desconectado', { name: name }));
-                  render();
-                }
-              },
-            });
-            return;
-          }
-          if (!tracker.hasKeys(p)) return toast(p === 'trakt' ? t('Preencha o Client ID e o Client Secret do Trakt abaixo.') : t('Preencha o Client ID do Simkl abaixo.'), 5000);
-          openTrackLink(p, () => render());
-        })
-      );
-    });
-    const trackKey = (title, sub, key, placeholder) => {
-      const input = h('input.input', { type: 'text', value: s[key] || '', placeholder: placeholder });
-      input.__submit = (v) => {
-        const patch = {};
-        patch[key] = v.trim();
-        store.saveSettings(patch);
-        toast(v.trim() ? t('Chave salva') : t('Chave removida'));
+    // ---- Tracking and skip segments live on their own pages ----
+    body.appendChild(h('div.set-section', { text: t('Integrações') }));
+    body.appendChild(
+      row(t('Rastreamento (Trakt e Simkl)'), t('Contas, fontes e recursos do Trakt'), tracker.connected().length ? t('Conectado') : t('Desconectado'), () => {
+        page = 'tracking';
         render();
-      };
-      body.appendChild(
-        h('div.set-row', { focusable: true, onSelect: () => nav.select(input) }, [
-          h('div.label', null, [title, h('small', { text: sub })]),
-          input,
-        ])
-      );
-    };
-    trackKey(t('Trakt Client ID'), t('Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)'), 'traktClientId', 'Client ID');
-    trackKey(t('Trakt Client Secret'), t('Do mesmo app do Trakt'), 'traktClientSecret', 'Client Secret');
-    trackKey(t('Simkl Client ID'), t('Crie um app grátis em simkl.com/settings/developer'), 'simklClientId', 'Client ID');
+        scroller.scrollTop = 0;
+      })
+    );
+    body.appendChild(
+      row(t('Pular trechos'), t('Abertura, recapitulação e encerramento'), s.skipMode === 'off' ? t('Desligado') : t('Ligado'), () => {
+        page = 'skip';
+        render();
+        scroller.scrollTop = 0;
+      })
+    );
 
     // ---- Metadados (opcional, como no Kai) ----
     body.appendChild(h('div.set-section', { text: t('Metadados extras (opcional)') }));
@@ -619,6 +690,11 @@ export function SettingsView() {
 
   return {
     el: el,
+    onBack: () => {
+      if (page === 'main') return false;
+      goMain();
+      return true;
+    },
     onShow: () => {
       server.check().then(() => render());
     },

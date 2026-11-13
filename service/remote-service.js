@@ -41,10 +41,19 @@ function isLocal(req) {
   return a === '127.0.0.1' || a === '::1' || a === '::ffff:127.0.0.1';
 }
 
+// Only the AniSkip client id is forwarded (nothing else from the app).
+function fetchHeaders(req) {
+  var h = { Accept: 'application/json', 'User-Agent': 'stremio-kai-tizen' };
+  var id = String(req.headers['x-client-id'] || '').trim();
+  if (id && /^[\w.\-]{1,128}$/.test(id)) h['x-client-id'] = id;
+  return h;
+}
+
 function send(res, status, body, type) {
   res.writeHead(status, {
     'Content-Type': type || 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'x-client-id, content-type',
     'Cache-Control': 'no-store'
   });
   res.end(typeof body === 'string' ? body : JSON.stringify(body));
@@ -152,7 +161,7 @@ function handle(req, res) {
     var target = require('url').parse(String(q.url || ''));
     var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev'];
     if (target.protocol !== 'https:' || okHosts.indexOf(target.hostname) < 0) return send(res, 400, { error: 'host not allowed' });
-    var upstream = require('https').get({ hostname: target.hostname, path: target.path, headers: { Accept: 'application/json', 'User-Agent': 'stremio-kai-tizen' }, timeout: 8000 }, function (r) {
+    var upstream = require('https').get({ hostname: target.hostname, path: target.path, headers: fetchHeaders(req), timeout: 8000 }, function (r) {
       var chunks = [];
       r.on('data', function (c) { chunks.push(c); });
       r.on('end', function () { send(res, r.statusCode || 502, Buffer.concat(chunks).toString('utf8')); });

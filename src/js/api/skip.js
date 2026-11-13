@@ -4,14 +4,21 @@
 import { getJSON } from '../lib/http.js';
 import * as server from './server.js';
 import { log } from '../lib/log.js';
+import * as store from '../lib/store.js';
 
 const INTRODB = 'https://api.introdb.app/segments';
 const ANISKIP = 'https://api.aniskip.com/v2/skip-times/';
 const ARM = 'https://arm.haglund.dev/api/v2/';
 
 // O IntroDB só libera CORS para o próprio site; se a TV bloquear, vai pelo proxy do servidor do PC.
-function getJSONWithProxy(url) {
-  return server.getJSONViaProxy(url, { timeout: 10000 });
+function getJSONWithProxy(url, headers) {
+  return server.getJSONViaProxy(url, { timeout: 10000, headers: headers });
+}
+
+// AniSkip v2 may want an x-client-id; the user's own id is sent when set.
+function aniSkipHeaders() {
+  const id = (store.settings().animeSkipClientId || '').trim();
+  return id ? { 'x-client-id': id } : undefined;
 }
 
 function fromIntroDb(data) {
@@ -87,12 +94,12 @@ export function getSegments(meta, video, durationSec) {
       malPromise = malFromAnime(anime);
       ep = anime.episode;
     } else if (imdb && isAnime(meta) && isFinite(episode)) malPromise = malFromImdb(imdb, season || 1);
-    if (!malPromise) return [];
+    if (!malPromise || store.settings().animeSkip === false) return [];
     return malPromise
       .then((mal) => {
         if (!mal || !ep) return [];
         const q = ['op', 'ed', 'recap', 'mixed-op', 'mixed-ed'].map((t) => 'types%5B%5D=' + t).join('&');
-        return getJSON(ANISKIP + mal + '/' + ep + '?' + q + '&episodeLength=' + Math.round(durationSec || 0), { quiet: true }).then(fromAniSkip);
+        return getJSONWithProxy(ANISKIP + mal + '/' + ep + '?' + q + '&episodeLength=' + Math.round(durationSec || 0), aniSkipHeaders()).then(fromAniSkip);
       })
       .catch(() => []);
   }).then((segs) => {

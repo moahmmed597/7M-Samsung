@@ -5260,7 +5260,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Fixar no topo": "Pin to top",
     "Fixada no topo": "Pinned to top",
     "Fixada no topo da aba Coleções": "Pinned to the top of Collections",
-    "Removida das favoritas": "Removed from favorites"
+    "Removida das favoritas": "Removed from favorites",
+    "Contas conectadas": "Connected accounts",
+    "Trakt e Simkl": "Trakt and Simkl",
+    "Fonte da biblioteca": "Library source",
+    "De onde vêm os assistidos e o Continuar assistindo": "Where watched items and Continue watching come from",
+    "Fonte do progresso": "Watch progress source",
+    "Para onde o progresso de reprodução é enviado": "Where playback progress is sent",
+    "Recursos do Trakt": "Trakt features",
+    "Atualiza assistidos e Continuar assistindo": "Refreshes watched items and Continue watching",
+    "Conecte uma conta primeiro": "Connect an account first",
+    "Pular trechos": "Skip segments",
+    "IntroDB (séries e filmes) — introdb.app": "IntroDB (series and movies) — introdb.app",
+    'Desligado: mostra o botão "Pular"': 'Off: shows the "Skip" button',
+    "Anime Skip": "Anime Skip",
+    "AniSkip: abertura e encerramento de animes": "AniSkip: anime openings and endings",
+    "AnimeSkip Client ID": "AnimeSkip Client ID",
+    "Opcional: enviado ao AniSkip como x-client-id": "Optional: sent to AniSkip as x-client-id",
+    "Integrações": "Integrations",
+    "Contas, fontes e recursos do Trakt": "Accounts, sources and Trakt features",
+    "Abertura, recapitulação e encerramento": "Intro, recap and outro",
+    "Ligado": "On"
   };
 
   // src/js/lib/i18n-ar.js
@@ -5754,7 +5774,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Fixar no topo": "تثبيت في الأعلى",
     "Fixada no topo": "مثبّتة في الأعلى",
     "Fixada no topo da aba Coleções": "تم تثبيتها في أعلى السلاسل",
-    "Removida das favoritas": "أُزيلت من المفضلة"
+    "Removida das favoritas": "أُزيلت من المفضلة",
+    "Contas conectadas": "الحسابات المربوطة",
+    "Trakt e Simkl": "Trakt و Simkl",
+    "Fonte da biblioteca": "مصدر المكتبة",
+    "De onde vêm os assistidos e o Continuar assistindo": "من وين تجي المشاهَدات وإكمال المشاهدة",
+    "Fonte do progresso": "مصدر تقدّم المشاهدة",
+    "Para onde o progresso de reprodução é enviado": "وين يُرسل تقدّم التشغيل",
+    "Recursos do Trakt": "ميزات Trakt",
+    "Atualiza assistidos e Continuar assistindo": "يحدّث المشاهَدات وإكمال المشاهدة",
+    "Conecte uma conta primeiro": "اربط حساب أول",
+    "Pular trechos": "تخطي المقاطع",
+    "IntroDB (séries e filmes) — introdb.app": "IntroDB (مسلسلات وأفلام) — introdb.app",
+    'Desligado: mostra o botão "Pular"': "مطفي: يطلع زر «تخطي»",
+    "Anime Skip": "Anime Skip",
+    "AniSkip: abertura e encerramento de animes": "AniSkip: مقدمات ونهايات الأنمي",
+    "AnimeSkip Client ID": "AnimeSkip Client ID",
+    "Opcional: enviado ao AniSkip como x-client-id": "اختياري: يُرسل لـ AniSkip كـ x-client-id",
+    "Integrações": "التكاملات",
+    "Contas, fontes e recursos do Trakt": "الحسابات والمصادر وميزات Trakt",
+    "Abertura, recapitulação e encerramento": "المقدمة والملخص والخاتمة",
+    "Ligado": "شغّال"
   };
 
   // src/js/lib/i18n.js
@@ -6470,7 +6510,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function set(key, value) {
     rawSet(profileKey(activeProfile().id, key), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -6510,6 +6550,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     subtitlePosition: "low",
     skipMode: "auto",
     // auto (default) | prompt | off
+    animeSkip: true,
+    // AniSkip for anime
+    animeSkipClientId: "",
+    librarySource: "both",
+    // both | trakt | simkl
+    progressSource: "both",
     subtitlesAuto: true,
     localAddons: []
   };
@@ -8767,10 +8813,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var INTRODB = "https://api.introdb.app/segments";
   var ANISKIP = "https://api.aniskip.com/v2/skip-times/";
   var ARM2 = "https://arm.haglund.dev/api/v2/";
-  function getJSONWithProxy(url2) {
+  function getJSONWithProxy(url2, headers) {
     return getJSONViaProxy(url2, {
-      timeout: 1e4
+      timeout: 1e4,
+      headers: headers
     });
+  }
+  function aniSkipHeaders() {
+    var id = (settings().animeSkipClientId || "").trim();
+    return id ? {
+      "x-client-id": id
+    } : void 0;
   }
   function fromIntroDb(data) {
     var out = [];
@@ -8865,15 +8918,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         malPromise = malFromAnime(anime);
         ep = anime.episode;
       } else if (imdb && isAnime(meta) && isFinite(episode)) malPromise = malFromImdb(imdb, season || 1);
-      if (!malPromise) return [];
+      if (!malPromise || settings().animeSkip === false) return [];
       return malPromise.then(function (mal) {
         if (!mal || !ep) return [];
         var q = ["op", "ed", "recap", "mixed-op", "mixed-ed"].map(function (t2) {
           return "types%5B%5D=" + t2;
         }).join("&");
-        return getJSON(ANISKIP + mal + "/" + ep + "?" + q + "&episodeLength=" + Math.round(durationSec || 0), {
-          quiet: true
-        }).then(fromAniSkip);
+        return getJSONWithProxy(ANISKIP + mal + "/" + ep + "?" + q + "&episodeLength=" + Math.round(durationSec || 0), aniSkipHeaders()).then(fromAniSkip);
       }).catch(function () {
         return [];
       });
@@ -9343,6 +9394,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var a = account(provider);
     return !!(a && a.invalid);
   }
+  function useFor(key, p) {
+    var v = settings()[key];
+    return v !== "trakt" && v !== "simkl" ? true : v === p;
+  }
   function connected() {
     return PROVIDERS.filter(isConnected);
   }
@@ -9589,7 +9644,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var body = Object.assign({}, playing.body, {
       progress: Math.max(0, Math.min(100, Math.round(progress2 * 1e4) / 100))
     });
-    connected().forEach(function (p) {
+    connected().filter(function (p) {
+      return useFor("progressSource", p);
+    }).forEach(function (p) {
       var call2 = p === "trakt" ? trakt("POST", "/scrobble/" + action, body) : simkl("POST", "/scrobble/" + action, body);
       call2.then(function () {
         return log.info("tracker", p, action, body.progress);
@@ -9642,8 +9699,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function syncNow() {
     if (syncing) return syncing;
     var tasks = [];
-    if (isConnected("trakt")) tasks.push(pullTraktWatched(), pullTraktPlayback());
-    if (isConnected("simkl")) tasks.push(pullSimklWatched());
+    if (isConnected("trakt") && useFor("librarySource", "trakt")) tasks.push(pullTraktWatched(), pullTraktPlayback());
+    if (isConnected("simkl") && useFor("librarySource", "simkl")) tasks.push(pullSimklWatched());
     if (!tasks.length) return Promise.resolve(false);
     lastSync = Date.now();
     syncing = Promise.all(tasks.map(function (p) {
@@ -13528,7 +13585,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-13T11:51:19.174Z";
+  var BUILD = "2026-11-13T12:02:27.131Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -13950,11 +14007,189 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         cls: on ? "on" : ""
       }, h("i"));
     }
+    var page = "main";
+    function keyInput(title, sub, key, placeholder) {
+      var s = settings();
+      var input = h("input.input", {
+        type: "text",
+        value: s[key] || "",
+        placeholder: placeholder
+      });
+      input.__submit = function (v) {
+        var patch = {};
+        patch[key] = v.trim();
+        saveSettings(patch);
+        toast(v.trim() ? t("Chave salva") : t("Chave removida"));
+        render();
+      };
+      return h("div.set-row", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return select(input);
+        }
+      }, [h("div.label", null, [title, h("small", {
+        text: sub
+      })]), input]);
+    }
+    function goMain() {
+      page = "main";
+      render();
+      scroller.scrollTop = 0;
+    }
+    function pageHeader(title) {
+      body.appendChild(row("‹ " + t("Voltar"), "", "", function () {
+        return goMain();
+      }));
+      body.appendChild(h("div.set-section", {
+        text: title
+      }));
+    }
+    function accountCard(p) {
+      var name = p === "trakt" ? "Trakt" : "Simkl";
+      var acc = account(p);
+      var on = isConnected(p);
+      var state = on ? acc && acc.user ? t("Conectado: {user}", {
+        user: acc.user
+      }) : t("Conectado") : needsReconnect(p) ? t("Reconectar") : t("Desconectado");
+      var sub = p === "trakt" ? t("Sincroniza assistidos, progresso e Continuar assistindo com o Trakt") : t("Sincroniza assistidos e progresso com o Simkl");
+      var card2 = row(name, sub, state, function () {
+        if (on) {
+          menu(name, [{
+            label: t("Sincronizar agora"),
+            value: "sync"
+          }, {
+            label: t("Desconectar"),
+            value: "off"
+          }], {
+            onPick: function onPick(v) {
+              if (v === "sync") {
+                toast(t("Sincronizando..."));
+                syncNow().then(function () {
+                  dropTab("home");
+                  toast(t("Sincronizado"));
+                });
+              } else {
+                disconnect(p);
+                toast(t("{name} desconectado", {
+                  name: name
+                }));
+                render();
+              }
+            }
+          });
+          return;
+        }
+        if (!hasKeys(p)) return toast(p === "trakt" ? t("Preencha o Client ID e o Client Secret do Trakt abaixo.") : t("Preencha o Client ID do Simkl abaixo."), 5e3);
+        openTrackLink(p, function () {
+          return render();
+        });
+      });
+      card2.classList.add("acct-card", "acct-" + p);
+      if (on) card2.classList.add("acct-on");
+      return card2;
+    }
+    function renderTracking(s) {
+      pageHeader(t("Rastreamento (Trakt e Simkl)"));
+      body.appendChild(h("div.set-section", {
+        text: t("Contas conectadas")
+      }));
+      PROVIDERS.forEach(function (p) {
+        return body.appendChild(accountCard(p));
+      });
+      body.appendChild(keyInput(t("Trakt Client ID"), t("Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)"), "traktClientId", "Client ID"));
+      body.appendChild(keyInput(t("Trakt Client Secret"), t("Do mesmo app do Trakt"), "traktClientSecret", "Client Secret"));
+      body.appendChild(keyInput(t("Simkl Client ID"), t("Crie um app grátis em simkl.com/settings/developer"), "simklClientId", "Client ID"));
+      body.appendChild(h("div.set-section", {
+        text: t("Fontes")
+      }));
+      var SRC = [{
+        id: "both",
+        label: t("Trakt e Simkl")
+      }, {
+        id: "trakt",
+        label: "Trakt"
+      }, {
+        id: "simkl",
+        label: "Simkl"
+      }];
+      var srcRow = function srcRow(title, sub, key) {
+        var cur = SRC.find(function (x) {
+          return x.id === s[key];
+        }) || SRC[0];
+        body.appendChild(row(title, sub, cur.label, function () {
+          return menu(title, SRC.map(function (x) {
+            return {
+              label: x.label,
+              value: x.id,
+              checked: x.id === cur.id
+            };
+          }), {
+            onPick: function onPick(v) {
+              var patch = {};
+              patch[key] = v;
+              saveSettings(patch);
+              render();
+            }
+          });
+        }));
+      };
+      srcRow(t("Fonte da biblioteca"), t("De onde vêm os assistidos e o Continuar assistindo"), "librarySource");
+      srcRow(t("Fonte do progresso"), t("Para onde o progresso de reprodução é enviado"), "progressSource");
+      body.appendChild(h("div.set-section", {
+        text: t("Recursos do Trakt")
+      }));
+      body.appendChild(row(t("Sincronizar agora"), t("Atualiza assistidos e Continuar assistindo"), "", function () {
+        if (!connected().length) return toast(t("Conecte uma conta primeiro"));
+        toast(t("Sincronizando..."));
+        syncNow().then(function () {
+          dropTab("home");
+          toast(t("Sincronizado"));
+        });
+      }));
+    }
+    function renderSkip(s) {
+      pageHeader(t("Pular trechos"));
+      var flip = function flip(title, sub, on, apply4) {
+        return body.appendChild(row(title, sub, "", function () {
+          apply4(!on);
+          render();
+        }, toggle(on)));
+      };
+      var skipOn = s.skipMode !== "off";
+      flip(t("Pular abertura"), t("IntroDB (séries e filmes) — introdb.app"), skipOn, function (v) {
+        return saveSettings({
+          skipMode: v ? s.skipAuto === false ? "prompt" : "auto" : "off"
+        });
+      });
+      if (skipOn) {
+        flip(t("Pular automaticamente"), t('Desligado: mostra o botão "Pular"'), s.skipMode === "auto", function (v) {
+          return saveSettings({
+            skipMode: v ? "auto" : "prompt",
+            skipAuto: v
+          });
+        });
+      }
+      body.appendChild(h("div.set-section", {
+        text: t("Animes")
+      }));
+      flip(t("Anime Skip"), t("AniSkip: abertura e encerramento de animes"), s.animeSkip !== false, function (v) {
+        return saveSettings({
+          animeSkip: v
+        });
+      });
+      body.appendChild(keyInput(t("AnimeSkip Client ID"), t("Opcional: enviado ao AniSkip como x-client-id"), "animeSkipClientId", "Client ID"));
+    }
     function render() {
       var s = settings();
       var keep = current2();
       var keepIndex = keep ? Array.prototype.indexOf.call(body.querySelectorAll(".set-row"), keep) : -1;
       clear(body);
+      if (page === "tracking" || page === "skip") {
+        if (page === "tracking") renderTracking(s);else renderSkip(s);
+        var sub = body.querySelectorAll(".set-row");
+        if (keepIndex >= 0 && sub[keepIndex]) focus(sub[keepIndex]);else if (sub[0]) focus(sub[0]);
+        return;
+      }
       var LANGS = [{
         id: "auto",
         label: t("Automático (idioma da TV)")
@@ -14373,20 +14608,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       body.appendChild(h("div.set-section", {
         text: t("Player")
       }));
-      choose(t("Pular abertura e encerramento"), t("IntroDB (séries e filmes) e AniSkip (animes)"), [{
-        id: "auto",
-        label: t("Pular automaticamente")
-      }, {
-        id: "prompt",
-        label: t('Mostrar botão "Pular"')
-      }, {
-        id: "off",
-        label: t("Desligado")
-      }], "skipMode", s.skipMode, {
-        prompt: t("Mostrar botão"),
-        auto: t("Automático"),
-        off: t("Desligado")
-      }[s.skipMode] || t("Automático"));
       choose(t("Player de vídeo"), t("O player da Samsung troca a faixa de áudio; o do navegador é o antigo"), [{
         id: "auto",
         label: available() ? t("Samsung (AVPlay)") : t("Samsung (AVPlay) · indisponível nesta TV")
@@ -14395,73 +14616,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         label: t("Navegador (HTML5)")
       }], "playerEngine", s.playerEngine === "html5" ? "html5" : "auto", s.playerEngine === "html5" ? t("Navegador (HTML5)") : t("Samsung (AVPlay)"));
       body.appendChild(h("div.set-section", {
-        text: t("Rastreamento (Trakt e Simkl)")
+        text: t("Integrações")
       }));
-      PROVIDERS.forEach(function (p) {
-        var name = p === "trakt" ? "Trakt" : "Simkl";
-        var acc = account(p);
-        var state = isConnected(p) ? acc.user ? t("Conectado: {user}", {
-          user: acc.user
-        }) : t("Conectado") : needsReconnect(p) ? t("Reconectar") : t("Desconectado");
-        var sub = p === "trakt" ? t("Sincroniza assistidos, progresso e Continuar assistindo com o Trakt") : t("Sincroniza assistidos e progresso com o Simkl");
-        body.appendChild(row(name, sub, state, function () {
-          if (isConnected(p)) {
-            menu(name, [{
-              label: t("Sincronizar agora"),
-              value: "sync"
-            }, {
-              label: t("Desconectar"),
-              value: "off"
-            }], {
-              onPick: function onPick(v) {
-                if (v === "sync") {
-                  toast(t("Sincronizando..."));
-                  syncNow().then(function () {
-                    dropTab("home");
-                    toast(t("Sincronizado"));
-                  });
-                } else {
-                  disconnect(p);
-                  toast(t("{name} desconectado", {
-                    name: name
-                  }));
-                  render();
-                }
-              }
-            });
-            return;
-          }
-          if (!hasKeys(p)) return toast(p === "trakt" ? t("Preencha o Client ID e o Client Secret do Trakt abaixo.") : t("Preencha o Client ID do Simkl abaixo."), 5e3);
-          openTrackLink(p, function () {
-            return render();
-          });
-        }));
-      });
-      var trackKey = function trackKey(title, sub, key, placeholder) {
-        var input = h("input.input", {
-          type: "text",
-          value: s[key] || "",
-          placeholder: placeholder
-        });
-        input.__submit = function (v) {
-          var patch = {};
-          patch[key] = v.trim();
-          saveSettings(patch);
-          toast(v.trim() ? t("Chave salva") : t("Chave removida"));
-          render();
-        };
-        body.appendChild(h("div.set-row", {
-          focusable: true,
-          onSelect: function onSelect() {
-            return select(input);
-          }
-        }, [h("div.label", null, [title, h("small", {
-          text: sub
-        })]), input]));
-      };
-      trackKey(t("Trakt Client ID"), t("Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)"), "traktClientId", "Client ID");
-      trackKey(t("Trakt Client Secret"), t("Do mesmo app do Trakt"), "traktClientSecret", "Client Secret");
-      trackKey(t("Simkl Client ID"), t("Crie um app grátis em simkl.com/settings/developer"), "simklClientId", "Client ID");
+      body.appendChild(row(t("Rastreamento (Trakt e Simkl)"), t("Contas, fontes e recursos do Trakt"), connected().length ? t("Conectado") : t("Desconectado"), function () {
+        page = "tracking";
+        render();
+        scroller.scrollTop = 0;
+      }));
+      body.appendChild(row(t("Pular trechos"), t("Abertura, recapitulação e encerramento"), s.skipMode === "off" ? t("Desligado") : t("Ligado"), function () {
+        page = "skip";
+        render();
+        scroller.scrollTop = 0;
+      }));
       body.appendChild(h("div.set-section", {
         text: t("Metadados extras (opcional)")
       }));
@@ -14593,6 +14759,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     render();
     return {
       el: el,
+      onBack: function onBack() {
+        if (page === "main") return false;
+        goMain();
+        return true;
+      },
       onShow: function onShow() {
         check().then(function () {
           return render();

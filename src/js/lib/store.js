@@ -114,7 +114,7 @@ export function set(key, value) {
 
 // ---------- Preferências ----------
 // Da TV (iguais para todos os perfis):
-const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine'];
+const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource'];
 
 const DEFAULT_SETTINGS = {
   // TV
@@ -146,6 +146,10 @@ const DEFAULT_SETTINGS = {
   subtitleBold: true,
   subtitlePosition: 'low',
   skipMode: 'auto', // auto (default) | prompt | off
+  animeSkip: true, // AniSkip for anime
+  animeSkipClientId: '',
+  librarySource: 'both', // both | trakt | simkl
+  progressSource: 'both',
   subtitlesAuto: true,
   localAddons: [],
 };

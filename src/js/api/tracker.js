@@ -52,6 +52,12 @@ export function needsReconnect(provider) {
   return !!(a && a.invalid);
 }
 
+// Which service receives scrobbles (progressSource) and which one is pulled (librarySource): both | trakt | simkl.
+function useFor(key, p) {
+  const v = store.settings()[key];
+  return v !== 'trakt' && v !== 'simkl' ? true : v === p;
+}
+
 export function connected() {
   return PROVIDERS.filter(isConnected);
 }
@@ -244,7 +250,7 @@ let playing = null; // { key, body, progress (0..1), lastAction, lastAt }
 function scrobble(action, progress) {
   if (!playing) return;
   const body = Object.assign({}, playing.body, { progress: Math.max(0, Math.min(100, Math.round(progress * 10000) / 100)) });
-  connected().forEach((p) => {
+  connected().filter((p) => useFor('progressSource', p)).forEach((p) => {
     const call = p === 'trakt' ? trakt('POST', '/scrobble/' + action, body) : simkl('POST', '/scrobble/' + action, body);
     call.then(() => log.info('tracker', p, action, body.progress)).catch((e) => {
       // 409: Trakt already has this (a second stop right after the first); not an error.
@@ -303,8 +309,8 @@ let lastSync = 0;
 export function syncNow() {
   if (syncing) return syncing;
   const tasks = [];
-  if (isConnected('trakt')) tasks.push(pullTraktWatched(), pullTraktPlayback());
-  if (isConnected('simkl')) tasks.push(pullSimklWatched());
+  if (isConnected('trakt') && useFor('librarySource', 'trakt')) tasks.push(pullTraktWatched(), pullTraktPlayback());
+  if (isConnected('simkl') && useFor('librarySource', 'simkl')) tasks.push(pullSimklWatched());
   if (!tasks.length) return Promise.resolve(false);
   lastSync = Date.now();
   syncing = Promise.all(tasks.map((p) => p.catch((e) => log.warn('tracker sync', e.message))))

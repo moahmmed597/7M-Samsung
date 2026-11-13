@@ -226,6 +226,10 @@ body.oled .details-shade { background: linear-gradient(to right, #000 25%, rgba(
 .set-row .label { -webkit-flex: 1; flex: 1; font-size: 23px; font-weight: 600; }
 .set-row .label small { display: block; font-size: 18px; font-weight: 400; color: rgba(255,255,255,0.55); margin-top: 2px; }
 .set-row .value { font-size: 22px; color: #c9bbff; font-weight: 600; max-width: 700px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.set-row.acct-card { border-left: 8px solid #555; }
+.set-row.acct-trakt { background: rgba(237,28,36,0.16); border-left-color: #ed1c24; }
+.set-row.acct-simkl { background: rgba(0,170,255,0.14); border-left-color: #00aaff; }
+.set-row.acct-on .value { color: #6ee7a0; }
 .set-row.focused { background: rgba(123,91,245,0.3); border-color: #9d85ff; }
 .set-row .input { width: 560px; height: 58px; font-size: 22px; }
 .toggle { width: 70px; height: 38px; border-radius: 19px; background: rgba(255,255,255,0.2); position: relative; }
