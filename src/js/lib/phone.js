@@ -6,6 +6,10 @@ import { toast } from '../ui.js';
 import { t } from './i18n.js';
 
 export const PORT = 8095;
+// The TizenBrew service on this TV fetches the skip-time APIs for us (they block the app's origin).
+export function fetchUrl(url) {
+  return 'http://127.0.0.1:' + PORT + '/api/fetch?url=' + encodeURIComponent(url);
+}
 const BASE = 'http://127.0.0.1:' + PORT;
 const ENTER = 13;
 

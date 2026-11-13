@@ -146,6 +146,22 @@ function handle(req, res) {
   if (req.method === 'OPTIONS') return send(res, 204, '');
 
   // ---- TV side (app on the same TV only) ----
+  // Fetches a skip-times API for the app (those sites refuse requests from the app's own origin).
+  // Local only, GET only, and only these hosts: it is not a general proxy.
+  if (url.pathname === '/api/fetch') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    var target = require('url').parse(String(q.url || ''));
+    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev'];
+    if (target.protocol !== 'https:' || okHosts.indexOf(target.hostname) < 0) return send(res, 400, { error: 'host not allowed' });
+    var upstream = require('https').get({ hostname: target.hostname, path: target.path, headers: { Accept: 'application/json', 'User-Agent': 'stremio-kai-tizen' }, timeout: 8000 }, function (r) {
+      var chunks = [];
+      r.on('data', function (c) { chunks.push(c); });
+      r.on('end', function () { send(res, r.statusCode || 502, Buffer.concat(chunks).toString('utf8')); });
+    });
+    upstream.on('error', function () { send(res, 502, { error: 'upstream failed' }); });
+    upstream.on('timeout', function () { upstream.abort(); });
+    return;
+  }
   if (url.pathname === '/api/info') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
     return send(res, 200, { ip: tvIp(), port: PORT, pin: PIN, last: nextId - 1, version: 1 });

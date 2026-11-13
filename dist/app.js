@@ -6833,6 +6833,540 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/lib/phone.js
+  var import_qrcode_generator = __toESM(require_qrcode(), 1);
+
+  // src/js/views/profiles.js
+  var SESSION_PICKED = "kai.profilePicked";
+  var SESSION_NEW = "kai.newProfile";
+  function session(key, value) {
+    try {
+      if (value === void 0) return window.sessionStorage.getItem(key);
+      if (value === null) window.sessionStorage.removeItem(key);else window.sessionStorage.setItem(key, value);
+    } catch (e) {}
+    return null;
+  }
+  function avatar(p, cls) {
+    var initial = String(p.name || "?").trim().charAt(0).toUpperCase() || "?";
+    return h("div.avatar", {
+      cls: cls || "",
+      style: {
+        backgroundColor: p.color || COLORS[0]
+      },
+      text: initial
+    });
+  }
+  function switchProfile(id) {
+    setActiveProfile(id);
+    session(SESSION_PICKED, "1");
+    window.location.reload();
+  }
+  function askProfileName(title, initial, okLabel, onOk, onCancel) {
+    var err = h("div.modal-text.err-text");
+    var input = h("input.input", {
+      type: "text",
+      value: initial || "",
+      placeholder: t("Ex.: Ana, Pedro, Sala"),
+      maxlength: "20",
+      focusable: true,
+      "data-autofocus": ""
+    });
+    var submit = function submit() {
+      var name = String(input.value || "").trim();
+      if (!name) {
+        err.textContent = t("Digite um nome para o perfil.");
+        focus(input);
+        return;
+      }
+      var dup = profiles().some(function (p) {
+        return p.name.toLowerCase() === name.toLowerCase() && p.name !== initial;
+      });
+      if (dup) {
+        err.textContent = t("Já existe um perfil com esse nome.");
+        focus(input);
+        return;
+      }
+      close();
+      onOk(name);
+    };
+    input.__submit = submit;
+    var box = h("div.modal-box.center", null, [h("h3", {
+      text: title
+    }), h("div.modal-text", null, input), err, h("div.modal-actions", {
+      "data-group": ""
+    }, [h("div.btn.primary", {
+      focusable: true,
+      text: okLabel || t("Continuar"),
+      onSelect: submit
+    }), h("div.btn", {
+      focusable: true,
+      text: t("Cancelar"),
+      onSelect: function onSelect() {
+        return close(), onCancel && onCancel();
+      }
+    })])]);
+    var modal = h("div.modal", null, box);
+    document.getElementById("app").appendChild(modal);
+    var layer = pushLayer(modal, {
+      onBack: function onBack() {
+        return close(), onCancel && onCancel();
+      }
+    });
+    focusFirst(modal);
+    function close() {
+      popLayer(layer);
+      if (modal.parentNode) modal.parentNode.removeChild(modal);
+    }
+  }
+  function createProfile() {
+    askProfileName(t("Nome do novo perfil"), "", t("Criar perfil"), function (name) {
+      var p = addProfile(name);
+      session(SESSION_NEW, p.id);
+      switchProfile(p.id);
+    });
+  }
+  function isNewProfilePendingLogin() {
+    return session(SESSION_NEW) === activeProfile().id;
+  }
+  function clearNewProfileFlag() {
+    session(SESSION_NEW, null);
+  }
+  function needsPicker() {
+    return profiles().length > 1 && settings().askProfile && !session(SESSION_PICKED);
+  }
+  function showPicker(onPicked) {
+    var list2 = profiles();
+    var active = activeProfile();
+    var cards = list2.map(function (p) {
+      return h("div.profile-card", {
+        focusable: true,
+        "data-autofocus": p.id === active.id ? "" : null,
+        onSelect: function onSelect() {
+          return pick2(p.id);
+        }
+      }, [avatar(p, "big"), h("div.profile-name", {
+        text: p.name
+      })]);
+    });
+    cards.push(h("div.profile-card", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return createProfile();
+      }
+    }, [h("div.avatar.big.add", {
+      text: "+"
+    }), h("div.profile-name", {
+      text: t("Adicionar perfil")
+    })]));
+    var el = h("div.view.profile-picker", null, [h("div.boot-logo", {
+      html: "Stremio <b>Kai</b>"
+    }), h("h1", {
+      text: t("Quem está assistindo?")
+    }), h("div.profile-row", {
+      "data-group": ""
+    }, cards), h("p.profile-hint", {
+      text: t("Cada perfil tem sua própria conta Stremio, com histórico e biblioteca separados.")
+    })]);
+    document.getElementById("app").appendChild(el);
+    var layer = pushLayer(el, {
+      onBack: function onBack() {
+        return pick2(active.id);
+      }
+    });
+    focusFirst(el);
+    function pick2(id) {
+      setActiveProfile(id);
+      session(SESSION_PICKED, "1");
+      popLayer(layer);
+      if (el.parentNode) el.parentNode.removeChild(el);
+      onPicked();
+    }
+  }
+
+  // src/js/ui.js
+  var toastTimer = null;
+  function toast(msg, ms) {
+    var el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      return el.classList.remove("show");
+    }, ms || 3500);
+  }
+  function menu(title, options, opts) {
+    var o = opts || {};
+    var list2 = h("div.modal-list", {
+      "data-scroll-y": "",
+      "data-pad-y": "80"
+    });
+    options.forEach(function (opt) {
+      list2.appendChild(h("div.opt", {
+        focusable: true,
+        cls: opt.checked ? "checked" : "",
+        "data-autofocus": opt.checked ? "" : null,
+        onSelect: function onSelect() {
+          close();
+          if (opt.onSelect) opt.onSelect(opt.value);
+          if (o.onPick) o.onPick(opt.value, opt);
+        }
+      }, [opt.label, opt.sub ? h("small", {
+        text: opt.sub
+      }) : null]));
+    });
+    if (!options.length) list2.appendChild(h("div.modal-text", {
+      text: o.empty || t("Nada por aqui.")
+    }));
+    var box = h("div.modal-box", {
+      cls: o.center ? "center" : ""
+    }, [h("h3", {
+      text: title
+    }), list2]);
+    var modal = h("div.modal", null, box);
+    document.getElementById("app").appendChild(modal);
+    var layer = pushLayer(modal, {
+      onBack: function onBack() {
+        return close();
+      },
+      onKey: o.onKey
+    });
+    focusFirst(modal);
+    var closed = false;
+    function close() {
+      if (closed) return;
+      closed = true;
+      popLayer(layer);
+      if (modal.parentNode) modal.parentNode.removeChild(modal);
+      if (o.onClose) o.onClose();
+    }
+    return {
+      close: close,
+      el: modal
+    };
+  }
+  function confirmDialog(text, okLabel, onOk) {
+    var box = h("div.modal-box.center", null, [h("h3", {
+      text: text
+    }), h("div.modal-actions", null, [h("div.btn.primary", {
+      focusable: true,
+      "data-autofocus": "",
+      text: okLabel || "OK",
+      onSelect: function onSelect() {
+        return close(), onOk && onOk();
+      }
+    }), h("div.btn", {
+      focusable: true,
+      text: t("Cancelar"),
+      onSelect: function onSelect() {
+        return close();
+      }
+    })])]);
+    var modal = h("div.modal", null, box);
+    document.getElementById("app").appendChild(modal);
+    var layer = pushLayer(modal, {
+      onBack: function onBack() {
+        return close();
+      }
+    });
+    focusFirst(modal);
+    function close() {
+      popLayer(layer);
+      if (modal.parentNode) modal.parentNode.removeChild(modal);
+    }
+  }
+  var TABS = [{
+    id: "home",
+    label: "Início"
+  }, {
+    id: "search",
+    label: "Buscar"
+  }, {
+    id: "library",
+    label: "Biblioteca"
+  }, {
+    id: "collections",
+    label: "Coleções"
+  }, {
+    id: "calendar",
+    label: "Calendário"
+  }, {
+    id: "settings",
+    label: "Ajustes"
+  }];
+  function topbar(activeId, onTab) {
+    var clock = h("div.clock");
+    var tick = function tick() {
+      return clock.textContent = timeHM(/* @__PURE__ */new Date());
+    };
+    tick();
+    var timer = setInterval(tick, 2e4);
+    var bar = h("div.topbar", {
+      "data-group": ""
+    }, [h("div.brand", {
+      html: "Stremio <b>Kai</b>"
+    }), TABS.map(function (tab) {
+      return h("div.tab", {
+        focusable: true,
+        cls: tab.id === activeId ? "active" : "",
+        text: t(tab.label),
+        onSelect: function onSelect() {
+          return onTab(tab.id);
+        }
+      });
+    }), h("div.spacer"), profileButton(onTab), clock]);
+    bar.__destroy = function () {
+      return clearInterval(timer);
+    };
+    return bar;
+  }
+  function profileButton(onTab) {
+    var chip = h("div.profile-chip", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return profileMenu(onTab);
+      }
+    });
+    fillChip(chip);
+    return chip;
+  }
+  function fillChip(chip) {
+    var p = activeProfile();
+    clear(chip);
+    chip.appendChild(avatar(p, "small"));
+    chip.appendChild(h("span", {
+      text: p.name
+    }));
+  }
+  function refreshProfileChips() {
+    Array.prototype.forEach.call(document.querySelectorAll(".profile-chip"), fillChip);
+  }
+  function profileMenu(onTab) {
+    var active = activeProfile();
+    var opts = profiles().map(function (p) {
+      return {
+        label: p.name,
+        sub: p.id === active.id ? t("Perfil atual") : t("Trocar para este perfil"),
+        value: p.id,
+        checked: p.id === active.id
+      };
+    });
+    opts.push({
+      label: t("+ Adicionar perfil"),
+      sub: t("Com outra conta Stremio (histórico separado)"),
+      value: "__add"
+    });
+    opts.push({
+      label: t("Gerenciar perfis"),
+      sub: t("Nome, cor, apagar"),
+      value: "__manage"
+    });
+    menu(t("Perfis"), opts, {
+      onPick: function onPick(v) {
+        if (v === "__add") createProfile();else if (v === "__manage") onTab("settings");else if (v !== active.id) switchProfile(v);
+      }
+    });
+  }
+  function timeHM(d) {
+    return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+  }
+  function fmtTime(sec) {
+    if (!isFinite(sec) || sec < 0) sec = 0;
+    var s = Math.floor(sec % 60);
+    var m = Math.floor(sec / 60 % 60);
+    var hh = Math.floor(sec / 3600);
+    return (hh ? hh + ":" + ("0" + m).slice(-2) : m) + ":" + ("0" + s).slice(-2);
+  }
+  function card(item2, opts) {
+    var o = opts || {};
+    var wrap = h("div.poster-wrap");
+    var src = o.wide ? smallBackground(o.image || item2.background || item2.poster) : smallPoster(item2.poster);
+    if (src) {
+      var im = h("img", {
+        alt: ""
+      });
+      im.setAttribute("data-lazy", src);
+      im.onerror = function () {
+        im.style.display = "none";
+        wrap.appendChild(h("div.ph", {
+          text: item2.name || ""
+        }));
+      };
+      wrap.appendChild(im);
+    } else wrap.appendChild(h("div.ph", {
+      text: item2.name || ""
+    }));
+    if (o.progress) wrap.appendChild(h("div.progress", null, h("i", {
+      style: {
+        width: Math.round(o.progress * 100) + "%"
+      }
+    })));
+    if (o.badge) wrap.appendChild(h("div.badge", {
+      text: o.badge
+    }));
+    return h("div.card", {
+      focusable: true,
+      cls: o.wide ? "wide" : "",
+      onSelect: o.onSelect,
+      onFocus: o.onFocus
+    }, [wrap, h("div.name", {
+      text: o.title || item2.name || ""
+    })]);
+  }
+  function spinnerLine(text) {
+    return h("div.loading-line", null, [h("div.spinner.small"), text]);
+  }
+
+  // src/js/lib/phone.js
+  var PORT = 8095;
+  function fetchUrl(url2) {
+    return "http://127.0.0.1:" + PORT + "/api/fetch?url=" + encodeURIComponent(url2);
+  }
+  var BASE = "http://127.0.0.1:" + PORT;
+  var ENTER = 13;
+  var last = 0;
+  var started = false;
+  function request2(url2, timeout) {
+    return new Promise(function (resolve, reject) {
+      var x = new XMLHttpRequest();
+      x.open("GET", url2);
+      x.timeout = timeout;
+      x.onload = function () {
+        try {
+          resolve(x.status === 200 ? JSON.parse(x.responseText) : null);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      x.onerror = x.ontimeout = function () {
+        return reject(new Error("remote service unreachable"));
+      };
+      x.send();
+    });
+  }
+  function fireKey(code) {
+    var e = document.createEvent("Event");
+    e.initEvent("keydown", true, true);
+    e.keyCode = code;
+    e.which = code;
+    (document.activeElement || document.body).dispatchEvent(e);
+  }
+  function typeText(text, submit) {
+    var el = document.activeElement;
+    if (!el || el.tagName !== "INPUT" && el.tagName !== "TEXTAREA") {
+      toast(t("Selecione um campo de texto na TV primeiro."), 4e3);
+      return;
+    }
+    el.value = text;
+    var ev = document.createEvent("Event");
+    ev.initEvent("input", true, true);
+    el.dispatchEvent(ev);
+    if (submit) fireKey(ENTER);
+  }
+  function nowPlaying(state) {
+    var x = new XMLHttpRequest();
+    x.open("POST", BASE + "/api/state");
+    x.onerror = function () {};
+    x.send(JSON.stringify(state || null));
+  }
+  function browse(data) {
+    var x = new XMLHttpRequest();
+    x.open("POST", BASE + "/api/browse");
+    x.onerror = function () {};
+    x.send(JSON.stringify(data));
+  }
+  var openHandler = null;
+  function onOpen(fn) {
+    openHandler = fn;
+  }
+  var seekHandler = null;
+  function onSeek(fn) {
+    seekHandler = fn;
+  }
+  var searchHandler = null;
+  function onSearch(fn) {
+    searchHandler = fn;
+  }
+  function handle(ev) {
+    if (ev.type === "key") fireKey(ev.code);else if (ev.type === "text") typeText(ev.text, ev.submit);else if (ev.type === "search" && searchHandler && ev.text) searchHandler(ev.text);else if (ev.type === "seek" && seekHandler) seekHandler(ev.to);else if (ev.type === "open" && openHandler && ev.item) openHandler(ev);
+  }
+  function poll(wait) {
+    setTimeout(function () {
+      request2(BASE + "/api/events?since=" + last, 35e3).then(function (r) {
+        if (r) {
+          (r.events || []).forEach(handle);
+          last = r.last || last;
+        }
+        poll(0);
+      }).catch(function () {
+        return poll(Math.min((wait || 2e3) * 2, 6e4));
+      });
+    }, wait);
+  }
+  function startService() {
+    var m = location.pathname.match(/\/module\/([^/]+)\//);
+    if (!m || typeof WebSocket === "undefined") return false;
+    try {
+      var ws = new WebSocket("ws://127.0.0.1:8081");
+      ws.onopen = function () {
+        ws.send(JSON.stringify({
+          type: 6,
+          payload: {
+            fullName: decodeURIComponent(m[1]),
+            serviceFile: "dist/remote-service.js"
+          }
+        }));
+        setTimeout(function () {
+          return ws.close();
+        }, 1e3);
+      };
+      ws.onerror = function () {};
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function start() {
+    if (started) return;
+    started = true;
+    request2(BASE + "/api/info", 3e3).then(function (r) {
+      if (r) last = r.last || 0;
+    }).catch(function () {
+      setTimeout(function () {
+        return request2(BASE + "/api/info", 4e3).catch(function () {
+          return startService();
+        });
+      }, 15e3);
+    }).then(function () {
+      return poll(0);
+    });
+  }
+  function info() {
+    var get2 = function get2() {
+      return request2(BASE + "/api/info", 4e3).then(function (r) {
+        return r && r.ip ? {
+          ip: r.ip,
+          port: r.port,
+          pin: r.pin,
+          url: "http://" + r.ip + ":" + r.port + "/#pin=" + r.pin
+        } : null;
+      }).catch(function () {
+        return null;
+      });
+    };
+    return get2().then(function (i) {
+      return i || !startService() ? i : new Promise(function (r) {
+        return setTimeout(r, 5e3);
+      }).then(get2);
+    });
+  }
+  function qrImage(text, size) {
+    var qr = (0, import_qrcode_generator.default)(0, "M");
+    qr.addData(text);
+    qr.make();
+    var cell = Math.max(2, Math.floor(size / (qr.getModuleCount() + 8)));
+    return qr.createDataURL(cell, cell * 4);
+  }
+
   // src/js/lib/luna.js
   var pending = /* @__PURE__ */new Set();
   function hasLuna() {
@@ -7119,11 +7653,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return getJSON(url2, Object.assign({
       quiet: true
     }, opts)).catch(function (e) {
-      var p = corsProxyUrl(url2);
-      if (!p || e.status && e.status !== 0) throw e;
-      return getJSON(p, Object.assign({
+      if (e.status && e.status !== 0) throw e;
+      return getJSON(fetchUrl(url2), Object.assign({
         quiet: true
-      }, opts));
+      }, opts)).catch(function (e2) {
+        var p = corsProxyUrl(url2);
+        if (!p || e2.status && e2.status !== 0) throw e2;
+        return getJSON(p, Object.assign({
+          quiet: true
+        }, opts));
+      });
     });
   }
   function needsServer(stream) {
@@ -7584,386 +8123,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function progress(videoId) {
     var v = all()[videoId];
     return v && v < 1 ? v : 0;
-  }
-
-  // src/js/views/profiles.js
-  var SESSION_PICKED = "kai.profilePicked";
-  var SESSION_NEW = "kai.newProfile";
-  function session(key, value) {
-    try {
-      if (value === void 0) return window.sessionStorage.getItem(key);
-      if (value === null) window.sessionStorage.removeItem(key);else window.sessionStorage.setItem(key, value);
-    } catch (e) {}
-    return null;
-  }
-  function avatar(p, cls) {
-    var initial = String(p.name || "?").trim().charAt(0).toUpperCase() || "?";
-    return h("div.avatar", {
-      cls: cls || "",
-      style: {
-        backgroundColor: p.color || COLORS[0]
-      },
-      text: initial
-    });
-  }
-  function switchProfile(id) {
-    setActiveProfile(id);
-    session(SESSION_PICKED, "1");
-    window.location.reload();
-  }
-  function askProfileName(title, initial, okLabel, onOk, onCancel) {
-    var err = h("div.modal-text.err-text");
-    var input = h("input.input", {
-      type: "text",
-      value: initial || "",
-      placeholder: t("Ex.: Ana, Pedro, Sala"),
-      maxlength: "20",
-      focusable: true,
-      "data-autofocus": ""
-    });
-    var submit = function submit() {
-      var name = String(input.value || "").trim();
-      if (!name) {
-        err.textContent = t("Digite um nome para o perfil.");
-        focus(input);
-        return;
-      }
-      var dup = profiles().some(function (p) {
-        return p.name.toLowerCase() === name.toLowerCase() && p.name !== initial;
-      });
-      if (dup) {
-        err.textContent = t("Já existe um perfil com esse nome.");
-        focus(input);
-        return;
-      }
-      close();
-      onOk(name);
-    };
-    input.__submit = submit;
-    var box = h("div.modal-box.center", null, [h("h3", {
-      text: title
-    }), h("div.modal-text", null, input), err, h("div.modal-actions", {
-      "data-group": ""
-    }, [h("div.btn.primary", {
-      focusable: true,
-      text: okLabel || t("Continuar"),
-      onSelect: submit
-    }), h("div.btn", {
-      focusable: true,
-      text: t("Cancelar"),
-      onSelect: function onSelect() {
-        return close(), onCancel && onCancel();
-      }
-    })])]);
-    var modal = h("div.modal", null, box);
-    document.getElementById("app").appendChild(modal);
-    var layer = pushLayer(modal, {
-      onBack: function onBack() {
-        return close(), onCancel && onCancel();
-      }
-    });
-    focusFirst(modal);
-    function close() {
-      popLayer(layer);
-      if (modal.parentNode) modal.parentNode.removeChild(modal);
-    }
-  }
-  function createProfile() {
-    askProfileName(t("Nome do novo perfil"), "", t("Criar perfil"), function (name) {
-      var p = addProfile(name);
-      session(SESSION_NEW, p.id);
-      switchProfile(p.id);
-    });
-  }
-  function isNewProfilePendingLogin() {
-    return session(SESSION_NEW) === activeProfile().id;
-  }
-  function clearNewProfileFlag() {
-    session(SESSION_NEW, null);
-  }
-  function needsPicker() {
-    return profiles().length > 1 && settings().askProfile && !session(SESSION_PICKED);
-  }
-  function showPicker(onPicked) {
-    var list2 = profiles();
-    var active = activeProfile();
-    var cards = list2.map(function (p) {
-      return h("div.profile-card", {
-        focusable: true,
-        "data-autofocus": p.id === active.id ? "" : null,
-        onSelect: function onSelect() {
-          return pick2(p.id);
-        }
-      }, [avatar(p, "big"), h("div.profile-name", {
-        text: p.name
-      })]);
-    });
-    cards.push(h("div.profile-card", {
-      focusable: true,
-      onSelect: function onSelect() {
-        return createProfile();
-      }
-    }, [h("div.avatar.big.add", {
-      text: "+"
-    }), h("div.profile-name", {
-      text: t("Adicionar perfil")
-    })]));
-    var el = h("div.view.profile-picker", null, [h("div.boot-logo", {
-      html: "Stremio <b>Kai</b>"
-    }), h("h1", {
-      text: t("Quem está assistindo?")
-    }), h("div.profile-row", {
-      "data-group": ""
-    }, cards), h("p.profile-hint", {
-      text: t("Cada perfil tem sua própria conta Stremio, com histórico e biblioteca separados.")
-    })]);
-    document.getElementById("app").appendChild(el);
-    var layer = pushLayer(el, {
-      onBack: function onBack() {
-        return pick2(active.id);
-      }
-    });
-    focusFirst(el);
-    function pick2(id) {
-      setActiveProfile(id);
-      session(SESSION_PICKED, "1");
-      popLayer(layer);
-      if (el.parentNode) el.parentNode.removeChild(el);
-      onPicked();
-    }
-  }
-
-  // src/js/ui.js
-  var toastTimer = null;
-  function toast(msg, ms) {
-    var el = document.getElementById("toast");
-    el.textContent = msg;
-    el.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () {
-      return el.classList.remove("show");
-    }, ms || 3500);
-  }
-  function menu(title, options, opts) {
-    var o = opts || {};
-    var list2 = h("div.modal-list", {
-      "data-scroll-y": "",
-      "data-pad-y": "80"
-    });
-    options.forEach(function (opt) {
-      list2.appendChild(h("div.opt", {
-        focusable: true,
-        cls: opt.checked ? "checked" : "",
-        "data-autofocus": opt.checked ? "" : null,
-        onSelect: function onSelect() {
-          close();
-          if (opt.onSelect) opt.onSelect(opt.value);
-          if (o.onPick) o.onPick(opt.value, opt);
-        }
-      }, [opt.label, opt.sub ? h("small", {
-        text: opt.sub
-      }) : null]));
-    });
-    if (!options.length) list2.appendChild(h("div.modal-text", {
-      text: o.empty || t("Nada por aqui.")
-    }));
-    var box = h("div.modal-box", {
-      cls: o.center ? "center" : ""
-    }, [h("h3", {
-      text: title
-    }), list2]);
-    var modal = h("div.modal", null, box);
-    document.getElementById("app").appendChild(modal);
-    var layer = pushLayer(modal, {
-      onBack: function onBack() {
-        return close();
-      },
-      onKey: o.onKey
-    });
-    focusFirst(modal);
-    var closed = false;
-    function close() {
-      if (closed) return;
-      closed = true;
-      popLayer(layer);
-      if (modal.parentNode) modal.parentNode.removeChild(modal);
-      if (o.onClose) o.onClose();
-    }
-    return {
-      close: close,
-      el: modal
-    };
-  }
-  function confirmDialog(text, okLabel, onOk) {
-    var box = h("div.modal-box.center", null, [h("h3", {
-      text: text
-    }), h("div.modal-actions", null, [h("div.btn.primary", {
-      focusable: true,
-      "data-autofocus": "",
-      text: okLabel || "OK",
-      onSelect: function onSelect() {
-        return close(), onOk && onOk();
-      }
-    }), h("div.btn", {
-      focusable: true,
-      text: t("Cancelar"),
-      onSelect: function onSelect() {
-        return close();
-      }
-    })])]);
-    var modal = h("div.modal", null, box);
-    document.getElementById("app").appendChild(modal);
-    var layer = pushLayer(modal, {
-      onBack: function onBack() {
-        return close();
-      }
-    });
-    focusFirst(modal);
-    function close() {
-      popLayer(layer);
-      if (modal.parentNode) modal.parentNode.removeChild(modal);
-    }
-  }
-  var TABS = [{
-    id: "home",
-    label: "Início"
-  }, {
-    id: "search",
-    label: "Buscar"
-  }, {
-    id: "library",
-    label: "Biblioteca"
-  }, {
-    id: "collections",
-    label: "Coleções"
-  }, {
-    id: "calendar",
-    label: "Calendário"
-  }, {
-    id: "settings",
-    label: "Ajustes"
-  }];
-  function topbar(activeId, onTab) {
-    var clock = h("div.clock");
-    var tick = function tick() {
-      return clock.textContent = timeHM(/* @__PURE__ */new Date());
-    };
-    tick();
-    var timer = setInterval(tick, 2e4);
-    var bar = h("div.topbar", {
-      "data-group": ""
-    }, [h("div.brand", {
-      html: "Stremio <b>Kai</b>"
-    }), TABS.map(function (tab) {
-      return h("div.tab", {
-        focusable: true,
-        cls: tab.id === activeId ? "active" : "",
-        text: t(tab.label),
-        onSelect: function onSelect() {
-          return onTab(tab.id);
-        }
-      });
-    }), h("div.spacer"), profileButton(onTab), clock]);
-    bar.__destroy = function () {
-      return clearInterval(timer);
-    };
-    return bar;
-  }
-  function profileButton(onTab) {
-    var chip = h("div.profile-chip", {
-      focusable: true,
-      onSelect: function onSelect() {
-        return profileMenu(onTab);
-      }
-    });
-    fillChip(chip);
-    return chip;
-  }
-  function fillChip(chip) {
-    var p = activeProfile();
-    clear(chip);
-    chip.appendChild(avatar(p, "small"));
-    chip.appendChild(h("span", {
-      text: p.name
-    }));
-  }
-  function refreshProfileChips() {
-    Array.prototype.forEach.call(document.querySelectorAll(".profile-chip"), fillChip);
-  }
-  function profileMenu(onTab) {
-    var active = activeProfile();
-    var opts = profiles().map(function (p) {
-      return {
-        label: p.name,
-        sub: p.id === active.id ? t("Perfil atual") : t("Trocar para este perfil"),
-        value: p.id,
-        checked: p.id === active.id
-      };
-    });
-    opts.push({
-      label: t("+ Adicionar perfil"),
-      sub: t("Com outra conta Stremio (histórico separado)"),
-      value: "__add"
-    });
-    opts.push({
-      label: t("Gerenciar perfis"),
-      sub: t("Nome, cor, apagar"),
-      value: "__manage"
-    });
-    menu(t("Perfis"), opts, {
-      onPick: function onPick(v) {
-        if (v === "__add") createProfile();else if (v === "__manage") onTab("settings");else if (v !== active.id) switchProfile(v);
-      }
-    });
-  }
-  function timeHM(d) {
-    return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-  }
-  function fmtTime(sec) {
-    if (!isFinite(sec) || sec < 0) sec = 0;
-    var s = Math.floor(sec % 60);
-    var m = Math.floor(sec / 60 % 60);
-    var hh = Math.floor(sec / 3600);
-    return (hh ? hh + ":" + ("0" + m).slice(-2) : m) + ":" + ("0" + s).slice(-2);
-  }
-  function card(item2, opts) {
-    var o = opts || {};
-    var wrap = h("div.poster-wrap");
-    var src = o.wide ? smallBackground(o.image || item2.background || item2.poster) : smallPoster(item2.poster);
-    if (src) {
-      var im = h("img", {
-        alt: ""
-      });
-      im.setAttribute("data-lazy", src);
-      im.onerror = function () {
-        im.style.display = "none";
-        wrap.appendChild(h("div.ph", {
-          text: item2.name || ""
-        }));
-      };
-      wrap.appendChild(im);
-    } else wrap.appendChild(h("div.ph", {
-      text: item2.name || ""
-    }));
-    if (o.progress) wrap.appendChild(h("div.progress", null, h("i", {
-      style: {
-        width: Math.round(o.progress * 100) + "%"
-      }
-    })));
-    if (o.badge) wrap.appendChild(h("div.badge", {
-      text: o.badge
-    }));
-    return h("div.card", {
-      focusable: true,
-      cls: o.wide ? "wide" : "",
-      onSelect: o.onSelect,
-      onFocus: o.onFocus
-    }, [wrap, h("div.name", {
-      text: o.title || item2.name || ""
-    })]);
-  }
-  function spinnerLine(text) {
-    return h("div.loading-line", null, [h("div.spinner.small"), text]);
   }
 
   // src/js/router.js
@@ -8724,155 +8883,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).join(", "));
       return segs;
     });
-  }
-
-  // src/js/lib/phone.js
-  var import_qrcode_generator = __toESM(require_qrcode(), 1);
-  var PORT = 8095;
-  var BASE = "http://127.0.0.1:" + PORT;
-  var ENTER = 13;
-  var last = 0;
-  var started = false;
-  function request2(url2, timeout) {
-    return new Promise(function (resolve, reject) {
-      var x = new XMLHttpRequest();
-      x.open("GET", url2);
-      x.timeout = timeout;
-      x.onload = function () {
-        try {
-          resolve(x.status === 200 ? JSON.parse(x.responseText) : null);
-        } catch (e) {
-          reject(e);
-        }
-      };
-      x.onerror = x.ontimeout = function () {
-        return reject(new Error("remote service unreachable"));
-      };
-      x.send();
-    });
-  }
-  function fireKey(code) {
-    var e = document.createEvent("Event");
-    e.initEvent("keydown", true, true);
-    e.keyCode = code;
-    e.which = code;
-    (document.activeElement || document.body).dispatchEvent(e);
-  }
-  function typeText(text, submit) {
-    var el = document.activeElement;
-    if (!el || el.tagName !== "INPUT" && el.tagName !== "TEXTAREA") {
-      toast(t("Selecione um campo de texto na TV primeiro."), 4e3);
-      return;
-    }
-    el.value = text;
-    var ev = document.createEvent("Event");
-    ev.initEvent("input", true, true);
-    el.dispatchEvent(ev);
-    if (submit) fireKey(ENTER);
-  }
-  function nowPlaying(state) {
-    var x = new XMLHttpRequest();
-    x.open("POST", BASE + "/api/state");
-    x.onerror = function () {};
-    x.send(JSON.stringify(state || null));
-  }
-  function browse(data) {
-    var x = new XMLHttpRequest();
-    x.open("POST", BASE + "/api/browse");
-    x.onerror = function () {};
-    x.send(JSON.stringify(data));
-  }
-  var openHandler = null;
-  function onOpen(fn) {
-    openHandler = fn;
-  }
-  var seekHandler = null;
-  function onSeek(fn) {
-    seekHandler = fn;
-  }
-  var searchHandler = null;
-  function onSearch(fn) {
-    searchHandler = fn;
-  }
-  function handle(ev) {
-    if (ev.type === "key") fireKey(ev.code);else if (ev.type === "text") typeText(ev.text, ev.submit);else if (ev.type === "search" && searchHandler && ev.text) searchHandler(ev.text);else if (ev.type === "seek" && seekHandler) seekHandler(ev.to);else if (ev.type === "open" && openHandler && ev.item) openHandler(ev);
-  }
-  function poll(wait) {
-    setTimeout(function () {
-      request2(BASE + "/api/events?since=" + last, 35e3).then(function (r) {
-        if (r) {
-          (r.events || []).forEach(handle);
-          last = r.last || last;
-        }
-        poll(0);
-      }).catch(function () {
-        return poll(Math.min((wait || 2e3) * 2, 6e4));
-      });
-    }, wait);
-  }
-  function startService() {
-    var m = location.pathname.match(/\/module\/([^/]+)\//);
-    if (!m || typeof WebSocket === "undefined") return false;
-    try {
-      var ws = new WebSocket("ws://127.0.0.1:8081");
-      ws.onopen = function () {
-        ws.send(JSON.stringify({
-          type: 6,
-          payload: {
-            fullName: decodeURIComponent(m[1]),
-            serviceFile: "dist/remote-service.js"
-          }
-        }));
-        setTimeout(function () {
-          return ws.close();
-        }, 1e3);
-      };
-      ws.onerror = function () {};
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  function start() {
-    if (started) return;
-    started = true;
-    request2(BASE + "/api/info", 3e3).then(function (r) {
-      if (r) last = r.last || 0;
-    }).catch(function () {
-      setTimeout(function () {
-        return request2(BASE + "/api/info", 4e3).catch(function () {
-          return startService();
-        });
-      }, 15e3);
-    }).then(function () {
-      return poll(0);
-    });
-  }
-  function info() {
-    var get2 = function get2() {
-      return request2(BASE + "/api/info", 4e3).then(function (r) {
-        return r && r.ip ? {
-          ip: r.ip,
-          port: r.port,
-          pin: r.pin,
-          url: "http://" + r.ip + ":" + r.port + "/#pin=" + r.pin
-        } : null;
-      }).catch(function () {
-        return null;
-      });
-    };
-    return get2().then(function (i) {
-      return i || !startService() ? i : new Promise(function (r) {
-        return setTimeout(r, 5e3);
-      }).then(get2);
-    });
-  }
-  function qrImage(text, size) {
-    var qr = (0, import_qrcode_generator.default)(0, "M");
-    qr.addData(text);
-    qr.make();
-    var cell = Math.max(2, Math.floor(size / (qr.getModuleCount() + 8)));
-    return qr.createDataURL(cell, cell * 4);
   }
 
   // src/js/lib/avvideo.js
@@ -13518,7 +13528,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-13T11:23:45.580Z";
+  var BUILD = "2026-11-13T11:51:19.174Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

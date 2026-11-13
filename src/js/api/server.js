@@ -1,6 +1,7 @@
 // Servidor de streaming do Stremio (stremio-service) rodando num PC da rede, porta 11470.
 // Ele baixa torrents e entrega à TV por HTTP; também expõe /tracks para as faixas embutidas.
 import { getJSON, postJSON } from '../lib/http.js';
+import { fetchUrl as phoneFetchUrl } from '../lib/phone.js';
 import * as store from '../lib/store.js';
 import { getTvIp } from '../lib/luna.js';
 import { t } from '../lib/i18n.js';
@@ -144,9 +145,13 @@ export function corsProxyUrl(url) {
 // Tenta direto; se a rede/CORS falhar e houver servidor no PC, tenta pelo proxy.
 export function getJSONViaProxy(url, opts) {
   return getJSON(url, Object.assign({ quiet: true }, opts)).catch((e) => {
-    const p = corsProxyUrl(url);
-    if (!p || (e.status && e.status !== 0)) throw e;
-    return getJSON(p, Object.assign({ quiet: true }, opts));
+    if (e.status && e.status !== 0) throw e;
+    // CORS blocked: ask the service on the TV (no PC needed), then the PC server if there is one.
+    return getJSON(phoneFetchUrl(url), Object.assign({ quiet: true }, opts)).catch((e2) => {
+      const p = corsProxyUrl(url);
+      if (!p || (e2.status && e2.status !== 0)) throw e2;
+      return getJSON(p, Object.assign({ quiet: true }, opts));
+    });
   });
 }
 
