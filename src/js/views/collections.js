@@ -7,7 +7,7 @@ import * as store from '../lib/store.js';
 import * as stremio from '../api/stremio.js';
 import * as extras from '../api/extras.js';
 import * as watched from '../lib/watched.js';
-import { topbar, card, spinnerLine, toast, menu } from '../ui.js';
+import { topbar, card, spinnerLine, toast, menu, confirmDialog, promptText } from '../ui.js';
 import * as router from '../router.js';
 import { openDetails } from './details.js';
 import { t, current } from '../lib/i18n.js';
@@ -51,6 +51,138 @@ function favEntries() {
       return m ? { f: { id: x.id, name: x.name, ar: x.name, items: [[x.poster]] }, tmdbId: Number(m[1]) } : null;
     })
     .filter(Boolean);
+}
+
+// ---------- Collections the user makes (per profile), like Nuvio's folders ----------
+const MINE_KEY = 'myCollections';
+
+export function myCollections() {
+  return store.get(MINE_KEY, []) || [];
+}
+
+function saveMine(list) {
+  store.set(MINE_KEY, list);
+}
+
+function newCollection(name, first) {
+  const list = myCollections();
+  const c = { id: 'my' + Date.now().toString(36), name: name, items: first ? [first] : [] };
+  list.push(c);
+  saveMine(list);
+  return c;
+}
+
+function toggleInCollection(id, item) {
+  const list = myCollections();
+  const c = list.find((x) => x.id === id);
+  if (!c) return false;
+  const i = c.items.findIndex((x) => x.id === item.id);
+  if (i >= 0) c.items.splice(i, 1);
+  else c.items.push(item);
+  saveMine(list);
+  return i < 0;
+}
+
+// Details page "Collection" button: built-in/TMDB collections plus the user's own.
+export function collectionMenu(meta, tmdbCollection) {
+  const item = { id: meta.id, type: meta.type, name: meta.name, poster: meta.poster || '' };
+  const opts = [];
+  franchisesOf(meta.id).forEach((f) => opts.push({ label: displayName(f), sub: t('{n} títulos', { n: f.items.length }), value: { f: f } }));
+  if (tmdbCollection && !franchisesOf(meta.id).some((f) => normalize(f.name) === normalize(tmdbCollection.name))) {
+    opts.push({ label: tmdbCollection.name, sub: 'TMDB', value: { tmdb: tmdbCollection.id } });
+  }
+  myCollections().forEach((c) => {
+    const inside = c.items.some((x) => x.id === meta.id);
+    opts.push({ label: (inside ? '✓ ' : '+ ') + c.name, sub: inside ? t('Toque para tirar desta coleção') : t('Adicionar a esta coleção'), value: { mine: c.id } });
+  });
+  opts.push({ label: '+ ' + t('Nova coleção...'), value: { create: true } });
+  menu(t('Coleções'), opts, {
+    onPick: (v) => {
+      if (v.f) return openFranchise(v.f);
+      if (v.tmdb) return openTmdbCollection(v.tmdb);
+      if (v.mine) {
+        const c = myCollections().find((x) => x.id === v.mine);
+        const added = toggleInCollection(v.mine, item);
+        return toast(added ? t('Adicionado a "{name}"', { name: c.name }) : t('Removido de "{name}"', { name: c.name }));
+      }
+      promptText(t('Nome da nova coleção'), '', t('Ex.: Para ver no fim de semana'), (name) => {
+        newCollection(name, item);
+        toast(t('Coleção "{name}" criada', { name: name }));
+      });
+    },
+  });
+}
+
+function MyCollectionView(id) {
+  const el = h('div.view');
+  const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
+  const head = h('div.franchise-head');
+  const filters = h('div.filters', { 'data-group': '' });
+  const grid = h('div.grid');
+  scroller.appendChild(head);
+  scroller.appendChild(filters);
+  scroller.appendChild(grid);
+  el.appendChild(scroller);
+
+  function render() {
+    const c = myCollections().find((x) => x.id === id);
+    if (!c) return router.pop();
+    clear(head);
+    head.appendChild(h('h1', { text: c.name }));
+    head.appendChild(h('div.franchise-sub', { text: t('{n} títulos', { n: c.items.length }) + '  ·  ' + t('Coleção sua') }));
+    clear(filters);
+    filters.appendChild(
+      h('div.chip', {
+        focusable: true,
+        text: t('Renomear'),
+        onSelect: () =>
+          promptText(t('Renomear'), c.name, '', (name) => {
+            const list = myCollections();
+            const x = list.find((y) => y.id === id);
+            if (x) x.name = name;
+            saveMine(list);
+            render();
+          }),
+      })
+    );
+    filters.appendChild(
+      h('div.chip', {
+        focusable: true,
+        text: t('Apagar coleção'),
+        onSelect: () =>
+          confirmDialog(t('Apagar a coleção "{name}"?', { name: c.name }), t('Apagar'), () => {
+            saveMine(myCollections().filter((x) => x.id !== id));
+            router.pop();
+          }),
+      })
+    );
+    clear(grid);
+    c.items.forEach((it) =>
+      grid.appendChild(
+        card(
+          { id: it.id, name: it.name, poster: it.poster || POSTER(it.id) },
+          {
+            badge: watched.isWatched(it.id) ? '✓' : '',
+            onSelect: () =>
+              menu(it.name, [
+                { label: t('Abrir'), value: 'open' },
+                { label: t('Tirar desta coleção'), value: 'remove' },
+              ], {
+                onPick: (v) => {
+                  if (v === 'open') return openDetails(it.type, it.id);
+                  toggleInCollection(id, it);
+                  render();
+                },
+              }),
+          }
+        )
+      )
+    );
+    if (!c.items.length) grid.appendChild(h('div.hint', { text: t('Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.') }));
+    loadVisibleImages(el, 400);
+  }
+  render();
+  return { el: el, onShow: () => render() };
 }
 
 function isSeriesItem(it) {
@@ -135,11 +267,13 @@ export function CollectionsView() {
   const bar = topbar('collections', router.goTab);
   const searchBox = h('div.search-box');
   const results = h('div');
+  const mineBox = h('div');
   const favBox = h('div');
   const grid = h('div');
   scroller.appendChild(bar);
   scroller.appendChild(searchBox);
   scroller.appendChild(results);
+  scroller.appendChild(mineBox);
   scroller.appendChild(favBox);
   scroller.appendChild(h('div.row-title', { text: t('Coleções') }));
   scroller.appendChild(grid);
@@ -194,7 +328,35 @@ export function CollectionsView() {
     );
   }
 
+  function renderMine() {
+    clear(mineBox);
+    mineBox.appendChild(h('div.row-title', { text: t('Minhas coleções') }));
+    const g = h('div.grid.fav-grid');
+    myCollections().forEach((c) => {
+      const first = c.items[0];
+      g.appendChild(
+        card(
+          { name: c.name, poster: first ? first.poster || POSTER(first.id) : '' },
+          { badge: String(c.items.length), onSelect: () => router.push(MyCollectionView(c.id)) }
+        )
+      );
+    });
+    g.appendChild(
+      h('div.card.see-all', {
+        focusable: true,
+        onSelect: () =>
+          promptText(t('Nome da nova coleção'), '', t('Ex.: Para ver no fim de semana'), (name) => {
+            const c = newCollection(name);
+            renderMine();
+            router.push(MyCollectionView(c.id));
+          }),
+      }, [h('div.poster-wrap', null, h('div.see-all-label', null, [h('b', { text: '+' }), t('Nova coleção')])), h('div.name', { text: '' })])
+    );
+    mineBox.appendChild(g);
+  }
+
   function renderGrid() {
+    renderMine();
     clear(favBox);
     const pinned = favEntries();
     if (pinned.length) {

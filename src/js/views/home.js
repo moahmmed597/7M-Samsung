@@ -14,6 +14,9 @@ import * as phone from '../lib/phone.js';
 import * as store from '../lib/store.js';
 import { CatalogView, canPage } from './catalog.js';
 import { t, epLabel } from '../lib/i18n.js';
+import * as homeRows from '../lib/homeRows.js';
+import * as mdblistRows from '../api/mdblistRows.js';
+import { trailerIds } from './trailer.js';
 
 const ROTATE_MS = 8000;
 
@@ -150,7 +153,7 @@ export function HomeView() {
 
   function renderContinue() {
     clear(cwRow);
-    const items = stremio.continueWatching().slice(0, 20);
+    const items = sortContinue(stremio.continueWatching()).slice(0, 20);
     if (!items.length) {
       cwRow.style.display = 'none';
       return;
@@ -214,7 +217,8 @@ export function HomeView() {
       .load()
       .then(() => {
         clear(rows);
-        const cats = addons.boardCatalogs();
+        // Add-on catalogs plus MDBList lists, in the order the user chose (Settings → Home rows).
+        const cats = homeRows.visible(addons.boardCatalogs().concat(mdblistRows.boardEntries()));
         if (!cats.length) rows.appendChild(h('div.row-empty', { text: t('Nenhum catálogo. Entre na sua conta em Ajustes.') }));
         pending = cats.map((c) => Object.assign(buildRow(c, rows), { state: 'idle' }));
         loadNearby();
@@ -264,6 +268,20 @@ export function HomeView() {
   return view;
 }
 
+// Continue watching order (Settings → Home): recent (default), almost finished, or A–Z.
+export const CW_SORTS = [
+  { id: 'recent', label: 'Assistidos por último' },
+  { id: 'progress', label: 'Quase terminados primeiro' },
+  { id: 'name', label: 'Nome (A–Z)' },
+];
+function sortContinue(list) {
+  const mode = store.settings().cwSort;
+  const frac = (it) => (it.state && it.state.duration ? it.state.timeOffset / it.state.duration : 0);
+  if (mode === 'progress') return list.slice().sort((a, b) => frac(b) - frac(a));
+  if (mode === 'name') return list.slice().sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+  return list;
+}
+
 function episodeLabel(videoId, metaId) {
   if (!videoId || videoId === metaId) return '';
   const m = String(videoId).match(/:(\d+):(\d+)$/);
@@ -274,14 +292,14 @@ const ROW_LIMIT = 20;
 
 function buildRow(entry, parent) {
   const row = h('div.row', { 'data-anchor': '30' });
-  const title = h('div.row-title', null, [entry.catalog.name || entry.catalog.id, h('small', { text: typeLabel(entry.catalog.type) + ' · ' + (entry.addon.manifest.name || '') })]);
+  const sub = entry.fetch ? entry.addon.manifest.name : typeLabel(entry.catalog.type) + ' · ' + (entry.addon.manifest.name || '');
+  const title = h('div.row-title', null, [entry.catalog.name || entry.catalog.id, h('small', { text: sub })]);
   const track = h('div.row-track.pending', { 'data-scroll-x': '', 'data-group': '' }, spinnerLine(t('Carregando...')));
   row.appendChild(title);
   row.appendChild(track);
   parent.appendChild(row);
   const load = () =>
-    addons
-      .fetchCatalog(entry)
+    (entry.fetch ? entry.fetch() : addons.fetchCatalog(entry))
       .then((metas) => {
         clear(track);
         track.classList.remove('pending');
@@ -297,7 +315,7 @@ function buildRow(entry, parent) {
           );
         });
         // "See all" at the end of the row when the catalog has more than the row shows.
-        if (metas.length > ROW_LIMIT || canPage(entry)) {
+        if (!entry.fetch && (metas.length > ROW_LIMIT || canPage(entry))) {
           track.appendChild(
             h('div.card.see-all', { focusable: true, onSelect: () => router.push(CatalogView(entry)) }, [
               h('div.poster-wrap', null, h('div.see-all-label', null, [h('b', { text: '→' }), t('Ver tudo')])),
@@ -335,9 +353,11 @@ function buildHero() {
   const infoBtn = h('div.btn', { focusable: true, html: '<span class="ico">ⓘ</span>' + t('Detalhes'), onSelect: () => open(false) });
   const buttons = h('div.hero-buttons', { 'data-group': '' }, [watchBtn, infoBtn]);
   buttons.__last = watchBtn; // entrar no banner sempre pelo "Assistir"
+  const ambient = h('div.hero-ambient');
   const el = h('div.hero', { 'data-anchor': '0' }, [
     bgA,
     bgB,
+    ambient,
     h('div.hero-shade-left'),
     h('div.hero-shade-bottom'),
     h('div.hero-info', null, [logo, title, meta, desc, buttons, dots]),
@@ -349,6 +369,46 @@ function buildHero() {
   let front = bgA;
   let paused = true;
   let bgToken = 0;
+
+  // ---------- Ambient mode (Settings → Appearance): the trailer plays behind the banner ----------
+  let ambientTimer = null;
+  let ambientOn = false;
+  function stopAmbient() {
+    clearTimeout(ambientTimer);
+    ambientTimer = null;
+    if (ambientOn) {
+      ambientOn = false;
+      ambient.classList.remove('show');
+      const f = ambient.firstChild;
+      if (f) f.src = 'about:blank';
+      clear(ambient);
+    }
+  }
+  function queueAmbient() {
+    stopAmbient();
+    if (!store.settings().ambientMode || paused) return;
+    const it = items[index];
+    ambientTimer = setTimeout(() => {
+      if (paused || items[index] !== it || el.getBoundingClientRect().bottom < 200) return;
+      const ids = it.trailers && it.trailers.length ? Promise.resolve(it.trailers) : addons.fetchMeta(it.type, it.id).then((m) => (it.trailers = trailerIds(m || {})));
+      ids
+        .then((list) => {
+          if (paused || items[index] !== it || !list.length) return;
+          clearTimeout(timer); // no rotation while the trailer plays
+          ambientOn = true;
+          const frame = h('iframe', { tabindex: '-1', allow: 'autoplay; encrypted-media', referrerpolicy: 'origin' });
+          frame.onload = () => setTimeout(() => ambientOn && ambient.classList.add('show'), 1500);
+          frame.src = 'https://www.youtube-nocookie.com/embed/' + list[0] + '?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5';
+          ambient.appendChild(frame);
+          // A minute and a half, then back to the rotating pictures.
+          ambientTimer = setTimeout(() => {
+            stopAmbient();
+            schedule();
+          }, 90000);
+        })
+        .catch(() => {});
+    }, 4000);
+  }
 
   function open(play) {
     const it = items[index];
@@ -397,11 +457,12 @@ function buildHero() {
     // Pré-carrega o próximo fundo.
     const nx = items[(index + 1) % items.length];
     if (nx) new Image().src = nx.background;
+    queueAmbient();
   }
 
   function schedule() {
     clearTimeout(timer);
-    if (paused || items.length < 2 || perf()) return; // Performance mode: changes only with left/right
+    if (paused || ambientOn || items.length < 2 || perf()) return; // Performance mode: changes only with left/right
     timer = setTimeout(() => {
       // Scrolled down to the rows: keep still, a fade there only costs smoothness.
       if (el.getBoundingClientRect().bottom > 0) {
@@ -437,6 +498,7 @@ function buildHero() {
     // Fora de vista, o banner solta os fundos (2 imagens 1920x1080 ≈ 16 MB na memória).
     pause: () => {
       paused = true;
+      stopAmbient();
       clearTimeout(timer);
       bgToken++;
       bgA.style.backgroundImage = '';

@@ -128,6 +128,13 @@ body.oled .details-shade { background: linear-gradient(to right, #000 25%, rgba(
 .details-meta .imdb { color: #f5c518; }
 .details-genres { margin-bottom: 18px; }
 .details-genres span { display: inline-block; padding: 4px 16px; margin: 0 10px 10px 0; border-radius: 20px; background: rgba(255,255,255,0.1); font-size: 19px; font-weight: 600; }
+.details-guide { margin: -6px 0 16px; font-size: 18px; }
+.details-guide span { display: inline-block; padding: 3px 14px; margin: 0 10px 8px 0; border-radius: 8px; border: 2px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.85); }
+.details-guide span b { font-weight: 600; margin-right: 6px; }
+.details-guide .lv-moderate { border-color: #e0a526; }
+.details-guide .lv-severe { border-color: #e04646; }
+[dir="rtl"] .details-guide span { margin: 0 0 8px 10px; }
+[dir="rtl"] .details-guide span b { margin-right: 0; margin-left: 6px; }
 .details-desc { font-size: 22px; color: rgba(255,255,255,0.8); display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; max-height: 180px; margin-bottom: 20px; }
 .details-cast { font-size: 20px; color: rgba(255,255,255,0.6); margin-bottom: 32px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .details-cast b { color: rgba(255,255,255,0.85); font-weight: 600; }
@@ -392,6 +399,17 @@ body.oled .details-shade { background: linear-gradient(to right, #000 25%, rgba(
 .un-buttons { margin-top: 20px; display: -webkit-flex; display: flex; }
 .un-buttons .btn { margin-right: 14px; }
 [dir="rtl"] .un-buttons .btn { margin-right: 0; margin-left: 14px; }
+
+/* Ambient mode: trailer behind the hero banner */
+.hero-ambient { position: absolute; right: 0; top: 0; width: 1500px; height: 640px; opacity: 0; -webkit-transition: opacity 1s; transition: opacity 1s; overflow: hidden; pointer-events: none; }
+.hero-ambient.show { opacity: 1; }
+.hero-ambient iframe { position: absolute; left: 0; top: 50%; width: 1500px; height: 844px; margin-top: -422px; border: 0; }
+[dir="rtl"] .hero-ambient { right: auto; left: 0; }
+
+/* Post-play: More like this */
+.p-postplay { position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 80px 50px; background: linear-gradient(to top, rgba(8,7,14,0.97) 60%, rgba(8,7,14,0)); display: none; }
+.p-postplay.show { display: block; }
+.p-postplay .row-track { margin: 16px 0 6px; }
 
 /* Watched markers in the episode list */
 .episode .thumb { position: relative; }

@@ -5,6 +5,7 @@ import { fetchUrl as phoneFetchUrl } from '../lib/phone.js';
 import * as store from '../lib/store.js';
 import { getTvIp } from '../lib/luna.js';
 import { t } from '../lib/i18n.js';
+import * as debrid from './debrid.js';
 
 let status = { ok: false, checkedAt: 0, url: '' };
 
@@ -157,6 +158,7 @@ export function getJSONViaProxy(url, opts) {
 
 // Diz se o stream precisa do servidor no PC (torrent) ou toca direto (HTTP/debrid).
 export function needsServer(stream) {
+  if (isTorrent(stream) && debrid.active()) return false; // plays through the user's debrid account
   if (typeof stream.url === 'string') {
     if (stream.url.indexOf('magnet:') === 0) return true;
     return !!(stream.behaviorHints && stream.behaviorHints.proxyHeaders);
@@ -168,8 +170,29 @@ export function isPlayableType(stream) {
   return typeof stream.url === 'string' || typeof stream.infoHash === 'string';
 }
 
+export function isTorrent(stream) {
+  return typeof stream.infoHash === 'string' || (typeof stream.url === 'string' && stream.url.indexOf('magnet:') === 0);
+}
+
 // Converte um stream de addon numa URL que o <video> da TV consegue abrir.
+// With a debrid key in Settings, torrents go through Real-Debrid/TorBox/Premiumize first.
 export function toPlayable(stream, seriesInfo) {
+  const p = isTorrent(stream) && debrid.active();
+  if (!p) return toPlayableLocal(stream, seriesInfo);
+  const mg = stream.infoHash ? { infoHash: stream.infoHash, sources: stream.sources || [] } : parseMagnet(stream.url);
+  if (!mg) return Promise.reject(new Error(t('Magnet inválido')));
+  const hint = {
+    fileIdx: stream.fileIdx,
+    filename: stream.behaviorHints && stream.behaviorHints.filename,
+    season: seriesInfo && seriesInfo.season,
+    episode: seriesInfo && seriesInfo.episode,
+  };
+  return debrid.resolve(mg.infoHash, mg.sources, hint)
+    .then((u) => ({ url: u, viaServer: false, debrid: p.name }))
+    .catch((e) => (baseUrl() ? toPlayableLocal(stream, seriesInfo) : Promise.reject(e)));
+}
+
+function toPlayableLocal(stream, seriesInfo) {
   const base = baseUrl();
   if (typeof stream.url === 'string') {
     if (stream.url.indexOf('magnet:') === 0) {

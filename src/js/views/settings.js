@@ -20,6 +20,14 @@ import * as theme from '../lib/theme.js';
 import * as tracker from '../api/tracker.js';
 import * as avvideo from '../lib/avvideo.js';
 import { openTrackLink } from './trackLink.js';
+import * as debrid from '../api/debrid.js';
+import * as mediaserver from '../api/mediaserver.js';
+import * as homeRows from '../lib/homeRows.js';
+import * as mdblistRows from '../api/mdblistRows.js';
+import * as badges from '../lib/badges.js';
+import * as speedtest from '../lib/speedtest.js';
+import { CW_SORTS } from './home.js';
+import { promptText } from '../ui.js';
 
 const SUB_LANGS = [
   { label: 'Inglês', value: ['eng', 'en'] },
@@ -232,13 +240,233 @@ export function SettingsView() {
     body.appendChild(keyInput(t('AnimeSkip Client ID'), t('Sua chave do anime-skip.com (fica só nesta TV)'), 'animeSkipClientId', 'Client ID'));
   }
 
+  function renderDebrid(s) {
+    pageHeader(t('Debrid'));
+    body.appendChild(h('div.hint', { style: { padding: '0 4px 14px' }, text: t('Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.') }));
+    const act = debrid.active();
+    const anyKey = debrid.PROVIDERS.some((p) => (s[p.key] || '').trim());
+    body.appendChild(
+      row(t('Usar debrid'), anyKey ? (act ? t('Usando {name}', { name: act.name }) : t('Desligado')) : t('Preencha uma chave abaixo'), '', () => {
+        store.saveSettings({ debridEnabled: s.debridEnabled === false });
+        render();
+      }, toggle(anyKey && s.debridEnabled !== false))
+    );
+    const cur = debrid.PROVIDERS.find((p) => p.id === s.debridProvider) || debrid.PROVIDERS[0];
+    body.appendChild(
+      row(t('Serviço preferido'), t('Usado quando há mais de uma chave'), cur.name, () =>
+        menu(t('Serviço preferido'), debrid.PROVIDERS.map((p) => ({ label: p.name, value: p.id, checked: p.id === cur.id })), {
+          onPick: (v) => {
+            store.saveSettings({ debridProvider: v });
+            render();
+          },
+        })
+      )
+    );
+    body.appendChild(h('div.set-section', { text: t('Chaves de API') }));
+    debrid.PROVIDERS.forEach((p) => {
+      body.appendChild(keyInput(p.name, t('Sua chave de API em {site}', { site: p.site }), p.key, 'API key'));
+      if ((s[p.key] || '').trim())
+        body.appendChild(
+          row(t('Testar {name}', { name: p.name }), '', '', () => {
+            toast(t('Testando...'));
+            debrid
+              .testKey(p.id, s[p.key].trim())
+              .then((who) => toast(t('{name} OK: {user}', { name: p.name, user: who }), 5000))
+              .catch((e) => toast(t('{name} recusou a chave: {msg}', { name: p.name, msg: e.message }), 6000));
+          })
+        );
+    });
+  }
+
+  function renderHomePage(s) {
+    pageHeader(t('Tela inicial'));
+    const cur = CW_SORTS.find((x) => x.id === s.cwSort) || CW_SORTS[0];
+    body.appendChild(
+      row(t('Ordem do Continuar assistindo'), '', t(cur.label), () =>
+        menu(t('Ordem do Continuar assistindo'), CW_SORTS.map((x) => ({ label: t(x.label), value: x.id, checked: x.id === cur.id })), {
+          onPick: (v) => {
+            store.saveSettings({ cwSort: v });
+            router.dropTab('home');
+            render();
+          },
+        })
+      )
+    );
+
+    // ---- MDBList lists as rows ----
+    body.appendChild(h('div.set-section', { text: t('Listas do MDBList') }));
+    if (!mdblistRows.hasKey()) {
+      body.appendChild(h('div.hint', { style: { padding: '0 4px 10px' }, text: t('Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.') }));
+    } else {
+      const saveRows = (list) => {
+        mdblistRows.setRows(list);
+        router.dropTab('home');
+        render();
+      };
+      body.appendChild(
+        row(t('Minhas listas'), t('Escolha quais das suas listas aparecem na tela inicial'), '', () => {
+          toast(t('Carregando...'));
+          mdblistRows
+            .myLists()
+            .then((lists) => {
+              const chosen = mdblistRows.rows();
+              menu(t('Minhas listas'), lists.map((l) => ({ label: l.name, sub: t('{n} títulos', { n: l.items }), value: l, checked: chosen.some((c) => c.id === l.id) })), {
+                empty: t('Você ainda não tem listas no MDBList.'),
+                onPick: (l) => {
+                  const cur2 = mdblistRows.rows();
+                  const on = cur2.some((c) => c.id === l.id);
+                  saveRows(on ? cur2.filter((c) => c.id !== l.id) : cur2.concat([{ id: l.id, name: l.name }]));
+                },
+              });
+            })
+            .catch((e) => toast(t('Erro: {msg}', { msg: e.message }), 5000));
+        })
+      );
+      body.appendChild(
+        row(t('Adicionar lista pública'), t('Ex.: usuario/nome-da-lista ou o link do mdblist.com'), '', () =>
+          promptText(t('Adicionar lista pública'), '', 'user/list', (text) =>
+            mdblistRows
+              .findList(text)
+              .then((l) => {
+                const cur2 = mdblistRows.rows();
+                if (!cur2.some((c) => c.id === l.id)) saveRows(cur2.concat([l]));
+                toast(t('Lista "{name}" adicionada', { name: l.name }));
+              })
+              .catch(() => toast(t('Lista não encontrada'), 5000))
+          )
+        )
+      );
+    }
+
+    // ---- Rows: order and hidden ----
+    body.appendChild(h('div.set-section', { text: t('Fileiras') }));
+    body.appendChild(h('div.hint', { style: { padding: '0 4px 10px' }, text: t('OK numa fileira: subir, descer ou esconder.') }));
+    const all = addons.boardCatalogs().concat(mdblistRows.boardEntries());
+    homeRows.sort(all).forEach((e) => {
+      const hidden = homeRows.isHidden(e);
+      const name = e.catalog.name || e.catalog.id;
+      const kind = e.fetch ? '' : ({ movie: t('Filmes'), series: t('Séries'), anime: t('Animes') }[e.catalog.type] || e.catalog.type) + ' · ';
+      body.appendChild(
+        row((hidden ? '⊘ ' : '') + name, kind + (e.addon.manifest.name || ''), hidden ? t('Escondida') : t('Visível'), () =>
+          menu(name, [
+            { label: '▲ ' + t('Subir'), value: -1 },
+            { label: '▼ ' + t('Descer'), value: 1 },
+            { label: hidden ? t('Mostrar') : t('Esconder'), value: 0 },
+          ], {
+            onPick: (v) => {
+              if (v === 0) homeRows.toggleHidden(e);
+              else homeRows.move(all, e, v);
+              router.dropTab('home');
+              render();
+            },
+          })
+        )
+      );
+    });
+    body.appendChild(
+      row(t('Restaurar ordem padrão'), '', '', () => {
+        homeRows.reset();
+        router.dropTab('home');
+        toast(t('Ordem padrão restaurada'));
+        render();
+      })
+    );
+  }
+
+  function renderBadges(s) {
+    pageHeader(t('Selos das fontes'));
+    const cur = badges.streamBadgeSettings();
+    badges.KINDS.forEach((k) =>
+      body.appendChild(
+        row(t(k.label), '', '', () => {
+          badges.setBadge(k.id, !cur[k.id]);
+          render();
+        }, toggle(cur[k.id]))
+      )
+    );
+  }
+
+  // Draft for the media server login (the password is never saved).
+  const msDraft = { providerId: 'jellyfin', address: '', user: '', pass: '' };
+
+  function draftInput(title, sub, field, placeholder, type) {
+    const input = h('input.input', { type: type || 'text', value: msDraft[field], placeholder: placeholder });
+    input.__submit = (v) => {
+      msDraft[field] = v.trim();
+      render();
+    };
+    return h('div.set-row', { focusable: true, onSelect: () => nav.select(input) }, [h('div.label', null, [title, sub ? h('small', { text: sub }) : null]), input]);
+  }
+
+  function renderServers(s) {
+    pageHeader(t('Servidores de mídia (Jellyfin e Emby)'));
+    body.appendChild(h('div.hint', { style: { padding: '0 4px 14px' }, text: t('Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.') }));
+    const c = mediaserver.connection();
+    if (c) {
+      const kindName = (mediaserver.KINDS.find((k) => k.id === c.providerId) || {}).name || '';
+      const card = row(c.name, kindName + ' · ' + c.address, t('Conectado: {user}', { user: c.user }), () =>
+        menu(c.name, [{ label: t('Desconectar'), value: 'off' }], {
+          onPick: () => {
+            mediaserver.disconnect();
+            router.dropTab('home');
+            toast(t('{name} desconectado', { name: c.name }));
+            render();
+          },
+        })
+      );
+      card.classList.add('acct-card');
+      if (s.mediaServerEnabled !== false) card.classList.add('acct-on');
+      body.appendChild(card);
+      body.appendChild(
+        row(t('Mostrar como fonte'), t('Lista os arquivos do servidor nas fontes'), '', () => {
+          store.saveSettings({ mediaServerEnabled: s.mediaServerEnabled === false });
+          render();
+        }, toggle(s.mediaServerEnabled !== false))
+      );
+      return;
+    }
+    const kind = mediaserver.KINDS.find((k) => k.id === msDraft.providerId) || mediaserver.KINDS[0];
+    body.appendChild(
+      row(t('Tipo de servidor'), '', kind.name, () =>
+        menu(t('Tipo de servidor'), mediaserver.KINDS.map((k) => ({ label: k.name, value: k.id, checked: k.id === kind.id })), {
+          onPick: (v) => {
+            msDraft.providerId = v;
+            render();
+          },
+        })
+      )
+    );
+    body.appendChild(draftInput(t('Endereço do servidor'), t('Ex.: 192.168.0.20:8096'), 'address', 'http://IP:8096'));
+    body.appendChild(draftInput(t('Usuário'), '', 'user', t('Usuário')));
+    body.appendChild(draftInput(t('Senha'), t('Usada só para entrar; não fica salva'), 'pass', '••••', 'password'));
+    body.appendChild(
+      row(t('Conectar'), '', '', () => {
+        if (!msDraft.address || !msDraft.user) return toast(t('Preencha o endereço e o usuário'));
+        toast(t('Conectando...'));
+        mediaserver
+          .connect(msDraft.providerId, msDraft.address, msDraft.user, msDraft.pass)
+          .then((conn) => {
+            msDraft.pass = '';
+            router.dropTab('home');
+            toast(t('Conectado a {name}', { name: conn.name }));
+            render();
+          })
+          .catch((e) => toast(t('Não foi possível conectar: {msg}', { msg: e.message }), 6000));
+      })
+    );
+  }
+
   function render() {
     const s = store.settings();
     const keep = nav.current();
     const keepIndex = keep ? Array.prototype.indexOf.call(body.querySelectorAll('.set-row'), keep) : -1;
     clear(body);
-    if (page === 'tracking' || page === 'skip') {
+    if (page !== 'main') {
       if (page === 'tracking') renderTracking(s);
+      else if (page === 'debrid') renderDebrid(s);
+      else if (page === 'servers') renderServers(s);
+      else if (page === 'home') renderHomePage(s);
+      else if (page === 'badges') renderBadges(s);
       else renderSkip(s);
       const sub = body.querySelectorAll('.set-row');
       if (keepIndex >= 0 && sub[keepIndex]) nav.focus(sub[keepIndex]);
@@ -312,6 +540,25 @@ export function SettingsView() {
       );
     }
     body.appendChild(row(t('Adicionar perfil'), t('Para outra pessoa, com outra conta Stremio'), '', () => createProfile()));
+    if (allProfiles.length > 1) {
+      body.appendChild(
+        row(t('Copiar ajustes de outro perfil'), t('Legendas, aparência, tela inicial e coleções (a conta não é copiada)'), '', () =>
+          menu(t('Copiar ajustes de'), allProfiles.filter((p) => p.id !== prof.id).map((p) => ({ label: p.name, value: p.id })), {
+            onPick: (id) => {
+              const from = allProfiles.find((p) => p.id === id);
+              confirmDialog(t('Trocar os ajustes de "{to}" pelos de "{from}"?', { to: prof.name, from: from.name }), t('Copiar'), () => {
+                store.copySettingsFrom(id);
+                theme.apply(store.settings().theme);
+                document.body.classList.toggle('oled', !!store.settings().oled);
+                router.dropTab('home');
+                toast(t('Ajustes copiados de {name}', { name: from.name }));
+                render();
+              });
+            },
+          })
+        )
+      );
+    }
     if (allProfiles.length > 1) {
       body.appendChild(
         row(t('Perguntar "Quem está assistindo?" ao abrir'), '', '', () => {
@@ -464,6 +711,20 @@ export function SettingsView() {
       )
     );
     body.appendChild(
+      row(t('Tela inicial'), t('Ordem das fileiras, listas do MDBList e Continuar assistindo'), '', () => {
+        page = 'home';
+        render();
+        scroller.scrollTop = 0;
+      })
+    );
+    body.appendChild(
+      row(t('Modo ambiente'), t('O trailer toca sem som atrás do Hero Banner (mais pesado na TV)'), '', () => {
+        store.saveSettings({ ambientMode: !store.settings().ambientMode });
+        router.dropTab('home');
+        render();
+      }, toggle(!!s.ambientMode))
+    );
+    body.appendChild(
       row(t('Tema OLED (preto puro)'), t('Fundo totalmente preto'), '', () => {
         const on = !store.settings().oled;
         store.saveSettings({ oled: on });
@@ -580,6 +841,20 @@ export function SettingsView() {
       s.playerEngine === 'html5' ? t('Navegador (HTML5)') : t('Samsung (AVPlay)')
     );
 
+    body.appendChild(
+      row(t('Sugestões no fim'), t('Ao terminar um filme, mostra "Mais como este"'), '', () => {
+        store.saveSettings({ postPlay: store.settings().postPlay === false });
+        render();
+      }, toggle(s.postPlay !== false))
+    );
+    body.appendChild(
+      row(t('Selos das fontes'), t('Qualidade, HDR, áudio, idioma, tamanho...'), '', () => {
+        page = 'badges';
+        render();
+        scroller.scrollTop = 0;
+      })
+    );
+
     // ---- Tracking and skip segments live on their own pages ----
     body.appendChild(h('div.set-section', { text: t('Integrações') }));
     body.appendChild(
@@ -592,6 +867,21 @@ export function SettingsView() {
     body.appendChild(
       row(t('Pular trechos'), t('Abertura, recapitulação e encerramento'), s.skipMode === 'off' ? t('Desligado') : t('Ligado'), () => {
         page = 'skip';
+        render();
+        scroller.scrollTop = 0;
+      })
+    );
+
+    body.appendChild(
+      row(t('Debrid'), 'Real-Debrid · TorBox · Premiumize', debrid.active() ? debrid.active().name : t('Desligado'), () => {
+        page = 'debrid';
+        render();
+        scroller.scrollTop = 0;
+      })
+    );
+    body.appendChild(
+      row(t('Servidores de mídia (Jellyfin e Emby)'), t('Seu próprio servidor como fonte'), mediaserver.enabled() ? mediaserver.connection().name : t('Desconectado'), () => {
+        page = 'servers';
         render();
         scroller.scrollTop = 0;
       })
@@ -617,6 +907,13 @@ export function SettingsView() {
     };
     keyRow(t('Chave TMDB'), t('Descrições em árabe, perfis de atores, calendário de filmes, logos e elenco com fotos (grátis em themoviedb.org)'), 'tmdbKey', 'API key (v3)');
     keyRow(t('Chave MDBList'), t('Notas do Rotten Tomatoes, Metacritic, Trakt e Letterboxd (grátis em mdblist.com)'), 'mdblistKey', 'API key');
+    keyRow(t('Chave RPDB'), t('Pôsteres com as notas desenhadas (ratingposterdb.com)'), 'rpdbKey', 'API key');
+    body.appendChild(
+      row(t('Guia para os pais'), t('Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)'), '', () => {
+        store.saveSettings({ parentalGuide: !store.settings().parentalGuide });
+        render();
+      }, toggle(!!s.parentalGuide))
+    );
 
     body.appendChild(h('div.set-section', { text: t('Addons') }));
     const list = addons.list();
@@ -663,6 +960,23 @@ export function SettingsView() {
         logInput,
       ])
     );
+    const netRow = row(t('Testar a internet'), t('Ping e velocidade de download (Cloudflare)'), '', () => {
+      const v = netRow.querySelector('.value');
+      v.textContent = t('Medindo o ping...');
+      speedtest
+        .run((step) => (v.textContent = step === 'ping' ? t('Medindo o ping...') : t('Baixando arquivo de teste...')))
+        .then((r) => {
+          const verdict = r.mbps >= 40 ? t('dá para 4K') : r.mbps >= 15 ? t('bom para 1080p') : r.mbps >= 6 ? t('só 720p com folga') : t('lenta para vídeo');
+          v.textContent = r.mbps + ' Mbps · ' + r.pingMs + ' ms';
+          toast(t('Internet: {mbps} Mbps, ping {ms} ms ({verdict})', { mbps: r.mbps, ms: r.pingMs, verdict: verdict }), 8000);
+        })
+        .catch((e) => {
+          v.textContent = '';
+          toast(t('O teste falhou: {msg}', { msg: e.message }), 5000);
+        });
+    });
+    body.appendChild(netRow);
+
     body.appendChild(h('div.set-section', { text: t('Atualizações') }));
     body.appendChild(row(t('Versão instalada'), device || 'Stremio Kai', shortDate(update.BUILD), null));
     const latestRow = row(t('Versão mais nova no GitHub'), update.REPO, t('Verificando...'), () => checkForUpdate());

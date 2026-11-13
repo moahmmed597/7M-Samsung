@@ -4,6 +4,7 @@ import * as stremio from './stremio.js';
 import * as store from '../lib/store.js';
 import { log } from '../lib/log.js';
 import { t } from '../lib/i18n.js';
+import * as mediaserver from './mediaserver.js';
 
 export const CINEMETA = 'https://v3-cinemeta.strem.io/manifest.json';
 export const OPENSUBTITLES = 'https://opensubtitles-v3.strem.io/manifest.json';
@@ -52,7 +53,8 @@ export function load(force) {
 }
 
 export function list() {
-  return addons || [];
+  const ms = mediaserver.virtualAddon(); // Jellyfin/Emby from Settings, when connected
+  return ms ? [ms].concat(addons || []) : addons || [];
 }
 
 function resourceMatch(addon, resource, type, id) {
@@ -148,7 +150,7 @@ export function fetchStreams(type, id, onAddon) {
   const sources = withResource('stream', type, id);
   return Promise.all(
     sources.map((a) =>
-      getJSON(url(a, 'stream', type, id), { timeout: 30000 })
+      (a.virtualStreams ? a.virtualStreams(type, id).then((list) => ({ streams: list })) : getJSON(url(a, 'stream', type, id), { timeout: 30000 }))
         .then((r) => {
           const streams = ((r && r.streams) || []).map((s) => Object.assign({ addon: a.manifest.name || a.manifest.id }, s));
           if (onAddon) onAddon(a, streams);

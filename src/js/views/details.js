@@ -16,7 +16,10 @@ import * as extras from '../api/extras.js';
 import { smallThumb } from '../lib/img.js';
 import { isAnime } from '../api/skip.js';
 import { t, epLabel } from '../lib/i18n.js';
-import { hasCollection, openCollectionsFor } from './collections.js';
+import { collectionMenu } from './collections.js';
+import * as parental from '../api/parental.js';
+import * as debrid from '../api/debrid.js';
+import { streamBadgeSettings } from '../lib/badges.js';
 
 export function openDetails(type, id, opts) {
   router.push(DetailsView(type, id, opts || {}));
@@ -119,8 +122,8 @@ function DetailsView(type, id, opts) {
       ? h('div.btn', { focusable: true, onSelect: () => openTrailer(trailers, meta.name) }, [h('span.ico', { text: '🎬' }), t('Trailer')])
       : null;
     // Collection: built-in franchises right away; a TMDB collection appears once TMDB answers.
-    const collBtn = h('div.btn', { focusable: true, onSelect: () => openCollectionsFor(meta.id, tmdbInfo && tmdbInfo.collection) }, [h('span.ico', { text: '🎞' }), t('Coleção')]);
-    if (!hasCollection(meta.id)) collBtn.style.display = 'none';
+    // Collection: built-in franchises, a TMDB collection, and the user's own collections.
+    const collBtn = h('div.btn', { focusable: true, onSelect: () => collectionMenu(meta, tmdbInfo && tmdbInfo.collection) }, [h('span.ico', { text: '🎞' }), t('Coleção')]);
     ui_collBtn = collBtn;
     updateButtons();
     info.appendChild(logo);
@@ -128,6 +131,18 @@ function DetailsView(type, id, opts) {
     info.appendChild(metaLine);
     info.appendChild(ratingsEl);
     info.appendChild(genres);
+    // Parental guide (Settings → Integrations), off by default.
+    if (store.settings().parentalGuide) {
+      const guideEl = h('div.details-guide');
+      guideEl.style.display = 'none';
+      info.appendChild(guideEl);
+      parental.guide(meta.imdb_id || meta.id).then((list) => {
+        if (!list.length) return;
+        const LV = { mild: t('Leve'), moderate: t('Moderado'), severe: t('Forte') };
+        list.forEach((g) => guideEl.appendChild(h('span', { cls: 'lv-' + g.level }, [h('b', { text: t(g.label) }), ' ' + (LV[g.level] || g.level)])));
+        guideEl.style.display = '';
+      });
+    }
     info.appendChild(desc);
     info.appendChild(castLine);
     info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, collBtn, libBtn]));
@@ -327,18 +342,34 @@ function DetailsView(type, id, opts) {
   }
 
   // Estimativa da taxa do arquivo (tamanho ÷ duração): avisa o que pesa no Wi-Fi da TV (~34 Mbps medidos).
+  // Settings → Stream badges turns each kind on or off (hide). Warnings (Dolby Vision, REMUX, very
+  // high bitrate) still steer Smart Choice when hidden.
   function streamBadges(s) {
-    const text = (s.name || '') + ' ' + (s.title || s.description || '');
+    const text = (s.name || '') + ' ' + (s.title || s.description || '') + ' ' + ((s.behaviorHints && s.behaviorHints.filename) || '');
+    const on = streamBadgeSettings();
     const out = [];
-    if (/2160p|\b4k\b|uhd/i.test(text)) out.push({ t: '4K' });
-    if (/dolby.?vision|\bdovi\b|\bdv\b/i.test(text)) out.push({ t: 'Dolby Vision', warn: true });
-    else if (/hdr/i.test(text)) out.push({ t: 'HDR' });
-    if (/remux/i.test(text)) out.push({ t: 'REMUX', warn: true });
+    const add = (kind, b) => out.push(Object.assign({ kind: kind, hide: on[kind] === false }, b));
+    if (/2160p|\b4k\b|uhd/i.test(text)) add('quality', { t: '4K' });
+    else if (/1080p/i.test(text)) add('quality', { t: '1080p' });
+    else if (/720p/i.test(text)) add('quality', { t: '720p' });
+    if (/dolby.?vision|\bdovi\b|\bdv\b/i.test(text)) add('hdr', { t: 'Dolby Vision', warn: true });
+    else if (/hdr/i.test(text)) add('hdr', { t: 'HDR' });
+    if (/remux/i.test(text)) add('remux', { t: 'REMUX', warn: true });
+    if (/\b(hevc|x265|h\.?265)\b/i.test(text)) add('codec', { t: 'HEVC' });
+    else if (/\bav1\b/i.test(text)) add('codec', { t: 'AV1' });
+    if (/atmos/i.test(text)) add('audio', { t: 'Atmos' });
+    else if (/truehd/i.test(text)) add('audio', { t: 'TrueHD' });
+    else if (/\bdts/i.test(text)) add('audio', { t: 'DTS' });
+    if (/\b7[ .]1\b/.test(text)) add('audio', { t: '7.1' });
+    else if (/\b5[ .]1\b/.test(text)) add('audio', { t: '5.1' });
+    if (/arabic|\bara\b|عربي/i.test(text)) add('lang', { t: t('Árabe') });
+    else if (/\bmulti\b/i.test(text)) add('lang', { t: 'Multi' });
     const m = text.match(/(\d+(?:[.,]\d+)?)\s*(GB|MB)\b/i);
     if (m) {
       const mb = parseFloat(m[1].replace(',', '.')) * (m[2].toUpperCase() === 'GB' ? 1024 : 1);
+      add('size', { t: m[1].replace(',', '.') + ' ' + m[2].toUpperCase() });
       const mbps = Math.round((mb * 8) / (runtimeMinutes() * 60));
-      if (mbps > 0) out.push({ t: '~' + mbps + ' Mbps', warn: mbps > 30 });
+      if (mbps > 0) add('bitrate', { t: '~' + mbps + ' Mbps', warn: mbps > 30 });
     }
     return out;
   }
@@ -519,8 +550,11 @@ function DetailsView(type, id, opts) {
     const tags = [];
     if (!playableType) tags.push(h('span.s-tag.warn', { text: t('Não suportado na TV') }));
     else if (needs) tags.push(h('span.s-tag', { cls: serverOk ? '' : 'warn', text: serverOk ? t('Torrent · via PC') : t('Torrent · precisa do PC') }));
+    else if (server.isTorrent(s) && debrid.active()) tags.push(h('span.s-tag.ok', { text: t('Torrent · via {name}', { name: debrid.active().name }) }));
     else tags.push(h('span.s-tag.ok', { text: t('Direto') }));
-    streamBadges(s).forEach((b) => tags.push(h('span.s-tag', { cls: b.warn ? 'warn' : '', text: b.t })));
+    streamBadges(s)
+      .filter((b) => !b.hide)
+      .forEach((b) => tags.push(h('span.s-tag', { cls: b.warn ? 'warn' : '', text: b.t })));
     return h(
       'div.stream',
       {

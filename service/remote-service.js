@@ -159,7 +159,7 @@ function handle(req, res) {
   if (url.pathname === '/api/fetch') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
     var target = require('url').parse(String(q.url || ''));
-    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev', 'api.anime-skip.com'];
+    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev', 'api.anime-skip.com', 'api.tiffara.com', 'api.mdblist.com'];
     if (target.protocol !== 'https:' || okHosts.indexOf(target.hostname) < 0) return send(res, 400, { error: 'host not allowed' });
     var isPost = req.method === 'POST';
     // POST only for the Anime-Skip GraphQL endpoint.

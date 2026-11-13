@@ -8,7 +8,10 @@ export function request(method, url, body, opts) {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
     xhr.timeout = o.timeout || 20000;
-    if (body !== undefined && body !== null) xhr.setRequestHeader('Content-Type', 'application/json');
+    // o.form: body is sent as a URL-encoded form (debrid APIs), otherwise as JSON.
+    const hasBody = body !== undefined && body !== null;
+    const payload = !hasBody ? null : o.form ? formEncode(body) : JSON.stringify(body);
+    if (hasBody) xhr.setRequestHeader('Content-Type', o.form ? 'application/x-www-form-urlencoded' : 'application/json');
     if (o.headers) for (const k in o.headers) xhr.setRequestHeader(k, o.headers[k]);
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
@@ -35,11 +38,18 @@ export function request(method, url, body, opts) {
       err.timeout = true;
       reject(err);
     };
-    xhr.send(body !== undefined && body !== null ? JSON.stringify(body) : null);
+    xhr.send(payload);
   }).catch((err) => {
     if (!o.quiet) log.warn(err.message);
     throw err;
   });
+}
+
+function formEncode(obj) {
+  return Object.keys(obj)
+    .filter((k) => obj[k] !== undefined && obj[k] !== null)
+    .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]))
+    .join('&');
 }
 
 export function getJSON(url, opts) {

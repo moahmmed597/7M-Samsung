@@ -12,6 +12,14 @@ export function smallPoster(url) {
     .replace(/(kitsu\.app\/anime\/poster_images\/\d+\/)(original|large|medium)\.(jpg|jpeg|png)/, '$1small.jpg'); // Kitsu antigo: 284x402
 }
 
+// RatingPosterDB: poster with the ratings drawn on it (user's own key, ratingposterdb.com).
+export function ratedPoster(id, key) {
+  const k = String(key || '').trim();
+  const m = String(id || '').match(/^tt\d+/);
+  if (!k || !m || !/^[\w-]+$/.test(k)) return null;
+  return 'https://api.ratingposterdb.com/' + k + '/imdb/poster-default/' + m[0] + '.jpg?fallback=true';
+}
+
 export function smallBackground(url) {
   if (!url) return url;
   return String(url)

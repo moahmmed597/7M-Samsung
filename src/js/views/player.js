@@ -1,5 +1,5 @@
 // Player: <video> nativo da TV (decodificação por hardware), legendas próprias, faixas via Luna.
-import { h, clear } from '../lib/dom.js';
+import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
 import { KEY } from '../lib/nav.js';
 import { luna, hasLuna, closeHeavyBackgroundApps } from '../lib/luna.js';
@@ -7,12 +7,12 @@ import * as subs from '../lib/subs.js';
 import * as substyle from '../lib/substyle.js';
 import * as store from '../lib/store.js';
 import { log } from '../lib/log.js';
-import { getText } from '../lib/http.js';
+import { getText, getJSON } from '../lib/http.js';
 import * as server from '../api/server.js';
 import * as addons from '../api/addons.js';
 import * as stremio from '../api/stremio.js';
 import * as skip from '../api/skip.js';
-import { menu, toast, fmtTime, timeHM } from '../ui.js';
+import { menu, toast, fmtTime, timeHM, card } from '../ui.js';
 import * as router from '../router.js';
 import { sortedVideos, openDetails } from './details.js';
 import { t, epLabel } from '../lib/i18n.js';
@@ -20,6 +20,7 @@ import * as watched from '../lib/watched.js';
 import * as phone from '../lib/phone.js';
 import * as avvideo from '../lib/avvideo.js';
 import * as tracker from '../api/tracker.js';
+import * as chapters from '../lib/chapters.js';
 
 const HIDE_MS = 5000;
 const SAVE_MS = 15000;
@@ -66,7 +67,8 @@ function PlayerView(opts) {
   const subsBtn = h('div.btn', { focusable: true, html: '<span class="ico">≡</span>' + t('Legendas'), onSelect: () => subsMenu() });
   const srcBtn = h('div.btn', { focusable: true, html: '<span class="ico">⇄</span>' + t('Fontes'), onSelect: () => sourcesMenu() });
   const nextBtn = h('div.btn', { focusable: true, html: '<span class="ico">⏭</span>' + t('Próximo'), onSelect: () => playNext() });
-  const buttons = h('div.p-buttons', { 'data-group': '' }, [playBtn, audioBtn, subsBtn, srcBtn, nextBtn]);
+  const chapBtn = h('div.btn', { focusable: true, html: '<span class="ico">☰</span>' + t('Capítulos'), onSelect: () => chaptersMenu() });
+  const buttons = h('div.p-buttons', { 'data-group': '' }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, nextBtn]);
   const spinner = h('div.p-center', null, h('div.spinner'));
   const msgEl = h('div.p-msg');
   const skipFill = h('i');
@@ -87,7 +89,11 @@ function PlayerView(opts) {
     upNextCount,
     h('div.un-buttons', { 'data-group': '' }, [upNextPlay, upNextCancel]),
   ]);
-  const el = h('div.view.player', null, [videoNode, subsEl, overlay, skipBox, upNextBox, spinner, msgEl]);
+  // After a film (or the last episode): "More like this", like Nuvio's post-play screen.
+  const postTrack = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
+  const postClose = h('div.btn', { focusable: true, onSelect: () => router.pop() }, t('Fechar'));
+  const postBox = h('div.p-postplay', null, [h('div.un-label', { text: t('Mais como este') }), postTrack, h('div.un-buttons', { 'data-group': '' }, [postClose])]);
+  const el = h('div.view.player', null, [videoNode, subsEl, overlay, skipBox, upNextBox, postBox, spinner, msgEl]);
 
   const renderer = subs.Renderer(subsEl);
   substyle.apply(subsEl, settings);
@@ -293,8 +299,68 @@ function PlayerView(opts) {
     watched.record(video.id, 1);
     tracker.onStop(1);
     if (opts.isSeries && nextVideo() && !upNextCancelled) playNext();
+    else if (!(opts.isSeries && nextVideo()) && store.settings().postPlay !== false) showPostPlay();
     else router.pop();
   });
+
+  let postPlayOn = false;
+  function showPostPlay() {
+    const genre = (meta.genres || meta.genre || [])[0];
+    const type = meta.type === 'series' ? 'series' : 'movie';
+    const url = 'https://v3-cinemeta.strem.io/catalog/' + type + '/top' + (genre ? '/genre=' + encodeURIComponent(genre) : '') + '.json';
+    getJSON(url, { timeout: 10000, quiet: true })
+      .then((r) => {
+        if (!alive) return;
+        const list = ((r && r.metas) || []).filter((m) => m.id !== meta.id && !watched.isWatched(m.id)).slice(0, 10);
+        if (!list.length) return router.pop();
+        clear(postTrack);
+        list.forEach((m) =>
+          postTrack.appendChild(
+            card(m, {
+              onSelect: () => {
+                router.pop();
+                openDetails(m.type || type, m.id);
+              },
+            })
+          )
+        );
+        hideControls();
+        postPlayOn = true;
+        postBox.classList.add('show');
+        loadVisibleImages(postBox);
+        nav.focus(postTrack.firstChild, { noScroll: true });
+      })
+      .catch(() => alive && router.pop());
+  }
+
+  // ---------- Chapters (Matroska files) ----------
+  let chapterList = null;
+  function chaptersMenu() {
+    const forUrl = mediaUrl;
+    const open = (list) => {
+      if (!list.length) return toast(t('Este arquivo não tem capítulos.'));
+      const now = videoEl.currentTime || 0;
+      let cur = 0;
+      list.forEach((c, i) => c.start <= now + 0.5 && (cur = i));
+      menu(
+        t('Capítulos'),
+        list.map((c, i) => ({ label: (c.title || t('Capítulo {n}', { n: i + 1 })), sub: fmtTime(c.start), value: i, checked: i === cur })),
+        {
+          onPick: (i) => {
+            videoEl.currentTime = Math.max(0, list[i].start);
+            showControls();
+          },
+        }
+      );
+    };
+    if (chapterList && chapterList.url === forUrl) return open(chapterList.list);
+    toast(t('Procurando capítulos...'));
+    chapters.load(forUrl).then((list) => {
+      if (!alive || forUrl !== mediaUrl) return;
+      chapterList = { url: forUrl, list: list };
+      open(list);
+    });
+  }
 
   // ---------- Now playing on the phone remote ----------
   function sendNowPlaying() {
@@ -1101,6 +1167,13 @@ function PlayerView(opts) {
       return true;
     }
     if (upNextTimer && cur && upNextBox.contains(cur)) return false; // arrows/OK on the card
+    if (postPlayOn) {
+      if (k === KEY.BACK || k === KEY.ESC || k === KEY.BACKSPACE) {
+        router.pop();
+        return true;
+      }
+      return false; // the cards and Close button take the arrows/OK
+    }
     if (k === KEY.CH_UP || k === KEY.YELLOW) {
       nudgeSubs(1);
       return true;

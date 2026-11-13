@@ -5,7 +5,7 @@ function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-(function () {
+(function (_EN, _AR) {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -25,12 +25,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         _step;
       try {
         var _loop = function _loop() {
-          var key = _step.value;
-          if (!__hasOwnProp.call(to, key) && key !== except) __defProp(to, key, {
+          var key2 = _step.value;
+          if (!__hasOwnProp.call(to, key2) && key2 !== except) __defProp(to, key2, {
             get: function get() {
-              return from[key];
+              return from[key2];
             },
-            enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+            enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable
           });
         };
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -127,9 +127,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var NATIVE_BIND = require_function_bind_native();
-      var call2 = Function.prototype.call;
-      module.exports = NATIVE_BIND ? call2.bind(call2) : function () {
-        return call2.apply(call2, arguments);
+      var call4 = Function.prototype.call;
+      module.exports = NATIVE_BIND ? call4.bind(call4) : function () {
+        return call4.apply(call4, arguments);
       };
     }
   });
@@ -174,11 +174,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var NATIVE_BIND = require_function_bind_native();
       var FunctionPrototype = Function.prototype;
-      var call2 = FunctionPrototype.call;
-      var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call2, call2);
+      var call4 = FunctionPrototype.call;
+      var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call4, call4);
       module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
         return function () {
-          return call2.apply(fn, arguments);
+          return call4.apply(fn, arguments);
         };
       };
     }
@@ -443,15 +443,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "node_modules/core-js/internals/ordinary-to-primitive.js": function node_modules_coreJs_internals_ordinaryToPrimitiveJs(exports, module) {
       "use strict";
 
-      var call2 = require_function_call();
+      var call4 = require_function_call();
       var isCallable = require_is_callable();
       var isObject = require_is_object();
       var $TypeError = TypeError;
       module.exports = function (input, pref) {
         var fn, val;
-        if (pref === "string" && isCallable(fn = input.toString) && !isObject(val = call2(fn, input))) return val;
-        if (isCallable(fn = input.valueOf) && !isObject(val = call2(fn, input))) return val;
-        if (pref !== "string" && isCallable(fn = input.toString) && !isObject(val = call2(fn, input))) return val;
+        if (pref === "string" && isCallable(fn = input.toString) && !isObject(val = call4(fn, input))) return val;
+        if (isCallable(fn = input.valueOf) && !isObject(val = call4(fn, input))) return val;
+        if (pref !== "string" && isCallable(fn = input.toString) && !isObject(val = call4(fn, input))) return val;
         throw new $TypeError("Can't convert object to primitive value");
       };
     }
@@ -473,15 +473,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var globalThis2 = require_global_this();
       var defineProperty = Object.defineProperty;
-      module.exports = function (key, value) {
+      module.exports = function (key2, value) {
         try {
-          defineProperty(globalThis2, key, {
+          defineProperty(globalThis2, key2, {
             value: value,
             configurable: true,
             writable: true
           });
         } catch (error) {
-          globalThis2[key] = value;
+          globalThis2[key2] = value;
         }
         return value;
       };
@@ -515,8 +515,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var store = require_shared_store();
       var create2 = Object.create || Object;
-      module.exports = function (key, value) {
-        return store[key] || (store[key] = value || create2(null));
+      module.exports = function (key2, value) {
+        return store[key2] || (store[key2] = value || create2(null));
       };
     }
   });
@@ -542,8 +542,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var uncurryThis = require_function_uncurry_this();
       var toObject = require_to_object();
       var hasOwnProperty = uncurryThis({}.hasOwnProperty);
-      module.exports = Object.hasOwn || function hasOwn(it, key) {
-        return hasOwnProperty(toObject(it), key);
+      module.exports = Object.hasOwn || function hasOwn(it, key2) {
+        return hasOwnProperty(toObject(it), key2);
       };
     }
   });
@@ -557,8 +557,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var id = 0;
       var postfix = Math.random();
       var toString = uncurryThis(1.1.toString);
-      module.exports = function (key) {
-        return "Symbol(" + (key === void 0 ? "" : key) + ")_" + toString(++id + postfix, 36);
+      module.exports = function (key2) {
+        return "Symbol(" + (key2 === void 0 ? "" : key2) + ")_" + toString(++id + postfix, 36);
       };
     }
   });
@@ -591,7 +591,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "node_modules/core-js/internals/to-primitive.js": function node_modules_coreJs_internals_toPrimitiveJs(exports, module) {
       "use strict";
 
-      var call2 = require_function_call();
+      var call4 = require_function_call();
       var isObject = require_is_object();
       var isSymbol = require_is_symbol();
       var getMethod = require_get_method();
@@ -605,7 +605,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var result;
         if (exoticToPrim) {
           if (pref === void 0) pref = "default";
-          result = call2(exoticToPrim, input, pref);
+          result = call4(exoticToPrim, input, pref);
           if (!isObject(result) || isSymbol(result)) return result;
           throw new $TypeError("Can't convert object to primitive value");
         }
@@ -623,8 +623,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var toPrimitive = require_to_primitive();
       var isSymbol = require_is_symbol();
       module.exports = function (argument) {
-        var key = toPrimitive(argument, "string");
-        return isSymbol(key) ? key : key + "";
+        var key2 = toPrimitive(argument, "string");
+        return isSymbol(key2) ? key2 : key2 + "";
       };
     }
   });
@@ -668,7 +668,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var DESCRIPTORS = require_descriptors();
-      var call2 = require_function_call();
+      var call4 = require_function_call();
       var propertyIsEnumerableModule = require_object_property_is_enumerable();
       var createPropertyDescriptor = require_create_property_descriptor();
       var toIndexedObject = require_to_indexed_object();
@@ -682,7 +682,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (IE8_DOM_DEFINE) try {
           return $getOwnPropertyDescriptor(O, P);
         } catch (error) {}
-        if (hasOwn(O, P)) return createPropertyDescriptor(!call2(propertyIsEnumerableModule.f, O, P), O[P]);
+        if (hasOwn(O, P)) return createPropertyDescriptor(!call4(propertyIsEnumerableModule.f, O, P), O[P]);
       };
     }
   });
@@ -772,10 +772,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var DESCRIPTORS = require_descriptors();
       var definePropertyModule = require_object_define_property();
       var createPropertyDescriptor = require_create_property_descriptor();
-      module.exports = DESCRIPTORS ? function (object, key, value) {
-        return definePropertyModule.f(object, key, createPropertyDescriptor(1, value));
-      } : function (object, key, value) {
-        object[key] = value;
+      module.exports = DESCRIPTORS ? function (object, key2, value) {
+        return definePropertyModule.f(object, key2, createPropertyDescriptor(1, value));
+      } : function (object, key2, value) {
+        object[key2] = value;
         return object;
       };
     }
@@ -839,8 +839,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var shared = require_shared();
       var uid = require_uid();
       var keys2 = shared("keys");
-      module.exports = function (key) {
-        return keys2[key] || (keys2[key] = uid(key));
+      module.exports = function (key2) {
+        return keys2[key2] || (keys2[key2] = uid(key2));
       };
     }
   });
@@ -1001,18 +1001,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var definePropertyModule = require_object_define_property();
       var makeBuiltIn = require_make_built_in();
       var defineGlobalProperty = require_define_global_property();
-      module.exports = function (O, key, value, options) {
+      module.exports = function (O, key2, value, options) {
         if (!options) options = {};
         var simple = options.enumerable;
-        var name = options.name !== void 0 ? options.name : key;
+        var name = options.name !== void 0 ? options.name : key2;
         if (isCallable(value)) makeBuiltIn(value, name, options);
         if (options.global) {
-          if (simple) O[key] = value;else defineGlobalProperty(key, value);
+          if (simple) O[key2] = value;else defineGlobalProperty(key2, value);
         } else {
           try {
-            if (!options.unsafe) delete O[key];else if (O[key]) simple = true;
+            if (!options.unsafe) delete O[key2];else if (O[key2]) simple = true;
           } catch (error) {}
-          if (simple) O[key] = value;else definePropertyModule.f(O, key, {
+          if (simple) O[key2] = value;else definePropertyModule.f(O, key2, {
             value: value,
             enumerable: false,
             configurable: !options.nonConfigurable,
@@ -1142,10 +1142,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var O = toIndexedObject(object);
         var i = 0;
         var result = [];
-        var key;
-        for (key in O) !hasOwn(hiddenKeys, key) && hasOwn(O, key) && push2(result, key);
-        while (names.length > i) if (hasOwn(O, key = names[i++])) {
-          ~indexOf(result, key) || push2(result, key);
+        var key2;
+        for (key2 in O) !hasOwn(hiddenKeys, key2) && hasOwn(O, key2) && push2(result, key2);
+        while (names.length > i) if (hasOwn(O, key2 = names[i++])) {
+          ~indexOf(result, key2) || push2(result, key2);
         }
         return result;
       };
@@ -1217,9 +1217,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var defineProperty = definePropertyModule.f;
         var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
         for (var i = 0; i < keys2.length; i++) {
-          var key = keys2[i];
-          if (!hasOwn(target, key) && !(exceptions && hasOwn(exceptions, key))) {
-            defineProperty(target, key, getOwnPropertyDescriptor(source, key));
+          var key2 = keys2[i];
+          if (!hasOwn(target, key2) && !(exceptions && hasOwn(exceptions, key2))) {
+            defineProperty(target, key2, getOwnPropertyDescriptor(source, key2));
           }
         }
       };
@@ -1264,7 +1264,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var TARGET = options.target;
         var GLOBAL = options.global;
         var STATIC = options.stat;
-        var FORCED, target, key, targetProperty, sourceProperty, descriptor;
+        var FORCED, target, key2, targetProperty, sourceProperty, descriptor;
         if (GLOBAL) {
           target = globalThis2;
         } else if (STATIC) {
@@ -1272,13 +1272,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         } else {
           target = globalThis2[TARGET] && globalThis2[TARGET].prototype;
         }
-        if (target) for (key in source) {
-          sourceProperty = source[key];
+        if (target) for (key2 in source) {
+          sourceProperty = source[key2];
           if (options.dontCallGetSet) {
-            descriptor = getOwnPropertyDescriptor(target, key);
+            descriptor = getOwnPropertyDescriptor(target, key2);
             targetProperty = descriptor && descriptor.value;
-          } else targetProperty = target[key];
-          FORCED = isForced(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
+          } else targetProperty = target[key2];
+          FORCED = isForced(GLOBAL ? key2 : TARGET + (STATIC ? "." : "#") + key2, options.forced);
           if (!FORCED && targetProperty !== void 0) {
             if (_typeof(sourceProperty) == _typeof(targetProperty)) continue;
             copyConstructorProperties(sourceProperty, targetProperty);
@@ -1286,7 +1286,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (options.sham || targetProperty && targetProperty.sham) {
             createNonEnumerableProperty(sourceProperty, "sham", true);
           }
-          defineBuiltIn(target, key, sourceProperty, options);
+          defineBuiltIn(target, key2, sourceProperty, options);
         }
       };
     }
@@ -1312,7 +1312,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var DESCRIPTORS = require_descriptors();
       var uncurryThis = require_function_uncurry_this();
-      var call2 = require_function_call();
+      var call4 = require_function_call();
       var fails = require_fails();
       var objectKeys = require_object_keys();
       var getOwnPropertySymbolsModule = require_object_get_own_property_symbols();
@@ -1356,10 +1356,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var keys2 = getOwnPropertySymbols ? concat(objectKeys(S), getOwnPropertySymbols(S)) : objectKeys(S);
           var length = keys2.length;
           var j = 0;
-          var key;
+          var key2;
           while (length > j) {
-            key = keys2[j++];
-            if (!DESCRIPTORS || call2(propertyIsEnumerable, S, key)) T[key] = S[key];
+            key2 = keys2[j++];
+            if (!DESCRIPTORS || call4(propertyIsEnumerable, S, key2)) T[key2] = S[key2];
           }
         }
         return T;
@@ -1472,11 +1472,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var length = keys2.length;
           var i = 0;
           var result = [];
-          var key;
+          var key2;
           while (length > i) {
-            key = keys2[i++];
-            if (!DESCRIPTORS || (IE_WORKAROUND ? key in O : propertyIsEnumerable(O, key))) {
-              push2(result, TO_ENTRIES ? [key, O[key]] : O[key]);
+            key2 = keys2[i++];
+            if (!DESCRIPTORS || (IE_WORKAROUND ? key2 in O : propertyIsEnumerable(O, key2))) {
+              push2(result, TO_ENTRIES ? [key2, O[key2]] : O[key2]);
             }
           }
           return result;
@@ -1578,9 +1578,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var CORRECT_ARGUMENTS = classofRaw(/* @__PURE__ */function () {
         return arguments;
       }()) === "Arguments";
-      var tryGet = function tryGet(it, key) {
+      var tryGet = function tryGet(it, key2) {
         try {
-          return it[key];
+          return it[key2];
         } catch (error) {}
       };
       module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
@@ -1655,8 +1655,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var keys2 = objectKeys(Properties);
         var length = keys2.length;
         var index = 0;
-        var key;
-        while (length > index) definePropertyModule.f(O, key = keys2[index++], props[key]);
+        var key2;
+        while (length > index) definePropertyModule.f(O, key2 = keys2[index++], props[key2]);
         return O;
       };
     }
@@ -1841,9 +1841,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var uncurryThis = require_function_uncurry_this();
       var aCallable = require_a_callable();
-      module.exports = function (object, key, method) {
+      module.exports = function (object, key2, method) {
         try {
-          return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key)[method]));
+          return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key2)[method]));
         } catch (error) {}
       };
     }
@@ -1911,7 +1911,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var $ = require_export();
-      var call2 = require_function_call();
+      var call4 = require_function_call();
       var IS_PURE = require_is_pure();
       var FunctionName = require_function_name();
       var isCallable = require_is_callable();
@@ -1985,7 +1985,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           } else {
             INCORRECT_VALUES_NAME = true;
             defaultIterator = function values() {
-              return call2(nativeIterator, this);
+              return call4(nativeIterator, this);
             };
           }
         }
@@ -2098,7 +2098,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "node_modules/core-js/internals/iterator-close.js": function node_modules_coreJs_internals_iteratorCloseJs(exports, module) {
       "use strict";
 
-      var call2 = require_function_call();
+      var call4 = require_function_call();
       var anObject = require_an_object();
       var getMethod = require_get_method();
       module.exports = function (iterator, kind, value) {
@@ -2110,7 +2110,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             if (kind === "throw") throw value;
             return value;
           }
-          innerResult = call2(innerResult, iterator);
+          innerResult = call4(innerResult, iterator);
         } catch (error) {
           innerError = true;
           innerResult = error;
@@ -2212,8 +2212,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var DESCRIPTORS = require_descriptors();
       var definePropertyModule = require_object_define_property();
       var createPropertyDescriptor = require_create_property_descriptor();
-      module.exports = function (object, key, value) {
-        if (DESCRIPTORS) definePropertyModule.f(object, key, createPropertyDescriptor(0, value));else object[key] = value;
+      module.exports = function (object, key2, value) {
+        if (DESCRIPTORS) definePropertyModule.f(object, key2, createPropertyDescriptor(0, value));else object[key2] = value;
       };
     }
   });
@@ -2282,7 +2282,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "node_modules/core-js/internals/get-iterator-internal.js": function node_modules_coreJs_internals_getIteratorInternalJs(exports, module) {
       "use strict";
 
-      var call2 = require_function_call();
+      var call4 = require_function_call();
       var isCallable = require_is_callable();
       var anObject = require_an_object();
       var tryToString = require_try_to_string();
@@ -2290,7 +2290,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var $TypeError = TypeError;
       module.exports = function (argument, usingIterator) {
         var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
-        if (isCallable(iteratorMethod)) return anObject(call2(iteratorMethod, argument));
+        if (isCallable(iteratorMethod)) return anObject(call4(iteratorMethod, argument));
         throw new $TypeError(tryToString(argument) + " is not iterable");
       };
     }
@@ -2316,7 +2316,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var bind = require_function_bind_context();
-      var call2 = require_function_call();
+      var call4 = require_function_call();
       var toObject = require_to_object();
       var callWithSafeIterationClosing = require_call_with_safe_iteration_closing();
       var isArrayIteratorMethod = require_is_array_iterator_method();
@@ -2343,7 +2343,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           result = IS_CONSTRUCTOR ? new this() : [];
           iterator = getIterator(O, iteratorMethod);
           next = iterator.next;
-          for (; !(step = call2(next, iterator)).done; index++) {
+          for (; !(step = call4(next, iterator)).done; index++) {
             try {
               doesNotExceedSafeInteger(index);
             } catch (error) {
@@ -2595,8 +2595,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           value: create2(null)
         });
       }
-      module.exports = function (key) {
-        ArrayPrototype[UNSCOPABLES][key] = true;
+      module.exports = function (key2) {
+        ArrayPrototype[UNSCOPABLES][key2] = true;
       };
     }
   });
@@ -4605,21 +4605,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var _map = {};
             var _size = 0;
             var _this2 = {};
-            _this2.add = function (key) {
-              if (_this2.contains(key)) {
-                throw "dup key:" + key;
+            _this2.add = function (key2) {
+              if (_this2.contains(key2)) {
+                throw "dup key:" + key2;
               }
-              _map[key] = _size;
+              _map[key2] = _size;
               _size += 1;
             };
             _this2.size = function () {
               return _size;
             };
-            _this2.indexOf = function (key) {
-              return _map[key];
+            _this2.indexOf = function (key2) {
+              return _map[key2];
             };
-            _this2.contains = function (key) {
-              return typeof _map[key] != "undefined";
+            _this2.contains = function (key2) {
+              return typeof _map[key2] != "undefined";
             };
             return _this2;
           };
@@ -4647,20 +4647,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       !function () {
         qrcode2.stringToBytesFuncs["UTF-8"] = function (s) {
           function toUTF8Array(str) {
-            var utf8 = [];
+            var utf82 = [];
             for (var i = 0; i < str.length; i++) {
               var charcode = str.charCodeAt(i);
-              if (charcode < 128) utf8.push(charcode);else if (charcode < 2048) {
-                utf8.push(192 | charcode >> 6, 128 | charcode & 63);
+              if (charcode < 128) utf82.push(charcode);else if (charcode < 2048) {
+                utf82.push(192 | charcode >> 6, 128 | charcode & 63);
               } else if (charcode < 55296 || charcode >= 57344) {
-                utf8.push(224 | charcode >> 12, 128 | charcode >> 6 & 63, 128 | charcode & 63);
+                utf82.push(224 | charcode >> 12, 128 | charcode >> 6 & 63, 128 | charcode & 63);
               } else {
                 i++;
                 charcode = 65536 + ((charcode & 1023) << 10 | str.charCodeAt(i) & 1023);
-                utf8.push(240 | charcode >> 18, 128 | charcode >> 12 & 63, 128 | charcode >> 6 & 63, 128 | charcode & 63);
+                utf82.push(240 | charcode >> 18, 128 | charcode >> 12 & 63, 128 | charcode >> 6 & 63, 128 | charcode & 63);
               }
             }
-            return utf8;
+            return utf82;
           }
           return toUTF8Array(s);
         };
@@ -4743,15 +4743,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (flushing || !buffer.length || !remoteUrl) return;
     flushing = true;
     var batch2 = buffer.splice(0, buffer.length);
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", remoteUrl, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.timeout = 5e3;
-    xhr.onloadend = function () {
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open("POST", remoteUrl, true);
+    xhr2.setRequestHeader("Content-Type", "application/json");
+    xhr2.timeout = 5e3;
+    xhr2.onloadend = function () {
       flushing = false;
       if (buffer.length) setTimeout(flush, 200);
     };
-    xhr.send(JSON.stringify(batch2));
+    xhr2.send(JSON.stringify(batch2));
   }
   var log = {
     info: function info() {
@@ -4773,7 +4773,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   };
 
   // src/js/lib/i18n-en.js
-  var EN = _defineProperty(_defineProperty(_defineProperty({
+  var EN = (_EN = {
     // Navegação e geral
     "Início": "Home",
     "Buscar": "Search",
@@ -5284,10 +5284,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Contas, fontes e recursos do Trakt": "Accounts, sources and Trakt features",
     "Abertura, recapitulação e encerramento": "Intro, recap and outro",
     "Ligado": "On"
-  }, "Filmes e s\xE9ries", "Movies and series"), "Desenhos animados", "Cartoons"), "Animes", "Anime");
+  }, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Filmes e s\xE9ries", "Movies and series"), "Desenhos animados", "Cartoons"), "Animes", "Anime"), "{name}: este torrent ainda não está no cache. Escolha outra fonte.", "{name}: this torrent is not cached yet. Pick another source."), "Chave inválida", "Invalid key"), "Endereço inválido", "Invalid address"), "Usuário ou senha errados", "Wrong user name or password"), "Leve", "Mild"), "Moderado", "Moderate"), "Forte", "Severe"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Nudez", "Nudity"), "Violência", "Violence"), "Palavrões", "Profanity"), "Álcool e drogas", "Alcohol and drugs"), "Cenas assustadoras", "Frightening scenes"), "Torrent · via {name}", "Torrent · via {name}"), "Debrid", "Debrid"), "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.", "Plays torrent sources through your debrid account, no PC server needed. Everyone uses their own key, kept only on this TV."), "Usar debrid", "Use debrid"), "Usando {name}", "Using {name}"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Preencha uma chave abaixo", "Fill in a key below"), "Serviço preferido", "Preferred service"), "Usado quando há mais de uma chave", "Used when there is more than one key"), "Chaves de API", "API keys"), "Sua chave de API em {site}", "Your API key at {site}"), "Testar {name}", "Test {name}"), "Testando...", "Testing..."), "{name} OK: {user}", "{name} OK: {user}"), "{name} recusou a chave: {msg}", "{name} rejected the key: {msg}"), "Servidores de mídia (Jellyfin e Emby)", "Media servers (Jellyfin and Emby)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.", "Movies and series on your server show up as a source, next to the add-ons."), "Mostrar como fonte", "Show as a source"), "Lista os arquivos do servidor nas fontes", "Lists the server files among the sources"), "Tipo de servidor", "Server type"), "Endereço do servidor", "Server address"), "Ex.: 192.168.0.20:8096", "E.g. 192.168.0.20:8096"), "Usuário", "User name"), "Usada só para entrar; não fica salva", "Only used to sign in; it is not saved"), "Conectar", "Connect"), "Preencha o endereço e o usuário", "Fill in the address and the user name"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Conectando...", "Connecting..."), "Conectado a {name}", "Connected to {name}"), "Não foi possível conectar: {msg}", "Could not connect: {msg}"), "Seu próprio servidor como fonte", "Your own server as a source"), "Chave RPDB", "RPDB key"), "Pôsteres com as notas desenhadas (ratingposterdb.com)", "Posters with the ratings drawn on them (ratingposterdb.com)"), "Guia para os pais", "Parental guide"), "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)", "Violence, profanity and intense scenes on the title page (IMDb via tiffara.com)"), "Abrir", "Open"), 'Adicionado a "{name}"', 'Added to "{name}"'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Adicionar a esta coleção", "Add to this collection"), "Adicionar lista pública", "Add a public list"), "Ajustes copiados de {name}", "Settings copied from {name}"), 'Ao terminar um filme, mostra "Mais como este"', 'When a film ends, shows "More like this"'), 'Apagar a coleção "{name}"?', 'Delete the collection "{name}"?'), "Apagar coleção", "Delete collection"), "Baixando arquivo de teste...", "Downloading a test file..."), "Capítulo {n}", "Chapter {n}"), "Capítulos", "Chapters"), 'Coleção "{name}" criada', 'Collection "{name}" created'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Coleção sua", "Your collection"), "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.", "Put your MDBList key in Settings → Extra metadata to use lists."), "Copiar", "Copy"), "Copiar ajustes de", "Copy settings from"), "Copiar ajustes de outro perfil", "Copy settings from another profile"), "Descer", "Move down"), "Escolha quais das suas listas aparecem na tela inicial", "Choose which of your lists show on the home screen"), "Esconder", "Hide"), "Escondida", "Hidden"), "Este arquivo não tem capítulos.", "This file has no chapters."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Ex.: Para ver no fim de semana", "E.g. For the weekend"), "Ex.: usuario/nome-da-lista ou o link do mdblist.com", "E.g. user/list-name or the mdblist.com link"), "Fechar", "Close"), "Fileiras", "Rows"), "Internet: {mbps} Mbps, ping {ms} ms ({verdict})", "Internet: {mbps} Mbps, ping {ms} ms ({verdict})"), "Legendas, aparência, tela inicial e coleções (a conta não é copiada)", "Subtitles, appearance, home screen and collections (the account is not copied)"), 'Lista "{name}" adicionada', 'List "{name}" added'), "Lista não encontrada", "List not found"), "Listas do MDBList", "MDBList lists"), "Mais como este", "More like this"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Medindo o ping...", "Measuring ping..."), "Minhas coleções", "My collections"), "Minhas listas", "My lists"), "Modo ambiente", "Ambient mode"), "Mostrar", "Show"), "Nome da nova coleção", "New collection name"), "Nova coleção", "New collection"), "Nova coleção...", "New collection..."), "O teste falhou: {msg}", "The test failed: {msg}"), "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)", "The trailer plays muted behind the Hero Banner (heavier on the TV)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "OK numa fileira: subir, descer ou esconder.", "OK on a row: move up, move down or hide."), "Ordem das fileiras, listas do MDBList e Continuar assistindo", "Row order, MDBList lists and Continue watching"), "Ordem do Continuar assistindo", "Continue watching order"), "Ordem padrão restaurada", "Default order restored"), "Ping e velocidade de download (Cloudflare)", "Ping and download speed (Cloudflare)"), "Procurando capítulos...", "Looking for chapters..."), "Qualidade, HDR, áudio, idioma, tamanho...", "Quality, HDR, audio, language, size..."), 'Removido de "{name}"', 'Removed from "{name}"'), "Renomear", "Rename"), "Restaurar ordem padrão", "Restore default order"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Selos das fontes", "Stream badges"), "Subir", "Move up"), "Sugestões no fim", "Suggestions at the end"), "Tela inicial", "Home screen"), "Testar a internet", "Test the internet"), "Tirar desta coleção", "Remove from this collection"), "Toque para tirar desta coleção", "Select to remove it from this collection"), 'Trocar os ajustes de "{to}" pelos de "{from}"?', 'Replace the settings of "{to}" with those of "{from}"?'), "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.", "Empty. On a film or series page, use the Collection button to add it."), "Visível", "Visible"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Você ainda não tem listas no MDBList.", "You have no MDBList lists yet."), "bom para 1080p", "good for 1080p"), "dá para 4K", "enough for 4K"), "lenta para vídeo", "slow for video"), "só 720p com folga", "720p only, comfortably"), "Assistidos por último", "Last watched"), "Quase terminados primeiro", "Almost finished first"), "Nome (A–Z)", "Name (A–Z)"), "Qualidade (4K, 1080p, 720p)", "Quality (4K, 1080p, 720p)"), "HDR e Dolby Vision", "HDR and Dolby Vision"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "REMUX", "REMUX"), "Codec (HEVC, AV1)", "Codec (HEVC, AV1)"), "Áudio (Atmos, DTS, 5.1)", "Audio (Atmos, DTS, 5.1)"), "Idioma (Árabe, Multi)", "Language (Arabic, Multi)"), "Tamanho do arquivo", "File size"), "Taxa estimada (Mbps)", "Estimated bitrate (Mbps)"), "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", "{name}: the API key was rejected. Check Settings → Debrid."));
 
   // src/js/lib/i18n-ar.js
-  var AR = _defineProperty(_defineProperty(_defineProperty({
+  var AR = (_AR = {
     // Navegação e geral
     "Início": "الرئيسية",
     "Buscar": "بحث",
@@ -5798,7 +5798,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Contas, fontes e recursos do Trakt": "الحسابات والمصادر وميزات Trakt",
     "Abertura, recapitulação e encerramento": "المقدمة والملخص والخاتمة",
     "Ligado": "شغّال"
-  }, "Filmes e s\xE9ries", "أفلام ومسلسلات"), "Desenhos animados", "كرتون"), "Animes", "أنمي");
+  }, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Filmes e s\xE9ries", "أفلام ومسلسلات"), "Desenhos animados", "كرتون"), "Animes", "أنمي"), "{name}: este torrent ainda não está no cache. Escolha outra fonte.", "{name}: هذا التورنت مو موجود بالكاش. اختر مصدر ثاني."), "Chave inválida", "المفتاح غلط"), "Endereço inválido", "العنوان غلط"), "Usuário ou senha errados", "اسم المستخدم أو كلمة المرور غلط"), "Leve", "خفيف"), "Moderado", "متوسط"), "Forte", "قوي"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Nudez", "عُري"), "Violência", "عنف"), "Palavrões", "ألفاظ"), "Álcool e drogas", "كحول ومخدرات"), "Cenas assustadoras", "مشاهد مخيفة"), "Torrent · via {name}", "تورنت · عبر {name}"), "Debrid", "Debrid"), "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.", "يشغّل مصادر التورنت عن طريق حسابك في الـ debrid بدون سيرفر الكمبيوتر. كل واحد يحط مفتاحه، ويبقى بس في هالتلفزيون."), "Usar debrid", "استخدم الـ debrid"), "Usando {name}", "يستخدم {name}"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Preencha uma chave abaixo", "حط مفتاح تحت"), "Serviço preferido", "الخدمة المفضلة"), "Usado quando há mais de uma chave", "تُستخدم إذا عندك أكثر من مفتاح"), "Chaves de API", "مفاتيح API"), "Sua chave de API em {site}", "مفتاح API حقك من {site}"), "Testar {name}", "اختبر {name}"), "Testando...", "جاري الاختبار..."), "{name} OK: {user}", "{name} شغّال: {user}"), "{name} recusou a chave: {msg}", "{name} رفض المفتاح: {msg}"), "Servidores de mídia (Jellyfin e Emby)", "سيرفرات الوسائط (Jellyfin و Emby)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.", "الأفلام والمسلسلات اللي في سيرفرك تطلع كمصدر مع الإضافات."), "Mostrar como fonte", "اعرضه كمصدر"), "Lista os arquivos do servidor nas fontes", "يعرض ملفات السيرفر مع المصادر"), "Tipo de servidor", "نوع السيرفر"), "Endereço do servidor", "عنوان السيرفر"), "Ex.: 192.168.0.20:8096", "مثال: 192.168.0.20:8096"), "Usuário", "اسم المستخدم"), "Usada só para entrar; não fica salva", "تُستخدم للدخول بس وما تنحفظ"), "Conectar", "اتصال"), "Preencha o endereço e o usuário", "حط العنوان واسم المستخدم"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Conectando...", "جاري الاتصال..."), "Conectado a {name}", "متصل بـ {name}"), "Não foi possível conectar: {msg}", "ما قدر يتصل: {msg}"), "Seu próprio servidor como fonte", "سيرفرك الخاص كمصدر"), "Chave RPDB", "مفتاح RPDB"), "Pôsteres com as notas desenhadas (ratingposterdb.com)", "بوسترات عليها التقييمات (ratingposterdb.com)"), "Guia para os pais", "دليل الأهل"), "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)", "العنف والألفاظ والمشاهد القوية في صفحة العمل (IMDb عن طريق tiffara.com)"), "Abrir", "افتح"), 'Adicionado a "{name}"', 'انضاف إلى "{name}"'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Adicionar a esta coleção", "أضف لهالمجموعة"), "Adicionar lista pública", "أضف قائمة عامة"), "Ajustes copiados de {name}", "انتسخت الإعدادات من {name}"), 'Ao terminar um filme, mostra "Mais como este"', 'لما يخلص الفيلم يعرض "أعمال مشابهة"'), 'Apagar a coleção "{name}"?', 'تحذف مجموعة "{name}"؟'), "Apagar coleção", "احذف المجموعة"), "Baixando arquivo de teste...", "جاري تنزيل ملف الاختبار..."), "Capítulo {n}", "الفصل {n}"), "Capítulos", "الفصول"), 'Coleção "{name}" criada', 'انسوّت مجموعة "{name}"'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Coleção sua", "مجموعتك"), "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.", "حط مفتاح MDBList في الإعدادات ← بيانات إضافية عشان تستخدم القوائم."), "Copiar", "انسخ"), "Copiar ajustes de", "انسخ الإعدادات من"), "Copiar ajustes de outro perfil", "انسخ الإعدادات من بروفايل ثاني"), "Descer", "نزّل"), "Escolha quais das suas listas aparecem na tela inicial", "اختر أي قوائمك تطلع في الرئيسية"), "Esconder", "إخفاء"), "Escondida", "مخفية"), "Este arquivo não tem capítulos.", "هالملف ما فيه فصول."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Ex.: Para ver no fim de semana", "مثال: للويكند"), "Ex.: usuario/nome-da-lista ou o link do mdblist.com", "مثال: user/list-name أو رابط mdblist.com"), "Fechar", "إغلاق"), "Fileiras", "الصفوف"), "Internet: {mbps} Mbps, ping {ms} ms ({verdict})", "النت: {mbps} ميغابت، البنق {ms} ms ({verdict})"), "Legendas, aparência, tela inicial e coleções (a conta não é copiada)", "الترجمة والشكل والرئيسية والمجموعات (الحساب ما ينسخ)"), 'Lista "{name}" adicionada', 'انضافت قائمة "{name}"'), "Lista não encontrada", "ما لقيت القائمة"), "Listas do MDBList", "قوائم MDBList"), "Mais como este", "أعمال مشابهة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Medindo o ping...", "جاري قياس البنق..."), "Minhas coleções", "مجموعاتي"), "Minhas listas", "قوائمي"), "Modo ambiente", "وضع الأجواء (Ambient)"), "Mostrar", "إظهار"), "Nome da nova coleção", "اسم المجموعة الجديدة"), "Nova coleção", "مجموعة جديدة"), "Nova coleção...", "مجموعة جديدة..."), "O teste falhou: {msg}", "الاختبار فشل: {msg}"), "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)", "التريلر يشتغل بدون صوت خلف البانر (أثقل على التلفزيون)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "OK numa fileira: subir, descer ou esconder.", "اضغط OK على صف: طلّعه أو نزّله أو اخفه."), "Ordem das fileiras, listas do MDBList e Continuar assistindo", "ترتيب الصفوف وقوائم MDBList وأكمل المشاهدة"), "Ordem do Continuar assistindo", "ترتيب أكمل المشاهدة"), "Ordem padrão restaurada", "رجع الترتيب الأصلي"), "Ping e velocidade de download (Cloudflare)", "البنق وسرعة التنزيل (Cloudflare)"), "Procurando capítulos...", "جاري البحث عن الفصول..."), "Qualidade, HDR, áudio, idioma, tamanho...", "الجودة و HDR والصوت واللغة والحجم..."), 'Removido de "{name}"', 'انشال من "{name}"'), "Renomear", "إعادة تسمية"), "Restaurar ordem padrão", "رجّع الترتيب الأصلي"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Selos das fontes", "شارات المصادر"), "Subir", "طلّع"), "Sugestões no fim", "اقتراحات بعد النهاية"), "Tela inicial", "الصفحة الرئيسية"), "Testar a internet", "اختبر النت"), "Tirar desta coleção", "شيله من هالمجموعة"), "Toque para tirar desta coleção", "اضغط عشان تشيله من هالمجموعة"), 'Trocar os ajustes de "{to}" pelos de "{from}"?', 'تستبدل إعدادات "{to}" بإعدادات "{from}"؟'), "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.", "فاضية. من صفحة أي فيلم أو مسلسل اضغط زر المجموعة عشان تضيفه."), "Visível", "ظاهرة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Você ainda não tem listas no MDBList.", "ما عندك قوائم في MDBList للحين."), "bom para 1080p", "زين للـ 1080p"), "dá para 4K", "يكفي للـ 4K"), "lenta para vídeo", "بطيء على الفيديو"), "só 720p com folga", "720p بس براحة"), "Assistidos por último", "آخر شي شفته"), "Quase terminados primeiro", "اللي قربت تخلصه أول"), "Nome (A–Z)", "الاسم (أ–ي)"), "Qualidade (4K, 1080p, 720p)", "الجودة (4K و 1080p و 720p)"), "HDR e Dolby Vision", "HDR و Dolby Vision"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "REMUX", "REMUX"), "Codec (HEVC, AV1)", "الترميز (HEVC و AV1)"), "Áudio (Atmos, DTS, 5.1)", "الصوت (Atmos و DTS و 5.1)"), "Idioma (Árabe, Multi)", "اللغة (عربي، متعدد)"), "Tamanho do arquivo", "حجم الملف"), "Taxa estimada (Mbps)", "معدل البت التقريبي (Mbps)"), "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", "{name}: المفتاح انرفض. تأكد منه في الإعدادات ← Debrid."));
 
   // src/js/lib/i18n.js
   var lang = "en";
@@ -5812,9 +5812,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function init(setting) {
     lang = setting === "en" || setting === "ar" ? setting : detect();
-    var root = document.documentElement;
-    root.setAttribute("lang", lang);
-    root.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    var root2 = document.documentElement;
+    root2.setAttribute("lang", lang);
+    root2.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
     return lang;
   }
   function current() {
@@ -5840,17 +5840,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/lib/http.js
   function request(method, url2, body, opts) {
     var o = opts || {};
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open(method, url2, true);
-      xhr.timeout = o.timeout || 2e4;
-      if (body !== void 0 && body !== null) xhr.setRequestHeader("Content-Type", "application/json");
-      if (o.headers) for (var k in o.headers) xhr.setRequestHeader(k, o.headers[k]);
-      xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          if (o.raw) return resolve(xhr.responseText);
+    return new Promise(function (resolve2, reject) {
+      var xhr2 = new XMLHttpRequest();
+      xhr2.open(method, url2, true);
+      xhr2.timeout = o.timeout || 2e4;
+      var hasBody = body !== void 0 && body !== null;
+      var payload = !hasBody ? null : o.form ? formEncode(body) : JSON.stringify(body);
+      if (hasBody) xhr2.setRequestHeader("Content-Type", o.form ? "application/x-www-form-urlencoded" : "application/json");
+      if (o.headers) for (var k in o.headers) xhr2.setRequestHeader(k, o.headers[k]);
+      xhr2.onload = function () {
+        if (xhr2.status >= 200 && xhr2.status < 300) {
+          if (o.raw) return resolve2(xhr2.responseText);
           try {
-            resolve(xhr.responseText ? JSON.parse(xhr.responseText) : null);
+            resolve2(xhr2.responseText ? JSON.parse(xhr2.responseText) : null);
           } catch (e) {
             reject(new Error(t("JSON inválido de {url}", {
               url: url2
@@ -5858,21 +5860,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
         } else {
           var err = new Error(t("HTTP {code} em {url}", {
-            code: xhr.status,
+            code: xhr2.status,
             url: url2
           }));
-          err.status = xhr.status;
+          err.status = xhr2.status;
           reject(err);
         }
       };
-      xhr.onerror = function () {
+      xhr2.onerror = function () {
         var err = new Error(t("Falha de rede em {url}", {
           url: url2
         }));
         err.status = 0;
         reject(err);
       };
-      xhr.ontimeout = function () {
+      xhr2.ontimeout = function () {
         var err = new Error(t("Tempo esgotado em {url}", {
           url: url2
         }));
@@ -5880,11 +5882,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         err.timeout = true;
         reject(err);
       };
-      xhr.send(body !== void 0 && body !== null ? JSON.stringify(body) : null);
+      xhr2.send(payload);
     }).catch(function (err) {
       if (!o.quiet) log.warn(err.message);
       throw err;
     });
+  }
+  function formEncode(obj) {
+    return Object.keys(obj).filter(function (k) {
+      return obj[k] !== void 0 && obj[k] !== null;
+    }).map(function (k) {
+      return encodeURIComponent(k) + "=" + encodeURIComponent(obj[k]);
+    }).join("&");
   }
   function getJSON(url2, opts) {
     return request("GET", url2, null, opts);
@@ -5918,6 +5927,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function smallPoster(url2) {
     if (!url2) return url2;
     return String(url2).replace(/(images\.metahub\.space\/poster\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w185/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?posters\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2").replace(/(static\.tvmaze\.com\/uploads\/images\/)(original_untouched|large_landscape|medium_landscape)\//, "$1medium_portrait/").replace(/(kitsu\.app\/anime\/poster_images\/\d+\/)(original|large|medium)\.(jpg|jpeg|png)/, "$1small.jpg");
+  }
+  function ratedPoster(id, key2) {
+    var k = String(key2 || "").trim();
+    var m = String(id || "").match(/^tt\d+/);
+    if (!k || !m || !/^[\w-]+$/.test(k)) return null;
+    return "https://api.ratingposterdb.com/" + k + "/imdb/poster-default/" + m[0] + ".jpg?fallback=true";
   }
   function smallBackground(url2) {
     if (!url2) return url2;
@@ -5974,17 +5989,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
   }
   function kitsuSmall(info2) {
-    var key = info2.id + ":" + info2.kind;
-    if (!kitsuCache[key]) {
-      kitsuCache[key] = new Promise(function (resolve) {
+    var key2 = info2.id + ":" + info2.kind;
+    if (!kitsuCache[key2]) {
+      kitsuCache[key2] = new Promise(function (resolve2) {
         (batch[info2.id] = batch[info2.id] || []).push({
           kind: info2.kind,
-          resolve: resolve
+          resolve: resolve2
         });
         if (!batchTimer) batchTimer = setTimeout(flush2, 60);
       });
     }
-    return kitsuCache[key];
+    return kitsuCache[key2];
   }
 
   // src/js/lib/dom.js
@@ -5996,12 +6011,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (p[0] === ".") el.classList.add(p.slice(1));else if (p[0] === "#") el.id = p.slice(1);
     }
     if (props) {
-      for (var key in props) {
-        var val = props[key];
+      for (var key2 in props) {
+        var val = props[key2];
         if (val === void 0 || val === null || val === false) continue;
-        if (key === "text") el.textContent = val;else if (key === "html") el.innerHTML = val;else if (key === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key === "onSelect") el.__select = val;else if (key === "onFocus") el.__focus = val;else if (key === "focusable") el.setAttribute("data-focus", "");else if (key === "cls") String(val).split(" ").forEach(function (c) {
+        if (key2 === "text") el.textContent = val;else if (key2 === "html") el.innerHTML = val;else if (key2 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key2 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key2 === "onSelect") el.__select = val;else if (key2 === "onFocus") el.__focus = val;else if (key2 === "focusable") el.setAttribute("data-focus", "");else if (key2 === "cls") String(val).split(" ").forEach(function (c) {
           return c && el.classList.add(c);
-        });else el.setAttribute(key, val === true ? "" : val);
+        });else el.setAttribute(key2, val === true ? "" : val);
       }
     }
     append(el, children);
@@ -6018,8 +6033,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     while (el.firstChild) el.removeChild(el.firstChild);
     return el;
   }
-  function $$(sel, root) {
-    return Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  function $$(sel, root2) {
+    return Array.prototype.slice.call((root2 || document).querySelectorAll(sel));
   }
   var BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
   function setOn(el, on) {
@@ -6043,7 +6058,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       el.src = BLANK;
     }
   }
-  function loadVisibleImages(root, margin) {
+  function loadVisibleImages(root2, margin) {
     var m = margin === void 0 ? 400 : margin;
     var W = window.innerWidth;
     var H = window.innerHeight;
@@ -6051,7 +6066,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return r.right < -W * 0.5 || r.left > W * 1.6 || r.bottom < -H * 0.8 || r.top > H * 1.8;
     };
     var handled = [];
-    $$("[data-scroll-x]", root).forEach(function (track) {
+    $$("[data-scroll-x]", root2).forEach(function (track) {
       if (track.offsetParent === null) return;
       var tr = track.getBoundingClientRect();
       if (tr.bottom < -H * 0.8 || tr.top > H * 1.8) {
@@ -6061,7 +6076,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         handled.push(track);
       }
     });
-    $$("img[data-lazy]", root).forEach(function (el) {
+    $$("img[data-lazy]", root2).forEach(function (el) {
       if (el.offsetParent === null) return;
       for (var i = 0; i < handled.length; i++) if (handled[i].contains(el)) return;
       var r = el.getBoundingClientRect();
@@ -6069,8 +6084,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (near) setOn(el, true);else if (isFar(r)) setOn(el, false);
     });
   }
-  function unloadImages(root) {
-    $$("img[data-lazy]", root).forEach(function (el) {
+  function unloadImages(root2) {
+    $$("img[data-lazy]", root2).forEach(function (el) {
       if (el.__on) {
         el.__on = false;
         el.src = BLANK;
@@ -6136,8 +6151,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (el.hasAttribute("disabled")) return false;
     return true;
   }
-  function candidates(root) {
-    return $$("[data-focus]", root).filter(isVisible);
+  function candidates(root2) {
+    return $$("[data-focus]", root2).filter(isVisible);
   }
   function center(r) {
     return {
@@ -6254,10 +6269,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var layer = top();
     return layer ? layer.current : null;
   }
-  function focusFirst(root) {
+  function focusFirst(root2) {
     var layer = top();
     if (!layer) return;
-    var scope = root || layer.root;
+    var scope = root2 || layer.root;
     var pref = $$("[data-autofocus]", scope).filter(isVisible)[0];
     var el = pref || candidates(scope)[0];
     if (el) focus(el);
@@ -6302,9 +6317,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     if (target.__select) target.__select(target);
   }
-  function pushLayer(root, handlers) {
+  function pushLayer(root2, handlers) {
     var layer = Object.assign({
-      root: root,
+      root: root2,
       current: null
     }, handlers || {});
     layers.push(layer);
@@ -6328,20 +6343,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var layer = top();
     if (!layer) return;
     var code = e.keyCode;
-    var active = document.activeElement;
-    var typing = active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA");
+    var active2 = document.activeElement;
+    var typing = active2 && (active2.tagName === "INPUT" || active2.tagName === "TEXTAREA");
     if (typing) {
       if (code === KEY.ENTER || code === KEY.IME_DONE) {
         if (code === KEY.ENTER) e.preventDefault();
-        active.blur();
-        if (active.__submit) active.__submit(active.value);
+        active2.blur();
+        if (active2.__submit) active2.__submit(active2.value);
         return;
       } else if (code === KEY.BACK || code === KEY.ESC || code === KEY.IME_CANCEL) {
         if (code !== KEY.IME_CANCEL) e.preventDefault();
-        active.blur();
+        active2.blur();
         return;
       } else if (code === KEY.UP || code === KEY.DOWN) {
-        active.blur();
+        active2.blur();
       } else return;
     }
     if (code >= 37 && code <= 40 && pointerMode) pointerMode = false;
@@ -6411,22 +6426,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
   // src/js/lib/store.js
   var PREFIX = "kai.";
-  function rawGet(key, fallback) {
+  function rawGet(key2, fallback) {
     try {
-      var raw = window.localStorage.getItem(PREFIX + key);
+      var raw = window.localStorage.getItem(PREFIX + key2);
       return raw === null ? fallback : JSON.parse(raw);
     } catch (e) {
       return fallback;
     }
   }
-  function rawSet(key, value) {
+  function rawSet(key2, value) {
     try {
-      if (value === void 0 || value === null) window.localStorage.removeItem(PREFIX + key);else window.localStorage.setItem(PREFIX + key, JSON.stringify(value));
+      if (value === void 0 || value === null) window.localStorage.removeItem(PREFIX + key2);else window.localStorage.setItem(PREFIX + key2, JSON.stringify(value));
     } catch (e) {}
   }
   var COLORS = ["#7b5bf5", "#e5508c", "#2bb6a3", "#f0a030", "#3d8bfd", "#e55353", "#8bc34a", "#9e9e9e"];
-  function profileKey(id, key) {
-    return "p." + id + "." + key;
+  function profileKey(id, key2) {
+    return "p." + id + "." + key2;
   }
   function ensureProfiles() {
     var list2 = rawGet("profiles", null);
@@ -6507,13 +6522,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (rawGet("activeProfile", null) === id) rawSet("activeProfile", list2[0].id);
     return true;
   }
-  function get(key, fallback) {
-    return rawGet(profileKey(activeProfile().id, key), fallback);
+  function getFor(profileId, key2, fallback) {
+    return rawGet(profileKey(profileId, key2), fallback);
   }
-  function set(key, value) {
-    rawSet(profileKey(activeProfile().id, key), value);
+  function get(key2, fallback) {
+    return rawGet(profileKey(activeProfile().id, key2), fallback);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource"];
+  function set(key2, value) {
+    rawSet(profileKey(activeProfile().id, key2), value);
+  }
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -6560,7 +6578,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     // both | trakt | simkl
     progressSource: "both",
     subtitlesAuto: true,
-    localAddons: []
+    localAddons: [],
+    // Integrations from Nuvio. Each user types their own keys; empty = off.
+    debridEnabled: true,
+    // only does something once a key is filled in
+    debridProvider: "realdebrid",
+    realDebridKey: "",
+    torboxKey: "",
+    premiumizeKey: "",
+    mediaServer: null,
+    // { providerId, address, token, userId, user, name } (no password)
+    mediaServerEnabled: true,
+    rpdbKey: "",
+    parentalGuide: false,
+    // Nuvio features (per profile)
+    homeRows: null,
+    // { order: [], hidden: [] }
+    cwSort: "recent",
+    mdblistRows: [],
+    // [{ id, name }]
+    ambientMode: false,
+    postPlay: true,
+    streamBadges: null
+    // { quality, hdr, remux, bitrate, size, audio, codec, lang } → false hides
   };
   function settings() {
     var subs = {
@@ -6571,6 +6611,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       subtitleLangs: subs
     } : null);
     return Object.assign(base, rawGet("device", {}), get("settings", {}));
+  }
+  function copySettingsFrom(profileId) {
+    var from = getFor(profileId, "settings", {}) || {};
+    set("settings", JSON.parse(JSON.stringify(from)));
+    ["franchiseOrder", "franchiseFavs", "myCollections", "subDelays"].forEach(function (k) {
+      var v = getFor(profileId, k, null);
+      if (v !== null) set(k, JSON.parse(JSON.stringify(v)));
+    });
   }
   function saveSettings(patch) {
     var dev = rawGet("device", {});
@@ -6663,14 +6711,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function logout() {
-    var key = authKey();
+    var key2 = authKey();
     auth = null;
     set("auth", null);
     set("addons", null);
     setLibrary([]);
-    if (key) call("logout", {
+    if (key2) call("logout", {
       type: "Logout",
-      authKey: key
+      authKey: key2
     }).catch(function () {});
   }
   function getAddonCollection() {
@@ -6730,8 +6778,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       collection: "libraryItem",
       ids: [],
       all: true
-    }).then(function (items) {
-      var list2 = Array.isArray(items) ? items : [];
+    }).then(function (items2) {
+      var list2 = Array.isArray(items2) ? items2 : [];
       setLibrary(list2);
       return list2;
     });
@@ -6752,9 +6800,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (!libMem) libMem = get("library", []);
     return libMem;
   }
-  function putLibraryItems(items) {
+  function putLibraryItems(items2) {
     var lib = cachedLibrary();
-    items.forEach(function (it) {
+    items2.forEach(function (it) {
       var i = lib.findIndex(function (x) {
         return x._id === it._id;
       });
@@ -6765,7 +6813,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return call("datastorePut", {
       authKey: auth.authKey,
       collection: "libraryItem",
-      changes: items
+      changes: items2
     }).catch(function (e) {
       log.warn("Falha ao salvar na biblioteca", e.message);
     });
@@ -6888,10 +6936,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/views/profiles.js
   var SESSION_PICKED = "kai.profilePicked";
   var SESSION_NEW = "kai.newProfile";
-  function session(key, value) {
+  function session(key2, value) {
     try {
-      if (value === void 0) return window.sessionStorage.getItem(key);
-      if (value === null) window.sessionStorage.removeItem(key);else window.sessionStorage.setItem(key, value);
+      if (value === void 0) return window.sessionStorage.getItem(key2);
+      if (value === null) window.sessionStorage.removeItem(key2);else window.sessionStorage.setItem(key2, value);
     } catch (e) {}
     return null;
   }
@@ -6985,11 +7033,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function showPicker(onPicked) {
     var list2 = profiles();
-    var active = activeProfile();
+    var active2 = activeProfile();
     var cards = list2.map(function (p) {
       return h("div.profile-card", {
         focusable: true,
-        "data-autofocus": p.id === active.id ? "" : null,
+        "data-autofocus": p.id === active2.id ? "" : null,
         onSelect: function onSelect() {
           return pick2(p.id);
         }
@@ -7019,7 +7067,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     document.getElementById("app").appendChild(el);
     var layer = pushLayer(el, {
       onBack: function onBack() {
-        return pick2(active.id);
+        return pick2(active2.id);
       }
     });
     focusFirst(el);
@@ -7123,6 +7171,43 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (modal.parentNode) modal.parentNode.removeChild(modal);
     }
   }
+  function promptText(title, value, placeholder, onSubmit) {
+    var input = h("input.input", {
+      type: "text",
+      value: value || "",
+      placeholder: placeholder || ""
+    });
+    var row = h("div.set-row", {
+      focusable: true,
+      "data-autofocus": "",
+      onSelect: function onSelect() {
+        return select(input);
+      }
+    }, input);
+    var box = h("div.modal-box.center", null, [h("h3", {
+      text: title
+    }), row]);
+    var modal = h("div.modal", null, box);
+    document.getElementById("app").appendChild(modal);
+    var layer = pushLayer(modal, {
+      onBack: function onBack() {
+        return close();
+      }
+    });
+    focusFirst(modal);
+    input.__submit = function (v) {
+      var text = String(v || "").trim();
+      close();
+      if (text) onSubmit(text);
+    };
+    setTimeout(function () {
+      return select(input);
+    }, 50);
+    function close() {
+      popLayer(layer);
+      if (modal.parentNode) modal.parentNode.removeChild(modal);
+    }
+  }
   var TABS = [{
     id: "home",
     label: "Início"
@@ -7190,13 +7275,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     Array.prototype.forEach.call(document.querySelectorAll(".profile-chip"), fillChip);
   }
   function profileMenu(onTab) {
-    var active = activeProfile();
+    var active2 = activeProfile();
     var opts = profiles().map(function (p) {
       return {
         label: p.name,
-        sub: p.id === active.id ? t("Perfil atual") : t("Trocar para este perfil"),
+        sub: p.id === active2.id ? t("Perfil atual") : t("Trocar para este perfil"),
         value: p.id,
-        checked: p.id === active.id
+        checked: p.id === active2.id
       };
     });
     opts.push({
@@ -7211,7 +7296,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     menu(t("Perfis"), opts, {
       onPick: function onPick(v) {
-        if (v === "__add") createProfile();else if (v === "__manage") onTab("settings");else if (v !== active.id) switchProfile(v);
+        if (v === "__add") createProfile();else if (v === "__manage") onTab("settings");else if (v !== active2.id) switchProfile(v);
       }
     });
   }
@@ -7228,13 +7313,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function card(item2, opts) {
     var o = opts || {};
     var wrap = h("div.poster-wrap");
-    var src = o.wide ? smallBackground(o.image || item2.background || item2.poster) : smallPoster(item2.poster);
+    var plain = o.wide ? smallBackground(o.image || item2.background || item2.poster) : smallPoster(item2.poster);
+    var rated = o.wide ? null : ratedPoster(item2.id || item2.imdb_id, settings().rpdbKey);
+    var src = rated || plain;
     if (src) {
       var im = h("img", {
         alt: ""
       });
       im.setAttribute("data-lazy", src);
       im.onerror = function () {
+        if (rated && plain && im.src.indexOf(plain) < 0) {
+          im.src = plain;
+          return;
+        }
         im.style.display = "none";
         wrap.appendChild(h("div.ph", {
           text: item2.name || ""
@@ -7275,13 +7366,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var last = 0;
   var started = false;
   function request2(url2, timeout) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve2, reject) {
       var x = new XMLHttpRequest();
       x.open("GET", url2);
       x.timeout = timeout;
       x.onload = function () {
         try {
-          resolve(x.status === 200 ? JSON.parse(x.responseText) : null);
+          resolve2(x.status === 200 ? JSON.parse(x.responseText) : null);
         } catch (e) {
           reject(e);
         }
@@ -7338,7 +7429,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function handle(ev) {
     if (ev.type === "key") fireKey(ev.code);else if (ev.type === "text") typeText(ev.text, ev.submit);else if (ev.type === "search" && searchHandler && ev.text) searchHandler(ev.text);else if (ev.type === "seek" && seekHandler) seekHandler(ev.to);else if (ev.type === "open" && openHandler && ev.item) openHandler(ev);
   }
-  function poll(wait) {
+  function poll(wait2) {
     setTimeout(function () {
       request2(BASE + "/api/events?since=" + last, 35e3).then(function (r) {
         if (r) {
@@ -7347,9 +7438,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         poll(0);
       }).catch(function () {
-        return poll(Math.min((wait || 2e3) * 2, 6e4));
+        return poll(Math.min((wait2 || 2e3) * 2, 6e4));
       });
-    }, wait);
+    }, wait2);
   }
   function startService() {
     var m = location.pathname.match(/\/module\/([^/]+)\//);
@@ -7422,7 +7513,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return typeof window.PalmServiceBridge === "function";
   }
   function luna(service, method, params) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve2, reject) {
       if (!hasLuna()) return reject(new Error("Luna indisponível"));
       var bridge = new window.PalmServiceBridge();
       pending.add(bridge);
@@ -7438,7 +7529,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var err = new Error(service + "/" + method + ": " + (res.errorText || res.errorCode || "falhou"));
           err.result = res;
           reject(err);
-        } else resolve(res);
+        } else resolve2(res);
       };
       bridge.call(service.replace(/\/$/, "") + "/" + method, JSON.stringify(params || {}));
     });
@@ -7486,7 +7577,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     } catch (e) {}
     var RTC = window.RTCPeerConnection || window.webkitRTCPeerConnection;
     if (!RTC) return Promise.reject(new Error("Sem IP"));
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve2, reject) {
       var pc = new RTC({
         iceServers: []
       });
@@ -7503,7 +7594,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var m = e && e.candidate && /(\d+\.\d+\.\d+\.\d+)/.exec(e.candidate.candidate);
         if (m && !/^(0\.|127\.)/.test(m[1])) {
           clearTimeout(timer);
-          done(resolve, m[1]);
+          done(resolve2, m[1]);
         }
       };
       pc.createDataChannel("ip");
@@ -7534,6 +7625,247 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }).catch(function () {
       return [];
+    });
+  }
+
+  // src/js/api/debrid.js
+  var PROVIDERS = [{
+    id: "realdebrid",
+    name: "Real-Debrid",
+    key: "realDebridKey",
+    site: "real-debrid.com/apitoken"
+  }, {
+    id: "torbox",
+    name: "TorBox",
+    key: "torboxKey",
+    site: "torbox.app/settings"
+  }, {
+    id: "premiumize",
+    name: "Premiumize",
+    key: "premiumizeKey",
+    site: "premiumize.me/account"
+  }];
+  function active() {
+    var s = settings();
+    if (s.debridEnabled === false) return null;
+    var has = function has(p2) {
+      return !!(s[p2.key] || "").trim();
+    };
+    var chosen = PROVIDERS.find(function (p2) {
+      return p2.id === s.debridProvider;
+    });
+    var p = chosen && has(chosen) ? chosen : PROVIDERS.find(has);
+    return p ? {
+      id: p.id,
+      name: p.name,
+      key: s[p.key].trim()
+    } : null;
+  }
+  var VIDEO_RE = /\.(mkv|mp4|avi|m4v|mov|ts|webm|wmv)$/i;
+  function magnet(infoHash, sources) {
+    var tr = (sources || []).filter(function (x) {
+      return /^tracker:/.test(x);
+    }).map(function (x) {
+      return "&tr=" + encodeURIComponent(x.slice(8));
+    });
+    return "magnet:?xt=urn:btih:" + infoHash + tr.join("");
+  }
+  function pickFile(files, hint) {
+    var vids = files.filter(function (f) {
+      return VIDEO_RE.test(f.name) && !/sample/i.test(f.name);
+    });
+    var pool = vids.length ? vids : files;
+    if (!pool.length) return null;
+    var base = function base(n) {
+      return String(n || "").split("/").pop().toLowerCase();
+    };
+    if (hint.filename) {
+      var m = pool.find(function (f) {
+        return base(f.name) === base(hint.filename);
+      });
+      if (m) return m;
+    }
+    if (hint.season != null && hint.episode != null) {
+      var s = +hint.season;
+      var e = +hint.episode;
+      var re = new RegExp("(s0*" + s + "[ ._-]*e0*" + e + "(?!\\d))|(\\b" + s + "x0*" + e + "(?!\\d))", "i");
+      var _m = pool.find(function (f) {
+        return re.test(base(f.name));
+      });
+      if (_m) return _m;
+    }
+    if (hint.fileIdx != null && files[hint.fileIdx] && pool.indexOf(files[hint.fileIdx]) >= 0) return files[hint.fileIdx];
+    return pool.slice().sort(function (a, b) {
+      return b.size - a.size;
+    })[0];
+  }
+  function wait(ms) {
+    return new Promise(function (r) {
+      return setTimeout(r, ms);
+    });
+  }
+  function notCached(name) {
+    return new Error(t("{name}: este torrent ainda não está no cache. Escolha outra fonte.", {
+      name: name
+    }));
+  }
+  var RD = "https://api.real-debrid.com/rest/1.0/";
+  function rd(key2, method, path, body) {
+    return request(method, RD + path, body, {
+      form: true,
+      timeout: 2e4,
+      headers: {
+        Authorization: "Bearer " + key2
+      }
+    });
+  }
+  function realDebrid(key2, mag, hint) {
+    return rd(key2, "POST", "torrents/addMagnet", {
+      magnet: mag
+    }).then(function (added) {
+      var id = added && added.id;
+      if (!id) throw new Error("Real-Debrid: addMagnet");
+      var info2 = function info2() {
+        return rd(key2, "GET", "torrents/info/" + encodeURIComponent(id));
+      };
+      return info2().then(function (tor) {
+        var files = (tor.files || []).map(function (f) {
+          return {
+            id: f.id,
+            name: f.path,
+            size: f.bytes
+          };
+        });
+        var file = pickFile(files, hint);
+        if (!file) throw new Error("Real-Debrid: no files");
+        return rd(key2, "POST", "torrents/selectFiles/" + encodeURIComponent(id), {
+          files: String(file.id)
+        });
+      }).then(function poll2(_, n) {
+        n = n || 0;
+        return info2().then(function (tor) {
+          if (tor.status === "downloaded" && tor.links && tor.links.length) return tor.links[0];
+          if (n >= 3 || /error|dead|virus|magnet_error/.test(tor.status)) {
+            rd(key2, "DELETE", "torrents/delete/" + encodeURIComponent(id)).catch(function () {});
+            throw notCached("Real-Debrid");
+          }
+          return wait(1500).then(function () {
+            return poll2(null, n + 1);
+          });
+        });
+      }).then(function (link) {
+        return rd(key2, "POST", "unrestrict/link", {
+          link: link
+        });
+      }).then(function (r) {
+        if (!r || !r.download) throw new Error("Real-Debrid: unrestrict");
+        return r.download;
+      });
+    });
+  }
+  var TB = "https://api.torbox.app/v1/api/";
+  function torbox(key2, mag, hint) {
+    var auth2 = {
+      Authorization: "Bearer " + key2
+    };
+    return request("POST", TB + "torrents/createtorrent", {
+      magnet: mag,
+      allow_zip: "false"
+    }, {
+      form: true,
+      timeout: 2e4,
+      headers: auth2
+    }).then(function (r) {
+      var id = r && r.data && r.data.torrent_id;
+      if (!id) throw new Error(r && r.detail || "TorBox: createtorrent");
+      var _poll = function poll2(n) {
+        return getJSON(TB + "torrents/mylist?bypass_cache=true&id=" + encodeURIComponent(id), {
+          timeout: 15e3,
+          headers: auth2
+        }).then(function (l) {
+          var tor = l && l.data;
+          if (tor && (tor.download_present || tor.download_finished) && tor.files && tor.files.length) return tor;
+          if (n >= 3) throw notCached("TorBox");
+          return wait(1500).then(function () {
+            return _poll(n + 1);
+          });
+        });
+      };
+      return _poll(0).then(function (tor) {
+        var files = tor.files.map(function (f) {
+          return {
+            id: f.id,
+            name: f.name || f.short_name,
+            size: f.size
+          };
+        });
+        var file = pickFile(files, hint);
+        if (!file) throw new Error("TorBox: no files");
+        return getJSON(TB + "torrents/requestdl?token=" + encodeURIComponent(key2) + "&torrent_id=" + encodeURIComponent(id) + "&file_id=" + encodeURIComponent(file.id), {
+          timeout: 15e3
+        }).then(function (d) {
+          if (!d || !d.data) throw new Error("TorBox: requestdl");
+          return d.data;
+        });
+      });
+    });
+  }
+  function premiumize(key2, mag, hint) {
+    return request("POST", "https://www.premiumize.me/api/transfer/directdl", {
+      src: mag,
+      apikey: key2
+    }, {
+      form: true,
+      timeout: 25e3
+    }).then(function (r) {
+      if (!r || r.status !== "success" || !r.content || !r.content.length) throw notCached("Premiumize");
+      var files = r.content.map(function (f, i) {
+        return {
+          id: i,
+          name: f.path,
+          size: f.size,
+          link: f.stream_link || f.link
+        };
+      });
+      var file = pickFile(files, hint);
+      if (!file || !file.link) throw notCached("Premiumize");
+      return file.link;
+    });
+  }
+  function resolve(infoHash, sources, hint) {
+    var p = active();
+    if (!p) return Promise.reject(new Error("debrid off"));
+    var mag = magnet(String(infoHash).toLowerCase(), sources);
+    var fn = p.id === "realdebrid" ? realDebrid : p.id === "torbox" ? torbox : premiumize;
+    return fn(p.key, mag, hint || {}).catch(function (e) {
+      if (e.status === 401 || e.status === 403) throw new Error(t("{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", {
+        name: p.name
+      }));
+      throw e;
+    });
+  }
+  function testKey(id, key2) {
+    if (id === "realdebrid") return request("GET", RD + "user", null, {
+      timeout: 15e3,
+      headers: {
+        Authorization: "Bearer " + key2
+      }
+    }).then(function (u) {
+      return u && u.username || "OK";
+    });
+    if (id === "torbox") return getJSON(TB + "user/me", {
+      timeout: 15e3,
+      headers: {
+        Authorization: "Bearer " + key2
+      }
+    }).then(function (u) {
+      return u && u.data && u.data.email ? u.data.email : "OK";
+    });
+    return getJSON("https://www.premiumize.me/api/account/info?apikey=" + encodeURIComponent(key2), {
+      timeout: 15e3
+    }).then(function (u) {
+      if (!u || u.status !== "success") throw new Error(t("Chave inválida"));
+      return u.customer_id ? String(u.customer_id) : "OK";
     });
   }
 
@@ -7680,9 +8012,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return torrentUrl(base, infoHash, hasIdx ? fileIdx : r && r.guessedFileIdx, body.peerSearch ? body.peerSearch.sources : []);
     });
   }
-  function proxyUrl(base, streamUrl, reqHeaders, resHeaders) {
-    var m = streamUrl.match(/^(https?:\/\/[^/?#]+)([^?#]*)(\?[^#]*)?/);
-    if (!m) return streamUrl;
+  function proxyUrl(base, streamUrl2, reqHeaders, resHeaders) {
+    var m = streamUrl2.match(/^(https?:\/\/[^/?#]+)([^?#]*)(\?[^#]*)?/);
+    if (!m) return streamUrl2;
     var parts = ["d=" + encodeURIComponent(m[1])];
     Object.keys(reqHeaders || {}).forEach(function (k) {
       return parts.push("h=" + encodeURIComponent(k + ":" + reqHeaders[k]));
@@ -7715,6 +8047,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function needsServer(stream) {
+    if (isTorrent(stream) && active()) return false;
     if (typeof stream.url === "string") {
       if (stream.url.indexOf("magnet:") === 0) return true;
       return !!(stream.behaviorHints && stream.behaviorHints.proxyHeaders);
@@ -7724,7 +8057,34 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function isPlayableType(stream) {
     return typeof stream.url === "string" || typeof stream.infoHash === "string";
   }
+  function isTorrent(stream) {
+    return typeof stream.infoHash === "string" || typeof stream.url === "string" && stream.url.indexOf("magnet:") === 0;
+  }
   function toPlayable(stream, seriesInfo) {
+    var p = isTorrent(stream) && active();
+    if (!p) return toPlayableLocal(stream, seriesInfo);
+    var mg = stream.infoHash ? {
+      infoHash: stream.infoHash,
+      sources: stream.sources || []
+    } : parseMagnet(stream.url);
+    if (!mg) return Promise.reject(new Error(t("Magnet inválido")));
+    var hint = {
+      fileIdx: stream.fileIdx,
+      filename: stream.behaviorHints && stream.behaviorHints.filename,
+      season: seriesInfo && seriesInfo.season,
+      episode: seriesInfo && seriesInfo.episode
+    };
+    return resolve(mg.infoHash, mg.sources, hint).then(function (u) {
+      return {
+        url: u,
+        viaServer: false,
+        debrid: p.name
+      };
+    }).catch(function (e) {
+      return baseUrl() ? toPlayableLocal(stream, seriesInfo) : Promise.reject(e);
+    });
+  }
+  function toPlayableLocal(stream, seriesInfo) {
     var base = baseUrl();
     if (typeof stream.url === "string") {
       if (stream.url.indexOf("magnet:") === 0) {
@@ -7812,11 +8172,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return !!tmdbKey();
   }
   function tmdb(path, params) {
-    var q = ["api_key=" + encodeURIComponent(tmdbKey())];
+    var q2 = ["api_key=" + encodeURIComponent(tmdbKey())];
     Object.keys(params || {}).forEach(function (k) {
-      return q.push(k + "=" + encodeURIComponent(params[k]));
+      return q2.push(k + "=" + encodeURIComponent(params[k]));
     });
-    return cachedJSON(TMDB + path + "?" + q.join("&"), 6 * 36e5, {
+    return cachedJSON(TMDB + path + "?" + q2.join("&"), 6 * 36e5, {
       quiet: true
     });
   }
@@ -7924,10 +8284,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var credits = (p.combined_credits && p.combined_credits.cast || []).concat((p.combined_credits && p.combined_credits.crew || []).filter(function (c) {
           return c.job === "Director";
         })).filter(function (c) {
-          var key = c.media_type + c.id;
-          if (!c.poster_path || seen[key] || c.media_type !== "movie" && c.media_type !== "tv") return false;
+          var key2 = c.media_type + c.id;
+          if (!c.poster_path || seen[key2] || c.media_type !== "movie" && c.media_type !== "tv") return false;
           if (c.media_type === "tv" && /^(Self|Himself|Herself|Host)/i.test(c.character || "")) return false;
-          seen[key] = true;
+          seen[key2] = true;
           return true;
         }).sort(function (a, b) {
           return (b.popularity || 0) - (a.popularity || 0);
@@ -7994,11 +8354,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function mdblist(meta) {
-    var key = (settings().mdblistKey || "").trim();
+    var key2 = (settings().mdblistKey || "").trim();
     var imdb = imdbOf(meta.id);
-    if (!key || !imdb) return Promise.resolve([]);
+    if (!key2 || !imdb) return Promise.resolve([]);
     var type = meta.type === "series" ? "show" : "movie";
-    return getJSONViaProxy("https://api.mdblist.com/imdb/" + type + "/" + imdb + "?apikey=" + encodeURIComponent(key), {
+    return getJSONViaProxy("https://api.mdblist.com/imdb/" + type + "/" + imdb + "?apikey=" + encodeURIComponent(key2), {
       timeout: 12e3
     }).then(function (d) {
       var out = [];
@@ -8277,6 +8637,174 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (v.layer) popLayer(v.layer);
   }
 
+  // src/js/api/mediaserver.js
+  var KINDS = [{
+    id: "jellyfin",
+    name: "Jellyfin"
+  }, {
+    id: "emby",
+    name: "Emby"
+  }];
+  function connection() {
+    var c = settings().mediaServer;
+    return c && c.token && c.address ? c : null;
+  }
+  function enabled() {
+    return !!connection() && settings().mediaServerEnabled !== false;
+  }
+  function deviceId() {
+    var id = settings().mediaServerDeviceId;
+    if (!id) {
+      id = "tv" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+      saveSettings({
+        mediaServerDeviceId: id
+      });
+    }
+    return id;
+  }
+  function root(c) {
+    return c.address + (c.providerId === "emby" ? "/emby" : "");
+  }
+  function headers(c) {
+    var auth2 = 'MediaBrowser Client="Stremio 7M", Device="Samsung TV", DeviceId="' + deviceId() + '", Version="1.0"' + (c.token ? ', Token="' + c.token + '"' : "");
+    var h2 = {};
+    h2[c.providerId === "emby" ? "X-Emby-Authorization" : "Authorization"] = auth2;
+    return h2;
+  }
+  function call2(c, method, path, body) {
+    return request(method, root(c) + path, body, {
+      timeout: 15e3,
+      headers: headers(c)
+    });
+  }
+  function normalizeAddress(value) {
+    var v = String(value || "").trim();
+    if (!v) return "";
+    if (!/^https?:\/\//i.test(v)) v = "http://" + v;
+    if (!/:\d+(\/|$)/.test(v.replace(/^https?:\/\//i, "")) && /^http:/i.test(v)) v = v.replace(/\/*$/, "") + ":8096";
+    return v.replace(/\/+$/, "").replace(/\/emby$/i, "");
+  }
+  function connect(providerId, address, username, password) {
+    var draft = {
+      providerId: providerId,
+      address: normalizeAddress(address)
+    };
+    if (!draft.address) return Promise.reject(new Error(t("Endereço inválido")));
+    return call2(draft, "GET", "/System/Info/Public").then(function (info2) {
+      return call2(draft, "POST", "/Users/AuthenticateByName", {
+        Username: username,
+        Pw: password || ""
+      }).then(function (auth2) {
+        if (!auth2 || !auth2.AccessToken || !auth2.User) throw new Error(t("Usuário ou senha errados"));
+        var c = {
+          providerId: providerId,
+          address: draft.address,
+          token: auth2.AccessToken,
+          userId: auth2.User.Id,
+          user: auth2.User.Name || username,
+          name: info2 && info2.ServerName || draft.address
+        };
+        saveSettings({
+          mediaServer: c,
+          mediaServerEnabled: true
+        });
+        return c;
+      });
+    });
+  }
+  function disconnect() {
+    var c = connection();
+    if (c) call2(c, "POST", "/Sessions/Logout").catch(function () {});
+    saveSettings({
+      mediaServer: null
+    });
+  }
+  function q(obj) {
+    return Object.keys(obj).map(function (k) {
+      return encodeURIComponent(k) + "=" + encodeURIComponent(obj[k]);
+    }).join("&");
+  }
+  function findItem(c, type, imdb) {
+    var params = {
+      Recursive: "true",
+      IncludeItemTypes: type === "movie" ? "Movie" : "Series",
+      AnyProviderIdEquals: "imdb." + imdb,
+      Fields: "ProviderIds,MediaSources",
+      Limit: 20
+    };
+    return call2(c, "GET", "/Users/" + c.userId + "/Items?" + q(params)).then(function (r) {
+      return (r && r.Items || []).filter(function (it) {
+        var ids2 = it.ProviderIds || {};
+        return String(ids2.Imdb || ids2.IMDB || ids2.imdb || "") === imdb;
+      });
+    });
+  }
+  function streamUrl(c, itemId, sourceId) {
+    return root(c) + "/Videos/" + encodeURIComponent(itemId) + "/stream?" + q({
+      static: "true",
+      MediaSourceId: sourceId,
+      DeviceId: deviceId(),
+      api_key: c.token
+    });
+  }
+  function sizeLabel(bytes) {
+    if (!bytes) return "";
+    return bytes > 1073741824 ? (bytes / 1073741824).toFixed(1) + " GB" : Math.round(bytes / 1048576) + " MB";
+  }
+  function streams(type, id) {
+    var c = connection();
+    var m = String(id).match(/^(tt\d+)(?::(\d+):(\d+))?$/);
+    if (!c || !m) return Promise.resolve([]);
+    return findItem(c, type, m[1]).then(function (items2) {
+      if (items2.length !== 1) return [];
+      var item2 = items2[0];
+      var pick2 = type === "movie" ? Promise.resolve(item2) : call2(c, "GET", "/Shows/" + encodeURIComponent(item2.Id) + "/Episodes?" + q({
+        UserId: c.userId,
+        Season: m[2],
+        Fields: "MediaSources"
+      })).then(function (r) {
+        return (r && r.Items || []).find(function (ep) {
+          return ep.ParentIndexNumber === +m[2] && ep.IndexNumber === +m[3] && !ep.IsMissing;
+        });
+      });
+      return pick2.then(function (it) {
+        return !it ? [] : (it.MediaSources || []).map(function (src) {
+          var video = (src.MediaStreams || []).find(function (x) {
+            return x.Type === "Video";
+          });
+          var audio = (src.MediaStreams || []).find(function (x) {
+            return x.Type === "Audio";
+          });
+          return {
+            name: c.name,
+            title: [src.Name || it.Name, [video && video.DisplayTitle, audio && audio.DisplayTitle, (src.Container || "").toUpperCase(), sizeLabel(src.Size)].filter(Boolean).join(" · ")].join("\n"),
+            url: streamUrl(c, it.Id, src.Id),
+            behaviorHints: {
+              filename: (src.Path || "").split(/[\\/]/).pop()
+            }
+          };
+        });
+      });
+    });
+  }
+  function virtualAddon() {
+    if (!enabled()) return null;
+    var c = connection();
+    return {
+      transportUrl: "mediaserver://" + c.providerId,
+      manifest: {
+        id: "mediaserver." + c.providerId,
+        name: c.name,
+        resources: ["stream"],
+        types: ["movie", "series"],
+        idPrefixes: ["tt"]
+      },
+      base: "",
+      query: "",
+      virtualStreams: streams
+    };
+  }
+
   // src/js/api/addons.js
   var CINEMETA = "https://v3-cinemeta.strem.io/manifest.json";
   var OPENSUBTITLES = "https://opensubtitles-v3.strem.io/manifest.json";
@@ -8334,7 +8862,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function list() {
-    return addons || [];
+    var ms = virtualAddon();
+    return ms ? [ms].concat(addons || []) : addons || [];
   }
   function resourceMatch(addon, resource, type, id) {
     var m = addon.manifest;
@@ -8442,16 +8971,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function fetchStreams(type, id, onAddon) {
     var sources = withResource("stream", type, id);
     return Promise.all(sources.map(function (a) {
-      return getJSON(url(a, "stream", type, id), {
+      return (a.virtualStreams ? a.virtualStreams(type, id).then(function (list2) {
+        return {
+          streams: list2
+        };
+      }) : getJSON(url(a, "stream", type, id), {
         timeout: 3e4
-      }).then(function (r) {
-        var streams = (r && r.streams || []).map(function (s) {
+      })).then(function (r) {
+        var streams2 = (r && r.streams || []).map(function (s) {
           return Object.assign({
             addon: a.manifest.name || a.manifest.id
           }, s);
         });
-        if (onAddon) onAddon(a, streams);
-        return streams;
+        if (onAddon) onAddon(a, streams2);
+        return streams2;
       }).catch(function (e) {
         if (onAddon) onAddon(a, [], e);
         return [];
@@ -8564,9 +9097,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return interleave(r[0], r[1]);
     });
   }
-  function localize(items) {
-    if (!hasTmdb()) return items;
-    return Promise.all(items.map(function (it) {
+  function localize(items2) {
+    if (!hasTmdb()) return items2;
+    return Promise.all(items2.map(function (it) {
       return tmdbFind(it.id).then(function (f) {
         if (f && f.overview) it.description = f.overview;
         if (f && f.title) it.name = f.title;
@@ -8577,8 +9110,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }));
   }
   function load2() {
-    return loadRaw().then(function (items) {
-      return localize(items.slice(0, 12));
+    return loadRaw().then(function (items2) {
+      return localize(items2.slice(0, 12));
     });
   }
   function loadRaw() {
@@ -8826,7 +9359,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var s = settings();
     return s.animeSkip === false ? "" : (s.animeSkipClientId || "").trim();
   }
-  function animeSkipQuery(query, key) {
+  function animeSkipQuery(query, key2) {
     var body = {
       query: query
     };
@@ -8834,7 +9367,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       timeout: 1e4,
       quiet: true,
       headers: {
-        "X-Client-ID": key
+        "X-Client-ID": key2
       }
     };
     return postJSON(ANIMESKIP, body, opts).catch(function (e) {
@@ -8874,10 +9407,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return out;
   }
   var showCache = {};
-  function animeSkipSegments(anilist, season, episode, key) {
+  function animeSkipSegments(anilist, season, episode, key2) {
     if (!anilist || !episode) return Promise.resolve([]);
     var ck = String(anilist);
-    if (!showCache[ck]) showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key).then(function (r) {
+    if (!showCache[ck]) showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key2).then(function (r) {
       return (r && r.data && r.data.findShowsByExternalId || []).map(function (x) {
         return String(x.id);
       }).filter(function (x) {
@@ -8892,7 +9425,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       ids2.forEach(function (id) {
         chain = chain.then(function (found) {
           if (found.length) return found;
-          return animeSkipQuery('{ findEpisodesByShowId(showId: "' + id + '") { season number baseDuration timestamps { at type { name } } } }', key).then(function (r) {
+          return animeSkipQuery('{ findEpisodesByShowId(showId: "' + id + '") { season number baseDuration timestamps { at type { name } } } }', key2).then(function (r) {
             var eps = r && r.data && r.data.findEpisodesByShowId || [];
             var same = eps.filter(function (e) {
               return Number(e.number) === Number(episode);
@@ -8959,8 +9492,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   var malCache = {};
   function idsFromAnime(a) {
-    var key = a.source + ":" + a.id;
-    if (!malCache[key]) malCache[key] = getJSON(ARM2 + "ids?source=" + a.source + "&id=" + a.id, {
+    var key2 = a.source + ":" + a.id;
+    if (!malCache[key2]) malCache[key2] = getJSON(ARM2 + "ids?source=" + a.source + "&id=" + a.id, {
       quiet: true
     }).then(function (r) {
       return {
@@ -8973,11 +9506,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         anilist: a.source === "anilist" ? parseInt(a.id, 10) : null
       };
     });
-    return malCache[key];
+    return malCache[key2];
   }
   function idsFromImdb(imdb, season) {
-    var key = imdb + ":" + season;
-    if (!malCache[key]) malCache[key] = getJSON(ARM2 + "imdb?id=" + imdb, {
+    var key2 = imdb + ":" + season;
+    if (!malCache[key2]) malCache[key2] = getJSON(ARM2 + "imdb?id=" + imdb, {
       quiet: true
     }).then(function (list2) {
       var arr = Array.isArray(list2) ? list2 : [];
@@ -8994,7 +9527,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         anilist: null
       };
     });
-    return malCache[key];
+    return malCache[key2];
   }
   function isAnime(meta) {
     var g = (meta.genres || meta.genre || []).map(function (x) {
@@ -9024,17 +9557,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       if (!idsPromise || !ep) return [];
       return idsPromise.then(function (ids2) {
-        var key = animeSkipKey();
-        var fromAs = key && ids2.anilist ? animeSkipSegments(ids2.anilist, seasonForSkip, ep, key).catch(function () {
+        var key2 = animeSkipKey();
+        var fromAs = key2 && ids2.anilist ? animeSkipSegments(ids2.anilist, seasonForSkip, ep, key2).catch(function () {
           return [];
         }) : Promise.resolve([]);
         return fromAs.then(function (found) {
           if (found.length) return found;
           if (!ids2.mal) return [];
-          var q = ["op", "ed", "recap", "mixed-op", "mixed-ed"].map(function (t2) {
+          var q2 = ["op", "ed", "recap", "mixed-op", "mixed-ed"].map(function (t2) {
             return "types%5B%5D=" + t2;
           }).join("&");
-          return getJSONWithProxy(ANISKIP + ids2.mal + "/" + ep + "?" + q + "&episodeLength=" + Math.round(durationSec || 0)).then(fromAniSkip).catch(function () {
+          return getJSONWithProxy(ANISKIP + ids2.mal + "/" + ep + "?" + q2 + "&episodeLength=" + Math.round(durationSec || 0)).then(fromAniSkip).catch(function () {
             return [];
           });
         });
@@ -9478,7 +10011,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var TRAKT_API = "https://api.trakt.tv";
   var SIMKL_API = "https://api.simkl.com";
   var SYNC_EVERY = 30 * 60 * 1e3;
-  var PROVIDERS = ["trakt", "simkl"];
+  var PROVIDERS2 = ["trakt", "simkl"];
   function keys() {
     var s = settings();
     return {
@@ -9505,14 +10038,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var a = account(provider);
     return !!(a && a.invalid);
   }
-  function useFor(key, p) {
-    var v = settings()[key];
+  function useFor(key2, p) {
+    var v = settings()[key2];
     return v !== "trakt" && v !== "simkl" ? true : v === p;
   }
   function connected() {
-    return PROVIDERS.filter(isConnected);
+    return PROVIDERS2.filter(isConnected);
   }
-  function disconnect(provider) {
+  function disconnect2(provider) {
     var a = account(provider);
     saveAccount(provider, null);
     if (provider === "trakt" && a && a.token && hasKeys("trakt")) {
@@ -9650,7 +10183,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         expires: Date.now() + (r.expires_in || 900) * 1e3
       };
     });
-    var _poll = function poll2(info2) {
+    var _poll2 = function poll2(info2) {
       if (stopped) return;
       if (Date.now() > info2.expires) return finish(onFail, "expired");
       timer = setTimeout(function () {
@@ -9667,7 +10200,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         check3.then(function (r) {
           if (stopped) return;
           var token = r && r.access_token;
-          if (!token) return _poll(info2);
+          if (!token) return _poll2(info2);
           saveAccount(provider, Object.assign({
             provider: provider
           }, tokenFields(r)));
@@ -9682,7 +10215,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             syncNow();
           });
         }).catch(function (e) {
-          if (e.status === 400 || e.status === 429 || e.status === 0) return _poll(e.status === 429 ? Object.assign({}, info2, {
+          if (e.status === 400 || e.status === 429 || e.status === 0) return _poll2(e.status === 429 ? Object.assign({}, info2, {
             interval: info2.interval + 1e3
           }) : info2);
           finish(onFail, e.status === 418 ? "denied" : e.status === 410 ? "expired" : e.message);
@@ -9699,7 +10232,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     handle2.ready = begin.then(function (info2) {
       handle2.code = info2.code;
       handle2.url = info2.url;
-      _poll(info2);
+      _poll2(info2);
       return handle2;
     });
     handle2.ready.catch(function (e) {
@@ -9758,8 +10291,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     connected().filter(function (p) {
       return useFor("progressSource", p);
     }).forEach(function (p) {
-      var call2 = p === "trakt" ? trakt("POST", "/scrobble/" + action, body) : simkl("POST", "/scrobble/" + action, body);
-      call2.then(function () {
+      var call4 = p === "trakt" ? trakt("POST", "/scrobble/" + action, body) : simkl("POST", "/scrobble/" + action, body);
+      call4.then(function () {
         return log.info("tracker", p, action, body.progress);
       }).catch(function (e) {
         if (e.status !== 409) log.warn("tracker", p, action, e.message);
@@ -9775,10 +10308,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       playing = null;
       return;
     }
-    var key = JSON.stringify(body);
-    if (playing && playing.key !== key && playing.lastAction !== "stop") scrobble("pause", playing.progress || 0);
-    if (!playing || playing.key !== key) playing = {
-      key: key,
+    var key2 = JSON.stringify(body);
+    if (playing && playing.key !== key2 && playing.lastAction !== "stop") scrobble("pause", playing.progress || 0);
+    if (!playing || playing.key !== key2) playing = {
+      key: key2,
       body: body,
       progress: fraction
     };
@@ -9908,6 +10441,216 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/lib/chapters.js
+  var HEAD_BYTES = 256 * 1024;
+  var MAX_CHAPTERS_BYTES = 1024 * 1024;
+  var ID = {
+    EBML: 440786851,
+    SEGMENT: 408125543,
+    SEEK_HEAD: 290298740,
+    SEEK: 19899,
+    SEEK_ID: 21419,
+    SEEK_POS: 21420,
+    CHAPTERS: 272869232,
+    EDITION: 17849,
+    EDITION_HIDDEN: 17853,
+    EDITION_DEFAULT: 17883,
+    ATOM: 182,
+    TIME_START: 145,
+    ATOM_HIDDEN: 152,
+    ATOM_ENABLED: 17816,
+    DISPLAY: 128,
+    STRING: 133,
+    CLUSTER: 524531317
+  };
+  function vint(b, pos, keepMarker) {
+    if (pos >= b.length) return null;
+    var first = b[pos];
+    var len = 1;
+    var mask = 128;
+    while (len <= 8 && !(first & mask)) {
+      len++;
+      mask >>= 1;
+    }
+    if (len > 8 || pos + len > b.length) return null;
+    var value = keepMarker ? first : first & mask - 1;
+    var allOnes = value === mask - 1;
+    for (var i = 1; i < len; i++) {
+      value = value * 256 + b[pos + i];
+      if (b[pos + i] !== 255) allOnes = false;
+    }
+    return {
+      value: value,
+      len: len,
+      unknown: !keepMarker && allOnes
+    };
+  }
+  function element(b, pos) {
+    var id = vint(b, pos, true);
+    if (!id || id.len > 4) return null;
+    var size = vint(b, pos + id.len, false);
+    if (!size) return null;
+    var start3 = pos + id.len + size.len;
+    return {
+      id: id.value,
+      start: start3,
+      end: size.unknown ? Infinity : start3 + size.value,
+      pos: pos
+    };
+  }
+  function kids(b, parent) {
+    var out = [];
+    var end = Math.min(parent.end, b.length);
+    var pos = parent.start;
+    while (pos < end) {
+      var e = element(b, pos);
+      if (!e || e.end > end || e.end <= pos) break;
+      out.push(e);
+      pos = e.end;
+    }
+    return out;
+  }
+  function uint(b, e) {
+    var v = 0;
+    for (var i = e.start; i < e.end && i < b.length; i++) v = v * 256 + b[i];
+    return v;
+  }
+  function utf8(b, e) {
+    var s = "";
+    for (var i = e.start; i < e.end && i < b.length; i++) s += "%" + ("0" + b[i].toString(16)).slice(-2);
+    try {
+      return decodeURIComponent(s).replace(/\0+$/, "").trim();
+    } catch (x) {
+      return "";
+    }
+  }
+  function flag(b, parent, id, dflt) {
+    var e = kids(b, parent).find(function (x) {
+      return x.id === id;
+    });
+    return e ? uint(b, e) !== 0 : dflt;
+  }
+  function parse2(b) {
+    var root2 = element(b, 0);
+    if (!root2 || root2.id !== ID.CHAPTERS) return [];
+    var editions = kids(b, root2).filter(function (e) {
+      return e.id === ID.EDITION && !flag(b, e, ID.EDITION_HIDDEN, false);
+    });
+    var ed = editions.find(function (e) {
+      return flag(b, e, ID.EDITION_DEFAULT, false);
+    }) || editions[0];
+    if (!ed) return [];
+    return kids(b, ed).filter(function (e) {
+      return e.id === ID.ATOM && !flag(b, e, ID.ATOM_HIDDEN, false) && flag(b, e, ID.ATOM_ENABLED, true);
+    }).map(function (atom) {
+      var parts = kids(b, atom);
+      var st = parts.find(function (x) {
+        return x.id === ID.TIME_START;
+      });
+      if (!st) return null;
+      var disp = parts.find(function (x) {
+        return x.id === ID.DISPLAY;
+      });
+      var str = disp && kids(b, disp).find(function (x) {
+        return x.id === ID.STRING;
+      });
+      return {
+        start: uint(b, st) / 1e9,
+        title: str ? utf8(b, str) : ""
+      };
+    }).filter(Boolean).sort(function (x, y) {
+      return x.start - y.start;
+    });
+  }
+  function range(url2, start3, length) {
+    return new Promise(function (resolve2) {
+      var xhr2 = new XMLHttpRequest();
+      xhr2.open("GET", url2, true);
+      xhr2.responseType = "arraybuffer";
+      xhr2.timeout = 8e3;
+      xhr2.setRequestHeader("Range", "bytes=" + start3 + "-" + (start3 + length - 1));
+      xhr2.onload = function () {
+        var ok = xhr2.status === 206 || xhr2.status === 200 && start3 === 0;
+        if (!ok || !xhr2.response) return resolve2(null);
+        var b = new Uint8Array(xhr2.response);
+        if (b.length > length) b = b.subarray(0, length);
+        resolve2(b);
+      };
+      xhr2.onerror = xhr2.ontimeout = function () {
+        return resolve2(null);
+      };
+      xhr2.send();
+    });
+  }
+  function elementAt(url2, head, pos, max) {
+    var fromHead = pos < head.length ? element(head, pos) : null;
+    var probe = fromHead ? Promise.resolve({
+      b: head,
+      e: fromHead
+    }) : range(url2, pos, 64).then(function (b) {
+      return b ? {
+        b: b,
+        e: element(b, 0)
+      } : null;
+    });
+    return probe.then(function (p) {
+      if (!p || !p.e || p.e.end === Infinity) return null;
+      var total = p.e.end - p.e.pos;
+      if (total <= 0 || total > max) return null;
+      if (pos + total <= head.length) return head.subarray(pos, pos + total);
+      return range(url2, pos, total).then(function (b) {
+        return b && b.length === total ? b : null;
+      });
+    });
+  }
+  function load4(url2) {
+    if (!/^https?:\/\//i.test(String(url2 || "")) || typeof Uint8Array === "undefined") return Promise.resolve([]);
+    return range(url2, 0, HEAD_BYTES).then(function (head) {
+      if (!head) return [];
+      var ebml = element(head, 0);
+      if (!ebml || ebml.id !== ID.EBML) return [];
+      var seg = element(head, ebml.end);
+      if (!seg || seg.id !== ID.SEGMENT) return [];
+      var pos = seg.start;
+      var seekHead = null;
+      var chaptersPos = null;
+      while (pos < head.length) {
+        var e = element(head, pos);
+        if (!e || e.end <= pos) break;
+        if (e.id === ID.SEEK_HEAD && seekHead === null) seekHead = pos;
+        if (e.id === ID.CHAPTERS) {
+          chaptersPos = pos;
+          break;
+        }
+        if (e.id === ID.CLUSTER || e.end === Infinity) break;
+        pos = e.end;
+      }
+      var findPos = chaptersPos !== null || seekHead === null ? Promise.resolve(chaptersPos) : elementAt(url2, head, seekHead, HEAD_BYTES).then(function (sh) {
+        if (!sh) return null;
+        var root2 = element(sh, 0);
+        var rel = null;
+        kids(sh, root2).filter(function (x) {
+          return x.id === ID.SEEK;
+        }).forEach(function (s) {
+          var id = null;
+          var p = null;
+          kids(sh, s).forEach(function (c) {
+            if (c.id === ID.SEEK_ID) id = uint(sh, c);else if (c.id === ID.SEEK_POS) p = uint(sh, c);
+          });
+          if (id === ID.CHAPTERS && p !== null && rel === null) rel = p;
+        });
+        return rel === null ? null : seg.start + rel;
+      });
+      return findPos.then(function (cp) {
+        return cp === null ? [] : elementAt(url2, head, cp, MAX_CHAPTERS_BYTES).then(function (b) {
+          return b ? parse2(b) : [];
+        });
+      });
+    }).catch(function () {
+      return [];
+    });
+  }
+
   // src/js/views/player.js
   var HIDE_MS = 5e3;
   var SAVE_MS = 15e3;
@@ -10007,9 +10750,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return playNext();
       }
     });
+    var chapBtn = h("div.btn", {
+      focusable: true,
+      html: '<span class="ico">☰</span>' + t("Capítulos"),
+      onSelect: function onSelect() {
+        return chaptersMenu();
+      }
+    });
     var buttons = h("div.p-buttons", {
       "data-group": ""
-    }, [playBtn, audioBtn, subsBtn, srcBtn, nextBtn]);
+    }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, nextBtn]);
     var spinner = h("div.p-center", null, h("div.spinner"));
     var msgEl = h("div.p-msg");
     var skipFill = h("i");
@@ -10042,7 +10792,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }), upNextTitle, upNextCount, h("div.un-buttons", {
       "data-group": ""
     }, [upNextPlay, upNextCancel])]);
-    var el = h("div.view.player", null, [videoNode, subsEl, overlay, skipBox, upNextBox, spinner, msgEl]);
+    var postTrack = h("div.row-track", {
+      "data-scroll-x": "",
+      "data-group": ""
+    });
+    var postClose = h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return pop();
+      }
+    }, t("Fechar"));
+    var postBox = h("div.p-postplay", null, [h("div.un-label", {
+      text: t("Mais como este")
+    }), postTrack, h("div.un-buttons", {
+      "data-group": ""
+    }, [postClose])]);
+    var el = h("div.view.player", null, [videoNode, subsEl, overlay, skipBox, upNextBox, postBox, spinner, msgEl]);
     var renderer = Renderer(subsEl);
     apply(subsEl, settings2);
     var alive = true;
@@ -10259,8 +11024,79 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       saveProgress2();
       record(video.id, 1);
       onStop(1);
-      if (opts.isSeries && nextVideo() && !upNextCancelled) playNext();else pop();
+      if (opts.isSeries && nextVideo() && !upNextCancelled) playNext();else if (!(opts.isSeries && nextVideo()) && settings().postPlay !== false) showPostPlay();else pop();
     });
+    var postPlayOn = false;
+    function showPostPlay() {
+      var genre = (meta.genres || meta.genre || [])[0];
+      var type = meta.type === "series" ? "series" : "movie";
+      var url2 = "https://v3-cinemeta.strem.io/catalog/" + type + "/top" + (genre ? "/genre=" + encodeURIComponent(genre) : "") + ".json";
+      getJSON(url2, {
+        timeout: 1e4,
+        quiet: true
+      }).then(function (r) {
+        if (!alive) return;
+        var list2 = (r && r.metas || []).filter(function (m) {
+          return m.id !== meta.id && !isWatched(m.id);
+        }).slice(0, 10);
+        if (!list2.length) return pop();
+        clear(postTrack);
+        list2.forEach(function (m) {
+          return postTrack.appendChild(card(m, {
+            onSelect: function onSelect() {
+              pop();
+              openDetails(m.type || type, m.id);
+            }
+          }));
+        });
+        hideControls();
+        postPlayOn = true;
+        postBox.classList.add("show");
+        loadVisibleImages(postBox);
+        focus(postTrack.firstChild, {
+          noScroll: true
+        });
+      }).catch(function () {
+        return alive && pop();
+      });
+    }
+    var chapterList = null;
+    function chaptersMenu() {
+      var forUrl = mediaUrl;
+      var open = function open(list2) {
+        if (!list2.length) return toast(t("Este arquivo não tem capítulos."));
+        var now = videoEl.currentTime || 0;
+        var cur = 0;
+        list2.forEach(function (c, i) {
+          return c.start <= now + 0.5 && (cur = i);
+        });
+        menu(t("Capítulos"), list2.map(function (c, i) {
+          return {
+            label: c.title || t("Capítulo {n}", {
+              n: i + 1
+            }),
+            sub: fmtTime(c.start),
+            value: i,
+            checked: i === cur
+          };
+        }), {
+          onPick: function onPick(i) {
+            videoEl.currentTime = Math.max(0, list2[i].start);
+            showControls();
+          }
+        });
+      };
+      if (chapterList && chapterList.url === forUrl) return open(chapterList.list);
+      toast(t("Procurando capítulos..."));
+      load4(forUrl).then(function (list2) {
+        if (!alive || forUrl !== mediaUrl) return;
+        chapterList = {
+          url: forUrl,
+          list: list2
+        };
+        open(list2);
+      });
+    }
     function sendNowPlaying() {
       var d = videoEl.duration;
       nowPlaying({
@@ -10618,15 +11454,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       triedTranscode = true;
       var base = baseUrl();
       var id = Math.random().toString(36).slice(2) + Date.now().toString(36);
-      var q = ["mediaURL=" + encodeURIComponent(mediaUrl)];
+      var q2 = ["mediaURL=" + encodeURIComponent(mediaUrl)];
       ["h264", "h265", "hevc"].forEach(function (c) {
-        return q.push("videoCodecs=" + c);
+        return q2.push("videoCodecs=" + c);
       });
       ["aac", "mp3", "ac3", "eac3"].forEach(function (c) {
-        return q.push("audioCodecs=" + c);
+        return q2.push("audioCodecs=" + c);
       });
-      q.push("maxAudioChannels=6");
-      var url2 = base + "hlsv2/" + id + "/master.m3u8?" + q.join("&");
+      q2.push("maxAudioChannels=6");
+      var url2 = base + "hlsv2/" + id + "/master.m3u8?" + q2.join("&");
       pendingStart = videoEl.currentTime * 1e3 || pendingStart;
       showSpinner(true);
       message("");
@@ -11130,6 +11966,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return true;
       }
       if (upNextTimer && cur && upNextBox.contains(cur)) return false;
+      if (postPlayOn) {
+        if (k === KEY.BACK || k === KEY.ESC || k === KEY.BACKSPACE) {
+          pop();
+          return true;
+        }
+        return false;
+      }
       if (k === KEY.CH_UP || k === KEY.YELLOW) {
         nudgeSubs(1);
         return true;
@@ -11390,7 +12233,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     el.appendChild(h("div.trailer-focus", {
       focusable: true
     }));
-    function load5() {
+    function load6() {
       var params = "autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&enablejsapi=1&hl=" + current();
       frame.src = "https://www.youtube-nocookie.com/embed/" + ids2[index] + "?" + params;
       playing2 = true;
@@ -11414,7 +12257,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return hint.classList.add("faded");
       }, 3e3);
     }
-    load5();
+    load6();
     return {
       el: el,
       onKey: function onKey(e) {
@@ -11427,13 +12270,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         if ((k === KEY.RIGHT || k === KEY.FF) && ids2.length > 1) {
           index = (index + 1) % ids2.length;
-          load5();
+          load6();
           return true;
         }
         if (k === KEY.LEFT || k === KEY.RW) {
           if (ids2.length > 1 && k === KEY.LEFT) {
             index = (index - 1 + ids2.length) % ids2.length;
-            load5();
+            load6();
           }
           return true;
         }
@@ -11444,6 +12287,121 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         frame.src = "about:blank";
       }
     };
+  }
+
+  // src/js/api/parental.js
+  var API2 = "https://api.tiffara.com/titles/";
+  var CATS = [{
+    key: "SEXUAL_CONTENT",
+    label: "Nudez"
+  }, {
+    key: "VIOLENCE",
+    label: "Violência"
+  }, {
+    key: "PROFANITY",
+    label: "Palavrões"
+  }, {
+    key: "ALCOHOL_DRUGS",
+    label: "Álcool e drogas"
+  }, {
+    key: "FRIGHTENING_INTENSE_SCENES",
+    label: "Cenas assustadoras"
+  }];
+  var cache3 = {};
+  function severity(cat) {
+    var list2 = (cat && cat.severityBreakdowns || []).map(function (x) {
+      return {
+        level: String(x.severityLevel || "").toLowerCase(),
+        votes: +x.voteCount || 0
+      };
+    });
+    var none = (list2.find(function (x) {
+      return x.level === "none";
+    }) || {
+      votes: 0
+    }).votes;
+    var top2 = list2.filter(function (x) {
+      return x.level && x.level !== "none";
+    }).sort(function (a, b) {
+      return b.votes - a.votes;
+    })[0];
+    return top2 && top2.votes > none ? top2.level : null;
+  }
+  function guide(imdbId) {
+    var id = (String(imdbId || "").match(/^tt\d+/) || [])[0];
+    if (!id) return Promise.resolve([]);
+    if (cache3[id]) return cache3[id];
+    var p = getJSONViaProxy(API2 + id + "/parentsGuide", {
+      timeout: 6e3
+    }).then(function (r) {
+      var map = {};
+      (r && r.parentsGuide || []).forEach(function (c) {
+        return map[String(c.category || "").toUpperCase()] = c;
+      });
+      return CATS.map(function (c) {
+        return {
+          label: c.label,
+          level: severity(map[c.key])
+        };
+      }).filter(function (x) {
+        return x.level;
+      });
+    }).catch(function () {
+      delete cache3[id];
+      return [];
+    });
+    cache3[id] = p;
+    return p;
+  }
+
+  // src/js/lib/badges.js
+  var KINDS2 = [{
+    id: "quality",
+    label: "Qualidade (4K, 1080p, 720p)",
+    dflt: true
+  }, {
+    id: "hdr",
+    label: "HDR e Dolby Vision",
+    dflt: true
+  }, {
+    id: "remux",
+    label: "REMUX",
+    dflt: true
+  }, {
+    id: "codec",
+    label: "Codec (HEVC, AV1)",
+    dflt: false
+  }, {
+    id: "audio",
+    label: "Áudio (Atmos, DTS, 5.1)",
+    dflt: true
+  }, {
+    id: "lang",
+    label: "Idioma (Árabe, Multi)",
+    dflt: true
+  }, {
+    id: "size",
+    label: "Tamanho do arquivo",
+    dflt: false
+  }, {
+    id: "bitrate",
+    label: "Taxa estimada (Mbps)",
+    dflt: true
+  }];
+  function streamBadgeSettings() {
+    var saved = settings().streamBadges || {};
+    var out = {};
+    KINDS2.forEach(function (k) {
+      return out[k.id] = saved[k.id] === void 0 ? k.dflt : !!saved[k.id];
+    });
+    return out;
+  }
+  function setBadge(kind, on) {
+    var cur = streamBadgeSettings();
+    cur[kind] = on;
+    saveSettings({
+      streamBadges: cur
+    });
   }
 
   // src/js/views/details.js
@@ -11580,12 +12538,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var collBtn = h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
-          return openCollectionsFor(meta.id, tmdbInfo && tmdbInfo.collection);
+          return collectionMenu(meta, tmdbInfo && tmdbInfo.collection);
         }
       }, [h("span.ico", {
         text: "🎞"
       }), t("Coleção")]);
-      if (!hasCollection(meta.id)) collBtn.style.display = "none";
       ui_collBtn = collBtn;
       updateButtons();
       info2.appendChild(logo2);
@@ -11593,6 +12550,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       info2.appendChild(metaLine);
       info2.appendChild(ratingsEl);
       info2.appendChild(genres);
+      if (settings().parentalGuide) {
+        var guideEl = h("div.details-guide");
+        guideEl.style.display = "none";
+        info2.appendChild(guideEl);
+        guide(meta.imdb_id || meta.id).then(function (list2) {
+          if (!list2.length) return;
+          var LV = {
+            mild: t("Leve"),
+            moderate: t("Moderado"),
+            severe: t("Forte")
+          };
+          list2.forEach(function (g) {
+            return guideEl.appendChild(h("span", {
+              cls: "lv-" + g.level
+            }, [h("b", {
+              text: t(g.label)
+            }), " " + (LV[g.level] || g.level)]));
+          });
+          guideEl.style.display = "";
+        });
+      }
       info2.appendChild(desc);
       info2.appendChild(castLine);
       info2.appendChild(h("div.details-buttons", {
@@ -11820,26 +12798,62 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return mins || (isSeries() ? 45 : 110);
     }
     function streamBadges(s) {
-      var text = (s.name || "") + " " + (s.title || s.description || "");
+      var text = (s.name || "") + " " + (s.title || s.description || "") + " " + (s.behaviorHints && s.behaviorHints.filename || "");
+      var on = streamBadgeSettings();
       var out = [];
-      if (/2160p|\b4k\b|uhd/i.test(text)) out.push({
+      var add = function add(kind, b) {
+        return out.push(Object.assign({
+          kind: kind,
+          hide: on[kind] === false
+        }, b));
+      };
+      if (/2160p|\b4k\b|uhd/i.test(text)) add("quality", {
         t: "4K"
+      });else if (/1080p/i.test(text)) add("quality", {
+        t: "1080p"
+      });else if (/720p/i.test(text)) add("quality", {
+        t: "720p"
       });
-      if (/dolby.?vision|\bdovi\b|\bdv\b/i.test(text)) out.push({
+      if (/dolby.?vision|\bdovi\b|\bdv\b/i.test(text)) add("hdr", {
         t: "Dolby Vision",
         warn: true
-      });else if (/hdr/i.test(text)) out.push({
+      });else if (/hdr/i.test(text)) add("hdr", {
         t: "HDR"
       });
-      if (/remux/i.test(text)) out.push({
+      if (/remux/i.test(text)) add("remux", {
         t: "REMUX",
         warn: true
+      });
+      if (/\b(hevc|x265|h\.?265)\b/i.test(text)) add("codec", {
+        t: "HEVC"
+      });else if (/\bav1\b/i.test(text)) add("codec", {
+        t: "AV1"
+      });
+      if (/atmos/i.test(text)) add("audio", {
+        t: "Atmos"
+      });else if (/truehd/i.test(text)) add("audio", {
+        t: "TrueHD"
+      });else if (/\bdts/i.test(text)) add("audio", {
+        t: "DTS"
+      });
+      if (/\b7[ .]1\b/.test(text)) add("audio", {
+        t: "7.1"
+      });else if (/\b5[ .]1\b/.test(text)) add("audio", {
+        t: "5.1"
+      });
+      if (/arabic|\bara\b|عربي/i.test(text)) add("lang", {
+        t: t("Árabe")
+      });else if (/\bmulti\b/i.test(text)) add("lang", {
+        t: "Multi"
       });
       var m = text.match(/(\d+(?:[.,]\d+)?)\s*(GB|MB)\b/i);
       if (m) {
         var mb = parseFloat(m[1].replace(",", ".")) * (m[2].toUpperCase() === "GB" ? 1024 : 1);
+        add("size", {
+          t: m[1].replace(",", ".") + " " + m[2].toUpperCase()
+        });
         var mbps = Math.round(mb * 8 / (runtimeMinutes() * 60));
-        if (mbps > 0) out.push({
+        if (mbps > 0) add("bitrate", {
           t: "~" + mbps + " Mbps",
           warn: mbps > 30
         });
@@ -11985,8 +12999,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         filterBtn.textContent = (g ? g.addon.manifest.name : t("Todos")) + " ▾";
       }
       function firstVisibleItem() {
-        var items = list2.querySelectorAll(".stream");
-        for (var i = 0; i < items.length; i++) if (items[i].offsetParent !== null && !items[i].classList.contains("disabled")) return items[i];
+        var items2 = list2.querySelectorAll(".stream");
+        for (var i = 0; i < items2.length; i++) if (items2[i].offsetParent !== null && !items2[i].classList.contains("disabled")) return items2[i];
         return null;
       }
       function applyFilter() {
@@ -12028,7 +13042,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return serverOk = r.ok;
       })).then(function () {
         status2();
-        return fetchStreams(meta.type, video.id, function (addon, streams) {
+        return fetchStreams(meta.type, video.id, function (addon, streams2) {
           if (!alive || streamsVideo !== video) return;
           pendingCount--;
           var g = groups.find(function (x) {
@@ -12036,9 +13050,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
           if (g) {
             g.done = true;
-            g.count = streams.length;
-            g.streams = streams;
-            streams.forEach(function (s) {
+            g.count = streams2.length;
+            g.streams = streams2;
+            streams2.forEach(function (s) {
               all2.push(s);
               g.el.appendChild(streamItem(s, video, serverOk, all2));
             });
@@ -12071,10 +13085,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));else if (needs) tags.push(h("span.s-tag", {
         cls: serverOk ? "" : "warn",
         text: serverOk ? t("Torrent · via PC") : t("Torrent · precisa do PC")
+      }));else if (isTorrent(s) && active()) tags.push(h("span.s-tag.ok", {
+        text: t("Torrent · via {name}", {
+          name: active().name
+        })
       }));else tags.push(h("span.s-tag.ok", {
         text: t("Direto")
       }));
-      streamBadges(s).forEach(function (b) {
+      streamBadges(s).filter(function (b) {
+        return !b.hide;
+      }).forEach(function (b) {
         return tags.push(h("span.s-tag", {
           cls: b.warn ? "warn" : "",
           text: b.t
@@ -12476,7 +13496,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
-  var CATS = [{
+  var CATS2 = [{
     id: "movies",
     label: "Filmes e séries"
   }, {
@@ -12541,6 +13561,205 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       } : null;
     }).filter(Boolean);
   }
+  var MINE_KEY = "myCollections";
+  function myCollections() {
+    return get(MINE_KEY, []) || [];
+  }
+  function saveMine(list2) {
+    set(MINE_KEY, list2);
+  }
+  function newCollection(name, first) {
+    var list2 = myCollections();
+    var c = {
+      id: "my" + Date.now().toString(36),
+      name: name,
+      items: first ? [first] : []
+    };
+    list2.push(c);
+    saveMine(list2);
+    return c;
+  }
+  function toggleInCollection(id, item2) {
+    var list2 = myCollections();
+    var c = list2.find(function (x) {
+      return x.id === id;
+    });
+    if (!c) return false;
+    var i = c.items.findIndex(function (x) {
+      return x.id === item2.id;
+    });
+    if (i >= 0) c.items.splice(i, 1);else c.items.push(item2);
+    saveMine(list2);
+    return i < 0;
+  }
+  function collectionMenu(meta, tmdbCollection2) {
+    var item2 = {
+      id: meta.id,
+      type: meta.type,
+      name: meta.name,
+      poster: meta.poster || ""
+    };
+    var opts = [];
+    franchisesOf(meta.id).forEach(function (f) {
+      return opts.push({
+        label: displayName(f),
+        sub: t("{n} títulos", {
+          n: f.items.length
+        }),
+        value: {
+          f: f
+        }
+      });
+    });
+    if (tmdbCollection2 && !franchisesOf(meta.id).some(function (f) {
+      return normalize2(f.name) === normalize2(tmdbCollection2.name);
+    })) {
+      opts.push({
+        label: tmdbCollection2.name,
+        sub: "TMDB",
+        value: {
+          tmdb: tmdbCollection2.id
+        }
+      });
+    }
+    myCollections().forEach(function (c) {
+      var inside = c.items.some(function (x) {
+        return x.id === meta.id;
+      });
+      opts.push({
+        label: (inside ? "✓ " : "+ ") + c.name,
+        sub: inside ? t("Toque para tirar desta coleção") : t("Adicionar a esta coleção"),
+        value: {
+          mine: c.id
+        }
+      });
+    });
+    opts.push({
+      label: "+ " + t("Nova coleção..."),
+      value: {
+        create: true
+      }
+    });
+    menu(t("Coleções"), opts, {
+      onPick: function onPick(v) {
+        if (v.f) return openFranchise(v.f);
+        if (v.tmdb) return openTmdbCollection(v.tmdb);
+        if (v.mine) {
+          var c = myCollections().find(function (x) {
+            return x.id === v.mine;
+          });
+          var added = toggleInCollection(v.mine, item2);
+          return toast(added ? t('Adicionado a "{name}"', {
+            name: c.name
+          }) : t('Removido de "{name}"', {
+            name: c.name
+          }));
+        }
+        promptText(t("Nome da nova coleção"), "", t("Ex.: Para ver no fim de semana"), function (name) {
+          newCollection(name, item2);
+          toast(t('Coleção "{name}" criada', {
+            name: name
+          }));
+        });
+      }
+    });
+  }
+  function MyCollectionView(id) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var head = h("div.franchise-head");
+    var filters = h("div.filters", {
+      "data-group": ""
+    });
+    var grid = h("div.grid");
+    scroller.appendChild(head);
+    scroller.appendChild(filters);
+    scroller.appendChild(grid);
+    el.appendChild(scroller);
+    function render() {
+      var c = myCollections().find(function (x) {
+        return x.id === id;
+      });
+      if (!c) return pop();
+      clear(head);
+      head.appendChild(h("h1", {
+        text: c.name
+      }));
+      head.appendChild(h("div.franchise-sub", {
+        text: t("{n} títulos", {
+          n: c.items.length
+        }) + "  ·  " + t("Coleção sua")
+      }));
+      clear(filters);
+      filters.appendChild(h("div.chip", {
+        focusable: true,
+        text: t("Renomear"),
+        onSelect: function onSelect() {
+          return promptText(t("Renomear"), c.name, "", function (name) {
+            var list2 = myCollections();
+            var x = list2.find(function (y) {
+              return y.id === id;
+            });
+            if (x) x.name = name;
+            saveMine(list2);
+            render();
+          });
+        }
+      }));
+      filters.appendChild(h("div.chip", {
+        focusable: true,
+        text: t("Apagar coleção"),
+        onSelect: function onSelect() {
+          return confirmDialog(t('Apagar a coleção "{name}"?', {
+            name: c.name
+          }), t("Apagar"), function () {
+            saveMine(myCollections().filter(function (x) {
+              return x.id !== id;
+            }));
+            pop();
+          });
+        }
+      }));
+      clear(grid);
+      c.items.forEach(function (it) {
+        return grid.appendChild(card({
+          id: it.id,
+          name: it.name,
+          poster: it.poster || POSTER(it.id)
+        }, {
+          badge: isWatched(it.id) ? "✓" : "",
+          onSelect: function onSelect() {
+            return menu(it.name, [{
+              label: t("Abrir"),
+              value: "open"
+            }, {
+              label: t("Tirar desta coleção"),
+              value: "remove"
+            }], {
+              onPick: function onPick(v) {
+                if (v === "open") return openDetails(it.type, it.id);
+                toggleInCollection(id, it);
+                render();
+              }
+            });
+          }
+        }));
+      });
+      if (!c.items.length) grid.appendChild(h("div.hint", {
+        text: t("Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.")
+      }));
+      loadVisibleImages(el, 400);
+    }
+    render();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return render();
+      }
+    };
+  }
   function isSeriesItem(it) {
     return it[3] === "s";
   }
@@ -12589,39 +13808,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return toast(t("Não foi possível carregar a coleção."));
     });
   }
-  function openCollectionsFor(imdb, tmdbCollection2) {
-    var list2 = franchisesOf(imdb);
-    if (list2.length === 1 && !tmdbCollection2) return openFranchise(list2[0]);
-    var opts = list2.map(function (f) {
-      return {
-        label: displayName(f),
-        sub: t("{n} títulos", {
-          n: f.items.length
-        }),
-        value: f
-      };
-    });
-    if (tmdbCollection2 && !list2.some(function (f) {
-      return normalize2(f.name) === normalize2(tmdbCollection2.name);
-    })) {
-      opts.push({
-        label: tmdbCollection2.name,
-        sub: "TMDB",
-        value: {
-          tmdb: tmdbCollection2.id
-        }
-      });
-    }
-    if (opts.length === 1 && opts[0].value.tmdb) return openTmdbCollection(opts[0].value.tmdb);
-    menu(t("Coleções"), opts, {
-      onPick: function onPick(v) {
-        return v.tmdb ? openTmdbCollection(v.tmdb) : openFranchise(v);
-      }
-    });
-  }
-  function hasCollection(imdb) {
-    return franchisesOf(imdb).length > 0;
-  }
   function normalize2(s) {
     return String(s || "").toLowerCase().replace(/collection|coleção|سلسلة|[^a-z0-9]/g, "");
   }
@@ -12633,11 +13819,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var bar = topbar("collections", goTab);
     var searchBox = h("div.search-box");
     var results = h("div");
+    var mineBox = h("div");
     var favBox = h("div");
     var grid = h("div");
     scroller.appendChild(bar);
     scroller.appendChild(searchBox);
     scroller.appendChild(results);
+    scroller.appendChild(mineBox);
     scroller.appendChild(favBox);
     scroller.appendChild(h("div.row-title", {
       text: t("Coleções")
@@ -12650,8 +13838,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         placeholder: t("Buscar outra coleção (ex.: Shrek, Rambo, Saw)..."),
         focusable: true
       });
-      input.__submit = function (q) {
-        return search(q);
+      input.__submit = function (q2) {
+        return search(q2);
       };
       searchBox.appendChild(input);
     } else {
@@ -12660,8 +13848,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));
     }
     var token = 0;
-    function search(q) {
-      var query = (q || "").trim();
+    function search(q2) {
+      var query = (q2 || "").trim();
       clear(results);
       if (query.length < 2) return;
       var my = ++token;
@@ -12717,7 +13905,42 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       });
     }
+    function renderMine() {
+      clear(mineBox);
+      mineBox.appendChild(h("div.row-title", {
+        text: t("Minhas coleções")
+      }));
+      var g = h("div.grid.fav-grid");
+      myCollections().forEach(function (c) {
+        var first = c.items[0];
+        g.appendChild(card({
+          name: c.name,
+          poster: first ? first.poster || POSTER(first.id) : ""
+        }, {
+          badge: String(c.items.length),
+          onSelect: function onSelect() {
+            return push(MyCollectionView(c.id));
+          }
+        }));
+      });
+      g.appendChild(h("div.card.see-all", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return promptText(t("Nome da nova coleção"), "", t("Ex.: Para ver no fim de semana"), function (name) {
+            var c = newCollection(name);
+            renderMine();
+            push(MyCollectionView(c.id));
+          });
+        }
+      }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+        text: "+"
+      }), t("Nova coleção")])), h("div.name", {
+        text: ""
+      })]));
+      mineBox.appendChild(g);
+    }
     function renderGrid() {
+      renderMine();
       clear(favBox);
       var pinned = favEntries();
       if (pinned.length) {
@@ -12734,7 +13957,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var pinnedIds = pinned.map(function (e) {
         return e.f.id;
       });
-      CATS.forEach(function (c) {
+      CATS2.forEach(function (c) {
         var list2 = FRANCHISES.filter(function (f) {
           return pinnedIds.indexOf(f.id) < 0 && catOf(f) === c.id;
         });
@@ -12812,14 +14035,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           title: next[1]
         })));
       }
-      var chip = function chip(key, label, active, onSelect) {
+      var chip = function chip(key2, label, active2, onSelect) {
         var c = h("div.chip", {
           focusable: true,
-          cls: active ? "active" : "",
+          cls: active2 ? "active" : "",
           text: label,
           onSelect: onSelect
         });
-        c.__key = key;
+        c.__key = key2;
         return c;
       };
       filters.appendChild(chip("release", t("Ordem de lançamento"), order === "release", function () {
@@ -12918,7 +14141,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   var run = 0;
-  function load4() {
+  function load5() {
     var my = ++run;
     return load().then(function () {
       return scan2(my);
@@ -13022,6 +14245,169 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/lib/homeRows.js
+  function key(entry) {
+    return (entry.addon.transportUrl || entry.addon.manifest.id || "") + "|" + entry.catalog.type + "|" + entry.catalog.id;
+  }
+  function prefs() {
+    var p = settings().homeRows || {};
+    return {
+      order: p.order || [],
+      hidden: p.hidden || []
+    };
+  }
+  function save(p) {
+    saveSettings({
+      homeRows: {
+        order: p.order,
+        hidden: p.hidden
+      }
+    });
+  }
+  function isHidden(entry) {
+    return prefs().hidden.indexOf(key(entry)) >= 0;
+  }
+  function sort(entries) {
+    var order = prefs().order;
+    return entries.map(function (e, i) {
+      return {
+        e: e,
+        i: i,
+        o: order.indexOf(key(e))
+      };
+    }).sort(function (a, b) {
+      return (a.o < 0 ? 1e6 + a.i : a.o) - (b.o < 0 ? 1e6 + b.i : b.o);
+    }).map(function (x) {
+      return x.e;
+    });
+  }
+  function visible(entries) {
+    var hidden = prefs().hidden;
+    return sort(entries).filter(function (e) {
+      return hidden.indexOf(key(e)) < 0;
+    });
+  }
+  function toggleHidden(entry) {
+    var p = prefs();
+    var k = key(entry);
+    var i = p.hidden.indexOf(k);
+    if (i >= 0) p.hidden.splice(i, 1);else p.hidden.push(k);
+    save(p);
+  }
+  function move2(entries, entry, delta) {
+    var list2 = sort(entries).map(key);
+    var k = key(entry);
+    var i = list2.indexOf(k);
+    var j = i + delta;
+    if (i < 0 || j < 0 || j >= list2.length) return;
+    list2.splice(i, 1);
+    list2.splice(j, 0, k);
+    var p = prefs();
+    p.order = list2;
+    save(p);
+  }
+  function reset() {
+    saveSettings({
+      homeRows: null
+    });
+  }
+
+  // src/js/api/mdblistRows.js
+  var API3 = "https://api.mdblist.com/";
+  var POSTER2 = function POSTER2(imdb) {
+    return "https://images.metahub.space/poster/medium/" + imdb + "/img";
+  };
+  function apiKey() {
+    return (settings().mdblistKey || "").trim();
+  }
+  function hasKey() {
+    return !!apiKey();
+  }
+  function call3(path) {
+    var sep = path.indexOf("?") >= 0 ? "&" : "?";
+    return getJSONViaProxy(API3 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
+      timeout: 15e3
+    });
+  }
+  function myLists() {
+    if (!hasKey()) return Promise.resolve([]);
+    return call3("lists/user").then(function (r) {
+      return (Array.isArray(r) ? r : []).map(function (l) {
+        return {
+          id: String(l.id),
+          name: l.name,
+          items: l.items || 0
+        };
+      });
+    });
+  }
+  function findList(text) {
+    var v = String(text || "").trim();
+    var m = v.match(/mdblist\.com\/lists\/([^/?#]+)\/([^/?#]+)/i) || v.match(/^([\w.-]+)\/([\w.-]+)$/);
+    var path = m ? "lists/" + encodeURIComponent(m[1]) + "/" + encodeURIComponent(m[2]) : /^\d+$/.test(v) ? "lists/" + v : null;
+    if (!path) return Promise.reject(new Error("?"));
+    return call3(path).then(function (r) {
+      var l = Array.isArray(r) ? r[0] : r;
+      if (!l || !l.id) throw new Error("?");
+      return {
+        id: String(l.id),
+        name: l.name
+      };
+    });
+  }
+  function rows() {
+    return hasKey() ? settings().mdblistRows || [] : [];
+  }
+  function setRows(list2) {
+    saveSettings({
+      mdblistRows: list2
+    });
+  }
+  function items(id) {
+    return call3("lists/" + encodeURIComponent(id) + "/items?limit=40").then(function (r) {
+      var out = [];
+      var add = function add(x, type) {
+        return x && x.imdb_id && out.push({
+          id: x.imdb_id,
+          type: type,
+          name: x.title,
+          poster: POSTER2(x.imdb_id),
+          rank: x.rank || 0
+        });
+      };
+      (r && r.movies || []).forEach(function (x) {
+        return add(x, "movie");
+      });
+      (r && r.shows || []).forEach(function (x) {
+        return add(x, "series");
+      });
+      return out.sort(function (a, b) {
+        return a.rank - b.rank;
+      });
+    });
+  }
+  function boardEntries() {
+    return rows().map(function (l) {
+      return {
+        addon: {
+          transportUrl: "mdblist",
+          manifest: {
+            id: "mdblist",
+            name: "MDBList"
+          }
+        },
+        catalog: {
+          id: l.id,
+          name: l.name,
+          type: "movie"
+        },
+        fetch: function fetch() {
+          return items(l.id);
+        }
+      };
+    });
+  }
+
   // src/js/views/home.js
   var ROTATE_MS = 8e3;
   function HomeView() {
@@ -13037,12 +14423,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var neRow = h("div.row", {
       "data-anchor": "30"
     });
-    var rows = h("div.rows");
+    var rows2 = h("div.rows");
     scroller.appendChild(bar);
     scroller.appendChild(heroUi.el);
     scroller.appendChild(cwRow);
     scroller.appendChild(neRow);
-    scroller.appendChild(rows);
+    scroller.appendChild(rows2);
     el.appendChild(scroller);
     var loadedBoard = false;
     onPlayback(function (list2) {
@@ -13077,7 +14463,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNew(force) {
       if (perf() || !force && Date.now() - newLoadedAt < 30 * 6e4) return;
       newLoadedAt = Date.now();
-      load4().then(function (list2) {
+      load5().then(function (list2) {
         newList = list2;
         renderNew();
         publishBrowse();
@@ -13178,8 +14564,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderContinue() {
       clear(cwRow);
-      var items = continueWatching().slice(0, 20);
-      if (!items.length) {
+      var items2 = sortContinue(continueWatching()).slice(0, 20);
+      if (!items2.length) {
         cwRow.style.display = "none";
         return;
       }
@@ -13191,7 +14577,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         "data-scroll-x": "",
         "data-group": ""
       });
-      items.forEach(function (it) {
+      items2.forEach(function (it) {
         var s = it.state;
         var ep = episodeLabel(s.video_id, it._id);
         var bg = /^tt\d+/.test(it._id) ? background(it._id) : it.poster;
@@ -13215,7 +14601,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       loadVisibleImages(cwRow);
     }
     var pending2 = [];
-    var active = 0;
+    var active2 = 0;
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
@@ -13228,15 +14614,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
           p.state = "loading";
-          active++;
+          active2++;
           p.load().then(function () {
             p.state = "done";
-            active--;
+            active2--;
             loadNearby();
           });
         },
         _ret3;
-      for (var i = 0; i < pending2.length && active < 2; i++) {
+      for (var i = 0; i < pending2.length && active2 < 2; i++) {
         _ret3 = _loop5();
         if (_ret3 === 0) continue;
         if (_ret3 === 1) break;
@@ -13245,23 +14631,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function renderBoard() {
       loadedBoard = true;
       pending2 = [];
-      clear(rows);
-      rows.appendChild(spinnerLine(t("Carregando catálogos...")));
+      clear(rows2);
+      rows2.appendChild(spinnerLine(t("Carregando catálogos...")));
       load().then(function () {
-        clear(rows);
-        var cats = boardCatalogs();
-        if (!cats.length) rows.appendChild(h("div.row-empty", {
+        clear(rows2);
+        var cats = visible(boardCatalogs().concat(boardEntries()));
+        if (!cats.length) rows2.appendChild(h("div.row-empty", {
           text: t("Nenhum catálogo. Entre na sua conta em Ajustes.")
         }));
         pending2 = cats.map(function (c) {
-          return Object.assign(buildRow(c, rows), {
+          return Object.assign(buildRow(c, rows2), {
             state: "idle"
           });
         });
         loadNearby();
       }).catch(function (e) {
-        clear(rows);
-        rows.appendChild(h("div.row-empty", {
+        clear(rows2);
+        rows2.appendChild(h("div.row-empty", {
           text: t("Erro ao carregar addons: {msg}", {
             msg: e.message
           })
@@ -13293,7 +14679,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         stop2();
         newLoadedAt = 0;
         pending2 = [];
-        clear(rows);
+        clear(rows2);
         loadedBoard = false;
       },
       onKey: function onKey(e) {
@@ -13311,6 +14697,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     return view;
   }
+  var CW_SORTS = [{
+    id: "recent",
+    label: "Assistidos por último"
+  }, {
+    id: "progress",
+    label: "Quase terminados primeiro"
+  }, {
+    id: "name",
+    label: "Nome (A–Z)"
+  }];
+  function sortContinue(list2) {
+    var mode = settings().cwSort;
+    var frac = function frac(it) {
+      return it.state && it.state.duration ? it.state.timeOffset / it.state.duration : 0;
+    };
+    if (mode === "progress") return list2.slice().sort(function (a, b) {
+      return frac(b) - frac(a);
+    });
+    if (mode === "name") return list2.slice().sort(function (a, b) {
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+    return list2;
+  }
   function episodeLabel(videoId, metaId) {
     if (!videoId || videoId === metaId) return "";
     var m = String(videoId).match(/:(\d+):(\d+)$/);
@@ -13321,8 +14730,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var row = h("div.row", {
       "data-anchor": "30"
     });
+    var sub = entry.fetch ? entry.addon.manifest.name : typeLabel(entry.catalog.type) + " · " + (entry.addon.manifest.name || "");
     var title = h("div.row-title", null, [entry.catalog.name || entry.catalog.id, h("small", {
-      text: typeLabel(entry.catalog.type) + " · " + (entry.addon.manifest.name || "")
+      text: sub
     })]);
     var track = h("div.row-track.pending", {
       "data-scroll-x": "",
@@ -13331,8 +14741,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     row.appendChild(title);
     row.appendChild(track);
     parent.appendChild(row);
-    var load5 = function load5() {
-      return fetchCatalog(entry).then(function (metas) {
+    var load6 = function load6() {
+      return (entry.fetch ? entry.fetch() : fetchCatalog(entry)).then(function (metas) {
         clear(track);
         track.classList.remove("pending");
         if (!metas.length) {
@@ -13346,7 +14756,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }
           }));
         });
-        if (metas.length > ROW_LIMIT || canPage(entry)) {
+        if (!entry.fetch && (metas.length > ROW_LIMIT || canPage(entry))) {
           track.appendChild(h("div.card.see-all", {
             focusable: true,
             onSelect: function onSelect() {
@@ -13365,7 +14775,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     return {
       row: row,
-      load: load5
+      load: load6
     };
   }
   function perf() {
@@ -13408,23 +14818,69 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "data-group": ""
     }, [watchBtn, infoBtn]);
     buttons.__last = watchBtn;
+    var ambient = h("div.hero-ambient");
     var el = h("div.hero", {
       "data-anchor": "0"
-    }, [bgA, bgB, h("div.hero-shade-left"), h("div.hero-shade-bottom"), h("div.hero-info", null, [logo2, title, meta, desc, buttons, dots])]);
-    var items = [];
+    }, [bgA, bgB, ambient, h("div.hero-shade-left"), h("div.hero-shade-bottom"), h("div.hero-info", null, [logo2, title, meta, desc, buttons, dots])]);
+    var items2 = [];
     var index = 0;
     var timer = null;
     var front = bgA;
     var paused = true;
     var bgToken = 0;
+    var ambientTimer = null;
+    var ambientOn = false;
+    function stopAmbient() {
+      clearTimeout(ambientTimer);
+      ambientTimer = null;
+      if (ambientOn) {
+        ambientOn = false;
+        ambient.classList.remove("show");
+        var f = ambient.firstChild;
+        if (f) f.src = "about:blank";
+        clear(ambient);
+      }
+    }
+    function queueAmbient() {
+      stopAmbient();
+      if (!settings().ambientMode || paused) return;
+      var it = items2[index];
+      ambientTimer = setTimeout(function () {
+        if (paused || items2[index] !== it || el.getBoundingClientRect().bottom < 200) return;
+        var ids2 = it.trailers && it.trailers.length ? Promise.resolve(it.trailers) : fetchMeta(it.type, it.id).then(function (m) {
+          return it.trailers = trailerIds(m || {});
+        });
+        ids2.then(function (list2) {
+          if (paused || items2[index] !== it || !list2.length) return;
+          clearTimeout(timer);
+          ambientOn = true;
+          var frame = h("iframe", {
+            tabindex: "-1",
+            allow: "autoplay; encrypted-media",
+            referrerpolicy: "origin"
+          });
+          frame.onload = function () {
+            return setTimeout(function () {
+              return ambientOn && ambient.classList.add("show");
+            }, 1500);
+          };
+          frame.src = "https://www.youtube-nocookie.com/embed/" + list2[0] + "?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5";
+          ambient.appendChild(frame);
+          ambientTimer = setTimeout(function () {
+            stopAmbient();
+            schedule();
+          }, 9e4);
+        }).catch(function () {});
+      }, 4e3);
+    }
     function open(play) {
-      var it = items[index];
+      var it = items2[index];
       if (it) openDetails(it.type, it.id, {
         autoStreams: play
       });
     }
     function render() {
-      var it = items[index];
+      var it = items2[index];
       if (!it) {
         el.style.display = "none";
         return;
@@ -13460,28 +14916,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       meta.innerHTML = (it.rating ? '<span class="imdb">★ ' + escapeHtml(it.rating) + "</span> · " : "") + escapeHtml(parts.join(" · "));
       desc.textContent = it.description || "";
       clear(dots);
-      items.forEach(function (_, i) {
+      items2.forEach(function (_, i) {
         return dots.appendChild(h("span", {
           cls: i === index ? "on" : ""
         }));
       });
-      var nx = items[(index + 1) % items.length];
+      var nx = items2[(index + 1) % items2.length];
       if (nx) new Image().src = nx.background;
+      queueAmbient();
     }
     function schedule() {
       clearTimeout(timer);
-      if (paused || items.length < 2 || perf()) return;
+      if (paused || ambientOn || items2.length < 2 || perf()) return;
       timer = setTimeout(function () {
         if (el.getBoundingClientRect().bottom > 0) {
-          index = (index + 1) % items.length;
+          index = (index + 1) % items2.length;
           render();
         }
         schedule();
       }, ROTATE_MS);
     }
     function go(delta) {
-      if (!items.length) return;
-      index = (index + delta + items.length) % items.length;
+      if (!items2.length) return;
+      index = (index + delta + items2.length) % items2.length;
       render();
       schedule();
     }
@@ -13489,18 +14946,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       el: el,
       load: function load() {
         return load2().then(function (list2) {
-          items = list2.slice(0, 12);
+          items2 = list2.slice(0, 12);
           index = 0;
           render();
           schedule();
         }).catch(function () {
-          items = [];
+          items2 = [];
           render();
         });
       },
       // Fora de vista, o banner solta os fundos (2 imagens 1920x1080 ≈ 16 MB na memória).
       pause: function pause() {
         paused = true;
+        stopAmbient();
         clearTimeout(timer);
         bgToken++;
         bgA.style.backgroundImage = "";
@@ -13510,7 +14968,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       resume: function resume() {
         paused = false;
-        if (items.length) render();
+        if (items2.length) render();
         schedule();
       },
       // Esquerda no primeiro botão / direita no último: troca o destaque.
@@ -13559,11 +15017,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(results);
     el.appendChild(scroller);
     var token = 0;
-    input.__submit = function (q) {
-      return run2(q);
+    input.__submit = function (q2) {
+      return run3(q2);
     };
-    function run2(q) {
-      var query = (q || "").trim();
+    function run3(q2) {
+      var query = (q2 || "").trim();
       clear(results);
       if (query.length < 2) {
         results.appendChild(h("div.hint", {
@@ -13648,7 +15106,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       });
     }
-    run2("");
+    run3("");
     return {
       el: el,
       onShow: function onShow() {
@@ -13661,9 +15119,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return focus(input);
       },
       // From the phone remote: fill the box and run the search.
-      search: function search(q) {
-        input.value = q;
-        run2(q);
+      search: function search(q2) {
+        input.value = q2;
+        run3(q2);
       }
     };
   }
@@ -13712,18 +15170,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderGrid() {
       clear(grid);
-      var items = cachedLibrary().filter(function (it) {
+      var items2 = cachedLibrary().filter(function (it) {
         return !it.removed && (filter === "all" || it.type === filter);
       }).sort(function (a, b) {
         return String(b._mtime || "").localeCompare(String(a._mtime || ""));
       });
-      if (!items.length) {
+      if (!items2.length) {
         grid.appendChild(h("div.hint", {
           text: isLoggedIn() ? t("Sua biblioteca está vazia.") : t("Entre na sua conta em Ajustes para ver a biblioteca.")
         }));
         return;
       }
-      items.forEach(function (it) {
+      items2.forEach(function (it) {
         return grid.appendChild(card({
           name: it.name,
           poster: it.poster
@@ -13755,7 +15213,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-13T12:13:02.270Z";
+  var BUILD = "2026-11-13T16:24:04.394Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -14063,6 +15521,56 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/lib/speedtest.js
+  var TRACE = "https://cloudflare.com/cdn-cgi/trace";
+  var DOWN = "https://speed.cloudflare.com/__down?bytes=";
+  function xhr(url2, binary, timeout) {
+    return new Promise(function (resolve2, reject) {
+      var x = new XMLHttpRequest();
+      x.open("GET", url2 + (url2.indexOf("?") >= 0 ? "&" : "?") + "_=" + Date.now() + Math.random(), true);
+      if (binary) x.responseType = "arraybuffer";
+      x.timeout = timeout;
+      var t0 = Date.now();
+      x.onload = function () {
+        return x.status >= 200 && x.status < 300 ? resolve2({
+          ms: Date.now() - t0,
+          bytes: binary && x.response ? x.response.byteLength : 0
+        }) : reject(new Error("HTTP " + x.status));
+      };
+      x.onerror = function () {
+        return reject(new Error("network"));
+      };
+      x.ontimeout = function () {
+        return reject(new Error("timeout"));
+      };
+      x.send();
+    });
+  }
+  function run2(onStep) {
+    var pings = [];
+    var ping = function ping() {
+      return xhr(TRACE, false, 5e3).then(function (r) {
+        return pings.push(r.ms);
+      });
+    };
+    onStep && onStep("ping");
+    return ping().then(ping).then(ping).then(function () {
+      onStep && onStep("download");
+      return xhr(DOWN + 2e6, true, 2e4);
+    }).then(function (warm) {
+      var firstMbps = warm.bytes * 8 / (warm.ms / 1e3) / 1e6;
+      var size = firstMbps > 40 ? 5e7 : firstMbps > 10 ? 2e7 : 5e6;
+      return xhr(DOWN + size, true, 45e3).then(function (r) {
+        return r.bytes * 8 / (r.ms / 1e3) / 1e6;
+      });
+    }).then(function (mbps) {
+      return {
+        pingMs: Math.min.apply(null, pings),
+        mbps: Math.round(mbps * 10) / 10
+      };
+    });
+  }
+
   // src/js/views/settings.js
   var SUB_LANGS = [{
     label: "Inglês",
@@ -14178,16 +15686,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, h("i"));
     }
     var page = "main";
-    function keyInput(title, sub, key, placeholder) {
+    function keyInput(title, sub, key2, placeholder) {
       var s = settings();
       var input = h("input.input", {
         type: "text",
-        value: s[key] || "",
+        value: s[key2] || "",
         placeholder: placeholder
       });
       input.__submit = function (v) {
         var patch = {};
-        patch[key] = v.trim();
+        patch[key2] = v.trim();
         saveSettings(patch);
         toast(v.trim() ? t("Chave salva") : t("Chave removida"));
         render();
@@ -14239,7 +15747,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                   toast(t("Sincronizado"));
                 });
               } else {
-                disconnect(p);
+                disconnect2(p);
                 toast(t("{name} desconectado", {
                   name: name
                 }));
@@ -14263,7 +15771,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       body.appendChild(h("div.set-section", {
         text: t("Contas conectadas")
       }));
-      PROVIDERS.forEach(function (p) {
+      PROVIDERS2.forEach(function (p) {
         return body.appendChild(accountCard(p));
       });
       body.appendChild(keyInput(t("Trakt Client ID"), t("Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)"), "traktClientId", "Client ID"));
@@ -14282,9 +15790,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         id: "simkl",
         label: "Simkl"
       }];
-      var srcRow = function srcRow(title, sub, key) {
+      var srcRow = function srcRow(title, sub, key2) {
         var cur = SRC.find(function (x) {
-          return x.id === s[key];
+          return x.id === s[key2];
         }) || SRC[0];
         body.appendChild(row(title, sub, cur.label, function () {
           return menu(title, SRC.map(function (x) {
@@ -14296,7 +15804,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }), {
             onPick: function onPick(v) {
               var patch = {};
-              patch[key] = v;
+              patch[key2] = v;
               saveSettings(patch);
               render();
             }
@@ -14349,13 +15857,324 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       body.appendChild(keyInput(t("AnimeSkip Client ID"), t("Sua chave do anime-skip.com (fica só nesta TV)"), "animeSkipClientId", "Client ID"));
     }
+    function renderDebrid(s) {
+      pageHeader(t("Debrid"));
+      body.appendChild(h("div.hint", {
+        style: {
+          padding: "0 4px 14px"
+        },
+        text: t("Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.")
+      }));
+      var act = active();
+      var anyKey = PROVIDERS.some(function (p) {
+        return (s[p.key] || "").trim();
+      });
+      body.appendChild(row(t("Usar debrid"), anyKey ? act ? t("Usando {name}", {
+        name: act.name
+      }) : t("Desligado") : t("Preencha uma chave abaixo"), "", function () {
+        saveSettings({
+          debridEnabled: s.debridEnabled === false
+        });
+        render();
+      }, toggle(anyKey && s.debridEnabled !== false)));
+      var cur = PROVIDERS.find(function (p) {
+        return p.id === s.debridProvider;
+      }) || PROVIDERS[0];
+      body.appendChild(row(t("Serviço preferido"), t("Usado quando há mais de uma chave"), cur.name, function () {
+        return menu(t("Serviço preferido"), PROVIDERS.map(function (p) {
+          return {
+            label: p.name,
+            value: p.id,
+            checked: p.id === cur.id
+          };
+        }), {
+          onPick: function onPick(v) {
+            saveSettings({
+              debridProvider: v
+            });
+            render();
+          }
+        });
+      }));
+      body.appendChild(h("div.set-section", {
+        text: t("Chaves de API")
+      }));
+      PROVIDERS.forEach(function (p) {
+        body.appendChild(keyInput(p.name, t("Sua chave de API em {site}", {
+          site: p.site
+        }), p.key, "API key"));
+        if ((s[p.key] || "").trim()) body.appendChild(row(t("Testar {name}", {
+          name: p.name
+        }), "", "", function () {
+          toast(t("Testando..."));
+          testKey(p.id, s[p.key].trim()).then(function (who) {
+            return toast(t("{name} OK: {user}", {
+              name: p.name,
+              user: who
+            }), 5e3);
+          }).catch(function (e) {
+            return toast(t("{name} recusou a chave: {msg}", {
+              name: p.name,
+              msg: e.message
+            }), 6e3);
+          });
+        }));
+      });
+    }
+    function renderHomePage(s) {
+      pageHeader(t("Tela inicial"));
+      var cur = CW_SORTS.find(function (x) {
+        return x.id === s.cwSort;
+      }) || CW_SORTS[0];
+      body.appendChild(row(t("Ordem do Continuar assistindo"), "", t(cur.label), function () {
+        return menu(t("Ordem do Continuar assistindo"), CW_SORTS.map(function (x) {
+          return {
+            label: t(x.label),
+            value: x.id,
+            checked: x.id === cur.id
+          };
+        }), {
+          onPick: function onPick(v) {
+            saveSettings({
+              cwSort: v
+            });
+            dropTab("home");
+            render();
+          }
+        });
+      }));
+      body.appendChild(h("div.set-section", {
+        text: t("Listas do MDBList")
+      }));
+      if (!hasKey()) {
+        body.appendChild(h("div.hint", {
+          style: {
+            padding: "0 4px 10px"
+          },
+          text: t("Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.")
+        }));
+      } else {
+        var saveRows = function saveRows(list2) {
+          setRows(list2);
+          dropTab("home");
+          render();
+        };
+        body.appendChild(row(t("Minhas listas"), t("Escolha quais das suas listas aparecem na tela inicial"), "", function () {
+          toast(t("Carregando..."));
+          myLists().then(function (lists) {
+            var chosen = rows();
+            menu(t("Minhas listas"), lists.map(function (l) {
+              return {
+                label: l.name,
+                sub: t("{n} títulos", {
+                  n: l.items
+                }),
+                value: l,
+                checked: chosen.some(function (c) {
+                  return c.id === l.id;
+                })
+              };
+            }), {
+              empty: t("Você ainda não tem listas no MDBList."),
+              onPick: function onPick(l) {
+                var cur2 = rows();
+                var on = cur2.some(function (c) {
+                  return c.id === l.id;
+                });
+                saveRows(on ? cur2.filter(function (c) {
+                  return c.id !== l.id;
+                }) : cur2.concat([{
+                  id: l.id,
+                  name: l.name
+                }]));
+              }
+            });
+          }).catch(function (e) {
+            return toast(t("Erro: {msg}", {
+              msg: e.message
+            }), 5e3);
+          });
+        }));
+        body.appendChild(row(t("Adicionar lista pública"), t("Ex.: usuario/nome-da-lista ou o link do mdblist.com"), "", function () {
+          return promptText(t("Adicionar lista pública"), "", "user/list", function (text) {
+            return findList(text).then(function (l) {
+              var cur2 = rows();
+              if (!cur2.some(function (c) {
+                return c.id === l.id;
+              })) saveRows(cur2.concat([l]));
+              toast(t('Lista "{name}" adicionada', {
+                name: l.name
+              }));
+            }).catch(function () {
+              return toast(t("Lista não encontrada"), 5e3);
+            });
+          });
+        }));
+      }
+      body.appendChild(h("div.set-section", {
+        text: t("Fileiras")
+      }));
+      body.appendChild(h("div.hint", {
+        style: {
+          padding: "0 4px 10px"
+        },
+        text: t("OK numa fileira: subir, descer ou esconder.")
+      }));
+      var all2 = boardCatalogs().concat(boardEntries());
+      sort(all2).forEach(function (e) {
+        var hidden = isHidden(e);
+        var name = e.catalog.name || e.catalog.id;
+        var kind = e.fetch ? "" : ({
+          movie: t("Filmes"),
+          series: t("Séries"),
+          anime: t("Animes")
+        }[e.catalog.type] || e.catalog.type) + " · ";
+        body.appendChild(row((hidden ? "⊘ " : "") + name, kind + (e.addon.manifest.name || ""), hidden ? t("Escondida") : t("Visível"), function () {
+          return menu(name, [{
+            label: "▲ " + t("Subir"),
+            value: -1
+          }, {
+            label: "▼ " + t("Descer"),
+            value: 1
+          }, {
+            label: hidden ? t("Mostrar") : t("Esconder"),
+            value: 0
+          }], {
+            onPick: function onPick(v) {
+              if (v === 0) toggleHidden(e);else move2(all2, e, v);
+              dropTab("home");
+              render();
+            }
+          });
+        }));
+      });
+      body.appendChild(row(t("Restaurar ordem padrão"), "", "", function () {
+        reset();
+        dropTab("home");
+        toast(t("Ordem padrão restaurada"));
+        render();
+      }));
+    }
+    function renderBadges(s) {
+      pageHeader(t("Selos das fontes"));
+      var cur = streamBadgeSettings();
+      KINDS2.forEach(function (k) {
+        return body.appendChild(row(t(k.label), "", "", function () {
+          setBadge(k.id, !cur[k.id]);
+          render();
+        }, toggle(cur[k.id])));
+      });
+    }
+    var msDraft = {
+      providerId: "jellyfin",
+      address: "",
+      user: "",
+      pass: ""
+    };
+    function draftInput(title, sub, field, placeholder, type) {
+      var input = h("input.input", {
+        type: type || "text",
+        value: msDraft[field],
+        placeholder: placeholder
+      });
+      input.__submit = function (v) {
+        msDraft[field] = v.trim();
+        render();
+      };
+      return h("div.set-row", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return select(input);
+        }
+      }, [h("div.label", null, [title, sub ? h("small", {
+        text: sub
+      }) : null]), input]);
+    }
+    function renderServers(s) {
+      pageHeader(t("Servidores de mídia (Jellyfin e Emby)"));
+      body.appendChild(h("div.hint", {
+        style: {
+          padding: "0 4px 14px"
+        },
+        text: t("Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.")
+      }));
+      var c = connection();
+      if (c) {
+        var kindName = (KINDS.find(function (k) {
+          return k.id === c.providerId;
+        }) || {}).name || "";
+        var card2 = row(c.name, kindName + " · " + c.address, t("Conectado: {user}", {
+          user: c.user
+        }), function () {
+          return menu(c.name, [{
+            label: t("Desconectar"),
+            value: "off"
+          }], {
+            onPick: function onPick() {
+              disconnect();
+              dropTab("home");
+              toast(t("{name} desconectado", {
+                name: c.name
+              }));
+              render();
+            }
+          });
+        });
+        card2.classList.add("acct-card");
+        if (s.mediaServerEnabled !== false) card2.classList.add("acct-on");
+        body.appendChild(card2);
+        body.appendChild(row(t("Mostrar como fonte"), t("Lista os arquivos do servidor nas fontes"), "", function () {
+          saveSettings({
+            mediaServerEnabled: s.mediaServerEnabled === false
+          });
+          render();
+        }, toggle(s.mediaServerEnabled !== false)));
+        return;
+      }
+      var kind = KINDS.find(function (k) {
+        return k.id === msDraft.providerId;
+      }) || KINDS[0];
+      body.appendChild(row(t("Tipo de servidor"), "", kind.name, function () {
+        return menu(t("Tipo de servidor"), KINDS.map(function (k) {
+          return {
+            label: k.name,
+            value: k.id,
+            checked: k.id === kind.id
+          };
+        }), {
+          onPick: function onPick(v) {
+            msDraft.providerId = v;
+            render();
+          }
+        });
+      }));
+      body.appendChild(draftInput(t("Endereço do servidor"), t("Ex.: 192.168.0.20:8096"), "address", "http://IP:8096"));
+      body.appendChild(draftInput(t("Usuário"), "", "user", t("Usuário")));
+      body.appendChild(draftInput(t("Senha"), t("Usada só para entrar; não fica salva"), "pass", "••••", "password"));
+      body.appendChild(row(t("Conectar"), "", "", function () {
+        if (!msDraft.address || !msDraft.user) return toast(t("Preencha o endereço e o usuário"));
+        toast(t("Conectando..."));
+        connect(msDraft.providerId, msDraft.address, msDraft.user, msDraft.pass).then(function (conn) {
+          msDraft.pass = "";
+          dropTab("home");
+          toast(t("Conectado a {name}", {
+            name: conn.name
+          }));
+          render();
+        }).catch(function (e) {
+          return toast(t("Não foi possível conectar: {msg}", {
+            msg: e.message
+          }), 6e3);
+        });
+      }));
+    }
     function render() {
       var s = settings();
       var keep = current2();
       var keepIndex = keep ? Array.prototype.indexOf.call(body.querySelectorAll(".set-row"), keep) : -1;
       clear(body);
-      if (page === "tracking" || page === "skip") {
-        if (page === "tracking") renderTracking(s);else renderSkip(s);
+      if (page !== "main") {
+        if (page === "tracking") renderTracking(s);else if (page === "debrid") renderDebrid(s);else if (page === "servers") renderServers(s);else if (page === "home") renderHomePage(s);else if (page === "badges") renderBadges(s);else renderSkip(s);
         var sub = body.querySelectorAll(".set-row");
         if (keepIndex >= 0 && sub[keepIndex]) focus(sub[keepIndex]);else if (sub[0]) focus(sub[0]);
         return;
@@ -14461,6 +16280,37 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       body.appendChild(row(t("Adicionar perfil"), t("Para outra pessoa, com outra conta Stremio"), "", function () {
         return createProfile();
       }));
+      if (allProfiles.length > 1) {
+        body.appendChild(row(t("Copiar ajustes de outro perfil"), t("Legendas, aparência, tela inicial e coleções (a conta não é copiada)"), "", function () {
+          return menu(t("Copiar ajustes de"), allProfiles.filter(function (p) {
+            return p.id !== prof.id;
+          }).map(function (p) {
+            return {
+              label: p.name,
+              value: p.id
+            };
+          }), {
+            onPick: function onPick(id) {
+              var from = allProfiles.find(function (p) {
+                return p.id === id;
+              });
+              confirmDialog(t('Trocar os ajustes de "{to}" pelos de "{from}"?', {
+                to: prof.name,
+                from: from.name
+              }), t("Copiar"), function () {
+                copySettingsFrom(id);
+                apply3(settings().theme);
+                document.body.classList.toggle("oled", !!settings().oled);
+                dropTab("home");
+                toast(t("Ajustes copiados de {name}", {
+                  name: from.name
+                }));
+                render();
+              });
+            }
+          });
+        }));
+      }
       if (allProfiles.length > 1) {
         body.appendChild(row(t('Perguntar "Quem está assistindo?" ao abrir'), "", "", function () {
           saveSettings({
@@ -14646,6 +16496,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
         });
       }));
+      body.appendChild(row(t("Tela inicial"), t("Ordem das fileiras, listas do MDBList e Continuar assistindo"), "", function () {
+        page = "home";
+        render();
+        scroller.scrollTop = 0;
+      }));
+      body.appendChild(row(t("Modo ambiente"), t("O trailer toca sem som atrás do Hero Banner (mais pesado na TV)"), "", function () {
+        saveSettings({
+          ambientMode: !settings().ambientMode
+        });
+        dropTab("home");
+        render();
+      }, toggle(!!s.ambientMode)));
       body.appendChild(row(t("Tema OLED (preto puro)"), t("Fundo totalmente preto"), "", function () {
         var on = !settings().oled;
         saveSettings({
@@ -14735,7 +16597,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       apply(preview, s);
       body.appendChild(h("div.sub-preview", null, preview));
       var lb = labels(s);
-      var choose = function choose(title, sub, list3, key, value, label) {
+      var choose = function choose(title, sub, list3, key2, value, label) {
         return body.appendChild(row(title, sub, t(String(label)), function () {
           return menu(title, list3.map(function (x) {
             return {
@@ -14746,7 +16608,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }), {
             onPick: function onPick(v) {
               var patch = {};
-              patch[key] = v;
+              patch[key2] = v;
               saveSettings(patch);
               render();
             }
@@ -14785,6 +16647,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         id: "html5",
         label: t("Navegador (HTML5)")
       }], "playerEngine", s.playerEngine === "html5" ? "html5" : "auto", s.playerEngine === "html5" ? t("Navegador (HTML5)") : t("Samsung (AVPlay)"));
+      body.appendChild(row(t("Sugestões no fim"), t('Ao terminar um filme, mostra "Mais como este"'), "", function () {
+        saveSettings({
+          postPlay: settings().postPlay === false
+        });
+        render();
+      }, toggle(s.postPlay !== false)));
+      body.appendChild(row(t("Selos das fontes"), t("Qualidade, HDR, áudio, idioma, tamanho..."), "", function () {
+        page = "badges";
+        render();
+        scroller.scrollTop = 0;
+      }));
       body.appendChild(h("div.set-section", {
         text: t("Integrações")
       }));
@@ -14798,18 +16671,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         render();
         scroller.scrollTop = 0;
       }));
+      body.appendChild(row(t("Debrid"), "Real-Debrid · TorBox · Premiumize", active() ? active().name : t("Desligado"), function () {
+        page = "debrid";
+        render();
+        scroller.scrollTop = 0;
+      }));
+      body.appendChild(row(t("Servidores de mídia (Jellyfin e Emby)"), t("Seu próprio servidor como fonte"), enabled() ? connection().name : t("Desconectado"), function () {
+        page = "servers";
+        render();
+        scroller.scrollTop = 0;
+      }));
       body.appendChild(h("div.set-section", {
         text: t("Metadados extras (opcional)")
       }));
-      var keyRow = function keyRow(title, sub, key, placeholder) {
+      var keyRow = function keyRow(title, sub, key2, placeholder) {
         var input = h("input.input", {
           type: "text",
-          value: s[key] || "",
+          value: s[key2] || "",
           placeholder: placeholder
         });
         input.__submit = function (v) {
           var patch = {};
-          patch[key] = v.trim();
+          patch[key2] = v.trim();
           saveSettings(patch);
           toast(v.trim() ? t("Chave salva") : t("Chave removida"));
           render();
@@ -14825,6 +16708,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
       keyRow(t("Chave TMDB"), t("Descrições em árabe, perfis de atores, calendário de filmes, logos e elenco com fotos (grátis em themoviedb.org)"), "tmdbKey", "API key (v3)");
       keyRow(t("Chave MDBList"), t("Notas do Rotten Tomatoes, Metacritic, Trakt e Letterboxd (grátis em mdblist.com)"), "mdblistKey", "API key");
+      keyRow(t("Chave RPDB"), t("Pôsteres com as notas desenhadas (ratingposterdb.com)"), "rpdbKey", "API key");
+      body.appendChild(row(t("Guia para os pais"), t("Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)"), "", function () {
+        saveSettings({
+          parentalGuide: !settings().parentalGuide
+        });
+        render();
+      }, toggle(!!s.parentalGuide)));
       body.appendChild(h("div.set-section", {
         text: t("Addons")
       }));
@@ -14900,6 +16790,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("div.label", null, [t("Log remoto"), h("small", {
         text: t("npm run logs no PC")
       })]), logInput]));
+      var netRow = row(t("Testar a internet"), t("Ping e velocidade de download (Cloudflare)"), "", function () {
+        var v = netRow.querySelector(".value");
+        v.textContent = t("Medindo o ping...");
+        run2(function (step) {
+          return v.textContent = step === "ping" ? t("Medindo o ping...") : t("Baixando arquivo de teste...");
+        }).then(function (r) {
+          var verdict = r.mbps >= 40 ? t("dá para 4K") : r.mbps >= 15 ? t("bom para 1080p") : r.mbps >= 6 ? t("só 720p com folga") : t("lenta para vídeo");
+          v.textContent = r.mbps + " Mbps · " + r.pingMs + " ms";
+          toast(t("Internet: {mbps} Mbps, ping {ms} ms ({verdict})", {
+            mbps: r.mbps,
+            ms: r.pingMs,
+            verdict: verdict
+          }), 8e3);
+        }).catch(function (e) {
+          v.textContent = "";
+          toast(t("O teste falhou: {msg}", {
+            msg: e.message
+          }), 5e3);
+        });
+      });
+      body.appendChild(netRow);
       body.appendChild(h("div.set-section", {
         text: t("Atualizações")
       }));
@@ -14923,8 +16834,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }), "", function () {
         return checkForUpdate();
       }));
-      var rows = body.querySelectorAll(".set-row");
-      if (keepIndex >= 0 && rows[keepIndex]) focus(rows[keepIndex]);
+      var rows2 = body.querySelectorAll(".set-row");
+      if (keepIndex >= 0 && rows2[keepIndex]) focus(rows2[keepIndex]);
     }
     render();
     return {
@@ -15067,9 +16978,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       lists[0].concat(lists[1]).forEach(function (e) {
         var show2 = e.show || e._embedded && e._embedded.show;
         if (!show2 || !show2.externals || !show2.externals.imdb || NOT_SERIES.test(show2.type || "")) return;
-        var key = show2.id + ":" + e.season + ":" + e.number;
-        if (seen[key]) return;
-        seen[key] = true;
+        var key2 = show2.id + ":" + e.season + ":" + e.number;
+        if (seen[key2]) return;
+        seen[key2] = true;
         var network = show2.webChannel && show2.webChannel.name || show2.network && show2.network.name || "";
         var at = e.airstamp ? Date.parse(e.airstamp) : 0;
         out.push({
@@ -15154,7 +17065,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             mode = m.id;
             renderModes();
             focus(modes.children[i]);
-            load5();
+            load6();
           }
         }));
       });
@@ -15172,7 +17083,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             current3 = off;
             renderDays();
             focus(days.children[off + 1]);
-            load5();
+            load6();
           }
         }));
       };
@@ -15181,7 +17092,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       days.__last = days.children[current3 + 1];
     }
-    function load5() {
+    function load6() {
       var my = ++token;
       clear(grid);
       grid.appendChild(spinnerLine(t("Buscando lançamentos...")));
@@ -15240,7 +17151,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     renderModes();
     renderDays();
-    load5();
+    load6();
     return {
       el: el,
       onShow: function onShow() {
@@ -15316,7 +17227,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         focusable: true,
         "data-autofocus": ""
       });
-      var save = function save() {
+      var save2 = function save2() {
         var name = String(input.value || "").trim();
         if (!name) {
           err.textContent = t("Digite um nome para o perfil.");
@@ -15329,12 +17240,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         refreshProfileChips();
         next();
       };
-      input.__submit = save;
+      input.__submit = save2;
       card2.appendChild(input);
       card2.appendChild(err);
       card2.appendChild(h("div.actions", {
         "data-group": ""
-      }, [btn(t("Continuar"), true, save)]));
+      }, [btn(t("Continuar"), true, save2)]));
     }
     function stepAccount() {
       card2.appendChild(h("h1", {
@@ -15459,10 +17370,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         autoStreams: true
       } : {});
     });
-    onSearch(function (q) {
+    onSearch(function (q2) {
       goTab("search");
       var view = currentView();
-      if (view && view.search) view.search(q);
+      if (view && view.search) view.search(q2);
     });
     install();
     setSmooth(s.smoothScroll);

@@ -114,7 +114,7 @@ export function set(key, value) {
 
 // ---------- Preferências ----------
 // Da TV (iguais para todos os perfis):
-const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource'];
+const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource', 'debridEnabled', 'debridProvider', 'realDebridKey', 'torboxKey', 'premiumizeKey', 'mediaServer', 'mediaServerEnabled', 'mediaServerDeviceId', 'rpdbKey', 'parentalGuide'];
 
 const DEFAULT_SETTINGS = {
   // TV
@@ -152,6 +152,23 @@ const DEFAULT_SETTINGS = {
   progressSource: 'both',
   subtitlesAuto: true,
   localAddons: [],
+  // Integrations from Nuvio. Each user types their own keys; empty = off.
+  debridEnabled: true, // only does something once a key is filled in
+  debridProvider: 'realdebrid',
+  realDebridKey: '',
+  torboxKey: '',
+  premiumizeKey: '',
+  mediaServer: null, // { providerId, address, token, userId, user, name } (no password)
+  mediaServerEnabled: true,
+  rpdbKey: '',
+  parentalGuide: false,
+  // Nuvio features (per profile)
+  homeRows: null, // { order: [], hidden: [] }
+  cwSort: 'recent',
+  mdblistRows: [], // [{ id, name }]
+  ambientMode: false,
+  postPlay: true,
+  streamBadges: null, // { quality, hdr, remux, bitrate, size, audio, codec, lang } → false hides
 };
 
 export function settings() {
@@ -159,6 +176,17 @@ export function settings() {
   const subs = { en: ['eng', 'en'], ar: ['ara', 'ar'] }[current()];
   const base = Object.assign({}, DEFAULT_SETTINGS, subs ? { subtitleLangs: subs } : null);
   return Object.assign(base, rawGet('device', {}), get('settings', {}));
+}
+
+// Copies another profile's preferences (subtitles, appearance, home rows, collections order...)
+// into the active one. The Stremio account, history and tracker logins are not copied.
+export function copySettingsFrom(profileId) {
+  const from = getFor(profileId, 'settings', {}) || {};
+  set('settings', JSON.parse(JSON.stringify(from)));
+  ['franchiseOrder', 'franchiseFavs', 'myCollections', 'subDelays'].forEach((k) => {
+    const v = getFor(profileId, k, null);
+    if (v !== null) set(k, JSON.parse(JSON.stringify(v)));
+  });
 }
 
 export function saveSettings(patch) {

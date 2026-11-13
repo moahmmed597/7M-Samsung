@@ -1,7 +1,7 @@
 // Componentes compartilhados: toast, menus modais, barra superior, cartões.
 import { h, clear } from './lib/dom.js';
 import * as nav from './lib/nav.js';
-import { smallPoster, smallBackground } from './lib/img.js';
+import { smallPoster, smallBackground, ratedPoster } from './lib/img.js';
 import * as store from './lib/store.js';
 import { avatar, switchProfile, createProfile } from './views/profiles.js';
 import { t } from './lib/i18n.js';
@@ -69,6 +69,27 @@ export function confirmDialog(text, okLabel, onOk) {
   document.getElementById('app').appendChild(modal);
   const layer = nav.pushLayer(modal, { onBack: () => close() });
   nav.focusFirst(modal);
+  function close() {
+    nav.popLayer(layer);
+    if (modal.parentNode) modal.parentNode.removeChild(modal);
+  }
+}
+
+// Text box in a modal: OK on the box opens the TV keyboard; Done on it calls onSubmit(text).
+export function promptText(title, value, placeholder, onSubmit) {
+  const input = h('input.input', { type: 'text', value: value || '', placeholder: placeholder || '' });
+  const row = h('div.set-row', { focusable: true, 'data-autofocus': '', onSelect: () => nav.select(input) }, input);
+  const box = h('div.modal-box.center', null, [h('h3', { text: title }), row]);
+  const modal = h('div.modal', null, box);
+  document.getElementById('app').appendChild(modal);
+  const layer = nav.pushLayer(modal, { onBack: () => close() });
+  nav.focusFirst(modal);
+  input.__submit = (v) => {
+    const text = String(v || '').trim();
+    close();
+    if (text) onSubmit(text);
+  };
+  setTimeout(() => nav.select(input), 50);
   function close() {
     nav.popLayer(layer);
     if (modal.parentNode) modal.parentNode.removeChild(modal);
@@ -158,11 +179,18 @@ export function card(item, opts) {
   const o = opts || {};
   const wrap = h('div.poster-wrap');
   // Versões pequenas das imagens (o cartão tem 210x315 / 380x214).
-  const src = o.wide ? smallBackground(o.image || item.background || item.poster) : smallPoster(item.poster);
+  const plain = o.wide ? smallBackground(o.image || item.background || item.poster) : smallPoster(item.poster);
+  // Rating posters (RPDB) when the user typed their own key in Settings; falls back to the normal one.
+  const rated = o.wide ? null : ratedPoster(item.id || item.imdb_id, store.settings().rpdbKey);
+  const src = rated || plain;
   if (src) {
     const im = h('img', { alt: '' });
     im.setAttribute('data-lazy', src);
     im.onerror = () => {
+      if (rated && plain && im.src.indexOf(plain) < 0) {
+        im.src = plain;
+        return;
+      }
       im.style.display = 'none';
       wrap.appendChild(h('div.ph', { text: item.name || '' }));
     };
