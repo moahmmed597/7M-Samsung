@@ -16134,7 +16134,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-13T17:56:26.622Z";
+  var BUILD = "2026-11-13T18:08:43.476Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -17238,25 +17238,36 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       label: "Sobre",
       sub: "Atualizações, teste de internet, log"
     }];
+    var railTimer = null;
+    var railItems = GROUPS.map(function (g) {
+      var el2 = h("div.rail-item", {
+        focusable: true,
+        onSelect: function onSelect() {
+          clearTimeout(railTimer);
+          openPage(g.id, true);
+        },
+        // Resting on a category shows it; passing over quickly does nothing (keeps the TV fast).
+        onFocus: function onFocus() {
+          clearTimeout(railTimer);
+          railTimer = setTimeout(function () {
+            if (current2() === el2 && g.id !== (PARENT[page] || page)) openPage(g.id, false);
+          }, 350);
+        }
+      }, [h("span.rail-ico", {
+        text: g.icon
+      }), h("span.rail-text", null, [t(g.label), h("small", {
+        text: t(g.sub)
+      })])]);
+      el2.__group = g.id;
+      rail.appendChild(el2);
+      return el2;
+    });
     function renderRail() {
-      clear(rail);
       var current3 = PARENT[page] || page;
-      GROUPS.forEach(function (g) {
-        rail.appendChild(h("div.rail-item", {
-          focusable: true,
-          cls: g.id === current3 ? "active" : "",
-          onSelect: function onSelect() {
-            return openPage(g.id, true);
-          },
-          // Moving along the rail shows each group right away; the focus stays on the rail.
-          onFocus: function onFocus() {
-            return g.id !== (PARENT[page] || page) && openPage(g.id, false);
-          }
-        }, [h("span.rail-ico", {
-          text: g.icon
-        }), h("span.rail-text", null, [t(g.label), h("small", {
-          text: t(g.sub)
-        })])]));
+      railItems.forEach(function (el2) {
+        var on = el2.__group === current3;
+        el2.classList.toggle("active", on);
+        if (on) rail.__last = el2;
       });
     }
     function render() {
@@ -18082,7 +18093,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       },
       destroy: function destroy() {
-        return bar.__destroy && bar.__destroy();
+        clearTimeout(railTimer);
+        if (bar.__destroy) bar.__destroy();
       }
     };
   }

@@ -27,6 +27,22 @@
     document.body.appendChild(js);
   }
 
+  // Installed as a Tizen app (.wgt from TizenBrew Installer): start its own background service,
+  // which serves the phone remote and fetches for the app (TizenBrew does this for modules).
+  try {
+    if (window.tizen && window.tizen.application && location.protocol !== 'http:' && location.protocol !== 'https:') {
+      var pkgId = window.tizen.application.getCurrentApplication().appInfo.packageId;
+      window.tizen.application.launchAppControl(
+        new window.tizen.ApplicationControl('http://tizen.org/appcontrol/operation/service'),
+        pkgId + '.Service',
+        function () {},
+        function () {}
+      );
+    }
+  } catch (e) {
+    /* not an installed app */
+  }
+
   // Samsung's webapis (AVPlay: the player that can switch audio tracks). A packaged app gets it
   // from $WEBAPIS; under TizenBrew the page comes from 127.0.0.1, so the TV's own copy is tried
   // too. Whatever happens, the app starts (without AVPlay it uses the browser's <video>).

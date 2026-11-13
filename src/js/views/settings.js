@@ -503,23 +503,39 @@ export function SettingsView() {
     { id: 'c-about', icon: 'ⓘ', label: 'Sobre', sub: 'Atualizações, teste de internet, log' },
   ];
 
+  // The rail is built once; a render only moves the "active" mark. Rebuilding it removed the
+  // item that had the focus, so the remote seemed stuck.
+  let railTimer = null;
+  const railItems = GROUPS.map((g) => {
+    const el = h(
+      'div.rail-item',
+      {
+        focusable: true,
+        onSelect: () => {
+          clearTimeout(railTimer);
+          openPage(g.id, true);
+        },
+        // Resting on a category shows it; passing over quickly does nothing (keeps the TV fast).
+        onFocus: () => {
+          clearTimeout(railTimer);
+          railTimer = setTimeout(() => {
+            if (nav.current() === el && g.id !== (PARENT[page] || page)) openPage(g.id, false);
+          }, 350);
+        },
+      },
+      [h('span.rail-ico', { text: g.icon }), h('span.rail-text', null, [t(g.label), h('small', { text: t(g.sub) })])]
+    );
+    el.__group = g.id;
+    rail.appendChild(el);
+    return el;
+  });
+
   function renderRail() {
-    clear(rail);
     const current = PARENT[page] || page;
-    GROUPS.forEach((g) => {
-      rail.appendChild(
-        h(
-          'div.rail-item',
-          {
-            focusable: true,
-            cls: g.id === current ? 'active' : '',
-            onSelect: () => openPage(g.id, true),
-            // Moving along the rail shows each group right away; the focus stays on the rail.
-            onFocus: () => g.id !== (PARENT[page] || page) && openPage(g.id, false),
-          },
-          [h('span.rail-ico', { text: g.icon }), h('span.rail-text', null, [t(g.label), h('small', { text: t(g.sub) })])]
-        )
-      );
+    railItems.forEach((el) => {
+      const on = el.__group === current;
+      el.classList.toggle('active', on);
+      if (on) rail.__last = el; // coming back to the rail lands on the open category
     });
   }
 
@@ -1161,6 +1177,9 @@ export function SettingsView() {
     onShow: () => {
       server.check().then(() => render());
     },
-    destroy: () => bar.__destroy && bar.__destroy(),
+    destroy: () => {
+      clearTimeout(railTimer);
+      if (bar.__destroy) bar.__destroy();
+    },
   };
 }
