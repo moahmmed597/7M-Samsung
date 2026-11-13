@@ -82,6 +82,8 @@ export function localized(meta) {
       title: d.title || d.name || f.title,
       overview: d.overview || f.overview,
       tagline: d.tagline || '',
+      // TMDB's own collection (any film series): { id, name }
+      collection: d.belongs_to_collection ? { id: d.belongs_to_collection.id, name: d.belongs_to_collection.name } : null,
       logo: pickLogo(d.images && d.images.logos),
       cast: ((d.credits && d.credits.cast) || []).slice(0, 14).map((c) => ({
         id: c.id,
@@ -211,4 +213,35 @@ function anilistScore(meta) {
 export function ratings(meta, anime) {
   const base = meta.imdbRating ? [{ cls: 'imdb', label: 'IMDb', value: String(meta.imdbRating) }] : [];
   return Promise.all([mdblist(meta), anime ? anilistScore(meta) : Promise.resolve([])]).then((r) => base.concat(r[0], r[1]));
+}
+
+// ---------- Collections (film series) from TMDB ----------
+export function searchCollections(query) {
+  if (!tmdbKey()) return Promise.resolve([]);
+  return tmdb('search/collection', { query: query, language: apiLang() }).then((r) =>
+    ((r && r.results) || []).slice(0, 20).map((c) => ({
+      id: c.id,
+      name: c.name,
+      poster: c.poster_path ? TMDB_IMG + 'w342' + c.poster_path : null,
+    }))
+  );
+}
+
+// A TMDB collection as a franchise: { id: 'tmdb:<id>', name, items: [[imdb, title, year]] } in
+// release order. Parts without an IMDb id (not out yet, very obscure) are left out.
+const collectionCache = {};
+export function tmdbCollection(id) {
+  if (collectionCache[id]) return collectionCache[id];
+  const p = tmdb('collection/' + id, { language: apiLang() }).then((c) => {
+    const parts = ((c && c.parts) || []).filter((x) => x.release_date).sort((a, b) => String(a.release_date).localeCompare(String(b.release_date)));
+    return Promise.all(parts.map((x) => tmdbImdb('movie', x.id).catch(() => null))).then((ids) => ({
+      id: 'tmdb:' + id,
+      name: c.name,
+      ar: c.name,
+      items: parts.map((x, i) => (ids[i] ? [ids[i], x.title, parseInt(x.release_date, 10)] : null)).filter(Boolean),
+    }));
+  });
+  collectionCache[id] = p;
+  p.catch(() => delete collectionCache[id]);
+  return p;
 }

@@ -8,6 +8,19 @@ features to Tizen, fully controlled with the Samsung remote.
 > **Unofficial.** Not affiliated with Stremio, Stremio Kai or Samsung. The app hosts no
 > content: it only shows what the add-ons on **your** Stremio account provide.
 
+## What's different from the original (7M edition)
+
+This is a fork of [ITzAkai/kai](https://github.com/ITzAkai/kai).
+
+- **Audio track switching fixed on Samsung.** The original always played the file's default
+  track and the Audio menu did nothing. Now the app uses Samsung's own player (AVPlay), with an
+  automatic fallback to the browser player if AVPlay isn't available (Settings → Player).
+- **Collections tab:** 39 franchises (MCU, X-Men, Star Wars, The Lord of the Rings, Bond, Gundam,
+  Fate, Monogatari and more) in release order or story order, with watched marks, a Next button
+  and favorites pinned to the top. Any other collection can be searched with a TMDB key.
+- **Built-in Trakt and Simkl:** sign in with a code, scrobbling, watched history, and Continue
+  watching from other devices (Settings → Tracking; needs a free Trakt/Simkl API app).
+
 ![Stremio Kai home screen on a Samsung TV](docs/screenshots/home.jpg)
 
 ## Features
@@ -221,7 +234,7 @@ Leave Developer Mode on from now on, or TizenBrew won't open.
 1. Open **TizenBrew** and go to **Module Manager → Add module**.
 2. Choose **GitHub** (not NPM) and enter:
    ```
-   ITzAkai/kai
+   moahmmed597/7M-Samsung
    ```
 3. **Stremio Kai** now appears in TizenBrew. Open it.
 

@@ -408,3 +408,18 @@ body.oled .details-shade { background: linear-gradient(to right, #000 25%, rgba(
 [dir="rtl"] .card .poster-wrap .badge.new-badge { left: auto; right: 10px; }
 /* Performance mode: every change is instant (each fade/zoom repaints on the TV's slow GPU). */
 .perf *, .perf *:before, .perf *:after { -webkit-transition: none !important; transition: none !important; }
+
+/* Samsung AVPlay draws the video on a plane under the page: everything above it must be see-through. */
+html.av-playing, html.av-playing body, html.av-playing .view.player, html.av-playing body.oled .view.player { background: transparent !important; }
+.player .av-video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+
+/* Collections */
+.franchise-head { padding: 70px 96px 20px; }
+.franchise-head h1 { font-size: 52px; font-weight: 800; line-height: 1.1; }
+.franchise-sub { margin-top: 12px; font-size: 22px; color: rgba(255,255,255,0.6); }
+.filters .chip.primary-chip { background: rgba(255,255,255,0.92); color: #111; }
+.filters .chip.primary-chip.focused { background: #fff; border-color: #9d85ff; }
+.filters { -webkit-flex-wrap: wrap; flex-wrap: wrap; }
+.filters .chip { margin-bottom: 12px; }
+[dir="rtl"] .chip { margin-right: 0; margin-left: 14px; }
+.fav-grid { padding-bottom: 20px; }

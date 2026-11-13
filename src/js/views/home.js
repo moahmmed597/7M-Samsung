@@ -9,6 +9,7 @@ import { topbar, card, spinnerLine } from '../ui.js';
 import * as router from '../router.js';
 import { openDetails } from './details.js';
 import * as newEpisodes from '../api/newEpisodes.js';
+import * as tracker from '../api/tracker.js';
 import * as phone from '../lib/phone.js';
 import * as store from '../lib/store.js';
 import { CatalogView, canPage } from './catalog.js';
@@ -32,6 +33,14 @@ export function HomeView() {
   el.appendChild(scroller);
 
   let loadedBoard = false;
+
+  // Trakt: items paused on other devices join Continue watching.
+  tracker.onPlayback((list) => {
+    if (stremio.mergeExternalProgress(list)) {
+      renderContinue();
+      publishBrowse();
+    }
+  });
 
   // Progress saved on other devices (phone, PC, Fire TV): refetch the account library when the
   // home screen comes back, at most once a minute, and redraw the row if anything changed.
@@ -223,6 +232,7 @@ export function HomeView() {
     onShow: () => {
       renderContinue();
       syncContinue();
+      tracker.maybeSync();
       renderNew();
       loadNew(false);
       publishBrowse();

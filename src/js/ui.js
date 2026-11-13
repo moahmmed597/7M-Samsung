@@ -80,6 +80,7 @@ export const TABS = [
   { id: 'home', label: 'Início' },
   { id: 'search', label: 'Buscar' },
   { id: 'library', label: 'Biblioteca' },
+  { id: 'collections', label: 'Coleções' },
   { id: 'calendar', label: 'Calendário' },
   { id: 'settings', label: 'Ajustes' },
 ];

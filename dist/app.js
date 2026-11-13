@@ -511,9 +511,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var store = require_shared_store();
-      var create = Object.create || Object;
+      var create2 = Object.create || Object;
       module.exports = function (key, value) {
-        return store[key] || (store[key] = value || create(null));
+        return store[key] || (store[key] = value || create2(null));
       };
     }
   });
@@ -835,9 +835,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var shared = require_shared();
       var uid = require_uid();
-      var keys = shared("keys");
+      var keys2 = shared("keys");
       module.exports = function (key) {
-        return keys[key] || (keys[key] = uid(key));
+        return keys2[key] || (keys2[key] = uid(key));
       };
     }
   });
@@ -1193,9 +1193,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var anObject = require_an_object();
       var concat = uncurryThis([].concat);
       module.exports = getBuiltIn("Reflect", "ownKeys") || function ownKeys(it) {
-        var keys = getOwnPropertyNamesModule.f(anObject(it));
+        var keys2 = getOwnPropertyNamesModule.f(anObject(it));
         var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
-        return getOwnPropertySymbols ? concat(keys, getOwnPropertySymbols(it)) : keys;
+        return getOwnPropertySymbols ? concat(keys2, getOwnPropertySymbols(it)) : keys2;
       };
     }
   });
@@ -1210,11 +1210,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var getOwnPropertyDescriptorModule = require_object_get_own_property_descriptor();
       var definePropertyModule = require_object_define_property();
       module.exports = function (target, source, exceptions) {
-        var keys = ownKeys(source);
+        var keys2 = ownKeys(source);
         var defineProperty = definePropertyModule.f;
         var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
-        for (var i = 0; i < keys.length; i++) {
-          var key = keys[i];
+        for (var i = 0; i < keys2.length; i++) {
+          var key = keys2[i];
           if (!hasOwn(target, key) && !(exceptions && hasOwn(exceptions, key))) {
             defineProperty(target, key, getOwnPropertyDescriptor(source, key));
           }
@@ -1232,10 +1232,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var isCallable = require_is_callable();
       var replacement = /#|\.prototype\./;
       var isForced = function isForced(feature, detection) {
-        var value = data[normalize2(feature)];
+        var value = data[normalize3(feature)];
         return value === POLYFILL ? true : value === NATIVE ? false : isCallable(detection) ? fails(detection) : !!detection;
       };
-      var normalize2 = isForced.normalize = function (string) {
+      var normalize3 = isForced.normalize = function (string) {
         return String(string).replace(replacement, ".").toLowerCase();
       };
       var data = isForced.data = {};
@@ -1296,7 +1296,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var internalObjectKeys = require_object_keys_internal();
       var enumBugKeys = require_enum_bug_keys();
-      module.exports = Object.keys || function keys(O) {
+      module.exports = Object.keys || function keys2(O) {
         return internalObjectKeys(O, enumBugKeys);
       };
     }
@@ -1350,12 +1350,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var propertyIsEnumerable = propertyIsEnumerableModule.f;
         while (argumentsLength > index) {
           var S = IndexedObject(arguments[index++]);
-          var keys = getOwnPropertySymbols ? concat(objectKeys(S), getOwnPropertySymbols(S)) : objectKeys(S);
-          var length = keys.length;
+          var keys2 = getOwnPropertySymbols ? concat(objectKeys(S), getOwnPropertySymbols(S)) : objectKeys(S);
+          var length = keys2.length;
           var j = 0;
           var key;
           while (length > j) {
-            key = keys[j++];
+            key = keys2[j++];
             if (!DESCRIPTORS || call2(propertyIsEnumerable, S, key)) T[key] = S[key];
           }
         }
@@ -1464,14 +1464,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var createMethod = function createMethod(TO_ENTRIES) {
         return function (it) {
           var O = toIndexedObject(it);
-          var keys = objectKeys(O);
+          var keys2 = objectKeys(O);
           var IE_WORKAROUND = IE_BUG && objectGetPrototypeOf(O) === null;
-          var length = keys.length;
+          var length = keys2.length;
           var i = 0;
           var result = [];
           var key;
           while (length > i) {
-            key = keys[i++];
+            key = keys2[i++];
             if (!DESCRIPTORS || (IE_WORKAROUND ? key in O : propertyIsEnumerable(O, key))) {
               push2(result, TO_ENTRIES ? [key, O[key]] : O[key]);
             }
@@ -1649,11 +1649,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       exports.f = DESCRIPTORS && !V8_PROTOTYPE_DEFINE_BUG ? Object.defineProperties : function defineProperties(O, Properties) {
         anObject(O);
         var props = toIndexedObject(Properties);
-        var keys = objectKeys(Properties);
-        var length = keys.length;
+        var keys2 = objectKeys(Properties);
+        var length = keys2.length;
         var index = 0;
         var key;
-        while (length > index) definePropertyModule.f(O, key = keys[index++], props[key]);
+        while (length > index) definePropertyModule.f(O, key = keys2[index++], props[key]);
         return O;
       };
     }
@@ -1721,7 +1721,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return _NullProtoObject();
       };
       hiddenKeys[IE_PROTO] = true;
-      module.exports = Object.create || function create(O, Properties) {
+      module.exports = Object.create || function create2(O, Properties) {
         var result;
         if (O !== null) {
           EmptyConstructor[PROTOTYPE] = anObject(O);
@@ -1742,7 +1742,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var fails = require_fails();
       var isCallable = require_is_callable();
       var isObject = require_is_object();
-      var create = require_object_create();
+      var create2 = require_object_create();
       var getPrototypeOf = require_object_get_prototype_of();
       var defineBuiltIn = require_define_built_in();
       var wellKnownSymbol = require_well_known_symbol();
@@ -1763,7 +1763,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var test = {};
         return IteratorPrototype[ITERATOR].call(test) !== test;
       });
-      if (NEW_ITERATOR_PROTOTYPE) IteratorPrototype = {};else if (IS_PURE) IteratorPrototype = create(IteratorPrototype);
+      if (NEW_ITERATOR_PROTOTYPE) IteratorPrototype = {};else if (IS_PURE) IteratorPrototype = create2(IteratorPrototype);
       if (!isCallable(IteratorPrototype[ITERATOR])) {
         defineBuiltIn(IteratorPrototype, ITERATOR, function () {
           return this;
@@ -1812,7 +1812,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var IteratorPrototype = require_iterators_core().IteratorPrototype;
-      var create = require_object_create();
+      var create2 = require_object_create();
       var createPropertyDescriptor = require_create_property_descriptor();
       var setToStringTag = require_set_to_string_tag();
       var Iterators = require_iterators();
@@ -1821,7 +1821,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
       module.exports = function (IteratorConstructor, NAME, next, ENUMERABLE_NEXT) {
         var TO_STRING_TAG = NAME + " Iterator";
-        IteratorConstructor.prototype = create(IteratorPrototype, {
+        IteratorConstructor.prototype = create2(IteratorPrototype, {
           next: createPropertyDescriptor(+!ENUMERABLE_NEXT, next)
         });
         setToStringTag(IteratorConstructor, TO_STRING_TAG, false, true);
@@ -1939,7 +1939,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (!BUGGY_SAFARI_ITERATORS && KIND && KIND in IterablePrototype) return IterablePrototype[KIND];
           switch (KIND) {
             case KEYS:
-              return function keys() {
+              return function keys2() {
                 return new IteratorConstructor(this, KIND);
               };
             case VALUES:
@@ -2582,14 +2582,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var wellKnownSymbol = require_well_known_symbol();
-      var create = require_object_create();
+      var create2 = require_object_create();
       var defineProperty = require_object_define_property().f;
       var UNSCOPABLES = wellKnownSymbol("unscopables");
       var ArrayPrototype = Array.prototype;
       if (ArrayPrototype[UNSCOPABLES] === void 0) {
         defineProperty(ArrayPrototype, UNSCOPABLES, {
           configurable: true,
-          value: create(null)
+          value: create2(null)
         });
       }
       module.exports = function (key) {
@@ -5202,7 +5202,65 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "HTTP {code} em {url}": "HTTP {code} at {url}",
     "Este link é torrent: configure o servidor do PC": "This link is a torrent: set up the PC server",
     "Magnet inválido": "Invalid magnet link",
-    "Tipo de link não suportado na TV": "Link type not supported on the TV"
+    "Tipo de link não suportado na TV": "Link type not supported on the TV",
+    "Usando o player do navegador nesta TV.": "Using the browser player on this TV.",
+    "Áudio: {lang}": "Audio: {lang}",
+    "Escolhido sozinho ao abrir o vídeo": "Picked automatically when the video opens",
+    "Player de vídeo": "Video player",
+    "O player da Samsung troca a faixa de áudio; o do navegador é o antigo": "Samsung's player can switch audio tracks; the browser player is the old one",
+    "Samsung (AVPlay)": "Samsung (AVPlay)",
+    "Samsung (AVPlay) · indisponível nesta TV": "Samsung (AVPlay) · not available on this TV",
+    "Navegador (HTML5)": "Browser (HTML5)",
+    "Rastreamento (Trakt e Simkl)": "Tracking (Trakt and Simkl)",
+    "Conectado: {user}": "Connected: {user}",
+    "Reconectar": "Reconnect",
+    "Desconectado": "Not connected",
+    "Sincroniza assistidos, progresso e Continuar assistindo com o Trakt": "Syncs watched history, progress and Continue watching with Trakt",
+    "Sincroniza assistidos e progresso com o Simkl": "Syncs watched history and progress with Simkl",
+    "Sincronizar agora": "Sync now",
+    "Desconectar": "Disconnect",
+    "Sincronizando...": "Syncing...",
+    "Sincronizado": "Synced",
+    "{name} desconectado": "{name} disconnected",
+    "Preencha o Client ID e o Client Secret do Trakt abaixo.": "Fill in the Trakt Client ID and Client Secret below.",
+    "Preencha o Client ID do Simkl abaixo.": "Fill in the Simkl Client ID below.",
+    "Trakt Client ID": "Trakt Client ID",
+    "Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)": "Create a free app at trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)",
+    "Trakt Client Secret": "Trakt Client Secret",
+    "Do mesmo app do Trakt": "From the same Trakt app",
+    "Simkl Client ID": "Simkl Client ID",
+    "Crie um app grátis em simkl.com/settings/developer": "Create a free app at simkl.com/settings/developer",
+    "Conectar {name}": "Connect {name}",
+    "{name} conectado: {user}": "{name} connected: {user}",
+    "{name} conectado": "{name} connected",
+    "Código expirou. Abra de novo.": "The code expired. Open this again.",
+    "Acesso negado no site.": "Access was denied on the website.",
+    "Falhou: {msg}": "Failed: {msg}",
+    "No celular ou PC, abra": "On your phone or PC, open",
+    "e digite o código:": "and enter the code:",
+    "Carregando coleção...": "Loading collection...",
+    "Nenhum título encontrado nesta coleção.": "No titles found in this collection.",
+    "Não foi possível carregar a coleção.": "Couldn't load the collection.",
+    "{n} títulos": "{n} titles",
+    "Coleções": "Collections",
+    "Buscar outra coleção (ex.: Shrek, Rambo, Saw)...": "Search another collection (e.g. Shrek, Rambo, Saw)...",
+    "Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes.": "With a TMDB key in Settings you can search any other film collection.",
+    "Nenhuma coleção encontrada.": "No collection found.",
+    "Resultados": "Results",
+    "Não foi possível buscar agora.": "Couldn't search right now.",
+    "Assistidos: {done} de {n}": "Watched: {done} of {n}",
+    "Ordem da história": "Story order",
+    "Ordem de lançamento": "Release order",
+    "Próximo: {title}": "Next: {title}",
+    "Esconder assistidos": "Hide watched",
+    "série": "series",
+    "Você já assistiu tudo desta coleção.": "You've watched everything in this collection.",
+    "Coleção": "Collection",
+    "Favoritas": "Favorites",
+    "Fixar no topo": "Pin to top",
+    "Fixada no topo": "Pinned to top",
+    "Fixada no topo da aba Coleções": "Pinned to the top of Collections",
+    "Removida das favoritas": "Removed from favorites"
   };
 
   // src/js/lib/i18n-ar.js
@@ -5638,7 +5696,65 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "HTTP {code} em {url}": "HTTP {code} على {url}",
     "Este link é torrent: configure o servidor do PC": "هذا الرابط تورنت: أعدّ خادم الكمبيوتر",
     "Magnet inválido": "رابط magnet غير صالح",
-    "Tipo de link não suportado na TV": "نوع الرابط غير مدعوم على التلفاز"
+    "Tipo de link não suportado na TV": "نوع الرابط غير مدعوم على التلفاز",
+    "Usando o player do navegador nesta TV.": "سيُستخدم مشغّل المتصفح على هذا التلفاز.",
+    "Áudio: {lang}": "الصوت: {lang}",
+    "Escolhido sozinho ao abrir o vídeo": "يُختار تلقائيًا عند فتح الفيديو",
+    "Player de vídeo": "مشغّل الفيديو",
+    "O player da Samsung troca a faixa de áudio; o do navegador é o antigo": "مشغّل سامسونج يبدّل مسارات الصوت؛ مشغّل المتصفح هو القديم",
+    "Samsung (AVPlay)": "سامسونج (AVPlay)",
+    "Samsung (AVPlay) · indisponível nesta TV": "سامسونج (AVPlay) · غير متاح على هذا التلفاز",
+    "Navegador (HTML5)": "المتصفح (HTML5)",
+    "Rastreamento (Trakt e Simkl)": "التتبّع (Trakt وSimkl)",
+    "Conectado: {user}": "متصل: {user}",
+    "Reconectar": "أعد الربط",
+    "Desconectado": "غير متصل",
+    "Sincroniza assistidos, progresso e Continuar assistindo com o Trakt": "يزامن المشاهدات والتقدّم و«متابعة المشاهدة» مع Trakt",
+    "Sincroniza assistidos e progresso com o Simkl": "يزامن المشاهدات والتقدّم مع Simkl",
+    "Sincronizar agora": "زامن الآن",
+    "Desconectar": "فصل الحساب",
+    "Sincronizando...": "جارٍ المزامنة...",
+    "Sincronizado": "تمت المزامنة",
+    "{name} desconectado": "فُصل {name}",
+    "Preencha o Client ID e o Client Secret do Trakt abaixo.": "أدخل Client ID وClient Secret الخاصين بـ Trakt في الأسفل.",
+    "Preencha o Client ID do Simkl abaixo.": "أدخل Client ID الخاص بـ Simkl في الأسفل.",
+    "Trakt Client ID": "Trakt Client ID",
+    "Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)": "أنشئ تطبيقًا مجانيًا في trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)",
+    "Trakt Client Secret": "Trakt Client Secret",
+    "Do mesmo app do Trakt": "من تطبيق Trakt نفسه",
+    "Simkl Client ID": "Simkl Client ID",
+    "Crie um app grátis em simkl.com/settings/developer": "أنشئ تطبيقًا مجانيًا في simkl.com/settings/developer",
+    "Conectar {name}": "ربط {name}",
+    "{name} conectado: {user}": "تم ربط {name}: {user}",
+    "{name} conectado": "تم ربط {name}",
+    "Código expirou. Abra de novo.": "انتهت صلاحية الرمز. افتح الصفحة من جديد.",
+    "Acesso negado no site.": "رُفض الإذن في الموقع.",
+    "Falhou: {msg}": "فشل: {msg}",
+    "No celular ou PC, abra": "على الجوال أو الكمبيوتر افتح",
+    "e digite o código:": "وأدخل الرمز:",
+    "Carregando coleção...": "جارٍ تحميل السلسلة...",
+    "Nenhum título encontrado nesta coleção.": "لا توجد أعمال في هذه السلسلة.",
+    "Não foi possível carregar a coleção.": "تعذّر تحميل السلسلة.",
+    "{n} títulos": "{n} عمل",
+    "Coleções": "السلاسل",
+    "Buscar outra coleção (ex.: Shrek, Rambo, Saw)...": "ابحث عن سلسلة أخرى (مثل Shrek أو Rambo أو Saw)...",
+    "Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes.": "بإضافة مفتاح TMDB في الإعدادات تقدر تبحث عن أي سلسلة أفلام أخرى.",
+    "Nenhuma coleção encontrada.": "لم يُعثر على أي سلسلة.",
+    "Resultados": "النتائج",
+    "Não foi possível buscar agora.": "تعذّر البحث الآن.",
+    "Assistidos: {done} de {n}": "شاهدت {done} من {n}",
+    "Ordem da história": "ترتيب الأحداث",
+    "Ordem de lançamento": "ترتيب الصدور",
+    "Próximo: {title}": "التالي: {title}",
+    "Esconder assistidos": "إخفاء ما شاهدته",
+    "série": "مسلسل",
+    "Você já assistiu tudo desta coleção.": "شاهدت كل أعمال هذه السلسلة.",
+    "Coleção": "السلسلة",
+    "Favoritas": "المفضلة",
+    "Fixar no topo": "تثبيت في الأعلى",
+    "Fixada no topo": "مثبّتة في الأعلى",
+    "Fixada no topo da aba Coleções": "تم تثبيتها في أعلى السلاسل",
+    "Removida das favoritas": "أُزيلت من المفضلة"
   };
 
   // src/js/lib/i18n.js
@@ -5780,12 +5896,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     } : null;
   }
   function flush2() {
-    var ids = Object.keys(batch);
+    var ids2 = Object.keys(batch);
     var waiting = batch;
     batch = {};
     batchTimer = null;
     var _loop2 = function _loop2() {
-      var chunk = ids.slice(i, i + 20);
+      var chunk = ids2.slice(i, i + 20);
       getJSON("https://kitsu.io/api/edge/anime?filter%5Bid%5D=" + chunk.join(",") + "&fields%5Banime%5D=posterImage,coverImage&page%5Blimit%5D=20", {
         quiet: true,
         timeout: 15e3
@@ -5810,7 +5926,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       });
     };
-    for (var i = 0; i < ids.length; i += 20) {
+    for (var i = 0; i < ids2.length; i += 20) {
       _loop2();
     }
   }
@@ -6341,7 +6457,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return p.id !== id;
     });
     if (!list2.length) return false;
-    ["auth", "addons", "library", "settings"].forEach(function (k) {
+    ["auth", "addons", "library", "settings", "watched", "track.trakt", "track.simkl"].forEach(function (k) {
       return rawSet(profileKey(id, k), null);
     });
     rawSet("profiles", list2);
@@ -6354,7 +6470,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function set(key, value) {
     rawSet(profileKey(activeProfile().id, key), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -6371,6 +6487,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     devlogUrl: true ? "" : "",
     language: "auto",
     // 'auto' (TV language: Arabic or English) | 'en' | 'ar'
+    // Tracking API apps (trakt.tv/oauth/applications, simkl.com/settings/developer): build or Settings.
+    traktClientId: true ? "" : "",
+    traktClientSecret: true ? "" : "",
+    simklClientId: true ? "" : "",
+    playerEngine: "auto",
+    // 'auto' = Samsung AVPlay when present (audio track switching) | 'html5'
     askProfile: true,
     // "Quem está assistindo?" ao abrir, se houver mais de um perfil
     wizardDone: false,
@@ -6642,12 +6764,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function setInLibrary(meta, inLibrary) {
     var existing = libraryItem(meta.id);
-    var item = existing ? clone(existing) : newLibraryItem(meta);
-    item.removed = !inLibrary;
-    item.temp = false;
-    item._mtime = nowIso();
-    return putLibraryItems([item]).then(function () {
-      return item;
+    var item2 = existing ? clone(existing) : newLibraryItem(meta);
+    item2.removed = !inLibrary;
+    item2.temp = false;
+    item2._mtime = nowIso();
+    return putLibraryItems([item2]).then(function () {
+      return item2;
     });
   }
   function isInLibrary(id) {
@@ -6656,8 +6778,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function saveProgress(meta, videoId, timeMs, durationMs, deltaWatchedMs) {
     var existing = libraryItem(meta.id);
-    var item = existing ? clone(existing) : newLibraryItem(meta);
-    var s = item.state;
+    var item2 = existing ? clone(existing) : newLibraryItem(meta);
+    var s = item2.state;
     if (s.video_id !== videoId) {
       s.timeWatched = 0;
       s.flaggedWatched = 0;
@@ -6673,10 +6795,35 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       s.timesWatched = (s.timesWatched || 0) + 1;
     }
     if (s.duration > 0 && s.timeOffset > s.duration * 0.95) s.timeOffset = 0;
-    if (!item.name && meta.name) item.name = meta.name;
-    if (!item.poster && meta.poster) item.poster = meta.poster;
-    item._mtime = nowIso();
-    return putLibraryItems([item]);
+    if (!item2.name && meta.name) item2.name = meta.name;
+    if (!item2.poster && meta.poster) item2.poster = meta.poster;
+    item2._mtime = nowIso();
+    return putLibraryItems([item2]);
+  }
+  function mergeExternalProgress(list2) {
+    var changed = [];
+    (list2 || []).forEach(function (p) {
+      var existing = libraryItem(p.id);
+      var localAt = existing && existing.state && existing.state.lastWatched;
+      if (localAt && String(localAt) >= String(p.at || "")) return;
+      var item2 = existing ? clone(existing) : newLibraryItem({
+        id: p.id,
+        type: p.type,
+        name: p.name,
+        poster: /^tt\d+$/.test(p.id) ? "https://images.metahub.space/poster/medium/" + p.id + "/img" : null
+      });
+      var s = item2.state;
+      var dur = s.video_id === p.videoId && s.duration > 0 ? s.duration : (p.runtime || (p.type === "movie" ? 110 : 45)) * 6e4;
+      s.video_id = p.videoId;
+      s.duration = dur;
+      s.timeOffset = Math.round(dur * p.progress);
+      s.lastWatched = p.at || nowIso();
+      if (!item2.name && p.name) item2.name = p.name;
+      item2._mtime = nowIso();
+      changed.push(item2);
+    });
+    if (changed.length) putLibraryItems(changed);
+    return changed.length > 0;
   }
   function continueWatching() {
     return cachedLibrary().filter(function (it) {
@@ -6786,12 +6933,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function closeHeavyBackgroundApps() {
     if (!hasLuna()) return Promise.resolve([]);
     return luna("luna://com.webos.applicationManager", "running", {}).then(function (r) {
-      var ids = (r && r.running || []).map(function (a) {
+      var ids2 = (r && r.running || []).map(function (a) {
         return a.id;
       }).filter(function (id) {
         return id && HEAVY.test(id);
       });
-      return Promise.all(ids.map(function (id) {
+      return Promise.all(ids2.map(function (id) {
         return luna("luna://com.webos.applicationManager", "closeByAppId", {
           id: id
         }).then(function () {
@@ -6856,7 +7003,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function lastStatus() {
     return status;
   }
-  function scan(onProgress) {
+  function scan(onProgress2) {
     return getTvIp().then(function (ip) {
       var prefix = ip.split(".").slice(0, 3).join(".") + ".";
       var hosts = [];
@@ -6875,7 +7022,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             if (!found) found = h2;
           }).catch(function () {}).then(function () {
             done++;
-            if (onProgress) onProgress(done, hosts.length);
+            if (onProgress2) onProgress2(done, hosts.length);
           });
         })).then(function () {
           return _runBatch(start3 + batch2);
@@ -7062,213 +7209,381 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return base ? base + "subtitles.vtt?from=" + encodeURIComponent(subUrl) : null;
   }
 
-  // src/js/api/addons.js
-  var CINEMETA = "https://v3-cinemeta.strem.io/manifest.json";
-  var OPENSUBTITLES = "https://opensubtitles-v3.strem.io/manifest.json";
-  var addons = null;
-  function normalize(list2) {
-    return (list2 || []).filter(function (a) {
-      return a && a.transportUrl && a.manifest;
-    }).filter(function (a) {
-      return /^https?:/.test(a.transportUrl);
-    }).map(function (a) {
+  // src/js/api/extras.js
+  var TMDB = "https://api.themoviedb.org/3/";
+  var TMDB_IMG = "https://image.tmdb.org/t/p/";
+  var ARM = "https://arm.haglund.dev/api/v2/";
+  function imdbOf(id) {
+    var m = String(id || "").match(/^tt\d+/);
+    return m ? m[0] : null;
+  }
+  function tmdbKey() {
+    return (settings().tmdbKey || "").trim();
+  }
+  function hasTmdb() {
+    return !!tmdbKey();
+  }
+  function tmdb(path, params) {
+    var q = ["api_key=" + encodeURIComponent(tmdbKey())];
+    Object.keys(params || {}).forEach(function (k) {
+      return q.push(k + "=" + encodeURIComponent(params[k]));
+    });
+    return cachedJSON(TMDB + path + "?" + q.join("&"), 6 * 36e5, {
+      quiet: true
+    });
+  }
+  function digitalReleases(ymd2, region) {
+    if (!tmdbKey()) return Promise.resolve(null);
+    return tmdb("discover/movie", {
+      with_release_type: 4,
+      "release_date.gte": ymd2,
+      "release_date.lte": ymd2,
+      region: region,
+      sort_by: "popularity.desc",
+      include_adult: "false",
+      language: apiLang()
+    }).then(function (r) {
+      return (r && r.results || []).map(function (m) {
+        return {
+          tmdb: m.id,
+          name: m.title,
+          poster: m.poster_path ? TMDB_IMG + "w342" + m.poster_path : null,
+          score: m.vote_average ? Math.round(m.vote_average * 10) : 0
+        };
+      });
+    });
+  }
+  function tmdbFind(imdb) {
+    if (!tmdbKey() || !imdb) return Promise.resolve(null);
+    return tmdb("find/" + imdb, {
+      external_source: "imdb_id",
+      language: apiLang()
+    }).then(function (r) {
+      var m = (r.movie_results || [])[0];
+      var tv = (r.tv_results || [])[0];
+      var hit = m || tv;
+      if (!hit) return null;
       return {
-        transportUrl: a.transportUrl,
-        manifest: a.manifest,
-        base: a.transportUrl.replace(/\/manifest\.json(\?.*)?$/, ""),
-        query: (a.transportUrl.match(/\/manifest\.json(\?.*)$/) || [])[1] || ""
+        id: hit.id,
+        type: m ? "movie" : "tv",
+        overview: hit.overview || "",
+        title: hit.title || hit.name || ""
       };
     });
   }
-  function defaultAddons() {
-    var urls = [CINEMETA, OPENSUBTITLES].concat(settings().localAddons || []);
-    return Promise.all(urls.map(function (u) {
-      return getJSON(u).then(function (m) {
-        return {
-          transportUrl: u,
-          manifest: m
+  function pickLogo(logos) {
+    var pref = current() === "ar" ? ["ar", "en", null] : ["en", null];
+    var _loop3 = function _loop3(i) {
+        var l = (logos || []).find(function (x) {
+          return x.iso_639_1 === pref[i];
+        });
+        if (l) return {
+          v: TMDB_IMG + "w500" + l.file_path
         };
-      }).catch(function () {
-        return null;
-      });
-    })).then(function (list2) {
-      return list2.filter(Boolean);
-    });
-  }
-  function load(force) {
-    if (addons && !force) return Promise.resolve(addons);
-    if (isLoggedIn()) {
-      var cached2 = cachedAddons();
-      var fresh = getAddonCollection().then(function (list2) {
-        return addons = normalize(list2);
-      });
-      if (cached2 && cached2.length && !force) {
-        addons = normalize(cached2);
-        fresh.catch(function (e) {
-          return log.warn("Addons: usando cache", e.message);
-        });
-        return Promise.resolve(addons);
-      }
-      return fresh.catch(function () {
-        addons = normalize(cached2 || []);
-        return addons;
-      });
+      },
+      _ret;
+    for (var i = 0; i < pref.length; i++) {
+      _ret = _loop3(i);
+      if (_ret) return _ret.v;
     }
-    return defaultAddons().then(function (list2) {
-      return addons = normalize(list2);
-    });
+    return null;
   }
-  function list() {
-    return addons || [];
-  }
-  function resourceMatch(addon, resource, type, id) {
-    var m = addon.manifest;
-    var resources = m.resources || [];
-    for (var i = 0; i < resources.length; i++) {
-      var r = resources[i];
-      var name = typeof r === "string" ? r : r.name;
-      if (name !== resource) continue;
-      var types = _typeof(r) === "object" && r.types || m.types || [];
-      if (type && types.length && types.indexOf(type) < 0) continue;
-      var prefixes = _typeof(r) === "object" && r.idPrefixes || m.idPrefixes;
-      if (id && prefixes && prefixes.length && !prefixes.some(function (p) {
-        return id.indexOf(p) === 0;
-      })) continue;
-      return true;
-    }
-    return false;
-  }
-  function withResource(resource, type, id) {
-    return list().filter(function (a) {
-      return resourceMatch(a, resource, type, id);
-    });
-  }
-  function url(addon, resource, type, id, extra) {
-    var path = "/" + resource + "/" + encodeURIComponent(type) + "/" + encodeURIComponent(id);
-    if (extra) {
-      var parts = Object.keys(extra).filter(function (k) {
-        return extra[k] !== void 0 && extra[k] !== null && extra[k] !== "";
-      }).map(function (k) {
-        return encodeURIComponent(k) + "=" + encodeURIComponent(extra[k]);
+  function localized(meta) {
+    var imdb = imdbOf(meta.id);
+    return tmdbFind(imdb).then(function (f) {
+      if (!f) return null;
+      return tmdb(f.type + "/" + f.id, {
+        language: apiLang(),
+        append_to_response: "credits,images",
+        include_image_language: "en,ar,null"
+      }).then(function (d) {
+        return {
+          tmdbId: f.id,
+          tmdbType: f.type,
+          title: d.title || d.name || f.title,
+          overview: d.overview || f.overview,
+          tagline: d.tagline || "",
+          // TMDB's own collection (any film series): { id, name }
+          collection: d.belongs_to_collection ? {
+            id: d.belongs_to_collection.id,
+            name: d.belongs_to_collection.name
+          } : null,
+          logo: pickLogo(d.images && d.images.logos),
+          cast: (d.credits && d.credits.cast || []).slice(0, 14).map(function (c) {
+            return {
+              id: c.id,
+              name: c.name,
+              character: c.character || "",
+              photo: c.profile_path ? TMDB_IMG + "w185" + c.profile_path : null
+            };
+          })
+        };
       });
-      if (parts.length) path += "/" + parts.join("&");
-    }
-    return addon.base + path + ".json" + addon.query;
+    });
   }
-  function boardCatalogs() {
-    var out = [];
-    list().forEach(function (addon) {
-      (addon.manifest.catalogs || []).forEach(function (cat) {
-        var extras = cat.extra || [];
-        var required = extras.some(function (e) {
-          return e.isRequired;
-        }) || cat.extraRequired && cat.extraRequired.length;
-        if (required) return;
-        out.push({
-          addon: addon,
-          catalog: cat
+  function person(id) {
+    return tmdb("person/" + id, {
+      language: apiLang(),
+      append_to_response: "combined_credits"
+    }).then(function (p) {
+      var bio = p.biography ? Promise.resolve(p.biography) : current() === "ar" ? tmdb("person/" + id, {
+        language: "en-US"
+      }).then(function (e) {
+        return e && e.biography || "";
+      }) : Promise.resolve("");
+      return bio.then(function (biography) {
+        var seen = {};
+        var credits = (p.combined_credits && p.combined_credits.cast || []).concat((p.combined_credits && p.combined_credits.crew || []).filter(function (c) {
+          return c.job === "Director";
+        })).filter(function (c) {
+          var key = c.media_type + c.id;
+          if (!c.poster_path || seen[key] || c.media_type !== "movie" && c.media_type !== "tv") return false;
+          if (c.media_type === "tv" && /^(Self|Himself|Herself|Host)/i.test(c.character || "")) return false;
+          seen[key] = true;
+          return true;
+        }).sort(function (a, b) {
+          return (b.popularity || 0) - (a.popularity || 0);
+        }).map(function (c) {
+          return {
+            tmdb: c.id,
+            type: c.media_type,
+            name: c.title || c.name,
+            poster: TMDB_IMG + "w342" + c.poster_path,
+            year: String(c.release_date || c.first_air_date || "").slice(0, 4),
+            role: c.character || c.job || ""
+          };
         });
+        return {
+          name: p.name,
+          photo: p.profile_path ? TMDB_IMG + "h632" + p.profile_path : null,
+          birthday: p.birthday,
+          deathday: p.deathday,
+          place: p.place_of_birth || "",
+          department: p.known_for_department || "",
+          biography: biography,
+          credits: credits
+        };
       });
     });
-    return out;
   }
-  function searchCatalogs() {
-    var out = [];
-    list().forEach(function (addon) {
-      (addon.manifest.catalogs || []).forEach(function (cat) {
-        var extras = cat.extra || [];
-        var supports = extras.some(function (e) {
-          return e.name === "search";
-        }) || (cat.extraSupported || []).indexOf("search") >= 0;
-        if (supports) out.push({
-          addon: addon,
-          catalog: cat
-        });
-      });
-    });
-    return out;
-  }
-  function catalogTitle(entry) {
-    var typeName = {
-      movie: t("Filmes"),
-      series: t("Séries"),
-      anime: t("Animes"),
-      channel: t("Canais"),
-      tv: "TV"
-    }[entry.catalog.type] || entry.catalog.type;
-    var name = entry.catalog.name || entry.catalog.id;
-    return name + " · " + typeName;
-  }
-  function fetchCatalog(entry, extra) {
-    return cachedJSON(url(entry.addon, "catalog", entry.catalog.type, entry.catalog.id, extra), 15 * 6e4, {
-      timeout: 12e3
+  function searchPeople(query) {
+    if (!tmdbKey()) return Promise.resolve([]);
+    return tmdb("search/person", {
+      query: query,
+      include_adult: "false",
+      language: apiLang()
     }).then(function (r) {
-      return r && r.metas || [];
+      return (r && r.results || []).filter(function (p) {
+        return p.profile_path && (p.known_for_department === "Acting" || p.known_for_department === "Directing") && p.popularity > 1;
+      }).slice(0, 12).map(function (p) {
+        return {
+          id: p.id,
+          name: p.name,
+          photo: TMDB_IMG + "w185" + p.profile_path
+        };
+      });
     });
   }
-  function fetchMeta(type, id) {
-    var sources = withResource("meta", type, id);
-    if (!sources.length) return Promise.reject(new Error(t("Nenhum addon fornece detalhes para {id}", {
-      id: id
-    })));
-    var i = 0;
-    var _next = function next() {
-      if (i >= sources.length) throw new Error(t("Detalhes não encontrados"));
-      var a = sources[i++];
-      return cachedJSON(url(a, "meta", type, id), 30 * 6e4).then(function (r) {
-        if (r && r.meta) return r.meta;
-        return _next();
-      }).catch(function () {
-        return _next();
-      });
-    };
-    return _next();
+  function tmdbImdb(type, id) {
+    return tmdb(type + "/" + id + "/external_ids", {}).then(function (r) {
+      return r && r.imdb_id || null;
+    });
   }
-  function fetchStreams(type, id, onAddon) {
-    var sources = withResource("stream", type, id);
-    return Promise.all(sources.map(function (a) {
-      return getJSON(url(a, "stream", type, id), {
-        timeout: 3e4
-      }).then(function (r) {
-        var streams = (r && r.streams || []).map(function (s) {
-          return Object.assign({
-            addon: a.manifest.name || a.manifest.id
-          }, s);
+  function seasonPt(tmdbId, season) {
+    if (!tmdbKey()) return Promise.resolve({});
+    return tmdb("tv/" + tmdbId + "/season/" + season, {
+      language: apiLang()
+    }).then(function (r) {
+      var map = {};
+      (r.episodes || []).forEach(function (e) {
+        map[e.episode_number] = {
+          name: e.name,
+          overview: e.overview,
+          still: e.still_path ? TMDB_IMG + "w300" + e.still_path : null
+        };
+      });
+      return map;
+    });
+  }
+  function mdblist(meta) {
+    var key = (settings().mdblistKey || "").trim();
+    var imdb = imdbOf(meta.id);
+    if (!key || !imdb) return Promise.resolve([]);
+    var type = meta.type === "series" ? "show" : "movie";
+    return getJSONViaProxy("https://api.mdblist.com/imdb/" + type + "/" + imdb + "?apikey=" + encodeURIComponent(key), {
+      timeout: 12e3
+    }).then(function (d) {
+      var out = [];
+      (d.ratings || []).forEach(function (r) {
+        var v = r.value;
+        if (v === null || v === void 0 || v === 0) return;
+        var src = String(r.source || "").toLowerCase();
+        if (src === "tomatoes") out.push({
+          cls: "rt",
+          label: "RT",
+          value: v + "%"
+        });else if (src === "popcorn" || src === "tomatoesaudience") out.push({
+          cls: "rt",
+          label: t("Público"),
+          value: v + "%"
+        });else if (src === "metacritic") out.push({
+          cls: "mc",
+          label: "MC",
+          value: String(v)
+        });else if (src === "trakt") out.push({
+          cls: "trakt",
+          label: "Trakt",
+          value: v + "%"
+        });else if (src === "letterboxd") out.push({
+          cls: "lb",
+          label: "LB",
+          value: Number(v).toFixed(1)
+        });else if (src === "tmdb") out.push({
+          cls: "tmdb",
+          label: "TMDB",
+          value: v + "%"
         });
-        if (onAddon) onAddon(a, streams);
-        return streams;
-      }).catch(function (e) {
-        if (onAddon) onAddon(a, [], e);
-        return [];
       });
-    })).then(function (all2) {
-      return all2.reduce(function (acc, x) {
-        return acc.concat(x);
-      }, []);
+      return out;
+    }).catch(function () {
+      return [];
     });
   }
-  function fetchSubtitles(type, id, extra, onAddon) {
-    var sources = withResource("subtitles", type, id);
-    return Promise.all(sources.map(function (a) {
-      return getJSON(url(a, "subtitles", type, id, extra), {
-        timeout: 15e3
+  function anilistScore(meta) {
+    var m = String(meta.id).match(/^(kitsu|mal|anilist):(\d+)/);
+    var idPromise;
+    if (m && m[1] === "anilist") idPromise = Promise.resolve({
+      anilist: parseInt(m[2], 10)
+    });else if (m) idPromise = getJSON(ARM + "ids?source=" + (m[1] === "mal" ? "myanimelist" : m[1]) + "&id=" + m[2], {
+      quiet: true
+    });else if (imdbOf(meta.id)) idPromise = getJSON(ARM + "imdb?id=" + imdbOf(meta.id), {
+      quiet: true
+    }).then(function (l) {
+      return Array.isArray(l) && l[0] || null;
+    });else return Promise.resolve([]);
+    return idPromise.then(function (ids2) {
+      if (!ids2 || !ids2.anilist) return [];
+      return postJSON("https://graphql.anilist.co", {
+        query: "query($id:Int){Media(id:$id,type:ANIME){averageScore}}",
+        variables: {
+          id: ids2.anilist
+        }
+      }, {
+        quiet: true
       }).then(function (r) {
-        return (r && r.subtitles || []).map(function (s) {
-          return Object.assign({
-            addon: a.manifest.name
-          }, s);
-        });
-      }).catch(function () {
-        return [];
-      }).then(function (list2) {
-        if (onAddon) onAddon(list2);
-        return list2;
+        var sc = r && r.data && r.data.Media && r.data.Media.averageScore;
+        return sc ? [{
+          cls: "al",
+          label: "AniList",
+          value: sc + "%"
+        }] : [];
       });
-    })).then(function (all2) {
-      return all2.reduce(function (acc, x) {
-        return acc.concat(x);
-      }, []);
+    }).catch(function () {
+      return [];
     });
+  }
+  function ratings(meta, anime) {
+    var base = meta.imdbRating ? [{
+      cls: "imdb",
+      label: "IMDb",
+      value: String(meta.imdbRating)
+    }] : [];
+    return Promise.all([mdblist(meta), anime ? anilistScore(meta) : Promise.resolve([])]).then(function (r) {
+      return base.concat(r[0], r[1]);
+    });
+  }
+  function searchCollections(query) {
+    if (!tmdbKey()) return Promise.resolve([]);
+    return tmdb("search/collection", {
+      query: query,
+      language: apiLang()
+    }).then(function (r) {
+      return (r && r.results || []).slice(0, 20).map(function (c) {
+        return {
+          id: c.id,
+          name: c.name,
+          poster: c.poster_path ? TMDB_IMG + "w342" + c.poster_path : null
+        };
+      });
+    });
+  }
+  var collectionCache = {};
+  function tmdbCollection(id) {
+    if (collectionCache[id]) return collectionCache[id];
+    var p = tmdb("collection/" + id, {
+      language: apiLang()
+    }).then(function (c) {
+      var parts = (c && c.parts || []).filter(function (x) {
+        return x.release_date;
+      }).sort(function (a, b) {
+        return String(a.release_date).localeCompare(String(b.release_date));
+      });
+      return Promise.all(parts.map(function (x) {
+        return tmdbImdb("movie", x.id).catch(function () {
+          return null;
+        });
+      })).then(function (ids2) {
+        return {
+          id: "tmdb:" + id,
+          name: c.name,
+          ar: c.name,
+          items: parts.map(function (x, i) {
+            return ids2[i] ? [ids2[i], x.title, parseInt(x.release_date, 10)] : null;
+          }).filter(Boolean)
+        };
+      });
+    });
+    collectionCache[id] = p;
+    p.catch(function () {
+      return delete collectionCache[id];
+    });
+    return p;
+  }
+
+  // src/js/lib/watched.js
+  var KEY2 = "watched";
+  var DONE = 0.9;
+  var MAX = 3e3;
+  var cache2 = null;
+  var cacheFor = null;
+  function all() {
+    var id = activeProfile().id;
+    if (cacheFor !== id) {
+      cache2 = get(KEY2, {}) || {};
+      cacheFor = id;
+    }
+    return cache2;
+  }
+  function record(videoId, fraction) {
+    if (!videoId || !(fraction > 0.02)) return;
+    var map = all();
+    delete map[videoId];
+    map[videoId] = fraction >= DONE ? 1 : Math.round(fraction * 1e3) / 1e3;
+    var keys2 = Object.keys(map);
+    for (var i = 0; i < keys2.length - MAX; i++) delete map[keys2[i]];
+    set(KEY2, map);
+  }
+  function markWatchedMany(ids2) {
+    if (!ids2 || !ids2.length) return;
+    var map = all();
+    var changed = false;
+    ids2.forEach(function (id) {
+      if (id && map[id] !== 1) {
+        map[id] = 1;
+        changed = true;
+      }
+    });
+    if (!changed) return;
+    var keys2 = Object.keys(map);
+    for (var i = 0; i < keys2.length - MAX; i++) delete map[keys2[i]];
+    set(KEY2, map);
+  }
+  function isWatched(videoId) {
+    return all()[videoId] === 1;
+  }
+  function progress(videoId) {
+    var v = all()[videoId];
+    return v && v < 1 ? v : 0;
   }
 
   // src/js/views/profiles.js
@@ -7519,6 +7834,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "library",
     label: "Biblioteca"
   }, {
+    id: "collections",
+    label: "Coleções"
+  }, {
     id: "calendar",
     label: "Calendário"
   }, {
@@ -7608,10 +7926,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var hh = Math.floor(sec / 3600);
     return (hh ? hh + ":" + ("0" + m).slice(-2) : m) + ":" + ("0" + s).slice(-2);
   }
-  function card(item, opts) {
+  function card(item2, opts) {
     var o = opts || {};
     var wrap = h("div.poster-wrap");
-    var src = o.wide ? smallBackground(o.image || item.background || item.poster) : smallPoster(item.poster);
+    var src = o.wide ? smallBackground(o.image || item2.background || item2.poster) : smallPoster(item2.poster);
     if (src) {
       var im = h("img", {
         alt: ""
@@ -7620,12 +7938,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       im.onerror = function () {
         im.style.display = "none";
         wrap.appendChild(h("div.ph", {
-          text: item.name || ""
+          text: item2.name || ""
         }));
       };
       wrap.appendChild(im);
     } else wrap.appendChild(h("div.ph", {
-      text: item.name || ""
+      text: item2.name || ""
     }));
     if (o.progress) wrap.appendChild(h("div.progress", null, h("i", {
       style: {
@@ -7641,7 +7959,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       onSelect: o.onSelect,
       onFocus: o.onFocus
     }, [wrap, h("div.name", {
-      text: o.title || item.name || ""
+      text: o.title || item2.name || ""
     })]);
   }
   function spinnerLine(text) {
@@ -7751,282 +8069,212 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (v.layer) popLayer(v.layer);
   }
 
-  // src/js/api/extras.js
-  var TMDB = "https://api.themoviedb.org/3/";
-  var TMDB_IMG = "https://image.tmdb.org/t/p/";
-  var ARM = "https://arm.haglund.dev/api/v2/";
-  function imdbOf(id) {
-    var m = String(id || "").match(/^tt\d+/);
-    return m ? m[0] : null;
-  }
-  function tmdbKey() {
-    return (settings().tmdbKey || "").trim();
-  }
-  function hasTmdb() {
-    return !!tmdbKey();
-  }
-  function tmdb(path, params) {
-    var q = ["api_key=" + encodeURIComponent(tmdbKey())];
-    Object.keys(params || {}).forEach(function (k) {
-      return q.push(k + "=" + encodeURIComponent(params[k]));
-    });
-    return cachedJSON(TMDB + path + "?" + q.join("&"), 6 * 36e5, {
-      quiet: true
-    });
-  }
-  function digitalReleases(ymd2, region) {
-    if (!tmdbKey()) return Promise.resolve(null);
-    return tmdb("discover/movie", {
-      with_release_type: 4,
-      "release_date.gte": ymd2,
-      "release_date.lte": ymd2,
-      region: region,
-      sort_by: "popularity.desc",
-      include_adult: "false",
-      language: apiLang()
-    }).then(function (r) {
-      return (r && r.results || []).map(function (m) {
-        return {
-          tmdb: m.id,
-          name: m.title,
-          poster: m.poster_path ? TMDB_IMG + "w342" + m.poster_path : null,
-          score: m.vote_average ? Math.round(m.vote_average * 10) : 0
-        };
-      });
-    });
-  }
-  function tmdbFind(imdb) {
-    if (!tmdbKey() || !imdb) return Promise.resolve(null);
-    return tmdb("find/" + imdb, {
-      external_source: "imdb_id",
-      language: apiLang()
-    }).then(function (r) {
-      var m = (r.movie_results || [])[0];
-      var tv = (r.tv_results || [])[0];
-      var hit = m || tv;
-      if (!hit) return null;
+  // src/js/api/addons.js
+  var CINEMETA = "https://v3-cinemeta.strem.io/manifest.json";
+  var OPENSUBTITLES = "https://opensubtitles-v3.strem.io/manifest.json";
+  var addons = null;
+  function normalize(list2) {
+    return (list2 || []).filter(function (a) {
+      return a && a.transportUrl && a.manifest;
+    }).filter(function (a) {
+      return /^https?:/.test(a.transportUrl);
+    }).map(function (a) {
       return {
-        id: hit.id,
-        type: m ? "movie" : "tv",
-        overview: hit.overview || "",
-        title: hit.title || hit.name || ""
+        transportUrl: a.transportUrl,
+        manifest: a.manifest,
+        base: a.transportUrl.replace(/\/manifest\.json(\?.*)?$/, ""),
+        query: (a.transportUrl.match(/\/manifest\.json(\?.*)$/) || [])[1] || ""
       };
     });
   }
-  function pickLogo(logos) {
-    var pref = current() === "ar" ? ["ar", "en", null] : ["en", null];
-    var _loop3 = function _loop3(i) {
-        var l = (logos || []).find(function (x) {
-          return x.iso_639_1 === pref[i];
-        });
-        if (l) return {
-          v: TMDB_IMG + "w500" + l.file_path
+  function defaultAddons() {
+    var urls = [CINEMETA, OPENSUBTITLES].concat(settings().localAddons || []);
+    return Promise.all(urls.map(function (u) {
+      return getJSON(u).then(function (m) {
+        return {
+          transportUrl: u,
+          manifest: m
         };
-      },
-      _ret;
-    for (var i = 0; i < pref.length; i++) {
-      _ret = _loop3(i);
-      if (_ret) return _ret.v;
+      }).catch(function () {
+        return null;
+      });
+    })).then(function (list2) {
+      return list2.filter(Boolean);
+    });
+  }
+  function load(force) {
+    if (addons && !force) return Promise.resolve(addons);
+    if (isLoggedIn()) {
+      var cached2 = cachedAddons();
+      var fresh = getAddonCollection().then(function (list2) {
+        return addons = normalize(list2);
+      });
+      if (cached2 && cached2.length && !force) {
+        addons = normalize(cached2);
+        fresh.catch(function (e) {
+          return log.warn("Addons: usando cache", e.message);
+        });
+        return Promise.resolve(addons);
+      }
+      return fresh.catch(function () {
+        addons = normalize(cached2 || []);
+        return addons;
+      });
     }
-    return null;
-  }
-  function localized(meta) {
-    var imdb = imdbOf(meta.id);
-    return tmdbFind(imdb).then(function (f) {
-      if (!f) return null;
-      return tmdb(f.type + "/" + f.id, {
-        language: apiLang(),
-        append_to_response: "credits,images",
-        include_image_language: "en,ar,null"
-      }).then(function (d) {
-        return {
-          tmdbId: f.id,
-          tmdbType: f.type,
-          title: d.title || d.name || f.title,
-          overview: d.overview || f.overview,
-          tagline: d.tagline || "",
-          logo: pickLogo(d.images && d.images.logos),
-          cast: (d.credits && d.credits.cast || []).slice(0, 14).map(function (c) {
-            return {
-              id: c.id,
-              name: c.name,
-              character: c.character || "",
-              photo: c.profile_path ? TMDB_IMG + "w185" + c.profile_path : null
-            };
-          })
-        };
-      });
+    return defaultAddons().then(function (list2) {
+      return addons = normalize(list2);
     });
   }
-  function person(id) {
-    return tmdb("person/" + id, {
-      language: apiLang(),
-      append_to_response: "combined_credits"
-    }).then(function (p) {
-      var bio = p.biography ? Promise.resolve(p.biography) : current() === "ar" ? tmdb("person/" + id, {
-        language: "en-US"
-      }).then(function (e) {
-        return e && e.biography || "";
-      }) : Promise.resolve("");
-      return bio.then(function (biography) {
-        var seen = {};
-        var credits = (p.combined_credits && p.combined_credits.cast || []).concat((p.combined_credits && p.combined_credits.crew || []).filter(function (c) {
-          return c.job === "Director";
-        })).filter(function (c) {
-          var key = c.media_type + c.id;
-          if (!c.poster_path || seen[key] || c.media_type !== "movie" && c.media_type !== "tv") return false;
-          if (c.media_type === "tv" && /^(Self|Himself|Herself|Host)/i.test(c.character || "")) return false;
-          seen[key] = true;
-          return true;
-        }).sort(function (a, b) {
-          return (b.popularity || 0) - (a.popularity || 0);
-        }).map(function (c) {
-          return {
-            tmdb: c.id,
-            type: c.media_type,
-            name: c.title || c.name,
-            poster: TMDB_IMG + "w342" + c.poster_path,
-            year: String(c.release_date || c.first_air_date || "").slice(0, 4),
-            role: c.character || c.job || ""
-          };
+  function list() {
+    return addons || [];
+  }
+  function resourceMatch(addon, resource, type, id) {
+    var m = addon.manifest;
+    var resources = m.resources || [];
+    for (var i = 0; i < resources.length; i++) {
+      var r = resources[i];
+      var name = typeof r === "string" ? r : r.name;
+      if (name !== resource) continue;
+      var types = _typeof(r) === "object" && r.types || m.types || [];
+      if (type && types.length && types.indexOf(type) < 0) continue;
+      var prefixes = _typeof(r) === "object" && r.idPrefixes || m.idPrefixes;
+      if (id && prefixes && prefixes.length && !prefixes.some(function (p) {
+        return id.indexOf(p) === 0;
+      })) continue;
+      return true;
+    }
+    return false;
+  }
+  function withResource(resource, type, id) {
+    return list().filter(function (a) {
+      return resourceMatch(a, resource, type, id);
+    });
+  }
+  function url(addon, resource, type, id, extra) {
+    var path = "/" + resource + "/" + encodeURIComponent(type) + "/" + encodeURIComponent(id);
+    if (extra) {
+      var parts = Object.keys(extra).filter(function (k) {
+        return extra[k] !== void 0 && extra[k] !== null && extra[k] !== "";
+      }).map(function (k) {
+        return encodeURIComponent(k) + "=" + encodeURIComponent(extra[k]);
+      });
+      if (parts.length) path += "/" + parts.join("&");
+    }
+    return addon.base + path + ".json" + addon.query;
+  }
+  function boardCatalogs() {
+    var out = [];
+    list().forEach(function (addon) {
+      (addon.manifest.catalogs || []).forEach(function (cat) {
+        var extras = cat.extra || [];
+        var required = extras.some(function (e) {
+          return e.isRequired;
+        }) || cat.extraRequired && cat.extraRequired.length;
+        if (required) return;
+        out.push({
+          addon: addon,
+          catalog: cat
         });
-        return {
-          name: p.name,
-          photo: p.profile_path ? TMDB_IMG + "h632" + p.profile_path : null,
-          birthday: p.birthday,
-          deathday: p.deathday,
-          place: p.place_of_birth || "",
-          department: p.known_for_department || "",
-          biography: biography,
-          credits: credits
-        };
       });
     });
+    return out;
   }
-  function searchPeople(query) {
-    if (!tmdbKey()) return Promise.resolve([]);
-    return tmdb("search/person", {
-      query: query,
-      include_adult: "false",
-      language: apiLang()
-    }).then(function (r) {
-      return (r && r.results || []).filter(function (p) {
-        return p.profile_path && (p.known_for_department === "Acting" || p.known_for_department === "Directing") && p.popularity > 1;
-      }).slice(0, 12).map(function (p) {
-        return {
-          id: p.id,
-          name: p.name,
-          photo: TMDB_IMG + "w185" + p.profile_path
-        };
+  function searchCatalogs() {
+    var out = [];
+    list().forEach(function (addon) {
+      (addon.manifest.catalogs || []).forEach(function (cat) {
+        var extras = cat.extra || [];
+        var supports = extras.some(function (e) {
+          return e.name === "search";
+        }) || (cat.extraSupported || []).indexOf("search") >= 0;
+        if (supports) out.push({
+          addon: addon,
+          catalog: cat
+        });
       });
     });
+    return out;
   }
-  function tmdbImdb(type, id) {
-    return tmdb(type + "/" + id + "/external_ids", {}).then(function (r) {
-      return r && r.imdb_id || null;
-    });
+  function catalogTitle(entry) {
+    var typeName = {
+      movie: t("Filmes"),
+      series: t("Séries"),
+      anime: t("Animes"),
+      channel: t("Canais"),
+      tv: "TV"
+    }[entry.catalog.type] || entry.catalog.type;
+    var name = entry.catalog.name || entry.catalog.id;
+    return name + " · " + typeName;
   }
-  function seasonPt(tmdbId, season) {
-    if (!tmdbKey()) return Promise.resolve({});
-    return tmdb("tv/" + tmdbId + "/season/" + season, {
-      language: apiLang()
-    }).then(function (r) {
-      var map = {};
-      (r.episodes || []).forEach(function (e) {
-        map[e.episode_number] = {
-          name: e.name,
-          overview: e.overview,
-          still: e.still_path ? TMDB_IMG + "w300" + e.still_path : null
-        };
-      });
-      return map;
-    });
-  }
-  function mdblist(meta) {
-    var key = (settings().mdblistKey || "").trim();
-    var imdb = imdbOf(meta.id);
-    if (!key || !imdb) return Promise.resolve([]);
-    var type = meta.type === "series" ? "show" : "movie";
-    return getJSONViaProxy("https://api.mdblist.com/imdb/" + type + "/" + imdb + "?apikey=" + encodeURIComponent(key), {
+  function fetchCatalog(entry, extra) {
+    return cachedJSON(url(entry.addon, "catalog", entry.catalog.type, entry.catalog.id, extra), 15 * 6e4, {
       timeout: 12e3
-    }).then(function (d) {
-      var out = [];
-      (d.ratings || []).forEach(function (r) {
-        var v = r.value;
-        if (v === null || v === void 0 || v === 0) return;
-        var src = String(r.source || "").toLowerCase();
-        if (src === "tomatoes") out.push({
-          cls: "rt",
-          label: "RT",
-          value: v + "%"
-        });else if (src === "popcorn" || src === "tomatoesaudience") out.push({
-          cls: "rt",
-          label: t("Público"),
-          value: v + "%"
-        });else if (src === "metacritic") out.push({
-          cls: "mc",
-          label: "MC",
-          value: String(v)
-        });else if (src === "trakt") out.push({
-          cls: "trakt",
-          label: "Trakt",
-          value: v + "%"
-        });else if (src === "letterboxd") out.push({
-          cls: "lb",
-          label: "LB",
-          value: Number(v).toFixed(1)
-        });else if (src === "tmdb") out.push({
-          cls: "tmdb",
-          label: "TMDB",
-          value: v + "%"
-        });
-      });
-      return out;
-    }).catch(function () {
-      return [];
+    }).then(function (r) {
+      return r && r.metas || [];
     });
   }
-  function anilistScore(meta) {
-    var m = String(meta.id).match(/^(kitsu|mal|anilist):(\d+)/);
-    var idPromise;
-    if (m && m[1] === "anilist") idPromise = Promise.resolve({
-      anilist: parseInt(m[2], 10)
-    });else if (m) idPromise = getJSON(ARM + "ids?source=" + (m[1] === "mal" ? "myanimelist" : m[1]) + "&id=" + m[2], {
-      quiet: true
-    });else if (imdbOf(meta.id)) idPromise = getJSON(ARM + "imdb?id=" + imdbOf(meta.id), {
-      quiet: true
-    }).then(function (l) {
-      return Array.isArray(l) && l[0] || null;
-    });else return Promise.resolve([]);
-    return idPromise.then(function (ids) {
-      if (!ids || !ids.anilist) return [];
-      return postJSON("https://graphql.anilist.co", {
-        query: "query($id:Int){Media(id:$id,type:ANIME){averageScore}}",
-        variables: {
-          id: ids.anilist
-        }
-      }, {
-        quiet: true
+  function fetchMeta(type, id) {
+    var sources = withResource("meta", type, id);
+    if (!sources.length) return Promise.reject(new Error(t("Nenhum addon fornece detalhes para {id}", {
+      id: id
+    })));
+    var i = 0;
+    var _next = function next() {
+      if (i >= sources.length) throw new Error(t("Detalhes não encontrados"));
+      var a = sources[i++];
+      return cachedJSON(url(a, "meta", type, id), 30 * 6e4).then(function (r) {
+        if (r && r.meta) return r.meta;
+        return _next();
+      }).catch(function () {
+        return _next();
+      });
+    };
+    return _next();
+  }
+  function fetchStreams(type, id, onAddon) {
+    var sources = withResource("stream", type, id);
+    return Promise.all(sources.map(function (a) {
+      return getJSON(url(a, "stream", type, id), {
+        timeout: 3e4
       }).then(function (r) {
-        var sc = r && r.data && r.data.Media && r.data.Media.averageScore;
-        return sc ? [{
-          cls: "al",
-          label: "AniList",
-          value: sc + "%"
-        }] : [];
+        var streams = (r && r.streams || []).map(function (s) {
+          return Object.assign({
+            addon: a.manifest.name || a.manifest.id
+          }, s);
+        });
+        if (onAddon) onAddon(a, streams);
+        return streams;
+      }).catch(function (e) {
+        if (onAddon) onAddon(a, [], e);
+        return [];
       });
-    }).catch(function () {
-      return [];
+    })).then(function (all2) {
+      return all2.reduce(function (acc, x) {
+        return acc.concat(x);
+      }, []);
     });
   }
-  function ratings(meta, anime) {
-    var base = meta.imdbRating ? [{
-      cls: "imdb",
-      label: "IMDb",
-      value: String(meta.imdbRating)
-    }] : [];
-    return Promise.all([mdblist(meta), anime ? anilistScore(meta) : Promise.resolve([])]).then(function (r) {
-      return base.concat(r[0], r[1]);
+  function fetchSubtitles(type, id, extra, onAddon) {
+    var sources = withResource("subtitles", type, id);
+    return Promise.all(sources.map(function (a) {
+      return getJSON(url(a, "subtitles", type, id, extra), {
+        timeout: 15e3
+      }).then(function (r) {
+        return (r && r.subtitles || []).map(function (s) {
+          return Object.assign({
+            addon: a.manifest.name
+          }, s);
+        });
+      }).catch(function () {
+        return [];
+      }).then(function (list2) {
+        if (onAddon) onAddon(list2);
+        return list2;
+      });
+    })).then(function (all2) {
+      return all2.reduce(function (acc, x) {
+        return acc.concat(x);
+      }, []);
     });
   }
 
@@ -8478,37 +8726,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
-  // src/js/lib/watched.js
-  var KEY2 = "watched";
-  var DONE = 0.9;
-  var MAX = 3e3;
-  var cache2 = null;
-  var cacheFor = null;
-  function all() {
-    var id = activeProfile().id;
-    if (cacheFor !== id) {
-      cache2 = get(KEY2, {}) || {};
-      cacheFor = id;
-    }
-    return cache2;
-  }
-  function record(videoId, fraction) {
-    if (!videoId || !(fraction > 0.02)) return;
-    var map = all();
-    delete map[videoId];
-    map[videoId] = fraction >= DONE ? 1 : Math.round(fraction * 1e3) / 1e3;
-    var keys = Object.keys(map);
-    for (var i = 0; i < keys.length - MAX; i++) delete map[keys[i]];
-    set(KEY2, map);
-  }
-  function isWatched(videoId) {
-    return all()[videoId] === 1;
-  }
-  function progress(videoId) {
-    var v = all()[videoId];
-    return v && v < 1 ? v : 0;
-  }
-
   // src/js/lib/phone.js
   var import_qrcode_generator = __toESM(require_qrcode(), 1);
   var PORT = 8095;
@@ -8658,6 +8875,861 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return qr.createDataURL(cell, cell * 4);
   }
 
+  // src/js/lib/avvideo.js
+  function available() {
+    try {
+      return !!(window.webapis && window.webapis.avplay && typeof window.webapis.avplay.open === "function");
+    } catch (e) {
+      return false;
+    }
+  }
+  function create() {
+    var AV = window.webapis.avplay;
+    var node = h("object", {
+      type: "application/avplayer"
+    });
+    node.className = "av-video";
+    var listeners = {};
+    var src = "";
+    var opened = false;
+    var prepared = false;
+    var state = "NONE";
+    var wantPlay = false;
+    var curMs = 0;
+    var durMs = NaN;
+    var ended = false;
+    var buffering = false;
+    var error = null;
+    var pendingSeekMs = null;
+    var pendingAudio = null;
+    var lastTimeEmit = 0;
+    var generation = 0;
+    function emit(type) {
+      var list2 = (listeners[type] || []).slice();
+      for (var i = 0; i < list2.length; i++) {
+        try {
+          list2[i].call(api, {
+            type: type,
+            target: api
+          });
+        } catch (e) {
+          log.warn("avplay listener", type, e && e.message);
+        }
+      }
+    }
+    function readState() {
+      try {
+        state = AV.getState();
+      } catch (e) {}
+      return state;
+    }
+    function stopAndClose() {
+      if (!opened) return;
+      try {
+        AV.stop();
+      } catch (e) {}
+      try {
+        AV.close();
+      } catch (e) {}
+      opened = false;
+      prepared = false;
+      state = "NONE";
+    }
+    function setListener(gen) {
+      var ok = function ok() {
+        return gen === generation;
+      };
+      AV.setListener({
+        onbufferingstart: function onbufferingstart() {
+          if (!ok()) return;
+          buffering = true;
+          emit("waiting");
+        },
+        onbufferingprogress: function onbufferingprogress() {},
+        onbufferingcomplete: function onbufferingcomplete() {
+          if (!ok()) return;
+          buffering = false;
+          emit("canplay");
+          if (readState() === "PLAYING") emit("playing");
+        },
+        oncurrentplaytime: function oncurrentplaytime(ms) {
+          if (!ok()) return;
+          if (typeof ms === "number" && isFinite(ms)) curMs = ms;
+          var now = Date.now();
+          if (now - lastTimeEmit >= 240) {
+            lastTimeEmit = now;
+            emit("timeupdate");
+          }
+        },
+        onstreamcompleted: function onstreamcompleted() {
+          if (!ok()) return;
+          ended = true;
+          try {
+            AV.pause();
+          } catch (e) {}
+          readState();
+          emit("pause");
+          emit("ended");
+        },
+        onerror: function onerror(type) {
+          if (!ok()) return;
+          fail(String(type || "PLAYER_ERROR"));
+        },
+        onevent: function onevent() {},
+        onsubtitlechange: function onsubtitlechange() {},
+        ondrmevent: function ondrmevent() {}
+      });
+    }
+    function fail(msg) {
+      log.warn("avplay error", msg);
+      error = {
+        code: 4,
+        message: msg
+      };
+      emit("error");
+    }
+    function open(url2) {
+      generation++;
+      var gen = generation;
+      stopAndClose();
+      src = url2;
+      ended = false;
+      error = null;
+      curMs = 0;
+      durMs = NaN;
+      pendingSeekMs = null;
+      pendingAudio = null;
+      wantPlay = !!api.autoplay;
+      if (!url2) {
+        emit("emptied");
+        return;
+      }
+      try {
+        AV.open(url2);
+        opened = true;
+        setListener(gen);
+        AV.setDisplayRect(0, 0, 1920, 1080);
+        try {
+          AV.setDisplayMethod("PLAYER_DISPLAY_MODE_LETTER_BOX");
+        } catch (e) {}
+      } catch (e) {
+        setTimeout(function () {
+          return gen === generation && fail("open: " + (e && e.message));
+        }, 0);
+        return;
+      }
+      emit("loadstart");
+      buffering = true;
+      emit("waiting");
+      AV.prepareAsync(function () {
+        if (gen !== generation) return;
+        prepared = true;
+        readState();
+        try {
+          durMs = AV.getDuration();
+        } catch (e) {
+          durMs = NaN;
+        }
+        emit("loadedmetadata");
+        emit("loadeddata");
+        buffering = false;
+        emit("canplay");
+        if (wantPlay) startPlayback();
+      }, function (err) {
+        if (gen !== generation) return;
+        fail("prepare: " + (err && (err.name || err.message) ? err.name || err.message : err));
+      });
+    }
+    function startPlayback() {
+      if (!prepared) return;
+      var go = function go() {
+        try {
+          AV.play();
+        } catch (e) {
+          fail("play: " + (e && e.message));
+          return;
+        }
+        readState();
+        emit("play");
+        emit("playing");
+        if (pendingAudio !== null) {
+          var idx = pendingAudio;
+          pendingAudio = null;
+          setTimeout(function () {
+            return applyAudio(idx);
+          }, 300);
+        }
+      };
+      if (pendingSeekMs !== null) {
+        var ms = pendingSeekMs;
+        pendingSeekMs = null;
+        doSeek(ms, go);
+      } else go();
+    }
+    function doSeek(ms, then) {
+      emit("seeking");
+      var done = function done() {
+        curMs = ms;
+        emit("seeked");
+        emit("timeupdate");
+        if (then) then();
+      };
+      try {
+        AV.seekTo(Math.max(0, Math.floor(ms)), done, function (e) {
+          log.warn("avplay seek", e && e.name);
+          emit("seeked");
+          if (then) then();
+        });
+      } catch (e) {
+        log.warn("avplay seek threw", e && e.message);
+        emit("seeked");
+        if (then) then();
+      }
+    }
+    function trackInfo(type) {
+      var all2 = [];
+      try {
+        all2 = AV.getTotalTrackInfo() || [];
+      } catch (e) {
+        return [];
+      }
+      var out = [];
+      for (var i = 0; i < all2.length; i++) {
+        if (all2[i].type !== type) continue;
+        var extra = {};
+        try {
+          extra = JSON.parse(all2[i].extra_info || "{}");
+        } catch (e) {}
+        out.push({
+          index: all2[i].index,
+          language: String(extra.language || extra.track_lang || "").trim(),
+          channels: extra.channels ? Number(extra.channels) : 0,
+          codec: extra.fourCC || ""
+        });
+      }
+      return out;
+    }
+    function currentIndex(type) {
+      try {
+        var cur = AV.getCurrentStreamInfo() || [];
+        for (var i = 0; i < cur.length; i++) if (cur[i].type === type) return cur[i].index;
+      } catch (e) {}
+      return null;
+    }
+    function applyAudio(avIndex) {
+      try {
+        AV.setSelectTrack("AUDIO", avIndex);
+        log.info("avplay audio ->", avIndex);
+        return true;
+      } catch (e) {
+        log.warn("avplay setSelectTrack", e && (e.name || e.message));
+        return false;
+      }
+    }
+    var api = {
+      node: node,
+      isAVPlay: true,
+      mediaId: "",
+      preload: "auto",
+      autoplay: false,
+      addEventListener: function addEventListener(type, fn) {
+        (listeners[type] = listeners[type] || []).push(fn);
+      },
+      removeEventListener: function removeEventListener(type, fn) {
+        var l = listeners[type];
+        if (l) listeners[type] = l.filter(function (x) {
+          return x !== fn;
+        });
+      },
+      play: function play() {
+        wantPlay = true;
+        if (!prepared) return Promise.resolve();
+        if (ended) {
+          ended = false;
+          pendingSeekMs = 0;
+        }
+        if (readState() === "PAUSED") {
+          try {
+            AV.play();
+          } catch (e) {}
+          readState();
+          emit("play");
+          emit("playing");
+          if (pendingAudio !== null) {
+            var idx = pendingAudio;
+            pendingAudio = null;
+            setTimeout(function () {
+              return applyAudio(idx);
+            }, 300);
+          }
+        } else if (state === "READY") startPlayback();
+        return Promise.resolve();
+      },
+      pause: function pause() {
+        wantPlay = false;
+        if (readState() === "PLAYING") {
+          try {
+            AV.pause();
+          } catch (e) {}
+          readState();
+          emit("pause");
+        }
+      },
+      load: function load() {
+        if (!src) stopAndClose();
+      },
+      removeAttribute: function removeAttribute(name) {
+        if (name === "src") {
+          wantPlay = false;
+          generation++;
+          stopAndClose();
+          src = "";
+        }
+      },
+      // Audio: list in file order, the playing one marked.
+      audioTrackList: function audioTrackList() {
+        var list2 = trackInfo("AUDIO");
+        var cur = pendingAudio !== null ? pendingAudio : currentIndex("AUDIO");
+        return list2.map(function (tr, i) {
+          return {
+            language: tr.language,
+            label: "",
+            channels: tr.channels,
+            codec: tr.codec,
+            enabled: cur === null ? i === 0 : tr.index === cur
+          };
+        });
+      },
+      // position = place in audioTrackList()
+      selectAudio: function selectAudio(position) {
+        var list2 = trackInfo("AUDIO");
+        var tr = list2[position];
+        if (!tr) return false;
+        if (readState() !== "PLAYING") {
+          pendingAudio = tr.index;
+          return true;
+        }
+        return applyAudio(tr.index);
+      },
+      destroy: function destroy() {
+        wantPlay = false;
+        generation++;
+        stopAndClose();
+        Object.keys(listeners).forEach(function (k) {
+          return delete listeners[k];
+        });
+      }
+    };
+    Object.defineProperty(api, "src", {
+      get: function get() {
+        return src;
+      },
+      set: function set(v) {
+        return open(String(v || ""));
+      }
+    });
+    Object.defineProperty(api, "currentSrc", {
+      get: function get() {
+        return src;
+      }
+    });
+    Object.defineProperty(api, "currentTime", {
+      get: function get() {
+        return curMs / 1e3;
+      },
+      set: function set(sec) {
+        var ms = Math.max(0, Number(sec) * 1e3 || 0);
+        ended = false;
+        var st = readState();
+        if (!prepared || st === "READY") {
+          pendingSeekMs = ms;
+          curMs = ms;
+          return;
+        }
+        curMs = ms;
+        doSeek(ms);
+      }
+    });
+    Object.defineProperty(api, "duration", {
+      get: function get() {
+        return durMs > 0 ? durMs / 1e3 : NaN;
+      }
+    });
+    Object.defineProperty(api, "paused", {
+      get: function get() {
+        return readState() !== "PLAYING";
+      }
+    });
+    Object.defineProperty(api, "ended", {
+      get: function get() {
+        return ended;
+      }
+    });
+    Object.defineProperty(api, "error", {
+      get: function get() {
+        return error;
+      }
+    });
+    Object.defineProperty(api, "readyState", {
+      get: function get() {
+        return prepared ? buffering ? 2 : 4 : 0;
+      }
+    });
+    Object.defineProperty(api, "networkState", {
+      get: function get() {
+        return opened ? 2 : 0;
+      }
+    });
+    Object.defineProperty(api, "buffered", {
+      // AVPlay doesn't report buffered ranges; the seek bar just shows no buffer line.
+      get: function get() {
+        return {
+          length: 0,
+          start: function start() {
+            return 0;
+          },
+          end: function end() {
+            return 0;
+          }
+        };
+      }
+    });
+    Object.defineProperty(api, "audioTracks", {
+      get: function get() {
+        return null;
+      }
+    });
+    return api;
+  }
+
+  // src/js/api/tracker.js
+  var TRAKT_API = "https://api.trakt.tv";
+  var SIMKL_API = "https://api.simkl.com";
+  var SYNC_EVERY = 30 * 60 * 1e3;
+  var PROVIDERS = ["trakt", "simkl"];
+  function keys() {
+    var s = settings();
+    return {
+      traktId: (s.traktClientId || "").trim(),
+      traktSecret: (s.traktClientSecret || "").trim(),
+      simklId: (s.simklClientId || "").trim()
+    };
+  }
+  function hasKeys(provider) {
+    var k = keys();
+    return provider === "trakt" ? !!(k.traktId && k.traktSecret) : !!k.simklId;
+  }
+  function account(provider) {
+    return get("track." + provider, null);
+  }
+  function saveAccount(provider, acc) {
+    set("track." + provider, acc);
+  }
+  function isConnected(provider) {
+    var a = account(provider);
+    return !!(a && a.token && !a.invalid);
+  }
+  function needsReconnect(provider) {
+    var a = account(provider);
+    return !!(a && a.invalid);
+  }
+  function connected() {
+    return PROVIDERS.filter(isConnected);
+  }
+  function disconnect(provider) {
+    var a = account(provider);
+    saveAccount(provider, null);
+    if (provider === "trakt" && a && a.token && hasKeys("trakt")) {
+      var k = keys();
+      request("POST", TRAKT_API + "/oauth/revoke", {
+        token: a.token,
+        client_id: k.traktId,
+        client_secret: k.traktSecret
+      }, {
+        quiet: true
+      }).catch(function () {});
+    }
+  }
+  function traktHeaders(token) {
+    var hd = {
+      "trakt-api-version": "2",
+      "trakt-api-key": keys().traktId
+    };
+    if (token) hd.Authorization = "Bearer " + token;
+    return hd;
+  }
+  function simklHeaders(token) {
+    var hd = {
+      "simkl-api-key": keys().simklId
+    };
+    if (token) hd.Authorization = "Bearer " + token;
+    return hd;
+  }
+  var refreshing = null;
+  function traktRefresh() {
+    var a = account("trakt");
+    if (!a || !a.refresh) return Promise.reject(new Error("no refresh token"));
+    if (refreshing) return refreshing;
+    var k = keys();
+    refreshing = request("POST", TRAKT_API + "/oauth/token", {
+      refresh_token: a.refresh,
+      client_id: k.traktId,
+      client_secret: k.traktSecret,
+      redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
+      grant_type: "refresh_token"
+    }, {
+      headers: traktHeaders(),
+      quiet: true
+    }).then(function (r) {
+      saveAccount("trakt", Object.assign({}, a, tokenFields(r), {
+        invalid: false
+      }));
+      return r.access_token;
+    }).catch(function (e) {
+      if (e.status === 400 || e.status === 401) saveAccount("trakt", Object.assign({}, a, {
+        invalid: true
+      }));
+      throw e;
+    }).then(function (v) {
+      refreshing = null;
+      return v;
+    }, function (e) {
+      refreshing = null;
+      throw e;
+    });
+    return refreshing;
+  }
+  function tokenFields(r) {
+    return {
+      token: r.access_token,
+      refresh: r.refresh_token || null,
+      expires: r.expires_in ? Date.now() + r.expires_in * 1e3 : 0
+    };
+  }
+  function trakt(method, path, body) {
+    var a = account("trakt");
+    if (!a || !a.token) return Promise.reject(new Error("Trakt not connected"));
+    var go = function go(token) {
+      return request(method, TRAKT_API + path, body, {
+        headers: traktHeaders(token),
+        quiet: true,
+        timeout: 15e3
+      });
+    };
+    var fresh = a.expires && a.expires - Date.now() < 36e5 ? traktRefresh().catch(function () {
+      return a.token;
+    }) : Promise.resolve(a.token);
+    return fresh.then(function (token) {
+      return go(token).catch(function (e) {
+        if (e.status !== 401) throw e;
+        return traktRefresh().then(go);
+      });
+    });
+  }
+  function simkl(method, path, body) {
+    var a = account("simkl");
+    if (!a || !a.token) return Promise.reject(new Error("Simkl not connected"));
+    return request(method, SIMKL_API + path, body, {
+      headers: simklHeaders(a.token),
+      quiet: true,
+      timeout: 15e3
+    }).catch(function (e) {
+      if (e.status === 401) saveAccount("simkl", Object.assign({}, a, {
+        invalid: true
+      }));
+      throw e;
+    });
+  }
+  function startLink(provider, onDone, onFail) {
+    var stopped = false;
+    var timer = null;
+    var k = keys();
+    var finish = function finish(fn, v) {
+      if (stopped) return;
+      stopped = true;
+      clearTimeout(timer);
+      fn(v);
+    };
+    var begin = provider === "trakt" ? request("POST", TRAKT_API + "/oauth/device/code", {
+      client_id: k.traktId
+    }, {
+      headers: traktHeaders(),
+      quiet: true
+    }).then(function (r) {
+      return {
+        code: r.user_code,
+        url: r.verification_url || "https://trakt.tv/activate",
+        device: r.device_code,
+        interval: (r.interval || 5) * 1e3,
+        expires: Date.now() + (r.expires_in || 600) * 1e3
+      };
+    }) : request("GET", SIMKL_API + "/oauth/pin?client_id=" + encodeURIComponent(k.simklId), null, {
+      quiet: true
+    }).then(function (r) {
+      return {
+        code: r.user_code,
+        url: r.verification_url || "https://simkl.com/pin",
+        device: r.device_code,
+        interval: (r.interval || 5) * 1e3,
+        expires: Date.now() + (r.expires_in || 900) * 1e3
+      };
+    });
+    var _poll = function poll2(info2) {
+      if (stopped) return;
+      if (Date.now() > info2.expires) return finish(onFail, "expired");
+      timer = setTimeout(function () {
+        var check3 = provider === "trakt" ? request("POST", TRAKT_API + "/oauth/device/token", {
+          code: info2.device,
+          client_id: k.traktId,
+          client_secret: k.traktSecret
+        }, {
+          headers: traktHeaders(),
+          quiet: true
+        }) : request("GET", SIMKL_API + "/oauth/pin/" + encodeURIComponent(info2.code) + "?client_id=" + encodeURIComponent(k.simklId), null, {
+          quiet: true
+        });
+        check3.then(function (r) {
+          if (stopped) return;
+          var token = r && r.access_token;
+          if (!token) return _poll(info2);
+          saveAccount(provider, Object.assign({
+            provider: provider
+          }, tokenFields(r)));
+          return whoAmI(provider).catch(function () {
+            return "";
+          }).then(function (name) {
+            var acc = account(provider);
+            if (acc) saveAccount(provider, Object.assign({}, acc, {
+              user: name
+            }));
+            finish(onDone, name);
+            syncNow();
+          });
+        }).catch(function (e) {
+          if (e.status === 400 || e.status === 429 || e.status === 0) return _poll(e.status === 429 ? Object.assign({}, info2, {
+            interval: info2.interval + 1e3
+          }) : info2);
+          finish(onFail, e.status === 418 ? "denied" : e.status === 410 ? "expired" : e.message);
+        });
+      }, info2.interval);
+    };
+    var handle2 = {
+      code: "",
+      url: "",
+      cancel: function cancel() {
+        return finish(function () {});
+      }
+    };
+    handle2.ready = begin.then(function (info2) {
+      handle2.code = info2.code;
+      handle2.url = info2.url;
+      _poll(info2);
+      return handle2;
+    });
+    handle2.ready.catch(function (e) {
+      return finish(onFail, e.message);
+    });
+    return handle2;
+  }
+  function whoAmI(provider) {
+    if (provider === "trakt") return trakt("GET", "/users/settings").then(function (r) {
+      return r && r.user && (r.user.name || r.user.username) || "";
+    });
+    return simkl("POST", "/users/settings", {}).then(function (r) {
+      return r && r.user && r.user.name || "";
+    });
+  }
+  function ids(metaId) {
+    var id = String(metaId || "");
+    if (/^tt\d+$/.test(id)) return {
+      imdb: id
+    };
+    var m = /^tmdb:(\d+)$/.exec(id);
+    if (m) return {
+      tmdb: Number(m[1])
+    };
+    return null;
+  }
+  function item(meta, video) {
+    var i = ids(meta && meta.id);
+    if (!i) return null;
+    if (meta.type === "series") {
+      if (!video || !(video.season > 0) || !(video.episode > 0)) return null;
+      return {
+        show: {
+          ids: i,
+          title: meta.name || void 0
+        },
+        episode: {
+          season: Number(video.season),
+          number: Number(video.episode)
+        }
+      };
+    }
+    return {
+      movie: {
+        ids: i,
+        title: meta.name || void 0
+      }
+    };
+  }
+  var playing = null;
+  function scrobble(action, progress2) {
+    if (!playing) return;
+    var body = Object.assign({}, playing.body, {
+      progress: Math.max(0, Math.min(100, Math.round(progress2 * 1e4) / 100))
+    });
+    connected().forEach(function (p) {
+      var call2 = p === "trakt" ? trakt("POST", "/scrobble/" + action, body) : simkl("POST", "/scrobble/" + action, body);
+      call2.then(function () {
+        return log.info("tracker", p, action, body.progress);
+      }).catch(function (e) {
+        if (e.status !== 409) log.warn("tracker", p, action, e.message);
+      });
+    });
+    playing.lastAction = action;
+    playing.lastAt = Date.now();
+  }
+  function onPlay(meta, video, fraction) {
+    if (!connected().length) return;
+    var body = item(meta, video);
+    if (!body) {
+      playing = null;
+      return;
+    }
+    var key = JSON.stringify(body);
+    if (playing && playing.key !== key && playing.lastAction !== "stop") scrobble("pause", playing.progress || 0);
+    if (!playing || playing.key !== key) playing = {
+      key: key,
+      body: body,
+      progress: fraction
+    };
+    playing.progress = fraction;
+    if (playing.lastAction === "start") return;
+    scrobble("start", fraction);
+  }
+  function onPause(fraction) {
+    if (!playing || playing.lastAction === "stop") return;
+    playing.progress = fraction;
+    if (playing.lastAction === "pause") return;
+    scrobble("pause", fraction);
+  }
+  function onProgress(fraction) {
+    if (playing) playing.progress = fraction;
+  }
+  function onStop(fraction) {
+    if (!playing || playing.lastAction === "stop") return;
+    playing.progress = fraction;
+    scrobble(fraction >= 0.8 ? "stop" : "pause", fraction);
+    if (fraction >= 0.8) playing.lastAction = "stop";
+  }
+  function stop() {
+    if (playing && playing.lastAction === "start") onStop(playing.progress || 0);
+    playing = null;
+  }
+  var syncing = null;
+  var lastSync = 0;
+  function syncNow() {
+    if (syncing) return syncing;
+    var tasks = [];
+    if (isConnected("trakt")) tasks.push(pullTraktWatched(), pullTraktPlayback());
+    if (isConnected("simkl")) tasks.push(pullSimklWatched());
+    if (!tasks.length) return Promise.resolve(false);
+    lastSync = Date.now();
+    syncing = Promise.all(tasks.map(function (p) {
+      return p.catch(function (e) {
+        return log.warn("tracker sync", e.message);
+      });
+    })).then(function () {
+      return true;
+    }).then(function (v) {
+      syncing = null;
+      return v;
+    }, function () {
+      syncing = null;
+      return false;
+    });
+    return syncing;
+  }
+  function maybeSync() {
+    if (Date.now() - lastSync < SYNC_EVERY) return Promise.resolve(false);
+    return syncNow();
+  }
+  function pullTraktWatched() {
+    return Promise.all([trakt("GET", "/sync/watched/movies"), trakt("GET", "/sync/watched/shows")]).then(function (res) {
+      var ids2 = [];
+      (res[0] || []).forEach(function (m) {
+        return m.movie && m.movie.ids && m.movie.ids.imdb && ids2.push(m.movie.ids.imdb);
+      });
+      (res[1] || []).forEach(function (s) {
+        var imdb = s.show && s.show.ids && s.show.ids.imdb;
+        if (!imdb) return;
+        (s.seasons || []).forEach(function (se) {
+          return (se.episodes || []).forEach(function (ep) {
+            return ids2.push(imdb + ":" + se.number + ":" + ep.number);
+          });
+        });
+      });
+      markWatchedMany(ids2);
+    });
+  }
+  function pullSimklWatched() {
+    return simkl("GET", "/sync/all-items/?extended=full").then(function (r) {
+      if (!r) return;
+      var ids2 = [];
+      (r.movies || []).forEach(function (m) {
+        var imdb = m.movie && m.movie.ids && m.movie.ids.imdb;
+        if (imdb && m.status === "completed") ids2.push(imdb);
+      });
+      (r.shows || []).concat(r.anime || []).forEach(function (s) {
+        var imdb = s.show && s.show.ids && s.show.ids.imdb;
+        if (!imdb) return;
+        (s.seasons || []).forEach(function (se) {
+          return (se.episodes || []).forEach(function (ep) {
+            return ids2.push(imdb + ":" + se.number + ":" + ep.number);
+          });
+        });
+      });
+      markWatchedMany(ids2);
+    });
+  }
+  var playbackSink = null;
+  function onPlayback(fn) {
+    playbackSink = fn;
+  }
+  function pullTraktPlayback() {
+    return trakt("GET", "/sync/playback?extended=full").then(function (list2) {
+      var out = [];
+      (list2 || []).forEach(function (p) {
+        var at = p.paused_at;
+        var pct = Number(p.progress) || 0;
+        if (pct < 1 || pct > 95) return;
+        if (p.type === "movie" && p.movie && p.movie.ids && p.movie.ids.imdb) {
+          out.push({
+            type: "movie",
+            id: p.movie.ids.imdb,
+            videoId: p.movie.ids.imdb,
+            name: p.movie.title,
+            runtime: p.movie.runtime || 0,
+            progress: pct / 100,
+            at: at
+          });
+        } else if (p.type === "episode" && p.show && p.show.ids && p.show.ids.imdb && p.episode) {
+          out.push({
+            type: "series",
+            id: p.show.ids.imdb,
+            videoId: p.show.ids.imdb + ":" + p.episode.season + ":" + p.episode.number,
+            name: p.show.title,
+            runtime: p.episode.runtime || p.show && p.show.runtime || 0,
+            progress: pct / 100,
+            at: at
+          });
+        }
+      });
+      if (playbackSink && out.length) playbackSink(out);
+    });
+  }
+
   // src/js/views/player.js
   var HIDE_MS = 5e3;
   var SAVE_MS = 15e3;
@@ -8702,9 +9774,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var video = opts.video;
     var stream = opts.stream;
     var settings2 = settings();
-    var videoEl = h("video", {
+    var useAV = settings2.playerEngine !== "html5" && available();
+    var videoEl = useAV ? create() : h("video", {
       preload: "auto"
     });
+    var videoNode = useAV ? videoEl.node : videoEl;
+    if (useAV) document.documentElement.classList.add("av-playing");
     var subsEl = h("div.subs");
     var titleEl = h("div.p-title");
     var clockEl = h("div.p-clock");
@@ -8789,7 +9864,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }), upNextTitle, upNextCount, h("div.un-buttons", {
       "data-group": ""
     }, [upNextPlay, upNextCancel])]);
-    var el = h("div.view.player", null, [videoEl, subsEl, overlay, skipBox, upNextBox, spinner, msgEl]);
+    var el = h("div.view.player", null, [videoNode, subsEl, overlay, skipBox, upNextBox, spinner, msgEl]);
     var renderer = Renderer(subsEl);
     apply(subsEl, settings2);
     var alive = true;
@@ -8819,6 +9894,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         season: video.season,
         episode: video.episode
       } : null;
+    };
+    var frac = function frac() {
+      var d = videoEl.duration;
+      return d > 0 && isFinite(d) ? Math.min(1, (videoEl.currentTime || 0) / d) : 0;
     };
     function setTitle() {
       clear(titleEl);
@@ -8905,14 +9984,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var prefAudio = (settings2.audioLangs || []).map(function (x) {
         return x.toLowerCase();
       });
-      if (!autoDone.audio && prefAudio.length && embedded && embedded.audio.length > 1) {
+      var avList = videoEl.isAVPlay ? videoEl.audioTrackList().map(function (x) {
+        return {
+          lang: x.language
+        };
+      }) : [];
+      var audioList = avList.length > 1 ? avList : embedded ? embedded.audio : [];
+      if (!autoDone.audio && prefAudio.length && audioList.length > 1) {
         autoDone.audio = true;
-        var already = embedded.audio[0] && prefAudio.indexOf(String(embedded.audio[0].lang).toLowerCase()) >= 0;
+        var already = audioList[0] && prefAudio.indexOf(String(audioList[0].lang).toLowerCase()) >= 0;
         if (!already) {
-          var idx = embedded.audio.findIndex(function (tr) {
+          var idx = audioList.findIndex(function (tr) {
             return prefAudio.indexOf(String(tr.lang).toLowerCase()) >= 0;
           });
-          if (idx > 0) selectEmbeddedAudio(idx);
+          if (idx > 0) selectEmbeddedAudio(idx, true);
         }
       }
       if (autoDone.sub || !settings2.subtitlesAuto || !prefSubs.length || !addonSubs) return;
@@ -8935,7 +10020,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     }
     function scheduleAudioPick() {
-      if (!(settings2.audioLangs || []).length || !isAvailable()) return;
+      if (!(settings2.audioLangs || []).length) return;
+      if (videoEl.isAVPlay) {
+        setTimeout(function () {
+          return alive && hasPlayed && autoPick();
+        }, 1500);
+        return;
+      }
+      if (!isAvailable()) return;
       setTimeout(function () {
         if (alive && hasPlayed) loadEmbeddedTracks().then(function () {
           return autoPick();
@@ -8956,12 +10048,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     videoEl.addEventListener("playing", function () {
       if (!hasPlayed) scheduleAudioPick();
       hasPlayed = true;
+      if (meta.id !== "dev") onPlay(meta, video, frac());
       showSpinner(false);
       message("");
       updatePlayBtn();
       scheduleHide();
     });
     videoEl.addEventListener("pause", function () {
+      if (!videoEl.ended) onPause(frac());
       updatePlayBtn();
       showControls();
       saveProgress2();
@@ -8986,6 +10080,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     videoEl.addEventListener("ended", function () {
       saveProgress2();
       record(video.id, 1);
+      onStop(1);
       if (opts.isSeries && nextVideo() && !upNextCancelled) playNext();else pop();
     });
     function sendNowPlaying() {
@@ -9072,8 +10167,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var all2 = get(SUB_DELAYS, {}) || {};
       delete all2[video.id];
       if (v) all2[video.id] = v;
-      var keys = Object.keys(all2);
-      if (keys.length > 200) delete all2[keys[0]];
+      var keys2 = Object.keys(all2);
+      if (keys2.length > 200) delete all2[keys2[0]];
       set(SUB_DELAYS, all2);
     }
     function setSubDelay(v) {
@@ -9092,8 +10187,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     videoEl.addEventListener("error", function () {
       var err = videoEl.error;
-      log.warn("Erro de vídeo", err && err.code, mediaUrl);
+      log.warn("Erro de vídeo", err && err.code, err && err.message, mediaUrl);
       if (!alive) return;
+      if (videoEl.isAVPlay && !hasPlayed && err && /^open:/.test(err.message || "")) {
+        saveSettings({
+          playerEngine: "html5"
+        });
+        toast(t("Usando o player do navegador nesta TV."));
+        pop();
+        openPlayer(Object.assign({}, opts, {
+          stream: stream,
+          video: video,
+          startTime: pendingStart
+        }));
+        return;
+      }
       if (!hasPlayed && opts.fallbacks && opts.fallbacks.length) {
         stream = opts.fallbacks.shift();
         toast(t("Essa fonte não tocou. Tentando outra..."));
@@ -9449,11 +10557,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var id = String(videoEl.mediaId || "").trim();
       return id && id !== "<invalid mediaId>" ? id : null;
     }
-    function selectEmbeddedAudio(index) {
+    function selectEmbeddedAudio(index, silent) {
+      if (videoEl.isAVPlay) {
+        if (videoEl.selectAudio(index)) {
+          currentAudio = index;
+          if (!silent) toast(t("Áudio: {lang}", {
+            lang: audioName(index)
+          }));
+        } else toast(t("Troca de áudio indisponível agora."));
+        return;
+      }
       var native = videoEl.audioTracks;
       if (native && native.length > index) {
         for (var i = 0; i < native.length; i++) native[i].enabled = i === index;
         currentAudio = index;
+        try {
+          if (!videoEl.paused) videoEl.currentTime = Math.max(0, videoEl.currentTime - 0.2);
+        } catch (e) {}
         return;
       }
       var id = mediaId();
@@ -9596,12 +10716,31 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function audioMenu() {
+      if (videoEl.isAVPlay && videoEl.audioTrackList().length) return openAudioMenu();
       withTracks(openAudioMenu);
+    }
+    function audioName(i) {
+      var av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
+      var tr = av[i] || embedded && embedded.audio[i];
+      return tr ? langName(tr.language || tr.lang) : "#" + (i + 1);
     }
     function openAudioMenu() {
       var native = videoEl.audioTracks;
+      var av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
       var list2 = [];
-      if (native && native.length) {
+      if (av.length) {
+        list2 = av.map(function (tr, i) {
+          var info2 = embedded && embedded.audio[i];
+          return {
+            label: langName(info2 && info2.lang || tr.language) + (info2 && info2.label ? " · " + info2.label : ""),
+            sub: [info2 && info2.codec || tr.codec, tr.channels || info2 && info2.channels ? t("{n} canais", {
+              n: tr.channels || info2.channels
+            }) : ""].filter(Boolean).join(" · "),
+            value: i,
+            checked: tr.enabled
+          };
+        });
+      } else if (native && native.length) {
         for (var i = 0; i < native.length; i++) {
           list2.push({
             label: langName(native[i].language) + (native[i].label ? " · " + native[i].label : ""),
@@ -9622,7 +10761,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }
       menu(t("Áudio"), list2, {
-        empty: isAvailable() ? t("Só uma faixa de áudio.") : t("Para listar as faixas, conecte o servidor do PC em Ajustes."),
+        empty: isAvailable() || videoEl.isAVPlay ? t("Só uma faixa de áudio.") : t("Para listar as faixas, conecte o servidor do PC em Ajustes."),
         onPick: function onPick(i) {
           return selectEmbeddedAudio(i);
         }
@@ -9766,6 +10905,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var nv = nextVideo();
       if (!nv) return;
       saveProgress2();
+      onStop(frac());
       var group = stream.behaviorHints && stream.behaviorHints.bingeGroup;
       showSpinner(true);
       message(t("Procurando o próximo episódio..."));
@@ -9801,6 +10941,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       watchedDelta = 0;
       if (meta.id === "dev") return;
       record(video.id, videoEl.currentTime / d);
+      onProgress(videoEl.currentTime / d);
       saveProgress(meta, video.id, videoEl.currentTime * 1e3, d * 1e3, delta);
     }
     function onKey(e) {
@@ -9915,11 +11056,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         clearTimeout(hideTimer);
         clearTimeout(seekCommitTimer);
         disableEmbeddedSubs();
+        stop();
         try {
           videoEl.pause();
           videoEl.removeAttribute("src");
           videoEl.load();
         } catch (e) {}
+        if (videoEl.isAVPlay) {
+          videoEl.destroy();
+          document.documentElement.classList.remove("av-playing");
+        }
       }
     };
   }
@@ -10034,23 +11180,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
   // src/js/views/trailer.js
   function trailerIds(meta) {
-    var ids = [];
+    var ids2 = [];
     (meta.trailerStreams || []).forEach(function (s) {
-      return s && s.ytId && ids.push(s.ytId);
+      return s && s.ytId && ids2.push(s.ytId);
     });
     (meta.trailers || []).forEach(function (tr) {
-      return tr && tr.source && (!tr.type || tr.type === "Trailer") && ids.push(tr.source);
+      return tr && tr.source && (!tr.type || tr.type === "Trailer") && ids2.push(tr.source);
     });
-    return ids.filter(function (id, i) {
-      return /^[\w-]{11}$/.test(id) && ids.indexOf(id) === i;
+    return ids2.filter(function (id, i) {
+      return /^[\w-]{11}$/.test(id) && ids2.indexOf(id) === i;
     });
   }
-  function openTrailer(ids, title) {
-    push(TrailerView(ids, title));
+  function openTrailer(ids2, title) {
+    push(TrailerView(ids2, title));
   }
-  function TrailerView(ids, title) {
+  function TrailerView(ids2, title) {
     var index = 0;
-    var playing = true;
+    var playing2 = true;
     var el = h("div.view.trailer");
     var frame = h("iframe.trailer-frame", {
       tabindex: "-1",
@@ -10068,8 +11214,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }));
     function load5() {
       var params = "autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&enablejsapi=1&hl=" + current();
-      frame.src = "https://www.youtube-nocookie.com/embed/" + ids[index] + "?" + params;
-      playing = true;
+      frame.src = "https://www.youtube-nocookie.com/embed/" + ids2[index] + "?" + params;
+      playing2 = true;
     }
     function command(func, args) {
       try {
@@ -10097,18 +11243,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var k = e.keyCode;
         showHint();
         if (k === KEY.PLAYPAUSE || k === KEY.PLAY || k === KEY.PAUSE || k === KEY.ENTER) {
-          playing = k === KEY.PLAY ? true : k === KEY.PAUSE ? false : !playing;
-          command(playing ? "playVideo" : "pauseVideo");
+          playing2 = k === KEY.PLAY ? true : k === KEY.PAUSE ? false : !playing2;
+          command(playing2 ? "playVideo" : "pauseVideo");
           return true;
         }
-        if ((k === KEY.RIGHT || k === KEY.FF) && ids.length > 1) {
-          index = (index + 1) % ids.length;
+        if ((k === KEY.RIGHT || k === KEY.FF) && ids2.length > 1) {
+          index = (index + 1) % ids2.length;
           load5();
           return true;
         }
         if (k === KEY.LEFT || k === KEY.RW) {
-          if (ids.length > 1 && k === KEY.LEFT) {
-            index = (index - 1 + ids.length) % ids.length;
+          if (ids2.length > 1 && k === KEY.LEFT) {
+            index = (index - 1 + ids2.length) % ids2.length;
             load5();
           }
           return true;
@@ -10156,6 +11302,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var watchBtn = null;
     var libBtn = null;
     var tmdbInfo = null;
+    var ui_collBtn = null;
     var isSeries = function isSeries() {
       return meta && sortedVideos(meta).length > 0 && meta.type !== "movie";
     };
@@ -10252,6 +11399,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: "🎬"
       }), t("Trailer")]) : null;
+      var collBtn = h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return openCollectionsFor(meta.id, tmdbInfo && tmdbInfo.collection);
+        }
+      }, [h("span.ico", {
+        text: "🎞"
+      }), t("Coleção")]);
+      if (!hasCollection(meta.id)) collBtn.style.display = "none";
+      ui_collBtn = collBtn;
       updateButtons();
       info2.appendChild(logo2);
       info2.appendChild(title);
@@ -10262,7 +11419,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       info2.appendChild(castLine);
       info2.appendChild(h("div.details-buttons", {
         "data-group": ""
-      }, [watchBtn, sourcesBtn, trailerBtn, libBtn]));
+      }, [watchBtn, sourcesBtn, trailerBtn, collBtn, libBtn]));
       loadExtras({
         logo: logo2,
         title: title,
@@ -10290,6 +11447,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       localized(meta).then(function (loc) {
         if (!alive || !loc) return;
         tmdbInfo = loc;
+        if (loc.collection && ui_collBtn) ui_collBtn.style.display = "";
         if (loc.overview) ui.desc.textContent = loc.overview;
         if (loc.title) ui.title.textContent = loc.title;
         if (loc.logo) {
@@ -10869,6 +12027,621 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/data/franchises.js
+  var FRANCHISES = [{
+    id: "mcu",
+    name: "Marvel Cinematic Universe",
+    ar: "عالم مارفل السينمائي (MCU)",
+    items: [["tt0371746", "Iron Man", 2008], ["tt0800080", "The Incredible Hulk", 2008], ["tt1228705", "Iron Man 2", 2010], ["tt0800369", "Thor", 2011], ["tt0458339", "Captain America: The First Avenger", 2011], ["tt0848228", "The Avengers", 2012], ["tt1300854", "Iron Man 3", 2013], ["tt1981115", "Thor: The Dark World", 2013], ["tt1843866", "Captain America: The Winter Soldier", 2014], ["tt2015381", "Guardians of the Galaxy", 2014], ["tt2395427", "Avengers: Age of Ultron", 2015], ["tt0478970", "Ant-Man", 2015], ["tt3498820", "Captain America: Civil War", 2016], ["tt1211837", "Doctor Strange", 2016], ["tt3896198", "Guardians of the Galaxy Vol. 2", 2017], ["tt2250912", "Spider-Man: Homecoming", 2017], ["tt3501632", "Thor: Ragnarok", 2017], ["tt1825683", "Black Panther", 2018], ["tt4154756", "Avengers: Infinity War", 2018], ["tt5095030", "Ant-Man and the Wasp", 2018], ["tt4154664", "Captain Marvel", 2019], ["tt4154796", "Avengers: Endgame", 2019], ["tt6320628", "Spider-Man: Far From Home", 2019], ["tt9140560", "WandaVision", 2021, "s"], ["tt9208876", "The Falcon and the Winter Soldier", 2021, "s"], ["tt9140554", "Loki", 2021, "s"], ["tt3480822", "Black Widow", 2021], ["tt10168312", "What If...?", 2021, "s"], ["tt9376612", "Shang-Chi and the Legend of the Ten Rings", 2021], ["tt9032400", "Eternals", 2021], ["tt10160804", "Hawkeye", 2021, "s"], ["tt10872600", "Spider-Man: No Way Home", 2021], ["tt10234724", "Moon Knight", 2022, "s"], ["tt9419884", "Doctor Strange in the Multiverse of Madness", 2022], ["tt10857164", "Ms. Marvel", 2022, "s"], ["tt10648342", "Thor: Love and Thunder", 2022], ["tt10857160", "She-Hulk: Attorney at Law", 2022, "s"], ["tt15318872", "Werewolf by Night", 2022], ["tt9114286", "Black Panther: Wakanda Forever", 2022], ["tt13623136", "The Guardians of the Galaxy Holiday Special", 2022], ["tt10954600", "Ant-Man and the Wasp: Quantumania", 2023], ["tt6791350", "Guardians of the Galaxy Vol. 3", 2023], ["tt13157618", "Secret Invasion", 2023, "s"], ["tt10676048", "The Marvels", 2023], ["tt13966962", "Echo", 2024, "s"], ["tt6263850", "Deadpool & Wolverine", 2024], ["tt15571732", "Agatha All Along", 2024, "s"], ["tt14513804", "Captain America: Brave New World", 2025], ["tt18923754", "Daredevil: Born Again", 2025, "s"], ["tt20969586", "Thunderbolts*", 2025], ["tt13623126", "Ironheart", 2025, "s"], ["tt10676052", "The Fantastic Four: First Steps", 2025]],
+    // Disney+'s timeline order.
+    chrono: ["tt0458339", "tt4154664", "tt0371746", "tt1228705", "tt0800080", "tt0800369", "tt0848228", "tt1981115", "tt1300854", "tt1843866", "tt2015381", "tt3896198", "tt2395427", "tt0478970", "tt3498820", "tt3480822", "tt1825683", "tt2250912", "tt1211837", "tt3501632", "tt5095030", "tt4154756", "tt4154796", "tt9140554", "tt10168312", "tt9140560", "tt9208876", "tt9376612", "tt9032400", "tt6320628", "tt10872600", "tt10160804", "tt10234724", "tt9419884", "tt10857164", "tt10648342", "tt15318872", "tt10857160", "tt9114286", "tt13623136", "tt13157618", "tt13966962", "tt10954600", "tt6791350", "tt10676048", "tt15571732", "tt6263850", "tt14513804", "tt18923754", "tt20969586", "tt13623126", "tt10676052"]
+  }, {
+    id: "xmen",
+    name: "X-Men",
+    ar: "إكس-مين (X-Men)",
+    items: [["tt0120903", "X-Men", 2e3], ["tt0290334", "X2", 2003], ["tt0376994", "X-Men: The Last Stand", 2006], ["tt0458525", "X-Men Origins: Wolverine", 2009], ["tt1270798", "X-Men: First Class", 2011], ["tt1430132", "The Wolverine", 2013], ["tt1877832", "X-Men: Days of Future Past", 2014], ["tt1431045", "Deadpool", 2016], ["tt3385516", "X-Men: Apocalypse", 2016], ["tt3315342", "Logan", 2017], ["tt5463162", "Deadpool 2", 2018], ["tt6565702", "Dark Phoenix", 2019], ["tt4682266", "The New Mutants", 2020], ["tt6263850", "Deadpool & Wolverine", 2024]],
+    chrono: ["tt1270798", "tt0458525", "tt0120903", "tt0290334", "tt0376994", "tt1430132", "tt1877832", "tt3385516", "tt6565702", "tt4682266", "tt1431045", "tt5463162", "tt3315342", "tt6263850"]
+  }, {
+    id: "spiderman",
+    name: "Spider-Man",
+    ar: "سبايدر مان",
+    items: [["tt0145487", "Spider-Man", 2002], ["tt0316654", "Spider-Man 2", 2004], ["tt0413300", "Spider-Man 3", 2007], ["tt0948470", "The Amazing Spider-Man", 2012], ["tt1872181", "The Amazing Spider-Man 2", 2014], ["tt2250912", "Spider-Man: Homecoming", 2017], ["tt4633694", "Spider-Man: Into the Spider-Verse", 2018], ["tt6320628", "Spider-Man: Far From Home", 2019], ["tt10872600", "Spider-Man: No Way Home", 2021], ["tt9362722", "Spider-Man: Across the Spider-Verse", 2023]]
+  }, {
+    id: "dceu",
+    name: "DC Extended Universe",
+    ar: "عالم دي سي (DCEU)",
+    items: [["tt0770828", "Man of Steel", 2013], ["tt2975590", "Batman v Superman: Dawn of Justice", 2016], ["tt1386697", "Suicide Squad", 2016], ["tt0451279", "Wonder Woman", 2017], ["tt0974015", "Justice League", 2017], ["tt1477834", "Aquaman", 2018], ["tt0448115", "Shazam!", 2019], ["tt7713068", "Birds of Prey", 2020], ["tt7126948", "Wonder Woman 1984", 2020], ["tt12361974", "Zack Snyder's Justice League", 2021], ["tt6334354", "The Suicide Squad", 2021], ["tt6443346", "Black Adam", 2022], ["tt10151854", "Shazam! Fury of the Gods", 2023], ["tt0439572", "The Flash", 2023], ["tt9362930", "Blue Beetle", 2023], ["tt9663764", "Aquaman and the Lost Kingdom", 2023]],
+    chrono: ["tt0451279", "tt7126948", "tt0770828", "tt2975590", "tt1386697", "tt0974015", "tt12361974", "tt1477834", "tt0448115", "tt7713068", "tt6334354", "tt6443346", "tt10151854", "tt0439572", "tt9362930", "tt9663764"]
+  }, {
+    id: "darkknight",
+    name: "The Dark Knight Trilogy",
+    ar: "ثلاثية فارس الظلام (باتمان - نولان)",
+    items: [["tt0372784", "Batman Begins", 2005], ["tt0468569", "The Dark Knight", 2008], ["tt1345836", "The Dark Knight Rises", 2012]]
+  }, {
+    id: "middleearth",
+    name: "The Lord of the Rings & The Hobbit",
+    ar: "سيد الخواتم والهوبيت",
+    items: [["tt0120737", "The Lord of the Rings: The Fellowship of the Ring", 2001], ["tt0167261", "The Lord of the Rings: The Two Towers", 2002], ["tt0167260", "The Lord of the Rings: The Return of the King", 2003], ["tt0903624", "The Hobbit: An Unexpected Journey", 2012], ["tt1170358", "The Hobbit: The Desolation of Smaug", 2013], ["tt2310332", "The Hobbit: The Battle of the Five Armies", 2014], ["tt7631058", "The Lord of the Rings: The Rings of Power", 2022, "s"], ["tt14824600", "The Lord of the Rings: The War of the Rohirrim", 2024]],
+    chrono: ["tt7631058", "tt14824600", "tt0903624", "tt1170358", "tt2310332", "tt0120737", "tt0167261", "tt0167260"]
+  }, {
+    id: "wizarding",
+    name: "Harry Potter & Fantastic Beasts",
+    ar: "هاري بوتر والوحوش المذهلة",
+    items: [["tt0241527", "Harry Potter and the Sorcerer's Stone", 2001], ["tt0295297", "Harry Potter and the Chamber of Secrets", 2002], ["tt0304141", "Harry Potter and the Prisoner of Azkaban", 2004], ["tt0330373", "Harry Potter and the Goblet of Fire", 2005], ["tt0373889", "Harry Potter and the Order of the Phoenix", 2007], ["tt0417741", "Harry Potter and the Half-Blood Prince", 2009], ["tt0926084", "Harry Potter and the Deathly Hallows: Part 1", 2010], ["tt1201607", "Harry Potter and the Deathly Hallows: Part 2", 2011], ["tt3183660", "Fantastic Beasts and Where to Find Them", 2016], ["tt4123430", "Fantastic Beasts: The Crimes of Grindelwald", 2018], ["tt4123432", "Fantastic Beasts: The Secrets of Dumbledore", 2022]],
+    chrono: ["tt3183660", "tt4123430", "tt4123432", "tt0241527", "tt0295297", "tt0304141", "tt0330373", "tt0373889", "tt0417741", "tt0926084", "tt1201607"]
+  }, {
+    id: "starwars",
+    name: "Star Wars",
+    ar: "حرب النجوم (Star Wars)",
+    items: [["tt0076759", "Star Wars: Episode IV - A New Hope", 1977], ["tt0080684", "Star Wars: Episode V - The Empire Strikes Back", 1980], ["tt0086190", "Star Wars: Episode VI - Return of the Jedi", 1983], ["tt0120915", "Star Wars: Episode I - The Phantom Menace", 1999], ["tt0121765", "Star Wars: Episode II - Attack of the Clones", 2002], ["tt0121766", "Star Wars: Episode III - Revenge of the Sith", 2005], ["tt1185834", "Star Wars: The Clone Wars", 2008], ["tt0458290", "Star Wars: The Clone Wars", 2008, "s"], ["tt2488496", "Star Wars: Episode VII - The Force Awakens", 2015], ["tt3748528", "Rogue One: A Star Wars Story", 2016], ["tt2527336", "Star Wars: Episode VIII - The Last Jedi", 2017], ["tt3778644", "Solo: A Star Wars Story", 2018], ["tt2527338", "Star Wars: Episode IX - The Rise of Skywalker", 2019], ["tt8111088", "The Mandalorian", 2019, "s"], ["tt12708542", "Star Wars: The Bad Batch", 2021, "s"], ["tt13668894", "The Book of Boba Fett", 2021, "s"], ["tt8466564", "Obi-Wan Kenobi", 2022, "s"], ["tt9253284", "Andor", 2022, "s"], ["tt13622776", "Ahsoka", 2023, "s"], ["tt12262202", "The Acolyte", 2024, "s"]],
+    chrono: ["tt12262202", "tt0120915", "tt0121765", "tt1185834", "tt0458290", "tt0121766", "tt12708542", "tt3778644", "tt8466564", "tt9253284", "tt3748528", "tt0076759", "tt0080684", "tt0086190", "tt8111088", "tt13668894", "tt13622776", "tt2488496", "tt2527336", "tt2527338"]
+  }, {
+    id: "dollars",
+    name: "The Dollars Trilogy",
+    ar: "ثلاثية الدولار (حفنة من الدولارات)",
+    items: [["tt0058461", "A Fistful of Dollars", 1964], ["tt0059578", "For a Few Dollars More", 1965], ["tt0060196", "The Good, the Bad and the Ugly", 1966]],
+    chrono: ["tt0060196", "tt0058461", "tt0059578"]
+  }, {
+    id: "godfather",
+    name: "The Godfather",
+    ar: "العراب",
+    items: [["tt0068646", "The Godfather", 1972], ["tt0071562", "The Godfather Part II", 1974], ["tt0099674", "The Godfather Part III", 1990]]
+  }, {
+    id: "johnwick",
+    name: "John Wick",
+    ar: "جون ويك",
+    items: [["tt2911666", "John Wick", 2014], ["tt4425200", "John Wick: Chapter 2", 2017], ["tt6146586", "John Wick: Chapter 3 - Parabellum", 2019], ["tt10366206", "John Wick: Chapter 4", 2023], ["tt6486762", "The Continental", 2023, "s"], ["tt7181546", "Ballerina", 2025]],
+    chrono: ["tt6486762", "tt2911666", "tt4425200", "tt6146586", "tt7181546", "tt10366206"]
+  }, {
+    id: "fast",
+    name: "Fast & Furious",
+    ar: "السرعة والغضب (Fast & Furious)",
+    items: [["tt0232500", "The Fast and the Furious", 2001], ["tt0322259", "2 Fast 2 Furious", 2003], ["tt0463985", "The Fast and the Furious: Tokyo Drift", 2006], ["tt1013752", "Fast & Furious", 2009], ["tt1596343", "Fast Five", 2011], ["tt1905041", "Fast & Furious 6", 2013], ["tt2820852", "Furious 7", 2015], ["tt4630562", "The Fate of the Furious", 2017], ["tt6806448", "Fast & Furious Presents: Hobbs & Shaw", 2019], ["tt5433138", "F9", 2021], ["tt5433140", "Fast X", 2023]],
+    chrono: ["tt0232500", "tt0322259", "tt1013752", "tt1596343", "tt1905041", "tt0463985", "tt2820852", "tt4630562", "tt6806448", "tt5433138", "tt5433140"]
+  }, {
+    id: "mi",
+    name: "Mission: Impossible",
+    ar: "المهمة المستحيلة",
+    items: [["tt0117060", "Mission: Impossible", 1996], ["tt0120755", "Mission: Impossible II", 2e3], ["tt0317919", "Mission: Impossible III", 2006], ["tt1229238", "Mission: Impossible - Ghost Protocol", 2011], ["tt2381249", "Mission: Impossible - Rogue Nation", 2015], ["tt4912910", "Mission: Impossible - Fallout", 2018], ["tt9603212", "Mission: Impossible - Dead Reckoning Part One", 2023], ["tt9603208", "Mission: Impossible - The Final Reckoning", 2025]]
+  }, {
+    id: "bond",
+    name: "James Bond 007",
+    ar: "جيمس بوند 007",
+    items: [["tt0055928", "Dr. No", 1962], ["tt0057076", "From Russia with Love", 1963], ["tt0058150", "Goldfinger", 1964], ["tt0059800", "Thunderball", 1965], ["tt0062512", "You Only Live Twice", 1967], ["tt0064757", "On Her Majesty's Secret Service", 1969], ["tt0066995", "Diamonds Are Forever", 1971], ["tt0070328", "Live and Let Die", 1973], ["tt0071807", "The Man with the Golden Gun", 1974], ["tt0076752", "The Spy Who Loved Me", 1977], ["tt0079574", "Moonraker", 1979], ["tt0082398", "For Your Eyes Only", 1981], ["tt0086034", "Octopussy", 1983], ["tt0090264", "A View to a Kill", 1985], ["tt0093428", "The Living Daylights", 1987], ["tt0097742", "Licence to Kill", 1989], ["tt0113189", "GoldenEye", 1995], ["tt0120347", "Tomorrow Never Dies", 1997], ["tt0143145", "The World Is Not Enough", 1999], ["tt0246460", "Die Another Day", 2002], ["tt0381061", "Casino Royale", 2006], ["tt0830515", "Quantum of Solace", 2008], ["tt1074638", "Skyfall", 2012], ["tt2379713", "Spectre", 2015], ["tt2382320", "No Time to Die", 2021]]
+  }, {
+    id: "bourne",
+    name: "Bourne",
+    ar: "بورن",
+    items: [["tt0258463", "The Bourne Identity", 2002], ["tt0372183", "The Bourne Supremacy", 2004], ["tt0440963", "The Bourne Ultimatum", 2007], ["tt1194173", "The Bourne Legacy", 2012], ["tt4196776", "Jason Bourne", 2016]]
+  }, {
+    id: "matrix",
+    name: "The Matrix",
+    ar: "المصفوفة (The Matrix)",
+    items: [["tt0133093", "The Matrix", 1999], ["tt0234215", "The Matrix Reloaded", 2003], ["tt0242653", "The Matrix Revolutions", 2003], ["tt10838180", "The Matrix Resurrections", 2021]]
+  }, {
+    id: "indy",
+    name: "Indiana Jones",
+    ar: "إنديانا جونز",
+    items: [["tt0082971", "Raiders of the Lost Ark", 1981], ["tt0087469", "Indiana Jones and the Temple of Doom", 1984], ["tt0097576", "Indiana Jones and the Last Crusade", 1989], ["tt0367882", "Indiana Jones and the Kingdom of the Crystal Skull", 2008], ["tt1462764", "Indiana Jones and the Dial of Destiny", 2023]],
+    chrono: ["tt0087469", "tt0082971", "tt0097576", "tt0367882", "tt1462764"]
+  }, {
+    id: "jurassic",
+    name: "Jurassic Park & Jurassic World",
+    ar: "الحديقة الجوراسية والعالم الجوراسي",
+    items: [["tt0107290", "Jurassic Park", 1993], ["tt0119567", "The Lost World: Jurassic Park", 1997], ["tt0163025", "Jurassic Park III", 2001], ["tt0369610", "Jurassic World", 2015], ["tt4881806", "Jurassic World: Fallen Kingdom", 2018], ["tt8041270", "Jurassic World Dominion", 2022], ["tt31036941", "Jurassic World Rebirth", 2025]]
+  }, {
+    id: "alien",
+    name: "Alien",
+    ar: "الفضائي (Alien)",
+    items: [["tt0078748", "Alien", 1979], ["tt0090605", "Aliens", 1986], ["tt0103644", "Alien 3", 1992], ["tt0118583", "Alien Resurrection", 1997], ["tt1446714", "Prometheus", 2012], ["tt2316204", "Alien: Covenant", 2017], ["tt18412256", "Alien: Romulus", 2024]],
+    chrono: ["tt1446714", "tt2316204", "tt0078748", "tt18412256", "tt0090605", "tt0103644", "tt0118583"]
+  }, {
+    id: "terminator",
+    name: "The Terminator",
+    ar: "المدمّر (Terminator)",
+    items: [["tt0088247", "The Terminator", 1984], ["tt0103064", "Terminator 2: Judgment Day", 1991], ["tt0181852", "Terminator 3: Rise of the Machines", 2003], ["tt0438488", "Terminator Salvation", 2009], ["tt1340138", "Terminator Genisys", 2015], ["tt6450804", "Terminator: Dark Fate", 2019]]
+  }, {
+    id: "pirates",
+    name: "Pirates of the Caribbean",
+    ar: "قراصنة الكاريبي",
+    items: [["tt0325980", "Pirates of the Caribbean: The Curse of the Black Pearl", 2003], ["tt0383574", "Pirates of the Caribbean: Dead Man's Chest", 2006], ["tt0449088", "Pirates of the Caribbean: At World's End", 2007], ["tt1298650", "Pirates of the Caribbean: On Stranger Tides", 2011], ["tt1790809", "Pirates of the Caribbean: Dead Men Tell No Tales", 2017]]
+  }, {
+    id: "apes",
+    name: "Planet of the Apes",
+    ar: "كوكب القردة",
+    items: [["tt1318514", "Rise of the Planet of the Apes", 2011], ["tt2103281", "Dawn of the Planet of the Apes", 2014], ["tt3450958", "War for the Planet of the Apes", 2017], ["tt11389872", "Kingdom of the Planet of the Apes", 2024]]
+  }, {
+    id: "bttf",
+    name: "Back to the Future",
+    ar: "العودة إلى المستقبل",
+    items: [["tt0088763", "Back to the Future", 1985], ["tt0096874", "Back to the Future Part II", 1989], ["tt0099088", "Back to the Future Part III", 1990]]
+  }, {
+    id: "madmax",
+    name: "Mad Max",
+    ar: "ماد ماكس",
+    items: [["tt0079501", "Mad Max", 1979], ["tt0082694", "Mad Max 2: The Road Warrior", 1981], ["tt0089530", "Mad Max Beyond Thunderdome", 1985], ["tt1392190", "Mad Max: Fury Road", 2015], ["tt12037194", "Furiosa: A Mad Max Saga", 2024]],
+    chrono: ["tt0079501", "tt0082694", "tt0089530", "tt12037194", "tt1392190"]
+  }, {
+    id: "rocky",
+    name: "Rocky & Creed",
+    ar: "روكي وكريد",
+    items: [["tt0075148", "Rocky", 1976], ["tt0079817", "Rocky II", 1979], ["tt0084602", "Rocky III", 1982], ["tt0089927", "Rocky IV", 1985], ["tt0100507", "Rocky V", 1990], ["tt0479143", "Rocky Balboa", 2006], ["tt3076658", "Creed", 2015], ["tt6343314", "Creed II", 2018], ["tt11145118", "Creed III", 2023]]
+  }, {
+    id: "diehard",
+    name: "Die Hard",
+    ar: "داي هارد",
+    items: [["tt0095016", "Die Hard", 1988], ["tt0099423", "Die Hard 2", 1990], ["tt0112864", "Die Hard with a Vengeance", 1995], ["tt0337978", "Live Free or Die Hard", 2007], ["tt1606378", "A Good Day to Die Hard", 2013]]
+  }, {
+    id: "conjuring",
+    name: "The Conjuring Universe",
+    ar: "عالم الشعوذة (The Conjuring)",
+    items: [["tt1457767", "The Conjuring", 2013], ["tt3322940", "Annabelle", 2014], ["tt3065204", "The Conjuring 2", 2016], ["tt5140878", "Annabelle: Creation", 2017], ["tt5814060", "The Nun", 2018], ["tt4913966", "The Curse of La Llorona", 2019], ["tt8350360", "Annabelle Comes Home", 2019], ["tt7069210", "The Conjuring: The Devil Made Me Do It", 2021], ["tt10160976", "The Nun II", 2023], ["tt22898462", "The Conjuring: Last Rites", 2025]],
+    chrono: ["tt5814060", "tt10160976", "tt5140878", "tt3322940", "tt1457767", "tt4913966", "tt3065204", "tt8350360", "tt7069210", "tt22898462"]
+  }, {
+    id: "monsterverse",
+    name: "MonsterVerse (Godzilla & Kong)",
+    ar: "عالم الوحوش (غودزيلا وكونغ)",
+    items: [["tt0831387", "Godzilla", 2014], ["tt3731562", "Kong: Skull Island", 2017], ["tt3741700", "Godzilla: King of the Monsters", 2019], ["tt5034838", "Godzilla vs. Kong", 2021], ["tt17220216", "Monarch: Legacy of Monsters", 2023, "s"], ["tt14539740", "Godzilla x Kong: The New Empire", 2024]],
+    chrono: ["tt3731562", "tt0831387", "tt17220216", "tt3741700", "tt5034838", "tt14539740"]
+  }, {
+    id: "transformers",
+    name: "Transformers",
+    ar: "المتحولون (Transformers)",
+    items: [["tt0418279", "Transformers", 2007], ["tt1055369", "Transformers: Revenge of the Fallen", 2009], ["tt1399103", "Transformers: Dark of the Moon", 2011], ["tt2109248", "Transformers: Age of Extinction", 2014], ["tt3371366", "Transformers: The Last Knight", 2017], ["tt4701182", "Bumblebee", 2018], ["tt5090568", "Transformers: Rise of the Beasts", 2023], ["tt8864596", "Transformers One", 2024]],
+    chrono: ["tt8864596", "tt4701182", "tt5090568", "tt0418279", "tt1055369", "tt1399103", "tt2109248", "tt3371366"]
+  }, {
+    id: "hungergames",
+    name: "The Hunger Games",
+    ar: "مباريات الجوع",
+    items: [["tt1392170", "The Hunger Games", 2012], ["tt1951264", "The Hunger Games: Catching Fire", 2013], ["tt1951265", "The Hunger Games: Mockingjay - Part 1", 2014], ["tt1951266", "The Hunger Games: Mockingjay - Part 2", 2015], ["tt10545296", "The Hunger Games: The Ballad of Songbirds & Snakes", 2023]],
+    chrono: ["tt10545296", "tt1392170", "tt1951264", "tt1951265", "tt1951266"]
+  }, {
+    id: "toystory",
+    name: "Toy Story",
+    ar: "حكاية لعبة",
+    items: [["tt0114709", "Toy Story", 1995], ["tt0120363", "Toy Story 2", 1999], ["tt0435761", "Toy Story 3", 2010], ["tt1979376", "Toy Story 4", 2019]]
+  },
+  // ---------------- Anime ----------------
+  {
+    id: "fate",
+    name: "Fate (stay night, Zero, Heaven's Feel...)",
+    ar: "فيت (Fate): ستاي نايت وزيرو وهيفنز فيل",
+    items: [["tt0774809", "Fate/stay night", 2006, "s"], ["tt2051178", "Fate/Zero", 2011, "s"], ["tt3621796", "Fate/stay night [Unlimited Blade Works]", 2014, "s"], ["tt6424454", "Fate/Apocrypha", 2017, "s"], ["tt4054952", "Fate/stay night [Heaven's Feel] I. presage flower", 2017], ["tt8091892", "Fate/stay night [Heaven's Feel] II. lost butterfly", 2019], ["tt8092118", "Fate/stay night [Heaven's Feel] III. spring song", 2020]],
+    // Zero is the prequel (4th war); stay night / UBW / Heaven's Feel are the 5th war; Apocrypha is separate.
+    chrono: ["tt2051178", "tt0774809", "tt3621796", "tt4054952", "tt8091892", "tt8092118", "tt6424454"]
+  }, {
+    id: "evangelion",
+    name: "Evangelion",
+    ar: "إيفانجيليون (Evangelion)",
+    items: [["tt0112159", "Neon Genesis Evangelion", 1995, "s"], ["tt0169880", "Neon Genesis Evangelion: Death & Rebirth", 1997], ["tt0169858", "Neon Genesis Evangelion: The End of Evangelion", 1997], ["tt0923811", "Evangelion: 1.0 You Are (Not) Alone", 2007], ["tt0860906", "Evangelion: 2.0 You Can (Not) Advance", 2009], ["tt0860907", "Evangelion: 3.0 You Can (Not) Redo", 2012], ["tt2458948", "Evangelion: 3.0+1.0 Thrice Upon a Time", 2021]]
+  }, {
+    id: "gundam-uc",
+    name: "Gundam - Universal Century",
+    ar: "جاندام: التقويم العالمي (Universal Century)",
+    items: [["tt0159172", "Mobile Suit Gundam", 1979, "s"], ["tt0159186", "Mobile Suit Zeta Gundam", 1985, "s"], ["tt0159184", "Mobile Suit Gundam ZZ", 1986, "s"], ["tt0095262", "Mobile Suit Gundam: Char's Counterattack", 1988], ["tt0097661", "Mobile Suit Gundam 0080: War in the Pocket", 1989, "s"], ["tt0159567", "Mobile Suit Gundam 0083: Stardust Memory", 1991, "s"], ["tt0159568", "Mobile Suit Gundam F91", 1991], ["tt0159185", "Mobile Suit Victory Gundam", 1993, "s"], ["tt1587790", "Mobile Suit Gundam Unicorn", 2010, "s"], ["tt12899130", "Mobile Suit Gundam: The Origin - Advent of the Red Comet", 2019, "s"], ["tt13288678", "Mobile Suit Gundam: Hathaway", 2021]],
+    // By the year inside the story (UC 0068 → 0153).
+    chrono: ["tt12899130", "tt0159172", "tt0097661", "tt0159567", "tt0159186", "tt0159184", "tt0095262", "tt1587790", "tt13288678", "tt0159568", "tt0159185"]
+  }, {
+    id: "gundam-alt",
+    name: "Gundam - Other universes",
+    ar: "جاندام: الأكوان الأخرى (Wing وSEED وغيرها)",
+    items: [["tt0159182", "Mobile Fighter G Gundam", 1994, "s"], ["tt0159193", "Mobile Suit Gundam Wing", 1995, "s"], ["tt0159183", "After War Gundam X", 1996, "s"], ["tt0260191", "Gundam Wing: The Movie - Endless Waltz", 1998], ["tt0189318", "Turn A Gundam", 1999, "s"], ["tt0374407", "Mobile Suit Gundam SEED", 2002, "s"], ["tt1134000", "Mobile Suit Gundam 00", 2007, "s"], ["tt5344382", "Mobile Suit Gundam: Iron-Blooded Orphans", 2015, "s"], ["tt15433166", "Mobile Suit Gundam: The Witch from Mercury", 2022, "s"]]
+  }, {
+    id: "macross",
+    name: "Macross",
+    ar: "ماكروس (Macross)",
+    items: [["tt0142183", "Super Dimension Fortress Macross", 1982, "s"], ["tt0087660", "Macross: Do You Remember Love?", 1984], ["tt0110426", "Macross Plus", 1994, "s"], ["tt0156220", "Macross 7", 1994, "s"], ["tt0353685", "Macross Zero", 2002, "s"], ["tt1216150", "Macross Frontier", 2008, "s"], ["tt5827092", "Macross Delta", 2015, "s"]],
+    chrono: ["tt0353685", "tt0142183", "tt0087660", "tt0110426", "tt0156220", "tt1216150", "tt5827092"]
+  }, {
+    id: "monogatari",
+    name: "Monogatari Series",
+    ar: "سلسلة مونوغاتاري (Monogatari)",
+    items: [["tt1480925", "Bakemonogatari", 2009, "s"], ["tt2178501", "Nisemonogatari", 2012, "s"], ["tt2575678", "Nekomonogatari (Kuro)", 2012, "s"], ["tt2922300", "Monogatari Series: Second Season", 2013, "s"], ["tt3621678", "Hanamonogatari", 2014, "s"], ["tt4213580", "Tsukimonogatari", 2014, "s"], ["tt5274556", "Owarimonogatari", 2015, "s"], ["tt3138698", "Kizumonogatari Part 1: Tekketsu", 2016], ["tt5084196", "Kizumonogatari Part 2: Nekketsu", 2016], ["tt5483932", "Koyomimonogatari", 2016, "s"], ["tt5084198", "Kizumonogatari Part 3: Reiketsu", 2017], ["tt9266104", "Zoku Owarimonogatari", 2018], ["tt30971467", "Monogatari Series: Off & Monster Season", 2024, "s"]],
+    // The order most fans recommend for the story's own timeline.
+    chrono: ["tt3138698", "tt5084196", "tt5084198", "tt2575678", "tt1480925", "tt2178501", "tt2922300", "tt4213580", "tt3621678", "tt5274556", "tt5483932", "tt9266104", "tt30971467"]
+  }, {
+    id: "madoka",
+    name: "Puella Magi Madoka Magica",
+    ar: "مادوكا ماجيكا",
+    items: [["tt1773185", "Puella Magi Madoka Magica", 2011, "s"], ["tt2205948", "Puella Magi Madoka Magica the Movie Part 1: Beginnings", 2012], ["tt2194724", "Puella Magi Madoka Magica the Movie Part 2: Eternal", 2012], ["tt2457282", "Puella Magi Madoka Magica the Movie Part III: The Rebellion Story", 2013]]
+  }, {
+    id: "gits",
+    name: "Ghost in the Shell",
+    ar: "شبح في القوقعة (Ghost in the Shell)",
+    items: [["tt0113568", "Ghost in the Shell", 1995], ["tt0346314", "Ghost in the Shell: Stand Alone Complex", 2002, "s"], ["tt0347246", "Ghost in the Shell 2: Innocence", 2004], ["tt4337072", "Ghost in the Shell: The New Movie", 2015], ["tt9466298", "Ghost in the Shell: SAC_2045", 2020, "s"]]
+  }];
+  function findFranchise(id) {
+    return FRANCHISES.find(function (f) {
+      return f.id === id;
+    }) || null;
+  }
+  function franchisesOf(imdb) {
+    return FRANCHISES.filter(function (f) {
+      return f.items.some(function (it) {
+        return it[0] === imdb;
+      });
+    });
+  }
+
+  // src/js/views/collections.js
+  var POSTER = function POSTER(imdb) {
+    return "https://images.metahub.space/poster/medium/" + imdb + "/img";
+  };
+  var ORDER_KEY = "franchiseOrder";
+  function displayName(f) {
+    return current() === "ar" && f.ar ? f.ar : f.name;
+  }
+  var FAV_KEY = "franchiseFavs";
+  function favs() {
+    return get(FAV_KEY, []) || [];
+  }
+  function isFav(id) {
+    return favs().some(function (x) {
+      return x.id === id;
+    });
+  }
+  function toggleFav(f) {
+    var list2 = favs();
+    var i = list2.findIndex(function (x) {
+      return x.id === f.id;
+    });
+    if (i >= 0) list2.splice(i, 1);else list2.push(findFranchise(f.id) ? {
+      id: f.id
+    } : {
+      id: f.id,
+      name: f.name,
+      poster: f.items[0][0]
+    });
+    set(FAV_KEY, list2);
+    return i < 0;
+  }
+  function favEntries() {
+    return favs().map(function (x) {
+      var f = findFranchise(x.id);
+      if (f) return {
+        f: f
+      };
+      var m = /^tmdb:(\d+)$/.exec(x.id);
+      return m ? {
+        f: {
+          id: x.id,
+          name: x.name,
+          ar: x.name,
+          items: [[x.poster]]
+        },
+        tmdbId: Number(m[1])
+      } : null;
+    }).filter(Boolean);
+  }
+  function isSeriesItem(it) {
+    return it[3] === "s";
+  }
+  function itemWatched(it) {
+    if (isSeriesItem(it)) return false;
+    if (isWatched(it[0])) return true;
+    var li = libraryItem(it[0]);
+    return !!(li && li.state && (li.state.timesWatched > 0 || li.state.flaggedWatched));
+  }
+  function itemProgress(it) {
+    var li = libraryItem(it[0]);
+    if (li && li.state && li.state.timeOffset > 0 && li.state.duration > 0) return li.state.timeOffset / li.state.duration;
+    return isSeriesItem(it) ? 0 : progress(it[0]);
+  }
+  function watchedCount(f) {
+    return f.items.filter(itemWatched).length;
+  }
+  function orderOf(f) {
+    var all2 = get(ORDER_KEY, {}) || {};
+    return f.chrono && all2[f.id] === "chrono" ? "chrono" : "release";
+  }
+  function setOrder(f, order) {
+    var all2 = get(ORDER_KEY, {}) || {};
+    all2[f.id] = order;
+    set(ORDER_KEY, all2);
+  }
+  function ordered(f, order) {
+    if (order !== "chrono" || !f.chrono) return f.items.slice();
+    var byId = {};
+    f.items.forEach(function (it) {
+      return byId[it[0]] = it;
+    });
+    return f.chrono.map(function (id) {
+      return byId[id];
+    }).filter(Boolean);
+  }
+  function openFranchise(f) {
+    push(FranchiseView(f));
+  }
+  function openTmdbCollection(id) {
+    toast(t("Carregando coleção..."), 2500);
+    tmdbCollection(id).then(function (f) {
+      if (!f.items.length) return toast(t("Nenhum título encontrado nesta coleção."));
+      openFranchise(f);
+    }).catch(function () {
+      return toast(t("Não foi possível carregar a coleção."));
+    });
+  }
+  function openCollectionsFor(imdb, tmdbCollection2) {
+    var list2 = franchisesOf(imdb);
+    if (list2.length === 1 && !tmdbCollection2) return openFranchise(list2[0]);
+    var opts = list2.map(function (f) {
+      return {
+        label: displayName(f),
+        sub: t("{n} títulos", {
+          n: f.items.length
+        }),
+        value: f
+      };
+    });
+    if (tmdbCollection2 && !list2.some(function (f) {
+      return normalize2(f.name) === normalize2(tmdbCollection2.name);
+    })) {
+      opts.push({
+        label: tmdbCollection2.name,
+        sub: "TMDB",
+        value: {
+          tmdb: tmdbCollection2.id
+        }
+      });
+    }
+    if (opts.length === 1 && opts[0].value.tmdb) return openTmdbCollection(opts[0].value.tmdb);
+    menu(t("Coleções"), opts, {
+      onPick: function onPick(v) {
+        return v.tmdb ? openTmdbCollection(v.tmdb) : openFranchise(v);
+      }
+    });
+  }
+  function hasCollection(imdb) {
+    return franchisesOf(imdb).length > 0;
+  }
+  function normalize2(s) {
+    return String(s || "").toLowerCase().replace(/collection|coleção|سلسلة|[^a-z0-9]/g, "");
+  }
+  function CollectionsView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar("collections", goTab);
+    var searchBox = h("div.search-box");
+    var results = h("div");
+    var favBox = h("div");
+    var grid = h("div.grid");
+    scroller.appendChild(bar);
+    scroller.appendChild(searchBox);
+    scroller.appendChild(results);
+    scroller.appendChild(favBox);
+    scroller.appendChild(h("div.row-title", {
+      text: t("Coleções")
+    }));
+    scroller.appendChild(grid);
+    el.appendChild(scroller);
+    if (hasTmdb()) {
+      var input = h("input.input", {
+        type: "text",
+        placeholder: t("Buscar outra coleção (ex.: Shrek, Rambo, Saw)..."),
+        focusable: true
+      });
+      input.__submit = function (q) {
+        return search(q);
+      };
+      searchBox.appendChild(input);
+    } else {
+      searchBox.appendChild(h("div.hint", {
+        text: t("Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes.")
+      }));
+    }
+    var token = 0;
+    function search(q) {
+      var query = (q || "").trim();
+      clear(results);
+      if (query.length < 2) return;
+      var my = ++token;
+      results.appendChild(spinnerLine(t('Buscando "{q}"...', {
+        q: query
+      })));
+      searchCollections(query).then(function (list2) {
+        if (my !== token) return;
+        clear(results);
+        if (!list2.length) {
+          results.appendChild(h("div.hint", {
+            text: t("Nenhuma coleção encontrada.")
+          }));
+          return;
+        }
+        results.appendChild(h("div.row-title", {
+          text: t("Resultados")
+        }));
+        var track = h("div.row-track", {
+          "data-scroll-x": "",
+          "data-group": ""
+        });
+        list2.forEach(function (c) {
+          return track.appendChild(card({
+            name: c.name,
+            poster: c.poster
+          }, {
+            onSelect: function onSelect() {
+              return openTmdbCollection(c.id);
+            }
+          }));
+        });
+        results.appendChild(h("div.row", null, track));
+        loadVisibleImages(el, 400);
+      }).catch(function () {
+        if (my !== token) return;
+        clear(results);
+        results.appendChild(h("div.hint", {
+          text: t("Não foi possível buscar agora.")
+        }));
+      });
+    }
+    function franchiseCard(f, tmdbId) {
+      var done = tmdbId ? 0 : watchedCount(f);
+      return card({
+        name: displayName(f),
+        poster: POSTER(f.items[0][0])
+      }, {
+        badge: tmdbId ? "★" : (isFav(f.id) ? "★ " : "") + (done ? done + "/" + f.items.length : String(f.items.length)),
+        progress: done ? done / f.items.length : 0,
+        onSelect: function onSelect() {
+          return tmdbId ? openTmdbCollection(tmdbId) : openFranchise(f);
+        }
+      });
+    }
+    function renderGrid() {
+      clear(favBox);
+      var pinned = favEntries();
+      if (pinned.length) {
+        favBox.appendChild(h("div.row-title", {
+          text: "★ " + t("Favoritas")
+        }));
+        var fg = h("div.grid.fav-grid");
+        pinned.forEach(function (e) {
+          return fg.appendChild(franchiseCard(e.f, e.tmdbId));
+        });
+        favBox.appendChild(fg);
+      }
+      clear(grid);
+      var pinnedIds = pinned.map(function (e) {
+        return e.f.id;
+      });
+      FRANCHISES.filter(function (f) {
+        return pinnedIds.indexOf(f.id) < 0;
+      }).forEach(function (f) {
+        return grid.appendChild(franchiseCard(f));
+      });
+      loadVisibleImages(el, 400);
+    }
+    renderGrid();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return renderGrid();
+      },
+      destroy: function destroy() {
+        return bar.__destroy && bar.__destroy();
+      }
+    };
+  }
+  function FranchiseView(f) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var head = h("div.franchise-head");
+    var filters = h("div.filters", {
+      "data-group": ""
+    });
+    var grid = h("div.grid");
+    scroller.appendChild(head);
+    scroller.appendChild(filters);
+    scroller.appendChild(grid);
+    el.appendChild(scroller);
+    var order = orderOf(f);
+    var hideWatched = false;
+    function nextUp(list2) {
+      return list2.find(function (it) {
+        return !itemWatched(it);
+      }) || null;
+    }
+    function open(it) {
+      openDetails(isSeriesItem(it) ? "series" : "movie", it[0]);
+    }
+    function render(keepFocus) {
+      var list2 = ordered(f, order);
+      var done = list2.filter(itemWatched).length;
+      clear(head);
+      head.appendChild(h("h1", {
+        text: displayName(f)
+      }));
+      head.appendChild(h("div.franchise-sub", {
+        text: t("{n} títulos", {
+          n: list2.length
+        }) + "  ·  " + t("Assistidos: {done} de {n}", {
+          done: done,
+          n: list2.length
+        }) + (order === "chrono" ? "  ·  " + t("Ordem da história") : "  ·  " + t("Ordem de lançamento"))
+      }));
+      clear(filters);
+      var next = nextUp(list2);
+      if (next) {
+        filters.appendChild(h("div.chip.primary-chip", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return open(next);
+          }
+        }, "▶ " + t("Próximo: {title}", {
+          title: next[1]
+        })));
+      }
+      var chip = function chip(key, label, active, onSelect) {
+        var c = h("div.chip", {
+          focusable: true,
+          cls: active ? "active" : "",
+          text: label,
+          onSelect: onSelect
+        });
+        c.__key = key;
+        return c;
+      };
+      filters.appendChild(chip("release", t("Ordem de lançamento"), order === "release", function () {
+        order = "release";
+        setOrder(f, order);
+        render("release");
+      }));
+      if (f.chrono) {
+        filters.appendChild(chip("chrono", t("Ordem da história"), order === "chrono", function () {
+          order = "chrono";
+          setOrder(f, order);
+          render("chrono");
+        }));
+      }
+      filters.appendChild(chip("hide", t("Esconder assistidos"), hideWatched, function () {
+        hideWatched = !hideWatched;
+        render("hide");
+      }));
+      filters.appendChild(chip("fav", isFav(f.id) ? "★ " + t("Fixada no topo") : "☆ " + t("Fixar no topo"), isFav(f.id), function () {
+        var on = toggleFav(f);
+        toast(on ? t("Fixada no topo da aba Coleções") : t("Removida das favoritas"));
+        render("fav");
+      }));
+      clear(grid);
+      list2.forEach(function (it, i) {
+        var seen = itemWatched(it);
+        if (hideWatched && seen) return;
+        grid.appendChild(card({
+          name: it[1],
+          poster: POSTER(it[0])
+        }, {
+          title: i + 1 + ". " + it[1] + (isSeriesItem(it) ? " · " + t("série") : "") + " (" + it[2] + ")",
+          badge: seen ? "✓ " + (i + 1) : String(i + 1),
+          progress: seen ? 0 : itemProgress(it),
+          onSelect: function onSelect() {
+            return open(it);
+          }
+        }));
+      });
+      if (!grid.firstChild) grid.appendChild(h("div.hint", {
+        text: t("Você já assistiu tudo desta coleção.")
+      }));
+      if (keepFocus) {
+        var c = Array.prototype.find.call(filters.children, function (x) {
+          return x.__key === keepFocus;
+        });
+        if (c) focus(c);
+      }
+      loadVisibleImages(el, 400);
+    }
+    render();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return render();
+      }
+    };
+  }
+
   // src/js/api/newEpisodes.js
   var DAYS = 7;
   var CHECK = 25;
@@ -10918,7 +12691,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return list2;
     });
   }
-  function stop() {
+  function stop2() {
     run++;
   }
   function scan2(my) {
@@ -11035,10 +12808,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(rows);
     el.appendChild(scroller);
     var loadedBoard = false;
-    var lastSync = Date.now();
+    onPlayback(function (list2) {
+      if (mergeExternalProgress(list2)) {
+        renderContinue();
+        publishBrowse();
+      }
+    });
+    var lastSync2 = Date.now();
     function syncContinue() {
-      if (!isLoggedIn() || Date.now() - lastSync < 6e4) return;
-      lastSync = Date.now();
+      if (!isLoggedIn() || Date.now() - lastSync2 < 6e4) return;
+      lastSync2 = Date.now();
       var before = JSON.stringify(continueWatching().map(function (it) {
         return [it._id, it.state.video_id, it.state.timeOffset];
       }));
@@ -11258,6 +13037,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       onShow: function onShow() {
         renderContinue();
         syncContinue();
+        maybeSync();
         renderNew();
         loadNew(false);
         publishBrowse();
@@ -11273,7 +13053,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       // Chamado quando um vídeo começa: solta as fileiras (o catálogo volta do cache ao retornar).
       freeMemory: function freeMemory() {
-        stop();
+        stop2();
         newLoadedAt = 0;
         pending2 = [];
         clear(rows);
@@ -11735,10 +13515,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/update.js
-  var REPO = "ITzAkai/kai";
+  var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-06T18:06:07.124Z";
+  var BUILD = "2026-11-13T11:23:45.580Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -11972,6 +13752,78 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       document.head.appendChild(style);
     };
     x.send();
+  }
+
+  // src/js/views/trackLink.js
+  var NAMES = {
+    trakt: "Trakt",
+    simkl: "Simkl"
+  };
+  function openTrackLink(provider, onDone) {
+    push(TrackLinkView(provider, onDone));
+  }
+  function TrackLinkView(provider, onDone) {
+    var name = NAMES[provider];
+    var el = h("div.view");
+    var codeEl = h("div.code", {
+      text: "····"
+    });
+    var qr = h("img.qr", {
+      alt: ""
+    });
+    var urlEl = h("p");
+    var status2 = h("p", {
+      text: t("Gerando código...")
+    });
+    el.appendChild(h("div.login", null, h("div.login-card", null, [h("div.login-col", null, [h("h1", {
+      text: t("Conectar {name}", {
+        name: name
+      })
+    }), urlEl, codeEl, status2, h("div", {
+      "data-group": ""
+    }, [h("div.btn", {
+      focusable: true,
+      text: t("Cancelar"),
+      onSelect: function onSelect() {
+        return pop();
+      }
+    })])]), h("div.login-col", null, [qr])])));
+    var alive = true;
+    var link = startLink(provider, function (user2) {
+      if (!alive) return;
+      toast(user2 ? t("{name} conectado: {user}", {
+        name: name,
+        user: user2
+      }) : t("{name} conectado", {
+        name: name
+      }), 4e3);
+      pop();
+      if (onDone) onDone();
+    }, function (why) {
+      if (!alive) return;
+      status2.textContent = why === "expired" ? t("Código expirou. Abra de novo.") : why === "denied" ? t("Acesso negado no site.") : t("Falhou: {msg}", {
+        msg: why
+      });
+    });
+    link.ready.then(function () {
+      if (!alive) return;
+      codeEl.textContent = link.code;
+      urlEl.innerHTML = "";
+      urlEl.appendChild(document.createTextNode(t("No celular ou PC, abra") + " "));
+      urlEl.appendChild(h("b", {
+        text: link.url.replace(/^https?:\/\//, "")
+      }));
+      urlEl.appendChild(document.createTextNode(" " + t("e digite o código:")));
+      qr.src = qrImage(link.url, 260);
+      status2.textContent = t("Aguardando confirmação...");
+    }).catch(function () {});
+    return {
+      el: el,
+      destroy: function destroy() {
+        alive = false;
+        link.cancel();
+      }
+    };
   }
 
   // src/js/views/settings.js
@@ -12443,7 +14295,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var audName = (AUDIO_LANGS.find(function (x) {
         return JSON.stringify(x.value) === JSON.stringify(s.audioLangs);
       }) || AUDIO_LANGS[0]).label;
-      body.appendChild(row(t("Áudio preferido"), t("Precisa do servidor do PC para ler as faixas"), t(audName), function () {
+      body.appendChild(row(t("Áudio preferido"), available() && s.playerEngine !== "html5" ? t("Escolhido sozinho ao abrir o vídeo") : t("Precisa do servidor do PC para ler as faixas"), t(audName), function () {
         return menu(t("Áudio preferido"), AUDIO_LANGS.map(function (x) {
           return {
             label: t(x.label),
@@ -12525,6 +14377,81 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         auto: t("Automático"),
         off: t("Desligado")
       }[s.skipMode] || t("Automático"));
+      choose(t("Player de vídeo"), t("O player da Samsung troca a faixa de áudio; o do navegador é o antigo"), [{
+        id: "auto",
+        label: available() ? t("Samsung (AVPlay)") : t("Samsung (AVPlay) · indisponível nesta TV")
+      }, {
+        id: "html5",
+        label: t("Navegador (HTML5)")
+      }], "playerEngine", s.playerEngine === "html5" ? "html5" : "auto", s.playerEngine === "html5" ? t("Navegador (HTML5)") : t("Samsung (AVPlay)"));
+      body.appendChild(h("div.set-section", {
+        text: t("Rastreamento (Trakt e Simkl)")
+      }));
+      PROVIDERS.forEach(function (p) {
+        var name = p === "trakt" ? "Trakt" : "Simkl";
+        var acc = account(p);
+        var state = isConnected(p) ? acc.user ? t("Conectado: {user}", {
+          user: acc.user
+        }) : t("Conectado") : needsReconnect(p) ? t("Reconectar") : t("Desconectado");
+        var sub = p === "trakt" ? t("Sincroniza assistidos, progresso e Continuar assistindo com o Trakt") : t("Sincroniza assistidos e progresso com o Simkl");
+        body.appendChild(row(name, sub, state, function () {
+          if (isConnected(p)) {
+            menu(name, [{
+              label: t("Sincronizar agora"),
+              value: "sync"
+            }, {
+              label: t("Desconectar"),
+              value: "off"
+            }], {
+              onPick: function onPick(v) {
+                if (v === "sync") {
+                  toast(t("Sincronizando..."));
+                  syncNow().then(function () {
+                    dropTab("home");
+                    toast(t("Sincronizado"));
+                  });
+                } else {
+                  disconnect(p);
+                  toast(t("{name} desconectado", {
+                    name: name
+                  }));
+                  render();
+                }
+              }
+            });
+            return;
+          }
+          if (!hasKeys(p)) return toast(p === "trakt" ? t("Preencha o Client ID e o Client Secret do Trakt abaixo.") : t("Preencha o Client ID do Simkl abaixo."), 5e3);
+          openTrackLink(p, function () {
+            return render();
+          });
+        }));
+      });
+      var trackKey = function trackKey(title, sub, key, placeholder) {
+        var input = h("input.input", {
+          type: "text",
+          value: s[key] || "",
+          placeholder: placeholder
+        });
+        input.__submit = function (v) {
+          var patch = {};
+          patch[key] = v.trim();
+          saveSettings(patch);
+          toast(v.trim() ? t("Chave salva") : t("Chave removida"));
+          render();
+        };
+        body.appendChild(h("div.set-row", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return select(input);
+          }
+        }, [h("div.label", null, [title, h("small", {
+          text: sub
+        })]), input]));
+      };
+      trackKey(t("Trakt Client ID"), t("Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)"), "traktClientId", "Client ID");
+      trackKey(t("Trakt Client Secret"), t("Do mesmo app do Trakt"), "traktClientSecret", "Client Secret");
+      trackKey(t("Simkl Client ID"), t("Crie um app grátis em simkl.com/settings/developer"), "simklClientId", "Client ID");
       body.appendChild(h("div.set-section", {
         text: t("Metadados extras (opcional)")
       }));
@@ -12744,8 +14671,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       quiet: true
     }).catch(function () {
       return null;
-    }).then(function (ids) {
-      var movieFirst = media.format === "MOVIE" || ids && ids.media === "MOVIE";
+    }).then(function (ids2) {
+      var movieFirst = media.format === "MOVIE" || ids2 && ids2.media === "MOVIE";
       var types = movieFirst ? ["movie", "series"] : ["series", "movie"];
       var cands = [];
       var add = function add(id) {
@@ -12756,8 +14683,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
         });
       };
-      if (ids && ids.kitsu) add("kitsu:" + ids.kitsu);
-      if (ids && ids.imdb) add(ids.imdb);
+      if (ids2 && ids2.kitsu) add("kitsu:" + ids2.kitsu);
+      if (ids2 && ids2.imdb) add(ids2.imdb);
       add("anilist:" + media.id);
       var usable = cands.filter(function (c) {
         return withResource("meta", c.type, c.id).length > 0;
@@ -13202,6 +15129,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     registerTab("library", LibraryView);
     registerTab("settings", SettingsView);
     registerTab("calendar", CalendarView);
+    registerTab("collections", CollectionsView);
     if (needsPicker()) {
       var bootEl = document.getElementById("boot");
       if (bootEl) bootEl.style.display = "none";

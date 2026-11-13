@@ -248,6 +248,31 @@ export function saveProgress(meta, videoId, timeMs, durationMs, deltaWatchedMs) 
   return putLibraryItems([item]);
 }
 
+// Paused on another device (from Trakt): put it in Continue watching unless this TV / the
+// Stremio account has something newer for that title. Returns true when anything changed.
+// list: [{ type, id, videoId, name, runtime (min), progress (0..1), at (ISO) }]
+export function mergeExternalProgress(list) {
+  const changed = [];
+  (list || []).forEach((p) => {
+    const existing = libraryItem(p.id);
+    const localAt = existing && existing.state && existing.state.lastWatched;
+    if (localAt && String(localAt) >= String(p.at || '')) return;
+    const item = existing ? clone(existing) : newLibraryItem({ id: p.id, type: p.type, name: p.name, poster: /^tt\d+$/.test(p.id) ? 'https://images.metahub.space/poster/medium/' + p.id + '/img' : null });
+    const s = item.state;
+    // Same episode/film already played here: its real duration beats Trakt's runtime in minutes.
+    const dur = s.video_id === p.videoId && s.duration > 0 ? s.duration : (p.runtime || (p.type === 'movie' ? 110 : 45)) * 60000;
+    s.video_id = p.videoId;
+    s.duration = dur;
+    s.timeOffset = Math.round(dur * p.progress);
+    s.lastWatched = p.at || nowIso();
+    if (!item.name && p.name) item.name = p.name;
+    item._mtime = nowIso();
+    changed.push(item);
+  });
+  if (changed.length) putLibraryItems(changed);
+  return changed.length > 0;
+}
+
 export function continueWatching() {
   return cachedLibrary()
     .filter((it) => it.type !== 'other' && (!it.removed || it.temp) && it.state && it.state.timeOffset > 0)

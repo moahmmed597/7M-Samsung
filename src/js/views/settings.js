@@ -17,6 +17,9 @@ import { avatar, switchProfile, createProfile } from './profiles.js';
 import { t } from '../lib/i18n.js';
 import * as phone from '../lib/phone.js';
 import * as theme from '../lib/theme.js';
+import * as tracker from '../api/tracker.js';
+import * as avvideo from '../lib/avvideo.js';
+import { openTrackLink } from './trackLink.js';
 
 const SUB_LANGS = [
   { label: 'Inglês', value: ['eng', 'en'] },
@@ -381,7 +384,7 @@ export function SettingsView() {
     );
     const audName = (AUDIO_LANGS.find((x) => JSON.stringify(x.value) === JSON.stringify(s.audioLangs)) || AUDIO_LANGS[0]).label;
     body.appendChild(
-      row(t('Áudio preferido'), t('Precisa do servidor do PC para ler as faixas'), t(audName), () =>
+      row(t('Áudio preferido'), avvideo.available() && s.playerEngine !== 'html5' ? t('Escolhido sozinho ao abrir o vídeo') : t('Precisa do servidor do PC para ler as faixas'), t(audName), () =>
         menu(t('Áudio preferido'), AUDIO_LANGS.map((x) => ({ label: t(x.label), value: x.value, checked: x.label === audName })), {
           onPick: (v) => {
             store.saveSettings({ audioLangs: v });
@@ -446,6 +449,82 @@ export function SettingsView() {
       s.skipMode,
       { prompt: t('Mostrar botão'), auto: t('Automático'), off: t('Desligado') }[s.skipMode] || t('Automático')
     );
+
+    choose(
+      t('Player de vídeo'),
+      t('O player da Samsung troca a faixa de áudio; o do navegador é o antigo'),
+      [
+        { id: 'auto', label: avvideo.available() ? t('Samsung (AVPlay)') : t('Samsung (AVPlay) · indisponível nesta TV') },
+        { id: 'html5', label: t('Navegador (HTML5)') },
+      ],
+      'playerEngine',
+      s.playerEngine === 'html5' ? 'html5' : 'auto',
+      s.playerEngine === 'html5' ? t('Navegador (HTML5)') : t('Samsung (AVPlay)')
+    );
+
+    // ---- Tracking: Trakt and Simkl built in ----
+    body.appendChild(h('div.set-section', { text: t('Rastreamento (Trakt e Simkl)') }));
+    tracker.PROVIDERS.forEach((p) => {
+      const name = p === 'trakt' ? 'Trakt' : 'Simkl';
+      const acc = tracker.account(p);
+      const state = tracker.isConnected(p)
+        ? acc.user
+          ? t('Conectado: {user}', { user: acc.user })
+          : t('Conectado')
+        : tracker.needsReconnect(p)
+          ? t('Reconectar')
+          : t('Desconectado');
+      const sub =
+        p === 'trakt'
+          ? t('Sincroniza assistidos, progresso e Continuar assistindo com o Trakt')
+          : t('Sincroniza assistidos e progresso com o Simkl');
+      body.appendChild(
+        row(name, sub, state, () => {
+          if (tracker.isConnected(p)) {
+            menu(name, [
+              { label: t('Sincronizar agora'), value: 'sync' },
+              { label: t('Desconectar'), value: 'off' },
+            ], {
+              onPick: (v) => {
+                if (v === 'sync') {
+                  toast(t('Sincronizando...'));
+                  tracker.syncNow().then(() => {
+                    router.dropTab('home');
+                    toast(t('Sincronizado'));
+                  });
+                } else {
+                  tracker.disconnect(p);
+                  toast(t('{name} desconectado', { name: name }));
+                  render();
+                }
+              },
+            });
+            return;
+          }
+          if (!tracker.hasKeys(p)) return toast(p === 'trakt' ? t('Preencha o Client ID e o Client Secret do Trakt abaixo.') : t('Preencha o Client ID do Simkl abaixo.'), 5000);
+          openTrackLink(p, () => render());
+        })
+      );
+    });
+    const trackKey = (title, sub, key, placeholder) => {
+      const input = h('input.input', { type: 'text', value: s[key] || '', placeholder: placeholder });
+      input.__submit = (v) => {
+        const patch = {};
+        patch[key] = v.trim();
+        store.saveSettings(patch);
+        toast(v.trim() ? t('Chave salva') : t('Chave removida'));
+        render();
+      };
+      body.appendChild(
+        h('div.set-row', { focusable: true, onSelect: () => nav.select(input) }, [
+          h('div.label', null, [title, h('small', { text: sub })]),
+          input,
+        ])
+      );
+    };
+    trackKey(t('Trakt Client ID'), t('Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)'), 'traktClientId', 'Client ID');
+    trackKey(t('Trakt Client Secret'), t('Do mesmo app do Trakt'), 'traktClientSecret', 'Client Secret');
+    trackKey(t('Simkl Client ID'), t('Crie um app grátis em simkl.com/settings/developer'), 'simklClientId', 'Client ID');
 
     // ---- Metadados (opcional, como no Kai) ----
     body.appendChild(h('div.set-section', { text: t('Metadados extras (opcional)') }));

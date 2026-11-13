@@ -31,6 +31,23 @@ export function record(videoId, fraction) {
   store.set(KEY, map);
 }
 
+// From Trakt/Simkl history: many ids at once, one write. Local progress on others is kept.
+export function markWatchedMany(ids) {
+  if (!ids || !ids.length) return;
+  const map = all();
+  let changed = false;
+  ids.forEach((id) => {
+    if (id && map[id] !== 1) {
+      map[id] = 1;
+      changed = true;
+    }
+  });
+  if (!changed) return;
+  const keys = Object.keys(map);
+  for (let i = 0; i < keys.length - MAX; i++) delete map[keys[i]];
+  store.set(KEY, map);
+}
+
 export function isWatched(videoId) {
   return all()[videoId] === 1;
 }

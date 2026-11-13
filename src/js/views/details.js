@@ -16,6 +16,7 @@ import * as extras from '../api/extras.js';
 import { smallThumb } from '../lib/img.js';
 import { isAnime } from '../api/skip.js';
 import { t, epLabel } from '../lib/i18n.js';
+import { hasCollection, openCollectionsFor } from './collections.js';
 
 export function openDetails(type, id, opts) {
   router.push(DetailsView(type, id, opts || {}));
@@ -55,6 +56,7 @@ function DetailsView(type, id, opts) {
   let watchBtn = null;
   let libBtn = null;
   let tmdbInfo = null;
+  let ui_collBtn = null;
 
   const isSeries = () => meta && sortedVideos(meta).length > 0 && meta.type !== 'movie';
 
@@ -116,6 +118,10 @@ function DetailsView(type, id, opts) {
     const trailerBtn = trailers.length
       ? h('div.btn', { focusable: true, onSelect: () => openTrailer(trailers, meta.name) }, [h('span.ico', { text: '🎬' }), t('Trailer')])
       : null;
+    // Collection: built-in franchises right away; a TMDB collection appears once TMDB answers.
+    const collBtn = h('div.btn', { focusable: true, onSelect: () => openCollectionsFor(meta.id, tmdbInfo && tmdbInfo.collection) }, [h('span.ico', { text: '🎞' }), t('Coleção')]);
+    if (!hasCollection(meta.id)) collBtn.style.display = 'none';
+    ui_collBtn = collBtn;
     updateButtons();
     info.appendChild(logo);
     info.appendChild(title);
@@ -124,7 +130,7 @@ function DetailsView(type, id, opts) {
     info.appendChild(genres);
     info.appendChild(desc);
     info.appendChild(castLine);
-    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, libBtn]));
+    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, collBtn, libBtn]));
     loadExtras({ logo: logo, title: title, desc: desc, castLine: castLine, ratingsEl: ratingsEl });
   }
 
@@ -146,6 +152,7 @@ function DetailsView(type, id, opts) {
       .then((loc) => {
         if (!alive || !loc) return;
         tmdbInfo = loc;
+        if (loc.collection && ui_collBtn) ui_collBtn.style.display = '';
         if (loc.overview) ui.desc.textContent = loc.overview;
         if (loc.title) ui.title.textContent = loc.title;
         if (loc.logo) {

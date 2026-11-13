@@ -3,7 +3,7 @@
 // the latest commit and loads app.js/app.css pinned to it: a pinned jsDelivr copy is never stale.
 // Offline, slow or failing: the copy next to this file. Plain ES5: it runs before any polyfill.
 (function () {
-  var REPO = 'ITzAkai/kai';
+  var REPO = 'moahmmed597/7M-Samsung';
   var started = false;
 
   function start(base) {
@@ -25,6 +25,50 @@
       };
     }
     document.body.appendChild(js);
+  }
+
+  // Samsung's webapis (AVPlay: the player that can switch audio tracks). A packaged app gets it
+  // from $WEBAPIS; under TizenBrew the page comes from 127.0.0.1, so the TV's own copy is tried
+  // too. Whatever happens, the app starts (without AVPlay it uses the browser's <video>).
+  var webapisDone = !/Tizen/i.test(navigator.userAgent || '') || !!window.webapis;
+  var startArgs = null;
+  function loadWebapis(list) {
+    if (window.webapis || !list.length) {
+      webapisDone = true;
+      if (startArgs !== null) start(startArgs);
+      return;
+    }
+    var s = document.createElement('script');
+    var next = function () {
+      if (s.parentNode) s.parentNode.removeChild(s);
+      loadWebapis(window.webapis ? [] : list.slice(1));
+    };
+    var timer = setTimeout(next, 1500);
+    s.onload = s.onerror = function () {
+      clearTimeout(timer);
+      if (window.webapis) {
+        webapisDone = true;
+        if (startArgs !== null) start(startArgs);
+      } else next();
+    };
+    s.src = list[0];
+    document.head.appendChild(s);
+  }
+  if (!webapisDone) loadWebapis(['$WEBAPIS/webapis/webapis.js', 'file:///usr/share/webapis/webapis/webapis.js', 'file:///usr/bin/../share/webapis/webapis/webapis.js']);
+  var realStart = start;
+  start = function (base) {
+    if (!webapisDone) {
+      startArgs = base;
+      return;
+    }
+    realStart(base);
+  };
+
+  // Testing on the PC (npm run serve → http://localhost:5173): use this build, not GitHub's.
+  // (TizenBrew itself serves from 127.0.0.1:8081, so it still gets the newest build.)
+  if (location.hostname === 'localhost') {
+    start('');
+    return;
   }
 
   var x = new XMLHttpRequest();

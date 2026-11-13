@@ -18,6 +18,8 @@ import { sortedVideos, openDetails } from './details.js';
 import { t, epLabel } from '../lib/i18n.js';
 import * as watched from '../lib/watched.js';
 import * as phone from '../lib/phone.js';
+import * as avvideo from '../lib/avvideo.js';
+import * as tracker from '../api/tracker.js';
 
 const HIDE_MS = 5000;
 const SAVE_MS = 15000;
@@ -44,7 +46,11 @@ function PlayerView(opts) {
   let stream = opts.stream;
   const settings = store.settings();
 
-  const videoEl = h('video', { preload: 'auto' });
+  // Samsung: AVPlay (switches audio tracks); elsewhere or if turned off: the page's <video>.
+  const useAV = settings.playerEngine !== 'html5' && avvideo.available();
+  const videoEl = useAV ? avvideo.create() : h('video', { preload: 'auto' });
+  const videoNode = useAV ? videoEl.node : videoEl;
+  if (useAV) document.documentElement.classList.add('av-playing');
   const subsEl = h('div.subs');
   const titleEl = h('div.p-title');
   const clockEl = h('div.p-clock');
@@ -81,7 +87,7 @@ function PlayerView(opts) {
     upNextCount,
     h('div.un-buttons', { 'data-group': '' }, [upNextPlay, upNextCancel]),
   ]);
-  const el = h('div.view.player', null, [videoEl, subsEl, overlay, skipBox, upNextBox, spinner, msgEl]);
+  const el = h('div.view.player', null, [videoNode, subsEl, overlay, skipBox, upNextBox, spinner, msgEl]);
 
   const renderer = subs.Renderer(subsEl);
   substyle.apply(subsEl, settings);
@@ -108,6 +114,11 @@ function PlayerView(opts) {
   let triedTranscode = false;
 
   const seriesInfo = () => (opts.isSeries ? { season: video.season, episode: video.episode } : null);
+  // Played fraction 0..1 (for Trakt/Simkl).
+  const frac = () => {
+    const d = videoEl.duration;
+    return d > 0 && isFinite(d) ? Math.min(1, (videoEl.currentTime || 0) / d) : 0;
+  };
 
   function setTitle() {
     clear(titleEl);
@@ -200,12 +211,14 @@ function PlayerView(opts) {
   function autoPick() {
     const prefSubs = (settings.subtitleLangs || []).map((x) => x.toLowerCase());
     const prefAudio = (settings.audioLangs || []).map((x) => x.toLowerCase());
-    if (!autoDone.audio && prefAudio.length && embedded && embedded.audio.length > 1) {
+    const avList = videoEl.isAVPlay ? videoEl.audioTrackList().map((x) => ({ lang: x.language })) : [];
+    const audioList = avList.length > 1 ? avList : embedded ? embedded.audio : [];
+    if (!autoDone.audio && prefAudio.length && audioList.length > 1) {
       autoDone.audio = true;
-      const already = embedded.audio[0] && prefAudio.indexOf(String(embedded.audio[0].lang).toLowerCase()) >= 0;
+      const already = audioList[0] && prefAudio.indexOf(String(audioList[0].lang).toLowerCase()) >= 0;
       if (!already) {
-        const idx = embedded.audio.findIndex((tr) => prefAudio.indexOf(String(tr.lang).toLowerCase()) >= 0);
-        if (idx > 0) selectEmbeddedAudio(idx);
+        const idx = audioList.findIndex((tr) => prefAudio.indexOf(String(tr.lang).toLowerCase()) >= 0);
+        if (idx > 0) selectEmbeddedAudio(idx, true);
       }
     }
     if (autoDone.sub || !settings.subtitlesAuto || !prefSubs.length || !addonSubs) return;
@@ -221,7 +234,13 @@ function PlayerView(opts) {
 
   // Áudio preferido configurado: lê as faixas uma vez, 20s depois de o vídeo começar.
   function scheduleAudioPick() {
-    if (!(settings.audioLangs || []).length || !server.isAvailable()) return;
+    if (!(settings.audioLangs || []).length) return;
+    // AVPlay knows the tracks itself: no need to ask the PC server.
+    if (videoEl.isAVPlay) {
+      setTimeout(() => alive && hasPlayed && autoPick(), 1500);
+      return;
+    }
+    if (!server.isAvailable()) return;
     setTimeout(() => {
       if (alive && hasPlayed) loadEmbeddedTracks().then(() => autoPick());
     }, 20000);
@@ -244,12 +263,14 @@ function PlayerView(opts) {
   videoEl.addEventListener('playing', () => {
     if (!hasPlayed) scheduleAudioPick();
     hasPlayed = true;
+    if (meta.id !== 'dev') tracker.onPlay(meta, video, frac());
     showSpinner(false);
     message('');
     updatePlayBtn();
     scheduleHide();
   });
   videoEl.addEventListener('pause', () => {
+    if (!videoEl.ended) tracker.onPause(frac());
     updatePlayBtn();
     showControls();
     saveProgress();
@@ -270,6 +291,7 @@ function PlayerView(opts) {
   videoEl.addEventListener('ended', () => {
     saveProgress();
     watched.record(video.id, 1);
+    tracker.onStop(1);
     if (opts.isSeries && nextVideo() && !upNextCancelled) playNext();
     else router.pop();
   });
@@ -378,8 +400,16 @@ function PlayerView(opts) {
   }
   videoEl.addEventListener('error', () => {
     const err = videoEl.error;
-    log.warn('Erro de vídeo', err && err.code, mediaUrl);
+    log.warn('Erro de vídeo', err && err.code, err && err.message, mediaUrl);
     if (!alive) return;
+    // AVPlay itself unusable on this TV (not just this file): use the browser player from now on.
+    if (videoEl.isAVPlay && !hasPlayed && err && /^open:/.test(err.message || '')) {
+      store.saveSettings({ playerEngine: 'html5' });
+      toast(t('Usando o player do navegador nesta TV.'));
+      router.pop();
+      openPlayer(Object.assign({}, opts, { stream: stream, video: video, startTime: pendingStart }));
+      return;
+    }
     // Smart Choice: before giving up, try its next-best source.
     if (!hasPlayed && opts.fallbacks && opts.fallbacks.length) {
       stream = opts.fallbacks.shift();
@@ -761,11 +791,24 @@ function PlayerView(opts) {
     return id && id !== '<invalid mediaId>' ? id : null;
   }
 
-  function selectEmbeddedAudio(index) {
+  function selectEmbeddedAudio(index, silent) {
+    if (videoEl.isAVPlay) {
+      if (videoEl.selectAudio(index)) {
+        currentAudio = index;
+        if (!silent) toast(t('Áudio: {lang}', { lang: audioName(index) }));
+      } else toast(t('Troca de áudio indisponível agora.'));
+      return;
+    }
     const native = videoEl.audioTracks;
     if (native && native.length > index) {
       for (let i = 0; i < native.length; i++) native[i].enabled = i === index;
       currentAudio = index;
+      // The TV's player keeps the old track's buffered audio: a tiny seek flushes it so the new one is heard now.
+      try {
+        if (!videoEl.paused) videoEl.currentTime = Math.max(0, videoEl.currentTime - 0.2);
+      } catch (e) {
+        /* ignore */
+      }
       return;
     }
     const id = mediaId();
@@ -873,13 +916,31 @@ function PlayerView(opts) {
   }
 
   function audioMenu() {
+    if (videoEl.isAVPlay && videoEl.audioTrackList().length) return openAudioMenu();
     withTracks(openAudioMenu);
+  }
+
+  function audioName(i) {
+    const av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
+    const tr = av[i] || (embedded && embedded.audio[i]);
+    return tr ? langName(tr.language || tr.lang) : '#' + (i + 1);
   }
 
   function openAudioMenu() {
     const native = videoEl.audioTracks;
+    const av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
     let list = [];
-    if (native && native.length) {
+    if (av.length) {
+      list = av.map((tr, i) => {
+        const info = embedded && embedded.audio[i];
+        return {
+          label: langName((info && info.lang) || tr.language) + (info && info.label ? ' · ' + info.label : ''),
+          sub: [(info && info.codec) || tr.codec, tr.channels || (info && info.channels) ? t('{n} canais', { n: tr.channels || info.channels }) : ''].filter(Boolean).join(' · '),
+          value: i,
+          checked: tr.enabled,
+        };
+      });
+    } else if (native && native.length) {
       for (let i = 0; i < native.length; i++) {
         list.push({ label: langName(native[i].language) + (native[i].label ? ' · ' + native[i].label : ''), value: i, checked: native[i].enabled });
       }
@@ -892,7 +953,7 @@ function PlayerView(opts) {
       }));
     }
     menu(t('Áudio'), list, {
-      empty: server.isAvailable() ? t('Só uma faixa de áudio.') : t('Para listar as faixas, conecte o servidor do PC em Ajustes.'),
+      empty: server.isAvailable() || videoEl.isAVPlay ? t('Só uma faixa de áudio.') : t('Para listar as faixas, conecte o servidor do PC em Ajustes.'),
       onPick: (i) => selectEmbeddedAudio(i),
     });
   }
@@ -997,6 +1058,7 @@ function PlayerView(opts) {
     const nv = nextVideo();
     if (!nv) return;
     saveProgress();
+    tracker.onStop(frac());
     const group = stream.behaviorHints && stream.behaviorHints.bingeGroup;
     showSpinner(true);
     message(t('Procurando o próximo episódio...'));
@@ -1026,6 +1088,7 @@ function PlayerView(opts) {
     watchedDelta = 0;
     if (meta.id === 'dev') return; // teste de desenvolvimento: não mexe na biblioteca
     watched.record(video.id, videoEl.currentTime / d);
+    tracker.onProgress(videoEl.currentTime / d);
     stremio.saveProgress(meta, video.id, videoEl.currentTime * 1000, d * 1000, delta);
   }
 
@@ -1150,12 +1213,17 @@ function PlayerView(opts) {
       clearTimeout(hideTimer);
       clearTimeout(seekCommitTimer);
       disableEmbeddedSubs();
+      tracker.stop();
       try {
         videoEl.pause();
         videoEl.removeAttribute('src');
         videoEl.load();
       } catch (e) {
         /* ignore */
+      }
+      if (videoEl.isAVPlay) {
+        videoEl.destroy();
+        document.documentElement.classList.remove('av-playing');
       }
     },
   };

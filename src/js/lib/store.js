@@ -92,7 +92,7 @@ export function updateProfile(id, patch) {
 export function removeProfile(id) {
   const list = ensureProfiles().filter((p) => p.id !== id);
   if (!list.length) return false;
-  ['auth', 'addons', 'library', 'settings'].forEach((k) => rawSet(profileKey(id, k), null));
+  ['auth', 'addons', 'library', 'settings', 'watched', 'track.trakt', 'track.simkl'].forEach((k) => rawSet(profileKey(id, k), null));
   rawSet('profiles', list);
   if (rawGet('activeProfile', null) === id) rawSet('activeProfile', list[0].id);
   return true;
@@ -114,7 +114,7 @@ export function set(key, value) {
 
 // ---------- Preferências ----------
 // Da TV (iguais para todos os perfis):
-const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language'];
+const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine'];
 
 const DEFAULT_SETTINGS = {
   // TV
@@ -127,6 +127,11 @@ const DEFAULT_SETTINGS = {
   theme: 'purple', // see lib/theme.js
   devlogUrl: typeof __KAI_DEVLOG__ !== 'undefined' ? __KAI_DEVLOG__ : '',
   language: 'auto', // 'auto' (TV language: Arabic or English) | 'en' | 'ar'
+  // Tracking API apps (trakt.tv/oauth/applications, simkl.com/settings/developer): build or Settings.
+  traktClientId: typeof __KAI_TRAKT_ID__ !== 'undefined' ? __KAI_TRAKT_ID__ : '',
+  traktClientSecret: typeof __KAI_TRAKT_SECRET__ !== 'undefined' ? __KAI_TRAKT_SECRET__ : '',
+  simklClientId: typeof __KAI_SIMKL_ID__ !== 'undefined' ? __KAI_SIMKL_ID__ : '',
+  playerEngine: 'auto', // 'auto' = Samsung AVPlay when present (audio track switching) | 'html5'
   askProfile: true, // "Quem está assistindo?" ao abrir, se houver mais de um perfil
   wizardDone: false,
   // Perfil
