@@ -733,4 +733,5 @@ export const AR = {
   "Indonésio": "إندونيسي",
   "Malaio": "ملايو",
   "Use de 4 a 8 números.": "استخدم من 4 إلى 8 أرقام.",
+  "Chaves próprias (opcional)": "مفاتيحك الخاصة (اختياري)",
 };

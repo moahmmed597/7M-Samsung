@@ -21,13 +21,25 @@ const SYNC_EVERY = 30 * 60 * 1000;
 export const PROVIDERS = ['trakt', 'simkl'];
 
 // ---------- Keys and accounts ----------
+const BUILT = {
+  traktId: typeof __KAI_TRAKT_ID__ !== 'undefined' ? __KAI_TRAKT_ID__ : '',
+  traktSecret: typeof __KAI_TRAKT_SECRET__ !== 'undefined' ? __KAI_TRAKT_SECRET__ : '',
+  simklId: typeof __KAI_SIMKL_ID__ !== 'undefined' ? __KAI_SIMKL_ID__ : '',
+};
+
 function keys() {
   const s = store.settings();
   return {
-    traktId: (s.traktClientId || '').trim(),
-    traktSecret: (s.traktClientSecret || '').trim(),
-    simklId: (s.simklClientId || '').trim(),
+    // Own keys typed in Settings win; otherwise the app's own keys from the build (GitHub secrets).
+    traktId: (s.traktClientId || '').trim() || BUILT.traktId,
+    traktSecret: ((s.traktClientId || '').trim() ? (s.traktClientSecret || '').trim() : BUILT.traktSecret),
+    simklId: (s.simklClientId || '').trim() || BUILT.simklId,
   };
+}
+
+// True when this build carries the app's own keys, so linking is just "scan and sign in".
+export function hasBuiltInKeys(provider) {
+  return provider === 'trakt' ? !!(BUILT.traktId && BUILT.traktSecret) : !!BUILT.simklId;
 }
 
 export function hasKeys(provider) {

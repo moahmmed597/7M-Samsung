@@ -733,4 +733,5 @@ export const EN = {
   "Indonésio": "Indonesian",
   "Malaio": "Malay",
   "Use de 4 a 8 números.": "Use 4 to 8 digits.",
+  "Chaves próprias (opcional)": "Your own keys (optional)",
 };

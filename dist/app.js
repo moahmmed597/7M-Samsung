@@ -5498,7 +5498,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Urdu": "Urdu",
     "Indonésio": "Indonesian",
     "Malaio": "Malay",
-    "Use de 4 a 8 números.": "Use 4 to 8 digits."
+    "Use de 4 a 8 números.": "Use 4 to 8 digits.",
+    "Chaves próprias (opcional)": "Your own keys (optional)"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6227,7 +6228,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Urdu": "أردو",
     "Indonésio": "إندونيسي",
     "Malaio": "ملايو",
-    "Use de 4 a 8 números.": "استخدم من 4 إلى 8 أرقام."
+    "Use de 4 a 8 números.": "استخدم من 4 إلى 8 أرقام.",
+    "Chaves próprias (opcional)": "مفاتيحك الخاصة (اختياري)"
   };
 
   // src/js/lib/i18n.js
@@ -6979,9 +6981,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     language: "auto",
     // 'auto' (TV language: Arabic or English) | 'en' | 'ar'
     // Tracking API apps (trakt.tv/oauth/applications, simkl.com/settings/developer): build or Settings.
-    traktClientId: true ? "" : "",
-    traktClientSecret: true ? "" : "",
-    simklClientId: true ? "" : "",
+    traktClientId: "",
+    // empty = the app's own keys from the build (api/tracker.js)
+    traktClientSecret: "",
+    simklClientId: "",
     playerEngine: "auto",
     // 'auto' = Samsung AVPlay when present (audio track switching) | 'html5'
     askProfile: true,
@@ -10556,13 +10559,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var SIMKL_API = "https://api.simkl.com";
   var SYNC_EVERY = 30 * 60 * 1e3;
   var PROVIDERS2 = ["trakt", "simkl"];
+  var BUILT = {
+    traktId: true ? "" : "",
+    traktSecret: true ? "" : "",
+    simklId: true ? "" : ""
+  };
   function keys() {
     var s = settings();
     return {
-      traktId: (s.traktClientId || "").trim(),
-      traktSecret: (s.traktClientSecret || "").trim(),
-      simklId: (s.simklClientId || "").trim()
+      // Own keys typed in Settings win; otherwise the app's own keys from the build (GitHub secrets).
+      traktId: (s.traktClientId || "").trim() || BUILT.traktId,
+      traktSecret: (s.traktClientId || "").trim() ? (s.traktClientSecret || "").trim() : BUILT.traktSecret,
+      simklId: (s.simklClientId || "").trim() || BUILT.simklId
     };
+  }
+  function hasBuiltInKeys(provider) {
+    return provider === "trakt" ? !!(BUILT.traktId && BUILT.traktSecret) : !!BUILT.simklId;
   }
   function hasKeys(provider) {
     var k = keys();
@@ -16134,7 +16146,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-13T18:08:43.476Z";
+  var BUILD = "2026-11-13T18:13:43.796Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -16794,6 +16806,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       PROVIDERS2.forEach(function (p) {
         return body.appendChild(accountCard(p));
       });
+      var builtIn = hasBuiltInKeys("trakt") && hasBuiltInKeys("simkl");
+      if (builtIn) body.appendChild(h("div.set-section", {
+        text: t("Chaves próprias (opcional)")
+      }));
       body.appendChild(keyInput(t("Trakt Client ID"), t("Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)"), "traktClientId", "Client ID"));
       body.appendChild(keyInput(t("Trakt Client Secret"), t("Do mesmo app do Trakt"), "traktClientSecret", "Client Secret"));
       body.appendChild(keyInput(t("Simkl Client ID"), t("Crie um app grátis em simkl.com/settings/developer"), "simklClientId", "Client ID"));

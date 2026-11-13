@@ -201,6 +201,9 @@ export function SettingsView() {
     pageHeader(t('Rastreamento (Trakt e Simkl)'));
     body.appendChild(h('div.set-section', { text: t('Contas conectadas') }));
     tracker.PROVIDERS.forEach((p) => body.appendChild(accountCard(p)));
+    // With the app's own keys in the build, linking is just "scan and sign in"; own keys stay optional.
+    const builtIn = tracker.hasBuiltInKeys('trakt') && tracker.hasBuiltInKeys('simkl');
+    if (builtIn) body.appendChild(h('div.set-section', { text: t('Chaves próprias (opcional)') }));
     body.appendChild(keyInput(t('Trakt Client ID'), t('Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)'), 'traktClientId', 'Client ID'));
     body.appendChild(keyInput(t('Trakt Client Secret'), t('Do mesmo app do Trakt'), 'traktClientSecret', 'Client Secret'));
     body.appendChild(keyInput(t('Simkl Client ID'), t('Crie um app grátis em simkl.com/settings/developer'), 'simklClientId', 'Client ID'));

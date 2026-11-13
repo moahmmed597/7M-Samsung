@@ -128,9 +128,9 @@ const DEFAULT_SETTINGS = {
   devlogUrl: typeof __KAI_DEVLOG__ !== 'undefined' ? __KAI_DEVLOG__ : '',
   language: 'auto', // 'auto' (TV language: Arabic or English) | 'en' | 'ar'
   // Tracking API apps (trakt.tv/oauth/applications, simkl.com/settings/developer): build or Settings.
-  traktClientId: typeof __KAI_TRAKT_ID__ !== 'undefined' ? __KAI_TRAKT_ID__ : '',
-  traktClientSecret: typeof __KAI_TRAKT_SECRET__ !== 'undefined' ? __KAI_TRAKT_SECRET__ : '',
-  simklClientId: typeof __KAI_SIMKL_ID__ !== 'undefined' ? __KAI_SIMKL_ID__ : '',
+  traktClientId: '', // empty = the app's own keys from the build (api/tracker.js)
+  traktClientSecret: '',
+  simklClientId: '',
   playerEngine: 'auto', // 'auto' = Samsung AVPlay when present (audio track switching) | 'html5'
   askProfile: true, // "Quem está assistindo?" ao abrir, se houver mais de um perfil
   wizardDone: false,
