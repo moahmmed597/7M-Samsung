@@ -5,7 +5,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const [input, output] = process.argv.slice(2);
+const [input, output, skipArg] = process.argv.slice(2);
+// Optional third argument: collection titles to leave out, comma separated (e.g. "Anime,Actors").
+const skip = String(skipArg || '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean);
 if (!input || !output) {
   console.error('Usage: node tools/import-nuvio-collections.mjs <export.json> <output.json>');
   process.exit(1);
@@ -66,7 +68,7 @@ function source(s) {
 
 const raw = JSON.parse(fs.readFileSync(input, 'utf8'));
 const cols = findCollections(raw, 0) || [];
-const out = cols.map((c) => ({
+const out = cols.filter((c) => skip.indexOf(String(c.title).trim().toLowerCase()) < 0).map((c) => ({
   t: c.title,
   f: c.folders.map((f) => {
     const x = {

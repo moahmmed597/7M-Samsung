@@ -43,12 +43,39 @@ export function collectionRows(parent, data) {
     return {
       row: row,
       load: () => {
-        c.f.forEach((f) => track.appendChild(folderTile(f)));
+        // 15 tiles per row keeps the home screen light; "See all" opens the whole collection.
+        c.f.slice(0, ROW_TILES).forEach((f) => track.appendChild(folderTile(f)));
+        if (c.f.length > ROW_TILES)
+          track.appendChild(
+            h('div.card.see-all', { focusable: true, onSelect: () => router.push(CollectionGridView(c)) }, [
+              h('div.poster-wrap', null, h('div.see-all-label', null, [h('b', { text: '→' }), t('Ver tudo')])),
+              h('div.name', { text: '' }),
+            ])
+          );
         loadVisibleImages(row);
         return Promise.resolve();
       },
     };
   });
+}
+
+const ROW_TILES = 15;
+
+// A whole collection as a grid of folder tiles; images load as they come into view.
+function CollectionGridView(c) {
+  const el = h('div.view');
+  const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
+  const grid = h('div.grid.nc-grid');
+  scroller.appendChild(h('div.row-title.catalog-title', { text: c.t }));
+  scroller.appendChild(grid);
+  el.appendChild(scroller);
+  c.f.forEach((f) => grid.appendChild(folderTile(f)));
+  setTimeout(() => {
+    const first = grid.querySelector('.card');
+    if (first) nav.focus(first);
+    loadVisibleImages(el, 400);
+  }, 0);
+  return { el: el, onShow: () => loadVisibleImages(el, 400), onScroll: () => loadVisibleImages(el, 400) };
 }
 
 function sourceRow(parent, src, title) {

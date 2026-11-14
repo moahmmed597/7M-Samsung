@@ -16303,14 +16303,54 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return {
         row: row,
         load: function load() {
-          c.f.forEach(function (f) {
+          c.f.slice(0, ROW_TILES).forEach(function (f) {
             return track.appendChild(folderTile(f));
           });
+          if (c.f.length > ROW_TILES) track.appendChild(h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return push(CollectionGridView(c));
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "→"
+          }), t("Ver tudo")])), h("div.name", {
+            text: ""
+          })]));
           loadVisibleImages(row);
           return Promise.resolve();
         }
       };
     });
+  }
+  var ROW_TILES = 15;
+  function CollectionGridView(c) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var grid = h("div.grid.nc-grid");
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: c.t
+    }));
+    scroller.appendChild(grid);
+    el.appendChild(scroller);
+    c.f.forEach(function (f) {
+      return grid.appendChild(folderTile(f));
+    });
+    setTimeout(function () {
+      var first = grid.querySelector(".card");
+      if (first) focus(first);
+      loadVisibleImages(el, 400);
+    }, 0);
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      onScroll: function onScroll() {
+        return loadVisibleImages(el, 400);
+      }
+    };
   }
   function sourceRow(parent, src, title) {
     var row = h("div.row", {
@@ -17368,7 +17408,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T03:34:57.174Z";
+  var BUILD = "2026-11-14T03:54:52.183Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
