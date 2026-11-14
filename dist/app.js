@@ -5522,7 +5522,37 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Preencha o endereço do servidor primeiro": "Fill in the server address first",
     "QR que abre direto a página da chave": "QR that opens the key page directly",
     "Sem senha: aprove um código no Jellyfin do celular": "No password: approve a code in Jellyfin on your phone",
-    "{name} pelo celular": "{name} from your phone"
+    "{name} pelo celular": "{name} from your phone",
+    "Aba Animes": "Anime tab",
+    "Carregar mais": "Load more",
+    "Descobrir": "Discover",
+    "Em alta agora": "Trending now",
+    "Esta temporada": "This season",
+    "Estúdios": "Studios",
+    "Filmes de anime": "Anime movies",
+    "Gêneros": "Genres",
+    "Lançando agora": "Airing now",
+    "Não encontrei este anime nos addons.": "Could not find this anime in your add-ons.",
+    "Não foi possível carregar agora.": "Could not load right now.",
+    "Temporada, estúdios e gêneros de anime (AniList)": "Anime season, studios and genres (AniList)",
+    "Mais populares": "Most popular",
+    "Mais bem avaliados": "Top rated",
+    "Em breve": "Upcoming",
+    "Ação": "Action",
+    "Aventura": "Adventure",
+    "Comédia": "Comedy",
+    "Drama": "Drama",
+    "Fantasia": "Fantasy",
+    "Terror": "Horror",
+    "Mistério": "Mystery",
+    "Romance": "Romance",
+    "Ficção científica": "Sci-Fi",
+    "Cotidiano": "Slice of Life",
+    "Esportes": "Sports",
+    "Sobrenatural": "Supernatural",
+    "Mecha": "Mecha",
+    "Psicológico": "Psychological",
+    "Música": "Music"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6275,7 +6305,37 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Preencha o endereço do servidor primeiro": "اكتب عنوان السيرفر أول",
     "QR que abre direto a página da chave": "باركود يفتح لك صفحة المفتاح مباشرة",
     "Sem senha: aprove um código no Jellyfin do celular": "بدون كلمة مرور: وافق على كود من Jellyfin في جوالك",
-    "{name} pelo celular": "{name} من الجوال"
+    "{name} pelo celular": "{name} من الجوال",
+    "Aba Animes": "تبويب الأنمي",
+    "Carregar mais": "تحميل المزيد",
+    "Descobrir": "اكتشف",
+    "Em alta agora": "الرائج الحين",
+    "Esta temporada": "هذا الموسم",
+    "Estúdios": "الاستوديوهات",
+    "Filmes de anime": "أفلام أنمي",
+    "Gêneros": "التصنيفات",
+    "Lançando agora": "ينعرض الحين",
+    "Não encontrei este anime nos addons.": "ما لقيت هالأنمي في الإضافات.",
+    "Não foi possível carregar agora.": "ما قدرت أحمّل الحين.",
+    "Temporada, estúdios e gêneros de anime (AniList)": "موسم الأنمي والاستوديوهات والتصنيفات (AniList)",
+    "Mais populares": "الأشهر",
+    "Mais bem avaliados": "الأعلى تقييماً",
+    "Em breve": "قريباً",
+    "Ação": "أكشن",
+    "Aventura": "مغامرة",
+    "Comédia": "كوميدي",
+    "Drama": "دراما",
+    "Fantasia": "فانتازيا",
+    "Terror": "رعب",
+    "Mistério": "غموض",
+    "Romance": "رومانسي",
+    "Ficção científica": "خيال علمي",
+    "Cotidiano": "شريحة من الحياة",
+    "Esportes": "رياضة",
+    "Sobrenatural": "خارق للطبيعة",
+    "Mecha": "ميكا",
+    "Psicológico": "نفسي",
+    "Música": "موسيقى"
   };
 
   // src/js/lib/i18n.js
@@ -7780,6 +7840,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "collections",
     label: "Coleções"
   }, {
+    id: "anime",
+    label: "Animes"
+  }, {
     id: "calendar",
     label: "Calendário"
   }, {
@@ -7797,7 +7860,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "data-group": ""
     }, [h("div.brand", {
       html: "Stremio <b>Kai</b>"
-    }), TABS.map(function (tab) {
+    }),
+    // The Anime tab can be hidden in Settings → Appearance.
+    TABS.filter(function (tab) {
+      return tab.id !== "anime" || settings().animeTab !== false;
+    }).map(function (tab) {
       return h("div.tab", {
         focusable: true,
         cls: tab.id === activeId ? "active" : "",
@@ -10153,9 +10220,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return out;
   }
   var showCache = {};
-  function animeSkipSegments(anilist, season, episode, key3) {
-    if (!anilist || !episode) return Promise.resolve([]);
-    var ck = String(anilist);
+  function animeSkipSegments(anilist2, season, episode, key3) {
+    if (!anilist2 || !episode) return Promise.resolve([]);
+    var ck = String(anilist2);
     if (!showCache[ck]) showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key3).then(function (r) {
       return (r && r.data && r.data.findShowsByExternalId || []).map(function (x) {
         return String(x.id);
@@ -15235,6 +15302,330 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/views/anime.js
+  var API4 = "https://graphql.anilist.co";
+  var ARM3 = "https://arm.haglund.dev/api/v2/ids?source=anilist&id=";
+  var FIELDS = "id format title { romaji english } coverImage { large }";
+  function seasonNow() {
+    var d = /* @__PURE__ */new Date();
+    return {
+      season: ["WINTER", "SPRING", "SUMMER", "FALL"][Math.floor(d.getMonth() / 3)],
+      year: d.getFullYear()
+    };
+  }
+  var DISCOVER = [{
+    id: "trending",
+    label: "Em alta agora",
+    args: "sort: TRENDING_DESC"
+  }, {
+    id: "airing",
+    label: "Lançando agora",
+    args: "status: RELEASING, sort: POPULARITY_DESC"
+  }, {
+    id: "popular",
+    label: "Mais populares",
+    args: "sort: POPULARITY_DESC"
+  }, {
+    id: "top",
+    label: "Mais bem avaliados",
+    args: "sort: SCORE_DESC"
+  }, {
+    id: "upcoming",
+    label: "Em breve",
+    args: "status: NOT_YET_RELEASED, sort: POPULARITY_DESC"
+  }, {
+    id: "movies",
+    label: "Filmes de anime",
+    args: "format: MOVIE, sort: POPULARITY_DESC"
+  }];
+  var STUDIOS = ["MAPPA", "ufotable", "Wit Studio", "Kyoto Animation", "Bones", "Production I.G", "A-1 Pictures", "Madhouse", "Toei Animation", "Studio Ghibli", "CloverWorks", "Trigger", "Sunrise", "Shaft", "David Production", "Studio Pierrot"];
+  var GENRES = [["Action", "Ação"], ["Adventure", "Aventura"], ["Comedy", "Comédia"], ["Drama", "Drama"], ["Fantasy", "Fantasia"], ["Horror", "Terror"], ["Mystery", "Mistério"], ["Romance", "Romance"], ["Sci-Fi", "Ficção científica"], ["Slice of Life", "Cotidiano"], ["Sports", "Esportes"], ["Supernatural", "Sobrenatural"], ["Mecha", "Mecha"], ["Psychological", "Psicológico"], ["Music", "Música"]];
+  var cache4 = {};
+  function anilist(query) {
+    if (cache4[query]) return cache4[query];
+    var p = postJSON(API4, {
+      query: query
+    }, {
+      timeout: 15e3,
+      quiet: true
+    }).then(function (r) {
+      return r && r.data;
+    }).catch(function (e) {
+      delete cache4[query];
+      throw e;
+    });
+    cache4[query] = p;
+    return p;
+  }
+  function toMetas(list2) {
+    return (list2 || []).map(function (m) {
+      return {
+        id: "anilist:" + m.id,
+        anilist: m.id,
+        type: m.format === "MOVIE" ? "movie" : "series",
+        name: m.title && (m.title.english || m.title.romaji) || "",
+        poster: m.coverImage && m.coverImage.large
+      };
+    });
+  }
+  function page(args, n, perPage) {
+    return anilist("{ Page(page: " + (n || 1) + ", perPage: " + (perPage || 20) + ") { pageInfo { hasNextPage } media(type: ANIME, isAdult: false, " + args + ") { " + FIELDS + " } } }").then(function (d) {
+      return {
+        items: toMetas(d && d.Page && d.Page.media),
+        more: !!(d && d.Page && d.Page.pageInfo && d.Page.pageInfo.hasNextPage)
+      };
+    });
+  }
+  function studioPage(name) {
+    return anilist("{ Studio(search: " + JSON.stringify(name) + ") { media(sort: POPULARITY_DESC, isMain: true, perPage: 40) { nodes { " + FIELDS + " } } } }").then(function (d) {
+      return {
+        items: toMetas(d && d.Studio && d.Studio.media && d.Studio.media.nodes).filter(function (m) {
+          return m.name;
+        }),
+        more: false
+      };
+    });
+  }
+  var idCache = {};
+  function openAnime(m) {
+    var go = function go(ids2) {
+      var kitsuOk = ids2.kitsu && withResource("meta", "series", "kitsu:" + ids2.kitsu).length;
+      var id = kitsuOk ? "kitsu:" + ids2.kitsu : ids2.imdb || (ids2.kitsu ? "kitsu:" + ids2.kitsu : null);
+      if (!id) return toast(t("Não encontrei este anime nos addons."));
+      openDetails(m.type, id);
+    };
+    if (idCache[m.anilist]) return go(idCache[m.anilist]);
+    getJSON(ARM3 + m.anilist, {
+      timeout: 1e4,
+      quiet: true
+    }).then(function (r) {
+      idCache[m.anilist] = {
+        imdb: r && r.imdb,
+        kitsu: r && r.kitsu
+      };
+      go(idCache[m.anilist]);
+    }).catch(function () {
+      return toast(t("Não encontrei este anime nos addons."));
+    });
+  }
+  function posterRow(parent, title, load6, onMore) {
+    var row = h("div.row", {
+      "data-anchor": "30"
+    });
+    var track = h("div.row-track.pending", {
+      "data-scroll-x": "",
+      "data-group": ""
+    }, spinnerLine(t("Carregando...")));
+    row.appendChild(h("div.row-title", {
+      text: title
+    }));
+    row.appendChild(track);
+    parent.appendChild(row);
+    return {
+      row: row,
+      load: function load() {
+        return load6().then(function (r) {
+          clear(track);
+          track.classList.remove("pending");
+          if (!r.items.length) return parent.removeChild(row);
+          r.items.forEach(function (m) {
+            return track.appendChild(card(m, {
+              onSelect: function onSelect() {
+                return openAnime(m);
+              }
+            }));
+          });
+          if (onMore) track.appendChild(h("div.card.see-all", {
+            focusable: true,
+            onSelect: onMore
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "→"
+          }), t("Ver tudo")])), h("div.name", {
+            text: ""
+          })]));
+          loadVisibleImages(row);
+        }).catch(function () {
+          return row.parentNode && parent.removeChild(row);
+        });
+      }
+    };
+  }
+  function tileRow(parent, title, tiles, cls) {
+    var row = h("div.row", {
+      "data-anchor": "30"
+    });
+    row.appendChild(h("div.row-title", {
+      text: title
+    }));
+    row.appendChild(h("div.row-track", {
+      "data-scroll-x": "",
+      "data-group": ""
+    }, tiles.map(function (x, i) {
+      return h("div.card.anime-tile", {
+        focusable: true,
+        cls: cls + " hue-" + i % 6,
+        onSelect: x.open
+      }, [h("div.poster-wrap", null, h("div.tile-label", {
+        text: x.label
+      })), h("div.name", {
+        text: ""
+      })]);
+    })));
+    parent.appendChild(row);
+  }
+  function AnimeView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar("anime", goTab);
+    var rows2 = h("div.rows");
+    scroller.appendChild(bar);
+    scroller.appendChild(rows2);
+    el.appendChild(scroller);
+    var pending2 = [];
+    var active2 = 0;
+    function loadNearby() {
+      if (el.offsetParent === null) return;
+      var limit = window.innerHeight * 2.2;
+      var _loop6 = function _loop6() {
+          var p = pending2[i];
+          if (p.state) return 0; // continue
+          if (p.row.getBoundingClientRect().top > limit) return 1; // break
+          p.state = "loading";
+          active2++;
+          p.load().then(function () {
+            p.state = "done";
+            active2--;
+            loadNearby();
+          });
+        },
+        _ret3;
+      for (var i = 0; i < pending2.length && active2 < 2; i++) {
+        _ret3 = _loop6();
+        if (_ret3 === 0) continue;
+        if (_ret3 === 1) break;
+      }
+    }
+    var s = seasonNow();
+    var add = function add(title, load6, onMore) {
+      return pending2.push(posterRow(rows2, title, load6, onMore));
+    };
+    add(t("Esta temporada"), function () {
+      return page("season: " + s.season + ", seasonYear: " + s.year + ", sort: POPULARITY_DESC");
+    }, function () {
+      return push(AnimeGridView(t("Esta temporada"), "season: " + s.season + ", seasonYear: " + s.year + ", sort: POPULARITY_DESC"));
+    });
+    tileRow(rows2, t("Descobrir"), DISCOVER.map(function (d) {
+      return {
+        label: t(d.label),
+        open: function open() {
+          return push(AnimeGridView(t(d.label), d.args));
+        }
+      };
+    }), "discover");
+    add(t("Em alta agora"), function () {
+      return page(DISCOVER[0].args);
+    }, function () {
+      return push(AnimeGridView(t("Em alta agora"), DISCOVER[0].args));
+    });
+    tileRow(rows2, t("Estúdios"), STUDIOS.map(function (name) {
+      return {
+        label: name,
+        open: function open() {
+          return push(AnimeGridView(name, null, name));
+        }
+      };
+    }), "studio");
+    tileRow(rows2, t("Gêneros"), GENRES.map(function (g) {
+      return {
+        label: t(g[1]),
+        open: function open() {
+          return push(AnimeGridView(t(g[1]), "genre: " + JSON.stringify(g[0]) + ", sort: POPULARITY_DESC"));
+        }
+      };
+    }), "genre");
+    add(t("Lançando agora"), function () {
+      return page(DISCOVER[1].args);
+    }, function () {
+      return push(AnimeGridView(t("Lançando agora"), DISCOVER[1].args));
+    });
+    add(t("Filmes de anime"), function () {
+      return page(DISCOVER[5].args);
+    }, function () {
+      return push(AnimeGridView(t("Filmes de anime"), DISCOVER[5].args));
+    });
+    return {
+      el: el,
+      onShow: function onShow() {
+        loadNearby();
+        loadVisibleImages(el);
+      },
+      onScroll: function onScroll() {
+        return loadNearby();
+      },
+      destroy: function destroy() {
+        return bar.__destroy && bar.__destroy();
+      }
+    };
+  }
+  function AnimeGridView(title, args, studio) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var grid = h("div.grid");
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: title
+    }));
+    scroller.appendChild(grid);
+    el.appendChild(scroller);
+    var n = 0;
+    var moreCard = null;
+    function more() {
+      if (moreCard && moreCard.parentNode) grid.removeChild(moreCard);
+      grid.appendChild(spinnerLine(t("Carregando...")));
+      (studio ? studioPage(studio) : page(args, ++n, 35)).then(function (r) {
+        var sp = grid.querySelector(".loading-line");
+        if (sp) grid.removeChild(sp);
+        r.items.forEach(function (m) {
+          return grid.appendChild(card(m, {
+            onSelect: function onSelect() {
+              return openAnime(m);
+            }
+          }));
+        });
+        if (r.more && !studio) {
+          moreCard = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return more();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          grid.appendChild(moreCard);
+        }
+        loadVisibleImages(el, 400);
+        if (n === 1 || studio) {
+          var first = grid.querySelector(".card");
+          if (first) focus(first);
+        }
+      }).catch(function () {
+        return toast(t("Não foi possível carregar agora."));
+      });
+    }
+    more();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      }
+    };
+  }
+
   // src/js/api/newEpisodes.js
   var DAYS = 7;
   var CHECK = 25;
@@ -15446,7 +15837,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/mdblistRows.js
-  var API4 = "https://api.mdblist.com/";
+  var API5 = "https://api.mdblist.com/";
   var POSTER2 = function POSTER2(imdb) {
     return "https://images.metahub.space/poster/medium/" + imdb + "/img";
   };
@@ -15458,7 +15849,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function call3(path) {
     var sep = path.indexOf("?") >= 0 ? "&" : "?";
-    return getJSONViaProxy(API4 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
+    return getJSONViaProxy(API5 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
       timeout: 15e3
     });
   }
@@ -15738,7 +16129,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop6 = function _loop6() {
+      var _loop7 = function _loop7() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -15754,11 +16145,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             loadNearby();
           });
         },
-        _ret3;
+        _ret4;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret3 = _loop6();
-        if (_ret3 === 0) continue;
-        if (_ret3 === 1) break;
+        _ret4 = _loop7();
+        if (_ret4 === 0) continue;
+        if (_ret4 === 1) break;
       }
     }
     function renderBoard() {
@@ -16390,7 +16781,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T02:59:39.018Z";
+  var BUILD = "2026-11-14T03:06:07.223Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -17043,7 +17434,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         cls: on ? "on" : ""
       }, h("i"));
     }
-    var page = "c-account";
+    var page2 = "c-account";
     var focusContent = false;
     function keyInput(title, sub, key3, placeholder) {
       var s = settings();
@@ -17077,16 +17468,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       badges: "c-playback"
     };
     function openPage(name, focus2) {
-      page = name;
+      page2 = name;
       focusContent = focus2 !== false;
       render();
       scroller.scrollTop = 0;
     }
     function goMain() {
-      openPage(PARENT[page] || page);
+      openPage(PARENT[page2] || page2);
     }
     function pageHeader(title) {
-      if (PARENT[page]) body.appendChild(row("‹ " + t("Voltar"), "", "", function () {
+      if (PARENT[page2]) body.appendChild(row("‹ " + t("Voltar"), "", "", function () {
         return goMain();
       }));
       body.appendChild(h("div.set-title", {
@@ -17713,7 +18104,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         onFocus: function onFocus() {
           clearTimeout(railTimer);
           railTimer = setTimeout(function () {
-            if (current2() === el2 && g.id !== (PARENT[page] || page)) openPage(g.id, false);
+            if (current2() === el2 && g.id !== (PARENT[page2] || page2)) openPage(g.id, false);
           }, 350);
         }
       }, [h("span.rail-ico", {
@@ -17726,7 +18117,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return el2;
     });
     function renderRail() {
-      var current3 = PARENT[page] || page;
+      var current3 = PARENT[page2] || page2;
       railItems.forEach(function (el2) {
         var on = el2.__group === current3;
         el2.classList.toggle("active", on);
@@ -17744,15 +18135,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       renderRail();
       var placeFocus = function placeFocus() {
         var rows2 = body.querySelectorAll(".set-row");
-        if (keepIndex >= 0 && rows2[keepIndex]) focus(rows2[keepIndex]);else if (wantFocus && rows2[0]) focus(rows2[PARENT[page] ? 1 : 0] || rows2[0]);
+        if (keepIndex >= 0 && rows2[keepIndex]) focus(rows2[keepIndex]);else if (wantFocus && rows2[0]) focus(rows2[PARENT[page2] ? 1 : 0] || rows2[0]);
       };
-      if (page.indexOf("c-") !== 0) {
-        if (page === "tracking") renderTracking(s);else if (page === "debrid") renderDebrid(s);else if (page === "servers") renderServers(s);else if (page === "home") renderHomePage(s);else if (page === "badges") renderBadges(s);else renderSkip(s);
+      if (page2.indexOf("c-") !== 0) {
+        if (page2 === "tracking") renderTracking(s);else if (page2 === "debrid") renderDebrid(s);else if (page2 === "servers") renderServers(s);else if (page2 === "home") renderHomePage(s);else if (page2 === "badges") renderBadges(s);else renderSkip(s);
         placeFocus();
         return;
       }
       var GROUP = GROUPS.find(function (g) {
-        return g.id === page;
+        return g.id === page2;
       });
       pageHeader(t(GROUP.label));
       var choose = function choose(title, sub, list2, key3, value, label) {
@@ -17773,7 +18164,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
         }));
       };
-      if (page === "c-account") {
+      if (page2 === "c-account") {
         var LANGS3 = [{
           id: "auto",
           label: t("Automático (idioma da TV)")
@@ -18023,7 +18414,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           })]));
         });
       }
-      if (page === "c-appearance") {
+      if (page2 === "c-appearance") {
         body.appendChild(h("div.set-section", {
           text: t("Cores e formas")
         }));
@@ -18113,6 +18504,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           dropTab("home");
           render();
         }, toggle(!!s.ambientMode)));
+        body.appendChild(row(t("Aba Animes"), t("Temporada, estúdios e gêneros de anime (AniList)"), "", function () {
+          saveSettings({
+            animeTab: settings().animeTab === false
+          });
+          window.location.reload();
+        }, toggle(s.animeTab !== false)));
         body.appendChild(row(t("Fileiras e Continuar assistindo"), t("Ordem das fileiras, listas do MDBList e Continuar assistindo"), "›", function () {
           return openPage("home");
         }));
@@ -18170,7 +18567,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           render();
         }, toggle(s.smoothScroll)));
       }
-      if (page === "c-subs") {
+      if (page2 === "c-subs") {
         body.appendChild(h("div.set-section", {
           text: t("Legendas e áudio")
         }));
@@ -18260,7 +18657,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: t("Legendas embutidas no arquivo são desenhadas pela própria TV: só cor, tamanho, posição e caixa se aplicam a elas.")
         }));
       }
-      if (page === "c-playback") {
+      if (page2 === "c-playback") {
         body.appendChild(h("div.set-section", {
           text: t("Player")
         }));
@@ -18310,7 +18707,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return openPage("badges");
         }));
       }
-      if (page === "c-playback") {
+      if (page2 === "c-playback") {
         body.appendChild(h("div.set-section", {
           text: t("Servidor de streaming (PC)")
         }));
@@ -18370,7 +18767,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
         }));
       }
-      if (page === "c-integrations") {
+      if (page2 === "c-integrations") {
         body.appendChild(h("div.set-section", {
           text: t("Chaves pelo celular")
         }));
@@ -18479,7 +18876,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: isLoggedIn() ? t("Instala na sua conta Stremio") : t("Fica só nesta TV")
         })]), addInput]));
       }
-      if (page === "c-about") {
+      if (page2 === "c-about") {
         body.appendChild(h("div.set-section", {
           text: t("Sobre e depuração")
         }));
@@ -18555,7 +18952,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       onBack: function onBack() {
-        if (!PARENT[page]) return false;
+        if (!PARENT[page2]) return false;
         goMain();
         return true;
       },
@@ -18604,7 +19001,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var from = Math.floor(dayStart(offset).getTime() / 1e3) - 1;
     var to = from + 86400 + 1;
     var all2 = [];
-    var _page = function page(p) {
+    var _page = function page2(p) {
       return postJSON("https://graphql.anilist.co", {
         query: ANIME_QUERY,
         variables: {
@@ -18787,7 +19184,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop7 = function _loop7() {
+      var _loop8 = function _loop8() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -18803,7 +19200,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop7();
+        _loop8();
       }
       days.__last = days.children[current3 + 1];
     }
@@ -19194,6 +19591,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     registerTab("settings", SettingsView);
     registerTab("calendar", CalendarView);
     registerTab("collections", CollectionsView);
+    registerTab("anime", AnimeView);
     if (needsPicker()) {
       var bootEl = document.getElementById("boot");
       if (bootEl) bootEl.style.display = "none";

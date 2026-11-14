@@ -1,6 +1,7 @@
 // Ponto de entrada do Stremio Kai para webOS.
 import './polyfills.js';
 import { CollectionsView } from './views/collections.js';
+import { AnimeView } from './views/anime.js';
 import { log } from './lib/log.js';
 import { t, init as initI18n } from './lib/i18n.js';
 import * as nav from './lib/nav.js';
@@ -76,6 +77,7 @@ function boot() {
   router.registerTab('settings', SettingsView);
   router.registerTab('calendar', CalendarView);
   router.registerTab('collections', CollectionsView);
+  router.registerTab('anime', AnimeView);
 
   // "Quem está assistindo?" (com mais de um perfil) antes de carregar a conta.
   if (profiles.needsPicker()) {

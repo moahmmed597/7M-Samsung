@@ -507,3 +507,16 @@ body.bg-glow .view.player, body.bg-glow .view.trailer { background: #000; }
 body.font-samsung, [dir="rtl"] body.font-samsung { font-family: 'SamsungOneUI', 'SamsungOne', 'Samsung One', 'SamsungOneArabic', 'SamsungOneUIArabic', 'TizenSans', 'Tizen Sans', 'TizenSansArabic', 'Breeze Sans', sans-serif; }
 .qr-modal .phone-qr { display: block; margin: 10px auto 14px; }
 .qr-modal .modal-actions { -webkit-justify-content: center; justify-content: center; }
+
+/* Anime tab: text tiles (Discover, Studios, Genres) */
+body .card.anime-tile { width: 300px; }
+body .card.anime-tile .poster-wrap { width: 300px; height: 150px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+.anime-tile .tile-label { font-size: 30px; font-weight: 800; text-align: center; padding: 0 16px; line-height: 1.15; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.anime-tile.hue-0 .poster-wrap { background: linear-gradient(135deg, #5b3fd6, #2a1e63); }
+.anime-tile.hue-1 .poster-wrap { background: linear-gradient(135deg, #c43a6d, #4d1630); }
+.anime-tile.hue-2 .poster-wrap { background: linear-gradient(135deg, #1f8f8a, #0e3b39); }
+.anime-tile.hue-3 .poster-wrap { background: linear-gradient(135deg, #d0782a, #57300f); }
+.anime-tile.hue-4 .poster-wrap { background: linear-gradient(135deg, #2f6fe0, #132c5c); }
+.anime-tile.hue-5 .poster-wrap { background: linear-gradient(135deg, #6a9a2d, #2a3d12); }
+.anime-tile.studio .poster-wrap { background: #f2f0f8; }
+.anime-tile.studio .tile-label { color: #17131f; text-shadow: none; }

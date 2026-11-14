@@ -912,6 +912,12 @@ export function SettingsView() {
           render();
         }, toggle(!!s.ambientMode))
       );
+      body.appendChild(
+        row(t('Aba Animes'), t('Temporada, estúdios e gêneros de anime (AniList)'), '', () => {
+          store.saveSettings({ animeTab: store.settings().animeTab === false });
+          window.location.reload(); // the top bar of every tab changes
+        }, toggle(s.animeTab !== false))
+      );
       body.appendChild(row(t('Fileiras e Continuar assistindo'), t('Ordem das fileiras, listas do MDBList e Continuar assistindo'), '›', () => openPage('home')));
       body.appendChild(
         row(t('Buscas recentes'), t('Mostra as últimas buscas na tela de busca'), '', () => {

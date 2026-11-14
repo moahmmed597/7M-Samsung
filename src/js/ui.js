@@ -102,6 +102,7 @@ export const TABS = [
   { id: 'search', label: 'Buscar' },
   { id: 'library', label: 'Biblioteca' },
   { id: 'collections', label: 'Coleções' },
+  { id: 'anime', label: 'Animes' },
   { id: 'calendar', label: 'Calendário' },
   { id: 'settings', label: 'Ajustes' },
 ];
@@ -113,7 +114,8 @@ export function topbar(activeId, onTab) {
   const timer = setInterval(tick, 20000);
   const bar = h('div.topbar', { 'data-group': '' }, [
     h('div.brand', { html: 'Stremio <b>Kai</b>' }),
-    TABS.map((tab) =>
+    // The Anime tab can be hidden in Settings → Appearance.
+    TABS.filter((tab) => tab.id !== 'anime' || store.settings().animeTab !== false).map((tab) =>
       h('div.tab', {
         focusable: true,
         cls: tab.id === activeId ? 'active' : '',
