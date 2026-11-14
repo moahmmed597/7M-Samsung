@@ -272,6 +272,8 @@ export const EN = {
   'Legenda: {lang}': 'Subtitle: {lang}',
   'Não foi possível baixar a legenda.': "Couldn't download the subtitle.",
   'Lendo as faixas do arquivo...': "Reading the file's tracks...",
+  'Faixa {n}': 'Track {n}',
+  'Transmissão': 'Stream',
   '{n} canais': '{n} channels',
   'Só uma faixa de áudio.': 'Only one audio track.',
   'Para listar as faixas, conecte o servidor do PC em Ajustes.': 'To list tracks, connect the PC server in Settings.',

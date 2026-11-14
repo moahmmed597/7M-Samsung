@@ -26,13 +26,28 @@ function prefLangs() {
 }
 
 // Resolves to subtitle entries like the add-ons give: { id, lang, url, addon }.
-export function search(type, videoId) {
+export function search(type, videoId, meta, video) {
   const k = key();
+  let imdbId = '';
+  let season = null;
+  let episode = null;
   const m = String(videoId || '').match(/^(tt\d+)(?::(\d+):(\d+))?$/);
-  if (!k || !m) return Promise.resolve([]);
-  const params = ['api_key=' + encodeURIComponent(k), 'imdb_id=' + m[1], 'type=' + (type === 'series' ? 'tv' : 'movie'), 'languages=' + prefLangs(), 'subs_per_page=30'];
-  if (m[2]) params.push('season_number=' + m[2], 'episode_number=' + m[3]);
-  const ep = m[2] ? 'S' + ('0' + m[2]).slice(-2) + 'E' + ('0' + m[3]).slice(-2) : '';
+  if (m) {
+    imdbId = m[1];
+    season = m[2];
+    episode = m[3];
+  } else if (meta && meta.imdb_id) {
+    imdbId = String(meta.imdb_id).trim();
+    if (video) {
+      if (video.season !== undefined) season = video.season;
+      if (video.episode !== undefined) episode = video.episode;
+    }
+  }
+  if (!k || !imdbId) return Promise.resolve([]);
+  const isSeries = type === 'series' || season !== null;
+  const params = ['api_key=' + encodeURIComponent(k), 'imdb_id=' + imdbId, 'type=' + (isSeries ? 'tv' : 'movie'), 'languages=' + prefLangs(), 'subs_per_page=30'];
+  if (season !== null && episode !== null) params.push('season_number=' + season, 'episode_number=' + episode);
+  const ep = season !== null && episode !== null ? 'S' + ('0' + season).slice(-2) + 'E' + ('0' + episode).slice(-2) : '';
   return server
     .getJSONViaProxy(API + '?' + params.join('&'), { timeout: 12000 })
     .then((r) =>

@@ -24,6 +24,12 @@ function seasonNow() {
 // installed (MAL data: { aio: catalog, g: genre option }), else from AniList ({ ani: filter }).
 const SEASONS = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
 const SEASON_LABEL = { WINTER: 'Winter', SPRING: 'Spring', SUMMER: 'Summer', FALL: 'Fall' };
+const SEASON_ART_FALLBACK = {
+  WINTER: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/172463-3J2o3qQZadFJ.jpg',
+  SPRING: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/147105-fTjmRrILFixZ.jpg',
+  SUMMER: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/178789-9nHWmoRLlcLu.jpg',
+  FALL: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/195539-lO5SUdp4SOrq.jpg',
+};
 function nextSeason(s) {
   const i = SEASONS.indexOf(s.season);
   return i === 3 ? { season: 'WINTER', year: s.year + 1 } : { season: SEASONS[i + 1], year: s.year };
@@ -196,12 +202,12 @@ function tileRow(parent, title, tiles, cls) {
       { 'data-scroll-x': '', 'data-group': '' },
       tiles.map((x, i) => {
         const wrap = h('div.poster-wrap', null, h('div.tile-label', { text: x.label }));
-        const url = artUrl(x.art);
+        const url = x.artUrl || artUrl(x.art);
         if (url) {
           const im = h('img.tile-art', { alt: '' });
           im.setAttribute('data-lazy', url);
           // Discover and Decades art already has its title drawn in; the rest get the name on top.
-          im.onload = () => wrap.classList.add(/^landscape-/.test(x.art) ? 'has-art' : 'has-art-label');
+          im.onload = () => wrap.classList.add(/^landscape-/.test(x.art || '') ? 'has-art' : 'has-art-label');
           im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
           wrap.appendChild(im);
         }
@@ -249,7 +255,7 @@ export function AnimeView() {
   // A tile row whose tiles open grids; tiles with no source at all are left out.
   const tiles = (title, list, cls) => {
     const usable = list.filter((x) => x.src);
-    if (usable.length) tileRow(rows, title, usable.map((x) => ({ label: x.label, art: x.art, open: () => router.push(AnimeGridView(x.label, null, null, x.src)) })), cls);
+    if (usable.length) tileRow(rows, title, usable.map((x) => ({ label: x.label, art: x.art, artUrl: x.artUrl, open: () => router.push(AnimeGridView(x.label, null, null, x.src)) })), cls);
   };
   const GENRE_ART = { Suspense: 'thriller', Mecha: 'mecha' };
   const malList = (list, cls, title, themes) =>
@@ -269,8 +275,14 @@ export function AnimeView() {
   add(t('Em alta agora'), () => page('sort: TRENDING_DESC'), () => router.push(AnimeGridView(t('Em alta agora'), 'sort: TRENDING_DESC')));
   tiles(t('Anime da temporada'), SEASONS.map((x) => {
     const one = { season: x, year: s.year };
-    return { label: t(SEASON_LABEL[x] === 'Winter' ? 'Inverno' : SEASON_LABEL[x] === 'Spring' ? 'Primavera' : SEASON_LABEL[x] === 'Summer' ? 'Verão' : 'Outono') + ' ' + s.year, src: listSource('mal.seasons', seasonName(one), seasonArgs(one)) };
-  }), 'genre');
+    const rawBanner = SEASON_ART_FALLBACK[x];
+    const artUrl = rawBanner ? 'https://wsrv.nl/?url=' + encodeURIComponent(rawBanner) + '&w=320&h=160&fit=cover&output=jpg&q=80' : null;
+    return {
+      label: t(SEASON_LABEL[x] === 'Winter' ? 'Inverno' : SEASON_LABEL[x] === 'Spring' ? 'Primavera' : SEASON_LABEL[x] === 'Summer' ? 'Verão' : 'Outono') + ' ' + s.year,
+      artUrl: artUrl,
+      src: listSource('mal.seasons', seasonName(one), seasonArgs(one)),
+    };
+  }), 'seasonal');
   tiles(t('Estúdios'), STUDIO_LIST.map((name) => ({ label: name, art: 'studio-' + slug(name), src: listSource('mal.studios', name, null) || ((n) => (n > 1 ? Promise.resolve({ items: [], more: false }) : studioPage(name))) })), 'studio');
   malList(GENRE_LIST, 'genre', t('Gêneros'));
   malList(DEMOGRAPHICS, 'discover', t('Público'));

@@ -52,15 +52,15 @@ function detectLang(code, label) {
   if (c && c !== 'und' && c !== 'undefined' && c !== 'null' && c !== 'unknown') {
     return c;
   }
-  if (/arabic|عربي|العربية|\bara\b|\bar\b/i.test(l)) return 'ara';
-  if (/english|ingl[eê]s|\beng\b|\ben\b/i.test(l)) return 'eng';
-  if (/japanese|japon[eê]s|ياباني|\bjpn\b|\bja\b/i.test(l)) return 'jpn';
-  if (/french|franc[eê]s|français|\bfra\b|\bfre\b|\bfr\b/i.test(l)) return 'fre';
-  if (/spanish|espanhol|español|\bspa\b|\bes\b/i.test(l)) return 'spa';
-  if (/portuguese|portugu[eê]s|\bpor\b|\bpob\b|\bpt\b/i.test(l)) return 'por';
-  if (/german|alem[aã]o|deutsch|\bger\b|\bdeu\b|\bde\b/i.test(l)) return 'ger';
-  if (/italian|italiano|\bita\b|\bit\b/i.test(l)) return 'ita';
-  if (/russian|russo|русский|\brus\b|\bru\b/i.test(l)) return 'rus';
+  if (/arabic|عربي|العربية|\bara\b|\bar\b/i.test(l) || /arabic|عربي|العربية|\bara\b|\bar\b/i.test(c)) return 'ara';
+  if (/english|ingl[eê]s|\beng\b|\ben\b/i.test(l) || /english|ingl[eê]s|\beng\b|\ben\b/i.test(c)) return 'eng';
+  if (/japanese|japon[eê]s|ياباني|\bjpn\b|\bja\b/i.test(l) || /japanese|japon[eê]s|ياباني|\bjpn\b|\bja\b/i.test(c)) return 'jpn';
+  if (/french|franc[eê]s|français|\bfra\b|\bfre\b|\bfr\b/i.test(l) || /french|franc[eê]s|français|\bfra\b|\bfre\b|\bfr\b/i.test(c)) return 'fre';
+  if (/spanish|espanhol|español|\bspa\b|\bes\b/i.test(l) || /spanish|espanhol|español|\bspa\b|\bes\b/i.test(c)) return 'spa';
+  if (/portuguese|portugu[eê]s|\bpor\b|\bpob\b|\bpt\b/i.test(l) || /portuguese|portugu[eê]s|\bpor\b|\bpob\b|\bpt\b/i.test(c)) return 'por';
+  if (/german|alem[aã]o|deutsch|\bger\b|\bdeu\b|\bde\b/i.test(l) || /german|alem[aã]o|deutsch|\bger\b|\bdeu\b|\bde\b/i.test(c)) return 'ger';
+  if (/italian|italiano|\bita\b|\bit\b/i.test(l) || /italian|italiano|\bita\b|\bit\b/i.test(c)) return 'ita';
+  if (/russian|russo|русский|\brus\b|\bru\b/i.test(l) || /russian|russo|русский|\brus\b|\bru\b/i.test(c)) return 'rus';
   return c || 'und';
 }
 
@@ -233,6 +233,16 @@ function PlayerView(opts) {
   function loadSubtitles() {
     const forVideo = video;
     addonSubs = null;
+    if (stream && Array.isArray(stream.subtitles)) {
+      const stSubs = stream.subtitles.map((s, idx) => ({
+        id: s.id || s.url || ('stream_' + idx),
+        url: s.url,
+        lang: s.lang || s.language || 'und',
+        addon: s.addon || t('Transmissão'),
+        label: s.label || s.title || '',
+      }));
+      addonSubs = (addonSubs || []).concat(stSubs);
+    }
     addons
       .fetchSubtitles(meta.type, video.id, {}, (list) => {
         if (!alive || forVideo !== video) return;
@@ -244,7 +254,7 @@ function PlayerView(opts) {
       });
     // SubDL (Settings → Subtitles), when the user has a key.
     if (subdl.key())
-      subdl.search(meta.type, video.id).then((list) => {
+      subdl.search(meta.type, video.id, meta, video).then((list) => {
         if (!alive || forVideo !== video || !list.length) return;
         addonSubs = (addonSubs || []).concat(list);
         autoPick();
@@ -1085,10 +1095,24 @@ function PlayerView(opts) {
     return i;
   }
 
-  // Cleans what the Samsung player gives for ASS/SSA: tags, line breaks, or a whole "Dialogue:" line.
+  // Cleans what the Samsung player gives for ASS/SSA/SRT: tags, line breaks, or a whole "Dialogue:" line.
   function cleanAvText(raw) {
-    let x = String(raw || '').trim();
+    if (!raw) return '';
+    let x = '';
+    if (typeof raw === 'object' && raw !== null) {
+      x = String(raw.text || raw.subtitle || raw.data || '').trim();
+    } else {
+      x = String(raw || '').trim();
+    }
     if (!x) return '';
+    if (/^\s*\{.*\}\s*$/.test(x)) {
+      try {
+        const parsed = JSON.parse(x);
+        if (parsed && (parsed.text || parsed.subtitle || parsed.data)) {
+          x = String(parsed.text || parsed.subtitle || parsed.data).trim();
+        }
+      } catch (e) {}
+    }
     if (/^Dialogue:\s*/i.test(x)) {
       x = x.replace(/^Dialogue:\s*/i, '');
       const idx9 = nthIndex(x, ',', 9);
@@ -1103,7 +1127,10 @@ function PlayerView(opts) {
       if (idx8 >= 0) x = x.slice(idx8 + 1);
     }
     return x
+      .replace(/^\d+\s*\r?\n/gm, '')
+      .replace(/\d+:\d+:\d+[,.]\d+\s*-->\s*\d+:\d+:\d+[,.]\d+[^\r\n]*\r?\n?/g, '')
       .replace(/\{\\[^}]*\}/g, '')
+      .replace(/\{[^}]*\}/g, '')
       .replace(/\\[Nn]/g, '\n')
       .replace(/\\h/g, ' ')
       .replace(/\r/g, '')
@@ -1116,10 +1143,15 @@ function PlayerView(opts) {
     renderer.setOffset(0);
     currentSub = { kind: 'avtext', index: index };
     videoEl.onSubtitle((s) => {
+      if (currentSub.kind !== 'avtext') return;
       const text = cleanAvText(s.text);
-      if (!text || currentSub.kind !== 'avtext') return;
       const now = videoEl.currentTime || 0;
-      renderer.add({ start: now, end: now + Math.max(1.5, (s.duration || 3000) / 1000), text: subs.sanitize(text) });
+      if (!text) {
+        renderer.clear();
+        return;
+      }
+      const durSec = s.duration > 100 ? s.duration / 1000 : (s.duration > 0 ? s.duration : 3);
+      renderer.add({ start: now, end: now + Math.max(1.5, durSec), text: subs.sanitize(text) });
       renderer.update(now);
     });
     if (!videoEl.selectText(index)) toast(t('Não foi possível ligar esta legenda.'));
@@ -1217,8 +1249,17 @@ function PlayerView(opts) {
       const rawLang = (info && info.lang) || tr.language || '';
       const rawLabel = (info && info.label) || tr.label || '';
       const detected = detectLang(rawLang, rawLabel);
+      let title = '';
+      if (detected && detected !== 'und') {
+        const lName = langName(detected);
+        title = lName + (rawLabel && !rawLabel.toLowerCase().includes(lName.toLowerCase()) ? ' · ' + rawLabel : '');
+      } else if (rawLabel) {
+        title = rawLabel;
+      } else {
+        title = t('Faixa {n}', { n: i + 1 });
+      }
       opts2.push({
-        label: langName(detected) + (rawLabel ? ' · ' + rawLabel : ''),
+        label: title,
         sub: t('Embutida no arquivo') + (codec ? ' · ' + codec : ''),
         value: { kind: 'avtext', index: i },
         checked: currentSub.kind === 'avtext' && currentSub.index === i,
@@ -1228,8 +1269,17 @@ function PlayerView(opts) {
       embedded.subs.forEach((tr, i) => {
         if (/PGS|VOBSUB|DVD/i.test(tr.codec || '')) return;
         const detected = detectLang(tr.lang, tr.label);
+        let title = '';
+        if (detected && detected !== 'und') {
+          const lName = langName(detected);
+          title = lName + (tr.label && !tr.label.toLowerCase().includes(lName.toLowerCase()) ? ' · ' + tr.label : '');
+        } else if (tr.label) {
+          title = tr.label;
+        } else {
+          title = t('Faixa {n}', { n: i + 1 });
+        }
         opts2.push({
-          label: langName(detected) + (tr.label ? ' · ' + tr.label : ''),
+          label: title,
           sub: t('Embutida no arquivo') + (tr.codec ? ' · ' + tr.codec : ''),
           value: { kind: 'embedded', index: i },
           checked: currentSub.kind === 'embedded' && currentSub.index === i,

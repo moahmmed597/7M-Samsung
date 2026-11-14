@@ -5040,6 +5040,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Legenda: {lang}": "Subtitle: {lang}",
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
+    "Faixa {n}": "Track {n}",
+    "Transmissão": "Stream",
     "{n} canais": "{n} channels",
     "Só uma faixa de áudio.": "Only one audio track.",
     "Para listar as faixas, conecte o servidor do PC em Ajustes.": "To list tracks, connect the PC server in Settings.",
@@ -5894,6 +5896,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Legenda: {lang}": "الترجمة: {lang}",
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
+    "Faixa {n}": "المسار {n}",
+    "Transmissão": "البث",
     "{n} canais": "{n} قنوات",
     "Só uma faixa de áudio.": "مسار صوتي واحد فقط.",
     "Para listar as faixas, conecte o servidor do PC em Ajustes.": "لعرض المسارات، اربط خادم الكمبيوتر من الإعدادات.",
@@ -11062,12 +11066,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         onevent: function onevent() {},
         // Embedded subtitles: the player parses them (SRT, ASS...) and hands over the text to show.
-        onsubtitlechange: function onsubtitlechange(duration, text) {
+        onsubtitlechange: function onsubtitlechange(p1, p2, p3, p4) {
           if (!ok() || !textOn || !subCb) return;
           try {
+            var text = "";
+            var dur = 0;
+            if (_typeof(p1) === "object" && p1 !== null) {
+              text = p1.text || p1.data || p1.subtitle || "";
+              dur = Number(p1.duration) || 0;
+            } else if (typeof p1 === "string" && (p2 === void 0 || typeof p2 !== "string")) {
+              text = p1;
+              dur = Number(p2) || 0;
+            } else if (typeof p2 === "string") {
+              text = p2;
+              dur = Number(p1) || 0;
+            } else if (typeof p1 === "string") {
+              text = p1;
+              dur = Number(p2) || 0;
+            }
             subCb({
               text: String(text || ""),
-              duration: Number(duration) || 0
+              duration: dur
             });
           } catch (e) {
             log.warn("avplay subtitle", e && e.message);
@@ -11191,6 +11210,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (then) then();
       }
     }
+    function parseExtra(info2) {
+      if (!info2) return {};
+      if (_typeof(info2) === "object") return info2;
+      if (typeof info2 === "string") {
+        try {
+          return JSON.parse(info2);
+        } catch (e) {
+          var res = {};
+          info2.replace(/([^,=;]+)=([^,;]+)/g, function (_, k, v) {
+            res[k.trim()] = v.trim().replace(/^['"]|['"]$/g, "");
+          });
+          return res;
+        }
+      }
+      return {};
+    }
     function trackInfo(type) {
       var all2 = [];
       try {
@@ -11201,16 +11236,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var out = [];
       for (var i = 0; i < all2.length; i++) {
         if (all2[i].type !== type) continue;
-        var extra = {};
-        try {
-          extra = JSON.parse(all2[i].extra_info || "{}");
-        } catch (e) {}
+        var extra = parseExtra(all2[i].extra_info);
+        var rawLang = extra.language || extra.track_lang || extra.lang || extra.Language || all2[i].language || all2[i].lang || "";
+        var rawLabel = extra.track_name || extra.track_title || extra.title || extra.name || extra.label || extra.track_label || extra.description || extra.track_description || all2[i].track_name || all2[i].name || "";
+        var rawCodec = extra.fourCC || extra.codec || extra.sub_type || extra.subtitle_type || extra.track_type || all2[i].codec || "";
         out.push({
           index: all2[i].index,
-          language: String(extra.language || extra.track_lang || all2[i].language || "").trim(),
-          label: String(extra.track_name || extra.track_title || extra.title || extra.name || all2[i].track_name || all2[i].name || "").trim(),
+          language: String(rawLang).trim(),
+          label: String(rawLabel).trim(),
           channels: extra.channels ? Number(extra.channels) : 0,
-          codec: String(extra.fourCC || extra.codec || all2[i].codec || "").trim()
+          codec: String(rawCodec).trim()
         });
       }
       return out;
@@ -11247,6 +11282,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         AV.setSelectTrack("TEXT", avIndex);
         log.info("avplay text ->", avIndex);
+        if (readState() === "PLAYING") {
+          var back2 = Math.max(0, curMs - 400);
+          setTimeout(function () {
+            if (readState() === "PLAYING") doSeek(back2);
+          }, 150);
+        }
         return true;
       } catch (e) {
         log.warn("avplay text track", e && (e.name || e.message));
@@ -12196,13 +12237,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (out.indexOf("AR") < 0) out.unshift("AR");
     return out.join(",");
   }
-  function search(type, videoId) {
+  function search(type, videoId, meta, video) {
     var k = key();
+    var imdbId = "";
+    var season = null;
+    var episode = null;
     var m = String(videoId || "").match(/^(tt\d+)(?::(\d+):(\d+))?$/);
-    if (!k || !m) return Promise.resolve([]);
-    var params = ["api_key=" + encodeURIComponent(k), "imdb_id=" + m[1], "type=" + (type === "series" ? "tv" : "movie"), "languages=" + prefLangs(), "subs_per_page=30"];
-    if (m[2]) params.push("season_number=" + m[2], "episode_number=" + m[3]);
-    var ep = m[2] ? "S" + ("0" + m[2]).slice(-2) + "E" + ("0" + m[3]).slice(-2) : "";
+    if (m) {
+      imdbId = m[1];
+      season = m[2];
+      episode = m[3];
+    } else if (meta && meta.imdb_id) {
+      imdbId = String(meta.imdb_id).trim();
+      if (video) {
+        if (video.season !== void 0) season = video.season;
+        if (video.episode !== void 0) episode = video.episode;
+      }
+    }
+    if (!k || !imdbId) return Promise.resolve([]);
+    var isSeries = type === "series" || season !== null;
+    var params = ["api_key=" + encodeURIComponent(k), "imdb_id=" + imdbId, "type=" + (isSeries ? "tv" : "movie"), "languages=" + prefLangs(), "subs_per_page=30"];
+    if (season !== null && episode !== null) params.push("season_number=" + season, "episode_number=" + episode);
+    var ep = season !== null && episode !== null ? "S" + ("0" + season).slice(-2) + "E" + ("0" + episode).slice(-2) : "";
     return getJSONViaProxy(API2 + "?" + params.join("&"), {
       timeout: 12e3
     }).then(function (r) {
@@ -12324,15 +12380,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (c && c !== "und" && c !== "undefined" && c !== "null" && c !== "unknown") {
       return c;
     }
-    if (/arabic|عربي|العربية|\bara\b|\bar\b/i.test(l)) return "ara";
-    if (/english|ingl[eê]s|\beng\b|\ben\b/i.test(l)) return "eng";
-    if (/japanese|japon[eê]s|ياباني|\bjpn\b|\bja\b/i.test(l)) return "jpn";
-    if (/french|franc[eê]s|français|\bfra\b|\bfre\b|\bfr\b/i.test(l)) return "fre";
-    if (/spanish|espanhol|español|\bspa\b|\bes\b/i.test(l)) return "spa";
-    if (/portuguese|portugu[eê]s|\bpor\b|\bpob\b|\bpt\b/i.test(l)) return "por";
-    if (/german|alem[aã]o|deutsch|\bger\b|\bdeu\b|\bde\b/i.test(l)) return "ger";
-    if (/italian|italiano|\bita\b|\bit\b/i.test(l)) return "ita";
-    if (/russian|russo|русский|\brus\b|\bru\b/i.test(l)) return "rus";
+    if (/arabic|عربي|العربية|\bara\b|\bar\b/i.test(l) || /arabic|عربي|العربية|\bara\b|\bar\b/i.test(c)) return "ara";
+    if (/english|ingl[eê]s|\beng\b|\ben\b/i.test(l) || /english|ingl[eê]s|\beng\b|\ben\b/i.test(c)) return "eng";
+    if (/japanese|japon[eê]s|ياباني|\bjpn\b|\bja\b/i.test(l) || /japanese|japon[eê]s|ياباني|\bjpn\b|\bja\b/i.test(c)) return "jpn";
+    if (/french|franc[eê]s|français|\bfra\b|\bfre\b|\bfr\b/i.test(l) || /french|franc[eê]s|français|\bfra\b|\bfre\b|\bfr\b/i.test(c)) return "fre";
+    if (/spanish|espanhol|español|\bspa\b|\bes\b/i.test(l) || /spanish|espanhol|español|\bspa\b|\bes\b/i.test(c)) return "spa";
+    if (/portuguese|portugu[eê]s|\bpor\b|\bpob\b|\bpt\b/i.test(l) || /portuguese|portugu[eê]s|\bpor\b|\bpob\b|\bpt\b/i.test(c)) return "por";
+    if (/german|alem[aã]o|deutsch|\bger\b|\bdeu\b|\bde\b/i.test(l) || /german|alem[aã]o|deutsch|\bger\b|\bdeu\b|\bde\b/i.test(c)) return "ger";
+    if (/italian|italiano|\bita\b|\bit\b/i.test(l) || /italian|italiano|\bita\b|\bit\b/i.test(c)) return "ita";
+    if (/russian|russo|русский|\brus\b|\bru\b/i.test(l) || /russian|russo|русский|\brus\b|\bru\b/i.test(c)) return "rus";
     return c || "und";
   }
   function langName(code) {
@@ -12568,6 +12624,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadSubtitles() {
       var forVideo = video;
       addonSubs = null;
+      if (stream && Array.isArray(stream.subtitles)) {
+        var stSubs = stream.subtitles.map(function (s, idx) {
+          return {
+            id: s.id || s.url || "stream_" + idx,
+            url: s.url,
+            lang: s.lang || s.language || "und",
+            addon: s.addon || t("Transmissão"),
+            label: s.label || s.title || ""
+          };
+        });
+        addonSubs = (addonSubs || []).concat(stSubs);
+      }
       fetchSubtitles(meta.type, video.id, {}, function (list2) {
         if (!alive || forVideo !== video) return;
         addonSubs = (addonSubs || []).concat(list2);
@@ -12575,7 +12643,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).catch(function () {
         if (!addonSubs) addonSubs = [];
       });
-      if (key()) search(meta.type, video.id).then(function (list2) {
+      if (key()) search(meta.type, video.id, meta, video).then(function (list2) {
         if (!alive || forVideo !== video || !list2.length) return;
         addonSubs = (addonSubs || []).concat(list2);
         autoPick();
@@ -13488,8 +13556,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return i;
     }
     function cleanAvText(raw) {
-      var x = String(raw || "").trim();
+      if (!raw) return "";
+      var x = "";
+      if (_typeof(raw) === "object" && raw !== null) {
+        x = String(raw.text || raw.subtitle || raw.data || "").trim();
+      } else {
+        x = String(raw || "").trim();
+      }
       if (!x) return "";
+      if (/^\s*\{.*\}\s*$/.test(x)) {
+        try {
+          var parsed = JSON.parse(x);
+          if (parsed && (parsed.text || parsed.subtitle || parsed.data)) {
+            x = String(parsed.text || parsed.subtitle || parsed.data).trim();
+          }
+        } catch (e) {}
+      }
       if (/^Dialogue:\s*/i.test(x)) {
         x = x.replace(/^Dialogue:\s*/i, "");
         var idx9 = nthIndex(x, ",", 9);
@@ -13501,7 +13583,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var _idx = nthIndex(x, ",", 8);
         if (_idx >= 0) x = x.slice(_idx + 1);
       }
-      return x.replace(/\{\\[^}]*\}/g, "").replace(/\\[Nn]/g, "\n").replace(/\\h/g, " ").replace(/\r/g, "").trim();
+      return x.replace(/^\d+\s*\r?\n/gm, "").replace(/\d+:\d+:\d+[,.]\d+\s*-->\s*\d+:\d+:\d+[,.]\d+[^\r\n]*\r?\n?/g, "").replace(/\{\\[^}]*\}/g, "").replace(/\{[^}]*\}/g, "").replace(/\\[Nn]/g, "\n").replace(/\\h/g, " ").replace(/\r/g, "").trim();
     }
     function selectAvText(index2) {
       disableEmbeddedSubs();
@@ -13512,12 +13594,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         index: index2
       };
       videoEl.onSubtitle(function (s) {
+        if (currentSub.kind !== "avtext") return;
         var text = cleanAvText(s.text);
-        if (!text || currentSub.kind !== "avtext") return;
         var now = videoEl.currentTime || 0;
+        if (!text) {
+          renderer.clear();
+          return;
+        }
+        var durSec = s.duration > 100 ? s.duration / 1e3 : s.duration > 0 ? s.duration : 3;
         renderer.add({
           start: now,
-          end: now + Math.max(1.5, (s.duration || 3e3) / 1e3),
+          end: now + Math.max(1.5, durSec),
           text: sanitize(text)
         });
         renderer.update(now);
@@ -13632,8 +13719,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var rawLang = info2 && info2.lang || tr.language || "";
         var rawLabel = info2 && info2.label || tr.label || "";
         var detected = detectLang(rawLang, rawLabel);
+        var title = "";
+        if (detected && detected !== "und") {
+          var lName = langName(detected);
+          title = lName + (rawLabel && !rawLabel.toLowerCase().includes(lName.toLowerCase()) ? " · " + rawLabel : "");
+        } else if (rawLabel) {
+          title = rawLabel;
+        } else {
+          title = t("Faixa {n}", {
+            n: i + 1
+          });
+        }
         opts2.push({
-          label: langName(detected) + (rawLabel ? " · " + rawLabel : ""),
+          label: title,
           sub: t("Embutida no arquivo") + (codec ? " · " + codec : ""),
           value: {
             kind: "avtext",
@@ -13646,8 +13744,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         embedded.subs.forEach(function (tr, i) {
           if (/PGS|VOBSUB|DVD/i.test(tr.codec || "")) return;
           var detected = detectLang(tr.lang, tr.label);
+          var title = "";
+          if (detected && detected !== "und") {
+            var lName = langName(detected);
+            title = lName + (tr.label && !tr.label.toLowerCase().includes(lName.toLowerCase()) ? " · " + tr.label : "");
+          } else if (tr.label) {
+            title = tr.label;
+          } else {
+            title = t("Faixa {n}", {
+              n: i + 1
+            });
+          }
           opts2.push({
-            label: langName(detected) + (tr.label ? " · " + tr.label : ""),
+            label: title,
             sub: t("Embutida no arquivo") + (tr.codec ? " · " + tr.codec : ""),
             value: {
               kind: "embedded",
@@ -16232,6 +16341,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     SUMMER: "Summer",
     FALL: "Fall"
   };
+  var SEASON_ART_FALLBACK = {
+    WINTER: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/172463-3J2o3qQZadFJ.jpg",
+    SPRING: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/147105-fTjmRrILFixZ.jpg",
+    SUMMER: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/178789-9nHWmoRLlcLu.jpg",
+    FALL: "https://s4.anilist.co/file/anilistcdn/media/anime/banner/195539-lO5SUdp4SOrq.jpg"
+  };
   function nextSeason(s) {
     var i = SEASONS.indexOf(s.season);
     return i === 3 ? {
@@ -16447,14 +16562,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var wrap = h("div.poster-wrap", null, h("div.tile-label", {
         text: x.label
       }));
-      var url2 = artUrl(x.art);
+      var url2 = x.artUrl || artUrl(x.art);
       if (url2) {
         var im = h("img.tile-art", {
           alt: ""
         });
         im.setAttribute("data-lazy", url2);
         im.onload = function () {
-          return wrap.classList.add(/^landscape-/.test(x.art) ? "has-art" : "has-art-label");
+          return wrap.classList.add(/^landscape-/.test(x.art || "") ? "has-art" : "has-art-label");
         };
         im.onerror = function () {
           return im.parentNode && im.parentNode.removeChild(im);
@@ -16525,6 +16640,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return {
           label: x.label,
           art: x.art,
+          artUrl: x.artUrl,
           open: function open() {
             return push(AnimeGridView(x.label, null, null, x.src));
           }
@@ -16592,11 +16708,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         season: x,
         year: s.year
       };
+      var rawBanner = SEASON_ART_FALLBACK[x];
+      var artUrl2 = rawBanner ? "https://wsrv.nl/?url=" + encodeURIComponent(rawBanner) + "&w=320&h=160&fit=cover&output=jpg&q=80" : null;
       return {
         label: t(SEASON_LABEL[x] === "Winter" ? "Inverno" : SEASON_LABEL[x] === "Spring" ? "Primavera" : SEASON_LABEL[x] === "Summer" ? "Verão" : "Outono") + " " + s.year,
+        artUrl: artUrl2,
         src: listSource("mal.seasons", seasonName(one), seasonArgs(one))
       };
-    }), "genre");
+    }), "seasonal");
     tiles(t("Estúdios"), STUDIO_LIST.map(function (name) {
       return {
         label: name,
@@ -18369,7 +18488,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T17:47:22.809Z";
+  var BUILD = "2026-11-14T18:11:28.453Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

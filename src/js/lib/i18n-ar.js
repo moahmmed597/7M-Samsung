@@ -272,6 +272,8 @@ export const AR = {
   'Legenda: {lang}': 'الترجمة: {lang}',
   'Não foi possível baixar a legenda.': 'تعذّر تنزيل الترجمة.',
   'Lendo as faixas do arquivo...': 'جارٍ قراءة مسارات الملف...',
+  'Faixa {n}': 'المسار {n}',
+  'Transmissão': 'البث',
   '{n} canais': '{n} قنوات',
   'Só uma faixa de áudio.': 'مسار صوتي واحد فقط.',
   'Para listar as faixas, conecte o servidor do PC em Ajustes.': 'لعرض المسارات، اربط خادم الكمبيوتر من الإعدادات.',

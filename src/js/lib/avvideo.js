@@ -120,10 +120,25 @@ export function create() {
       },
       onevent: () => {},
       // Embedded subtitles: the player parses them (SRT, ASS...) and hands over the text to show.
-      onsubtitlechange: (duration, text) => {
+      onsubtitlechange: (p1, p2, p3, p4) => {
         if (!ok() || !textOn || !subCb) return;
         try {
-          subCb({ text: String(text || ''), duration: Number(duration) || 0 });
+          let text = '';
+          let dur = 0;
+          if (typeof p1 === 'object' && p1 !== null) {
+            text = p1.text || p1.data || p1.subtitle || '';
+            dur = Number(p1.duration) || 0;
+          } else if (typeof p1 === 'string' && (p2 === undefined || typeof p2 !== 'string')) {
+            text = p1;
+            dur = Number(p2) || 0;
+          } else if (typeof p2 === 'string') {
+            text = p2;
+            dur = Number(p1) || 0;
+          } else if (typeof p1 === 'string') {
+            text = p1;
+            dur = Number(p2) || 0;
+          }
+          subCb({ text: String(text || ''), duration: dur });
         } catch (e) {
           log.warn('avplay subtitle', e && e.message);
         }
@@ -249,6 +264,23 @@ export function create() {
   }
 
   // ---------- Tracks ----------
+  function parseExtra(info) {
+    if (!info) return {};
+    if (typeof info === 'object') return info;
+    if (typeof info === 'string') {
+      try {
+        return JSON.parse(info);
+      } catch (e) {
+        const res = {};
+        info.replace(/([^,=;]+)=([^,;]+)/g, (_, k, v) => {
+          res[k.trim()] = v.trim().replace(/^['"]|['"]$/g, '');
+        });
+        return res;
+      }
+    }
+    return {};
+  }
+
   function trackInfo(type) {
     let all = [];
     try {
@@ -259,18 +291,16 @@ export function create() {
     const out = [];
     for (let i = 0; i < all.length; i++) {
       if (all[i].type !== type) continue;
-      let extra = {};
-      try {
-        extra = JSON.parse(all[i].extra_info || '{}');
-      } catch (e) {
-        /* ignore */
-      }
+      const extra = parseExtra(all[i].extra_info);
+      const rawLang = extra.language || extra.track_lang || extra.lang || extra.Language || all[i].language || all[i].lang || '';
+      const rawLabel = extra.track_name || extra.track_title || extra.title || extra.name || extra.label || extra.track_label || extra.description || extra.track_description || all[i].track_name || all[i].name || '';
+      const rawCodec = extra.fourCC || extra.codec || extra.sub_type || extra.subtitle_type || extra.track_type || all[i].codec || '';
       out.push({
         index: all[i].index,
-        language: String(extra.language || extra.track_lang || all[i].language || '').trim(),
-        label: String(extra.track_name || extra.track_title || extra.title || extra.name || all[i].track_name || all[i].name || '').trim(),
+        language: String(rawLang).trim(),
+        label: String(rawLabel).trim(),
         channels: extra.channels ? Number(extra.channels) : 0,
-        codec: String(extra.fourCC || extra.codec || all[i].codec || '').trim(),
+        codec: String(rawCodec).trim(),
       });
     }
     return out;
@@ -315,6 +345,12 @@ export function create() {
       }
       AV.setSelectTrack('TEXT', avIndex);
       log.info('avplay text ->', avIndex);
+      if (readState() === 'PLAYING') {
+        const back = Math.max(0, curMs - 400);
+        setTimeout(() => {
+          if (readState() === 'PLAYING') doSeek(back);
+        }, 150);
+      }
       return true;
     } catch (e) {
       log.warn('avplay text track', e && (e.name || e.message));

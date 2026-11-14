@@ -26,7 +26,12 @@
 
 > **Open Source & Independent.** Licensed under GNU GPL-3.0. Not affiliated with Stremio, Stremio Kai, or Samsung. The app hosts no content: it only displays what the add-ons on **your** Stremio account provide.
 
-![Stremio Kai 7M home screen on a Samsung TV](docs/screenshots/home.jpg)
+<div align="center">
+  <img src="docs/screenshots/anime.jpg" alt="Stremio Kai 7M Anime Hub" width="49%" style="border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.5);" />
+  <img src="docs/screenshots/arabic-home.jpg" alt="Stremio Kai 7M Native Arabic UI" width="49%" style="border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.5);" />
+  <br/>
+  <sub><i>Left: Built-in UltraAnime Hub with Seasonal Anime Artwork · Right: Native Arabic RTL Interface</i></sub>
+</div>
 
 ---
 
