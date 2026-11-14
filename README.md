@@ -45,18 +45,6 @@ The **7M Edition** introduces over **22,000+ lines of enhancements** across 69 f
 
 ---
 
-## 📺 Real-Life TV Showcase (Samsung OLED S90D 2024)
-
-| Arabic Subtitles on OLED Playback | SubDL Subtitle Selector & Delay Sync |
-|:---:|:---:|
-| <img src="docs/screenshots/oled-arabic-display.jpg" alt="Real Samsung OLED TV Playing Arabic Subtitles" width="460"> | <img src="docs/screenshots/oled-xmen-subdl.jpg" alt="SubDL Arabic Subtitles Menu" width="460"> |
-
-| Embedded Anime Subtitle Auto-Detection | Smart Choice & Stream Quality Badges |
-|:---:|:---:|
-| <img src="docs/screenshots/oled-anime-subtitles.jpg" alt="Anime Embedded Subtitle on Samsung TV" width="460"> | <img src="docs/screenshots/smart-choice.jpg" alt="Smart Choice & Badges" width="460"> |
-
----
-
 ## 🚀 Complete Visual Feature Guide
 
 ### 1. A Home Screen Built for the TV
