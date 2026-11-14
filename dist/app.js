@@ -5593,7 +5593,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Primavera": "Spring",
     "Verão": "Summer",
     "Outono": "Fall",
-    "Não foi possível ligar esta legenda.": "Could not turn this subtitle on."
+    "Não foi possível ligar esta legenda.": "Could not turn this subtitle on.",
+    "Marvel Studios": "Marvel Studios"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6417,7 +6418,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Primavera": "الربيع",
     "Verão": "الصيف",
     "Outono": "الخريف",
-    "Não foi possível ligar esta legenda.": "ما قدرت أشغّل هالترجمة."
+    "Não foi possível ligar esta legenda.": "ما قدرت أشغّل هالترجمة.",
+    "Marvel Studios": "مارفل الرسمية (Marvel Studios)"
   };
 
   // src/js/lib/i18n.js
@@ -14683,9 +14685,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     name: "Marvel Cinematic Universe",
     ar: "عالم مارفل السينمائي (MCU)",
     related: ["xmen", "spiderman"],
-    items: [["tt0371746", "Iron Man", 2008], ["tt0800080", "The Incredible Hulk", 2008], ["tt1228705", "Iron Man 2", 2010], ["tt0800369", "Thor", 2011], ["tt0458339", "Captain America: The First Avenger", 2011], ["tt0848228", "The Avengers", 2012], ["tt1300854", "Iron Man 3", 2013], ["tt1981115", "Thor: The Dark World", 2013], ["tt1843866", "Captain America: The Winter Soldier", 2014], ["tt2015381", "Guardians of the Galaxy", 2014], ["tt2395427", "Avengers: Age of Ultron", 2015], ["tt0478970", "Ant-Man", 2015], ["tt3498820", "Captain America: Civil War", 2016], ["tt1211837", "Doctor Strange", 2016], ["tt3896198", "Guardians of the Galaxy Vol. 2", 2017], ["tt2250912", "Spider-Man: Homecoming", 2017], ["tt3501632", "Thor: Ragnarok", 2017], ["tt1825683", "Black Panther", 2018], ["tt4154756", "Avengers: Infinity War", 2018], ["tt5095030", "Ant-Man and the Wasp", 2018], ["tt4154664", "Captain Marvel", 2019], ["tt4154796", "Avengers: Endgame", 2019], ["tt6320628", "Spider-Man: Far From Home", 2019], ["tt9140560", "WandaVision", 2021, "s"], ["tt9208876", "The Falcon and the Winter Soldier", 2021, "s"], ["tt9140554", "Loki", 2021, "s"], ["tt3480822", "Black Widow", 2021], ["tt10168312", "What If...?", 2021, "s"], ["tt9376612", "Shang-Chi and the Legend of the Ten Rings", 2021], ["tt9032400", "Eternals", 2021], ["tt10160804", "Hawkeye", 2021, "s"], ["tt10872600", "Spider-Man: No Way Home", 2021], ["tt10234724", "Moon Knight", 2022, "s"], ["tt9419884", "Doctor Strange in the Multiverse of Madness", 2022], ["tt10857164", "Ms. Marvel", 2022, "s"], ["tt10648342", "Thor: Love and Thunder", 2022], ["tt10857160", "She-Hulk: Attorney at Law", 2022, "s"], ["tt15318872", "Werewolf by Night", 2022], ["tt9114286", "Black Panther: Wakanda Forever", 2022], ["tt13623136", "The Guardians of the Galaxy Holiday Special", 2022], ["tt10954600", "Ant-Man and the Wasp: Quantumania", 2023], ["tt6791350", "Guardians of the Galaxy Vol. 3", 2023], ["tt13157618", "Secret Invasion", 2023, "s"], ["tt10676048", "The Marvels", 2023], ["tt13966962", "Echo", 2024, "s"], ["tt6263850", "Deadpool & Wolverine", 2024], ["tt15571732", "Agatha All Along", 2024, "s"], ["tt14513804", "Captain America: Brave New World", 2025], ["tt18923754", "Daredevil: Born Again", 2025, "s"], ["tt20969586", "Thunderbolts*", 2025], ["tt13623126", "Ironheart", 2025, "s"], ["tt10676052", "The Fantastic Four: First Steps", 2025]],
+    items: [["tt0120903", "X-Men", 2e3], ["tt0145487", "Spider-Man", 2002], ["tt0290334", "X2", 2003], ["tt0316654", "Spider-Man 2", 2004], ["tt0376994", "X-Men: The Last Stand", 2006], ["tt0413300", "Spider-Man 3", 2007], ["tt0371746", "Iron Man", 2008], ["tt0800080", "The Incredible Hulk", 2008], ["tt0458525", "X-Men Origins: Wolverine", 2009], ["tt1228705", "Iron Man 2", 2010], ["tt0800369", "Thor", 2011], ["tt0458339", "Captain America: The First Avenger", 2011], ["tt1270798", "X-Men: First Class", 2011], ["tt0848228", "The Avengers", 2012], ["tt0948470", "The Amazing Spider-Man", 2012], ["tt1300854", "Iron Man 3", 2013], ["tt1981115", "Thor: The Dark World", 2013], ["tt1430132", "The Wolverine", 2013], ["tt1843866", "Captain America: The Winter Soldier", 2014], ["tt2015381", "Guardians of the Galaxy", 2014], ["tt1877832", "X-Men: Days of Future Past", 2014], ["tt1872181", "The Amazing Spider-Man 2", 2014], ["tt2395427", "Avengers: Age of Ultron", 2015], ["tt0478970", "Ant-Man", 2015], ["tt3498820", "Captain America: Civil War", 2016], ["tt1211837", "Doctor Strange", 2016], ["tt1431045", "Deadpool", 2016], ["tt3385516", "X-Men: Apocalypse", 2016], ["tt3896198", "Guardians of the Galaxy Vol. 2", 2017], ["tt2250912", "Spider-Man: Homecoming", 2017], ["tt3501632", "Thor: Ragnarok", 2017], ["tt3315342", "Logan", 2017], ["tt1825683", "Black Panther", 2018], ["tt4154756", "Avengers: Infinity War", 2018], ["tt5095030", "Ant-Man and the Wasp", 2018], ["tt5463162", "Deadpool 2", 2018], ["tt4154664", "Captain Marvel", 2019], ["tt4154796", "Avengers: Endgame", 2019], ["tt6320628", "Spider-Man: Far From Home", 2019], ["tt6565702", "Dark Phoenix", 2019], ["tt4682266", "The New Mutants", 2020], ["tt9140560", "WandaVision", 2021, "s"], ["tt9208876", "The Falcon and the Winter Soldier", 2021, "s"], ["tt9140554", "Loki", 2021, "s"], ["tt3480822", "Black Widow", 2021], ["tt10168312", "What If...?", 2021, "s"], ["tt9376612", "Shang-Chi and the Legend of the Ten Rings", 2021], ["tt9032400", "Eternals", 2021], ["tt10160804", "Hawkeye", 2021, "s"], ["tt10872600", "Spider-Man: No Way Home", 2021], ["tt10234724", "Moon Knight", 2022, "s"], ["tt9419884", "Doctor Strange in the Multiverse of Madness", 2022], ["tt10857164", "Ms. Marvel", 2022, "s"], ["tt10648342", "Thor: Love and Thunder", 2022], ["tt10857160", "She-Hulk: Attorney at Law", 2022, "s"], ["tt15318872", "Werewolf by Night", 2022], ["tt9114286", "Black Panther: Wakanda Forever", 2022], ["tt13623136", "The Guardians of the Galaxy Holiday Special", 2022], ["tt10954600", "Ant-Man and the Wasp: Quantumania", 2023], ["tt6791350", "Guardians of the Galaxy Vol. 3", 2023], ["tt13157618", "Secret Invasion", 2023, "s"], ["tt10676048", "The Marvels", 2023], ["tt13966962", "Echo", 2024, "s"], ["tt6263850", "Deadpool & Wolverine", 2024], ["tt15571732", "Agatha All Along", 2024, "s"], ["tt14513804", "Captain America: Brave New World", 2025], ["tt18923754", "Daredevil: Born Again", 2025, "s"], ["tt20969586", "Thunderbolts*", 2025], ["tt13623126", "Ironheart", 2025, "s"], ["tt10676052", "The Fantastic Four: First Steps", 2025]],
     // Disney+'s timeline order.
-    chrono: ["tt0458339", "tt4154664", "tt0371746", "tt1228705", "tt0800080", "tt0800369", "tt0848228", "tt1981115", "tt1300854", "tt1843866", "tt2015381", "tt3896198", "tt2395427", "tt0478970", "tt3498820", "tt3480822", "tt1825683", "tt2250912", "tt1211837", "tt3501632", "tt5095030", "tt4154756", "tt4154796", "tt9140554", "tt10168312", "tt9140560", "tt9208876", "tt9376612", "tt9032400", "tt6320628", "tt10872600", "tt10160804", "tt10234724", "tt9419884", "tt10857164", "tt10648342", "tt15318872", "tt10857160", "tt9114286", "tt13623136", "tt13157618", "tt13966962", "tt10954600", "tt6791350", "tt10676048", "tt15571732", "tt6263850", "tt14513804", "tt18923754", "tt20969586", "tt13623126", "tt10676052"]
+    chrono: ["tt0458339", "tt1270798", "tt0458525", "tt1877832", "tt3385516", "tt6565702", "tt4154664", "tt0120903", "tt0145487", "tt0290334", "tt0316654", "tt0376994", "tt0413300", "tt0371746", "tt1228705", "tt0800080", "tt0800369", "tt1430132", "tt0848228", "tt0948470", "tt1300854", "tt1872181", "tt1981115", "tt1843866", "tt2015381", "tt3896198", "tt2395427", "tt0478970", "tt1431045", "tt3498820", "tt3480822", "tt1825683", "tt2250912", "tt1211837", "tt3501632", "tt5095030", "tt5463162", "tt4154756", "tt4154796", "tt9140554", "tt10168312", "tt9140560", "tt9208876", "tt9376612", "tt9032400", "tt6320628", "tt10872600", "tt10160804", "tt10234724", "tt9419884", "tt10857164", "tt10648342", "tt15318872", "tt4682266", "tt10857160", "tt9114286", "tt13623136", "tt10954600", "tt6791350", "tt13157618", "tt10676048", "tt13966962", "tt3315342", "tt6263850", "tt15571732", "tt14513804", "tt18923754", "tt20969586", "tt13623126", "tt10676052"]
   }, {
     id: "xmen",
     name: "X-Men",
@@ -15582,8 +15584,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var order = orderOf(f);
     var hideWatched = false;
     var mediaFilter = "all";
+    var sagaFilter = "all";
+    var XMEN_IDS = /* @__PURE__ */new Set(["tt0120903", "tt0290334", "tt0376994", "tt0458525", "tt1270798", "tt1430132", "tt1877832", "tt1431045", "tt3385516", "tt3315342", "tt5463162", "tt6565702", "tt4682266", "tt6263850"]);
+    var SPIDEY_LEGACY_IDS = /* @__PURE__ */new Set(["tt0145487", "tt0316654", "tt0413300", "tt0948470", "tt1872181"]);
+    var SPIDEY_ALL_IDS = /* @__PURE__ */new Set(["tt0145487", "tt0316654", "tt0413300", "tt0948470", "tt1872181", "tt2250912", "tt6320628", "tt10872600"]);
+    function matchSaga(id) {
+      if (f.id !== "mcu" || sagaFilter === "all") return true;
+      if (sagaFilter === "xmen") return XMEN_IDS.has(id);
+      if (sagaFilter === "spiderman") return SPIDEY_ALL_IDS.has(id);
+      if (sagaFilter === "mcu_core") return (!XMEN_IDS.has(id) || id === "tt6263850") && !SPIDEY_LEGACY_IDS.has(id);
+      return true;
+    }
     function nextUp(list2) {
       return list2.find(function (it) {
+        if (!matchSaga(it[0])) return false;
         if (mediaFilter === "movies" && isSeriesItem(it)) return false;
         if (mediaFilter === "series" && !isSeriesItem(it)) return false;
         return !itemWatched(it);
@@ -15629,6 +15643,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         c.__key = key3;
         return c;
       };
+      if (f.id === "mcu") {
+        filters.appendChild(chip("saga_all", t("Todos"), sagaFilter === "all", function () {
+          sagaFilter = "all";
+          render("saga_all");
+        }));
+        filters.appendChild(chip("saga_mcu", t("Marvel Studios"), sagaFilter === "mcu_core", function () {
+          sagaFilter = "mcu_core";
+          render("saga_mcu");
+        }));
+        filters.appendChild(chip("saga_xmen", "X-Men", sagaFilter === "xmen", function () {
+          sagaFilter = "xmen";
+          render("saga_xmen");
+        }));
+        filters.appendChild(chip("saga_spidey", "Spider-Man", sagaFilter === "spiderman", function () {
+          sagaFilter = "spiderman";
+          render("saga_spidey");
+        }));
+      }
       var hasMovies = f.items.some(function (it) {
         return !isSeriesItem(it);
       });
@@ -15683,6 +15715,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       clear(grid);
       var count = 0;
       list2.forEach(function (it, i) {
+        if (!matchSaga(it[0])) return;
         if (mediaFilter === "movies" && isSeriesItem(it)) return;
         if (mediaFilter === "series" && !isSeriesItem(it)) return;
         var seen = itemWatched(it);
@@ -17818,7 +17851,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T15:53:32.735Z";
+  var BUILD = "2026-11-14T16:00:24.283Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

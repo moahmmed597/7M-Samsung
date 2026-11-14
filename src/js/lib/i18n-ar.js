@@ -828,4 +828,5 @@ export const AR = {
   "Verão": "الصيف",
   "Outono": "الخريف",
   "Não foi possível ligar esta legenda.": "ما قدرت أشغّل هالترجمة.",
+  "Marvel Studios": "مارفل الرسمية (Marvel Studios)",
 };

@@ -828,4 +828,5 @@ export const EN = {
   "Verão": "Summer",
   "Outono": "Fall",
   "Não foi possível ligar esta legenda.": "Could not turn this subtitle on.",
+  "Marvel Studios": "Marvel Studios",
 };

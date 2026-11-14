@@ -446,10 +446,33 @@ function FranchiseView(f) {
   let order = orderOf(f);
   let hideWatched = false;
   let mediaFilter = 'all'; // 'all' | 'movies' | 'series'
+  let sagaFilter = 'all'; // for mcu: 'all' | 'mcu_core' | 'xmen' | 'spiderman'
+
+  const XMEN_IDS = new Set([
+    'tt0120903', 'tt0290334', 'tt0376994', 'tt0458525', 'tt1270798', 'tt1430132',
+    'tt1877832', 'tt1431045', 'tt3385516', 'tt3315342', 'tt5463162', 'tt6565702',
+    'tt4682266', 'tt6263850'
+  ]);
+  const SPIDEY_LEGACY_IDS = new Set([
+    'tt0145487', 'tt0316654', 'tt0413300', 'tt0948470', 'tt1872181'
+  ]);
+  const SPIDEY_ALL_IDS = new Set([
+    'tt0145487', 'tt0316654', 'tt0413300', 'tt0948470', 'tt1872181',
+    'tt2250912', 'tt6320628', 'tt10872600'
+  ]);
+
+  function matchSaga(id) {
+    if (f.id !== 'mcu' || sagaFilter === 'all') return true;
+    if (sagaFilter === 'xmen') return XMEN_IDS.has(id);
+    if (sagaFilter === 'spiderman') return SPIDEY_ALL_IDS.has(id);
+    if (sagaFilter === 'mcu_core') return (!XMEN_IDS.has(id) || id === 'tt6263850') && !SPIDEY_LEGACY_IDS.has(id);
+    return true;
+  }
 
   function nextUp(list) {
     return (
       list.find((it) => {
+        if (!matchSaga(it[0])) return false;
         if (mediaFilter === 'movies' && isSeriesItem(it)) return false;
         if (mediaFilter === 'series' && !isSeriesItem(it)) return false;
         return !itemWatched(it);
@@ -488,6 +511,32 @@ function FranchiseView(f) {
       c.__key = key;
       return c;
     };
+    if (f.id === 'mcu') {
+      filters.appendChild(
+        chip('saga_all', t('Todos'), sagaFilter === 'all', () => {
+          sagaFilter = 'all';
+          render('saga_all');
+        })
+      );
+      filters.appendChild(
+        chip('saga_mcu', t('Marvel Studios'), sagaFilter === 'mcu_core', () => {
+          sagaFilter = 'mcu_core';
+          render('saga_mcu');
+        })
+      );
+      filters.appendChild(
+        chip('saga_xmen', 'X-Men', sagaFilter === 'xmen', () => {
+          sagaFilter = 'xmen';
+          render('saga_xmen');
+        })
+      );
+      filters.appendChild(
+        chip('saga_spidey', 'Spider-Man', sagaFilter === 'spiderman', () => {
+          sagaFilter = 'spiderman';
+          render('saga_spidey');
+        })
+      );
+    }
     const hasMovies = f.items.some((it) => !isSeriesItem(it));
     const hasSeries = f.items.some((it) => isSeriesItem(it));
     if (hasMovies && hasSeries) {
@@ -553,6 +602,7 @@ function FranchiseView(f) {
     clear(grid);
     let count = 0;
     list.forEach((it, i) => {
+      if (!matchSaga(it[0])) return;
       if (mediaFilter === 'movies' && isSeriesItem(it)) return;
       if (mediaFilter === 'series' && !isSeriesItem(it)) return;
       const seen = itemWatched(it);
