@@ -1,130 +1,193 @@
-# Stremio Kai 7M (Samsung Tizen Edition) 🎬⚡
+# Stremio Kai 7M for Samsung Tizen
 
 <div align="center">
-  <img src="src/static/largeIcon.png" alt="Stremio Kai 7M Logo" width="140" style="border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);" />
+  <img src="src/static/largeIcon.png" alt="Stremio Kai 7M Logo" width="130" style="border-radius: 26px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);" />
   <br/>
-  <h3>The Ultimate Modern Stremio Experience Crafted for Samsung OLED / Tizen Smart TVs</h3>
+  <h3>The Modern Stremio Experience Crafted for Samsung Smart TVs (Tizen OS)</h3>
   <p>
-    <b>High Performance · True OLED Blacks · Embedded Subtitles · Franchise Sagas · Multi-Profile · Anime Universe</b>
+    <b>Hardware AVPlay · Embedded MKV Subtitles · OLED Burn-in Protection · Franchise Timelines · UltraAnime · Multi-Profile</b>
   </p>
 
-  [![Samsung Tizen](https://img.shields.io/badge/Samsung-Tizen_OS_4.0_--_8.0+-037bc8?style=for-the-badge&logo=samsung&logoColor=white)](https://www.samsung.com)
+  [![Samsung Tizen](https://img.shields.io/badge/Samsung-Tizen_OS_3.0_--_8.0+-037bc8?style=for-the-badge&logo=samsung&logoColor=white)](https://www.samsung.com)
   [![Built For OLED](https://img.shields.io/badge/OLED-Burn--in_Protected-000000?style=for-the-badge&logo=target&logoColor=white)](https://github.com/moahmmed597/Stremio-Kai-7M)
   [![License](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)](LICENSE)
-  [![Build](https://img.shields.io/badge/Build-Tizen_.wgt_Ready-success?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/moahmmed597/Stremio-Kai-7M)
+  [![Build](https://img.shields.io/badge/Tizen-Ready_.wgt-success?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/moahmmed597/Stremio-Kai-7M)
 </div>
 
 ---
 
-## 🌟 Overview / نظرة عامة
+**Stremio Kai 7M** brings the modern, clean look and rich features of Stremio Kai to Samsung Tizen TVs, including older models (2017+ Tizen 3.0) and the newest 2024 OLED TVs (S90D/S95D on Tizen 8.0). It runs natively via [TizenBrew](https://github.com/reisxd/TizenBrew) or as a standalone `.wgt` app, completely controllable with your Samsung TV remote.
 
-**Stremio Kai 7M** is a heavily enhanced, standalone evolution of the open-source Stremio Tizen client (`kai`), meticulously re-engineered for Samsung Smart TVs (especially 2024 OLED S90D/S95D and high-refresh Tizen models).
+> **Unofficial.** Not affiliated with Stremio, Stremio Kai, or Samsung. The app hosts no content: it only displays what the add-ons on **your** Stremio account provide.
 
-It transforms the streaming experience on Samsung TVs with native hardware decoding, embedded MKV subtitle handling, 100% Arabic localization, multi-franchise timelines, OLED burn-in prevention, and zero-latency TV navigation.
-
-> [!NOTE]
-> This edition contains over **22,000+ lines of custom enhancements** across 69 files compared to upstream, including custom video renderers, memory optimizations, and comprehensive cloud integrations.
+![Stremio Kai 7M home screen on a Samsung TV](docs/screenshots/home.jpg)
 
 ---
 
-## 🚀 Key Features & Innovations / أبرز المزايا والابتكارات
+## 🌟 What's New in 7M Edition?
 
-### 📺 1. Native Samsung AVPlay Engine (Hardware Decoding)
-* **Embedded Subtitles Decoding:** Native playback of subtitle tracks packed inside MKV and MP4 files (TEXT/UTF8, ASS/SSA) rendered directly on screen without needing an external PC transcoding server.
-* **Smart Arabic Character Encoding:** Automatic CP1256 and UTF-8 encoding detection with ZIP stream decompression for SubDL and external subtitle providers.
-* **Auto-Language Detection:** Intelligently resolves `Unknown / und` anime tracks by inspecting internal track labels (`extra_info.label`).
-* **Multi-Audio Track Switching:** Seamlessly switch between multi-language audio streams, dubs, stereo, 5.1 surround, and Dolby Atmos passthrough.
+The **7M Edition** introduces over **22,000+ lines of enhancements** across 69 files over the upstream base, heavily tailored for Samsung OLED TVs:
 
-### 🖤 2. Tailored for OLED Screens (Samsung OLED 2024 Care)
-* **True OLED Screensaver:** `#000000` pitch-black sleep screen activates after 90 seconds of inactivity or pause to safeguard OLED panels from burn-in, featuring an ultra-dim floating clock.
-* **13 High-Contrast OLED Themes:** Cyberpunk, Emerald, Amber, Royal Violet, Neon Fuchsia, Ruby Rose, Sky Blue, Netflix Red, Samsung Blue, Sunset Flame, and Charcoal Slate.
-* **Memory & RAM Shield (14KB Thumbnails):** Ultra-light proxy image compression (wsrv.nl WebP caching) reducing poster sizes from 1.4MB down to ~14KB, keeping memory consumption within Samsung TV's strict 180MB budget.
-
-### ⏱️ 3. Smart Pause Info & "Ends At" ETA
-* **Real-time Finish Time (Ends At):** Displays the exact clock time a movie or episode will conclude if watched now (e.g., `⏱️ ينتهي في تمام 21:45`).
-* **One-Click Trailer `[🎬 Trailer]`:** Instant official trailer playback directly in the app without launching external YouTube apps.
-* **Smart Stream Badges:** Automatic tagging and highlighting for 4K UHD, HDR, Dolby Vision, REMUX, and Dolby Atmos audio sources.
-
-### 🦸 4. Cinematic Franchise Sagas & Timelines
-* **15+ Complete Universes:** MCU (Marvel Cinematic Universe), DC Universe, Batman Sagas, X-Men, Spider-Man, Fantastic Four, Blade, Star Wars, Harry Potter, Middle-earth, and more.
-* **Chronological vs Release Order:** Switch viewing order between release date and chronological story continuity.
-* **Saga Separation:** Clean separation between live-action movies and classic animated universes (e.g., X-Men Animated Series vs Fox/MCU Movies).
-* **MCU Sub-Filters:** Instant filter chips for `[All (70)]`, `[Official MCU (52)]`, `[X-Men (14)]`, and `[Spider-Man (8)]`.
-* **Active Sagas Row:** Resume watching your franchises directly from the Home screen.
-
-### 🎎 5. Dedicated Anime Universe
-* **UltraAnime Tab:** Built-in dedicated anime hub with seasonal catalogs, anime studios (MAPPA, Ufotable, Wit Studio, Toei), demographics, and genres.
-* **Automated Intros/Outros Skip:** Integrated Anime-Skip and AniSkip client skipping opening and ending sequences automatically.
-
-### 👨‍👩‍👧‍👦 6. Profiles & Family Security
-* **Multi-User Profiles:** Independent Stremio accounts, watch histories, and settings per profile.
-* **Startup Profile Picker:** "Who's Watching?" profile selection on TV boot with quick auto-login toggle.
-* **PIN Lock (4–8 Digits):** Secure profiles with a remote-friendly PIN code.
-* **Kids Profile (🧒):** Tailored profile badge and environment for children and family content.
-* **IMDb Parental Guide:** Real-time content warning badges (violence, nudity, frightening scenes).
-
-### 🌐 7. Cloud Tracking & Phone Remote Link
-* **Out-of-the-Box Trakt & Simkl:** Built-in scrobbling and cloud library sync with pre-configured client credentials.
-* **Instant QR Code Login:** Log in to Real-Debrid, TorBox, Trakt, and Jellyfin simply by scanning a QR code with your mobile phone camera.
-* **Built-in Speedtest:** Direct TV internet speed & ping test powered by Cloudflare.
-* **Multilingual UI:** Full support for Arabic (with native RTL layout), English, Spanish, French, Turkish, German, and Portuguese.
+1. **Samsung AVPlay Hardware Decoding Engine:** Direct 4K UHD video playback, MKV/MP4 embedded subtitle track extraction, and smooth hardware acceleration.
+2. **Native Embedded Subtitles (ASS/SSA & SRT):** File-embedded subtitles render locally on the TV without needing an external transcoding PC server.
+3. **SubDL ZIP & CP1256 Auto-Decoding:** Resolves Arabic encoding issues and unpacks compressed ZIP subtitle archives automatically.
+4. **Smart Language Detection:** Fixes `Unknown / und` anime subtitles by reading internal audio/text track metadata labels.
+5. **7 Custom Arabic Fonts:** Cairo, Changa, Almarai, Tajawal, El Messiri, Readex Pro, and Noto Sans Arabic with customizable outline and shadows.
+6. **OLED Burn-in Protection:** `#000000` pitch-black sleep screen activates after 90 seconds of pause/inactivity, accompanied by a dim floating clock.
+7. **13 High-Contrast OLED Themes:** Cyberpunk, Emerald, Amber, Royal Violet, Neon Fuchsia, Ruby Rose, Sky Blue, Netflix Red, Samsung Blue, Sunset Flame, and Slate.
+8. **RAM Shield (14KB Thumbnails):** Efficient WebP image caching (wsrv.nl proxy) shrinking 1.4MB poster weights down to ~14KB, keeping memory within Samsung TV's 180MB RAM envelope.
+9. **15+ Cinematic Franchise Sagas:** Marvel Cinematic Universe (MCU), DC Universe, Batman, Spider-Man, X-Men, Star Wars, Harry Potter, and more with Chronological and Release-Date viewing orders.
+10. **Dedicated UltraAnime Hub:** Built-in seasonal catalogs, anime studios (MAPPA, Ufotable, Wit, Toei), demographics, and genres.
+11. **Auto-Skip Segments:** Automated intro and outro skipping powered by Anime-Skip (GraphQL) and AniSkip.
+12. **Real-time Finish Time (Ends At ETA):** Calculates the exact clock time a movie or episode will end if you watch it now (`⏱️ Ends at 21:45`).
+13. **Multi-Profile & PIN Lock:** Independent user accounts, startup profile picker, Kids Profile (`🧒`), and remote-friendly 4–8 digit PIN security.
+14. **Direct Phone Remote & QR Authentication:** Scan a QR code to sign in to Real-Debrid, TorBox, Trakt, and Jellyfin without typing keys on the TV.
 
 ---
 
-## 🛠️ Installation on Samsung Tizen TVs / طريقة التثبيت على شاشات سامسونج
+## 📺 Real-Life TV Showcase
 
-### Method 1: TizenBrew / Device Manager (Recommended)
-1. Turn on **Developer Mode** on your Samsung TV:
-   * Go to **Smart Hub** -> **Apps**.
-   * Press `1` `2` `3` `4` `5` on the remote.
-   * Toggle **Developer Mode** to **ON** and enter your computer's local IP address.
-   * Restart TV (hold power button on remote until Samsung logo appears).
-2. Install via **TizenBrew** or package the `.wgt` directly:
-   ```bash
-   node tools/build-wgt.mjs
-   tizen install -n Stremio7M.wgt -t <Your-TV-Device-Name>
+| Real Samsung OLED TV with Arabic Subtitles | SubDL & Stream Quality Badges |
+|:---:|:---:|
+| <img src="docs/screenshots/oled-anime-subtitles.jpg" alt="Real Samsung OLED TV" width="460"> | <img src="docs/screenshots/smart-choice.jpg" alt="Smart Choice & Badges" width="460"> |
+
+---
+
+## 🚀 Complete Feature Guide
+
+### 1. A Home Screen Built for the TV
+A rotating hero banner showcasing titles with logos, ratings, runtimes, and genres. One click starts playback or opens details. Below the banner, every catalog from your Stremio add-ons appears in an endless horizontal row.
+
+### 2. See All, Without Dead Ends
+Every row ends with a **See all** tile that opens the entire catalog as a responsive grid. New items load automatically as you scroll down.
+
+| Row End | Full Catalog Grid |
+|---|---|
+| ![See all tile](docs/screenshots/see-all-row.jpg) | ![Full catalog grid](docs/screenshots/see-all-grid.jpg) |
+
+### 3. Smart Choice & Stream Badges
+Press **Watch** and the app automatically chooses the best source and begins playing immediately without making you scroll through a long list. It prioritizes direct (debrid) streams, your preferred add-on order, and files that play cleanly on your TV, while skipping REMUX or incompatible bitrates. **Sources** still lets you browse the full list with clear 4K, HDR, Dolby Vision, REMUX, and Atmos badges.
+
+### 4. Smart Pause Info & "Ends At" ETA
+* In movie and episode details: see the exact time the movie will finish if you start watching now (`⏱️ Ends at 21:45`).
+* During playback: the current clock and finish time stay pinned in the top-right corner.
+
+### 5. Dedicated Anime Universe
+A topbar **Anime** tab inspired by UltraAnime featuring:
+* Current season broadcast schedule.
+* Studio hubs (MAPPA, Ufotable, Wit Studio, CloverWorks, Toei, Bones).
+* Demographic categories (Shounen, Seinen, Shoujo) and genres.
+* Built-in **Auto-Skip** for anime opening and ending themes.
+
+### 6. Cinematic Franchise Sagas & Timelines
+Explore complete fictional universes in the **Collections** tab:
+* **MCU:** Filter by All (70 items), Official MCU (52), X-Men (14), or Spider-Man (8).
+* **Viewing Orders:** Toggle between Release Order and In-Universe Chronological Timeline.
+* **Separation of Universes:** Live-action movies and classic animated series are kept cleanly separated.
+* **Active Sagas Row:** Resume your franchise watching right from the Home screen.
+
+### 7. Multi-User Profiles & Kids Protection
+* **Startup Profile Picker:** "Who's Watching?" selection upon booting the app.
+* **Individual Accounts:** Each profile maintains its own Stremio account, watch history, and library.
+* **PIN Lock:** Lock any profile with a 4 to 8 digit numeric PIN.
+* **Kids Profile (🧒):** Designates a family-friendly profile for children.
+* **IMDb Parental Guide:** Real-time warnings for violence, profanity, and intense scenes.
+
+### 8. Subtitle Styling & Arabic Typography
+* 7 built-in Arabic fonts (Cairo, Changa, Almarai, Tajawal, El Messiri, Readex Pro, Noto Sans).
+* Full control over subtitle size, position, outline, shadows, and sync delay.
+* Native rendering of ASS/SSA dialogue tags without clutter.
+
+### 9. Phone Remote Controller
+Control your TV from any phone without installing an app:
+* Scan the QR code in **Settings → Phone remote**.
+* Access D-pad, playback controls, volume, subtitle sync, and a **Now Playing** card.
+* **Search on TV:** Type with your phone keyboard or use voice dictation (🎤) to send text directly to the TV.
+* **Browse on Phone:** Browse Continue Watching, New Episodes, and Library on your phone and tap to launch on TV.
+
+| Phone Remote | QR Code in Settings | Phone Browser Tab |
+|---|---|---|
+| <img src="docs/screenshots/phone-remote.jpg" alt="Phone remote" width="260"> | <img src="docs/screenshots/phone-remote-qr.jpg" alt="Settings QR" width="260"> | <img src="docs/screenshots/phone-browse.jpg" alt="Browse on phone" width="260"> |
+
+### 10. Universal Add-on Search & Global Calendar
+* **Search:** Search movies and series across all installed add-ons at once.
+* **Release Calendar:** Track day-by-day anime broadcasts, television episodes, and home streaming releases.
+
+| Search Screen | Anime Calendar | Series Calendar |
+|---|---|---|
+| ![Search](docs/screenshots/search.jpg) | ![Anime Calendar](docs/screenshots/calendar-anime.jpg) | ![Series Calendar](docs/screenshots/calendar-series.jpg) |
+
+### 11. Cloud Tracking, Debrid & Speedtest
+* **Trakt & Simkl:** Built-in scrobbling and cloud history sync with pre-configured client IDs.
+* **QR Quick Auth:** Connect Real-Debrid, TorBox, Trakt, and Jellyfin via mobile QR code.
+* **Internet Speedtest:** Test TV download speed and ping via Cloudflare directly in Settings.
+
+---
+
+## 🛠️ Installation Guide for Samsung Tizen TVs
+
+### Step 1: Turn on Developer Mode on your Samsung TV
+1. On your Samsung TV, open the **Smart Hub** and go to **Apps**.
+2. Press `1` `2` `3` `4` `5` on your remote control.
+3. In the Developer Mode popup, toggle **Developer Mode** to **ON**.
+4. In **Host PC IP**, enter your computer's local IP address (e.g. `192.168.1.50`).
+5. Click **OK** and restart your TV (hold the remote power button until the Samsung logo appears).
+
+### Step 2: Install TizenBrew via TizenBrew Installer
+1. Download **TizenBrew Installer** on your computer from the [TizenBrew Releases](https://github.com/reisxd/TizenBrew/releases):
+   * **Windows:** `TizenBrewInstaller-win-x64.exe`
+   * **Mac:** `TizenBrewInstaller-macos-arm64` (Apple Silicon) or `TizenBrewInstaller-macos-x64` (Intel)
+   * **Linux:** `TizenBrewInstaller-linux-x64`
+2. Run the installer on your computer.
+3. Enter your TV's IP address (found in TV **Settings → General → Network → Network Status → IP Settings**) and click **Connect to TV**.
+4. Click **Install TizenBrew**. Once complete, **TizenBrew** will appear in your TV's Apps list.
+
+### Step 3: Point Developer Mode to Localhost
+1. Open TV **Apps** and enter `1` `2` `3` `4` `5` again.
+2. Change **Host PC IP** to `127.0.0.1` and click **OK**.
+3. Restart the TV again.
+
+### Step 4: Add Stremio Kai 7M
+1. Open **TizenBrew** on your TV.
+2. Navigate to **Module Manager → Add module**.
+3. Select **GitHub** and enter:
+   ```text
+   moahmmed597/Stremio-Kai-7M
    ```
+4. **Stremio Kai 7M** will now appear in your list. Launch it!
 
-### Method 2: Local Development & Build
+---
+
+## 💻 Local Building & Packaging
+
+Requires Node.js (v18 or newer).
+
 ```bash
-# Clone the repository
-git clone https://github.com/moahmmed597/7M-Samsung.git
-cd 7M-Samsung
+# Clone repository
+git clone https://github.com/moahmmed597/Stremio-Kai-7M.git
+cd Stremio-Kai-7M
 
 # Install dependencies
 npm install
 
-# Build the production bundle
+# Build JavaScript bundle
 npm run build
 
-# Generate Tizen .wgt package
+# Package as installable Samsung Tizen .wgt file
 node tools/build-wgt.mjs
 ```
 
----
-
-## 📊 Comparison with Original Upstream (kai)
-
-| Feature | Upstream (`kai`) | Stremio 7M Samsung |
-| :--- | :---: | :---: |
-| **Samsung Tizen Native AVPlay** | Basic HTML5 | **Full Hardware AVPlay + Subtitle Decoding** |
-| **Embedded MKV Subtitles** | ❌ (Required PC Server) | **✅ 100% Native on TV (ASS/SSA & SRT)** |
-| **SubDL ZIP Subtitle Parsing** | ❌ (Failed on CP1256/ZIP) | **✅ Full Automatic Decoding** |
-| **Arabic Subtitle Fonts** | System Default | **7 Custom High-Visibility Arabic Fonts** |
-| **OLED Burn-in Protection** | ❌ None | **✅ 90s `#000000` True OLED Screen Saver** |
-| **Franchise Sagas (MCU, DC, etc.)** | ❌ Flat list | **✅ 15+ Universes with Chrono Filters** |
-| **Dedicated Anime Tab** | ❌ None | **✅ UltraAnime Hub + Auto-Skip Intros** |
-| **Multi-Profile & PIN Lock** | ❌ Single User | **✅ Profiles + Kids Profile + PIN Lock** |
-| **Smart Pause Info & "Ends At" ETA** | ❌ None | **✅ Real-Time Calculation** |
-| **RAM Optimization** | Standard 1.4MB covers | **✅ WebP Caching (14KB, 90% RAM reduction)** |
+The compiled package is output to `out/Stremio7M.wgt`.
 
 ---
 
 ## 🤝 Credits & Acknowledgements
 
-* Original foundation by **ITzAkai** and contributors of the open-source `kai` project.
-* Special thanks to the TizenBrew community, Stremio open-source developers, and contributors.
+* **[Stremio Kai](https://github.com/allecsc/Stremio-Kai)** by allecsc: original foundation and core visual design.
+* **[Stremio Kai for Tizen](https://github.com/ITzAkai/kai)** by ITzAkai: the lightweight Tizen port and TV-first architecture.
+* **[TizenBrew](https://github.com/reisxd/TizenBrew)** by reisxd: runtime framework for Samsung TVs.
 * **Stremio 7M Edition** created and maintained by **Mohammed** ([@moahmmed597](https://github.com/moahmmed597)).
+* Special thanks to the open-source community and Stremio developers worldwide.
 
 ---
 
