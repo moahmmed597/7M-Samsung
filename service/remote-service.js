@@ -230,11 +230,13 @@ function handle(req, res) {
   if (url.pathname === '/api/fetch') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
     var target = require('url').parse(String(q.url || ''));
-    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev', 'api.anime-skip.com', 'api.tiffara.com', 'api.mdblist.com', 'api.subdl.com'];
+    var okHosts = ['api.introdb.app', 'api.aniskip.com', 'arm.haglund.dev', 'api.anime-skip.com', 'api.tiffara.com', 'api.mdblist.com', 'api.subdl.com', 'api.torbox.app'];
     if (target.protocol !== 'https:' || okHosts.indexOf(target.hostname) < 0) return send(res, 400, { error: 'host not allowed' });
     var isPost = req.method === 'POST';
     // POST only for the Anime-Skip GraphQL endpoint.
-    if (isPost && (target.hostname !== 'api.anime-skip.com' || target.pathname !== '/graphql')) return send(res, 400, { error: 'post not allowed' });
+    // POST only for the Anime-Skip GraphQL endpoint and TorBox's device sign-in.
+    var postOk = (target.hostname === 'api.anime-skip.com' && target.pathname === '/graphql') || (target.hostname === 'api.torbox.app' && target.pathname === '/v1/api/user/auth/device/token');
+    if (isPost && !postOk) return send(res, 400, { error: 'post not allowed' });
     var run = function (payload) {
       var headers = fetchHeaders(req);
       if (isPost) {

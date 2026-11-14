@@ -4,6 +4,8 @@
 import { request, getJSON } from '../lib/http.js';
 import * as store from '../lib/store.js';
 import { t } from '../lib/i18n.js';
+import * as server from './server.js';
+import { fetchUrl as phoneFetchUrl } from '../lib/phone.js';
 
 export const PROVIDERS = [
   { id: 'realdebrid', name: 'Real-Debrid', key: 'realDebridKey', site: 'real-debrid.com/apitoken' },
@@ -134,6 +136,10 @@ function premiumize(key, mag, hint) {
 
 // Turns a torrent into a direct link. hint: { fileIdx, filename, season, episode }.
 export function resolve(infoHash, sources, hint) {
+  return freshRealDebrid().then(() => resolveNow(infoHash, sources, hint));
+}
+
+function resolveNow(infoHash, sources, hint) {
   const p = active();
   if (!p) return Promise.reject(new Error('debrid off'));
   const mag = magnet(String(infoHash).toLowerCase(), sources);
@@ -153,4 +159,95 @@ export function testKey(id, key) {
     if (!u || u.status !== 'success') throw new Error(t('Chave inválida'));
     return u.customer_id ? String(u.customer_id) : 'OK';
   });
+}
+
+// ---------- Sign-in by QR (no API key to copy) ----------
+// TorBox: device flow for apps (just an app name). Real-Debrid: the public client id for open-source
+// apps; approving gives this TV its own credentials, and the access token renews itself.
+const RD_OAUTH = 'https://api.real-debrid.com/oauth/v2/';
+const RD_OPEN_CLIENT = 'X245A4XAIBGVM';
+const RD_GRANT = 'http://oauth.net/grant_type/device/1.0';
+
+export function canSignIn(id) {
+  return id === 'torbox' || id === 'realdebrid';
+}
+
+// For views/deviceLink.js: { name, start() }.
+export function signInFlow(id) {
+  const p = PROVIDERS.find((x) => x.id === id);
+  if (id === 'torbox')
+    return {
+      name: p.name,
+      start: () =>
+        server.getJSONViaProxy(TB + 'user/auth/device/start?app=' + encodeURIComponent('Stremio Kai'), { timeout: 15000 }).then((r) => {
+          const d = r && r.data;
+          if (!d || !d.device_code) throw new Error('TorBox');
+          return {
+            code: d.code,
+            url: d.friendly_verification_url || d.verification_url,
+            qrUrl: d.verification_url_complete || d.verification_url,
+            interval: d.interval,
+            expiresIn: d.expires_in,
+            poll: () =>
+              // TorBox refuses the app's origin (no CORS): straight first, then through the TV service.
+              request('POST', TB + 'user/auth/device/token', { device_code: d.device_code }, { timeout: 15000, quiet: true })
+                .catch((e) => {
+                  if (e.status) throw e;
+                  return request('POST', phoneFetchUrl(TB + 'user/auth/device/token'), { device_code: d.device_code }, { timeout: 15000, quiet: true });
+                })
+                .then(
+                (x) => {
+                  const token = x && x.data && x.data.access_token;
+                  if (!token) return 'pending';
+                  store.saveSettings({ torboxKey: token, debridProvider: store.settings().debridProvider || 'torbox' });
+                  return 'ok';
+                },
+                (e) => (e.status === 410 ? 'expired' : 'pending')
+              ),
+          };
+        }),
+    };
+  if (id === 'realdebrid')
+    return {
+      name: p.name,
+      start: () =>
+        getJSON(RD_OAUTH + 'device/code?client_id=' + RD_OPEN_CLIENT + '&new_credentials=yes', { timeout: 15000 }).then((d) => {
+          if (!d || !d.device_code) throw new Error('Real-Debrid');
+          return {
+            code: d.user_code,
+            url: d.verification_url,
+            qrUrl: d.direct_verification_url || d.verification_url,
+            interval: d.interval,
+            expiresIn: d.expires_in,
+            poll: () =>
+              getJSON(RD_OAUTH + 'device/credentials?client_id=' + RD_OPEN_CLIENT + '&code=' + encodeURIComponent(d.device_code), { timeout: 15000, quiet: true })
+                .then(
+                  (c) => (c && c.client_id && c.client_secret ? rdToken(c.client_id, c.client_secret, d.device_code).then(() => 'ok') : 'pending'),
+                  (e) => (e.status === 403 ? 'denied' : 'pending')
+                ),
+          };
+        }),
+    };
+  return null;
+}
+
+// Exchanges the device code (or the refresh token) for an access token and keeps both.
+function rdToken(clientId, clientSecret, code) {
+  return request('POST', RD_OAUTH + 'token', { client_id: clientId, client_secret: clientSecret, code: code, grant_type: RD_GRANT }, { form: true, timeout: 15000 }).then(
+    (r) => {
+      if (!r || !r.access_token) throw new Error('Real-Debrid token');
+      store.saveSettings({
+        realDebridKey: r.access_token,
+        realDebridAuth: { clientId: clientId, clientSecret: clientSecret, refresh: r.refresh_token, expiresAt: Date.now() + (r.expires_in || 3600) * 1000 },
+      });
+      return r.access_token;
+    }
+  );
+}
+
+// Before using Real-Debrid: renew the access token when it came from QR sign-in and is about to end.
+export function freshRealDebrid() {
+  const a = store.settings().realDebridAuth;
+  if (!a || !a.refresh || Date.now() < (a.expiresAt || 0) - 120000) return Promise.resolve();
+  return rdToken(a.clientId, a.clientSecret, a.refresh).catch(() => {});
 }

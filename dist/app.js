@@ -5510,7 +5510,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Fonte do app": "App font",
     "Letra dos menus e textos": "Font of the menus and texts",
     "Samsung (da TV)": "Samsung (TV font)",
-    "Montserrat (Kai)": "Montserrat (Kai)"
+    "Montserrat (Kai)": "Montserrat (Kai)",
+    "Aponte a câmera: abra a página da chave, copie, cole e envie.": "Point the camera: open the key page, copy, paste and send.",
+    "Aponte o celular para o QR e entre na sua conta": "Point your phone at the QR and sign in",
+    "Ative o Quick Connect no painel do Jellyfin": "Turn on Quick Connect in the Jellyfin dashboard",
+    "Entrar com QR (sem chave)": "Sign in with a QR (no key)",
+    "Entrar com Quick Connect": "Sign in with Quick Connect",
+    "Entrar no {name}": "Sign in to {name}",
+    "No app ou site do Jellyfin: Configurações → Quick Connect, e digite o código.": "In the Jellyfin app or site: Settings → Quick Connect, then type the code.",
+    "Ou cole a chave": "Or paste the key",
+    "Preencha o endereço do servidor primeiro": "Fill in the server address first",
+    "QR que abre direto a página da chave": "QR that opens the key page directly",
+    "Sem senha: aprove um código no Jellyfin do celular": "No password: approve a code in Jellyfin on your phone",
+    "{name} pelo celular": "{name} from your phone"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6251,7 +6263,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Fonte do app": "خط التطبيق",
     "Letra dos menus e textos": "خط القوائم والنصوص",
     "Samsung (da TV)": "سامسونج (خط التلفزيون)",
-    "Montserrat (Kai)": "Montserrat (Kai)"
+    "Montserrat (Kai)": "Montserrat (Kai)",
+    "Aponte a câmera: abra a página da chave, copie, cole e envie.": "صوّر الباركود: افتح صفحة المفتاح، انسخه، الصقه، وأرسله.",
+    "Aponte o celular para o QR e entre na sua conta": "صوّر الباركود بجوالك وسجّل دخول بحسابك",
+    "Ative o Quick Connect no painel do Jellyfin": "فعّل Quick Connect من لوحة تحكم Jellyfin",
+    "Entrar com QR (sem chave)": "الدخول بالباركود (بدون مفتاح)",
+    "Entrar com Quick Connect": "الدخول بـ Quick Connect",
+    "Entrar no {name}": "الدخول إلى {name}",
+    "No app ou site do Jellyfin: Configurações → Quick Connect, e digite o código.": "في تطبيق أو موقع Jellyfin: الإعدادات ← Quick Connect، واكتب الكود.",
+    "Ou cole a chave": "أو الصق المفتاح",
+    "Preencha o endereço do servidor primeiro": "اكتب عنوان السيرفر أول",
+    "QR que abre direto a página da chave": "باركود يفتح لك صفحة المفتاح مباشرة",
+    "Sem senha: aprove um código no Jellyfin do celular": "بدون كلمة مرور: وافق على كود من Jellyfin في جوالك",
+    "{name} pelo celular": "{name} من الجوال"
   };
 
   // src/js/lib/i18n.js
@@ -6985,7 +7009,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function set(key3, value) {
     rawSet(profileKey(activeProfile().id, key3), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -8382,6 +8406,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function resolve(infoHash, sources, hint) {
+    return freshRealDebrid().then(function () {
+      return resolveNow(infoHash, sources, hint);
+    });
+  }
+  function resolveNow(infoHash, sources, hint) {
     var p = active();
     if (!p) return Promise.reject(new Error("debrid off"));
     var mag = magnet(String(infoHash).toLowerCase(), sources);
@@ -8416,6 +8445,122 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (!u || u.status !== "success") throw new Error(t("Chave inválida"));
       return u.customer_id ? String(u.customer_id) : "OK";
     });
+  }
+  var RD_OAUTH = "https://api.real-debrid.com/oauth/v2/";
+  var RD_OPEN_CLIENT = "X245A4XAIBGVM";
+  var RD_GRANT = "http://oauth.net/grant_type/device/1.0";
+  function canSignIn(id) {
+    return id === "torbox" || id === "realdebrid";
+  }
+  function signInFlow(id) {
+    var p = PROVIDERS.find(function (x) {
+      return x.id === id;
+    });
+    if (id === "torbox") return {
+      name: p.name,
+      start: function start() {
+        return getJSONViaProxy(TB + "user/auth/device/start?app=" + encodeURIComponent("Stremio Kai"), {
+          timeout: 15e3
+        }).then(function (r) {
+          var d = r && r.data;
+          if (!d || !d.device_code) throw new Error("TorBox");
+          return {
+            code: d.code,
+            url: d.friendly_verification_url || d.verification_url,
+            qrUrl: d.verification_url_complete || d.verification_url,
+            interval: d.interval,
+            expiresIn: d.expires_in,
+            poll: function poll() {
+              return (
+                // TorBox refuses the app's origin (no CORS): straight first, then through the TV service.
+                request("POST", TB + "user/auth/device/token", {
+                  device_code: d.device_code
+                }, {
+                  timeout: 15e3,
+                  quiet: true
+                }).catch(function (e) {
+                  if (e.status) throw e;
+                  return request("POST", fetchUrl(TB + "user/auth/device/token"), {
+                    device_code: d.device_code
+                  }, {
+                    timeout: 15e3,
+                    quiet: true
+                  });
+                }).then(function (x) {
+                  var token = x && x.data && x.data.access_token;
+                  if (!token) return "pending";
+                  saveSettings({
+                    torboxKey: token,
+                    debridProvider: settings().debridProvider || "torbox"
+                  });
+                  return "ok";
+                }, function (e) {
+                  return e.status === 410 ? "expired" : "pending";
+                })
+              );
+            }
+          };
+        });
+      }
+    };
+    if (id === "realdebrid") return {
+      name: p.name,
+      start: function start() {
+        return getJSON(RD_OAUTH + "device/code?client_id=" + RD_OPEN_CLIENT + "&new_credentials=yes", {
+          timeout: 15e3
+        }).then(function (d) {
+          if (!d || !d.device_code) throw new Error("Real-Debrid");
+          return {
+            code: d.user_code,
+            url: d.verification_url,
+            qrUrl: d.direct_verification_url || d.verification_url,
+            interval: d.interval,
+            expiresIn: d.expires_in,
+            poll: function poll() {
+              return getJSON(RD_OAUTH + "device/credentials?client_id=" + RD_OPEN_CLIENT + "&code=" + encodeURIComponent(d.device_code), {
+                timeout: 15e3,
+                quiet: true
+              }).then(function (c) {
+                return c && c.client_id && c.client_secret ? rdToken(c.client_id, c.client_secret, d.device_code).then(function () {
+                  return "ok";
+                }) : "pending";
+              }, function (e) {
+                return e.status === 403 ? "denied" : "pending";
+              });
+            }
+          };
+        });
+      }
+    };
+    return null;
+  }
+  function rdToken(clientId, clientSecret, code) {
+    return request("POST", RD_OAUTH + "token", {
+      client_id: clientId,
+      client_secret: clientSecret,
+      code: code,
+      grant_type: RD_GRANT
+    }, {
+      form: true,
+      timeout: 15e3
+    }).then(function (r) {
+      if (!r || !r.access_token) throw new Error("Real-Debrid token");
+      saveSettings({
+        realDebridKey: r.access_token,
+        realDebridAuth: {
+          clientId: clientId,
+          clientSecret: clientSecret,
+          refresh: r.refresh_token,
+          expiresAt: Date.now() + (r.expires_in || 3600) * 1e3
+        }
+      });
+      return r.access_token;
+    });
+  }
+  function freshRealDebrid() {
+    var a = settings().realDebridAuth;
+    if (!a || !a.refresh || Date.now() < (a.expiresAt || 0) - 12e4) return Promise.resolve();
+    return rdToken(a.clientId, a.clientSecret, a.refresh).catch(function () {});
   }
 
   // src/js/api/server.js
@@ -9351,6 +9496,58 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       base: "",
       query: "",
       virtualStreams: streams
+    };
+  }
+  function quickConnectFlow(address) {
+    var draft = {
+      providerId: "jellyfin",
+      address: normalizeAddress(address)
+    };
+    return {
+      name: "Jellyfin",
+      hint: t("No app ou site do Jellyfin: Configurações → Quick Connect, e digite o código."),
+      start: function start() {
+        if (!draft.address) return Promise.reject(new Error(t("Endereço inválido")));
+        return call2(draft, "GET", "/QuickConnect/Enabled").then(function (on) {
+          if (on === false) throw new Error(t("Ative o Quick Connect no painel do Jellyfin"));
+          return call2(draft, "POST", "/QuickConnect/Initiate").then(function (r) {
+            if (!r || !r.Secret) throw new Error("Quick Connect");
+            return {
+              code: r.Code,
+              url: draft.address + "/web/#/quickconnect",
+              qrUrl: draft.address + "/web/#/quickconnect",
+              interval: 4,
+              expiresIn: 600,
+              poll: function poll() {
+                return call2(draft, "GET", "/QuickConnect/Connect?secret=" + encodeURIComponent(r.Secret)).then(function (st) {
+                  if (!st || !st.Authenticated) return "pending";
+                  return Promise.all([call2(draft, "GET", "/System/Info/Public").catch(function () {
+                    return null;
+                  }), call2(draft, "POST", "/Users/AuthenticateWithQuickConnect", {
+                    Secret: r.Secret
+                  })]).then(function (x) {
+                    var info2 = x[0];
+                    var auth2 = x[1];
+                    if (!auth2 || !auth2.AccessToken) return "pending";
+                    saveSettings({
+                      mediaServer: {
+                        providerId: "jellyfin",
+                        address: draft.address,
+                        token: auth2.AccessToken,
+                        userId: auth2.User.Id,
+                        user: auth2.User.Name,
+                        name: info2 && info2.ServerName || draft.address
+                      },
+                      mediaServerEnabled: true
+                    });
+                    return "ok";
+                  });
+                });
+              }
+            };
+          });
+        });
+      }
     };
   }
 
@@ -16193,7 +16390,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T02:52:57.736Z";
+  var BUILD = "2026-11-14T02:59:39.018Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -16598,6 +16795,93 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/views/deviceLink.js
+  function openDeviceLink(flow, onDone) {
+    push(DeviceLinkView(flow, onDone));
+  }
+  function DeviceLinkView(flow, onDone) {
+    var el = h("div.view");
+    var codeEl = h("div.code", {
+      text: "····"
+    });
+    var qr = h("img.qr.qr-big", {
+      alt: ""
+    });
+    var urlEl = h("p");
+    var status2 = h("p", {
+      text: t("Gerando código...")
+    });
+    el.appendChild(h("div.login", null, h("div.login-card", null, [h("div.login-col", null, [h("h1", {
+      text: t("Conectar {name}", {
+        name: flow.name
+      })
+    }), urlEl, codeEl, status2, h("div", {
+      "data-group": ""
+    }, [h("div.btn", {
+      focusable: true,
+      text: t("Cancelar"),
+      onSelect: function onSelect() {
+        return pop();
+      }
+    })])]), h("div.login-col", null, [qr])])));
+    var alive = true;
+    var timer = null;
+    flow.start().then(function (s) {
+      if (!alive) return;
+      codeEl.textContent = s.code || "";
+      urlEl.appendChild(h("b", {
+        text: flow.hint || t("Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.")
+      }));
+      urlEl.appendChild(h("br"));
+      urlEl.appendChild(document.createTextNode(t("Ou abra") + " "));
+      urlEl.appendChild(h("b", {
+        text: String(s.url || "").replace(/^https?:\/\//, "")
+      }));
+      if (s.code) urlEl.appendChild(document.createTextNode(" " + t("e digite o código:")));
+      qr.src = qrImage(s.qrUrl || s.url, 360);
+      status2.textContent = t("Aguardando confirmação...");
+      var until = Date.now() + (s.expiresIn || 600) * 1e3;
+      var _tick = function tick() {
+        if (!alive) return;
+        if (Date.now() > until) {
+          status2.textContent = t("Código expirou. Abra de novo.");
+          return;
+        }
+        s.poll().then(function (r) {
+          if (!alive) return;
+          if (r === "ok") {
+            toast(t("{name} conectado", {
+              name: flow.name
+            }), 4e3);
+            pop();
+            if (onDone) onDone();
+            return;
+          }
+          if (r === "expired") return status2.textContent = t("Código expirou. Abra de novo.");
+          if (r === "denied") return status2.textContent = t("Acesso negado no site.");
+          if (r !== "pending") status2.textContent = t("Falhou: {msg}", {
+            msg: r
+          });
+          timer = setTimeout(_tick, Math.max(3, s.interval || 5) * 1e3);
+        }).catch(function () {
+          return alive && (timer = setTimeout(_tick, Math.max(3, s.interval || 5) * 1e3));
+        });
+      };
+      timer = setTimeout(_tick, Math.max(3, s.interval || 5) * 1e3);
+    }).catch(function (e) {
+      return alive && (status2.textContent = t("Falhou: {msg}", {
+        msg: e.message
+      }));
+    });
+    return {
+      el: el,
+      destroy: function destroy() {
+        alive = false;
+        clearTimeout(timer);
+      }
+    };
+  }
+
   // src/js/lib/speedtest.js
   var TRACE = "https://cloudflare.com/cdn-cgi/trace";
   var DOWN = "https://speed.cloudflare.com/__down?bytes=";
@@ -16842,6 +17126,52 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       return box;
     }
+    function keyQr(key3, name) {
+      info().then(function (i) {
+        var url2 = setupUrl(i);
+        if (!url2) return toast(t("O serviço da TV não está rodando. Feche o app e abra de novo."), 5e3);
+        var close = h("div.btn.primary", {
+          focusable: true,
+          "data-autofocus": "",
+          text: t("Fechar"),
+          onSelect: function onSelect() {
+            return done();
+          }
+        });
+        var box = h("div.modal-box.center.qr-modal", null, [h("h3", {
+          text: name
+        }), h("img.phone-qr", {
+          src: qrImage(url2 + "&only=" + key3, 320),
+          alt: ""
+        }), h("div.modal-text", {
+          text: t("Aponte a câmera: abra a página da chave, copie, cole e envie.")
+        }), h("div.modal-actions", null, close)]);
+        var modal = h("div.modal", null, box);
+        document.getElementById("app").appendChild(modal);
+        var layer = pushLayer(modal, {
+          onBack: function onBack() {
+            return done();
+          }
+        });
+        focusFirst(modal);
+        var watch = setInterval(function () {
+          return (settings()[key3] || "").trim() && done();
+        }, 1500);
+        function done() {
+          clearInterval(watch);
+          popLayer(layer);
+          if (modal.parentNode) modal.parentNode.removeChild(modal);
+          render();
+        }
+      });
+    }
+    function phoneKeyRow(key3, name) {
+      return row("📱 " + t("{name} pelo celular", {
+        name: name
+      }), t("QR que abre direto a página da chave"), "", function () {
+        return keyQr(key3, name);
+      });
+    }
     function accountCard(p) {
       var name = p === "trakt" ? "Trakt" : "Simkl";
       var acc = account(p);
@@ -16986,6 +17316,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       });
       body.appendChild(keyInput(t("AnimeSkip Client ID"), t("Sua chave do anime-skip.com (fica só nesta TV)"), "animeSkipClientId", "Client ID"));
+      body.appendChild(phoneKeyRow("animeSkipClientId", "Anime-Skip"));
       body.appendChild(h("div.set-section", {
         text: t("Diagnóstico")
       }));
@@ -17045,12 +17376,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }));
       body.appendChild(h("div.set-section", {
-        text: t("Chaves de API")
+        text: t("Entrar com QR (sem chave)")
+      }));
+      PROVIDERS.filter(function (p) {
+        return canSignIn(p.id);
+      }).forEach(function (p) {
+        return body.appendChild(row(t("Entrar no {name}", {
+          name: p.name
+        }), t("Aponte o celular para o QR e entre na sua conta"), (s[p.key] || "").trim() ? t("Conectado") : "", function () {
+          return openDeviceLink(signInFlow(p.id), function () {
+            return render();
+          });
+        }));
+      });
+      body.appendChild(h("div.set-section", {
+        text: t("Ou cole a chave")
       }));
       PROVIDERS.forEach(function (p) {
         body.appendChild(keyInput(p.name, t("Sua chave de API em {site}", {
           site: p.site
         }), p.key, "API key"));
+        if (!canSignIn(p.id)) body.appendChild(phoneKeyRow(p.key, p.name));
         if ((s[p.key] || "").trim()) body.appendChild(row(t("Testar {name}", {
           name: p.name
         }), "", "", function () {
@@ -17298,6 +17644,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }));
       body.appendChild(draftInput(t("Endereço do servidor"), t("Ex.: 192.168.0.20:8096"), "address", "http://IP:8096"));
+      if (kind.id === "jellyfin") body.appendChild(row("⚡ " + t("Entrar com Quick Connect"), t("Sem senha: aprove um código no Jellyfin do celular"), "", function () {
+        if (!msDraft.address) return toast(t("Preencha o endereço do servidor primeiro"));
+        openDeviceLink(quickConnectFlow(msDraft.address), function () {
+          dropTab("home");
+          render();
+        });
+      }));
       body.appendChild(draftInput(t("Usuário"), "", "user", t("Usuário")));
       body.appendChild(draftInput(t("Senha"), t("Usada só para entrar; não fica salva"), "pass", "••••", "password"));
       body.appendChild(row(t("Conectar"), "", "", function () {
@@ -17828,6 +18181,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           render();
         }, toggle(s.rememberTracks !== false)));
         body.appendChild(keyInput(t("Chave SubDL"), t("Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)"), "subdlKey", "API key"));
+        body.appendChild(phoneKeyRow("subdlKey", "SubDL"));
         var subName = (SUB_LANGS.find(function (x) {
           return JSON.stringify(x.value) === JSON.stringify(s.subtitleLangs);
         }) || {
@@ -18062,8 +18416,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           })]), input]));
         };
         keyRow(t("Chave TMDB"), t("Descrições em árabe, perfis de atores, calendário de filmes, logos e elenco com fotos (grátis em themoviedb.org)"), "tmdbKey", "API key (v3)");
+        body.appendChild(phoneKeyRow("tmdbKey", "TMDB"));
         keyRow(t("Chave MDBList"), t("Notas do Rotten Tomatoes, Metacritic, Trakt e Letterboxd (grátis em mdblist.com)"), "mdblistKey", "API key");
+        body.appendChild(phoneKeyRow("mdblistKey", "MDBList"));
         keyRow(t("Chave RPDB"), t("Pôsteres com as notas desenhadas (ratingposterdb.com)"), "rpdbKey", "API key");
+        body.appendChild(phoneKeyRow("rpdbKey", "RPDB"));
         body.appendChild(row(t("Guia para os pais"), t("Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)"), "", function () {
           saveSettings({
             parentalGuide: !settings().parentalGuide

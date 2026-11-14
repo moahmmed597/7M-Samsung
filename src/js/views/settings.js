@@ -21,6 +21,7 @@ import * as tracker from '../api/tracker.js';
 import * as avvideo from '../lib/avvideo.js';
 import * as skip from '../api/skip.js';
 import { openTrackLink } from './trackLink.js';
+import { openDeviceLink } from './deviceLink.js';
 import * as debrid from '../api/debrid.js';
 import * as mediaserver from '../api/mediaserver.js';
 import * as homeRows from '../lib/homeRows.js';
@@ -187,6 +188,36 @@ export function SettingsView() {
     return box;
   }
 
+  // One service's key from the phone: a QR that opens the setup page on just that service.
+  function keyQr(key, name) {
+    phone.info().then((i) => {
+      const url = phone.setupUrl(i);
+      if (!url) return toast(t('O serviço da TV não está rodando. Feche o app e abra de novo.'), 5000);
+      const close = h('div.btn.primary', { focusable: true, 'data-autofocus': '', text: t('Fechar'), onSelect: () => done() });
+      const box = h('div.modal-box.center.qr-modal', null, [
+        h('h3', { text: name }),
+        h('img.phone-qr', { src: phone.qrImage(url + '&only=' + key, 320), alt: '' }),
+        h('div.modal-text', { text: t('Aponte a câmera: abra a página da chave, copie, cole e envie.') }),
+        h('div.modal-actions', null, close),
+      ]);
+      const modal = h('div.modal', null, box);
+      document.getElementById('app').appendChild(modal);
+      const layer = nav.pushLayer(modal, { onBack: () => done() });
+      nav.focusFirst(modal);
+      // Closes by itself once the key arrives.
+      const watch = setInterval(() => (store.settings()[key] || '').trim() && done(), 1500);
+      function done() {
+        clearInterval(watch);
+        nav.popLayer(layer);
+        if (modal.parentNode) modal.parentNode.removeChild(modal);
+        render();
+      }
+    });
+  }
+  function phoneKeyRow(key, name) {
+    return row('📱 ' + t('{name} pelo celular', { name: name }), t('QR que abre direto a página da chave'), '', () => keyQr(key, name));
+  }
+
   function accountCard(p) {
     const name = p === 'trakt' ? 'Trakt' : 'Simkl';
     const acc = tracker.account(p);
@@ -289,6 +320,7 @@ export function SettingsView() {
     body.appendChild(h('div.set-section', { text: t('Animes') }));
     flip(t('Anime Skip'), t('Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes'), s.animeSkip !== false, (v) => store.saveSettings({ animeSkip: v }));
     body.appendChild(keyInput(t('AnimeSkip Client ID'), t('Sua chave do anime-skip.com (fica só nesta TV)'), 'animeSkipClientId', 'Client ID'));
+    body.appendChild(phoneKeyRow('animeSkipClientId', 'Anime-Skip'));
     body.appendChild(h('div.set-section', { text: t('Diagnóstico') }));
     const testRow = row(t('Testar o pulo de abertura'), t('Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou'), '', () => {
       const v = testRow.querySelector('.value');
@@ -329,9 +361,18 @@ export function SettingsView() {
         })
       )
     );
-    body.appendChild(h('div.set-section', { text: t('Chaves de API') }));
+    body.appendChild(h('div.set-section', { text: t('Entrar com QR (sem chave)') }));
+    debrid.PROVIDERS.filter((p) => debrid.canSignIn(p.id)).forEach((p) =>
+      body.appendChild(
+        row(t('Entrar no {name}', { name: p.name }), t('Aponte o celular para o QR e entre na sua conta'), (s[p.key] || '').trim() ? t('Conectado') : '', () =>
+          openDeviceLink(debrid.signInFlow(p.id), () => render())
+        )
+      )
+    );
+    body.appendChild(h('div.set-section', { text: t('Ou cole a chave') }));
     debrid.PROVIDERS.forEach((p) => {
       body.appendChild(keyInput(p.name, t('Sua chave de API em {site}', { site: p.site }), p.key, 'API key'));
+      if (!debrid.canSignIn(p.id)) body.appendChild(phoneKeyRow(p.key, p.name));
       if ((s[p.key] || '').trim())
         body.appendChild(
           row(t('Testar {name}', { name: p.name }), '', '', () => {
@@ -505,6 +546,16 @@ export function SettingsView() {
       )
     );
     body.appendChild(draftInput(t('Endereço do servidor'), t('Ex.: 192.168.0.20:8096'), 'address', 'http://IP:8096'));
+    if (kind.id === 'jellyfin')
+      body.appendChild(
+        row('⚡ ' + t('Entrar com Quick Connect'), t('Sem senha: aprove um código no Jellyfin do celular'), '', () => {
+          if (!msDraft.address) return toast(t('Preencha o endereço do servidor primeiro'));
+          openDeviceLink(mediaserver.quickConnectFlow(msDraft.address), () => {
+            router.dropTab('home');
+            render();
+          });
+        })
+      );
     body.appendChild(draftInput(t('Usuário'), '', 'user', t('Usuário')));
     body.appendChild(draftInput(t('Senha'), t('Usada só para entrar; não fica salva'), 'pass', '••••', 'password'));
     body.appendChild(
@@ -910,6 +961,7 @@ export function SettingsView() {
         }, toggle(s.rememberTracks !== false))
       );
       body.appendChild(keyInput(t('Chave SubDL'), t('Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)'), 'subdlKey', 'API key'));
+      body.appendChild(phoneKeyRow('subdlKey', 'SubDL'));
       const subName = (SUB_LANGS.find((x) => JSON.stringify(x.value) === JSON.stringify(s.subtitleLangs)) || { label: (s.subtitleLangs || []).join(', ') }).label;
       body.appendChild(
         row(t('Idioma da legenda'), t('Escolhida sozinha ao abrir o vídeo'), t(subName), () =>
@@ -1101,8 +1153,11 @@ export function SettingsView() {
         );
       };
       keyRow(t('Chave TMDB'), t('Descrições em árabe, perfis de atores, calendário de filmes, logos e elenco com fotos (grátis em themoviedb.org)'), 'tmdbKey', 'API key (v3)');
+      body.appendChild(phoneKeyRow('tmdbKey', 'TMDB'));
       keyRow(t('Chave MDBList'), t('Notas do Rotten Tomatoes, Metacritic, Trakt e Letterboxd (grátis em mdblist.com)'), 'mdblistKey', 'API key');
+      body.appendChild(phoneKeyRow('mdblistKey', 'MDBList'));
       keyRow(t('Chave RPDB'), t('Pôsteres com as notas desenhadas (ratingposterdb.com)'), 'rpdbKey', 'API key');
+      body.appendChild(phoneKeyRow('rpdbKey', 'RPDB'));
       body.appendChild(
         row(t('Guia para os pais'), t('Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)'), '', () => {
           store.saveSettings({ parentalGuide: !store.settings().parentalGuide });

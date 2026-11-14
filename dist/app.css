@@ -505,3 +505,5 @@ body.bg-glow .view.player, body.bg-glow .view.trailer { background: #000; }
 
 /* App font: Samsung's own TV font (default) or Montserrat (Kai). Names cover Tizen versions. */
 body.font-samsung, [dir="rtl"] body.font-samsung { font-family: 'SamsungOneUI', 'SamsungOne', 'Samsung One', 'SamsungOneArabic', 'SamsungOneUIArabic', 'TizenSans', 'Tizen Sans', 'TizenSansArabic', 'Breeze Sans', sans-serif; }
+.qr-modal .phone-qr { display: block; margin: 10px auto 14px; }
+.qr-modal .modal-actions { -webkit-justify-content: center; justify-content: center; }

@@ -151,3 +151,53 @@ export function virtualAddon() {
     virtualStreams: streams,
   };
 }
+
+// Jellyfin Quick Connect: the TV shows a code; the user approves it in Jellyfin on the phone
+// (Settings → Quick Connect), no password typed. For views/deviceLink.js.
+export function quickConnectFlow(address) {
+  const draft = { providerId: 'jellyfin', address: normalizeAddress(address) };
+  return {
+    name: 'Jellyfin',
+    hint: t('No app ou site do Jellyfin: Configurações → Quick Connect, e digite o código.'),
+    start: () => {
+      if (!draft.address) return Promise.reject(new Error(t('Endereço inválido')));
+      return call(draft, 'GET', '/QuickConnect/Enabled').then((on) => {
+        if (on === false) throw new Error(t('Ative o Quick Connect no painel do Jellyfin'));
+        return call(draft, 'POST', '/QuickConnect/Initiate').then((r) => {
+          if (!r || !r.Secret) throw new Error('Quick Connect');
+          return {
+            code: r.Code,
+            url: draft.address + '/web/#/quickconnect',
+            qrUrl: draft.address + '/web/#/quickconnect',
+            interval: 4,
+            expiresIn: 600,
+            poll: () =>
+              call(draft, 'GET', '/QuickConnect/Connect?secret=' + encodeURIComponent(r.Secret)).then((st) => {
+                if (!st || !st.Authenticated) return 'pending';
+                return Promise.all([
+                  call(draft, 'GET', '/System/Info/Public').catch(() => null),
+                  call(draft, 'POST', '/Users/AuthenticateWithQuickConnect', { Secret: r.Secret }),
+                ]).then((x) => {
+                  const info = x[0];
+                  const auth = x[1];
+                  if (!auth || !auth.AccessToken) return 'pending';
+                  store.saveSettings({
+                    mediaServer: {
+                      providerId: 'jellyfin',
+                      address: draft.address,
+                      token: auth.AccessToken,
+                      userId: auth.User.Id,
+                      user: auth.User.Name,
+                      name: (info && info.ServerName) || draft.address,
+                    },
+                    mediaServerEnabled: true,
+                  });
+                  return 'ok';
+                });
+              }),
+          };
+        });
+      });
+    },
+  };
+}

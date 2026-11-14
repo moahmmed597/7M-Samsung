@@ -72,6 +72,36 @@
 <script>
 (function () {
   var pin = (location.hash.match(/pin=(\d{4})/) || [])[1] || '';
+  // Opened from one service's QR on the TV: show only that service, with a button to its key page.
+  var only = (location.hash.match(/only=(\w+)/) || [])[1] || '';
+  if (only) {
+    var field = document.querySelector('input[data-k="' + only + '"]');
+    if (field) {
+      var secs = document.querySelectorAll('section');
+      for (var q = 0; q < secs.length; q++) if (secs[q].id !== 'pinbox' && !secs[q].contains(field)) secs[q].style.display = 'none';
+      var mates = field.parentNode.querySelectorAll('input[data-k]');
+      for (var w = 0; w < mates.length; w++) {
+        if (mates[w] === field) continue;
+        mates[w].style.display = 'none';
+        if (mates[w].previousElementSibling) mates[w].previousElementSibling.style.display = 'none';
+      }
+      var label = field.previousElementSibling;
+      var link = label && label.querySelector('a');
+      var help = field.parentNode.querySelector('.help a');
+      var target = (link || help);
+      if (target) {
+        var go = document.createElement('a');
+        go.href = target.href;
+        go.target = '_blank';
+        go.rel = 'noopener';
+        go.textContent = '١) افتح صفحة المفتاح وانسخه';
+        go.style.cssText = 'display:block;text-align:center;padding:14px;border-radius:12px;background:#2b2440;color:#fff;font-weight:700;margin:6px 0 12px;text-decoration:none';
+        field.parentNode.insertBefore(go, field.parentNode.querySelector('h2').nextSibling);
+      }
+      field.placeholder = '٢) الصق المفتاح هنا';
+      document.getElementById('save').textContent = '٣) إرسال للتلفزيون';
+    }
+  }
   var pinBox = document.getElementById('pinbox');
   var pinInput = document.getElementById('pin');
   if (!pin) pinBox.style.display = 'block';
