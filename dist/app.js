@@ -16341,11 +16341,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     SUMMER: "Summer",
     FALL: "Fall"
   };
-  var SEASON_LOCAL_ART = {
-    WINTER: "seasons/winter.jpg",
-    SPRING: "seasons/spring.jpg",
-    SUMMER: "seasons/summer.jpg",
-    FALL: "seasons/fall.jpg"
+  var SEASON_BASE = "https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/src/static/seasons/";
+  var SEASON_ART_URLS = {
+    WINTER: "https://wsrv.nl/?url=" + encodeURIComponent(SEASON_BASE + "winter.jpg") + "&w=300&h=169&fit=cover&output=jpg&q=80",
+    SPRING: "https://wsrv.nl/?url=" + encodeURIComponent(SEASON_BASE + "spring.jpg") + "&w=300&h=169&fit=cover&output=jpg&q=80",
+    SUMMER: "https://wsrv.nl/?url=" + encodeURIComponent(SEASON_BASE + "summer.jpg") + "&w=300&h=169&fit=cover&output=jpg&q=80",
+    FALL: "https://wsrv.nl/?url=" + encodeURIComponent(SEASON_BASE + "fall.jpg") + "&w=300&h=169&fit=cover&output=jpg&q=80"
+  };
+  var SEASON_FALLBACK_URLS = {
+    WINTER: "https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/winter.jpg",
+    SPRING: "https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/spring.jpg",
+    SUMMER: "https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/summer.jpg",
+    FALL: "https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/fall.jpg"
   };
   function nextSeason(s) {
     var i = SEASONS.indexOf(s.season);
@@ -16546,7 +16553,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return String(x).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   }
   function artUrl(file) {
-    return file ? "https://wsrv.nl/?url=" + encodeURIComponent(ART + file + ".jpg") + "&w=320&h=180&fit=cover&output=jpg&q=80" : null;
+    if (!file) return null;
+    var align = /^studio-/.test(file) ? "center" : /^genre-/.test(file) ? "top" : "center";
+    return "https://wsrv.nl/?url=" + encodeURIComponent(ART + file + ".jpg") + "&w=300&h=169&fit=cover&a=" + align + "&output=jpg&q=80";
   }
   function tileRow(parent, title, tiles, cls) {
     var row = h("div.row", {
@@ -16559,9 +16568,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "data-scroll-x": "",
       "data-group": ""
     }, tiles.map(function (x, i) {
-      var wrap = h("div.poster-wrap", null, h("div.tile-label", {
+      var wrap = h("div.poster-wrap");
+      var labelEl = h("div.tile-label", {
         text: x.label
-      }));
+      });
       var url2 = x.artUrl || artUrl(x.art);
       if (url2) {
         var im = h("img.tile-art", {
@@ -16572,18 +16582,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return wrap.classList.add(/^landscape-/.test(x.art || "") ? "has-art" : "has-art-label");
         };
         im.onerror = function () {
-          if (x.fallbackUrl && im.getAttribute("src") !== x.fallbackUrl) {
-            im.setAttribute("src", x.fallbackUrl);
+          if (x.fallbackUrl && im.src !== x.fallbackUrl) {
+            im.src = x.fallbackUrl;
           } else if (im.parentNode) {
             im.parentNode.removeChild(im);
           }
         };
         wrap.appendChild(im);
       }
+      wrap.appendChild(labelEl);
       var seasonCls = x.seasonKey ? " season-" + String(x.seasonKey).toLowerCase() : "";
       return h("div.card.anime-tile", {
         focusable: true,
-        cls: cls + seasonCls + " hue-" + i % 6,
+        cls: (cls ? cls + " " : "") + (seasonCls ? seasonCls + " " : "") + "hue-" + i % 6,
         onSelect: x.open
       }, [wrap, h("div.name", {
         text: ""
@@ -16716,8 +16727,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return {
         label: t(SEASON_LABEL[x] === "Winter" ? "Inverno" : SEASON_LABEL[x] === "Spring" ? "Primavera" : SEASON_LABEL[x] === "Summer" ? "Verão" : "Outono") + " " + s.year,
         seasonKey: x,
-        artUrl: SEASON_LOCAL_ART[x],
-        fallbackUrl: "https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/src/static/seasons/" + x.toLowerCase() + ".jpg",
+        artUrl: SEASON_ART_URLS[x],
+        fallbackUrl: SEASON_FALLBACK_URLS[x],
         src: listSource("mal.seasons", seasonName(one), seasonArgs(one))
       };
     }), "seasonal");
@@ -18493,7 +18504,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T18:22:42.352Z";
+  var BUILD = "2026-11-14T18:41:52.701Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

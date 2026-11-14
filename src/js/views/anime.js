@@ -24,11 +24,18 @@ function seasonNow() {
 // installed (MAL data: { aio: catalog, g: genre option }), else from AniList ({ ani: filter }).
 const SEASONS = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
 const SEASON_LABEL = { WINTER: 'Winter', SPRING: 'Spring', SUMMER: 'Summer', FALL: 'Fall' };
-const SEASON_LOCAL_ART = {
-  WINTER: 'seasons/winter.jpg',
-  SPRING: 'seasons/spring.jpg',
-  SUMMER: 'seasons/summer.jpg',
-  FALL: 'seasons/fall.jpg',
+const SEASON_BASE = 'https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/src/static/seasons/';
+const SEASON_ART_URLS = {
+  WINTER: 'https://wsrv.nl/?url=' + encodeURIComponent(SEASON_BASE + 'winter.jpg') + '&w=300&h=169&fit=cover&output=jpg&q=80',
+  SPRING: 'https://wsrv.nl/?url=' + encodeURIComponent(SEASON_BASE + 'spring.jpg') + '&w=300&h=169&fit=cover&output=jpg&q=80',
+  SUMMER: 'https://wsrv.nl/?url=' + encodeURIComponent(SEASON_BASE + 'summer.jpg') + '&w=300&h=169&fit=cover&output=jpg&q=80',
+  FALL: 'https://wsrv.nl/?url=' + encodeURIComponent(SEASON_BASE + 'fall.jpg') + '&w=300&h=169&fit=cover&output=jpg&q=80',
+};
+const SEASON_FALLBACK_URLS = {
+  WINTER: 'https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/winter.jpg',
+  SPRING: 'https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/spring.jpg',
+  SUMMER: 'https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/summer.jpg',
+  FALL: 'https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/fall.jpg',
 };
 function nextSeason(s) {
   const i = SEASONS.indexOf(s.season);
@@ -190,7 +197,9 @@ function slug(x) {
   return String(x).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 function artUrl(file) {
-  return file ? 'https://wsrv.nl/?url=' + encodeURIComponent(ART + file + '.jpg') + '&w=320&h=180&fit=cover&output=jpg&q=80' : null;
+  if (!file) return null;
+  const align = /^studio-/.test(file) ? 'center' : /^genre-/.test(file) ? 'top' : 'center';
+  return 'https://wsrv.nl/?url=' + encodeURIComponent(ART + file + '.jpg') + '&w=300&h=169&fit=cover&a=' + align + '&output=jpg&q=80';
 }
 
 function tileRow(parent, title, tiles, cls) {
@@ -201,7 +210,8 @@ function tileRow(parent, title, tiles, cls) {
       'div.row-track',
       { 'data-scroll-x': '', 'data-group': '' },
       tiles.map((x, i) => {
-        const wrap = h('div.poster-wrap', null, h('div.tile-label', { text: x.label }));
+        const wrap = h('div.poster-wrap');
+        const labelEl = h('div.tile-label', { text: x.label });
         const url = x.artUrl || artUrl(x.art);
         if (url) {
           const im = h('img.tile-art', { alt: '' });
@@ -209,16 +219,17 @@ function tileRow(parent, title, tiles, cls) {
           // Discover and Decades art already has its title drawn in; the rest get the name on top.
           im.onload = () => wrap.classList.add(/^landscape-/.test(x.art || '') ? 'has-art' : 'has-art-label');
           im.onerror = () => {
-            if (x.fallbackUrl && im.getAttribute('src') !== x.fallbackUrl) {
-              im.setAttribute('src', x.fallbackUrl);
+            if (x.fallbackUrl && im.src !== x.fallbackUrl) {
+              im.src = x.fallbackUrl;
             } else if (im.parentNode) {
               im.parentNode.removeChild(im);
             }
           };
           wrap.appendChild(im);
         }
+        wrap.appendChild(labelEl);
         const seasonCls = x.seasonKey ? ' season-' + String(x.seasonKey).toLowerCase() : '';
-        return h('div.card.anime-tile', { focusable: true, cls: cls + seasonCls + ' hue-' + (i % 6), onSelect: x.open }, [wrap, h('div.name', { text: '' })]);
+        return h('div.card.anime-tile', { focusable: true, cls: (cls ? cls + ' ' : '') + (seasonCls ? seasonCls + ' ' : '') + 'hue-' + (i % 6), onSelect: x.open }, [wrap, h('div.name', { text: '' })]);
       })
     )
   );
@@ -285,8 +296,8 @@ export function AnimeView() {
     return {
       label: t(SEASON_LABEL[x] === 'Winter' ? 'Inverno' : SEASON_LABEL[x] === 'Spring' ? 'Primavera' : SEASON_LABEL[x] === 'Summer' ? 'Verão' : 'Outono') + ' ' + s.year,
       seasonKey: x,
-      artUrl: SEASON_LOCAL_ART[x],
-      fallbackUrl: 'https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/src/static/seasons/' + x.toLowerCase() + '.jpg',
+      artUrl: SEASON_ART_URLS[x],
+      fallbackUrl: SEASON_FALLBACK_URLS[x],
       src: listSource('mal.seasons', seasonName(one), seasonArgs(one)),
     };
   }), 'seasonal');
