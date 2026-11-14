@@ -12,6 +12,19 @@ export const THEMES = [
   { id: 'cyan', label: 'Ciano', main: '#1595b8', light: '#3ec0e0', pale: '#a9e5f4' },
   { id: 'indigo', label: 'Índigo', main: '#4652d6', light: '#6f7af0', pale: '#c3c8fa' },
   { id: 'silver', label: 'Prata', main: '#6f7a8c', light: '#9aa5b8', pale: '#d5dbe6' },
+  { id: 'crimson', label: 'Carmim', main: '#e6194b', light: '#f25278', pale: '#f9a8b8' },
+  { id: 'emerald', label: 'Esmeralda', main: '#059669', light: '#10b981', pale: '#6ee7b7' },
+  { id: 'amber', label: 'Âmbar', main: '#d97706', light: '#f59e0b', pale: '#fcd34d' },
+  { id: 'violet', label: 'Violeta real', main: '#6d28d9', light: '#8b5cf6', pale: '#c4b5fd' },
+  { id: 'fuchsia', label: 'Fúcsia neon', main: '#c026d3', light: '#d946ef', pale: '#f0abfc' },
+  { id: 'rose', label: 'Rosa rubi', main: '#e11d48', light: '#f43f5e', pale: '#fda4af' },
+  { id: 'sky', label: 'Azul céu', main: '#0284c7', light: '#0ea5e9', pale: '#7dd3fc' },
+  { id: 'lime', label: 'Lima neon', main: '#65a30d', light: '#84cc16', pale: '#bef264' },
+  { id: 'slate', label: 'Ardósia', main: '#475569', light: '#64748b', pale: '#94a3b8' },
+  { id: 'netflix', label: 'Vermelho Netflix', main: '#e50914', light: '#ff3b47', pale: '#ff999f' },
+  { id: 'samsung', label: 'Azul Samsung', main: '#1428a0', light: '#2b50d6', pale: '#8ea7ff' },
+  { id: 'cyberpunk', label: 'Cyberpunk neon', main: '#00c8d7', light: '#00f0ff', pale: '#a5faff' },
+  { id: 'sunset', label: 'Pôr do sol', main: '#ea580c', light: '#f97316', pale: '#fdba74' },
 ];
 
 // Shapes and sizes (Settings → Appearance), applied as classes on <body>.

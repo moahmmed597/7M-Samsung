@@ -29,13 +29,13 @@ const LANG_NAMES = {
   por: 'Português', pob: 'Português (BR)', pt: 'Português', 'pt-br': 'Português (BR)', eng: 'Inglês', en: 'Inglês',
   spa: 'Espanhol', es: 'Espanhol', jpn: 'Japonês', ja: 'Japonês', fre: 'Francês', fra: 'Francês', fr: 'Francês',
   ger: 'Alemão', deu: 'Alemão', de: 'Alemão', ita: 'Italiano', it: 'Italiano', kor: 'Coreano', ko: 'Coreano',
-  chi: 'Chinês', zho: 'Chinês', rus: 'Russo', ara: 'Árabe', hin: 'Hindi', und: 'Indefinido',
+  chi: 'Chinês', zho: 'Chinês', rus: 'Russo', ru: 'Russo', ara: 'Árabe', ar: 'Árabe', arabic: 'Árabe', hin: 'Hindi', und: 'Indefinido',
 };
 
 // Any language label ("en", "eng", "English", "en-US") → a 2-letter code, so preferences match
 // whatever the TV or the add-on reports.
 const LANG2 = {
-  eng: 'en', english: 'en', ara: 'ar', arabic: 'ar', rus: 'ru', russian: 'ru', jpn: 'ja', japanese: 'ja', spa: 'es', spanish: 'es',
+  eng: 'en', english: 'en', ara: 'ar', arabic: 'ar', ar: 'ar', rus: 'ru', russian: 'ru', jpn: 'ja', japanese: 'ja', spa: 'es', spanish: 'es',
   fre: 'fr', fra: 'fr', french: 'fr', ger: 'de', deu: 'de', german: 'de', ita: 'it', italian: 'it', por: 'pt', pob: 'pt', portuguese: 'pt',
   tur: 'tr', turkish: 'tr', hin: 'hi', hindi: 'hi', kor: 'ko', korean: 'ko', chi: 'zh', zho: 'zh', chinese: 'zh', per: 'fa', fas: 'fa', persian: 'fa',
   urd: 'ur', urdu: 'ur', heb: 'he', hebrew: 'he', ind: 'id', indonesian: 'id', may: 'ms', msa: 'ms', malay: 'ms', tha: 'th', thai: 'th',
@@ -46,8 +46,26 @@ export function lang2(x) {
   return LANG2[v] || v;
 }
 
+function detectLang(code, label) {
+  const c = String(code || '').toLowerCase().trim();
+  const l = String(label || '').toLowerCase().trim();
+  if (c && c !== 'und' && c !== 'undefined' && c !== 'null' && c !== 'unknown') {
+    return c;
+  }
+  if (/arabic|عربي|العربية|\bara\b|\bar\b/i.test(l)) return 'ara';
+  if (/english|ingl[eê]s|\beng\b|\ben\b/i.test(l)) return 'eng';
+  if (/japanese|japon[eê]s|ياباني|\bjpn\b|\bja\b/i.test(l)) return 'jpn';
+  if (/french|franc[eê]s|français|\bfra\b|\bfre\b|\bfr\b/i.test(l)) return 'fre';
+  if (/spanish|espanhol|español|\bspa\b|\bes\b/i.test(l)) return 'spa';
+  if (/portuguese|portugu[eê]s|\bpor\b|\bpob\b|\bpt\b/i.test(l)) return 'por';
+  if (/german|alem[aã]o|deutsch|\bger\b|\bdeu\b|\bde\b/i.test(l)) return 'ger';
+  if (/italian|italiano|\bita\b|\bit\b/i.test(l)) return 'ita';
+  if (/russian|russo|русский|\brus\b|\bru\b/i.test(l)) return 'rus';
+  return c || 'und';
+}
+
 function langName(code) {
-  if (!code) return t('Desconhecido');
+  if (!code || code === 'und') return t('Desconhecido');
   const name = LANG_NAMES[String(code).toLowerCase()];
   return name ? t(name) : code;
 }
@@ -272,13 +290,30 @@ function PlayerView(opts) {
         if (idx >= 0 && idx !== nowIdx) selectEmbeddedAudio(idx, true);
       }
     }
-    if (autoDone.sub || !(settings.subtitlesAuto || mem.sub) || !prefSubs.length || !addonSubs) return;
-    for (let p = 0; p < prefSubs.length; p++) {
-      const s = addonSubs.find((x) => lang2(x.lang) === lang2(prefSubs[p]));
-      if (s) {
-        autoDone.sub = true;
-        selectAddonSub(s, true);
-        return;
+    if (autoDone.sub || !(settings.subtitlesAuto || mem.sub) || !prefSubs.length) return;
+    if (addonSubs) {
+      for (let p = 0; p < prefSubs.length; p++) {
+        const s = addonSubs.find((x) => lang2(x.lang) === lang2(prefSubs[p]));
+        if (s) {
+          autoDone.sub = true;
+          selectAddonSub(s, true);
+          return;
+        }
+      }
+    }
+    if (videoEl.isAVPlay) {
+      const avText = videoEl.textTrackList();
+      for (let p = 0; p < prefSubs.length; p++) {
+        const target = lang2(prefSubs[p]);
+        const idx = avText.findIndex((tr) => {
+          const l = detectLang(tr.language, tr.label);
+          return lang2(l) === target;
+        });
+        if (idx >= 0) {
+          autoDone.sub = true;
+          selectAvText(idx);
+          return;
+        }
       }
     }
   }
@@ -1044,11 +1079,29 @@ function PlayerView(opts) {
       .catch((e) => toast(t('Falha na legenda embutida: {msg}', { msg: e.message })));
   }
 
+  function nthIndex(str, pat, n) {
+    let i = -1;
+    while (n-- > 0 && (i = str.indexOf(pat, i + 1)) !== -1) {}
+    return i;
+  }
+
   // Cleans what the Samsung player gives for ASS/SSA: tags, line breaks, or a whole "Dialogue:" line.
   function cleanAvText(raw) {
-    let x = String(raw || '');
-    const d = /^Dialogue:\s*(?:[^,]*,){9}([\s\S]*)$/.exec(x);
-    if (d) x = d[1];
+    let x = String(raw || '').trim();
+    if (!x) return '';
+    if (/^Dialogue:\s*/i.test(x)) {
+      x = x.replace(/^Dialogue:\s*/i, '');
+      const idx9 = nthIndex(x, ',', 9);
+      if (idx9 >= 0) x = x.slice(idx9 + 1);
+      else {
+        const idx8 = nthIndex(x, ',', 8);
+        if (idx8 >= 0) x = x.slice(idx8 + 1);
+      }
+    } else if (/^\d+,\d*,/i.test(x)) {
+      // Raw Matroska ASS packet: ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+      const idx8 = nthIndex(x, ',', 8);
+      if (idx8 >= 0) x = x.slice(idx8 + 1);
+    }
     return x
       .replace(/\{\\[^}]*\}/g, '')
       .replace(/\\[Nn]/g, '\n')
@@ -1067,6 +1120,7 @@ function PlayerView(opts) {
       if (!text || currentSub.kind !== 'avtext') return;
       const now = videoEl.currentTime || 0;
       renderer.add({ start: now, end: now + Math.max(1.5, (s.duration || 3000) / 1000), text: subs.sanitize(text) });
+      renderer.update(now);
     });
     if (!videoEl.selectText(index)) toast(t('Não foi possível ligar esta legenda.'));
   }
@@ -1158,23 +1212,29 @@ function PlayerView(opts) {
     const avText = videoEl.isAVPlay ? videoEl.textTrackList() : [];
     avText.forEach((tr, i) => {
       const info = embedded && embedded.subs.length === avText.length ? embedded.subs[i] : null;
-      if (info && /PGS|VOBSUB|DVD/i.test(info.codec || '')) return; // picture subtitles can't be drawn as text
+      const codec = (info && info.codec) || tr.codec || '';
+      if (/PGS|VOBSUB|DVD/i.test(codec)) return; // picture subtitles can't be drawn as text
+      const rawLang = (info && info.lang) || tr.language || '';
+      const rawLabel = (info && info.label) || tr.label || '';
+      const detected = detectLang(rawLang, rawLabel);
       opts2.push({
-        label: langName((info && info.lang) || tr.language) + (info && info.label ? ' · ' + info.label : ''),
-        sub: t('Embutida no arquivo') + (info && info.codec ? ' · ' + info.codec : ''),
+        label: langName(detected) + (rawLabel ? ' · ' + rawLabel : ''),
+        sub: t('Embutida no arquivo') + (codec ? ' · ' + codec : ''),
         value: { kind: 'avtext', index: i },
         checked: currentSub.kind === 'avtext' && currentSub.index === i,
       });
     });
     if (!avText.length && embedded && embedded.subs.length) {
-      embedded.subs.forEach((tr, i) =>
-        /PGS|VOBSUB|DVD/i.test(tr.codec || '') ? null : opts2.push({
-          label: langName(tr.lang) + (tr.label ? ' · ' + tr.label : ''),
+      embedded.subs.forEach((tr, i) => {
+        if (/PGS|VOBSUB|DVD/i.test(tr.codec || '')) return;
+        const detected = detectLang(tr.lang, tr.label);
+        opts2.push({
+          label: langName(detected) + (tr.label ? ' · ' + tr.label : ''),
           sub: t('Embutida no arquivo') + (tr.codec ? ' · ' + tr.codec : ''),
           value: { kind: 'embedded', index: i },
           checked: currentSub.kind === 'embedded' && currentSub.index === i,
-        })
-      );
+        });
+      });
     }
     const pref = (settings.subtitleLangs || []).map((x) => x.toLowerCase());
     const sorted = (addonSubs || []).slice().sort((a, b) => {

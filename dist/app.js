@@ -5596,7 +5596,32 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível ligar esta legenda.": "Could not turn this subtitle on.",
     "Marvel Studios": "Marvel Studios",
     "Sagas em andamento": "Sagas in progress",
-    "Clique para continuar a maratona": "Click to continue the saga"
+    "Clique para continuar a maratona": "Click to continue the saga",
+    "Carmim": "Crimson",
+    "Esmeralda": "Emerald",
+    "Âmbar": "Amber",
+    "Violeta real": "Royal Violet",
+    "Fúcsia neon": "Neon Fuchsia",
+    "Rosa rubi": "Ruby Rose",
+    "Azul céu": "Sky Blue",
+    "Lima neon": "Neon Lime",
+    "Ardósia": "Charcoal Slate",
+    "Vermelho Netflix": "Netflix Red",
+    "Azul Samsung": "Samsung Blue",
+    "Cyberpunk neon": "Cyberpunk",
+    "Pôr do sol": "Sunset Flame",
+    "Ucraniano": "Ukrainian",
+    "Polonês": "Polish",
+    "Holandês": "Dutch",
+    "Grego": "Greek",
+    "Sueco": "Swedish",
+    "Vietnamita": "Vietnamese",
+    "Tailandês": "Thai",
+    "Hebraico": "Hebrew",
+    "Romeno": "Romanian",
+    "Húngaro": "Hungarian",
+    "Tcheco": "Czech",
+    "Filipino": "Filipino"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6423,7 +6448,32 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível ligar esta legenda.": "ما قدرت أشغّل هالترجمة.",
     "Marvel Studios": "مارفل الرسمية (Marvel Studios)",
     "Sagas em andamento": "سلاسل قيد المتابعة",
-    "Clique para continuar a maratona": "اضغط لمتابعة السلسلة"
+    "Clique para continuar a maratona": "اضغط لمتابعة السلسلة",
+    "Carmim": "قرمزي دم الغزال (Crimson)",
+    "Esmeralda": "زمردي فاخر (Emerald)",
+    "Âmbar": "كهرماني (Amber)",
+    "Violeta real": "بنفسجي ملكي (Royal Violet)",
+    "Fúcsia neon": "فوشيا نيون (Neon Fuchsia)",
+    "Rosa rubi": "وردي ياقوتي (Ruby Rose)",
+    "Azul céu": "أزرق سماوي ناصع (Sky Blue)",
+    "Lima neon": "ليموني مضيء (Neon Lime)",
+    "Ardósia": "فحمي داكن (Charcoal Slate)",
+    "Vermelho Netflix": "أحمر نتفليكس (Netflix Red)",
+    "Azul Samsung": "أزرق سامسونج (Samsung Blue)",
+    "Cyberpunk neon": "نيون سايبربانك (Cyberpunk)",
+    "Pôr do sol": "شروق وغروب (Sunset Flame)",
+    "Ucraniano": "الأوكرانية",
+    "Polonês": "البولندية",
+    "Holandês": "الهولندية",
+    "Grego": "اليونانية",
+    "Sueco": "السويدية",
+    "Vietnamita": "الفيتنامية",
+    "Tailandês": "التايلاندية",
+    "Hebraico": "العبرية",
+    "Romeno": "الرومانية",
+    "Húngaro": "المجرية",
+    "Tcheco": "التشيكية",
+    "Filipino": "الفلبينية"
   };
 
   // src/js/lib/i18n.js
@@ -10188,8 +10238,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       // One cue at a time (embedded subtitles delivered live by the Samsung player).
       add: function add(c) {
+        if (!c || !c.text) return;
         cues.push(c);
         if (cues.length > 300) cues.splice(0, 100);
+        cues.sort(function (a, b) {
+          return a.start - b.start;
+        });
         idx = 0;
       },
       active: function active() {
@@ -10878,9 +10932,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         } catch (e) {}
         out.push({
           index: all2[i].index,
-          language: String(extra.language || extra.track_lang || "").trim(),
+          language: String(extra.language || extra.track_lang || all2[i].language || "").trim(),
+          label: String(extra.track_name || extra.track_title || extra.title || extra.name || all2[i].track_name || all2[i].name || "").trim(),
           channels: extra.channels ? Number(extra.channels) : 0,
-          codec: extra.fourCC || ""
+          codec: String(extra.fourCC || extra.codec || all2[i].codec || "").trim()
         });
       }
       return out;
@@ -10910,7 +10965,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function applyText(avIndex) {
       try {
-        AV.setSilentSubtitle(true);
+        try {
+          AV.setSilentSubtitle(true);
+        } catch (err) {
+          log.warn("avplay setSilentSubtitle failed", err);
+        }
         AV.setSelectTrack("TEXT", avIndex);
         log.info("avplay text ->", avIndex);
         return true;
@@ -11016,6 +11075,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return trackInfo("TEXT").map(function (tr) {
           return {
             language: tr.language,
+            label: tr.label,
+            codec: tr.codec,
             index: tr.index
           };
         });
@@ -11912,7 +11973,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     chi: "Chinês",
     zho: "Chinês",
     rus: "Russo",
+    ru: "Russo",
     ara: "Árabe",
+    ar: "Árabe",
+    arabic: "Árabe",
     hin: "Hindi",
     und: "Indefinido"
   };
@@ -11921,6 +11985,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     english: "en",
     ara: "ar",
     arabic: "ar",
+    ar: "ar",
     rus: "ru",
     russian: "ru",
     jpn: "ja",
@@ -11978,8 +12043,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var v = String(x || "").toLowerCase().trim().split(/[-_ (]/)[0];
     return LANG2[v] || v;
   }
+  function detectLang(code, label) {
+    var c = String(code || "").toLowerCase().trim();
+    var l = String(label || "").toLowerCase().trim();
+    if (c && c !== "und" && c !== "undefined" && c !== "null" && c !== "unknown") {
+      return c;
+    }
+    if (/arabic|عربي|العربية|\bara\b|\bar\b/i.test(l)) return "ara";
+    if (/english|ingl[eê]s|\beng\b|\ben\b/i.test(l)) return "eng";
+    if (/japanese|japon[eê]s|ياباني|\bjpn\b|\bja\b/i.test(l)) return "jpn";
+    if (/french|franc[eê]s|français|\bfra\b|\bfre\b|\bfr\b/i.test(l)) return "fre";
+    if (/spanish|espanhol|español|\bspa\b|\bes\b/i.test(l)) return "spa";
+    if (/portuguese|portugu[eê]s|\bpor\b|\bpob\b|\bpt\b/i.test(l)) return "por";
+    if (/german|alem[aã]o|deutsch|\bger\b|\bdeu\b|\bde\b/i.test(l)) return "ger";
+    if (/italian|italiano|\bita\b|\bit\b/i.test(l)) return "ita";
+    if (/russian|russo|русский|\brus\b|\bru\b/i.test(l)) return "rus";
+    return c || "und";
+  }
   function langName(code) {
-    if (!code) return t("Desconhecido");
+    if (!code || code === "und") return t("Desconhecido");
     var name = LANG_NAMES[String(code).toLowerCase()];
     return name ? t(name) : code;
   }
@@ -12277,23 +12359,47 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (idx >= 0 && idx !== nowIdx) selectEmbeddedAudio(idx, true);
         }
       }
-      if (autoDone.sub || !(settings2.subtitlesAuto || mem.sub) || !prefSubs.length || !addonSubs) return;
-      var _loop5 = function _loop5(p) {
-          var s = addonSubs.find(function (x) {
-            return lang2(x.lang) === lang2(prefSubs[p]);
-          });
-          if (s) {
-            autoDone.sub = true;
-            selectAddonSub(s, true);
-            return {
-              v: void 0
-            };
-          }
-        },
-        _ret2;
-      for (var p = 0; p < prefSubs.length; p++) {
-        _ret2 = _loop5(p);
-        if (_ret2) return _ret2.v;
+      if (autoDone.sub || !(settings2.subtitlesAuto || mem.sub) || !prefSubs.length) return;
+      if (addonSubs) {
+        var _loop5 = function _loop5(p) {
+            var s = addonSubs.find(function (x) {
+              return lang2(x.lang) === lang2(prefSubs[p]);
+            });
+            if (s) {
+              autoDone.sub = true;
+              selectAddonSub(s, true);
+              return {
+                v: void 0
+              };
+            }
+          },
+          _ret2;
+        for (var p = 0; p < prefSubs.length; p++) {
+          _ret2 = _loop5(p);
+          if (_ret2) return _ret2.v;
+        }
+      }
+      if (videoEl.isAVPlay) {
+        var avText = videoEl.textTrackList();
+        var _loop6 = function _loop6() {
+            var target = lang2(prefSubs[_p]);
+            var idx = avText.findIndex(function (tr) {
+              var l = detectLang(tr.language, tr.label);
+              return lang2(l) === target;
+            });
+            if (idx >= 0) {
+              autoDone.sub = true;
+              selectAvText(idx);
+              return {
+                v: void 0
+              };
+            }
+          },
+          _ret3;
+        for (var _p = 0; _p < prefSubs.length; _p++) {
+          _ret3 = _loop6();
+          if (_ret3) return _ret3.v;
+        }
       }
     }
     function scheduleAudioPick() {
@@ -13101,10 +13207,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       });
     }
+    function nthIndex(str, pat, n) {
+      var i = -1;
+      while (n-- > 0 && (i = str.indexOf(pat, i + 1)) !== -1) {}
+      return i;
+    }
     function cleanAvText(raw) {
-      var x = String(raw || "");
-      var d = /^Dialogue:\s*(?:[^,]*,){9}([\s\S]*)$/.exec(x);
-      if (d) x = d[1];
+      var x = String(raw || "").trim();
+      if (!x) return "";
+      if (/^Dialogue:\s*/i.test(x)) {
+        x = x.replace(/^Dialogue:\s*/i, "");
+        var idx9 = nthIndex(x, ",", 9);
+        if (idx9 >= 0) x = x.slice(idx9 + 1);else {
+          var idx8 = nthIndex(x, ",", 8);
+          if (idx8 >= 0) x = x.slice(idx8 + 1);
+        }
+      } else if (/^\d+,\d*,/i.test(x)) {
+        var _idx = nthIndex(x, ",", 8);
+        if (_idx >= 0) x = x.slice(_idx + 1);
+      }
       return x.replace(/\{\\[^}]*\}/g, "").replace(/\\[Nn]/g, "\n").replace(/\\h/g, " ").replace(/\r/g, "").trim();
     }
     function selectAvText(index2) {
@@ -13124,6 +13245,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           end: now + Math.max(1.5, (s.duration || 3e3) / 1e3),
           text: sanitize(text)
         });
+        renderer.update(now);
       });
       if (!videoEl.selectText(index2)) toast(t("Não foi possível ligar esta legenda."));
     }
@@ -13230,10 +13352,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var avText = videoEl.isAVPlay ? videoEl.textTrackList() : [];
       avText.forEach(function (tr, i) {
         var info2 = embedded && embedded.subs.length === avText.length ? embedded.subs[i] : null;
-        if (info2 && /PGS|VOBSUB|DVD/i.test(info2.codec || "")) return;
+        var codec = info2 && info2.codec || tr.codec || "";
+        if (/PGS|VOBSUB|DVD/i.test(codec)) return;
+        var rawLang = info2 && info2.lang || tr.language || "";
+        var rawLabel = info2 && info2.label || tr.label || "";
+        var detected = detectLang(rawLang, rawLabel);
         opts2.push({
-          label: langName(info2 && info2.lang || tr.language) + (info2 && info2.label ? " · " + info2.label : ""),
-          sub: t("Embutida no arquivo") + (info2 && info2.codec ? " · " + info2.codec : ""),
+          label: langName(detected) + (rawLabel ? " · " + rawLabel : ""),
+          sub: t("Embutida no arquivo") + (codec ? " · " + codec : ""),
           value: {
             kind: "avtext",
             index: i
@@ -13243,8 +13369,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       if (!avText.length && embedded && embedded.subs.length) {
         embedded.subs.forEach(function (tr, i) {
-          return /PGS|VOBSUB|DVD/i.test(tr.codec || "") ? null : opts2.push({
-            label: langName(tr.lang) + (tr.label ? " · " + tr.label : ""),
+          if (/PGS|VOBSUB|DVD/i.test(tr.codec || "")) return;
+          var detected = detectLang(tr.lang, tr.label);
+          opts2.push({
+            label: langName(detected) + (tr.label ? " · " + tr.label : ""),
             sub: t("Embutida no arquivo") + (tr.codec ? " · " + tr.codec : ""),
             value: {
               kind: "embedded",
@@ -16052,7 +16180,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop6 = function _loop6() {
+      var _loop7 = function _loop7() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -16064,11 +16192,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             loadNearby();
           });
         },
-        _ret3;
+        _ret4;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret3 = _loop6();
-        if (_ret3 === 0) continue;
-        if (_ret3 === 1) break;
+        _ret4 = _loop7();
+        if (_ret4 === 0) continue;
+        if (_ret4 === 1) break;
       }
     }
     var s = seasonNow();
@@ -16870,7 +16998,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function run3() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop7 = function _loop7() {
+      var _loop8 = function _loop8() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (!p.row.parentNode) {
@@ -16890,11 +17018,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             run3();
           });
         },
-        _ret4;
+        _ret5;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret4 = _loop7();
-        if (_ret4 === 0) continue;
-        if (_ret4 === 1) break;
+        _ret5 = _loop8();
+        if (_ret5 === 0) continue;
+        if (_ret5 === 1) break;
       }
     }
     return {
@@ -17249,7 +17377,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop8 = function _loop8() {
+      var _loop9 = function _loop9() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -17265,11 +17393,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             loadNearby();
           });
         },
-        _ret5;
+        _ret6;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret5 = _loop8();
-        if (_ret5 === 0) continue;
-        if (_ret5 === 1) break;
+        _ret6 = _loop9();
+        if (_ret6 === 0) continue;
+        if (_ret6 === 1) break;
       }
     }
     var boardToken = 0;
@@ -17934,7 +18062,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T16:09:08.654Z";
+  var BUILD = "2026-11-14T16:47:10.310Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -18168,6 +18296,84 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     main: "#6f7a8c",
     light: "#9aa5b8",
     pale: "#d5dbe6"
+  }, {
+    id: "crimson",
+    label: "Carmim",
+    main: "#e6194b",
+    light: "#f25278",
+    pale: "#f9a8b8"
+  }, {
+    id: "emerald",
+    label: "Esmeralda",
+    main: "#059669",
+    light: "#10b981",
+    pale: "#6ee7b7"
+  }, {
+    id: "amber",
+    label: "Âmbar",
+    main: "#d97706",
+    light: "#f59e0b",
+    pale: "#fcd34d"
+  }, {
+    id: "violet",
+    label: "Violeta real",
+    main: "#6d28d9",
+    light: "#8b5cf6",
+    pale: "#c4b5fd"
+  }, {
+    id: "fuchsia",
+    label: "Fúcsia neon",
+    main: "#c026d3",
+    light: "#d946ef",
+    pale: "#f0abfc"
+  }, {
+    id: "rose",
+    label: "Rosa rubi",
+    main: "#e11d48",
+    light: "#f43f5e",
+    pale: "#fda4af"
+  }, {
+    id: "sky",
+    label: "Azul céu",
+    main: "#0284c7",
+    light: "#0ea5e9",
+    pale: "#7dd3fc"
+  }, {
+    id: "lime",
+    label: "Lima neon",
+    main: "#65a30d",
+    light: "#84cc16",
+    pale: "#bef264"
+  }, {
+    id: "slate",
+    label: "Ardósia",
+    main: "#475569",
+    light: "#64748b",
+    pale: "#94a3b8"
+  }, {
+    id: "netflix",
+    label: "Vermelho Netflix",
+    main: "#e50914",
+    light: "#ff3b47",
+    pale: "#ff999f"
+  }, {
+    id: "samsung",
+    label: "Azul Samsung",
+    main: "#1428a0",
+    light: "#2b50d6",
+    pale: "#8ea7ff"
+  }, {
+    id: "cyberpunk",
+    label: "Cyberpunk neon",
+    main: "#00c8d7",
+    light: "#00f0ff",
+    pale: "#a5faff"
+  }, {
+    id: "sunset",
+    label: "Pôr do sol",
+    main: "#ea580c",
+    light: "#f97316",
+    pale: "#fdba74"
   }];
   var SHAPES = [{
     id: "rounded",
@@ -18477,7 +18683,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/views/settings.js
-  var LANGS2 = [["Árabe", ["ara", "ar"]], ["Inglês", ["eng", "en"]], ["Francês", ["fre", "fra", "fr"]], ["Espanhol", ["spa", "es"]], ["Turco", ["tur", "tr"]], ["Persa", ["per", "fas", "fa"]], ["Urdu", ["urd", "ur"]], ["Hindi", ["hin", "hi"]], ["Russo", ["rus", "ru"]], ["Alemão", ["ger", "deu", "de"]], ["Italiano", ["ita", "it"]], ["Português", ["por", "pob", "pt"]], ["Japonês", ["jpn", "ja"]], ["Coreano", ["kor", "ko"]], ["Chinês", ["chi", "zho", "zh"]], ["Indonésio", ["ind", "id"]], ["Malaio", ["may", "msa", "ms"]]];
+  var LANGS2 = [["Árabe", ["ara", "ar"]], ["Inglês", ["eng", "en"]], ["Francês", ["fre", "fra", "fr"]], ["Espanhol", ["spa", "es"]], ["Turco", ["tur", "tr"]], ["Persa", ["per", "fas", "fa"]], ["Urdu", ["urd", "ur"]], ["Hindi", ["hin", "hi"]], ["Russo", ["rus", "ru"]], ["Alemão", ["ger", "deu", "de"]], ["Italiano", ["ita", "it"]], ["Português", ["por", "pob", "pt"]], ["Japonês", ["jpn", "ja"]], ["Coreano", ["kor", "ko"]], ["Chinês", ["chi", "zho", "zh"]], ["Indonésio", ["ind", "id"]], ["Malaio", ["may", "msa", "ms"]], ["Ucraniano", ["ukr", "uk"]], ["Polonês", ["pol", "pl"]], ["Holandês", ["dut", "nld", "nl"]], ["Grego", ["gre", "ell", "el"]], ["Sueco", ["swe", "sv"]], ["Vietnamita", ["vie", "vi"]], ["Tailandês", ["tha", "th"]], ["Hebraico", ["heb", "he"]], ["Romeno", ["ron", "rum", "ro"]], ["Húngaro", ["hun", "hu"]], ["Tcheco", ["ces", "cze", "cs"]], ["Filipino", ["fil", "tgl", "tl"]]];
   var SUB_LANGS = LANGS2.map(function (l) {
     return {
       label: l[0],
@@ -20378,7 +20584,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop9 = function _loop9() {
+      var _loop0 = function _loop0() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -20394,7 +20600,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop9();
+        _loop0();
       }
       days.__last = days.children[current3 + 1];
     }

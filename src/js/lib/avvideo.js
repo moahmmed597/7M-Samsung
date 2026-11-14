@@ -267,9 +267,10 @@ export function create() {
       }
       out.push({
         index: all[i].index,
-        language: String(extra.language || extra.track_lang || '').trim(),
+        language: String(extra.language || extra.track_lang || all[i].language || '').trim(),
+        label: String(extra.track_name || extra.track_title || extra.title || extra.name || all[i].track_name || all[i].name || '').trim(),
         channels: extra.channels ? Number(extra.channels) : 0,
-        codec: extra.fourCC || '',
+        codec: String(extra.fourCC || extra.codec || all[i].codec || '').trim(),
       });
     }
     return out;
@@ -307,7 +308,11 @@ export function create() {
   // Silent = the player does not draw the subtitle itself; the app draws it in its own style.
   function applyText(avIndex) {
     try {
-      AV.setSilentSubtitle(true);
+      try {
+        AV.setSilentSubtitle(true);
+      } catch (err) {
+        log.warn('avplay setSilentSubtitle failed', err);
+      }
       AV.setSelectTrack('TEXT', avIndex);
       log.info('avplay text ->', avIndex);
       return true;
@@ -402,7 +407,12 @@ export function create() {
     },
     // Embedded subtitle tracks, in file order.
     textTrackList() {
-      return trackInfo('TEXT').map((tr) => ({ language: tr.language, index: tr.index }));
+      return trackInfo('TEXT').map((tr) => ({
+        language: tr.language,
+        label: tr.label,
+        codec: tr.codec,
+        index: tr.index,
+      }));
     },
     // position = place in textTrackList()
     selectText(position) {

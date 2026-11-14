@@ -168,8 +168,10 @@ export function Renderer(el) {
     },
     // One cue at a time (embedded subtitles delivered live by the Samsung player).
     add: (c) => {
+      if (!c || !c.text) return;
       cues.push(c);
       if (cues.length > 300) cues.splice(0, 100);
+      cues.sort((a, b) => a.start - b.start);
       idx = 0;
     },
     active: () => cues.length > 0,

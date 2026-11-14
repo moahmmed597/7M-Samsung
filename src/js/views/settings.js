@@ -50,6 +50,18 @@ const LANGS = [
   ['Chinês', ['chi', 'zho', 'zh']],
   ['Indonésio', ['ind', 'id']],
   ['Malaio', ['may', 'msa', 'ms']],
+  ['Ucraniano', ['ukr', 'uk']],
+  ['Polonês', ['pol', 'pl']],
+  ['Holandês', ['dut', 'nld', 'nl']],
+  ['Grego', ['gre', 'ell', 'el']],
+  ['Sueco', ['swe', 'sv']],
+  ['Vietnamita', ['vie', 'vi']],
+  ['Tailandês', ['tha', 'th']],
+  ['Hebraico', ['heb', 'he']],
+  ['Romeno', ['ron', 'rum', 'ro']],
+  ['Húngaro', ['hun', 'hu']],
+  ['Tcheco', ['ces', 'cze', 'cs']],
+  ['Filipino', ['fil', 'tgl', 'tl']],
 ];
 const SUB_LANGS = LANGS.map((l) => ({ label: l[0], value: l[1] })).concat([{ label: 'Nenhum (não ligar sozinho)', value: [] }]);
 const AUDIO_LANGS = [{ label: 'Original do arquivo', value: [] }].concat(LANGS.map((l) => ({ label: l[0], value: l[1] })));
