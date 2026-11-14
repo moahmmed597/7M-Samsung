@@ -1044,7 +1044,35 @@ function PlayerView(opts) {
       .catch((e) => toast(t('Falha na legenda embutida: {msg}', { msg: e.message })));
   }
 
+  // Cleans what the Samsung player gives for ASS/SSA: tags, line breaks, or a whole "Dialogue:" line.
+  function cleanAvText(raw) {
+    let x = String(raw || '');
+    const d = /^Dialogue:\s*(?:[^,]*,){9}([\s\S]*)$/.exec(x);
+    if (d) x = d[1];
+    return x
+      .replace(/\{\\[^}]*\}/g, '')
+      .replace(/\\[Nn]/g, '\n')
+      .replace(/\\h/g, ' ')
+      .replace(/\r/g, '')
+      .trim();
+  }
+
+  function selectAvText(index) {
+    disableEmbeddedSubs();
+    renderer.clear();
+    renderer.setOffset(0);
+    currentSub = { kind: 'avtext', index: index };
+    videoEl.onSubtitle((s) => {
+      const text = cleanAvText(s.text);
+      if (!text || currentSub.kind !== 'avtext') return;
+      const now = videoEl.currentTime || 0;
+      renderer.add({ start: now, end: now + Math.max(1.5, (s.duration || 3000) / 1000), text: subs.sanitize(text) });
+    });
+    if (!videoEl.selectText(index)) toast(t('Não foi possível ligar esta legenda.'));
+  }
+
   function disableEmbeddedSubs() {
+    if (videoEl.isAVPlay && currentSub.kind === 'avtext') videoEl.disableText();
     const id = mediaId();
     if (id && hasLuna() && currentSub.kind === 'embedded' && !currentSub.extracted) {
       luna('luna://com.webos.media', 'setSubtitleEnable', { mediaId: id, enable: false }).catch(() => {});
@@ -1126,7 +1154,19 @@ function PlayerView(opts) {
 
   function openSubsMenu() {
     const opts2 = [{ label: t('Desligada'), value: { kind: 'off' }, checked: currentSub.kind === 'off' }];
-    if (embedded && embedded.subs.length) {
+    // Samsung player: the file's own text tracks, drawn by the app (works without the PC server).
+    const avText = videoEl.isAVPlay ? videoEl.textTrackList() : [];
+    avText.forEach((tr, i) => {
+      const info = embedded && embedded.subs.length === avText.length ? embedded.subs[i] : null;
+      if (info && /PGS|VOBSUB|DVD/i.test(info.codec || '')) return; // picture subtitles can't be drawn as text
+      opts2.push({
+        label: langName((info && info.lang) || tr.language) + (info && info.label ? ' · ' + info.label : ''),
+        sub: t('Embutida no arquivo') + (info && info.codec ? ' · ' + info.codec : ''),
+        value: { kind: 'avtext', index: i },
+        checked: currentSub.kind === 'avtext' && currentSub.index === i,
+      });
+    });
+    if (!avText.length && embedded && embedded.subs.length) {
       embedded.subs.forEach((tr, i) =>
         /PGS|VOBSUB|DVD/i.test(tr.codec || '') ? null : opts2.push({
           label: langName(tr.lang) + (tr.label ? ' · ' + tr.label : ''),
@@ -1155,15 +1195,17 @@ function PlayerView(opts) {
     menu(t('Legendas'), opts2, {
       empty: addonSubs === null ? t('Carregando legendas...') : t('Nenhuma legenda.'),
       onPick: (v) => {
-        if (v.kind === 'off' || v.kind === 'embedded' || v.kind === 'addon') autoDone.sub = true;
+        if (v.kind === 'off' || v.kind === 'embedded' || v.kind === 'addon' || v.kind === 'avtext') autoDone.sub = true;
         if (v.kind === 'off') rememberTrack('sub', 'off');
         else if (v.kind === 'addon') rememberTrack('sub', v.sub.lang);
         else if (v.kind === 'embedded') rememberTrack('sub', embedded.subs[v.index] && embedded.subs[v.index].lang);
+        else if (v.kind === 'avtext') rememberTrack('sub', avText[v.index] && avText[v.index].language);
         if (v.kind === 'off') {
           disableEmbeddedSubs();
           renderer.clear();
           currentSub = { kind: 'off' };
         } else if (v.kind === 'embedded') selectEmbeddedSub(v.index);
+        else if (v.kind === 'avtext') selectAvText(v.index);
         else if (v.kind === 'addon') selectAddonSub(v.sub);
         else if (v.kind === 'delay') delayMenu();
         else if (v.kind === 'size') sizeMenu();

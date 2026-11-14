@@ -810,4 +810,5 @@ export const EN = {
   "Primavera": "Spring",
   "Verão": "Summer",
   "Outono": "Fall",
+  "Não foi possível ligar esta legenda.": "Could not turn this subtitle on.",
 };

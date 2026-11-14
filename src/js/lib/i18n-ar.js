@@ -810,4 +810,5 @@ export const AR = {
   "Primavera": "الربيع",
   "Verão": "الصيف",
   "Outono": "الخريف",
+  "Não foi possível ligar esta legenda.": "ما قدرت أشغّل هالترجمة.",
 };

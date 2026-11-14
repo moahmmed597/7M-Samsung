@@ -5575,7 +5575,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Inverno": "Winter",
     "Primavera": "Spring",
     "Verão": "Summer",
-    "Outono": "Fall"
+    "Outono": "Fall",
+    "Não foi possível ligar esta legenda.": "Could not turn this subtitle on."
   };
 
   // src/js/lib/i18n-ar.js
@@ -6381,7 +6382,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Inverno": "الشتاء",
     "Primavera": "الربيع",
     "Verão": "الصيف",
-    "Outono": "الخريف"
+    "Outono": "الخريف",
+    "Não foi possível ligar esta legenda.": "ما قدرت أشغّل هالترجمة."
   };
 
   // src/js/lib/i18n.js
@@ -10062,6 +10064,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         lastHtml = "";
         el.innerHTML = "";
       },
+      // One cue at a time (embedded subtitles delivered live by the Samsung player).
+      add: function add(c) {
+        cues.push(c);
+        if (cues.length > 300) cues.splice(0, 100);
+        idx = 0;
+      },
       active: function active() {
         return cues.length > 0;
       },
@@ -10500,6 +10508,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var error = null;
     var pendingSeekMs = null;
     var pendingAudio = null;
+    var pendingText = null;
+    var textOn = false;
+    var subCb = null;
     var lastTimeEmit = 0;
     var generation = 0;
     function emit(type) {
@@ -10574,7 +10585,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           fail(String(type || "PLAYER_ERROR"));
         },
         onevent: function onevent() {},
-        onsubtitlechange: function onsubtitlechange() {},
+        // Embedded subtitles: the player parses them (SRT, ASS...) and hands over the text to show.
+        onsubtitlechange: function onsubtitlechange(duration, text) {
+          if (!ok() || !textOn || !subCb) return;
+          try {
+            subCb({
+              text: String(text || ""),
+              duration: Number(duration) || 0
+            });
+          } catch (e) {
+            log.warn("avplay subtitle", e && e.message);
+          }
+        },
         ondrmevent: function ondrmevent() {}
       });
     }
@@ -10597,6 +10619,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       durMs = NaN;
       pendingSeekMs = null;
       pendingAudio = null;
+      pendingText = null;
+      textOn = false;
       wantPlay = !!api.autoplay;
       if (!url2) {
         emit("emptied");
@@ -10656,6 +10680,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           setTimeout(function () {
             return applyAudio(idx);
           }, 300);
+        }
+        if (pendingText !== null) {
+          var ti = pendingText;
+          pendingText = null;
+          setTimeout(function () {
+            return applyText(ti);
+          }, 500);
         }
       };
       if (pendingSeekMs !== null) {
@@ -10730,6 +10761,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return false;
       }
     }
+    function applyText(avIndex) {
+      try {
+        AV.setSilentSubtitle(true);
+        AV.setSelectTrack("TEXT", avIndex);
+        log.info("avplay text ->", avIndex);
+        return true;
+      } catch (e) {
+        log.warn("avplay text track", e && (e.name || e.message));
+        return false;
+      }
+    }
     var api = {
       node: node,
       isAVPlay: true,
@@ -10765,6 +10807,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             setTimeout(function () {
               return applyAudio(idx);
             }, 300);
+          }
+          if (pendingText !== null) {
+            var ti = pendingText;
+            pendingText = null;
+            setTimeout(function () {
+              return applyText(ti);
+            }, 500);
           }
         } else if (state === "READY") startPlayback();
         return Promise.resolve();
@@ -10814,6 +10863,33 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return true;
         }
         return applyAudio(tr.index);
+      },
+      // Embedded subtitle tracks, in file order.
+      textTrackList: function textTrackList() {
+        return trackInfo("TEXT").map(function (tr) {
+          return {
+            language: tr.language,
+            index: tr.index
+          };
+        });
+      },
+      // position = place in textTrackList()
+      selectText: function selectText(position) {
+        var tr = trackInfo("TEXT")[position];
+        if (!tr) return false;
+        textOn = true;
+        if (readState() !== "PLAYING") {
+          pendingText = tr.index;
+          return true;
+        }
+        return applyText(tr.index);
+      },
+      disableText: function disableText() {
+        textOn = false;
+        pendingText = null;
+      },
+      onSubtitle: function onSubtitle(fn) {
+        subCb = fn;
       },
       destroy: function destroy() {
         wantPlay = false;
@@ -12878,7 +12954,34 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       });
     }
+    function cleanAvText(raw) {
+      var x = String(raw || "");
+      var d = /^Dialogue:\s*(?:[^,]*,){9}([\s\S]*)$/.exec(x);
+      if (d) x = d[1];
+      return x.replace(/\{\\[^}]*\}/g, "").replace(/\\[Nn]/g, "\n").replace(/\\h/g, " ").replace(/\r/g, "").trim();
+    }
+    function selectAvText(index2) {
+      disableEmbeddedSubs();
+      renderer.clear();
+      renderer.setOffset(0);
+      currentSub = {
+        kind: "avtext",
+        index: index2
+      };
+      videoEl.onSubtitle(function (s) {
+        var text = cleanAvText(s.text);
+        if (!text || currentSub.kind !== "avtext") return;
+        var now = videoEl.currentTime || 0;
+        renderer.add({
+          start: now,
+          end: now + Math.max(1.5, (s.duration || 3e3) / 1e3),
+          text: sanitize(text)
+        });
+      });
+      if (!videoEl.selectText(index2)) toast(t("Não foi possível ligar esta legenda."));
+    }
     function disableEmbeddedSubs() {
+      if (videoEl.isAVPlay && currentSub.kind === "avtext") videoEl.disableText();
       var id = mediaId();
       if (id && hasLuna() && currentSub.kind === "embedded" && !currentSub.extracted) {
         luna("luna://com.webos.media", "setSubtitleEnable", {
@@ -12977,7 +13080,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         checked: currentSub.kind === "off"
       }];
-      if (embedded && embedded.subs.length) {
+      var avText = videoEl.isAVPlay ? videoEl.textTrackList() : [];
+      avText.forEach(function (tr, i) {
+        var info2 = embedded && embedded.subs.length === avText.length ? embedded.subs[i] : null;
+        if (info2 && /PGS|VOBSUB|DVD/i.test(info2.codec || "")) return;
+        opts2.push({
+          label: langName(info2 && info2.lang || tr.language) + (info2 && info2.label ? " · " + info2.label : ""),
+          sub: t("Embutida no arquivo") + (info2 && info2.codec ? " · " + info2.codec : ""),
+          value: {
+            kind: "avtext",
+            index: i
+          },
+          checked: currentSub.kind === "avtext" && currentSub.index === i
+        });
+      });
+      if (!avText.length && embedded && embedded.subs.length) {
         embedded.subs.forEach(function (tr, i) {
           return /PGS|VOBSUB|DVD/i.test(tr.codec || "") ? null : opts2.push({
             label: langName(tr.lang) + (tr.label ? " · " + tr.label : ""),
@@ -13029,15 +13146,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       menu(t("Legendas"), opts2, {
         empty: addonSubs === null ? t("Carregando legendas...") : t("Nenhuma legenda."),
         onPick: function onPick(v) {
-          if (v.kind === "off" || v.kind === "embedded" || v.kind === "addon") autoDone.sub = true;
-          if (v.kind === "off") rememberTrack("sub", "off");else if (v.kind === "addon") rememberTrack("sub", v.sub.lang);else if (v.kind === "embedded") rememberTrack("sub", embedded.subs[v.index] && embedded.subs[v.index].lang);
+          if (v.kind === "off" || v.kind === "embedded" || v.kind === "addon" || v.kind === "avtext") autoDone.sub = true;
+          if (v.kind === "off") rememberTrack("sub", "off");else if (v.kind === "addon") rememberTrack("sub", v.sub.lang);else if (v.kind === "embedded") rememberTrack("sub", embedded.subs[v.index] && embedded.subs[v.index].lang);else if (v.kind === "avtext") rememberTrack("sub", avText[v.index] && avText[v.index].language);
           if (v.kind === "off") {
             disableEmbeddedSubs();
             renderer.clear();
             currentSub = {
               kind: "off"
             };
-          } else if (v.kind === "embedded") selectEmbeddedSub(v.index);else if (v.kind === "addon") selectAddonSub(v.sub);else if (v.kind === "delay") delayMenu();else if (v.kind === "size") sizeMenu();
+          } else if (v.kind === "embedded") selectEmbeddedSub(v.index);else if (v.kind === "avtext") selectAvText(v.index);else if (v.kind === "addon") selectAddonSub(v.sub);else if (v.kind === "delay") delayMenu();else if (v.kind === "size") sizeMenu();
         }
       });
     }
@@ -17455,7 +17572,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T09:27:36.092Z";
+  var BUILD = "2026-11-14T09:30:26.108Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

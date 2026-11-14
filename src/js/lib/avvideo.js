@@ -35,6 +35,9 @@ export function create() {
   let error = null;
   let pendingSeekMs = null;
   let pendingAudio = null; // Tizen 3 refuses setSelectTrack while paused: applied on play
+  let pendingText = null; // same for an embedded subtitle track
+  let textOn = false; // an embedded subtitle track is wanted: its text is passed to onSubtitle
+  let subCb = null;
   let lastTimeEmit = 0;
   let generation = 0;
 
@@ -116,7 +119,15 @@ export function create() {
         fail(String(type || 'PLAYER_ERROR'));
       },
       onevent: () => {},
-      onsubtitlechange: () => {},
+      // Embedded subtitles: the player parses them (SRT, ASS...) and hands over the text to show.
+      onsubtitlechange: (duration, text) => {
+        if (!ok() || !textOn || !subCb) return;
+        try {
+          subCb({ text: String(text || ''), duration: Number(duration) || 0 });
+        } catch (e) {
+          log.warn('avplay subtitle', e && e.message);
+        }
+      },
       ondrmevent: () => {},
     });
   }
@@ -138,6 +149,8 @@ export function create() {
     durMs = NaN;
     pendingSeekMs = null;
     pendingAudio = null;
+    pendingText = null;
+    textOn = false;
     wantPlay = !!api.autoplay;
     if (!url) {
       emit('emptied');
@@ -200,6 +213,11 @@ export function create() {
         const idx = pendingAudio;
         pendingAudio = null;
         setTimeout(() => applyAudio(idx), 300);
+      }
+      if (pendingText !== null) {
+        const ti = pendingText;
+        pendingText = null;
+        setTimeout(() => applyText(ti), 500);
       }
     };
     if (pendingSeekMs !== null) {
@@ -286,6 +304,19 @@ export function create() {
     }
   }
 
+  // Silent = the player does not draw the subtitle itself; the app draws it in its own style.
+  function applyText(avIndex) {
+    try {
+      AV.setSilentSubtitle(true);
+      AV.setSelectTrack('TEXT', avIndex);
+      log.info('avplay text ->', avIndex);
+      return true;
+    } catch (e) {
+      log.warn('avplay text track', e && (e.name || e.message));
+      return false;
+    }
+  }
+
   const api = {
     node: node,
     isAVPlay: true,
@@ -319,6 +350,11 @@ export function create() {
           const idx = pendingAudio;
           pendingAudio = null;
           setTimeout(() => applyAudio(idx), 300);
+        }
+        if (pendingText !== null) {
+          const ti = pendingText;
+          pendingText = null;
+          setTimeout(() => applyText(ti), 500);
         }
       } else if (state === 'READY') startPlayback();
       return Promise.resolve();
@@ -363,6 +399,28 @@ export function create() {
         return true;
       }
       return applyAudio(tr.index);
+    },
+    // Embedded subtitle tracks, in file order.
+    textTrackList() {
+      return trackInfo('TEXT').map((tr) => ({ language: tr.language, index: tr.index }));
+    },
+    // position = place in textTrackList()
+    selectText(position) {
+      const tr = trackInfo('TEXT')[position];
+      if (!tr) return false;
+      textOn = true;
+      if (readState() !== 'PLAYING') {
+        pendingText = tr.index;
+        return true;
+      }
+      return applyText(tr.index);
+    },
+    disableText() {
+      textOn = false;
+      pendingText = null;
+    },
+    onSubtitle(fn) {
+      subCb = fn;
     },
     destroy() {
       wantPlay = false;

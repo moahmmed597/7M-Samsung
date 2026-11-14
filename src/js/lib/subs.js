@@ -34,7 +34,7 @@ export function parse(text) {
 }
 
 // Mantém só <i>, <b>, <u>; o resto vira texto.
-function sanitize(s) {
+export function sanitize(s) {
   const esc = s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   return esc.replace(/&lt;(\/?)(i|b|u)&gt;/gi, '<$1$2>').replace(/&lt;\/?[^&]*&gt;/g, '');
 }
@@ -77,6 +77,12 @@ export function Renderer(el) {
       cues = [];
       lastHtml = '';
       el.innerHTML = '';
+    },
+    // One cue at a time (embedded subtitles delivered live by the Samsung player).
+    add: (c) => {
+      cues.push(c);
+      if (cues.length > 300) cues.splice(0, 100);
+      idx = 0;
     },
     active: () => cues.length > 0,
     setOffset: (sec) => (offset = sec),
