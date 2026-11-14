@@ -1,7 +1,7 @@
-# 🎬 أرشيف مشروع: Stremio Samsung 7M
+# 🎬 أرشيف مشروع: Stremio Kai 7M
 
 > **إصدار التلفزيون المستهدف:** Samsung OLED S90D (2024) — Tizen OS 8.0  
-> **مستودع GitHub:** [`moahmmed597/7M-Samsung`](https://github.com/moahmmed597/7M-Samsung.git)  
+> **مستودع GitHub الرئيسي (المستقل):** [`moahmmed597/Stremio-Kai-7M`](https://github.com/moahmmed597/Stremio-Kai-7M.git)  
 > **الفرع الأساسي:** `main`  
 > **المسار المحلي على جهازك:** `C:\Users\hamoo\Documents\kai-fork`  
 > **مجلد النسخ الاحتياطي:** `C:\Users\hamoo\Documents\Stremio-Kai-Backup\2026-11-14`  
@@ -10,12 +10,12 @@
 
 ## ⚡ كيف يعمل التحديث التلقائي على شاشة التلفاز؟
 
-يعمل تطبيق **Stremio 7M** على شاشتك بآلية تحديث ديناميكية متقدمة تماثل البث السحابي:
+يعمل تطبيق **Stremio Kai 7M** على شاشتك بآلية تحديث ديناميكية متقدمة تماثل البث السحابي:
 
 ```mermaid
 flowchart LR
     TV["شاشة سامسونج OLED\n(Tizen App)"] --> Loader["loader.js\n(محمل الإقلاع)"]
-    Loader --> GH["GitHub API / latest.json\n(moahmmed597/7M-Samsung)"]
+    Loader --> GH["GitHub API / latest.json\n(moahmmed597/Stremio-Kai-7M)"]
     GH --> CDN["شبكة jsDelivr السريعة\n(سحب أحدث app.js و app.css)"]
     CDN --> Launch["تشغيل أحدث نسخة فوراً\nدون الحاجة لإعادة التثبيت"]
 ```
