@@ -87,16 +87,59 @@
     return;
   }
 
-  var x = new XMLHttpRequest();
-  x.open('GET', 'https://api.github.com/repos/' + REPO + '/commits/main');
-  x.setRequestHeader('Accept', 'application/vnd.github.sha');
-  x.timeout = 4000;
-  x.onload = function () {
-    var sha = String(x.responseText || '').replace(/\s/g, '');
-    start(x.status === 200 && /^[0-9a-f]{40}$/.test(sha) ? 'https://cdn.jsdelivr.net/gh/' + REPO + '@' + sha + '/dist/' : '');
-  };
-  x.onerror = x.ontimeout = function () {
+  // Newest commit: GitHub's API first, then latest.json on raw.githubusercontent.com (no hourly
+  // limit). A TV just switched on may take a while to get online, so each try waits up to 10 s.
+  function sha40(v) {
+    v = String(v || '').replace(/\s/g, '');
+    return /^[0-9a-f]{40}$/.test(v) ? v : '';
+  }
+  function getText(url, accept, cb) {
+    var r = new XMLHttpRequest();
+    r.open('GET', url);
+    if (accept) r.setRequestHeader('Accept', accept);
+    r.timeout = 10000;
+    r.onload = function () {
+      cb(r.status === 200 ? r.responseText : '');
+    };
+    r.onerror = r.ontimeout = function () {
+      cb('');
+    };
+    r.send();
+  }
+  function latestSha(cb) {
+    getText('https://api.github.com/repos/' + REPO + '/commits/main', 'application/vnd.github.sha', function (t) {
+      var s = sha40(t);
+      if (s) return cb(s);
+      getText('https://raw.githubusercontent.com/' + REPO + '/main/latest.json?t=' + Date.now(), '', function (j) {
+        var v = '';
+        try {
+          v = sha40(JSON.parse(j).sha);
+        } catch (e) {
+          /* not there */
+        }
+        cb(v);
+      });
+    });
+  }
+  function pinned(s) {
+    return 'https://cdn.jsdelivr.net/gh/' + REPO + '@' + s + '/dist/';
+  }
+  latestSha(function (s) {
+    if (s) return start(pinned(s));
     start('');
-  };
-  x.send();
+    // Offline at start: the copy inside the app runs; once the newest is reachable, reload into it
+    // (once per session, so a bad network never loops).
+    var key = 'kai.loaderRetried';
+    try {
+      if (window.sessionStorage.getItem(key)) return;
+      window.sessionStorage.setItem(key, '1');
+    } catch (e) {
+      return;
+    }
+    setTimeout(function () {
+      latestSha(function (s2) {
+        if (s2) window.location.reload();
+      });
+    }, 20000);
+  });
 })();

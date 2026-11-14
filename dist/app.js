@@ -7977,6 +7977,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }, wait2);
   }
   function startService() {
+    try {
+      if (window.tizen && window.tizen.application && !/^https?:/.test(location.protocol)) {
+        var pkg = window.tizen.application.getCurrentApplication().appInfo.packageId;
+        window.tizen.application.launchAppControl(new window.tizen.ApplicationControl("http://tizen.org/appcontrol/operation/service"), pkg + ".Service", function () {}, function () {});
+        return true;
+      }
+    } catch (e) {}
     var m = location.pathname.match(/\/module\/([^/]+)\//);
     if (!m || typeof WebSocket === "undefined") return false;
     try {
@@ -16175,7 +16182,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T02:37:38.735Z";
+  var BUILD = "2026-11-14T02:44:27.919Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

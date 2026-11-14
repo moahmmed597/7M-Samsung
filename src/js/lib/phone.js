@@ -125,6 +125,16 @@ function poll(wait) {
 // TizenBrew starts the service once, when it opens the app; if that failed (download error,
 // crash) it stays off. TizenBrew's own channel on the TV can start it again: returns true if asked.
 function startService() {
+  // Installed app (.wgt): start its own background service again.
+  try {
+    if (window.tizen && window.tizen.application && !/^https?:/.test(location.protocol)) {
+      const pkg = window.tizen.application.getCurrentApplication().appInfo.packageId;
+      window.tizen.application.launchAppControl(new window.tizen.ApplicationControl('http://tizen.org/appcontrol/operation/service'), pkg + '.Service', () => {}, () => {});
+      return true;
+    }
+  } catch (e) {
+    /* not an installed app */
+  }
   const m = location.pathname.match(/\/module\/([^/]+)\//);
   if (!m || typeof WebSocket === 'undefined') return false;
   try {
