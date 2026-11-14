@@ -45,37 +45,45 @@ The **7M Edition** introduces over **22,000+ lines of enhancements** across 69 f
 
 ---
 
-## 📺 Real-Life TV Showcase
+## 📺 Real-Life TV Showcase (Samsung OLED S90D 2024)
 
-| Real Samsung OLED TV with Arabic Subtitles | SubDL & Stream Quality Badges |
+| Arabic Subtitles on OLED Playback | SubDL Subtitle Selector & Delay Sync |
 |:---:|:---:|
-| <img src="docs/screenshots/oled-anime-subtitles.jpg" alt="Real Samsung OLED TV" width="460"> | <img src="docs/screenshots/smart-choice.jpg" alt="Smart Choice & Badges" width="460"> |
+| <img src="docs/screenshots/oled-arabic-display.jpg" alt="Real Samsung OLED TV Playing Arabic Subtitles" width="460"> | <img src="docs/screenshots/oled-xmen-subdl.jpg" alt="SubDL Arabic Subtitles Menu" width="460"> |
+
+| Embedded Anime Subtitle Auto-Detection | Smart Choice & Stream Quality Badges |
+|:---:|:---:|
+| <img src="docs/screenshots/oled-anime-subtitles.jpg" alt="Anime Embedded Subtitle on Samsung TV" width="460"> | <img src="docs/screenshots/smart-choice.jpg" alt="Smart Choice & Badges" width="460"> |
 
 ---
 
-## 🚀 Complete Feature Guide
+## 🚀 Complete Visual Feature Guide
 
 ### 1. A Home Screen Built for the TV
 A rotating hero banner showcasing titles with logos, ratings, runtimes, and genres. One click starts playback or opens details. Below the banner, every catalog from your Stremio add-ons appears in an endless horizontal row.
 
-### 2. See All, Without Dead Ends
-Every row ends with a **See all** tile that opens the entire catalog as a responsive grid. New items load automatically as you scroll down.
+![Home Screen Banner](docs/screenshots/home.jpg)
 
-| Row End | Full Catalog Grid |
-|---|---|
+### 2. See All, Without Dead Ends
+Every row ends with a **See all** tile that opens the entire catalog as a responsive grid. New items load automatically as you scroll down, so you never hit a dead end.
+
+| Catalog Row End | Full Catalog Grid |
+|:---:|:---:|
 | ![See all tile](docs/screenshots/see-all-row.jpg) | ![Full catalog grid](docs/screenshots/see-all-grid.jpg) |
 
-### 3. Smart Choice & Stream Badges
+### 3. Smart Choice & Stream Quality Badges
 Press **Watch** and the app automatically chooses the best source and begins playing immediately without making you scroll through a long list. It prioritizes direct (debrid) streams, your preferred add-on order, and files that play cleanly on your TV, while skipping REMUX or incompatible bitrates. **Sources** still lets you browse the full list with clear 4K, HDR, Dolby Vision, REMUX, and Atmos badges.
 
-### 4. Smart Pause Info & "Ends At" ETA
-* In movie and episode details: see the exact time the movie will finish if you start watching now (`⏱️ Ends at 21:45`).
-* During playback: the current clock and finish time stay pinned in the top-right corner.
+![Details: Watch with Smart Choice, Trailer, and Badges](docs/screenshots/smart-choice.jpg)
 
-### 5. Dedicated Anime Universe
+### 4. Smart Pause Info & "Ends At" ETA
+* **In Movie & Episode Details:** See the exact clock time the title will finish if you start watching now (`⏱️ Ends at 21:45`).
+* **During Playback:** The current clock time and calculated finish time stay cleanly pinned in the top-right corner.
+
+### 5. Dedicated Anime Universe (UltraAnime Hub)
 A topbar **Anime** tab inspired by UltraAnime featuring:
 * Current season broadcast schedule.
-* Studio hubs (MAPPA, Ufotable, Wit Studio, CloverWorks, Toei, Bones).
+* Studio hubs (MAPPA, Ufotable, Wit Studio, CloverWorks, Toei, Bones, Madhouse).
 * Demographic categories (Shounen, Seinen, Shoujo) and genres.
 * Built-in **Auto-Skip** for anime opening and ending themes.
 
@@ -90,13 +98,18 @@ Explore complete fictional universes in the **Collections** tab:
 * **Startup Profile Picker:** "Who's Watching?" selection upon booting the app.
 * **Individual Accounts:** Each profile maintains its own Stremio account, watch history, and library.
 * **PIN Lock:** Lock any profile with a 4 to 8 digit numeric PIN.
-* **Kids Profile (🧒):** Designates a family-friendly profile for children.
+* **Kids Profile (`🧒`):** Designates a family-friendly profile for children.
 * **IMDb Parental Guide:** Real-time warnings for violence, profanity, and intense scenes.
 
-### 8. Subtitle Styling & Arabic Typography
+### 8. Full Arabic Localization & Typography
+The entire app in **Arabic** or **English** (Settings → Language / اللغة, or automatic from the TV's language). Arabic switches to a right-to-left layout, while titles and synopses keep their own direction.
 * 7 built-in Arabic fonts (Cairo, Changa, Almarai, Tajawal, El Messiri, Readex Pro, Noto Sans).
 * Full control over subtitle size, position, outline, shadows, and sync delay.
 * Native rendering of ASS/SSA dialogue tags without clutter.
+
+| Arabic Home Screen | Arabic Movie Details Screen |
+|:---:|:---:|
+| ![Arabic Home Screen](docs/screenshots/arabic-home.jpg) | ![Arabic Details Screen](docs/screenshots/arabic-details.jpg) |
 
 ### 9. Phone Remote Controller
 Control your TV from any phone without installing an app:
@@ -105,22 +118,65 @@ Control your TV from any phone without installing an app:
 * **Search on TV:** Type with your phone keyboard or use voice dictation (🎤) to send text directly to the TV.
 * **Browse on Phone:** Browse Continue Watching, New Episodes, and Library on your phone and tap to launch on TV.
 
-| Phone Remote | QR Code in Settings | Phone Browser Tab |
-|---|---|---|
-| <img src="docs/screenshots/phone-remote.jpg" alt="Phone remote" width="260"> | <img src="docs/screenshots/phone-remote-qr.jpg" alt="Settings QR" width="260"> | <img src="docs/screenshots/phone-browse.jpg" alt="Browse on phone" width="260"> |
+| Phone Remote Controller | QR Code in TV Settings | Browse Tab on Phone |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/phone-remote.jpg" alt="Phone remote" width="280"> | <img src="docs/screenshots/phone-remote-qr.jpg" alt="Settings QR" width="280"> | <img src="docs/screenshots/phone-browse.jpg" alt="Browse on phone" width="280"> |
 
 ### 10. Universal Add-on Search & Global Calendar
 * **Search:** Search movies and series across all installed add-ons at once.
 * **Release Calendar:** Track day-by-day anime broadcasts, television episodes, and home streaming releases.
 
-| Search Screen | Anime Calendar | Series Calendar |
-|---|---|---|
-| ![Search](docs/screenshots/search.jpg) | ![Anime Calendar](docs/screenshots/calendar-anime.jpg) | ![Series Calendar](docs/screenshots/calendar-series.jpg) |
+| Universal Multi-Addon Search | Anime Broadcast Calendar | Series Broadcast Calendar |
+|:---:|:---:|:---:|
+| ![Search Screen](docs/screenshots/search.jpg) | ![Anime Calendar](docs/screenshots/calendar-anime.jpg) | ![Series Calendar](docs/screenshots/calendar-series.jpg) |
 
-### 11. Cloud Tracking, Debrid & Speedtest
+### 11. Trailers, Cast Bios & New Episodes
+* **One-Click Trailer:** Plays the official trailer full screen directly inside the app.
+* **Cast Profiles:** Select any actor or director to open their photo, biography, and full filmography.
+* **New Episodes Row:** Instantly highlights new episodes of shows you've been watching.
+
+| Full Screen Trailer Playback | New Episodes Notification Row |
+|:---:|:---:|
+| ![Trailer Playback](docs/screenshots/trailer.jpg) | ![New Episodes](docs/screenshots/new-episodes.jpg) |
+
+### 12. Themes, Cloud Tracking & Speedtest
+* **13 OLED Themes:** High-contrast themes designed to look gorgeous on OLED displays.
 * **Trakt & Simkl:** Built-in scrobbling and cloud history sync with pre-configured client IDs.
 * **QR Quick Auth:** Connect Real-Debrid, TorBox, Trakt, and Jellyfin via mobile QR code.
 * **Internet Speedtest:** Test TV download speed and ping via Cloudflare directly in Settings.
+* **In-App Self-Updater:** Checks for updates and refreshes to the latest commit automatically.
+
+| OLED Theme Example | Comprehensive Settings Menu | Self-Updating Engine |
+|:---:|:---:|:---:|
+| ![OLED Theme](docs/screenshots/theme-gold.jpg) | ![Settings Menu](docs/screenshots/settings.jpg) | ![Updates](docs/screenshots/updates.jpg) |
+
+---
+
+## 🍙 Recommended Add-ons for the Ultimate Anime Experience
+
+To unlock the full potential of the **UltraAnime** tab and get the beautifully structured catalogs (Studios, Demographics, Themes, and correct Seasons/Episodes), we highly recommend adding these add-ons to your Stremio account:
+
+1. **AIOMetadata (All-In-One Metadata):**
+   * Powers the rich **MyAnimeList (MAL)** catalog hierarchy inside the Anime tab.
+   * Enables browsing by animation studios (MAPPA, Ufotable, Wit Studio, CloverWorks, Toei, Bones), demographics (Shounen, Seinen, Shoujo), and decades.
+2. **Anime Kitsu:**
+   * Ensures accurate anime episode mapping, correct seasons, and comprehensive Japanese metadata.
+3. **Anime-Skip / AniSkip:**
+   * Powers automatic skipping of anime opening (intro) and ending (outro) themes.
+4. **SubDL & SubSource:**
+   * Delivers high-quality external Arabic and multi-language subtitle tracks.
+
+---
+
+## 📱 Multi-Platform Releases (Roadmap)
+
+While **Stremio Kai 7M** was born and handcrafted specifically for **Samsung Smart TVs (Tizen OS)** to leverage Samsung's native AVPlay hardware engine, native package releases for additional platforms are in active development:
+
+* **📺 Samsung Smart TVs (Tizen 3.0 to 8.0+):** Available now via TizenBrew or installable `Stremio7M.wgt`.
+* **🤖 Android TV & Google TV (TCL, Sony, Xiaomi, Chromecast):** Standalone full-screen `.apk` package with native TV remote D-pad navigation.
+* **🍏 Apple iOS (iPhone & iPad):** Native `.ipa` package for direct sideloading via **SideStore**, **LiveContainer**, and **AltStore**.
+* **📺 LG Smart TVs (webOS):** Native `.ipk` package for LG webOS Dev Mode and Homebrew Channel.
+* **💻 Windows PC:** Ultra-lightweight standalone `.exe` desktop application.
 
 ---
 
@@ -155,34 +211,6 @@ Control your TV from any phone without installing an app:
    moahmmed597/Stremio-Kai-7M
    ```
 4. **Stremio Kai 7M** will now appear in your list. Launch it!
-
----
-
-## 🍙 Recommended Add-ons for the Ultimate Anime Experience
-
-To unlock the full potential of the **UltraAnime** tab and get the beautifully structured catalogs (Studios, Demographics, Themes, and correct Seasons/Episodes), we highly recommend adding these add-ons to your Stremio account:
-
-1. **AIOMetadata (All-In-One Metadata):**
-   * Powers the rich **MyAnimeList (MAL)** catalog hierarchy inside the Anime tab.
-   * Enables browsing by animation studios (MAPPA, Ufotable, Wit Studio, CloverWorks, Toei, Bones), demographics (Shounen, Seinen, Shoujo), and decades.
-2. **Anime Kitsu:**
-   * Ensures accurate anime episode mapping, correct seasons, and comprehensive Japanese metadata.
-3. **Anime-Skip / AniSkip:**
-   * Powers automatic skipping of anime opening (intro) and ending (outro) themes.
-4. **SubDL & SubSource:**
-   * Delivers high-quality external Arabic and multi-language subtitle tracks.
-
----
-
-## 📱 Multi-Platform Releases (Roadmap)
-
-While **Stremio Kai 7M** was born and handcrafted specifically for **Samsung Smart TVs (Tizen OS)** to leverage Samsung's native AVPlay hardware engine, native package releases for additional platforms are in active development:
-
-* **📺 Samsung Smart TVs (Tizen 3.0 to 8.0+):** Available now via TizenBrew or installable `Stremio7M.wgt`.
-* **🤖 Android TV & Google TV (TCL, Sony, Xiaomi, Chromecast):** Standalone full-screen `.apk` package with native TV remote D-pad navigation.
-* **🍏 Apple iOS (iPhone & iPad):** Native `.ipa` package for direct sideloading via **SideStore**, **LiveContainer**, and **AltStore**.
-* **📺 LG Smart TVs (webOS):** Native `.ipk` package for LG webOS Dev Mode and Homebrew Channel.
-* **💻 Windows PC:** Ultra-lightweight standalone `.exe` desktop application.
 
 ---
 
