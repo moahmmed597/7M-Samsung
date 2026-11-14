@@ -13,7 +13,7 @@ import { openDetails } from './details.js';
 import { t, current } from '../lib/i18n.js';
 import { FRANCHISES, CATS, catOf, franchisesOf, findFranchise } from '../data/franchises.js';
 
-const POSTER = (imdb) => 'https://images.metahub.space/poster/medium/' + imdb + '/img';
+const POSTER = (imdb) => 'https://images.metahub.space/poster/small/' + imdb + '/img';
 const ORDER_KEY = 'franchiseOrder';
 
 function displayName(f) {
@@ -539,6 +539,16 @@ function FranchiseView(f) {
         render('fav');
       })
     );
+    if (f.related && f.related.length) {
+      f.related.forEach((relId) => {
+        const relF = findFranchise(relId);
+        if (relF) {
+          filters.appendChild(
+            chip('rel_' + relId, '🔗 ' + displayName(relF), false, () => router.push(FranchiseView(relF)))
+          );
+        }
+      });
+    }
 
     clear(grid);
     let count = 0;

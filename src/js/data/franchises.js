@@ -6,6 +6,7 @@ export const FRANCHISES = [
     id: 'mcu',
     name: 'Marvel Cinematic Universe',
     ar: 'عالم مارفل السينمائي (MCU)',
+    related: ['xmen', 'spiderman'],
     items: [
       ['tt0371746', 'Iron Man', 2008],
       ['tt0800080', 'The Incredible Hulk', 2008],
@@ -75,6 +76,7 @@ export const FRANCHISES = [
     id: 'xmen',
     name: 'X-Men',
     ar: 'إكس-مين (X-Men)',
+    related: ['mcu', 'xmen-cartoon'],
     items: [
       ['tt0120903', 'X-Men', 2000],
       ['tt0290334', 'X2', 2003],
@@ -90,12 +92,10 @@ export const FRANCHISES = [
       ['tt6565702', 'Dark Phoenix', 2019],
       ['tt4682266', 'The New Mutants', 2020],
       ['tt6263850', 'Deadpool & Wolverine', 2024],
-      ['tt0103584', 'X-Men: The Animated Series', 1992, 's'],
-      ['tt16026746', "X-Men '97", 2024, 's'],
     ],
     chrono: [
       'tt1270798', 'tt0458525', 'tt0120903', 'tt0290334', 'tt0376994', 'tt1430132', 'tt1877832', 'tt3385516',
-      'tt6565702', 'tt4682266', 'tt1431045', 'tt5463162', 'tt3315342', 'tt6263850', 'tt0103584', 'tt16026746',
+      'tt6565702', 'tt4682266', 'tt1431045', 'tt5463162', 'tt3315342', 'tt6263850',
     ],
   },
   {
@@ -815,11 +815,15 @@ export const FRANCHISES = [
     cat: 'cartoon',
     name: 'X-Men (animated)',
     ar: 'إكس-مين الكرتون (X-Men Animated)',
+    related: ['xmen', 'mcu'],
     items: [
       ['tt0103584', 'X-Men: The Animated Series', 1992, 's'],
       ['tt0247827', 'X-Men: Evolution', 2000, 's'],
+      ['tt0772145', 'Wolverine and the X-Men', 2008, 's'],
+      ['tt2070571', 'X-Men', 2011, 's'],
       ['tt16026746', "X-Men '97", 2024, 's'],
     ],
+    chrono: ['tt0103584', 'tt16026746', 'tt0247827', 'tt0772145', 'tt2070571'],
   },
   {
     id: 'dcau',
