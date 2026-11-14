@@ -267,17 +267,47 @@ export function CollectionsView() {
   const bar = topbar('collections', router.goTab);
   const searchBox = h('div.search-box');
   const results = h('div');
+  const filterBox = h('div.filters', { 'data-group': '' });
   const mineBox = h('div');
   const favBox = h('div');
   const grid = h('div');
   scroller.appendChild(bar);
   scroller.appendChild(searchBox);
   scroller.appendChild(results);
+  scroller.appendChild(filterBox);
   scroller.appendChild(mineBox);
   scroller.appendChild(favBox);
-  scroller.appendChild(h('div.row-title', { text: t('Coleções') }));
   scroller.appendChild(grid);
   el.appendChild(scroller);
+
+  let activeCat = 'all';
+  const CAT_TABS = [
+    { id: 'all', label: 'Todos' },
+    { id: 'heroes', label: 'Super-heróis e Grandes Sagas' },
+    { id: 'movies', label: 'Filmes' },
+    { id: 'series', label: 'Séries' },
+    { id: 'cartoon', label: 'Desenhos animados' },
+    { id: 'anime', label: 'Animes' },
+    { id: 'mine', label: 'Minhas coleções' },
+  ];
+
+  function renderCategoryChips() {
+    clear(filterBox);
+    CAT_TABS.forEach((tab) => {
+      filterBox.appendChild(
+        h('div.chip', {
+          focusable: true,
+          cls: tab.id === activeCat ? 'active' : '',
+          text: t(tab.label),
+          onSelect: () => {
+            activeCat = tab.id;
+            renderCategoryChips();
+            renderGrid();
+          },
+        })
+      );
+    });
+  }
 
   if (extras.hasTmdb()) {
     const input = h('input.input', { type: 'text', placeholder: t('Buscar outra coleção (ex.: Shrek, Rambo, Saw)...'), focusable: true });
@@ -356,19 +386,29 @@ export function CollectionsView() {
   }
 
   function renderGrid() {
-    renderMine();
+    clear(mineBox);
     clear(favBox);
-    const pinned = favEntries();
-    if (pinned.length) {
-      favBox.appendChild(h('div.row-title', { text: '★ ' + t('Favoritas') }));
-      const fg = h('div.grid.fav-grid');
-      pinned.forEach((e) => fg.appendChild(franchiseCard(e.f, e.tmdbId)));
-      favBox.appendChild(fg);
-    }
     clear(grid);
+    const showMine = activeCat === 'all' || activeCat === 'mine';
+    if (showMine) {
+      renderMine();
+      const pinned = favEntries();
+      if (pinned.length) {
+        favBox.appendChild(h('div.row-title', { text: '★ ' + t('Favoritas') }));
+        const fg = h('div.grid.fav-grid');
+        pinned.forEach((e) => fg.appendChild(franchiseCard(e.f, e.tmdbId)));
+        favBox.appendChild(fg);
+      }
+    }
+    if (activeCat === 'mine') {
+      loadVisibleImages(el, 400);
+      return;
+    }
+    const pinned = favEntries();
     const pinnedIds = pinned.map((e) => e.f.id);
-    CATS.forEach((c) => {
-      const list = FRANCHISES.filter((f) => pinnedIds.indexOf(f.id) < 0 && catOf(f) === c.id);
+    const catsToShow = activeCat === 'all' ? CATS : CATS.filter((c) => c.id === activeCat);
+    catsToShow.forEach((c) => {
+      const list = FRANCHISES.filter((f) => (activeCat !== 'all' || pinnedIds.indexOf(f.id) < 0) && catOf(f) === c.id);
       if (!list.length) return;
       grid.appendChild(h('div.row-title.cat-title', { text: t(c.label) }));
       const g = h('div.grid');
@@ -378,11 +418,15 @@ export function CollectionsView() {
     loadVisibleImages(el, 400);
   }
 
+  renderCategoryChips();
   renderGrid();
 
   return {
     el: el,
-    onShow: () => renderGrid(),
+    onShow: () => {
+      renderCategoryChips();
+      renderGrid();
+    },
     destroy: () => bar.__destroy && bar.__destroy(),
   };
 }
@@ -401,9 +445,16 @@ function FranchiseView(f) {
 
   let order = orderOf(f);
   let hideWatched = false;
+  let mediaFilter = 'all'; // 'all' | 'movies' | 'series'
 
   function nextUp(list) {
-    return list.find((it) => !itemWatched(it)) || null;
+    return (
+      list.find((it) => {
+        if (mediaFilter === 'movies' && isSeriesItem(it)) return false;
+        if (mediaFilter === 'series' && !isSeriesItem(it)) return false;
+        return !itemWatched(it);
+      }) || null
+    );
   }
 
   function open(it) {
@@ -437,6 +488,28 @@ function FranchiseView(f) {
       c.__key = key;
       return c;
     };
+    const hasMovies = f.items.some((it) => !isSeriesItem(it));
+    const hasSeries = f.items.some((it) => isSeriesItem(it));
+    if (hasMovies && hasSeries) {
+      filters.appendChild(
+        chip('type_all', t('Todos'), mediaFilter === 'all', () => {
+          mediaFilter = 'all';
+          render('type_all');
+        })
+      );
+      filters.appendChild(
+        chip('type_movies', t('Só filmes'), mediaFilter === 'movies', () => {
+          mediaFilter = 'movies';
+          render('type_movies');
+        })
+      );
+      filters.appendChild(
+        chip('type_series', t('Só séries'), mediaFilter === 'series', () => {
+          mediaFilter = 'series';
+          render('type_series');
+        })
+      );
+    }
     filters.appendChild(
       chip('release', t('Ordem de lançamento'), order === 'release', () => {
         order = 'release';
@@ -468,9 +541,13 @@ function FranchiseView(f) {
     );
 
     clear(grid);
+    let count = 0;
     list.forEach((it, i) => {
+      if (mediaFilter === 'movies' && isSeriesItem(it)) return;
+      if (mediaFilter === 'series' && !isSeriesItem(it)) return;
       const seen = itemWatched(it);
       if (hideWatched && seen) return;
+      count++;
       grid.appendChild(
         card(
           { name: it[1], poster: POSTER(it[0]) },

@@ -99,10 +99,10 @@ export function promptText(title, value, placeholder, onSubmit) {
 // Barra superior com as abas principais.
 export const TABS = [
   { id: 'home', label: 'Início' },
+  { id: 'anime', label: 'Animes' },
+  { id: 'collections', label: 'Coleções' },
   { id: 'search', label: 'Buscar' },
   { id: 'library', label: 'Biblioteca' },
-  { id: 'collections', label: 'Coleções' },
-  { id: 'anime', label: 'Animes' },
   { id: 'calendar', label: 'Calendário' },
   { id: 'settings', label: 'Ajustes' },
 ];

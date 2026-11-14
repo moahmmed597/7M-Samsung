@@ -4888,8 +4888,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Proteção contra burn-in (OLED)": "OLED Burn-in Protection",
     "Tela preta pura com relógio móvel após 90s pausado para proteger painéis OLED": "Pure black screen with drifting clock after 90s pause to protect OLED panels",
     "Samsung Arabic (خط سامسونج عربي)": "Samsung Arabic font",
+    "Samsung Arabic (خط سامسونج رسمي)": "Samsung Arabic font (Official)",
+    "المراعي السينمائي (Almarai)": "Almarai font (Cinema style)",
+    "تجوال الحديث (Tajawal)": "Tajawal font (Modern)",
+    "المسيري الكوفي (El Messiri)": "El Messiri font (Kufic style)",
     "خط عربي واضح (Noto / Cairo)": "Clear Arabic font (Noto / Cairo)",
     "خلفية داكنة واضحة (OLED HDR)": "High-contrast box (OLED HDR)",
+    "Super-heróis e Grandes Sagas": "Superheroes & Major Sagas",
+    "Só filmes": "Movies only",
+    "Só séries": "Series only",
     "Apagar este perfil": "Delete this profile",
     "Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)": "Removes the profile's account and preferences from this TV (the Stremio account itself is kept)",
     'Apagar o perfil "{name}" desta TV?': 'Delete profile "{name}" from this TV?',
@@ -5705,8 +5712,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Proteção contra burn-in (OLED)": "حماية شاشات OLED من التطبيع",
     "Tela preta pura com relógio móvel após 90s pausado para proteger painéis OLED": "شاشة سوداء تامة مع ساعة متحركة بعد 90 ثانية من الإيقاف لحماية لوحة OLED",
     "Samsung Arabic (خط سامسونج عربي)": "خط سامسونج عربي",
+    "Samsung Arabic (خط سامسونج رسمي)": "خط سامسونج رسمي",
+    "المراعي السينمائي (Almarai)": "المراعي السينمائي (Almarai)",
+    "تجوال الحديث (Tajawal)": "تجوال الحديث (Tajawal)",
+    "المسيري الكوفي (El Messiri)": "المسيري الكوفي (El Messiri)",
     "خط عربي واضح (Noto / Cairo)": "خط عربي واضح (Noto / Cairo)",
     "خلفية داكنة واضحة (OLED HDR)": "خلفية داكنة واضحة (OLED HDR)",
+    "Super-heróis e Grandes Sagas": "الأبطال والخيال",
+    "Só filmes": "الأفلام فقط",
+    "Só séries": "المسلسلات فقط",
     "Apagar este perfil": "حذف هذا الملف",
     "Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)": "يزيل حساب الملف وتفضيلاته من هذا التلفاز (يبقى حساب Stremio نفسه)",
     'Apagar o perfil "{name}" desta TV?': 'حذف الملف "{name}" من هذا التلفاز؟',
@@ -7901,17 +7915,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "home",
     label: "Início"
   }, {
+    id: "anime",
+    label: "Animes"
+  }, {
+    id: "collections",
+    label: "Coleções"
+  }, {
     id: "search",
     label: "Buscar"
   }, {
     id: "library",
     label: "Biblioteca"
-  }, {
-    id: "collections",
-    label: "Coleções"
-  }, {
-    id: "anime",
-    label: "Animes"
   }, {
     id: "calendar",
     label: "Calendário"
@@ -10202,8 +10216,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     css: "'Montserrat', sans-serif"
   }, {
     id: "samsung-ar",
-    label: "Samsung Arabic (خط سامسونج عربي)",
+    label: "Samsung Arabic (خط سامسونج رسمي)",
     css: "'SamsungOneArabic', 'SamsungOne', 'Noto Sans Arabic', 'Cairo', sans-serif"
+  }, {
+    id: "almarai",
+    label: "المراعي السينمائي (Almarai)",
+    css: "'Almarai', 'SamsungOneArabic', 'Segoe UI', sans-serif"
+  }, {
+    id: "tajawal",
+    label: "تجوال الحديث (Tajawal)",
+    css: "'Tajawal', 'SamsungOneArabic', 'Cairo', sans-serif"
+  }, {
+    id: "messiri",
+    label: "المسيري الكوفي (El Messiri)",
+    css: "'El Messiri', 'SamsungOneArabic', sans-serif"
   }, {
     id: "arabic",
     label: "خط عربي واضح (Noto / Cairo)",
@@ -14663,8 +14689,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "xmen",
     name: "X-Men",
     ar: "إكس-مين (X-Men)",
-    items: [["tt0120903", "X-Men", 2e3], ["tt0290334", "X2", 2003], ["tt0376994", "X-Men: The Last Stand", 2006], ["tt0458525", "X-Men Origins: Wolverine", 2009], ["tt1270798", "X-Men: First Class", 2011], ["tt1430132", "The Wolverine", 2013], ["tt1877832", "X-Men: Days of Future Past", 2014], ["tt1431045", "Deadpool", 2016], ["tt3385516", "X-Men: Apocalypse", 2016], ["tt3315342", "Logan", 2017], ["tt5463162", "Deadpool 2", 2018], ["tt6565702", "Dark Phoenix", 2019], ["tt4682266", "The New Mutants", 2020], ["tt6263850", "Deadpool & Wolverine", 2024]],
-    chrono: ["tt1270798", "tt0458525", "tt0120903", "tt0290334", "tt0376994", "tt1430132", "tt1877832", "tt3385516", "tt6565702", "tt4682266", "tt1431045", "tt5463162", "tt3315342", "tt6263850"]
+    items: [["tt0120903", "X-Men", 2e3], ["tt0290334", "X2", 2003], ["tt0376994", "X-Men: The Last Stand", 2006], ["tt0458525", "X-Men Origins: Wolverine", 2009], ["tt1270798", "X-Men: First Class", 2011], ["tt1430132", "The Wolverine", 2013], ["tt1877832", "X-Men: Days of Future Past", 2014], ["tt1431045", "Deadpool", 2016], ["tt3385516", "X-Men: Apocalypse", 2016], ["tt3315342", "Logan", 2017], ["tt5463162", "Deadpool 2", 2018], ["tt6565702", "Dark Phoenix", 2019], ["tt4682266", "The New Mutants", 2020], ["tt6263850", "Deadpool & Wolverine", 2024], ["tt0103584", "X-Men: The Animated Series", 1992, "s"], ["tt16026746", "X-Men '97", 2024, "s"]],
+    chrono: ["tt1270798", "tt0458525", "tt0120903", "tt0290334", "tt0376994", "tt1430132", "tt1877832", "tt3385516", "tt6565702", "tt4682266", "tt1431045", "tt5463162", "tt3315342", "tt6263850", "tt0103584", "tt16026746"]
   }, {
     id: "spiderman",
     name: "Spider-Man",
@@ -14985,6 +15011,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   var CATS2 = [{
+    id: "heroes",
+    label: "Super-heróis e Grandes Sagas"
+  }, {
     id: "movies",
     label: "Filmes"
   }, {
@@ -14997,9 +15026,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "anime",
     label: "Animes"
   }];
+  var HERO_IDS = ["mcu", "xmen", "spiderman", "batman", "superman", "dceu", "arrowverse", "starwars", "lotr", "potter", "transformers", "matrix", "monsterverse", "jurassic", "planet-apes", "hungergames", "twilight"];
   var ANIME_IDS = ["fate", "evangelion", "gundam-uc", "gundam-alt", "macross", "monogatari", "madoka", "gits"];
   function catOf(f) {
-    return f.cat || (ANIME_IDS.indexOf(f.id) >= 0 ? "anime" : "movies");
+    if (f.cat) return f.cat;
+    if (HERO_IDS.indexOf(f.id) >= 0) return "heroes";
+    if (ANIME_IDS.indexOf(f.id) >= 0) return "anime";
+    return "movies";
   }
 
   // src/js/views/collections.js
@@ -15310,19 +15343,58 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var bar = topbar("collections", goTab);
     var searchBox = h("div.search-box");
     var results = h("div");
+    var filterBox = h("div.filters", {
+      "data-group": ""
+    });
     var mineBox = h("div");
     var favBox = h("div");
     var grid = h("div");
     scroller.appendChild(bar);
     scroller.appendChild(searchBox);
     scroller.appendChild(results);
+    scroller.appendChild(filterBox);
     scroller.appendChild(mineBox);
     scroller.appendChild(favBox);
-    scroller.appendChild(h("div.row-title", {
-      text: t("Coleções")
-    }));
     scroller.appendChild(grid);
     el.appendChild(scroller);
+    var activeCat = "all";
+    var CAT_TABS = [{
+      id: "all",
+      label: "Todos"
+    }, {
+      id: "heroes",
+      label: "Super-heróis e Grandes Sagas"
+    }, {
+      id: "movies",
+      label: "Filmes"
+    }, {
+      id: "series",
+      label: "Séries"
+    }, {
+      id: "cartoon",
+      label: "Desenhos animados"
+    }, {
+      id: "anime",
+      label: "Animes"
+    }, {
+      id: "mine",
+      label: "Minhas coleções"
+    }];
+    function renderCategoryChips() {
+      clear(filterBox);
+      CAT_TABS.forEach(function (tab) {
+        filterBox.appendChild(h("div.chip", {
+          focusable: true,
+          cls: tab.id === activeCat ? "active" : "",
+          text: t(tab.label),
+          onSelect: function onSelect() {
+            activeCat = tab.id;
+            renderCategoryChips();
+            renderGrid();
+          }
+        }));
+      });
+    }
     if (hasTmdb()) {
       var input = h("input.input", {
         type: "text",
@@ -15431,26 +15503,38 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       mineBox.appendChild(g);
     }
     function renderGrid() {
-      renderMine();
+      clear(mineBox);
       clear(favBox);
-      var pinned = favEntries();
-      if (pinned.length) {
-        favBox.appendChild(h("div.row-title", {
-          text: "★ " + t("Favoritas")
-        }));
-        var fg = h("div.grid.fav-grid");
-        pinned.forEach(function (e) {
-          return fg.appendChild(franchiseCard(e.f, e.tmdbId));
-        });
-        favBox.appendChild(fg);
-      }
       clear(grid);
+      var showMine = activeCat === "all" || activeCat === "mine";
+      if (showMine) {
+        renderMine();
+        var pinned2 = favEntries();
+        if (pinned2.length) {
+          favBox.appendChild(h("div.row-title", {
+            text: "★ " + t("Favoritas")
+          }));
+          var fg = h("div.grid.fav-grid");
+          pinned2.forEach(function (e) {
+            return fg.appendChild(franchiseCard(e.f, e.tmdbId));
+          });
+          favBox.appendChild(fg);
+        }
+      }
+      if (activeCat === "mine") {
+        loadVisibleImages(el, 400);
+        return;
+      }
+      var pinned = favEntries();
       var pinnedIds = pinned.map(function (e) {
         return e.f.id;
       });
-      CATS2.forEach(function (c) {
+      var catsToShow = activeCat === "all" ? CATS2 : CATS2.filter(function (c) {
+        return c.id === activeCat;
+      });
+      catsToShow.forEach(function (c) {
         var list2 = FRANCHISES.filter(function (f) {
-          return pinnedIds.indexOf(f.id) < 0 && catOf(f) === c.id;
+          return (activeCat !== "all" || pinnedIds.indexOf(f.id) < 0) && catOf(f) === c.id;
         });
         if (!list2.length) return;
         grid.appendChild(h("div.row-title.cat-title", {
@@ -15464,11 +15548,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       loadVisibleImages(el, 400);
     }
+    renderCategoryChips();
     renderGrid();
     return {
       el: el,
       onShow: function onShow() {
-        return renderGrid();
+        renderCategoryChips();
+        renderGrid();
       },
       destroy: function destroy() {
         return bar.__destroy && bar.__destroy();
@@ -15491,8 +15577,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     el.appendChild(scroller);
     var order = orderOf(f);
     var hideWatched = false;
+    var mediaFilter = "all";
     function nextUp(list2) {
       return list2.find(function (it) {
+        if (mediaFilter === "movies" && isSeriesItem(it)) return false;
+        if (mediaFilter === "series" && !isSeriesItem(it)) return false;
         return !itemWatched(it);
       }) || null;
     }
@@ -15536,6 +15625,26 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         c.__key = key3;
         return c;
       };
+      var hasMovies = f.items.some(function (it) {
+        return !isSeriesItem(it);
+      });
+      var hasSeries = f.items.some(function (it) {
+        return isSeriesItem(it);
+      });
+      if (hasMovies && hasSeries) {
+        filters.appendChild(chip("type_all", t("Todos"), mediaFilter === "all", function () {
+          mediaFilter = "all";
+          render("type_all");
+        }));
+        filters.appendChild(chip("type_movies", t("Só filmes"), mediaFilter === "movies", function () {
+          mediaFilter = "movies";
+          render("type_movies");
+        }));
+        filters.appendChild(chip("type_series", t("Só séries"), mediaFilter === "series", function () {
+          mediaFilter = "series";
+          render("type_series");
+        }));
+      }
       filters.appendChild(chip("release", t("Ordem de lançamento"), order === "release", function () {
         order = "release";
         setOrder(f, order);
@@ -15558,9 +15667,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         render("fav");
       }));
       clear(grid);
+      var count = 0;
       list2.forEach(function (it, i) {
+        if (mediaFilter === "movies" && isSeriesItem(it)) return;
+        if (mediaFilter === "series" && !isSeriesItem(it)) return;
         var seen = itemWatched(it);
         if (hideWatched && seen) return;
+        count++;
         grid.appendChild(card({
           name: it[1],
           poster: POSTER(it[0])
@@ -17656,10 +17769,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return;
       }
       items3.forEach(function (it) {
-        return grid.appendChild(card({
+        var prog = it.state && it.state.duration && it.state.timeOffset ? it.state.timeOffset / it.state.duration : watched.progress(it._id) || 0;
+        var isDone = prog >= 0.95 || watched.isWatched(it._id);
+        grid.appendChild(card({
           name: it.name,
           poster: it.poster
         }, {
+          progress: !isDone && prog > 0.02 ? prog : 0,
+          badge: isDone ? "✓" : "",
           onSelect: function onSelect() {
             return openDetails(it.type, it._id);
           }
@@ -17687,7 +17804,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T15:32:04.229Z";
+  var BUILD = "2026-11-14T15:45:46.212Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

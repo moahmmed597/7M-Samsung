@@ -5,7 +5,10 @@ import { luna, hasLuna } from './luna.js';
 export const FONTS = [
   { id: 'nata', label: 'Nata Sans (padrão Kai)', css: "'Nata Sans', 'Montserrat', sans-serif" },
   { id: 'montserrat', label: 'Montserrat', css: "'Montserrat', sans-serif" },
-  { id: 'samsung-ar', label: 'Samsung Arabic (خط سامسونج عربي)', css: "'SamsungOneArabic', 'SamsungOne', 'Noto Sans Arabic', 'Cairo', sans-serif" },
+  { id: 'samsung-ar', label: 'Samsung Arabic (خط سامسونج رسمي)', css: "'SamsungOneArabic', 'SamsungOne', 'Noto Sans Arabic', 'Cairo', sans-serif" },
+  { id: 'almarai', label: 'المراعي السينمائي (Almarai)', css: "'Almarai', 'SamsungOneArabic', 'Segoe UI', sans-serif" },
+  { id: 'tajawal', label: 'تجوال الحديث (Tajawal)', css: "'Tajawal', 'SamsungOneArabic', 'Cairo', sans-serif" },
+  { id: 'messiri', label: 'المسيري الكوفي (El Messiri)', css: "'El Messiri', 'SamsungOneArabic', sans-serif" },
   { id: 'arabic', label: 'خط عربي واضح (Noto / Cairo)', css: "'Noto Sans Arabic', 'Cairo', 'Segoe UI', Tahoma, sans-serif" },
   { id: 'tv', label: 'Fonte da TV (Samsung/LG)', css: "'SamsungOne', 'LG Display', 'Museo Sans', sans-serif" },
   { id: 'classic', label: 'Clássica (Arial)', css: 'Arial, Helvetica, sans-serif' },

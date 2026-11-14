@@ -90,10 +90,12 @@ export const FRANCHISES = [
       ['tt6565702', 'Dark Phoenix', 2019],
       ['tt4682266', 'The New Mutants', 2020],
       ['tt6263850', 'Deadpool & Wolverine', 2024],
+      ['tt0103584', 'X-Men: The Animated Series', 1992, 's'],
+      ['tt16026746', "X-Men '97", 2024, 's'],
     ],
     chrono: [
       'tt1270798', 'tt0458525', 'tt0120903', 'tt0290334', 'tt0376994', 'tt1430132', 'tt1877832', 'tt3385516',
-      'tt6565702', 'tt4682266', 'tt1431045', 'tt5463162', 'tt3315342', 'tt6263850',
+      'tt6565702', 'tt4682266', 'tt1431045', 'tt5463162', 'tt3315342', 'tt6263850', 'tt0103584', 'tt16026746',
     ],
   },
   {
@@ -888,14 +890,25 @@ export function franchisesOf(imdb) {
   return FRANCHISES.filter((f) => f.items.some((it) => it[0] === imdb));
 }
 
-// Section order in the Collections tab: movies, series, cartoons, anime.
+// Section order in the Collections tab: heroes/sagas, movies, series, cartoons, anime.
 export const CATS = [
+  { id: 'heroes', label: 'Super-heróis e Grandes Sagas' },
   { id: 'movies', label: 'Filmes' },
   { id: 'series', label: 'Séries' },
   { id: 'cartoon', label: 'Desenhos animados' },
   { id: 'anime', label: 'Animes' },
 ];
+
+const HERO_IDS = [
+  'mcu', 'xmen', 'spiderman', 'batman', 'superman', 'dceu', 'arrowverse', 'starwars',
+  'lotr', 'potter', 'transformers', 'matrix', 'monsterverse', 'jurassic', 'planet-apes',
+  'hungergames', 'twilight'
+];
 const ANIME_IDS = ['fate', 'evangelion', 'gundam-uc', 'gundam-alt', 'macross', 'monogatari', 'madoka', 'gits'];
+
 export function catOf(f) {
-  return f.cat || (ANIME_IDS.indexOf(f.id) >= 0 ? 'anime' : 'movies');
+  if (f.cat) return f.cat;
+  if (HERO_IDS.indexOf(f.id) >= 0) return 'heroes';
+  if (ANIME_IDS.indexOf(f.id) >= 0) return 'anime';
+  return 'movies';
 }

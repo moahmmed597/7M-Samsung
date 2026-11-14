@@ -55,7 +55,20 @@ export function LibraryView() {
       grid.appendChild(h('div.hint', { text: stremio.isLoggedIn() ? t('Sua biblioteca está vazia.') : t('Entre na sua conta em Ajustes para ver a biblioteca.') }));
       return;
     }
-    items.forEach((it) => grid.appendChild(card({ name: it.name, poster: it.poster }, { onSelect: () => openDetails(it.type, it._id) })));
+    items.forEach((it) => {
+      const prog = (it.state && it.state.duration && it.state.timeOffset) ? it.state.timeOffset / it.state.duration : (watched.progress(it._id) || 0);
+      const isDone = prog >= 0.95 || watched.isWatched(it._id);
+      grid.appendChild(
+        card(
+          { name: it.name, poster: it.poster },
+          {
+            progress: !isDone && prog > 0.02 ? prog : 0,
+            badge: isDone ? '✓' : '',
+            onSelect: () => openDetails(it.type, it._id),
+          }
+        )
+      );
+    });
     loadVisibleImages(el, 400);
   }
 
