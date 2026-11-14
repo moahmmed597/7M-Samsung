@@ -17,6 +17,9 @@ import { t, epLabel } from '../lib/i18n.js';
 import * as homeRows from '../lib/homeRows.js';
 import * as mdblistRows from '../api/mdblistRows.js';
 import { trailerIds } from './trailer.js';
+import * as nc from '../api/nuvioCollections.js';
+import * as extras from '../api/extras.js';
+import { collectionRows } from './nuvioHome.js';
 
 const ROTATE_MS = 8000;
 
@@ -208,7 +211,10 @@ export function HomeView() {
     }
   }
 
+  let boardToken = 0;
   function renderBoard() {
+    const myBoard = ++boardToken;
+    const alive = () => myBoard === boardToken && loadedBoard;
     loadedBoard = true;
     pending = [];
     clear(rows);
@@ -217,11 +223,27 @@ export function HomeView() {
       .load()
       .then(() => {
         clear(rows);
+        // Layout (Settings → Home screen): the imported collections (Kaptain), the add-on rows, or both.
+        const layout = store.settings().homeLayout || 'collections';
+        if (layout !== 'addons') {
+          const box = h('div.nc-box');
+          rows.appendChild(box);
+          if (!extras.hasTmdb()) box.appendChild(h('div.nc-hint', { text: t('Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.') }));
+          nc.load('home')
+            .then((data) => {
+              if (!alive()) return;
+              const list = collectionRows(box, data).map((x) => Object.assign(x, { state: 'idle' }));
+              pending = list.concat(pending); // they sit above the add-on rows
+              loadNearby();
+            })
+            .catch(() => box.appendChild(h('div.nc-hint', { text: t('Não foi possível carregar as coleções agora.') })));
+        }
+        if (layout === 'collections') return;
         // Add-on catalogs plus MDBList lists, in the order the user chose (Settings → Home rows).
         const wl = tracker.watchlistEntry();
         const cats = homeRows.visible((wl ? [wl] : []).concat(addons.boardCatalogs(), mdblistRows.boardEntries()));
         if (!cats.length) rows.appendChild(h('div.row-empty', { text: t('Nenhum catálogo. Entre na sua conta em Ajustes.') }));
-        pending = cats.map((c) => Object.assign(buildRow(c, rows), { state: 'idle' }));
+        pending = pending.concat(cats.map((c) => Object.assign(buildRow(c, rows), { state: 'idle' })));
         loadNearby();
       })
       .catch((e) => {

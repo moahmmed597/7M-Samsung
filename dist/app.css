@@ -520,3 +520,14 @@ body .card.anime-tile .poster-wrap { width: 300px; height: 150px; display: -webk
 .anime-tile.hue-5 .poster-wrap { background: linear-gradient(135deg, #6a9a2d, #2a3d12); }
 .anime-tile.studio .poster-wrap { background: #f2f0f8; }
 .anime-tile.studio .tile-label { color: #17131f; text-shadow: none; }
+
+/* Imported Nuvio collections: folder tiles in the pack's own shapes */
+body .card.nc-tile.nc-poster { width: 210px; }
+body .card.nc-tile.nc-poster .poster-wrap { width: 210px; height: 315px; }
+body .card.nc-tile.nc-landscape { width: 380px; }
+body .card.nc-tile.nc-landscape .poster-wrap { width: 380px; height: 214px; }
+body .card.nc-tile.nc-square { width: 250px; }
+body .card.nc-tile.nc-square .poster-wrap { width: 250px; height: 250px; background: #f2f0f8; }
+.nc-tile .poster-wrap img { object-fit: cover; }
+.nc-tile.nc-square .poster-wrap img { object-fit: contain; }
+.nc-hint { padding: 10px 96px 4px; font-size: 21px; color: rgba(255,255,255,0.6); }

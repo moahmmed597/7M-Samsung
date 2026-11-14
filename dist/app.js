@@ -5552,7 +5552,30 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Sobrenatural": "Supernatural",
     "Mecha": "Mecha",
     "Psicológico": "Psychological",
-    "Música": "Music"
+    "Música": "Music",
+    "Anime da temporada": "Seasonal anime",
+    "Coleções prontas (filmes, séries, atores, estúdios...) ou os catálogos dos seus addons": "Ready-made collections (movies, series, actors, studios...) or your add-ons' catalogs",
+    "Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.": "Add your TMDB key (Settings → Integrations) to see the home collections.",
+    "Conteúdo da tela inicial": "Home screen content",
+    "Crime e vida cotidiana": "Crime & everyday life",
+    "Décadas": "Decades",
+    "Estilos de comédia e romance": "Comedy & romance styles",
+    "Mais favoritados": "Most favourites",
+    "Melhores filmes": "Top anime movies",
+    "Melhores séries": "Top anime series",
+    "Não foi possível abrir agora.": "Could not open it right now.",
+    "Não foi possível carregar as coleções agora.": "Could not load the collections right now.",
+    "Próxima temporada": "Upcoming season",
+    "Temas": "Themes",
+    "{n} pastas": "{n} folders",
+    "Coleções (Kaptain)": "Collections (Kaptain)",
+    "Coleções e addons": "Collections and add-ons",
+    "Só os catálogos dos addons": "Add-on catalogs only",
+    "Infantil": "Kids",
+    "Inverno": "Winter",
+    "Primavera": "Spring",
+    "Verão": "Summer",
+    "Outono": "Fall"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6335,7 +6358,30 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Sobrenatural": "خارق للطبيعة",
     "Mecha": "ميكا",
     "Psicológico": "نفسي",
-    "Música": "موسيقى"
+    "Música": "موسيقى",
+    "Anime da temporada": "أنمي المواسم",
+    "Coleções prontas (filmes, séries, atores, estúdios...) ou os catálogos dos seus addons": "مجموعات جاهزة (أفلام، مسلسلات، ممثلين، استوديوهات...) أو كتالوجات إضافاتك",
+    "Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.": "حط مفتاح TMDB (الإعدادات ← التكاملات) عشان تشتغل مجموعات الرئيسية.",
+    "Conteúdo da tela inicial": "محتوى الصفحة الرئيسية",
+    "Crime e vida cotidiana": "الجريمة والحياة اليومية",
+    "Décadas": "العقود",
+    "Estilos de comédia e romance": "أنواع الكوميديا والرومانسي",
+    "Mais favoritados": "الأكثر تفضيلاً",
+    "Melhores filmes": "أفضل الأفلام",
+    "Melhores séries": "أفضل المسلسلات",
+    "Não foi possível abrir agora.": "ما قدرت أفتحه الحين.",
+    "Não foi possível carregar as coleções agora.": "ما قدرت أحمّل المجموعات الحين.",
+    "Próxima temporada": "الموسم الجاي",
+    "Temas": "المواضيع",
+    "{n} pastas": "{n} مجلد",
+    "Coleções (Kaptain)": "المجموعات (Kaptain)",
+    "Coleções e addons": "المجموعات والإضافات",
+    "Só os catálogos dos addons": "كتالوجات الإضافات بس",
+    "Infantil": "أطفال",
+    "Inverno": "الشتاء",
+    "Primavera": "الربيع",
+    "Verão": "الصيف",
+    "Outono": "الخريف"
   };
 
   // src/js/lib/i18n.js
@@ -8310,11 +8356,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     return "magnet:?xt=urn:btih:" + infoHash + tr.join("");
   }
-  function pickFile(files, hint) {
-    var vids = files.filter(function (f) {
+  function pickFile(files2, hint) {
+    var vids = files2.filter(function (f) {
       return VIDEO_RE.test(f.name) && !/sample/i.test(f.name);
     });
-    var pool = vids.length ? vids : files;
+    var pool = vids.length ? vids : files2;
     if (!pool.length) return null;
     var base = function base(n) {
       return String(n || "").split("/").pop().toLowerCase();
@@ -8334,7 +8380,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       if (_m) return _m;
     }
-    if (hint.fileIdx != null && files[hint.fileIdx] && pool.indexOf(files[hint.fileIdx]) >= 0) return files[hint.fileIdx];
+    if (hint.fileIdx != null && files2[hint.fileIdx] && pool.indexOf(files2[hint.fileIdx]) >= 0) return files2[hint.fileIdx];
     return pool.slice().sort(function (a, b) {
       return b.size - a.size;
     })[0];
@@ -8369,14 +8415,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return rd(key3, "GET", "torrents/info/" + encodeURIComponent(id));
       };
       return info2().then(function (tor) {
-        var files = (tor.files || []).map(function (f) {
+        var files2 = (tor.files || []).map(function (f) {
           return {
             id: f.id,
             name: f.path,
             size: f.bytes
           };
         });
-        var file = pickFile(files, hint);
+        var file = pickFile(files2, hint);
         if (!file) throw new Error("Real-Debrid: no files");
         return rd(key3, "POST", "torrents/selectFiles/" + encodeURIComponent(id), {
           files: String(file.id)
@@ -8432,14 +8478,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       };
       return _poll(0).then(function (tor) {
-        var files = tor.files.map(function (f) {
+        var files2 = tor.files.map(function (f) {
           return {
             id: f.id,
             name: f.name || f.short_name,
             size: f.size
           };
         });
-        var file = pickFile(files, hint);
+        var file = pickFile(files2, hint);
         if (!file) throw new Error("TorBox: no files");
         return getJSON(TB + "torrents/requestdl?token=" + encodeURIComponent(key3) + "&torrent_id=" + encodeURIComponent(id) + "&file_id=" + encodeURIComponent(file.id), {
           timeout: 15e3
@@ -8459,7 +8505,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       timeout: 25e3
     }).then(function (r) {
       if (!r || r.status !== "success" || !r.content || !r.content.length) throw notCached("Premiumize");
-      var files = r.content.map(function (f, i) {
+      var files2 = r.content.map(function (f, i) {
         return {
           id: i,
           name: f.path,
@@ -8467,7 +8513,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           link: f.stream_link || f.link
         };
       });
-      var file = pickFile(files, hint);
+      var file = pickFile(files2, hint);
       if (!file || !file.link) throw notCached("Premiumize");
       return file.link;
     });
@@ -9092,6 +9138,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         };
       });
     });
+  }
+  function tmdbGet(path, params) {
+    if (!tmdbKey()) return Promise.reject(new Error("no TMDB key"));
+    return tmdb(path, Object.assign({
+      language: apiLang()
+    }, params || {}));
   }
   function tmdbImdb(type, id) {
     return tmdb(type + "/" + id + "/external_ids", {}).then(function (r) {
@@ -11331,6 +11383,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     };
   }
+  function traktPublic(path) {
+    return request("GET", TRAKT_API + path, null, {
+      headers: traktHeaders(),
+      quiet: true,
+      timeout: 15e3
+    });
+  }
 
   // src/js/lib/chapters.js
   var HEAD_BYTES = 256 * 1024;
@@ -13368,7 +13427,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     el.appendChild(h("div.trailer-focus", {
       focusable: true
     }));
-    function load6() {
+    function load7() {
       var params = "autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&enablejsapi=1&hl=" + current();
       frame.src = "https://www.youtube-nocookie.com/embed/" + ids2[index2] + "?" + params;
       playing3 = true;
@@ -13392,7 +13451,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return hint.classList.add("faded");
       }, 3e3);
     }
-    load6();
+    load7();
     return {
       el: el,
       onKey: function onKey(e) {
@@ -13405,13 +13464,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         if ((k === KEY.RIGHT || k === KEY.FF) && ids2.length > 1) {
           index2 = (index2 + 1) % ids2.length;
-          load6();
+          load7();
           return true;
         }
         if (k === KEY.LEFT || k === KEY.RW) {
           if (ids2.length > 1 && k === KEY.LEFT) {
             index2 = (index2 - 1 + ids2.length) % ids2.length;
-            load6();
+            load7();
           }
           return true;
         }
@@ -15313,33 +15372,30 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       year: d.getFullYear()
     };
   }
-  var DISCOVER = [{
-    id: "trending",
-    label: "Em alta agora",
-    args: "sort: TRENDING_DESC"
-  }, {
-    id: "airing",
-    label: "Lançando agora",
-    args: "status: RELEASING, sort: POPULARITY_DESC"
-  }, {
-    id: "popular",
-    label: "Mais populares",
-    args: "sort: POPULARITY_DESC"
-  }, {
-    id: "top",
-    label: "Mais bem avaliados",
-    args: "sort: SCORE_DESC"
-  }, {
-    id: "upcoming",
-    label: "Em breve",
-    args: "status: NOT_YET_RELEASED, sort: POPULARITY_DESC"
-  }, {
-    id: "movies",
-    label: "Filmes de anime",
-    args: "format: MOVIE, sort: POPULARITY_DESC"
-  }];
-  var STUDIOS = ["MAPPA", "ufotable", "Wit Studio", "Kyoto Animation", "Bones", "Production I.G", "A-1 Pictures", "Madhouse", "Toei Animation", "Studio Ghibli", "CloverWorks", "Trigger", "Sunrise", "Shaft", "David Production", "Studio Pierrot"];
-  var GENRES = [["Action", "Ação"], ["Adventure", "Aventura"], ["Comedy", "Comédia"], ["Drama", "Drama"], ["Fantasy", "Fantasia"], ["Horror", "Terror"], ["Mystery", "Mistério"], ["Romance", "Romance"], ["Sci-Fi", "Ficção científica"], ["Slice of Life", "Cotidiano"], ["Sports", "Esportes"], ["Supernatural", "Sobrenatural"], ["Mecha", "Mecha"], ["Psychological", "Psicológico"], ["Music", "Música"]];
+  var SEASONS = ["WINTER", "SPRING", "SUMMER", "FALL"];
+  var SEASON_LABEL = {
+    WINTER: "Winter",
+    SPRING: "Spring",
+    SUMMER: "Summer",
+    FALL: "Fall"
+  };
+  function nextSeason(s) {
+    var i = SEASONS.indexOf(s.season);
+    return i === 3 ? {
+      season: "WINTER",
+      year: s.year + 1
+    } : {
+      season: SEASONS[i + 1],
+      year: s.year
+    };
+  }
+  var STUDIO_LIST = ["MAPPA", "Madhouse", "ufotable", "Kyoto Animation", "Bones", "Wit Studio", "Production I.G", "Sunrise", "Trigger", "CloverWorks", "A-1 Pictures", "Toei Animation", "Studio Pierrot", "David Production", "TMS Entertainment", "P.A. Works", "J.C.Staff", "Studio Ghibli"];
+  var GENRE_LIST = [["Action", "Ação", 'genre: "Action"'], ["Adventure", "Aventura", 'genre: "Adventure"'], ["Comedy", "Comédia", 'genre: "Comedy"'], ["Drama", "Drama", 'genre: "Drama"'], ["Fantasy", "Fantasia", 'genre: "Fantasy"'], ["Horror", "Terror", 'genre: "Horror"'], ["Mahou Shoujo", null, 'genre: "Mahou Shoujo"'], ["Mecha", "Mecha", 'genre: "Mecha"'], ["Music", "Música", 'genre: "Music"'], ["Mystery", "Mistério", 'genre: "Mystery"'], ["Psychological", "Psicológico", 'genre: "Psychological"'], ["Romance", "Romance", 'genre: "Romance"'], ["Sci-Fi", "Ficção científica", 'genre: "Sci-Fi"'], ["Slice of Life", "Cotidiano", 'genre: "Slice of Life"'], ["Sports", "Esportes", 'genre: "Sports"'], ["Supernatural", "Sobrenatural", 'genre: "Supernatural"'], ["Suspense", null, 'genre: "Thriller"']];
+  var DEMOGRAPHICS = [["Shounen", null, 'tag: "Shounen"'], ["Seinen", null, 'tag: "Seinen"'], ["Shoujo", null, 'tag: "Shoujo"'], ["Josei", null, 'tag: "Josei"'], ["Kids", "Infantil", 'tag: "Kids"']];
+  var THEMES = [["Isekai", null, 'tag: "Isekai"'], ["Reincarnation", null, 'tag: "Reincarnation"'], ["Mythology", null, 'tag: "Mythology"'], ["Vampire", null, 'tag: "Vampire"'], ["Super Power", null, 'tag: "Super Power"'], ["Samurai", null, 'tag: "Samurai"'], ["Martial Arts", null, 'tag: "Martial Arts"'], ["Survival", null, 'tag: "Survival"'], ["Military", null, 'tag: "Military"'], ["Time Travel", null, 'tag: "Time Manipulation"'], ["Space", null, 'tag: "Space"'], ["Mecha", null, 'tag: "Real Robot"'], ["Urban Fantasy", null, 'tag: "Urban Fantasy"'], ["Team Sports", null, 'tag: "Team Sports"'], ["Love Polygon", null, 'tag: "Love Triangle"']];
+  var EVERYDAY = [["Detective", null, 'tag: "Detective"'], ["Organized Crime", null, 'tag: "Organized Crime"'], ["Gore", null, 'tag: "Gore"'], ["Medical", null, 'tag: "Medicine"'], ["Historical", null, 'tag: "Historical"'], ["CGDCT", null, 'tag: "Cute Girls Doing Cute Things"'], ["Iyashikei", null, 'tag: "Iyashikei"'], ["Childcare", null, 'tag: "Parenthood"'], ["Gourmet", null, 'tag: "Food"'], ["Workplace", null, 'tag: "Workplace"'], ["School", null, 'tag: "School"'], ["Performing Arts", null, 'tag: "Acting"'], ["Visual Arts", null, 'tag: "Drawing"'], ["Pets", null, 'tag: "Pets"'], ["Showbiz", null, 'tag: "Idol"']];
+  var STYLES2 = [["Parody", null, 'tag: "Parody"'], ["Gag Humor", null, 'tag: "Slapstick"'], ["Otaku Culture", null, 'tag: "Otaku Culture"'], ["Delinquents", null, 'tag: "Delinquents"'], ["Crossdressing", null, 'tag: "Crossdressing"'], ["Harem", null, 'tag: "Male Harem"'], ["Reverse Harem", null, 'tag: "Female Harem"'], ["Love Polygon", null, 'tag: "Love Triangle"']];
+  var DECADES = [[1980, "80s"], [1990, "90s"], [2e3, "2000s"], [2010, "2010s"], [2020, "2020s"]];
   var cache4 = {};
   function anilist(query) {
     if (cache4[query]) return cache4[query];
@@ -15388,6 +15444,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   var idCache = {};
   function openAnime(m) {
+    if (m.aio) {
+      var mal = /^mal:(\d+)/.exec(m.id);
+      if (!mal) return openDetails(m.type, m.id);
+      return getJSON("https://arm.haglund.dev/api/v2/ids?source=myanimelist&id=" + mal[1], {
+        timeout: 1e4,
+        quiet: true
+      }).then(function (r) {
+        var kitsuOk = r && r.kitsu && withResource("meta", "series", "kitsu:" + r.kitsu).length;
+        openDetails(m.type, kitsuOk ? "kitsu:" + r.kitsu : r && r.imdb || m.id);
+      }).catch(function () {
+        return openDetails(m.type, m.id);
+      });
+    }
     var go = function go(ids2) {
       var kitsuOk = ids2.kitsu && withResource("meta", "series", "kitsu:" + ids2.kitsu).length;
       var id = kitsuOk ? "kitsu:" + ids2.kitsu : ids2.imdb || (ids2.kitsu ? "kitsu:" + ids2.kitsu : null);
@@ -15408,7 +15477,61 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return toast(t("Não encontrei este anime nos addons."));
     });
   }
-  function posterRow(parent, title, load6, onMore) {
+  function aioAddon() {
+    return list().find(function (a) {
+      return a.manifest && a.manifest.id === "aio-metadata";
+    });
+  }
+  function aioOption(cat, want) {
+    var a = aioAddon();
+    var c = a && (a.manifest.catalogs || []).find(function (x) {
+      return x.id === cat;
+    });
+    var ex = c && (c.extra || []).find(function (e) {
+      return e.name === "genre";
+    });
+    var opts = ex && ex.options || [];
+    var w = String(want).toLowerCase();
+    return opts.find(function (o) {
+      return String(o).toLowerCase() === w;
+    }) || opts.find(function (o) {
+      return String(o).toLowerCase().indexOf(w + " - ") === 0;
+    }) || null;
+  }
+  function aioPage(cat, genre, n) {
+    var a = aioAddon();
+    if (!a) return Promise.reject(new Error("no aio"));
+    var extra = {};
+    if (genre) extra.genre = genre;
+    if (n > 1) extra.skip = (n - 1) * 50;
+    return fetchCatalog({
+      addon: a,
+      catalog: {
+        type: "anime",
+        id: cat
+      }
+    }, extra).then(function (metas) {
+      return {
+        items: metas.map(function (m) {
+          return Object.assign({}, m, {
+            type: m.type === "movie" || /movie/i.test(m.type) ? "movie" : "series",
+            aio: true
+          });
+        }),
+        more: metas.length >= 50
+      };
+    });
+  }
+  function listSource(aioCat, aioGenre, aniArgs) {
+    var opt = aioCat && (aioGenre ? aioOption(aioCat, aioGenre) : true);
+    if (aioAddon() && opt) return function (n) {
+      return aioPage(aioCat, aioGenre ? opt : null, n);
+    };
+    return aniArgs ? function (n) {
+      return page(aniArgs, n, 35);
+    } : null;
+  }
+  function posterRow(parent, title, load7, onMore) {
     var row = h("div.row", {
       "data-anchor": "30"
     });
@@ -15424,7 +15547,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       row: row,
       load: function load() {
-        return load6().then(function (r) {
+        return load7().then(function (r) {
           clear(track);
           track.classList.remove("pending");
           if (!r.items.length) return parent.removeChild(row);
@@ -15508,52 +15631,108 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     }
     var s = seasonNow();
-    var add = function add(title, load6, onMore) {
-      return pending2.push(posterRow(rows2, title, load6, onMore));
+    var ns = nextSeason(s);
+    var seasonArgs = function seasonArgs(x) {
+      return "season: " + x.season + ", seasonYear: " + x.year + ", sort: POPULARITY_DESC";
+    };
+    var seasonName = function seasonName(x) {
+      return SEASON_LABEL[x.season] + " " + x.year;
+    };
+    var add = function add(title, load7, onMore) {
+      return pending2.push(posterRow(rows2, title, load7, onMore));
+    };
+    var tiles = function tiles(title, list2, cls) {
+      var usable = list2.filter(function (x) {
+        return x.src;
+      });
+      if (usable.length) tileRow(rows2, title, usable.map(function (x) {
+        return {
+          label: x.label,
+          open: function open() {
+            return push(AnimeGridView(x.label, null, null, x.src));
+          }
+        };
+      }), cls);
+    };
+    var malList = function malList(list2, cls, title) {
+      return tiles(title, list2.map(function (g) {
+        return {
+          label: g[1] ? t(g[1]) : g[0],
+          src: listSource("mal.genres", g[0], g[2] + ", sort: POPULARITY_DESC")
+        };
+      }), cls);
     };
     add(t("Esta temporada"), function () {
-      return page("season: " + s.season + ", seasonYear: " + s.year + ", sort: POPULARITY_DESC");
+      return page(seasonArgs(s));
     }, function () {
-      return push(AnimeGridView(t("Esta temporada"), "season: " + s.season + ", seasonYear: " + s.year + ", sort: POPULARITY_DESC"));
+      return push(AnimeGridView(t("Esta temporada"), seasonArgs(s)));
     });
-    tileRow(rows2, t("Descobrir"), DISCOVER.map(function (d) {
-      return {
-        label: t(d.label),
-        open: function open() {
-          return push(AnimeGridView(t(d.label), d.args));
-        }
-      };
-    }), "discover");
+    tiles(t("Descobrir"), [{
+      label: t("Lançando agora"),
+      src: listSource("mal.airing", null, "status: RELEASING, sort: POPULARITY_DESC")
+    }, {
+      label: t("Esta temporada"),
+      src: listSource("mal.seasons", seasonName(s), seasonArgs(s))
+    }, {
+      label: t("Próxima temporada"),
+      src: listSource("mal.seasons", seasonName(ns), seasonArgs(ns))
+    }, {
+      label: t("Mais populares"),
+      src: listSource(null, null, "sort: POPULARITY_DESC")
+    }, {
+      label: t("Mais favoritados"),
+      src: listSource(null, null, "sort: FAVOURITES_DESC")
+    }, {
+      label: t("Melhores séries"),
+      src: listSource("mal.top_anime", null, "format: TV, sort: SCORE_DESC")
+    }, {
+      label: t("Melhores filmes"),
+      src: listSource(null, null, "format: MOVIE, sort: SCORE_DESC")
+    }, {
+      label: t("Mais bem avaliados"),
+      src: listSource(null, null, "sort: SCORE_DESC")
+    }], "discover");
     add(t("Em alta agora"), function () {
-      return page(DISCOVER[0].args);
+      return page("sort: TRENDING_DESC");
     }, function () {
-      return push(AnimeGridView(t("Em alta agora"), DISCOVER[0].args));
+      return push(AnimeGridView(t("Em alta agora"), "sort: TRENDING_DESC"));
     });
-    tileRow(rows2, t("Estúdios"), STUDIOS.map(function (name) {
+    tiles(t("Anime da temporada"), SEASONS.map(function (x) {
+      var one = {
+        season: x,
+        year: s.year
+      };
+      return {
+        label: t(SEASON_LABEL[x] === "Winter" ? "Inverno" : SEASON_LABEL[x] === "Spring" ? "Primavera" : SEASON_LABEL[x] === "Summer" ? "Verão" : "Outono") + " " + s.year,
+        src: listSource("mal.seasons", seasonName(one), seasonArgs(one))
+      };
+    }), "genre");
+    tiles(t("Estúdios"), STUDIO_LIST.map(function (name) {
       return {
         label: name,
-        open: function open() {
-          return push(AnimeGridView(name, null, name));
+        src: listSource("mal.studios", name, null) || function (n) {
+          return n > 1 ? Promise.resolve({
+            items: [],
+            more: false
+          }) : studioPage(name);
         }
       };
     }), "studio");
-    tileRow(rows2, t("Gêneros"), GENRES.map(function (g) {
+    malList(GENRE_LIST, "genre", t("Gêneros"));
+    malList(DEMOGRAPHICS, "discover", t("Público"));
+    tiles(t("Décadas"), DECADES.map(function (d) {
       return {
-        label: t(g[1]),
-        open: function open() {
-          return push(AnimeGridView(t(g[1]), "genre: " + JSON.stringify(g[0]) + ", sort: POPULARITY_DESC"));
-        }
+        label: d[1],
+        src: listSource(null, null, "startDate_greater: " + d[0] + "0000, startDate_lesser: " + (d[0] + 10) + "0000, sort: SCORE_DESC")
       };
     }), "genre");
-    add(t("Lançando agora"), function () {
-      return page(DISCOVER[1].args);
-    }, function () {
-      return push(AnimeGridView(t("Lançando agora"), DISCOVER[1].args));
-    });
+    malList(THEMES, "discover", t("Temas"));
+    malList(EVERYDAY, "genre", t("Crime e vida cotidiana"));
+    malList(STYLES2, "discover", t("Estilos de comédia e romance"));
     add(t("Filmes de anime"), function () {
-      return page(DISCOVER[5].args);
+      return page("format: MOVIE, sort: POPULARITY_DESC");
     }, function () {
-      return push(AnimeGridView(t("Filmes de anime"), DISCOVER[5].args));
+      return push(AnimeGridView(t("Filmes de anime"), "format: MOVIE, sort: POPULARITY_DESC"));
     });
     return {
       el: el,
@@ -15569,7 +15748,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     };
   }
-  function AnimeGridView(title, args, studio) {
+  function AnimeGridView(title, args, studio, src) {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
       "data-scroll-y": ""
@@ -15585,7 +15764,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function more() {
       if (moreCard && moreCard.parentNode) grid.removeChild(moreCard);
       grid.appendChild(spinnerLine(t("Carregando...")));
-      (studio ? studioPage(studio) : page(args, ++n, 35)).then(function (r) {
+      (src ? src(++n) : studio ? studioPage(studio) : page(args, ++n, 35)).then(function (r) {
         var sp = grid.querySelector(".loading-line");
         if (sp) grid.removeChild(sp);
         r.items.forEach(function (m) {
@@ -15595,7 +15774,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }
           }));
         });
-        if (r.more && !studio) {
+        if (r.more && (src || !studio)) {
           moreCard = h("div.card.see-all", {
             focusable: true,
             onSelect: function onSelect() {
@@ -15609,7 +15788,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           grid.appendChild(moreCard);
         }
         loadVisibleImages(el, 400);
-        if (n === 1 || studio) {
+        if (n === 1 || studio && !src) {
           var first = grid.querySelector(".card");
           if (first) focus(first);
         }
@@ -15932,6 +16111,386 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/api/nuvioCollections.js
+  var TMDB_IMG2 = "https://image.tmdb.org/t/p/w342";
+  var files = {};
+  function load6(name) {
+    if (!files[name]) {
+      var base = window.__KAI_BASE__ || "";
+      files[name] = getJSON(base + "collections/" + name + ".json", {
+        timeout: 3e4
+      }).catch(function (e) {
+        delete files[name];
+        throw e;
+      });
+    }
+    return files[name];
+  }
+  function fromTmdb(list2, media) {
+    return (list2 || []).filter(function (x) {
+      return x && x.poster_path;
+    }).map(function (x) {
+      var type = (x.media_type || media) === "tv" ? "series" : "movie";
+      return {
+        id: "tmdb:" + x.id,
+        tmdb: x.id,
+        tmdbType: type === "series" ? "tv" : "movie",
+        type: type,
+        name: x.title || x.name || "",
+        poster: TMDB_IMG2 + x.poster_path
+      };
+    });
+  }
+  function sortList(items3, sort2) {
+    var s = String(sort2 || "");
+    var key3 = s.split(".")[0];
+    var desc = /desc$/.test(s);
+    if (!key3 || key3 === "original_order" || key3 === "rank") return items3;
+    return items3.slice().sort(function (a, b) {
+      return ((a.__s[key3] || 0) - (b.__s[key3] || 0)) * (desc ? -1 : 1);
+    });
+  }
+  function fetchSource(src, page2) {
+    var n = page2 || 1;
+    if (src.q) {
+      return tmdbGet("discover/" + src.m, Object.assign({
+        page: n,
+        include_adult: "false"
+      }, src.q)).then(function (r) {
+        return {
+          items: fromTmdb(r && r.results, src.m),
+          more: !!(r && r.page < r.total_pages && n < 20)
+        };
+      });
+    }
+    if (src.list) {
+      return tmdbGet("list/" + src.list, {}).then(function (r) {
+        var raw = (r && r.items || []).map(function (x) {
+          return Object.assign({}, x, {
+            __s: {
+              vote_average: x.vote_average,
+              popularity: x.popularity,
+              release_date: Date.parse(x.release_date || x.first_air_date) || 0
+            }
+          });
+        });
+        var items3 = fromTmdb(sortList(raw, src.sort), src.m);
+        return {
+          items: items3.slice((n - 1) * 40, n * 40),
+          more: items3.length > n * 40
+        };
+      });
+    }
+    if (src.coll) {
+      return tmdbGet("collection/" + src.coll, {}).then(function (r) {
+        var parts = (r && r.parts || []).slice().sort(function (a, b) {
+          return (Date.parse(a.release_date) || 9e15) - (Date.parse(b.release_date) || 9e15);
+        });
+        return {
+          items: fromTmdb(parts, "movie"),
+          more: false
+        };
+      });
+    }
+    if (src.trakt) {
+      var kind = src.m === "tv" ? "show" : "movie";
+      return traktPublic("/lists/" + src.trakt + "/items/" + kind + "?limit=40&page=" + n).then(function (list2) {
+        return {
+          items: (list2 || []).map(function (x) {
+            var m = x.movie || x.show;
+            var imdb = m && m.ids && m.ids.imdb;
+            return imdb ? {
+              id: imdb,
+              type: x.movie ? "movie" : "series",
+              name: m.title,
+              poster: "https://images.metahub.space/poster/medium/" + imdb + "/img"
+            } : null;
+          }).filter(Boolean),
+          more: (list2 || []).length >= 40
+        };
+      });
+    }
+    if (src.addon) {
+      var a = list().find(function (x) {
+        return x.manifest && x.manifest.id === src.addon;
+      });
+      if (!a) return Promise.resolve({
+        items: [],
+        more: false,
+        missing: src.addon
+      });
+      var extra = {};
+      if (src.genre) extra.genre = src.genre;
+      if (n > 1) extra.skip = (n - 1) * 100;
+      return fetchCatalog({
+        addon: a,
+        catalog: {
+          type: src.m,
+          id: src.cat
+        }
+      }, extra).then(function (metas) {
+        return {
+          items: metas,
+          more: metas.length >= 50
+        };
+      });
+    }
+    return Promise.resolve({
+      items: [],
+      more: false
+    });
+  }
+  function idFor(m) {
+    if (!m.tmdb) return Promise.resolve(m.id);
+    return tmdbImdb(m.tmdbType, m.tmdb).then(function (imdb) {
+      return imdb || m.id;
+    });
+  }
+
+  // src/js/views/nuvioHome.js
+  function openItem(m) {
+    idFor(m).then(function (id) {
+      return openDetails(m.type, id);
+    }).catch(function () {
+      return toast(t("Não foi possível abrir agora."));
+    });
+  }
+  function folderTile(f) {
+    var shape = f.s === "L" ? "landscape" : f.s === "S" ? "square" : "poster";
+    var wrap = h("div.poster-wrap");
+    if (f.c) {
+      var im = h("img", {
+        alt: ""
+      });
+      im.setAttribute("data-lazy", f.c);
+      im.onerror = function () {
+        im.style.display = "none";
+        wrap.appendChild(h("div.ph", {
+          text: f.t
+        }));
+      };
+      wrap.appendChild(im);
+    } else wrap.appendChild(h("div.ph", {
+      text: (f.e ? f.e + " " : "") + f.t
+    }));
+    var open = function open() {
+      return push(f.src.length === 1 ? SourceGridView(f.src[0], f.t) : FolderView(f));
+    };
+    return h("div.card.nc-tile", {
+      focusable: true,
+      cls: "nc-" + shape,
+      onSelect: open
+    }, [wrap, h("div.name", {
+      text: f.h ? "" : f.t
+    })]);
+  }
+  function collectionRows(parent, data) {
+    return data.map(function (c) {
+      var row = h("div.row.nc-row", {
+        "data-anchor": "30"
+      });
+      var track = h("div.row-track", {
+        "data-scroll-x": "",
+        "data-group": ""
+      });
+      row.appendChild(h("div.row-title", null, [c.t, h("small", {
+        text: t("{n} pastas", {
+          n: c.f.length
+        })
+      })]));
+      row.appendChild(track);
+      parent.appendChild(row);
+      return {
+        row: row,
+        load: function load() {
+          c.f.forEach(function (f) {
+            return track.appendChild(folderTile(f));
+          });
+          loadVisibleImages(row);
+          return Promise.resolve();
+        }
+      };
+    });
+  }
+  function sourceRow(parent, src, title) {
+    var row = h("div.row", {
+      "data-anchor": "30"
+    });
+    var track = h("div.row-track.pending", {
+      "data-scroll-x": "",
+      "data-group": ""
+    }, spinnerLine(t("Carregando...")));
+    row.appendChild(h("div.row-title", {
+      text: title
+    }));
+    row.appendChild(track);
+    parent.appendChild(row);
+    return {
+      row: row,
+      load: function load() {
+        return fetchSource(src, 1).then(function (r) {
+          clear(track);
+          track.classList.remove("pending");
+          if (!r.items.length) {
+            if (row.parentNode) parent.removeChild(row);
+            return;
+          }
+          r.items.slice(0, 20).forEach(function (m) {
+            return track.appendChild(card(m, {
+              onSelect: function onSelect() {
+                return openItem(m);
+              }
+            }));
+          });
+          if (r.more || r.items.length > 20) track.appendChild(h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return push(SourceGridView(src, title));
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "→"
+          }), t("Ver tudo")])), h("div.name", {
+            text: ""
+          })]));
+          loadVisibleImages(row);
+        }).catch(function () {
+          return row.parentNode && parent.removeChild(row);
+        });
+      }
+    };
+  }
+  function lazyQueue(el) {
+    var pending2 = [];
+    var active2 = 0;
+    function run3() {
+      if (el.offsetParent === null) return;
+      var limit = window.innerHeight * 2.2;
+      var _loop7 = function _loop7() {
+          var p = pending2[i];
+          if (p.state) return 0; // continue
+          if (!p.row.parentNode) {
+            p.state = "done";
+            return 0; // continue
+          }
+          if (p.row.getBoundingClientRect().top > limit) return 1; // break
+          p.state = "loading";
+          active2++;
+          p.load().then(function () {
+            p.state = "done";
+            active2--;
+            run3();
+          }, function () {
+            p.state = "done";
+            active2--;
+            run3();
+          });
+        },
+        _ret4;
+      for (var i = 0; i < pending2.length && active2 < 2; i++) {
+        _ret4 = _loop7();
+        if (_ret4 === 0) continue;
+        if (_ret4 === 1) break;
+      }
+    }
+    return {
+      add: function add(list2) {
+        list2.forEach(function (p) {
+          return pending2.push(p);
+        });
+        run3();
+      },
+      run: run3,
+      clear: function clear() {
+        return pending2.length = 0;
+      }
+    };
+  }
+  function FolderView(f) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var rows2 = h("div.rows");
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: f.t
+    }));
+    scroller.appendChild(rows2);
+    el.appendChild(scroller);
+    var q2 = lazyQueue(el);
+    q2.add(f.src.map(function (s) {
+      return sourceRow(rows2, s, s.n || f.t);
+    }));
+    return {
+      el: el,
+      onShow: function onShow() {
+        q2.run();
+        loadVisibleImages(el);
+      },
+      onScroll: function onScroll() {
+        return q2.run();
+      }
+    };
+  }
+  function SourceGridView(src, title) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var grid = h("div.grid");
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: title
+    }));
+    scroller.appendChild(grid);
+    el.appendChild(scroller);
+    var n = 0;
+    var more = null;
+    var seen = {};
+    function next() {
+      if (more && more.parentNode) grid.removeChild(more);
+      grid.appendChild(spinnerLine(t("Carregando...")));
+      fetchSource(src, ++n).then(function (r) {
+        var sp = grid.querySelector(".loading-line");
+        if (sp) grid.removeChild(sp);
+        r.items.forEach(function (m) {
+          if (seen[m.id]) return;
+          seen[m.id] = true;
+          grid.appendChild(card(m, {
+            onSelect: function onSelect() {
+              return openItem(m);
+            }
+          }));
+        });
+        if (r.more) {
+          more = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return next();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          grid.appendChild(more);
+        }
+        loadVisibleImages(el, 400);
+        if (n === 1) {
+          var first = grid.querySelector(".card");
+          if (first) focus(first);
+        }
+      }).catch(function () {
+        return toast(t("Não foi possível carregar agora."));
+      });
+    }
+    next();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      }
+    };
+  }
+
   // src/js/views/home.js
   var ROTATE_MS = 8e3;
   function HomeView() {
@@ -16129,7 +16688,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop7 = function _loop7() {
+      var _loop8 = function _loop8() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -16145,30 +16704,58 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             loadNearby();
           });
         },
-        _ret4;
+        _ret5;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret4 = _loop7();
-        if (_ret4 === 0) continue;
-        if (_ret4 === 1) break;
+        _ret5 = _loop8();
+        if (_ret5 === 0) continue;
+        if (_ret5 === 1) break;
       }
     }
+    var boardToken = 0;
     function renderBoard() {
+      var myBoard = ++boardToken;
+      var alive = function alive() {
+        return myBoard === boardToken && loadedBoard;
+      };
       loadedBoard = true;
       pending2 = [];
       clear(rows2);
       rows2.appendChild(spinnerLine(t("Carregando catálogos...")));
       load().then(function () {
         clear(rows2);
+        var layout = settings().homeLayout || "collections";
+        if (layout !== "addons") {
+          var box = h("div.nc-box");
+          rows2.appendChild(box);
+          if (!hasTmdb()) box.appendChild(h("div.nc-hint", {
+            text: t("Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.")
+          }));
+          load6("home").then(function (data) {
+            if (!alive()) return;
+            var list2 = collectionRows(box, data).map(function (x) {
+              return Object.assign(x, {
+                state: "idle"
+              });
+            });
+            pending2 = list2.concat(pending2);
+            loadNearby();
+          }).catch(function () {
+            return box.appendChild(h("div.nc-hint", {
+              text: t("Não foi possível carregar as coleções agora.")
+            }));
+          });
+        }
+        if (layout === "collections") return;
         var wl = watchlistEntry();
         var cats = visible((wl ? [wl] : []).concat(boardCatalogs(), boardEntries()));
         if (!cats.length) rows2.appendChild(h("div.row-empty", {
           text: t("Nenhum catálogo. Entre na sua conta em Ajustes.")
         }));
-        pending2 = cats.map(function (c) {
+        pending2 = pending2.concat(cats.map(function (c) {
           return Object.assign(buildRow(c, rows2), {
             state: "idle"
           });
-        });
+        }));
         loadNearby();
       }).catch(function (e) {
         clear(rows2);
@@ -16266,7 +16853,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     row.appendChild(title);
     row.appendChild(track);
     parent.appendChild(row);
-    var load6 = function load6() {
+    var load7 = function load7() {
       return (entry.fetch ? entry.fetch() : fetchCatalog(entry)).then(function (metas) {
         clear(track);
         track.classList.remove("pending");
@@ -16300,7 +16887,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     return {
       row: row,
-      load: load6
+      load: load7
     };
   }
   function perf() {
@@ -16781,7 +17368,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T03:06:07.223Z";
+  var BUILD = "2026-11-14T03:34:57.174Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -16949,7 +17536,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/lib/theme.js
-  var THEMES = [{
+  var THEMES2 = [{
     id: "purple",
     label: "Roxo",
     main: "#7b5bf5",
@@ -17078,7 +17665,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     b.classList.toggle("oled", bg === "oled");
     b.classList.toggle("bg-glow", bg === "glow");
   }
-  var BASE2 = THEMES[0];
+  var BASE2 = THEMES2[0];
   function rgb(hex) {
     var n = parseInt(hex.slice(1), 16);
     return [n >> 16 & 255, n >> 8 & 255, n & 255].join(",");
@@ -17093,7 +17680,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function apply3(id) {
     var old = document.getElementById("theme-css");
     if (old) old.parentNode.removeChild(old);
-    var th = THEMES.find(function (x2) {
+    var th = THEMES2.find(function (x2) {
       return x2.id === id;
     });
     if (!th || th === BASE2) return;
@@ -17808,6 +18395,36 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderHomePage(s) {
       pageHeader(t("Tela inicial"));
+      var LAYOUTS = [{
+        id: "collections",
+        label: "Coleções (Kaptain)"
+      }, {
+        id: "both",
+        label: "Coleções e addons"
+      }, {
+        id: "addons",
+        label: "Só os catálogos dos addons"
+      }];
+      var lay = LAYOUTS.find(function (x) {
+        return x.id === (s.homeLayout || "collections");
+      }) || LAYOUTS[0];
+      body.appendChild(row(t("Conteúdo da tela inicial"), t("Coleções prontas (filmes, séries, atores, estúdios...) ou os catálogos dos seus addons"), t(lay.label), function () {
+        return menu(t("Conteúdo da tela inicial"), LAYOUTS.map(function (x) {
+          return {
+            label: t(x.label),
+            value: x.id,
+            checked: x.id === lay.id
+          };
+        }), {
+          onPick: function onPick(v) {
+            saveSettings({
+              homeLayout: v
+            });
+            dropTab("home");
+            render();
+          }
+        });
+      }));
       var cur = CW_SORTS.find(function (x) {
         return x.id === s.cwSort;
       }) || CW_SORTS[0];
@@ -18418,11 +19035,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         body.appendChild(h("div.set-section", {
           text: t("Cores e formas")
         }));
-        var curTheme = THEMES.find(function (x) {
+        var curTheme = THEMES2.find(function (x) {
           return x.id === s.theme;
-        }) || THEMES[0];
+        }) || THEMES2[0];
         body.appendChild(row(t("Cor do app"), t("Cor de destaque de botões, foco e barras"), t(curTheme.label), function () {
-          return menu(t("Cor do app"), THEMES.map(function (x) {
+          return menu(t("Cor do app"), THEMES2.map(function (x) {
             return {
               label: "● " + t(x.label),
               value: x.id,
@@ -19177,14 +19794,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             mode = m.id;
             renderModes();
             focus(modes.children[i]);
-            load6();
+            load7();
           }
         }));
       });
     }
     function renderDays() {
       clear(days);
-      var _loop8 = function _loop8() {
+      var _loop9 = function _loop9() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -19195,16 +19812,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             current3 = off;
             renderDays();
             focus(days.children[off + 1]);
-            load6();
+            load7();
           }
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop8();
+        _loop9();
       }
       days.__last = days.children[current3 + 1];
     }
-    function load6() {
+    function load7() {
       var my = ++token;
       clear(grid);
       grid.appendChild(spinnerLine(t("Buscando lançamentos...")));
@@ -19263,7 +19880,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     renderModes();
     renderDays();
-    load6();
+    load7();
     return {
       el: el,
       onShow: function onShow() {

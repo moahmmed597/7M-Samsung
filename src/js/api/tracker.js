@@ -447,3 +447,8 @@ export function watchlistEntry() {
       ),
   };
 }
+
+// Public Trakt data (lists) with just the app's Client ID, no sign-in needed.
+export function traktPublic(path) {
+  return request('GET', TRAKT_API + path, null, { headers: traktHeaders(), quiet: true, timeout: 15000 });
+}

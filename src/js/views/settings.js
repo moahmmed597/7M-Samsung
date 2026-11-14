@@ -388,6 +388,23 @@ export function SettingsView() {
 
   function renderHomePage(s) {
     pageHeader(t('Tela inicial'));
+    const LAYOUTS = [
+      { id: 'collections', label: 'Coleções (Kaptain)' },
+      { id: 'both', label: 'Coleções e addons' },
+      { id: 'addons', label: 'Só os catálogos dos addons' },
+    ];
+    const lay = LAYOUTS.find((x) => x.id === (s.homeLayout || 'collections')) || LAYOUTS[0];
+    body.appendChild(
+      row(t('Conteúdo da tela inicial'), t('Coleções prontas (filmes, séries, atores, estúdios...) ou os catálogos dos seus addons'), t(lay.label), () =>
+        menu(t('Conteúdo da tela inicial'), LAYOUTS.map((x) => ({ label: t(x.label), value: x.id, checked: x.id === lay.id })), {
+          onPick: (v) => {
+            store.saveSettings({ homeLayout: v });
+            router.dropTab('home');
+            render();
+          },
+        })
+      )
+    );
     const cur = CW_SORTS.find((x) => x.id === s.cwSort) || CW_SORTS[0];
     body.appendChild(
       row(t('Ordem do Continuar assistindo'), '', t(cur.label), () =>

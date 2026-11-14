@@ -150,6 +150,12 @@ export function searchPeople(query) {
   );
 }
 
+// Any TMDB v3 path (for the imported Nuvio collections); rejects without a key.
+export function tmdbGet(path, params) {
+  if (!tmdbKey()) return Promise.reject(new Error('no TMDB key'));
+  return tmdb(path, Object.assign({ language: apiLang() }, params || {}));
+}
+
 // TMDB movie/tv id → IMDb id, which Stremio's catalogs use.
 export function tmdbImdb(type, id) {
   return tmdb(type + '/' + id + '/external_ids', {}).then((r) => (r && r.imdb_id) || null);
