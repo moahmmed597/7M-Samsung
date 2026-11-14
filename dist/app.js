@@ -5499,7 +5499,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Indonésio": "Indonesian",
     "Malaio": "Malay",
     "Use de 4 a 8 números.": "Use 4 to 8 digits.",
-    "Chaves próprias (opcional)": "Your own keys (optional)"
+    "Chaves próprias (opcional)": "Your own keys (optional)",
+    "Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.": "Point the camera at the code, paste the keys and tap Send. They stay on this TV only.",
+    "Chaves pelo celular": "Keys from your phone",
+    "Chaves recebidas do celular: {n}": "Keys received from the phone: {n}",
+    "Coloque as chaves pelo celular": "Add the keys from your phone",
+    "O serviço da TV não está rodando. Feche o app e abra de novo.": "The TV service is not running. Close the app and open it again.",
+    "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "First add the keys from your phone: point the camera at the QR on this page."
   };
 
   // src/js/lib/i18n-ar.js
@@ -6229,7 +6235,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Indonésio": "إندونيسي",
     "Malaio": "ملايو",
     "Use de 4 a 8 números.": "استخدم من 4 إلى 8 أرقام.",
-    "Chaves próprias (opcional)": "مفاتيحك الخاصة (اختياري)"
+    "Chaves próprias (opcional)": "مفاتيحك الخاصة (اختياري)",
+    "Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.": "وجّه الكاميرا على الباركود، الصق المفاتيح واضغط إرسال. تبقى في هالتلفزيون بس.",
+    "Chaves pelo celular": "المفاتيح من الجوال",
+    "Chaves recebidas do celular: {n}": "وصلت المفاتيح من الجوال: {n}",
+    "Coloque as chaves pelo celular": "حط المفاتيح من جوالك",
+    "O serviço da TV não está rodando. Feche o app e abra de novo.": "خدمة التلفزيون مو شغالة. سكّر التطبيق وافتحه من جديد.",
+    "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "أول شي حط المفاتيح من جوالك: صوّر الباركود اللي في هالصفحة."
   };
 
   // src/js/lib/i18n.js
@@ -7936,11 +7948,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     seekHandler = fn;
   }
   var searchHandler = null;
+  var keysHandler = null;
+  function onKeys(fn) {
+    keysHandler = fn;
+  }
+  function setupUrl(i) {
+    return i ? "http://" + i.ip + ":" + i.port + "/setup#pin=" + i.pin : null;
+  }
   function onSearch(fn) {
     searchHandler = fn;
   }
   function handle(ev) {
-    if (ev.type === "key") fireKey(ev.code);else if (ev.type === "text") typeText(ev.text, ev.submit);else if (ev.type === "search" && searchHandler && ev.text) searchHandler(ev.text);else if (ev.type === "seek" && seekHandler) seekHandler(ev.to);else if (ev.type === "open" && openHandler && ev.item) openHandler(ev);
+    if (ev.type === "key") fireKey(ev.code);else if (ev.type === "text") typeText(ev.text, ev.submit);else if (ev.type === "search" && searchHandler && ev.text) searchHandler(ev.text);else if (ev.type === "seek" && seekHandler) seekHandler(ev.to);else if (ev.type === "open" && openHandler && ev.item) openHandler(ev);else if (ev.type === "keys" && keysHandler && ev.keys) keysHandler(ev.keys);
   }
   function poll(wait2) {
     setTimeout(function () {
@@ -12836,6 +12855,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return true;
         }
       }
+      if (activeSeg && k === KEY.UP && cur !== skipBtn) {
+        showControls(skipBtn);
+        focus(skipBtn, {
+          noScroll: true
+        });
+        return true;
+      }
       if (!controlsOn) {
         if (k === KEY.LEFT) seekBy(-1);else if (k === KEY.RIGHT) seekBy(1);else if (k === KEY.ENTER) togglePlay();else if (k === KEY.DOWN) showControls(playBtn);else showControls(bar);
         return true;
@@ -16146,7 +16172,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-13T18:13:43.796Z";
+  var BUILD = "2026-11-14T02:11:28.821Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -16754,6 +16780,39 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: title
       }));
     }
+    function phoneSetupBox() {
+      var box = h("div.set-row.phone-remote", {
+        focusable: true
+      }, h("div.phone-sub", {
+        text: t("Carregando...")
+      }));
+      info().then(function (i) {
+        clear(box);
+        var url2 = setupUrl(i);
+        if (!url2) {
+          box.appendChild(h("div.phone-sub", {
+            text: t("O serviço da TV não está rodando. Feche o app e abra de novo.")
+          }));
+          return;
+        }
+        box.appendChild(h("img.phone-qr", {
+          src: qrImage(url2, 300),
+          alt: ""
+        }));
+        box.appendChild(h("div.phone-text", null, [h("div.phone-title", {
+          text: t("Coloque as chaves pelo celular")
+        }), h("div.phone-sub", {
+          text: t("Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.")
+        }), h("div.phone-url", {
+          text: "http://" + i.ip + ":" + i.port + "/setup"
+        }), h("div.phone-sub", {
+          text: t("PIN: {pin}", {
+            pin: i.pin
+          })
+        })]));
+      });
+      return box;
+    }
     function accountCard(p) {
       var name = p === "trakt" ? "Trakt" : "Simkl";
       var acc = account(p);
@@ -16789,7 +16848,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
           return;
         }
-        if (!hasKeys(p)) return toast(p === "trakt" ? t("Preencha o Client ID e o Client Secret do Trakt abaixo.") : t("Preencha o Client ID do Simkl abaixo."), 5e3);
+        if (!hasKeys(p)) return toast(t("Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página."), 6e3);
         openTrackLink(p, function () {
           return render();
         });
@@ -16806,6 +16865,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       PROVIDERS2.forEach(function (p) {
         return body.appendChild(accountCard(p));
       });
+      if (!hasKeys("trakt") || !hasKeys("simkl")) {
+        body.appendChild(h("div.set-section", {
+          text: t("Chaves pelo celular")
+        }));
+        body.appendChild(phoneSetupBox());
+      }
       var builtIn = hasBuiltInKeys("trakt") && hasBuiltInKeys("simkl");
       if (builtIn) body.appendChild(h("div.set-section", {
         text: t("Chaves próprias (opcional)")
@@ -17923,6 +17988,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       if (page === "c-integrations") {
         body.appendChild(h("div.set-section", {
+          text: t("Chaves pelo celular")
+        }));
+        body.appendChild(phoneSetupBox());
+        body.appendChild(h("div.set-section", {
           text: t("Integrações")
         }));
         body.appendChild(row(t("Rastreamento (Trakt e Simkl)"), t("Contas, fontes e recursos do Trakt"), connected().length ? t("Conectado") : t("Desconectado"), function () {
@@ -18706,6 +18775,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         videoId: ev.video,
         autoStreams: true
       } : {});
+    });
+    onKeys(function (keys2) {
+      saveSettings(keys2);
+      dropTab("settings");
+      toast(t("Chaves recebidas do celular: {n}", {
+        n: Object.keys(keys2).length
+      }), 5e3);
+      var want = keys2.traktClientId && !isConnected("trakt") ? "trakt" : keys2.simklClientId && !isConnected("simkl") ? "simkl" : null;
+      if (want && hasKeys(want)) openTrackLink(want);
     });
     onSearch(function (q2) {
       goTab("search");

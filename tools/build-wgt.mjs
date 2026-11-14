@@ -68,8 +68,54 @@ add('index.html', html);
   });
 })(path.join(dist, 'fonts'), '/fonts');
 // The service: the same file TizenBrew runs, plus the entry points a Tizen service needs.
+// The installed copy can't update itself like app.js does, so the entry file first tries the newest
+// remote-service.js from GitHub (pinned to the latest commit on jsDelivr, the same source the app
+// loads from) and falls back to the copy packaged here when offline.
 const service = fs.readFileSync(path.join(dist, 'remote-service.js'), 'utf8');
-add('service/remote-service.js', service + '\nmodule.exports.onStart = function () {};\nmodule.exports.onRequest = function () {};\nmodule.exports.onExit = function () {};\n');
+add('service/bundled.js', service);
+add(
+  'service/remote-service.js',
+  `'use strict';
+module.exports.onStart = function () {};
+module.exports.onRequest = function () {};
+module.exports.onExit = function () {};
+(function () {
+  var https = require('https');
+  var started = false;
+  function run(code, from) {
+    if (started) return;
+    started = true;
+    try {
+      new Function('require', 'module', 'exports', '__dirname', code)(require, { exports: {} }, {}, __dirname);
+      console.log('Stremio 7M service from ' + from);
+    } catch (e) {
+      console.log('Service from ' + from + ' failed: ' + e.message);
+      if (from !== 'package') require('./bundled.js');
+    }
+  }
+  function get(url, cb) {
+    var r = https.get(url, { headers: { 'User-Agent': 'stremio-7m-tizen', Accept: 'application/vnd.github.sha' }, timeout: 6000 }, function (res) {
+      var body = '';
+      res.setEncoding('utf8');
+      res.on('data', function (c) { body += c; });
+      res.on('end', function () { cb(res.statusCode === 200 ? body : null); });
+    });
+    r.on('error', function () { cb(null); });
+    r.on('timeout', function () { r.abort(); });
+  }
+  var fallback = setTimeout(function () { if (!started) { started = true; require('./bundled.js'); } }, 15000);
+  get('https://api.github.com/repos/moahmmed597/7M-Samsung/commits/main', function (sha) {
+    sha = String(sha || '').replace(/\\s/g, '');
+    if (!/^[0-9a-f]{40}$/.test(sha)) { clearTimeout(fallback); if (!started) { started = true; require('./bundled.js'); } return; }
+    get('https://cdn.jsdelivr.net/gh/moahmmed597/7M-Samsung@' + sha + '/dist/remote-service.js', function (code) {
+      clearTimeout(fallback);
+      if (code && code.indexOf('REMOTE_PAGE') >= 0) run(code, sha.slice(0, 7));
+      else if (!started) { started = true; require('./bundled.js'); }
+    });
+  });
+})();
+`
+);
 
 // ---------- Minimal ZIP writer (deflate) ----------
 const CRC = new Int32Array(256).map((_, n) => {

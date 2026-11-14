@@ -164,6 +164,29 @@ export function SettingsView() {
     body.appendChild(h('div.set-title', { text: title }));
   }
 
+  // QR that opens the key setup page on the phone (keys travel over the home Wi-Fi to this TV only).
+  function phoneSetupBox() {
+    const box = h('div.set-row.phone-remote', { focusable: true }, h('div.phone-sub', { text: t('Carregando...') }));
+    phone.info().then((i) => {
+      clear(box);
+      const url = phone.setupUrl(i);
+      if (!url) {
+        box.appendChild(h('div.phone-sub', { text: t('O serviço da TV não está rodando. Feche o app e abra de novo.') }));
+        return;
+      }
+      box.appendChild(h('img.phone-qr', { src: phone.qrImage(url, 300), alt: '' }));
+      box.appendChild(
+        h('div.phone-text', null, [
+          h('div.phone-title', { text: t('Coloque as chaves pelo celular') }),
+          h('div.phone-sub', { text: t('Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.') }),
+          h('div.phone-url', { text: 'http://' + i.ip + ':' + i.port + '/setup' }),
+          h('div.phone-sub', { text: t('PIN: {pin}', { pin: i.pin }) }),
+        ])
+      );
+    });
+    return box;
+  }
+
   function accountCard(p) {
     const name = p === 'trakt' ? 'Trakt' : 'Simkl';
     const acc = tracker.account(p);
@@ -189,7 +212,7 @@ export function SettingsView() {
         });
         return;
       }
-      if (!tracker.hasKeys(p)) return toast(p === 'trakt' ? t('Preencha o Client ID e o Client Secret do Trakt abaixo.') : t('Preencha o Client ID do Simkl abaixo.'), 5000);
+      if (!tracker.hasKeys(p)) return toast(t('Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.'), 6000);
       openTrackLink(p, () => render());
     });
     card.classList.add('acct-card', 'acct-' + p);
@@ -201,6 +224,10 @@ export function SettingsView() {
     pageHeader(t('Rastreamento (Trakt e Simkl)'));
     body.appendChild(h('div.set-section', { text: t('Contas conectadas') }));
     tracker.PROVIDERS.forEach((p) => body.appendChild(accountCard(p)));
+    if (!tracker.hasKeys('trakt') || !tracker.hasKeys('simkl')) {
+      body.appendChild(h('div.set-section', { text: t('Chaves pelo celular') }));
+      body.appendChild(phoneSetupBox());
+    }
     // With the app's own keys in the build, linking is just "scan and sign in"; own keys stay optional.
     const builtIn = tracker.hasBuiltInKeys('trakt') && tracker.hasBuiltInKeys('simkl');
     if (builtIn) body.appendChild(h('div.set-section', { text: t('Chaves próprias (opcional)') }));
@@ -1037,6 +1064,8 @@ export function SettingsView() {
     }
 
     if (page === 'c-integrations') {
+      body.appendChild(h('div.set-section', { text: t('Chaves pelo celular') }));
+      body.appendChild(phoneSetupBox());
       body.appendChild(h('div.set-section', { text: t('Integrações') }));
       body.appendChild(
         row(t('Rastreamento (Trakt e Simkl)'), t('Contas, fontes e recursos do Trakt'), tracker.connected().length ? t('Conectado') : t('Desconectado'), () => openPage('tracking'))

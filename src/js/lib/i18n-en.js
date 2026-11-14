@@ -734,4 +734,10 @@ export const EN = {
   "Malaio": "Malay",
   "Use de 4 a 8 números.": "Use 4 to 8 digits.",
   "Chaves próprias (opcional)": "Your own keys (optional)",
+  "Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.": "Point the camera at the code, paste the keys and tap Send. They stay on this TV only.",
+  "Chaves pelo celular": "Keys from your phone",
+  "Chaves recebidas do celular: {n}": "Keys received from the phone: {n}",
+  "Coloque as chaves pelo celular": "Add the keys from your phone",
+  "O serviço da TV não está rodando. Feche o app e abra de novo.": "The TV service is not running. Close the app and open it again.",
+  "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "First add the keys from your phone: point the camera at the QR on this page.",
 };

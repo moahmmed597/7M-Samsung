@@ -734,4 +734,10 @@ export const AR = {
   "Malaio": "ملايو",
   "Use de 4 a 8 números.": "استخدم من 4 إلى 8 أرقام.",
   "Chaves próprias (opcional)": "مفاتيحك الخاصة (اختياري)",
+  "Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.": "وجّه الكاميرا على الباركود، الصق المفاتيح واضغط إرسال. تبقى في هالتلفزيون بس.",
+  "Chaves pelo celular": "المفاتيح من الجوال",
+  "Chaves recebidas do celular: {n}": "وصلت المفاتيح من الجوال: {n}",
+  "Coloque as chaves pelo celular": "حط المفاتيح من جوالك",
+  "O serviço da TV não está rodando. Feche o app e abra de novo.": "خدمة التلفزيون مو شغالة. سكّر التطبيق وافتحه من جديد.",
+  "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "أول شي حط المفاتيح من جوالك: صوّر الباركود اللي في هالصفحة.",
 };

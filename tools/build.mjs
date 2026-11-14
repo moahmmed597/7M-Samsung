@@ -95,7 +95,8 @@ async function emit(result) {
   // Phone remote: the TizenBrew service (Node 4 on the TV) with the phone page built in.
   const page = fs.readFileSync(path.join(src, 'remote', 'remote.html'), 'utf8');
   const service = fs.readFileSync(path.join(root, 'service', 'remote-service.js'), 'utf8');
-  fs.writeFileSync(path.join(dist, 'remote-service.js'), 'var REMOTE_PAGE = ' + JSON.stringify(page) + ';\n' + service);
+  const setup = fs.readFileSync(path.join(src, 'remote', 'setup.html'), 'utf8'); // key setup from the phone
+  fs.writeFileSync(path.join(dist, 'remote-service.js'), 'var REMOTE_PAGE = ' + JSON.stringify(page) + ';\nvar SETUP_PAGE = ' + JSON.stringify(setup) + ';\n' + service);
   console.log('[build] dist/remote-service.js (phone remote service)');
   fs.writeFileSync(path.join(dist, 'build.json'), JSON.stringify({ build: BUILD, version: APP_VERSION }) + '\n');
 }

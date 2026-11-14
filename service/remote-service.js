@@ -319,6 +319,30 @@ function handle(req, res) {
   if (url.pathname === '/' || url.pathname === '/index.html') {
     return send(res, 200, remotePage(), 'text/html; charset=utf-8');
   }
+  // Key setup from the phone (the QR in Settings): the keys go to the app on this TV only.
+  if (url.pathname === '/setup' || url.pathname === '/setup.html') {
+    return send(res, 200, typeof SETUP_PAGE === 'string' ? SETUP_PAGE : 'Setup page missing', 'text/html; charset=utf-8');
+  }
+  if (url.pathname === '/api/keys' && req.method === 'POST') {
+    if (q.pin !== PIN) return send(res, 401, { ok: false });
+    return readBody(req, function (body) {
+      var allowed = ['traktClientId', 'traktClientSecret', 'simklClientId', 'tmdbKey', 'mdblistKey', 'rpdbKey', 'subdlKey', 'animeSkipClientId', 'realDebridKey', 'torboxKey', 'premiumizeKey'];
+      var keys = {};
+      var n = 0;
+      try {
+        var data = JSON.parse(body || '{}');
+        allowed.forEach(function (k) {
+          var v = typeof data[k] === 'string' ? data[k].trim() : '';
+          if (v && v.length <= 200 && /^[\w.\-:]+$/.test(v)) { keys[k] = v; n++; }
+        });
+      } catch (e) {
+        return send(res, 400, { ok: false });
+      }
+      if (!n) return send(res, 400, { ok: false });
+      push({ type: 'keys', keys: keys });
+      send(res, 200, { ok: true, count: n });
+    }, 8192);
+  }
   if (url.pathname === '/api/check') {
     return send(res, q.pin === PIN ? 200 : 401, { ok: q.pin === PIN });
   }

@@ -26,6 +26,8 @@ import { registerTizenKeys } from './lib/platform.js';
 import * as phone from './lib/phone.js';
 import * as theme from './lib/theme.js';
 import * as screensaver from './lib/screensaver.js';
+import * as tracker from './api/tracker.js';
+import { openTrackLink } from './views/trackLink.js';
 
 function boot() {
   const s = store.settings();
@@ -40,6 +42,15 @@ function boot() {
   phone.onOpen((ev) => {
     router.goTab('home');
     openDetails(ev.kind, ev.item, ev.video ? { videoId: ev.video, autoStreams: true } : {});
+  });
+  // Keys pasted on the phone's setup page: saved on this TV only. With new Trakt/Simkl keys and no
+  // account linked yet, the link screen opens right away (scan its QR, sign in, done).
+  phone.onKeys((keys) => {
+    store.saveSettings(keys);
+    router.dropTab('settings');
+    toast(t('Chaves recebidas do celular: {n}', { n: Object.keys(keys).length }), 5000);
+    const want = keys.traktClientId && !tracker.isConnected('trakt') ? 'trakt' : keys.simklClientId && !tracker.isConnected('simkl') ? 'simkl' : null;
+    if (want && tracker.hasKeys(want)) openTrackLink(want);
   });
   phone.onSearch((q) => {
     router.goTab('search');

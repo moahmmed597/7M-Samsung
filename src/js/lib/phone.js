@@ -83,6 +83,17 @@ export function onSeek(fn) {
 
 // Search from the phone (typed or spoken): opens the Search tab and runs it, from any screen.
 let searchHandler = null;
+// Keys sent from the phone's setup page (Settings → Integrations → set up from the phone).
+let keysHandler = null;
+export function onKeys(fn) {
+  keysHandler = fn;
+}
+
+// The phone page where the user pastes their own API keys; null when the service isn't running.
+export function setupUrl(i) {
+  return i ? 'http://' + i.ip + ':' + i.port + '/setup#pin=' + i.pin : null;
+}
+
 export function onSearch(fn) {
   searchHandler = fn;
 }
@@ -93,6 +104,7 @@ function handle(ev) {
   else if (ev.type === 'search' && searchHandler && ev.text) searchHandler(ev.text);
   else if (ev.type === 'seek' && seekHandler) seekHandler(ev.to);
   else if (ev.type === 'open' && openHandler && ev.item) openHandler(ev);
+  else if (ev.type === 'keys' && keysHandler && ev.keys) keysHandler(ev.keys);
 }
 
 // Polls forever; when the service isn't running (e.g. outside TizenBrew) it checks again slowly.

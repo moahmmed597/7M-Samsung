@@ -1316,6 +1316,13 @@ function PlayerView(opts) {
         return true;
       }
     }
+    // Skip button on screen: Up always lands on it (from the hidden controls, the seek bar or the
+    // buttons), instead of having to walk right along the button row.
+    if (activeSeg && k === KEY.UP && cur !== skipBtn) {
+      showControls(skipBtn);
+      nav.focus(skipBtn, { noScroll: true });
+      return true;
+    }
     if (!controlsOn) {
       if (k === KEY.LEFT) seekBy(-1);
       else if (k === KEY.RIGHT) seekBy(1);
