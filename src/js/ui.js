@@ -113,7 +113,7 @@ export function topbar(activeId, onTab) {
   tick();
   const timer = setInterval(tick, 20000);
   const bar = h('div.topbar', { 'data-group': '' }, [
-    h('div.brand', { html: 'Stremio <b>Kai</b>' }),
+    h('div.brand', { html: 'Stremio <b>Kai 7M</b>' }),
     // The Anime tab can be hidden in Settings → Appearance.
     TABS.filter((tab) => tab.id !== 'anime' || store.settings().animeTab !== false).map((tab) =>
       h('div.tab', {

@@ -6693,11 +6693,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (/^fr/i.test(nav)) return "fr";
     if (/^tr/i.test(nav)) return "tr";
     if (/^de/i.test(nav)) return "de";
+    if (/^it/i.test(nav)) return "it";
     if (/^pt/i.test(nav)) return "pt";
+    if (/^ru/i.test(nav)) return "ru";
+    if (/^ja/i.test(nav)) return "ja";
+    if (/^ko/i.test(nav)) return "ko";
+    if (/^pl/i.test(nav)) return "pl";
+    if (/^nl/i.test(nav)) return "nl";
+    if (/^sv/i.test(nav)) return "sv";
+    if (/^el/i.test(nav)) return "el";
+    if (/^cs/i.test(nav)) return "cs";
+    if (/^hu/i.test(nav)) return "hu";
+    if (/^ro/i.test(nav)) return "ro";
+    if (/^uk/i.test(nav)) return "uk";
     return "en";
   }
   function init(setting) {
-    var supported = ["en", "ar", "es", "fr", "tr", "de", "pt"];
+    var supported = ["en", "ar", "es", "fr", "tr", "de", "it", "pt", "ru", "ja", "ko", "pl", "nl", "sv", "el", "cs", "hu", "ro", "uk"];
     lang = supported.indexOf(setting) >= 0 ? setting : detect();
     var root2 = document.documentElement;
     root2.setAttribute("lang", lang);
@@ -6719,8 +6731,32 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return "tr-TR";
       case "de":
         return "de-DE";
+      case "it":
+        return "it-IT";
       case "pt":
         return "pt-BR";
+      case "ru":
+        return "ru-RU";
+      case "ja":
+        return "ja-JP";
+      case "ko":
+        return "ko-KR";
+      case "pl":
+        return "pl-PL";
+      case "nl":
+        return "nl-NL";
+      case "sv":
+        return "sv-SE";
+      case "el":
+        return "el-GR";
+      case "cs":
+        return "cs-CZ";
+      case "hu":
+        return "hu-HU";
+      case "ro":
+        return "ro-RO";
+      case "uk":
+        return "uk-UA";
       default:
         return "en-US";
     }
@@ -8238,7 +8274,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var bar = h("div.topbar", {
       "data-group": ""
     }, [h("div.brand", {
-      html: "Stremio <b>Kai</b>"
+      html: "Stremio <b>Kai 7M</b>"
     }),
     // The Anime tab can be hidden in Settings → Appearance.
     TABS.filter(function (tab) {
@@ -18333,7 +18369,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T17:28:25.477Z";
+  var BUILD = "2026-11-14T17:44:08.856Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -19841,14 +19877,50 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           id: "fr",
           label: "Français (French)"
         }, {
-          id: "tr",
-          label: "Türkçe (Turkish)"
-        }, {
           id: "de",
           label: "Deutsch (German)"
         }, {
+          id: "it",
+          label: "Italiano (Italian)"
+        }, {
           id: "pt",
           label: "Português (Portuguese)"
+        }, {
+          id: "tr",
+          label: "Türkçe (Turkish)"
+        }, {
+          id: "ru",
+          label: "Русский (Russian)"
+        }, {
+          id: "ja",
+          label: "日本語 (Japanese)"
+        }, {
+          id: "ko",
+          label: "한국어 (Korean)"
+        }, {
+          id: "pl",
+          label: "Polski (Polish)"
+        }, {
+          id: "nl",
+          label: "Nederlands (Dutch)"
+        }, {
+          id: "sv",
+          label: "Svenska (Swedish)"
+        }, {
+          id: "el",
+          label: "Ελληνικά (Greek)"
+        }, {
+          id: "cs",
+          label: "Čeština (Czech)"
+        }, {
+          id: "hu",
+          label: "Magyar (Hungarian)"
+        }, {
+          id: "ro",
+          label: "Română (Romanian)"
+        }, {
+          id: "uk",
+          label: "Українська (Ukrainian)"
         }];
         body.appendChild(h("div.set-section", {
           text: "Language / اللغة"
@@ -21332,7 +21404,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     registerTab("calendar", CalendarView);
     registerTab("collections", CollectionsView);
     registerTab("anime", AnimeView);
-    if (needsPicker()) {
+    if (needsPicker() && !window.location.search.includes("nopicker")) {
       var bootEl = document.getElementById("boot");
       if (bootEl) bootEl.style.display = "none";
       showPicker(function () {
@@ -21364,7 +21436,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     })]).then(function () {
       var bootEl = document.getElementById("boot");
       if (bootEl) bootEl.parentNode.removeChild(bootEl);
-      goTab("home");
+      var initialTab = (window.location.hash || "").replace("#", "") || "home";
+      goTab(initialTab);
       if (isNewProfilePendingLogin() && !isLoggedIn()) {
         clearNewProfileFlag();
         openLogin(function () {

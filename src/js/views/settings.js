@@ -699,9 +699,21 @@ export function SettingsView() {
         { id: 'en', label: 'English' },
         { id: 'es', label: 'Español (Spanish)' },
         { id: 'fr', label: 'Français (French)' },
-        { id: 'tr', label: 'Türkçe (Turkish)' },
         { id: 'de', label: 'Deutsch (German)' },
+        { id: 'it', label: 'Italiano (Italian)' },
         { id: 'pt', label: 'Português (Portuguese)' },
+        { id: 'tr', label: 'Türkçe (Turkish)' },
+        { id: 'ru', label: 'Русский (Russian)' },
+        { id: 'ja', label: '日本語 (Japanese)' },
+        { id: 'ko', label: '한국어 (Korean)' },
+        { id: 'pl', label: 'Polski (Polish)' },
+        { id: 'nl', label: 'Nederlands (Dutch)' },
+        { id: 'sv', label: 'Svenska (Swedish)' },
+        { id: 'el', label: 'Ελληνικά (Greek)' },
+        { id: 'cs', label: 'Čeština (Czech)' },
+        { id: 'hu', label: 'Magyar (Hungarian)' },
+        { id: 'ro', label: 'Română (Romanian)' },
+        { id: 'uk', label: 'Українська (Ukrainian)' },
       ];
       body.appendChild(h('div.set-section', { text: 'Language / اللغة' }));
       body.appendChild(

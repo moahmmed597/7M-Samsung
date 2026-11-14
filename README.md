@@ -89,11 +89,12 @@ Explore complete fictional universes in the **Collections** tab:
 * **Kids Profile (`🧒`):** Designates a family-friendly profile for children.
 * **IMDb Parental Guide:** Real-time warnings for violence, profanity, and intense scenes.
 
-### 8. Full Arabic Localization & Typography
-The entire app in **Arabic** or **English** (Settings → Language / اللغة, or automatic from the TV's language). Arabic switches to a right-to-left layout, while titles and synopses keep their own direction.
-* 7 built-in Arabic fonts (Cairo, Changa, Almarai, Tajawal, El Messiri, Readex Pro, Noto Sans).
+### 8. Global Multilingual Support (18+ Languages) & Arabic Typography
+The app is built with comprehensive internationalization, supporting **18+ major world languages** (Settings → Language / اللغة, or automatic from your TV's system language):
+* **Supported Languages:** Arabic (العربية with native RTL layout), English, Spanish (Español), French (Français), German (Deutsch), Italian (Italiano), Portuguese (Português), Turkish (Türkçe), Russian (Русский), Japanese (日本語), Korean (한국어), Polish (Polski), Dutch (Nederlands), Swedish (Svenska), Greek (Ελληνικά), Czech (Čeština), Hungarian (Magyar), Romanian (Română), and Ukrainian (Українська).
+* **Arabic Typography & Styling:** 7 built-in high-contrast Arabic fonts (Cairo, Changa, Almarai, Tajawal, El Messiri, Readex Pro, Noto Sans).
 * Full control over subtitle size, position, outline, shadows, and sync delay.
-* Native rendering of ASS/SSA dialogue tags without clutter.
+* Native rendering of ASS/SSA dialogue tags without visual clutter.
 
 | Arabic Home Screen | Arabic Movie Details Screen |
 |:---:|:---:|

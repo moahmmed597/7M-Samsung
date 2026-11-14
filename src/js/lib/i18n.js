@@ -18,12 +18,24 @@ export function detect() {
   if (/^fr/i.test(nav)) return 'fr';
   if (/^tr/i.test(nav)) return 'tr';
   if (/^de/i.test(nav)) return 'de';
+  if (/^it/i.test(nav)) return 'it';
   if (/^pt/i.test(nav)) return 'pt';
+  if (/^ru/i.test(nav)) return 'ru';
+  if (/^ja/i.test(nav)) return 'ja';
+  if (/^ko/i.test(nav)) return 'ko';
+  if (/^pl/i.test(nav)) return 'pl';
+  if (/^nl/i.test(nav)) return 'nl';
+  if (/^sv/i.test(nav)) return 'sv';
+  if (/^el/i.test(nav)) return 'el';
+  if (/^cs/i.test(nav)) return 'cs';
+  if (/^hu/i.test(nav)) return 'hu';
+  if (/^ro/i.test(nav)) return 'ro';
+  if (/^uk/i.test(nav)) return 'uk';
   return 'en';
 }
 
 export function init(setting) {
-  const supported = ['en', 'ar', 'es', 'fr', 'tr', 'de', 'pt'];
+  const supported = ['en', 'ar', 'es', 'fr', 'tr', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'pl', 'nl', 'sv', 'el', 'cs', 'hu', 'ro', 'uk'];
   lang = supported.indexOf(setting) >= 0 ? setting : detect();
   const root = document.documentElement;
   root.setAttribute('lang', lang);
@@ -44,7 +56,19 @@ export function apiLang() {
     case 'fr': return 'fr-FR';
     case 'tr': return 'tr-TR';
     case 'de': return 'de-DE';
+    case 'it': return 'it-IT';
     case 'pt': return 'pt-BR';
+    case 'ru': return 'ru-RU';
+    case 'ja': return 'ja-JP';
+    case 'ko': return 'ko-KR';
+    case 'pl': return 'pl-PL';
+    case 'nl': return 'nl-NL';
+    case 'sv': return 'sv-SE';
+    case 'el': return 'el-GR';
+    case 'cs': return 'cs-CZ';
+    case 'hu': return 'hu-HU';
+    case 'ro': return 'ro-RO';
+    case 'uk': return 'uk-UA';
     default: return 'en-US';
   }
 }

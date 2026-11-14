@@ -80,7 +80,7 @@ function boot() {
   router.registerTab('anime', AnimeView);
 
   // "Quem está assistindo?" (com mais de um perfil) antes de carregar a conta.
-  if (profiles.needsPicker()) {
+  if (profiles.needsPicker() && !window.location.search.includes('nopicker')) {
     const bootEl = document.getElementById('boot');
     if (bootEl) bootEl.style.display = 'none';
     profiles.showPicker(() => {
@@ -117,7 +117,8 @@ function start() {
   Promise.all([server.check(), addons.load().catch(() => null)]).then(() => {
     const bootEl = document.getElementById('boot');
     if (bootEl) bootEl.parentNode.removeChild(bootEl);
-    router.goTab('home');
+    const initialTab = (window.location.hash || '').replace('#', '') || 'home';
+    router.goTab(initialTab);
     if (profiles.isNewProfilePendingLogin() && !stremio.isLoggedIn()) {
       // Perfil novo: entra na conta Stremio deste perfil (para ter o histórico próprio).
       profiles.clearNewProfileFlag();

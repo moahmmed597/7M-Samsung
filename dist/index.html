@@ -7,16 +7,26 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' file:; script-src 'self' file: https://cdn.jsdelivr.net; style-src 'self' file: https://cdn.jsdelivr.net 'unsafe-inline'; img-src * data: blob:; media-src * blob: data:; connect-src *; font-src 'self' file: https://cdn.jsdelivr.net; object-src 'none'; frame-src https://www.youtube-nocookie.com https://www.youtube.com">
   <!-- Only the app's origin is sent (YouTube embeds refuse to play without it). -->
   <meta name="referrer" content="origin">
-  <title>Stremio Kai</title>
+  <title>Stremio Kai 7M</title>
 </head>
 <body>
   <div id="app">
     <div id="boot" class="boot">
-      <div class="boot-logo">Stremio <b>Kai</b></div>
+      <div class="boot-logo">Stremio <b>Kai 7M</b></div>
       <div class="spinner"></div>
     </div>
   </div>
   <div id="toast" class="toast"></div>
+  <script>
+    if (window.location.search.includes('mock')) {
+      try {
+        localStorage.setItem('kai.device', JSON.stringify({ wizardDone: true, language: 'en' }));
+        localStorage.setItem('kai.profiles', JSON.stringify([{ id: 'p1', name: '7M OLED', color: '#7b5bf5', unnamed: false }]));
+        localStorage.setItem('kai.activeProfile', JSON.stringify('p1'));
+        sessionStorage.setItem('kai.profilePicked', '1');
+      } catch (e) {}
+    }
+  </script>
   <script src="loader.js"></script>
 </body>
 </html>
