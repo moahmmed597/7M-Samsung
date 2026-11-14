@@ -200,11 +200,12 @@ function tileRow(parent, title, tiles, cls) {
         if (url) {
           const im = h('img.tile-art', { alt: '' });
           im.setAttribute('data-lazy', url);
-          im.onload = () => wrap.classList.add('has-art');
+          // Discover and Decades art already has its title drawn in; the rest get the name on top.
+          im.onload = () => wrap.classList.add(/^landscape-/.test(x.art) ? 'has-art' : 'has-art-label');
           im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
           wrap.appendChild(im);
         }
-        return h('div.card.anime-tile', { focusable: true, cls: cls + ' hue-' + (i % 6), onSelect: x.open }, [wrap, h('div.name', { text: url ? x.label : '' })]);
+        return h('div.card.anime-tile', { focusable: true, cls: cls + ' hue-' + (i % 6), onSelect: x.open }, [wrap, h('div.name', { text: '' })]);
       })
     )
   );

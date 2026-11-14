@@ -15601,7 +15601,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         im.setAttribute("data-lazy", url2);
         im.onload = function () {
-          return wrap.classList.add("has-art");
+          return wrap.classList.add(/^landscape-/.test(x.art) ? "has-art" : "has-art-label");
         };
         im.onerror = function () {
           return im.parentNode && im.parentNode.removeChild(im);
@@ -15613,7 +15613,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         cls: cls + " hue-" + i % 6,
         onSelect: x.open
       }, [wrap, h("div.name", {
-        text: url2 ? x.label : ""
+        text: ""
       })]);
     })));
     parent.appendChild(row);
@@ -17455,7 +17455,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T09:24:20.576Z";
+  var BUILD = "2026-11-14T09:27:36.092Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
