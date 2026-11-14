@@ -178,6 +178,15 @@ function posterRow(parent, title, load, onMore) {
   };
 }
 
+// UltraAnime's tile art (aliabdoxd14/collectionsart on GitHub), loaded at tile size through wsrv.nl.
+const ART = 'https://raw.githubusercontent.com/aliabdoxd14/collectionsart/refs/heads/main/';
+function slug(x) {
+  return String(x).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+function artUrl(file) {
+  return file ? 'https://wsrv.nl/?url=' + encodeURIComponent(ART + file + '.jpg') + '&w=320&h=180&fit=cover&output=jpg&q=80' : null;
+}
+
 function tileRow(parent, title, tiles, cls) {
   const row = h('div.row', { 'data-anchor': '30' });
   row.appendChild(h('div.row-title', { text: title }));
@@ -185,15 +194,22 @@ function tileRow(parent, title, tiles, cls) {
     h(
       'div.row-track',
       { 'data-scroll-x': '', 'data-group': '' },
-      tiles.map((x, i) =>
-        h('div.card.anime-tile', { focusable: true, cls: cls + ' hue-' + (i % 6), onSelect: x.open }, [
-          h('div.poster-wrap', null, h('div.tile-label', { text: x.label })),
-          h('div.name', { text: '' }),
-        ])
-      )
+      tiles.map((x, i) => {
+        const wrap = h('div.poster-wrap', null, h('div.tile-label', { text: x.label }));
+        const url = artUrl(x.art);
+        if (url) {
+          const im = h('img.tile-art', { alt: '' });
+          im.setAttribute('data-lazy', url);
+          im.onload = () => wrap.classList.add('has-art');
+          im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
+          wrap.appendChild(im);
+        }
+        return h('div.card.anime-tile', { focusable: true, cls: cls + ' hue-' + (i % 6), onSelect: x.open }, [wrap, h('div.name', { text: url ? x.label : '' })]);
+      })
     )
   );
   parent.appendChild(row);
+  loadVisibleImages(row);
 }
 
 export function AnimeView() {
@@ -232,32 +248,33 @@ export function AnimeView() {
   // A tile row whose tiles open grids; tiles with no source at all are left out.
   const tiles = (title, list, cls) => {
     const usable = list.filter((x) => x.src);
-    if (usable.length) tileRow(rows, title, usable.map((x) => ({ label: x.label, open: () => router.push(AnimeGridView(x.label, null, null, x.src)) })), cls);
+    if (usable.length) tileRow(rows, title, usable.map((x) => ({ label: x.label, art: x.art, open: () => router.push(AnimeGridView(x.label, null, null, x.src)) })), cls);
   };
-  const malList = (list, cls, title) =>
-    tiles(title, list.map((g) => ({ label: g[1] ? t(g[1]) : g[0], src: listSource('mal.genres', g[0], g[2] + ', sort: POPULARITY_DESC') })), cls);
+  const GENRE_ART = { Suspense: 'thriller', Mecha: 'mecha' };
+  const malList = (list, cls, title, themes) =>
+    tiles(title, list.map((g) => ({ label: g[1] ? t(g[1]) : g[0], art: 'genre-' + (themes && g[0] === 'Mecha' ? 'real-robot' : GENRE_ART[g[0]] || slug(g[0])), src: listSource('mal.genres', g[0], g[2] + ', sort: POPULARITY_DESC') })), cls);
 
   add(t('Esta temporada'), () => page(seasonArgs(s)), () => router.push(AnimeGridView(t('Esta temporada'), seasonArgs(s))));
   tiles(t('Descobrir'), [
-    { label: t('Lançando agora'), src: listSource('mal.airing', null, 'status: RELEASING, sort: POPULARITY_DESC') },
-    { label: t('Esta temporada'), src: listSource('mal.seasons', seasonName(s), seasonArgs(s)) },
-    { label: t('Próxima temporada'), src: listSource('mal.seasons', seasonName(ns), seasonArgs(ns)) },
-    { label: t('Mais populares'), src: listSource(null, null, 'sort: POPULARITY_DESC') },
-    { label: t('Mais favoritados'), src: listSource(null, null, 'sort: FAVOURITES_DESC') },
-    { label: t('Melhores séries'), src: listSource('mal.top_anime', null, 'format: TV, sort: SCORE_DESC') },
-    { label: t('Melhores filmes'), src: listSource(null, null, 'format: MOVIE, sort: SCORE_DESC') },
-    { label: t('Mais bem avaliados'), src: listSource(null, null, 'sort: SCORE_DESC') },
+    { label: t('Lançando agora'), art: 'landscape-airing-now', src: listSource('mal.airing', null, 'status: RELEASING, sort: POPULARITY_DESC') },
+    { label: t('Esta temporada'), art: 'landscape-this-season', src: listSource('mal.seasons', seasonName(s), seasonArgs(s)) },
+    { label: t('Próxima temporada'), art: 'landscape-upcoming-season', src: listSource('mal.seasons', seasonName(ns), seasonArgs(ns)) },
+    { label: t('Mais populares'), art: 'landscape-most-popular', src: listSource(null, null, 'sort: POPULARITY_DESC') },
+    { label: t('Mais favoritados'), art: 'landscape-most-favourites', src: listSource(null, null, 'sort: FAVOURITES_DESC') },
+    { label: t('Melhores séries'), art: 'landscape-top-series', src: listSource('mal.top_anime', null, 'format: TV, sort: SCORE_DESC') },
+    { label: t('Melhores filmes'), art: 'landscape-top-movies', src: listSource(null, null, 'format: MOVIE, sort: SCORE_DESC') },
+    { label: t('Mais bem avaliados'), art: 'landscape-top-anime', src: listSource(null, null, 'sort: SCORE_DESC') },
   ], 'discover');
   add(t('Em alta agora'), () => page('sort: TRENDING_DESC'), () => router.push(AnimeGridView(t('Em alta agora'), 'sort: TRENDING_DESC')));
   tiles(t('Anime da temporada'), SEASONS.map((x) => {
     const one = { season: x, year: s.year };
     return { label: t(SEASON_LABEL[x] === 'Winter' ? 'Inverno' : SEASON_LABEL[x] === 'Spring' ? 'Primavera' : SEASON_LABEL[x] === 'Summer' ? 'Verão' : 'Outono') + ' ' + s.year, src: listSource('mal.seasons', seasonName(one), seasonArgs(one)) };
   }), 'genre');
-  tiles(t('Estúdios'), STUDIO_LIST.map((name) => ({ label: name, src: listSource('mal.studios', name, null) || ((n) => (n > 1 ? Promise.resolve({ items: [], more: false }) : studioPage(name))) })), 'studio');
+  tiles(t('Estúdios'), STUDIO_LIST.map((name) => ({ label: name, art: 'studio-' + slug(name), src: listSource('mal.studios', name, null) || ((n) => (n > 1 ? Promise.resolve({ items: [], more: false }) : studioPage(name))) })), 'studio');
   malList(GENRE_LIST, 'genre', t('Gêneros'));
   malList(DEMOGRAPHICS, 'discover', t('Público'));
-  tiles(t('Décadas'), DECADES.map((d) => ({ label: d[1], src: listSource(null, null, 'startDate_greater: ' + d[0] + '0000, startDate_lesser: ' + (d[0] + 10) + '0000, sort: SCORE_DESC') })), 'genre');
-  malList(THEMES, 'discover', t('Temas'));
+  tiles(t('Décadas'), DECADES.map((d) => ({ label: d[1], art: 'landscape-best-of-the-' + d[1].toLowerCase(), src: listSource(null, null, 'startDate_greater: ' + d[0] + '0000, startDate_lesser: ' + (d[0] + 10) + '0000, sort: SCORE_DESC') })), 'genre');
+  malList(THEMES, 'discover', t('Temas'), true);
   malList(EVERYDAY, 'genre', t('Crime e vida cotidiana'));
   malList(STYLES, 'discover', t('Estilos de comédia e romance'));
   add(t('Filmes de anime'), () => page('format: MOVIE, sort: POPULARITY_DESC'), () => router.push(AnimeGridView(t('Filmes de anime'), 'format: MOVIE, sort: POPULARITY_DESC')));

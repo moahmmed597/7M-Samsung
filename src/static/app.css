@@ -531,3 +531,8 @@ body .card.nc-tile.nc-square .poster-wrap { width: 250px; height: 250px; backgro
 .nc-tile .poster-wrap img { object-fit: cover; }
 .nc-tile.nc-square .poster-wrap img { object-fit: contain; }
 .nc-hint { padding: 10px 96px 4px; font-size: 21px; color: rgba(255,255,255,0.6); }
+/* Anime tiles with the pack art: picture fills the tile, the name goes under it */
+.anime-tile .poster-wrap { position: relative; }
+.anime-tile .tile-art { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+.anime-tile .poster-wrap.has-art .tile-label { display: none; }
+.anime-tile .name { text-align: center; }
