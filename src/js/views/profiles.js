@@ -151,7 +151,7 @@ export function showPicker(onPicked) {
         'data-autofocus': p.id === active.id ? '' : null,
         onSelect: () => pick(p.id),
       },
-      [avatar(p, 'big'), h('div.profile-name', { text: (p.pin ? '🔒 ' : '') + p.name })]
+      [avatar(p, 'big'), h('div.profile-name', { text: (p.pin ? '🔒 ' : '') + (p.isKids ? '🧒 ' : '') + p.name })]
     )
   );
   cards.push(

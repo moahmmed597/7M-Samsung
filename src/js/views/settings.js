@@ -695,8 +695,13 @@ export function SettingsView() {
       // ---- Idioma do app (vale para a TV inteira; o nome fica bilíngue para quem não lê o atual) ----
       const LANGS = [
         { id: 'auto', label: t('Automático (idioma da TV)') },
+        { id: 'ar', label: 'العربية (Arabic)' },
         { id: 'en', label: 'English' },
-        { id: 'ar', label: 'العربية' },
+        { id: 'es', label: 'Español (Spanish)' },
+        { id: 'fr', label: 'Français (French)' },
+        { id: 'tr', label: 'Türkçe (Turkish)' },
+        { id: 'de', label: 'Deutsch (German)' },
+        { id: 'pt', label: 'Português (Portuguese)' },
       ];
       body.appendChild(h('div.set-section', { text: 'Language / اللغة' }));
       body.appendChild(
@@ -779,6 +784,18 @@ export function SettingsView() {
               }),
           });
         })
+      );
+      // Perfil infantil
+      body.appendChild(
+        row(
+          t('Perfil infantil'),
+          t('Destaca o perfil para crianças e família'),
+          prof.isKids ? '🧒 ' + t('Ligado') : t('Desligado'),
+          () => {
+            store.updateProfile(prof.id, { isKids: !prof.isKids });
+            render();
+          }
+        )
       );
       body.appendChild(row(t('Adicionar perfil'), t('Para outra pessoa, com outra conta Stremio'), '', () => createProfile()));
       if (allProfiles.length > 1) {

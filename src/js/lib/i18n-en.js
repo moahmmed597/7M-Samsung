@@ -856,4 +856,6 @@ export const EN = {
   "Húngaro": "Hungarian",
   "Tcheco": "Czech",
   "Filipino": "Filipino",
+  "Perfil infantil": "Kids Profile",
+  "Destaca o perfil para crianças e família": "Highlights this profile for kids and family",
 };

@@ -856,4 +856,6 @@ export const AR = {
   "Húngaro": "المجرية",
   "Tcheco": "التشيكية",
   "Filipino": "الفلبينية",
+  "Perfil infantil": "بروفايل أطفال",
+  "Destaca o perfil para crianças e família": "يخصص ويميز هذا الحساب للأطفال والعائلة",
 };

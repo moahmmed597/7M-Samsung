@@ -5621,7 +5621,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Romeno": "Romanian",
     "Húngaro": "Hungarian",
     "Tcheco": "Czech",
-    "Filipino": "Filipino"
+    "Filipino": "Filipino",
+    "Perfil infantil": "Kids Profile",
+    "Destaca o perfil para crianças e família": "Highlights this profile for kids and family"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6473,21 +6475,230 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Romeno": "الرومانية",
     "Húngaro": "المجرية",
     "Tcheco": "التشيكية",
-    "Filipino": "الفلبينية"
+    "Filipino": "الفلبينية",
+    "Perfil infantil": "بروفايل أطفال",
+    "Destaca o perfil para crianças e família": "يخصص ويميز هذا الحساب للأطفال والعائلة"
+  };
+
+  // src/js/lib/i18n-es.js
+  var ES = {
+    "Início": "Inicio",
+    "Buscar": "Buscar",
+    "Biblioteca": "Biblioteca",
+    "Ajustes": "Ajustes",
+    "Cancelar": "Cancelar",
+    "Voltar": "Volver",
+    "Continuar": "Continuar",
+    "Pular": "Saltar",
+    "Sair": "Salir",
+    "Nada por aqui.": "Nada por aquí.",
+    "Carregando...": "Cargando...",
+    "Ver tudo": "Ver todo",
+    "Assistir": "Ver",
+    "Episódios": "Episodios",
+    "Temporada {n}": "Temporada {n}",
+    "Especiais": "Especiales",
+    "Episódio {n}": "Episodio {n}",
+    "Trailer": "Tráiler",
+    "Fontes": "Fuentes",
+    "Legendas": "Subtítulos",
+    "Áudio": "Audio",
+    "Capítulos": "Capítulos",
+    "Dormir": "Temporizador",
+    "Próximo": "Siguiente",
+    "Desligado": "Desactivado",
+    "Desligada": "Desactivada",
+    "Ligado": "Activado",
+    "Ligada": "Activada",
+    "Velocidade": "Velocidad",
+    "Tamanho": "Tamaño",
+    "Sincronia": "Sincronización",
+    "Cor": "Color",
+    "Coleções": "Colecciones",
+    "Anime": "Anime",
+    "Filmes": "Películas",
+    "Séries": "Series",
+    "Desenhos": "Dibujos animados",
+    "Quem está assistindo?": "¿Quién está viendo?",
+    "Adicionar perfil": "Añadir perfil",
+    "Trancar com PIN": "Bloquear con PIN",
+    "Perfil infantil": "Perfil infantil",
+    "Destaca o perfil para crianças e família": "Destaca el perfil para niños y familia",
+    "Termina às {time}": "Termina a las {time}",
+    "Proteção de tela OLED": "Protección de pantalla OLED",
+    "Tema": "Tema"
+  };
+
+  // src/js/lib/i18n-fr.js
+  var FR = {
+    "Início": "Accueil",
+    "Buscar": "Rechercher",
+    "Biblioteca": "Bibliothèque",
+    "Ajustes": "Paramètres",
+    "Cancelar": "Annuler",
+    "Voltar": "Retour",
+    "Continuar": "Continuer",
+    "Pular": "Passer",
+    "Sair": "Quitter",
+    "Nada por aqui.": "Rien ici.",
+    "Carregando...": "Chargement...",
+    "Ver tudo": "Tout voir",
+    "Assistir": "Regarder",
+    "Episódios": "Épisodes",
+    "Temporada {n}": "Saison {n}",
+    "Especiais": "Spéciaux",
+    "Episódio {n}": "Épisode {n}",
+    "Trailer": "Bande-annonce",
+    "Fontes": "Sources",
+    "Legendas": "Sous-titres",
+    "Áudio": "Audio",
+    "Capítulos": "Chapitres",
+    "Dormir": "Veille",
+    "Próximo": "Suivant",
+    "Desligado": "Désactivé",
+    "Desligada": "Désactivée",
+    "Ligado": "Activé",
+    "Ligada": "Activée",
+    "Velocidade": "Vitesse",
+    "Tamanho": "Taille",
+    "Sincronia": "Synchronisation",
+    "Cor": "Couleur",
+    "Coleções": "Collections",
+    "Anime": "Animé",
+    "Filmes": "Films",
+    "Séries": "Séries",
+    "Desenhos": "Dessins animés",
+    "Quem está assistindo?": "Qui regarde ?",
+    "Adicionar perfil": "Ajouter un profil",
+    "Trancar com PIN": "Verrouiller par code PIN",
+    "Perfil infantil": "Profil enfants",
+    "Destaca o perfil para crianças e família": "Met en valeur ce profil pour les enfants et la famille",
+    "Termina às {time}": "Finit à {time}",
+    "Proteção de tela OLED": "Protection d'écran OLED",
+    "Tema": "Thème"
+  };
+
+  // src/js/lib/i18n-tr.js
+  var TR = {
+    "Início": "Ana Sayfa",
+    "Buscar": "Ara",
+    "Biblioteca": "Kütüphane",
+    "Ajustes": "Ayarlar",
+    "Cancelar": "İptal",
+    "Voltar": "Geri",
+    "Continuar": "Devam Et",
+    "Pular": "Geç",
+    "Sair": "Çıkış",
+    "Nada por aqui.": "Burada bir şey yok.",
+    "Carregando...": "Yükleniyor...",
+    "Ver tudo": "Tümünü gör",
+    "Assistir": "İzle",
+    "Episódios": "Bölümler",
+    "Temporada {n}": "{n}. Sezon",
+    "Especiais": "Özeller",
+    "Episódio {n}": "{n}. Bölüm",
+    "Trailer": "Fragman",
+    "Fontes": "Kaynaklar",
+    "Legendas": "Altyazılar",
+    "Áudio": "Ses",
+    "Capítulos": "Bölümler",
+    "Dormir": "Uyku Zamanlayıcı",
+    "Próximo": "Sonraki",
+    "Desligado": "Kapalı",
+    "Desligada": "Kapalı",
+    "Ligado": "Açık",
+    "Ligada": "Açık",
+    "Velocidade": "Hız",
+    "Tamanho": "Boyut",
+    "Sincronia": "Senkronizasyon",
+    "Cor": "Renk",
+    "Coleções": "Koleksiyonlar",
+    "Anime": "Anime",
+    "Filmes": "Filmler",
+    "Séries": "Diziler",
+    "Desenhos": "Çizgi Filmler",
+    "Quem está assistindo?": "Kim izliyor?",
+    "Adicionar perfil": "Profil Ekle",
+    "Trancar com PIN": "PIN ile Kilitle",
+    "Perfil infantil": "Çocuk Profili",
+    "Destaca o perfil para crianças e família": "Çocuklar ve aile için profili öne çıkarır",
+    "Termina às {time}": "Bitiş saati {time}",
+    "Proteção de tela OLED": "OLED Ekran Koruması",
+    "Tema": "Tema"
+  };
+
+  // src/js/lib/i18n-de.js
+  var DE = {
+    "Início": "Startseite",
+    "Buscar": "Suche",
+    "Biblioteca": "Bibliothek",
+    "Ajustes": "Einstellungen",
+    "Cancelar": "Abbrechen",
+    "Voltar": "Zurück",
+    "Continuar": "Fortsetzen",
+    "Pular": "Überspringen",
+    "Sair": "Beenden",
+    "Nada por aqui.": "Hier gibt es nichts.",
+    "Carregando...": "Wird geladen...",
+    "Ver tudo": "Alle anzeigen",
+    "Assistir": "Ansehen",
+    "Episódios": "Episoden",
+    "Temporada {n}": "Staffel {n}",
+    "Especiais": "Specials",
+    "Episódio {n}": "Episode {n}",
+    "Trailer": "Trailer",
+    "Fontes": "Quellen",
+    "Legendas": "Untertitel",
+    "Áudio": "Audio",
+    "Capítulos": "Kapitel",
+    "Dormir": "Schlafmodus",
+    "Próximo": "Weiter",
+    "Desligado": "Aus",
+    "Desligada": "Aus",
+    "Ligado": "Ein",
+    "Ligada": "Ein",
+    "Velocidade": "Geschwindigkeit",
+    "Tamanho": "Größe",
+    "Sincronia": "Synchronisation",
+    "Cor": "Farbe",
+    "Coleções": "Sammlungen",
+    "Anime": "Anime",
+    "Filmes": "Filme",
+    "Séries": "Serien",
+    "Desenhos": "Cartoons",
+    "Quem está assistindo?": "Wer schaut gerade?",
+    "Adicionar perfil": "Profil hinzufügen",
+    "Trancar com PIN": "Mit PIN sperren",
+    "Perfil infantil": "Kinderprofil",
+    "Destaca o perfil para crianças e família": "Hebt dieses Profil für Kinder und Familie hervor",
+    "Termina às {time}": "Endet um {time}",
+    "Proteção de tela OLED": "OLED-Bildschirmschoner",
+    "Tema": "Design"
   };
 
   // src/js/lib/i18n.js
   var lang = "en";
   var TABLES = {
     en: EN,
-    ar: AR
+    ar: AR,
+    es: ES,
+    fr: FR,
+    tr: TR,
+    de: DE
   };
   function detect() {
     var nav = window.navigator && (window.navigator.language || window.navigator.userLanguage) || "";
-    return /^ar/i.test(nav) ? "ar" : "en";
+    if (/^ar/i.test(nav)) return "ar";
+    if (/^es/i.test(nav)) return "es";
+    if (/^fr/i.test(nav)) return "fr";
+    if (/^tr/i.test(nav)) return "tr";
+    if (/^de/i.test(nav)) return "de";
+    if (/^pt/i.test(nav)) return "pt";
+    return "en";
   }
   function init(setting) {
-    lang = setting === "en" || setting === "ar" ? setting : detect();
+    var supported = ["en", "ar", "es", "fr", "tr", "de", "pt"];
+    lang = supported.indexOf(setting) >= 0 ? setting : detect();
     var root2 = document.documentElement;
     root2.setAttribute("lang", lang);
     root2.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
@@ -6497,11 +6708,35 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return lang;
   }
   function apiLang() {
-    return lang === "ar" ? "ar-SA" : "en-US";
+    switch (lang) {
+      case "ar":
+        return "ar-SA";
+      case "es":
+        return "es-ES";
+      case "fr":
+        return "fr-FR";
+      case "tr":
+        return "tr-TR";
+      case "de":
+        return "de-DE";
+      case "pt":
+        return "pt-BR";
+      default:
+        return "en-US";
+    }
   }
   function t(text, params) {
-    var table = TABLES[lang];
-    var out = table[text] !== void 0 ? table[text] : EN[text] !== void 0 ? EN[text] : text;
+    if (lang === "pt") {
+      var out2 = text;
+      if (params) {
+        Object.keys(params).forEach(function (k) {
+          out2 = out2.split("{" + k + "}").join(String(params[k]));
+        });
+      }
+      return out2;
+    }
+    var table = TABLES[lang] || EN;
+    var out = table && table[text] !== void 0 ? table[text] : EN[text] !== void 0 ? EN[text] : text;
     if (params) {
       Object.keys(params).forEach(function (k) {
         out = out.split("{" + k + "}").join(String(params[k]));
@@ -6510,7 +6745,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return out;
   }
   function epLabel(season, episode) {
-    return lang === "ar" ? "م" + season + " ح" + episode : "S" + season + " E" + episode;
+    if (lang === "ar") return "م" + season + " ح" + episode;
+    if (lang === "es") return "T" + season + " E" + episode;
+    if (lang === "fr") return "S" + season + " É" + episode;
+    if (lang === "tr") return "S" + season + " B" + episode;
+    return "S" + season + " E" + episode;
   }
 
   // src/js/lib/http.js
@@ -7794,7 +8033,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return pick2(p.id);
         }
       }, [avatar(p, "big"), h("div.profile-name", {
-        text: (p.pin ? "🔒 " : "") + p.name
+        text: (p.pin ? "🔒 " : "") + (p.isKids ? "🧒 " : "") + p.name
       })]);
     });
     cards.push(h("div.profile-card", {
@@ -14005,6 +14244,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   var SMART_WAIT_MS = 1e4;
   var SMART_FALLBACKS = 4;
+  function parseRuntimeMinutes(val) {
+    if (!val) return 0;
+    if (typeof val === "number") return val > 0 ? val : 0;
+    var s = String(val).trim();
+    var mins = 0;
+    var hMatch = s.match(/(\d+)\s*h(?:our|ours|r)?/i);
+    var mMatch = s.match(/(\d+)\s*m(?:in|inute|inutes)?/i);
+    if (hMatch) mins += parseInt(hMatch[1], 10) * 60;
+    if (mMatch) mins += parseInt(mMatch[1], 10);
+    if (!mins) {
+      var rawNum = parseInt(s, 10);
+      if (!isNaN(rawNum) && rawNum > 0) mins = rawNum;
+    }
+    return mins;
+  }
+  function finishTimeStr(mins) {
+    if (!mins || mins <= 0) return "";
+    var d = new Date(Date.now() + mins * 6e4);
+    var hh = String(d.getHours()).padStart(2, "0");
+    var mm = String(d.getMinutes()).padStart(2, "0");
+    return "".concat(hh, ":").concat(mm);
+  }
   function DetailsView(type, id, opts) {
     var el = h("div.view");
     var bg = h("img.details-bg", {
@@ -14060,7 +14321,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       logo2.src = meta.logo || logo(meta.id);
       var parts = [];
       if (meta.releaseInfo || meta.year) parts.push(meta.releaseInfo || meta.year);
-      if (meta.runtime) parts.push(meta.runtime);
+      if (meta.runtime) {
+        parts.push(meta.runtime);
+        var mins = parseRuntimeMinutes(meta.runtime);
+        if (mins > 0) parts.push(t("Termina às {time}", {
+          time: finishTimeStr(mins)
+        }));
+      }
       if (isSeries()) {
         var seasons = uniqueSeasons().filter(function (s) {
           return s !== 0;
@@ -14332,6 +14599,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           n: v.episode || "?"
         });
         if (v.released) sub += " · " + formatDate(v.released);
+        var epMins = parseRuntimeMinutes(v.runtime || meta.runtime);
+        if (epMins > 0) sub += " · " + t("Termina às {time}", {
+          time: finishTimeStr(epMins)
+        });
         var inProgress = li && li.state && li.state.video_id === v.id && li.state.timeOffset > 0;
         if (inProgress) sub += " · " + t("parou em {time}", {
           time: fmtTime(li.state.timeOffset / 1e3)
@@ -18062,7 +18333,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T16:47:10.310Z";
+  var BUILD = "2026-11-14T17:01:52.237Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -19558,11 +19829,26 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           id: "auto",
           label: t("Automático (idioma da TV)")
         }, {
+          id: "ar",
+          label: "العربية (Arabic)"
+        }, {
           id: "en",
           label: "English"
         }, {
-          id: "ar",
-          label: "العربية"
+          id: "es",
+          label: "Español (Spanish)"
+        }, {
+          id: "fr",
+          label: "Français (French)"
+        }, {
+          id: "tr",
+          label: "Türkçe (Turkish)"
+        }, {
+          id: "de",
+          label: "Deutsch (German)"
+        }, {
+          id: "pt",
+          label: "Português (Portuguese)"
         }];
         body.appendChild(h("div.set-section", {
           text: "Language / اللغة"
@@ -19683,6 +19969,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               });
             }
           });
+        }));
+        body.appendChild(row(t("Perfil infantil"), t("Destaca o perfil para crianças e família"), prof.isKids ? "🧒 " + t("Ligado") : t("Desligado"), function () {
+          updateProfile(prof.id, {
+            isKids: !prof.isKids
+          });
+          render();
         }));
         body.appendChild(row(t("Adicionar perfil"), t("Para outra pessoa, com outra conta Stremio"), "", function () {
           return createProfile();

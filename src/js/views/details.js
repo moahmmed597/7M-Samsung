@@ -41,6 +41,30 @@ export function sortedVideos(meta) {
 const SMART_WAIT_MS = 10000;
 const SMART_FALLBACKS = 4;
 
+function parseRuntimeMinutes(val) {
+  if (!val) return 0;
+  if (typeof val === 'number') return val > 0 ? val : 0;
+  const s = String(val).trim();
+  let mins = 0;
+  const hMatch = s.match(/(\d+)\s*h(?:our|ours|r)?/i);
+  const mMatch = s.match(/(\d+)\s*m(?:in|inute|inutes)?/i);
+  if (hMatch) mins += parseInt(hMatch[1], 10) * 60;
+  if (mMatch) mins += parseInt(mMatch[1], 10);
+  if (!mins) {
+    const rawNum = parseInt(s, 10);
+    if (!isNaN(rawNum) && rawNum > 0) mins = rawNum;
+  }
+  return mins;
+}
+
+function finishTimeStr(mins) {
+  if (!mins || mins <= 0) return '';
+  const d = new Date(Date.now() + mins * 60000);
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+
 function DetailsView(type, id, opts) {
   const el = h('div.view');
   const bg = h('img.details-bg', { alt: '' });
@@ -89,7 +113,11 @@ function DetailsView(type, id, opts) {
     logo.src = meta.logo || hero.logo(meta.id);
     const parts = [];
     if (meta.releaseInfo || meta.year) parts.push(meta.releaseInfo || meta.year);
-    if (meta.runtime) parts.push(meta.runtime);
+    if (meta.runtime) {
+      parts.push(meta.runtime);
+      const mins = parseRuntimeMinutes(meta.runtime);
+      if (mins > 0) parts.push(t('Termina às {time}', { time: finishTimeStr(mins) }));
+    }
     if (isSeries()) {
       const seasons = uniqueSeasons().filter((s) => s !== 0);
       if (seasons.length) parts.push(t(seasons.length > 1 ? '{n} temporadas' : '{n} temporada', { n: seasons.length }));
@@ -298,6 +326,8 @@ function DetailsView(type, id, opts) {
         }
         let sub = t('Episódio {n}', { n: v.episode || '?' });
         if (v.released) sub += ' · ' + formatDate(v.released);
+        const epMins = parseRuntimeMinutes(v.runtime || meta.runtime);
+        if (epMins > 0) sub += ' · ' + t('Termina às {time}', { time: finishTimeStr(epMins) });
         const inProgress = li && li.state && li.state.video_id === v.id && li.state.timeOffset > 0;
         if (inProgress) sub += ' · ' + t('parou em {time}', { time: fmtTime(li.state.timeOffset / 1000) });
         // Watched markers: a check on finished episodes, a bar on half-watched ones.
