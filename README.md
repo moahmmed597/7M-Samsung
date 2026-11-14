@@ -158,6 +158,34 @@ Control your TV from any phone without installing an app:
 
 ---
 
+## 🍙 Recommended Add-ons for the Ultimate Anime Experience
+
+To unlock the full potential of the **UltraAnime** tab and get the beautifully structured catalogs (Studios, Demographics, Themes, and correct Seasons/Episodes), we highly recommend adding these add-ons to your Stremio account:
+
+1. **AIOMetadata (All-In-One Metadata):**
+   * Powers the rich **MyAnimeList (MAL)** catalog hierarchy inside the Anime tab.
+   * Enables browsing by animation studios (MAPPA, Ufotable, Wit Studio, CloverWorks, Toei, Bones), demographics (Shounen, Seinen, Shoujo), and decades.
+2. **Anime Kitsu:**
+   * Ensures accurate anime episode mapping, correct seasons, and comprehensive Japanese metadata.
+3. **Anime-Skip / AniSkip:**
+   * Powers automatic skipping of anime opening (intro) and ending (outro) themes.
+4. **SubDL & SubSource:**
+   * Delivers high-quality external Arabic and multi-language subtitle tracks.
+
+---
+
+## 📱 Multi-Platform Releases (Roadmap)
+
+While **Stremio Kai 7M** was born and handcrafted specifically for **Samsung Smart TVs (Tizen OS)** to leverage Samsung's native AVPlay hardware engine, native package releases for additional platforms are in active development:
+
+* **📺 Samsung Smart TVs (Tizen 3.0 to 8.0+):** Available now via TizenBrew or installable `Stremio7M.wgt`.
+* **🤖 Android TV & Google TV (TCL, Sony, Xiaomi, Chromecast):** Standalone full-screen `.apk` package with native TV remote D-pad navigation.
+* **🍏 Apple iOS (iPhone & iPad):** Native `.ipa` package for direct sideloading via **SideStore**, **LiveContainer**, and **AltStore**.
+* **📺 LG Smart TVs (webOS):** Native `.ipk` package for LG webOS Dev Mode and Homebrew Channel.
+* **💻 Windows PC:** Ultra-lightweight standalone `.exe` desktop application.
+
+---
+
 ## 💻 Local Building & Packaging
 
 Requires Node.js (v18 or newer).
