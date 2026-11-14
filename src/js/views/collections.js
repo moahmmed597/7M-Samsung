@@ -13,10 +13,10 @@ import { openDetails } from './details.js';
 import { t, current } from '../lib/i18n.js';
 import { FRANCHISES, CATS, catOf, franchisesOf, findFranchise } from '../data/franchises.js';
 
-const POSTER = (imdb) => 'https://images.metahub.space/poster/small/' + imdb + '/img';
+export const POSTER = (imdb) => 'https://images.metahub.space/poster/small/' + imdb + '/img';
 const ORDER_KEY = 'franchiseOrder';
 
-function displayName(f) {
+export function displayName(f) {
   return current() === 'ar' && f.ar ? f.ar : f.name;
 }
 
@@ -203,7 +203,7 @@ function itemProgress(it) {
   return isSeriesItem(it) ? 0 : watched.progress(it[0]);
 }
 
-function watchedCount(f) {
+export function watchedCount(f) {
   return f.items.filter(itemWatched).length;
 }
 

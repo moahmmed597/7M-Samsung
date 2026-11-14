@@ -6,7 +6,7 @@ export const FRANCHISES = [
     id: 'mcu',
     name: 'Marvel Cinematic Universe',
     ar: 'عالم مارفل السينمائي (MCU)',
-    related: ['xmen', 'spiderman'],
+    related: ['xmen', 'spiderman', 'f4', 'blade'],
     items: [
       ['tt0120903', 'X-Men', 2000],
       ['tt0145487', 'Spider-Man', 2002],
@@ -125,6 +125,7 @@ export const FRANCHISES = [
     id: 'spiderman',
     name: 'Spider-Man',
     ar: 'سبايدر مان',
+    related: ['mcu'],
     items: [
       ['tt0145487', 'Spider-Man', 2002],
       ['tt0316654', 'Spider-Man 2', 2004],
@@ -139,9 +140,33 @@ export const FRANCHISES = [
     ],
   },
   {
+    id: 'f4',
+    name: 'Fantastic Four',
+    ar: 'فانتاستيك فور (Fantastic Four)',
+    related: ['mcu'],
+    items: [
+      ['tt0120667', 'Fantastic Four', 2005],
+      ['tt0486576', 'Fantastic Four: Rise of the Silver Surfer', 2007],
+      ['tt1502712', 'Fantastic Four', 2015],
+      ['tt10676052', 'The Fantastic Four: First Steps', 2025],
+    ],
+  },
+  {
+    id: 'blade',
+    name: 'Blade',
+    ar: 'بليد (Blade)',
+    related: ['mcu'],
+    items: [
+      ['tt0120611', 'Blade', 1998],
+      ['tt0187738', 'Blade II', 2002],
+      ['tt0359013', 'Blade: Trinity', 2004],
+    ],
+  },
+  {
     id: 'dceu',
     name: 'DC Extended Universe',
     ar: 'عالم دي سي (DCEU)',
+    related: ['batman', 'darkknight', 'dcau'],
     items: [
       ['tt0770828', 'Man of Steel', 2013],
       ['tt2975590', 'Batman v Superman: Dawn of Justice', 2016],
@@ -166,9 +191,27 @@ export const FRANCHISES = [
     ],
   },
   {
+    id: 'batman',
+    name: 'Batman',
+    ar: 'باتمان (Batman)',
+    related: ['dceu', 'darkknight', 'dcau'],
+    items: [
+      ['tt0096895', 'Batman', 1989],
+      ['tt0103776', 'Batman Returns', 1992],
+      ['tt0112462', 'Batman Forever', 1995],
+      ['tt0118688', 'Batman & Robin', 1997],
+      ['tt0372784', 'Batman Begins', 2005],
+      ['tt0468569', 'The Dark Knight', 2008],
+      ['tt1345836', 'The Dark Knight Rises', 2012],
+      ['tt2975590', 'Batman v Superman: Dawn of Justice', 2016],
+      ['tt1877830', 'The Batman', 2022],
+    ],
+  },
+  {
     id: 'darkknight',
     name: 'The Dark Knight Trilogy',
     ar: 'ثلاثية فارس الظلام (باتمان - نولان)',
+    related: ['dceu', 'batman', 'dcau'],
     items: [
       ['tt0372784', 'Batman Begins', 2005],
       ['tt0468569', 'The Dark Knight', 2008],
@@ -853,6 +896,7 @@ export const FRANCHISES = [
     cat: 'cartoon',
     name: 'DC Animated Universe',
     ar: 'عالم DC الكرتوني (DCAU)',
+    related: ['dceu', 'batman', 'darkknight'],
     items: [
       ['tt0103359', 'Batman: The Animated Series', 1992, 's'],
       ['tt0106364', 'Batman: Mask of the Phantasm', 1993],
@@ -927,7 +971,7 @@ export const CATS = [
 ];
 
 const HERO_IDS = [
-  'mcu', 'xmen', 'spiderman', 'batman', 'superman', 'dceu', 'arrowverse', 'starwars',
+  'mcu', 'xmen', 'spiderman', 'f4', 'blade', 'batman', 'darkknight', 'dceu', 'arrowverse', 'superman', 'starwars',
   'lotr', 'potter', 'transformers', 'matrix', 'monsterverse', 'jurassic', 'planet-apes',
   'hungergames', 'twilight'
 ];

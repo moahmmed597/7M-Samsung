@@ -829,4 +829,6 @@ export const AR = {
   "Outono": "الخريف",
   "Não foi possível ligar esta legenda.": "ما قدرت أشغّل هالترجمة.",
   "Marvel Studios": "مارفل الرسمية (Marvel Studios)",
+  "Sagas em andamento": "سلاسل قيد المتابعة",
+  "Clique para continuar a maratona": "اضغط لمتابعة السلسلة",
 };

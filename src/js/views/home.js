@@ -20,6 +20,9 @@ import { trailerIds } from './trailer.js';
 import * as nc from '../api/nuvioCollections.js';
 import * as extras from '../api/extras.js';
 import { collectionRows } from './nuvioHome.js';
+import { FRANCHISES } from '../data/franchises.js';
+import { watchedCount, displayName, openFranchise, POSTER } from './collections.js';
+import * as watched from '../lib/watched.js';
 
 const ROTATE_MS = 8000;
 
@@ -29,11 +32,13 @@ export function HomeView() {
   const bar = topbar('home', router.goTab);
   const heroUi = buildHero();
   const cwRow = h('div.row', { 'data-anchor': '30' });
+  const sagasRow = h('div.row', { 'data-anchor': '30' });
   const neRow = h('div.row', { 'data-anchor': '30' });
   const rows = h('div.rows');
   scroller.appendChild(bar);
   scroller.appendChild(heroUi.el);
   scroller.appendChild(cwRow);
+  scroller.appendChild(sagasRow);
   scroller.appendChild(neRow);
   scroller.appendChild(rows);
   el.appendChild(scroller);
@@ -44,6 +49,7 @@ export function HomeView() {
   tracker.onPlayback((list) => {
     if (stremio.mergeExternalProgress(list)) {
       renderContinue();
+      renderSagas();
       publishBrowse();
     }
   });
@@ -61,6 +67,7 @@ export function HomeView() {
         const after = JSON.stringify(stremio.continueWatching().map((it) => [it._id, it.state.video_id, it.state.timeOffset]));
         if (after !== before) {
           renderContinue();
+          renderSagas();
           loadNew(true);
           publishBrowse();
         }
@@ -185,6 +192,45 @@ export function HomeView() {
     loadVisibleImages(cwRow);
   }
 
+  function renderSagas() {
+    clear(sagasRow);
+    const active = FRANCHISES.map((f) => {
+      const done = watchedCount(f);
+      return { f: f, done: done, total: f.items.length };
+    }).filter((x) => x.done > 0 && x.done < x.total);
+
+    if (!active.length) {
+      sagasRow.style.display = 'none';
+      return;
+    }
+    sagasRow.style.display = '';
+    sagasRow.appendChild(
+      h('div.row-title', null, [
+        t('Sagas em andamento'),
+        h('small', { text: t('Clique para continuar a maratona') }),
+      ])
+    );
+    const track = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
+    active.forEach((x) => {
+      const f = x.f;
+      const title = displayName(f);
+      const firstUnseen = f.items.find((it) => !watched.isWatched(it[0]));
+      const posterImdb = (firstUnseen && firstUnseen[0]) || f.items[0][0];
+      const c = card(
+        { name: title, poster: POSTER(posterImdb) },
+        {
+          title: title + ' · ' + t('Assistidos: {done} de {n}', { done: x.done, n: x.total }),
+          badge: x.done + '/' + x.total,
+          progress: x.done / x.total,
+          onSelect: () => openFranchise(f),
+        }
+      );
+      track.appendChild(c);
+    });
+    sagasRow.appendChild(track);
+    loadVisibleImages(sagasRow);
+  }
+
   // Fileiras sob demanda: só busca o catálogo quando a fileira chega perto da tela,
   // no máximo 2 ao mesmo tempo. Antes eram todas de uma vez e a TV ficava sem memória.
   let pending = [];
@@ -258,6 +304,7 @@ export function HomeView() {
     el: el,
     onShow: () => {
       renderContinue();
+      renderSagas();
       syncContinue();
       tracker.maybeSync();
       renderNew();

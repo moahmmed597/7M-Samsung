@@ -829,4 +829,6 @@ export const EN = {
   "Outono": "Fall",
   "Não foi possível ligar esta legenda.": "Could not turn this subtitle on.",
   "Marvel Studios": "Marvel Studios",
+  "Sagas em andamento": "Sagas in progress",
+  "Clique para continuar a maratona": "Click to continue the saga",
 };
