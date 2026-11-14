@@ -24,11 +24,11 @@ function seasonNow() {
 // installed (MAL data: { aio: catalog, g: genre option }), else from AniList ({ ani: filter }).
 const SEASONS = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
 const SEASON_LABEL = { WINTER: 'Winter', SPRING: 'Spring', SUMMER: 'Summer', FALL: 'Fall' };
-const SEASON_ART_FALLBACK = {
-  WINTER: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/172463-3J2o3qQZadFJ.jpg',
-  SPRING: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/147105-fTjmRrILFixZ.jpg',
-  SUMMER: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/178789-9nHWmoRLlcLu.jpg',
-  FALL: 'https://s4.anilist.co/file/anilistcdn/media/anime/banner/195539-lO5SUdp4SOrq.jpg',
+const SEASON_LOCAL_ART = {
+  WINTER: 'seasons/winter.jpg',
+  SPRING: 'seasons/spring.jpg',
+  SUMMER: 'seasons/summer.jpg',
+  FALL: 'seasons/fall.jpg',
 };
 function nextSeason(s) {
   const i = SEASONS.indexOf(s.season);
@@ -208,10 +208,17 @@ function tileRow(parent, title, tiles, cls) {
           im.setAttribute('data-lazy', url);
           // Discover and Decades art already has its title drawn in; the rest get the name on top.
           im.onload = () => wrap.classList.add(/^landscape-/.test(x.art || '') ? 'has-art' : 'has-art-label');
-          im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
+          im.onerror = () => {
+            if (x.fallbackUrl && im.getAttribute('src') !== x.fallbackUrl) {
+              im.setAttribute('src', x.fallbackUrl);
+            } else if (im.parentNode) {
+              im.parentNode.removeChild(im);
+            }
+          };
           wrap.appendChild(im);
         }
-        return h('div.card.anime-tile', { focusable: true, cls: cls + ' hue-' + (i % 6), onSelect: x.open }, [wrap, h('div.name', { text: '' })]);
+        const seasonCls = x.seasonKey ? ' season-' + String(x.seasonKey).toLowerCase() : '';
+        return h('div.card.anime-tile', { focusable: true, cls: cls + seasonCls + ' hue-' + (i % 6), onSelect: x.open }, [wrap, h('div.name', { text: '' })]);
       })
     )
   );
@@ -275,11 +282,11 @@ export function AnimeView() {
   add(t('Em alta agora'), () => page('sort: TRENDING_DESC'), () => router.push(AnimeGridView(t('Em alta agora'), 'sort: TRENDING_DESC')));
   tiles(t('Anime da temporada'), SEASONS.map((x) => {
     const one = { season: x, year: s.year };
-    const rawBanner = SEASON_ART_FALLBACK[x];
-    const artUrl = rawBanner ? 'https://wsrv.nl/?url=' + encodeURIComponent(rawBanner) + '&w=320&h=160&fit=cover&output=jpg&q=80' : null;
     return {
       label: t(SEASON_LABEL[x] === 'Winter' ? 'Inverno' : SEASON_LABEL[x] === 'Spring' ? 'Primavera' : SEASON_LABEL[x] === 'Summer' ? 'Verão' : 'Outono') + ' ' + s.year,
-      artUrl: artUrl,
+      seasonKey: x,
+      artUrl: SEASON_LOCAL_ART[x],
+      fallbackUrl: 'https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/src/static/seasons/' + x.toLowerCase() + '.jpg',
       src: listSource('mal.seasons', seasonName(one), seasonArgs(one)),
     };
   }), 'seasonal');

@@ -58,15 +58,17 @@ add('index.html', html);
   const p = path.join(dist, f);
   if (fs.existsSync(p)) add(f, fs.readFileSync(p));
 });
-(function walk(dir, rel) {
-  if (!fs.existsSync(dir)) return;
-  fs.readdirSync(dir).forEach((f) => {
-    const p = path.join(dir, f);
-    const r = rel + '/' + f;
-    if (fs.statSync(p).isDirectory()) walk(p, r);
-    else add(r.slice(1), fs.readFileSync(p));
-  });
-})(path.join(dist, 'fonts'), '/fonts');
+['fonts', 'seasons'].forEach((folder) => {
+  (function walk(dir, rel) {
+    if (!fs.existsSync(dir)) return;
+    fs.readdirSync(dir).forEach((f) => {
+      const p = path.join(dir, f);
+      const r = rel + '/' + f;
+      if (fs.statSync(p).isDirectory()) walk(p, r);
+      else add(r.slice(1), fs.readFileSync(p));
+    });
+  })(path.join(dist, folder), '/' + folder);
+});
 // The service: the same file TizenBrew runs, plus the entry points a Tizen service needs.
 // The installed copy can't update itself like app.js does, so the entry file first tries the newest
 // remote-service.js from GitHub (pinned to the latest commit on jsDelivr, the same source the app

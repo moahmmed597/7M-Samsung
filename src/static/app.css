@@ -543,7 +543,11 @@ body .card.nc-tile.nc-square .poster-wrap { width: 250px; height: 250px; backgro
 [dir="rtl"] .anime-tile .poster-wrap.has-art-label .tile-label { text-align: right; }
 
 /* Seasonal anime tiles with backdrop artwork */
-.anime-tile.seasonal .poster-wrap { background: #1a162b; border-radius: 12px; overflow: hidden; }
+.anime-tile.seasonal .poster-wrap { border-radius: 12px; overflow: hidden; position: relative; }
+.anime-tile.seasonal.season-winter .poster-wrap { background: linear-gradient(135deg, #1e3a8a, #0f172a); }
+.anime-tile.seasonal.season-spring .poster-wrap { background: linear-gradient(135deg, #db2777, #4c0519); }
+.anime-tile.seasonal.season-summer .poster-wrap { background: linear-gradient(135deg, #0d9488, #134e4a); }
+.anime-tile.seasonal.season-fall .poster-wrap { background: linear-gradient(135deg, #ea580c, #431407); }
 .anime-tile.seasonal .tile-label { position: absolute; left: 0; right: 0; bottom: 0; padding: 34px 16px 14px; font-size: 24px; font-weight: 800; text-align: left; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 100%); text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
 [dir="rtl"] .anime-tile.seasonal .tile-label { text-align: right; }
 
