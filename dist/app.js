@@ -16262,8 +16262,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var im = h("img", {
         alt: ""
       });
-      im.setAttribute("data-lazy", f.c);
+      var size = shape === "landscape" ? "&w=400&h=225&fit=cover" : shape === "square" ? "&w=260&h=260&fit=contain&cbg=f2f0f8" : "&w=230&h=345&fit=cover";
+      var small = "https://wsrv.nl/?url=" + encodeURIComponent(f.c) + size + "&output=jpg&q=80";
+      im.setAttribute("data-lazy", small);
+      var triedFull = false;
       im.onerror = function () {
+        if (!triedFull) {
+          triedFull = true;
+          im.src = f.c;
+          return;
+        }
         im.style.display = "none";
         wrap.appendChild(h("div.ph", {
           text: f.t
@@ -17408,7 +17416,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T03:54:52.183Z";
+  var BUILD = "2026-11-14T04:00:19.297Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

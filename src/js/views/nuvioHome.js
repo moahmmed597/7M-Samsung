@@ -20,8 +20,18 @@ function folderTile(f) {
   const wrap = h('div.poster-wrap');
   if (f.c) {
     const im = h('img', { alt: '' });
-    im.setAttribute('data-lazy', f.c);
+    // The packs' covers are full HD (1920x1080, up to 1.4 MB): decoded, each one takes ~8 MB of the
+    // TV's memory for a 380 px tile. wsrv.nl (also used by Nuvio) sends them at the tile's size.
+    const size = shape === 'landscape' ? '&w=400&h=225&fit=cover' : shape === 'square' ? '&w=260&h=260&fit=contain&cbg=f2f0f8' : '&w=230&h=345&fit=cover';
+    const small = 'https://wsrv.nl/?url=' + encodeURIComponent(f.c) + size + '&output=jpg&q=80';
+    im.setAttribute('data-lazy', small);
+    let triedFull = false;
     im.onerror = () => {
+      if (!triedFull) {
+        triedFull = true; // the proxy failed: the original picture
+        im.src = f.c;
+        return;
+      }
       im.style.display = 'none';
       wrap.appendChild(h('div.ph', { text: f.t }));
     };
