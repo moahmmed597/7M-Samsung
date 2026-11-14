@@ -232,7 +232,7 @@ export function SettingsView() {
     const builtIn = tracker.hasBuiltInKeys('trakt') && tracker.hasBuiltInKeys('simkl');
     if (builtIn) body.appendChild(h('div.set-section', { text: t('Chaves próprias (opcional)') }));
     body.appendChild(keyInput(t('Trakt Client ID'), t('Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)'), 'traktClientId', 'Client ID'));
-    body.appendChild(keyInput(t('Trakt Client Secret'), t('Do mesmo app do Trakt'), 'traktClientSecret', 'Client Secret'));
+    body.appendChild(keyInput(t('Trakt Client Secret'), t('Opcional: só apps antigos do Trakt têm'), 'traktClientSecret', 'Client Secret'));
     body.appendChild(keyInput(t('Simkl Client ID'), t('Crie um app grátis em simkl.com/settings/developer'), 'simklClientId', 'Client ID'));
 
     body.appendChild(h('div.set-section', { text: t('Fontes') }));

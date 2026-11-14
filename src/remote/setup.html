@@ -35,9 +35,9 @@
 
   <section>
     <h2>Trakt</h2>
-    <p class="help">مرة وحدة بس: افتح <a href="https://trakt.tv/oauth/applications/new" target="_blank" rel="noopener">trakt.tv/oauth/applications/new</a>، اكتب أي اسم، وفي <b>Redirect uri</b> حط <code>urn:ietf:wg:oauth:2.0:oob</code>، واحفظ. بعدها انسخ Client ID و Client Secret هنا.</p>
+    <p class="help">افتح <a href="https://developer.trakt.tv/apps" target="_blank" rel="noopener">developer.trakt.tv/apps</a>، اضغط على تطبيقك (أو Create app وحط في Redirect URIs <code>urn:ietf:wg:oauth:2.0:oob</code>)، وانسخ <b>Client ID</b>. التطبيقات الجديدة ما فيها Client Secret، وهذا عادي.</p>
     <label>Client ID</label><input data-k="traktClientId" autocomplete="off">
-    <label>Client Secret</label><input data-k="traktClientSecret" autocomplete="off">
+    <label>Client Secret (بس إذا تطبيقك قديم وفيه واحد)</label><input data-k="traktClientSecret" autocomplete="off">
   </section>
 
   <section>

@@ -59,7 +59,7 @@ function TrackLinkView(provider, onDone) {
       urlEl.appendChild(h('b', { text: link.url.replace(/^https?:\/\//, '') }));
       urlEl.appendChild(document.createTextNode(' ' + t('e digite o código:')));
       // The QR carries the code too, so the phone opens the page with it already filled in.
-      const direct = provider === 'trakt' ? 'https://trakt.tv/activate/' + encodeURIComponent(link.code) : 'https://simkl.com/pin/' + encodeURIComponent(link.code);
+      const direct = provider === 'trakt' ? link.url.replace(/\/+$/, '') + '/' + encodeURIComponent(link.code) : 'https://simkl.com/pin/' + encodeURIComponent(link.code);
       qr.src = phone.qrImage(direct, 360);
       status.textContent = t('Aguardando confirmação...');
     })

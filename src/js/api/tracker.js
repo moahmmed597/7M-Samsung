@@ -27,6 +27,12 @@ const BUILT = {
   simklId: typeof __KAI_SIMKL_ID__ !== 'undefined' ? __KAI_SIMKL_ID__ : '',
 };
 
+// Older Trakt apps have a Client Secret; send it only when the user has one.
+function withSecret(body, k) {
+  if (k.traktSecret) body.client_secret = k.traktSecret;
+  return body;
+}
+
 function keys() {
   const s = store.settings();
   return {
@@ -39,12 +45,13 @@ function keys() {
 
 // True when this build carries the app's own keys, so linking is just "scan and sign in".
 export function hasBuiltInKeys(provider) {
-  return provider === 'trakt' ? !!(BUILT.traktId && BUILT.traktSecret) : !!BUILT.simklId;
+  return provider === 'trakt' ? !!BUILT.traktId : !!BUILT.simklId;
 }
 
 export function hasKeys(provider) {
   const k = keys();
-  return provider === 'trakt' ? !!(k.traktId && k.traktSecret) : !!k.simklId;
+  // Trakt apps made on the new developer site have no secret (PKCE): the Client ID is enough.
+  return provider === 'trakt' ? !!k.traktId : !!k.simklId;
 }
 
 export function account(provider) {
@@ -80,7 +87,7 @@ export function disconnect(provider) {
   saveAccount(provider, null);
   if (provider === 'trakt' && a && a.token && hasKeys('trakt')) {
     const k = keys();
-    request('POST', TRAKT_API + '/oauth/revoke', { token: a.token, client_id: k.traktId, client_secret: k.traktSecret }, { quiet: true }).catch(() => {});
+    request('POST', TRAKT_API + '/oauth/revoke', withSecret({ token: a.token, client_id: k.traktId }, k), { quiet: true }).catch(() => {});
   }
 }
 
@@ -106,7 +113,7 @@ function traktRefresh() {
   refreshing = request(
     'POST',
     TRAKT_API + '/oauth/token',
-    { refresh_token: a.refresh, client_id: k.traktId, client_secret: k.traktSecret, redirect_uri: 'urn:ietf:wg:oauth:2.0:oob', grant_type: 'refresh_token' },
+    withSecret({ refresh_token: a.refresh, client_id: k.traktId, redirect_uri: 'urn:ietf:wg:oauth:2.0:oob', grant_type: 'refresh_token' }, k),
     { headers: traktHeaders(), quiet: true }
   )
     .then((r) => {
@@ -197,7 +204,7 @@ export function startLink(provider, onDone, onFail) {
     timer = setTimeout(() => {
       const check =
         provider === 'trakt'
-          ? request('POST', TRAKT_API + '/oauth/device/token', { code: info.device, client_id: k.traktId, client_secret: k.traktSecret }, { headers: traktHeaders(), quiet: true })
+          ? request('POST', TRAKT_API + '/oauth/device/token', withSecret({ code: info.device, client_id: k.traktId }, k), { headers: traktHeaders(), quiet: true })
           : request('GET', SIMKL_API + '/oauth/pin/' + encodeURIComponent(info.code) + '?client_id=' + encodeURIComponent(k.simklId), null, { quiet: true });
       check
         .then((r) => {

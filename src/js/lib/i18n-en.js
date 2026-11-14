@@ -740,4 +740,5 @@ export const EN = {
   "Coloque as chaves pelo celular": "Add the keys from your phone",
   "O serviço da TV não está rodando. Feche o app e abra de novo.": "The TV service is not running. Close the app and open it again.",
   "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "First add the keys from your phone: point the camera at the QR on this page.",
+  "Opcional: só apps antigos do Trakt têm": "Optional: only older Trakt apps have one",
 };

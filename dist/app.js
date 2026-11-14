@@ -5505,7 +5505,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Chaves recebidas do celular: {n}": "Keys received from the phone: {n}",
     "Coloque as chaves pelo celular": "Add the keys from your phone",
     "O serviço da TV não está rodando. Feche o app e abra de novo.": "The TV service is not running. Close the app and open it again.",
-    "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "First add the keys from your phone: point the camera at the QR on this page."
+    "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "First add the keys from your phone: point the camera at the QR on this page.",
+    "Opcional: só apps antigos do Trakt têm": "Optional: only older Trakt apps have one"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6241,7 +6242,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Chaves recebidas do celular: {n}": "وصلت المفاتيح من الجوال: {n}",
     "Coloque as chaves pelo celular": "حط المفاتيح من جوالك",
     "O serviço da TV não está rodando. Feche o app e abra de novo.": "خدمة التلفزيون مو شغالة. سكّر التطبيق وافتحه من جديد.",
-    "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "أول شي حط المفاتيح من جوالك: صوّر الباركود اللي في هالصفحة."
+    "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "أول شي حط المفاتيح من جوالك: صوّر الباركود اللي في هالصفحة.",
+    "Opcional: só apps antigos do Trakt têm": "اختياري: بس تطبيقات Trakt القديمة فيها"
   };
 
   // src/js/lib/i18n.js
@@ -10583,6 +10585,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     traktSecret: true ? "" : "",
     simklId: true ? "" : ""
   };
+  function withSecret(body, k) {
+    if (k.traktSecret) body.client_secret = k.traktSecret;
+    return body;
+  }
   function keys() {
     var s = settings();
     return {
@@ -10593,11 +10599,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
   function hasBuiltInKeys(provider) {
-    return provider === "trakt" ? !!(BUILT.traktId && BUILT.traktSecret) : !!BUILT.simklId;
+    return provider === "trakt" ? !!BUILT.traktId : !!BUILT.simklId;
   }
   function hasKeys(provider) {
     var k = keys();
-    return provider === "trakt" ? !!(k.traktId && k.traktSecret) : !!k.simklId;
+    return provider === "trakt" ? !!k.traktId : !!k.simklId;
   }
   function account(provider) {
     return get("track." + provider, null);
@@ -10625,11 +10631,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     saveAccount(provider, null);
     if (provider === "trakt" && a && a.token && hasKeys("trakt")) {
       var k = keys();
-      request("POST", TRAKT_API + "/oauth/revoke", {
+      request("POST", TRAKT_API + "/oauth/revoke", withSecret({
         token: a.token,
-        client_id: k.traktId,
-        client_secret: k.traktSecret
-      }, {
+        client_id: k.traktId
+      }, k), {
         quiet: true
       }).catch(function () {});
     }
@@ -10655,13 +10660,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (!a || !a.refresh) return Promise.reject(new Error("no refresh token"));
     if (refreshing) return refreshing;
     var k = keys();
-    refreshing = request("POST", TRAKT_API + "/oauth/token", {
+    refreshing = request("POST", TRAKT_API + "/oauth/token", withSecret({
       refresh_token: a.refresh,
       client_id: k.traktId,
-      client_secret: k.traktSecret,
       redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
       grant_type: "refresh_token"
-    }, {
+    }, k), {
       headers: traktHeaders(),
       quiet: true
     }).then(function (r) {
@@ -10762,11 +10766,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (stopped) return;
       if (Date.now() > info2.expires) return finish(onFail, "expired");
       timer = setTimeout(function () {
-        var check3 = provider === "trakt" ? request("POST", TRAKT_API + "/oauth/device/token", {
+        var check3 = provider === "trakt" ? request("POST", TRAKT_API + "/oauth/device/token", withSecret({
           code: info2.device,
-          client_id: k.traktId,
-          client_secret: k.traktSecret
-        }, {
+          client_id: k.traktId
+        }, k), {
           headers: traktHeaders(),
           quiet: true
         }) : request("GET", SIMKL_API + "/oauth/pin/" + encodeURIComponent(info2.code) + "?client_id=" + encodeURIComponent(k.simklId), null, {
@@ -16172,7 +16175,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T02:11:28.821Z";
+  var BUILD = "2026-11-14T02:37:38.735Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -16556,7 +16559,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: link.url.replace(/^https?:\/\//, "")
       }));
       urlEl.appendChild(document.createTextNode(" " + t("e digite o código:")));
-      var direct = provider === "trakt" ? "https://trakt.tv/activate/" + encodeURIComponent(link.code) : "https://simkl.com/pin/" + encodeURIComponent(link.code);
+      var direct = provider === "trakt" ? link.url.replace(/\/+$/, "") + "/" + encodeURIComponent(link.code) : "https://simkl.com/pin/" + encodeURIComponent(link.code);
       qr.src = qrImage(direct, 360);
       status2.textContent = t("Aguardando confirmação...");
     }).catch(function () {});
@@ -16876,7 +16879,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: t("Chaves próprias (opcional)")
       }));
       body.appendChild(keyInput(t("Trakt Client ID"), t("Crie um app grátis em trakt.tv/oauth/applications (Redirect: urn:ietf:wg:oauth:2.0:oob)"), "traktClientId", "Client ID"));
-      body.appendChild(keyInput(t("Trakt Client Secret"), t("Do mesmo app do Trakt"), "traktClientSecret", "Client Secret"));
+      body.appendChild(keyInput(t("Trakt Client Secret"), t("Opcional: só apps antigos do Trakt têm"), "traktClientSecret", "Client Secret"));
       body.appendChild(keyInput(t("Simkl Client ID"), t("Crie um app grátis em simkl.com/settings/developer"), "simklClientId", "Client ID"));
       body.appendChild(h("div.set-section", {
         text: t("Fontes")
