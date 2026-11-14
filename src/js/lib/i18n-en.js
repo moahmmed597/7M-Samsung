@@ -741,4 +741,8 @@ export const EN = {
   "O serviço da TV não está rodando. Feche o app e abra de novo.": "The TV service is not running. Close the app and open it again.",
   "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "First add the keys from your phone: point the camera at the QR on this page.",
   "Opcional: só apps antigos do Trakt têm": "Optional: only older Trakt apps have one",
+  "Fonte do app": "App font",
+  "Letra dos menus e textos": "Font of the menus and texts",
+  "Samsung (da TV)": "Samsung (TV font)",
+  "Montserrat (Kai)": "Montserrat (Kai)",
 };

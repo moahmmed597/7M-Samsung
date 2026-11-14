@@ -5506,7 +5506,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Coloque as chaves pelo celular": "Add the keys from your phone",
     "O serviço da TV não está rodando. Feche o app e abra de novo.": "The TV service is not running. Close the app and open it again.",
     "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "First add the keys from your phone: point the camera at the QR on this page.",
-    "Opcional: só apps antigos do Trakt têm": "Optional: only older Trakt apps have one"
+    "Opcional: só apps antigos do Trakt têm": "Optional: only older Trakt apps have one",
+    "Fonte do app": "App font",
+    "Letra dos menus e textos": "Font of the menus and texts",
+    "Samsung (da TV)": "Samsung (TV font)",
+    "Montserrat (Kai)": "Montserrat (Kai)"
   };
 
   // src/js/lib/i18n-ar.js
@@ -6243,7 +6247,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Coloque as chaves pelo celular": "حط المفاتيح من جوالك",
     "O serviço da TV não está rodando. Feche o app e abra de novo.": "خدمة التلفزيون مو شغالة. سكّر التطبيق وافتحه من جديد.",
     "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "أول شي حط المفاتيح من جوالك: صوّر الباركود اللي في هالصفحة.",
-    "Opcional: só apps antigos do Trakt têm": "اختياري: بس تطبيقات Trakt القديمة فيها"
+    "Opcional: só apps antigos do Trakt têm": "اختياري: بس تطبيقات Trakt القديمة فيها",
+    "Fonte do app": "خط التطبيق",
+    "Letra dos menus e textos": "خط القوائم والنصوص",
+    "Samsung (da TV)": "سامسونج (خط التلفزيون)",
+    "Montserrat (Kai)": "Montserrat (Kai)"
   };
 
   // src/js/lib/i18n.js
@@ -10588,7 +10596,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var SYNC_EVERY = 30 * 60 * 1e3;
   var PROVIDERS2 = ["trakt", "simkl"];
   var BUILT = {
-    traktId: true ? "" : "",
+    // The app's own Trakt Client ID (approved by the owner). Apps on Trakt's new developer site sign
+    // users in with device codes/PKCE and have no secret: the Client ID is public by design and can't
+    // be turned into tokens without the user approving on trakt.tv. So linking is "scan and sign in".
+    traktId: "U3R0Jew72DahpIxoxD5sl9jw7J6sGMaWLrdji9xTark",
     traktSecret: true ? "" : "",
     simklId: true ? "" : ""
   };
@@ -16182,7 +16193,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T02:44:27.919Z";
+  var BUILD = "2026-11-14T02:52:57.736Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -16457,7 +16468,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "glow",
     label: "Escuro com brilho da cor"
   }];
+  var FONTS2 = [{
+    id: "samsung",
+    label: "Samsung (da TV)"
+  }, {
+    id: "montserrat",
+    label: "Montserrat (Kai)"
+  }];
   function applyLook(s) {
+    document.body.classList.toggle("font-samsung", (s.appFont || "samsung") === "samsung");
     var b = document.body;
     var set2 = function set2(prefix, value, all2) {
       return all2.forEach(function (x) {
@@ -17710,6 +17729,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         lookChoose(t("Formato dos cartões"), t("Cantos dos pôsteres e botões"), SHAPES, "cardShape", "rounded");
         lookChoose(t("Tamanho dos pôsteres"), t("Mais pôsteres por linha ou pôsteres maiores"), SIZES2, "cardSize", "medium");
         lookChoose(t("Estilo do foco"), t("Como o item selecionado aparece"), FOCUS, "focusStyle", "glow");
+        lookChoose(t("Fonte do app"), t("Letra dos menus e textos"), FONTS2, "appFont", "samsung");
         body.appendChild(h("div.set-section", {
           text: t("Tela inicial")
         }));

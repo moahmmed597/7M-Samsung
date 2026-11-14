@@ -835,6 +835,7 @@ export function SettingsView() {
       lookChoose(t('Formato dos cartões'), t('Cantos dos pôsteres e botões'), theme.SHAPES, 'cardShape', 'rounded');
       lookChoose(t('Tamanho dos pôsteres'), t('Mais pôsteres por linha ou pôsteres maiores'), theme.SIZES, 'cardSize', 'medium');
       lookChoose(t('Estilo do foco'), t('Como o item selecionado aparece'), theme.FOCUS, 'focusStyle', 'glow');
+      lookChoose(t('Fonte do app'), t('Letra dos menus e textos'), theme.FONTS, 'appFont', 'samsung');
 
       body.appendChild(h('div.set-section', { text: t('Tela inicial') }));
       const heroName = t((hero.SOURCES.find((x) => x.id === s.heroSource) || hero.SOURCES[0]).name);

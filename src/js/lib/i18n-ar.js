@@ -741,4 +741,8 @@ export const AR = {
   "O serviço da TV não está rodando. Feche o app e abra de novo.": "خدمة التلفزيون مو شغالة. سكّر التطبيق وافتحه من جديد.",
   "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "أول شي حط المفاتيح من جوالك: صوّر الباركود اللي في هالصفحة.",
   "Opcional: só apps antigos do Trakt têm": "اختياري: بس تطبيقات Trakt القديمة فيها",
+  "Fonte do app": "خط التطبيق",
+  "Letra dos menus e textos": "خط القوائم والنصوص",
+  "Samsung (da TV)": "سامسونج (خط التلفزيون)",
+  "Montserrat (Kai)": "Montserrat (Kai)",
 };

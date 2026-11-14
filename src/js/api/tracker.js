@@ -22,7 +22,10 @@ export const PROVIDERS = ['trakt', 'simkl'];
 
 // ---------- Keys and accounts ----------
 const BUILT = {
-  traktId: typeof __KAI_TRAKT_ID__ !== 'undefined' ? __KAI_TRAKT_ID__ : '',
+  // The app's own Trakt Client ID (approved by the owner). Apps on Trakt's new developer site sign
+  // users in with device codes/PKCE and have no secret: the Client ID is public by design and can't
+  // be turned into tokens without the user approving on trakt.tv. So linking is "scan and sign in".
+  traktId: (typeof __KAI_TRAKT_ID__ !== 'undefined' && __KAI_TRAKT_ID__) || 'U3R0Jew72DahpIxoxD5sl9jw7J6sGMaWLrdji9xTark',
   traktSecret: typeof __KAI_TRAKT_SECRET__ !== 'undefined' ? __KAI_TRAKT_SECRET__ : '',
   simklId: typeof __KAI_SIMKL_ID__ !== 'undefined' ? __KAI_SIMKL_ID__ : '',
 };

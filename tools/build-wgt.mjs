@@ -28,7 +28,7 @@ const config = `<?xml version="1.0" encoding="UTF-8"?>
     <feature name="http://tizen.org/feature/screen.size.all"/>
     <feature name="http://tizen.org/feature/web.service"/>
     <icon src="icon.png"/>
-    <name>Stremio 7M</name>
+    <name>Stremio Kai</name>
     <tizen:metadata key="http://samsung.com/tv/metadata/prelaunch.support" value="false"/>
     <tizen:privilege name="http://tizen.org/privilege/internet"/>
     <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
@@ -39,7 +39,7 @@ const config = `<?xml version="1.0" encoding="UTF-8"?>
     <tizen:service id="${SERVICE_ID}">
         <tizen:content src="service/remote-service.js"/>
         <tizen:name>Stremio7MService</tizen:name>
-        <tizen:description>Phone remote and helper requests for Stremio 7M</tizen:description>
+        <tizen:description>Phone remote and helper requests for Stremio Kai</tizen:description>
     </tizen:service>
     <tizen:setting screen-orientation="landscape" context-menu="disable" background-support="disable" encryption="disable" install-location="auto" hwkey-event="enable"/>
 </widget>

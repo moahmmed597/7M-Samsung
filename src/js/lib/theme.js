@@ -36,7 +36,13 @@ export const BACKGROUNDS = [
   { id: 'glow', label: 'Escuro com brilho da cor' },
 ];
 
+export const FONTS = [
+  { id: 'samsung', label: 'Samsung (da TV)' },
+  { id: 'montserrat', label: 'Montserrat (Kai)' },
+];
+
 export function applyLook(s) {
+  document.body.classList.toggle('font-samsung', (s.appFont || 'samsung') === 'samsung');
   const b = document.body;
   const set = (prefix, value, all) => all.forEach((x) => b.classList.toggle(prefix + x.id, x.id === value));
   set('shape-', s.cardShape || 'rounded', SHAPES);
