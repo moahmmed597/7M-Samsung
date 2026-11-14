@@ -1,7 +1,7 @@
-# Stremio 7M (Samsung Tizen Edition) 🎬⚡
+# Stremio Kai 7M (Samsung Tizen Edition) 🎬⚡
 
 <div align="center">
-  <img src="src/static/largeIcon.png" alt="Stremio 7M Logo" width="140" style="border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);" />
+  <img src="src/static/largeIcon.png" alt="Stremio Kai 7M Logo" width="140" style="border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);" />
   <br/>
   <h3>The Ultimate Modern Stremio Experience Crafted for Samsung OLED / Tizen Smart TVs</h3>
   <p>
@@ -9,16 +9,16 @@
   </p>
 
   [![Samsung Tizen](https://img.shields.io/badge/Samsung-Tizen_OS_4.0_--_8.0+-037bc8?style=for-the-badge&logo=samsung&logoColor=white)](https://www.samsung.com)
-  [![Built For OLED](https://img.shields.io/badge/OLED-Burn--in_Protected-000000?style=for-the-badge&logo=target&logoColor=white)](https://github.com/moahmmed597/7M-Samsung)
+  [![Built For OLED](https://img.shields.io/badge/OLED-Burn--in_Protected-000000?style=for-the-badge&logo=target&logoColor=white)](https://github.com/moahmmed597/Stremio-Kai-7M)
   [![License](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)](LICENSE)
-  [![Build](https://img.shields.io/badge/Build-Tizen_.wgt_Ready-success?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/moahmmed597/7M-Samsung)
+  [![Build](https://img.shields.io/badge/Build-Tizen_.wgt_Ready-success?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/moahmmed597/Stremio-Kai-7M)
 </div>
 
 ---
 
 ## 🌟 Overview / نظرة عامة
 
-**Stremio 7M** is a heavily enhanced, standalone evolution of the open-source Stremio Tizen client (`kai`), meticulously re-engineered for Samsung Smart TVs (especially 2024 OLED S90D/S95D and high-refresh Tizen models).
+**Stremio Kai 7M** is a heavily enhanced, standalone evolution of the open-source Stremio Tizen client (`kai`), meticulously re-engineered for Samsung Smart TVs (especially 2024 OLED S90D/S95D and high-refresh Tizen models).
 
 It transforms the streaming experience on Samsung TVs with native hardware decoding, embedded MKV subtitle handling, 100% Arabic localization, multi-franchise timelines, OLED burn-in prevention, and zero-latency TV navigation.
 

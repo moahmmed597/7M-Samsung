@@ -3,7 +3,7 @@
 // the latest commit and loads app.js/app.css pinned to it: a pinned jsDelivr copy is never stale.
 // Offline, slow or failing: the copy next to this file. Plain ES5: it runs before any polyfill.
 (function () {
-  var REPO = 'moahmmed597/7M-Samsung';
+  var REPO = 'moahmmed597/Stremio-Kai-7M';
   var started = false;
 
   function start(base) {

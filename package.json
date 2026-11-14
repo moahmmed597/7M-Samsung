@@ -1,8 +1,8 @@
 {
-  "name": "stremio-kai-tizen",
+  "name": "stremio-kai-7m",
   "version": "1.2.0-tizen.1",
   "private": true,
-  "description": "Stremio Kai Timeworn ported to old Samsung Tizen TVs (2017+, Tizen 3.0) as a TizenBrew app module",
+  "description": "Stremio Kai 7M - Custom Edition for Samsung OLED / Tizen Smart TVs",
   "license": "GPL-3.0",
   "type": "module",
   "scripts": {
@@ -28,10 +28,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/moahmmed597/7M-Samsung.git"
+    "url": "https://github.com/moahmmed597/Stremio-Kai-7M.git"
   },
   "packageType": "app",
-  "appName": "Stremio Kai",
+  "appName": "Stremio Kai 7M",
   "appPath": "dist/index.html",
   "keys": [
     "MediaPlayPause",

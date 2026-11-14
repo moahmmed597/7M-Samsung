@@ -5876,7 +5876,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Abertura pulada": "تم تخطي المقدمة",
     "Recapitulação pulada": "تم تخطي الملخص",
     "Encerramento pulado": "تم تخطي الخاتمة",
-    "Termina às {time}": "ينتهي في {time}",
+    "Termina às {time}": "ينتهي الساعة {time}",
     "O vídeo parou de carregar": "توقف تحميل الفيديو",
     "Reabre o vídeo em {time}": "يعيد فتح الفيديو عند {time}",
     "Tentar de novo": "إعادة المحاولة",
@@ -8047,7 +8047,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text: t("Adicionar perfil")
     })]));
     var el = h("div.view.profile-picker", null, [h("div.boot-logo", {
-      html: "Stremio <b>Kai</b>"
+      html: "Stremio <b>Kai 7M</b>"
     }), h("h1", {
       text: t("Quem está assistindo?")
     }), h("div.profile-row", {
@@ -18333,7 +18333,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T17:01:52.237Z";
+  var BUILD = "2026-11-14T17:07:27.935Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

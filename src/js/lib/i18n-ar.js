@@ -254,7 +254,7 @@ export const AR = {
   'Abertura pulada': 'تم تخطي المقدمة',
   'Recapitulação pulada': 'تم تخطي الملخص',
   'Encerramento pulado': 'تم تخطي الخاتمة',
-  'Termina às {time}': 'ينتهي في {time}',
+  'Termina às {time}': 'ينتهي الساعة {time}',
   'O vídeo parou de carregar': 'توقف تحميل الفيديو',
   'Reabre o vídeo em {time}': 'يعيد فتح الفيديو عند {time}',
   'Tentar de novo': 'إعادة المحاولة',
