@@ -5,7 +5,9 @@ import { luna, hasLuna } from './luna.js';
 export const FONTS = [
   { id: 'nata', label: 'Nata Sans (padrão Kai)', css: "'Nata Sans', 'Montserrat', sans-serif" },
   { id: 'montserrat', label: 'Montserrat', css: "'Montserrat', sans-serif" },
-  { id: 'tv', label: 'Fonte da TV (LG)', css: "'LG Display', 'Museo Sans', sans-serif" },
+  { id: 'samsung-ar', label: 'Samsung Arabic (خط سامسونج عربي)', css: "'SamsungOneArabic', 'SamsungOne', 'Noto Sans Arabic', 'Cairo', sans-serif" },
+  { id: 'arabic', label: 'خط عربي واضح (Noto / Cairo)', css: "'Noto Sans Arabic', 'Cairo', 'Segoe UI', Tahoma, sans-serif" },
+  { id: 'tv', label: 'Fonte da TV (Samsung/LG)', css: "'SamsungOne', 'LG Display', 'Museo Sans', sans-serif" },
   { id: 'classic', label: 'Clássica (Arial)', css: 'Arial, Helvetica, sans-serif' },
 ];
 
@@ -14,6 +16,7 @@ export const STYLES = [
   { id: 'outline', label: 'Contorno grosso' },
   { id: 'shadow', label: 'Só sombra' },
   { id: 'box', label: 'Caixa de fundo' },
+  { id: 'strongbox', label: 'خلفية داكنة واضحة (OLED HDR)' },
 ];
 
 // webos = nome de cor aceito pelo player nativo (legendas embutidas).
@@ -40,6 +43,7 @@ const SHADOWS = {
     '-3px -3px 0 #000, 0 -3px 0 #000, 3px -3px 0 #000, 3px 0 0 #000, 3px 3px 0 #000, 0 3px 0 #000, -3px 3px 0 #000, -3px 0 0 #000, 0 0 8px rgba(0,0,0,0.8)',
   shadow: '3px 3px 6px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.6)',
   box: 'none',
+  strongbox: 'none',
 };
 
 function find(list, id) {
@@ -56,7 +60,8 @@ export function apply(el, s) {
   el.style.color = s.subtitleColor || '#ffffff';
   el.style.textShadow = SHADOWS[s.subtitleStyle] || SHADOWS.kai;
   el.style.bottom = pos.bottom + 'px';
-  el.classList.toggle('box', s.subtitleStyle === 'box');
+  el.classList.toggle('box', s.subtitleStyle === 'box' || s.subtitleStyle === 'strongbox');
+  el.classList.toggle('strong-box', s.subtitleStyle === 'strongbox');
 }
 
 // Legendas embutidas são desenhadas pelo player da TV: só cor, tamanho e posição.

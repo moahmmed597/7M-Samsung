@@ -1,41 +1,130 @@
-// Legendas externas (SRT/VTT) desenhadas pelo próprio app, sincronizadas com o <video>.
+// Legendas externas (SRT/VTT/ASS/SSA) desenhadas pelo próprio app, sincronizadas com o <video>.
 import { getText } from './http.js';
 
-function toSec(ts) {
-  const m = ts.trim().replace(',', '.').match(/(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)/);
+export function toSec(ts) {
+  if (!ts) return NaN;
+  const s = String(ts).trim().replace(',', '.');
+  const m = s.match(/(?:(?:(\d+):)?(\d+):)?(\d+(?:\.\d+)?)/);
   if (!m) return NaN;
-  return (parseInt(m[1] || '0', 10) * 3600) + parseInt(m[2], 10) * 60 + parseFloat(m[3]);
+  const h = parseInt(m[1] || '0', 10);
+  const min = parseInt(m[2] || '0', 10);
+  const sec = parseFloat(m[3] || '0');
+  return h * 3600 + min * 60 + sec;
 }
 
-export function parse(text) {
+// Parses ASS/SSA subtitle events.
+export function parseAss(text) {
   const cues = [];
-  const blocks = String(text)
-    .replace(/^﻿/, '')
-    .replace(/\r\n?/g, '\n')
-    .split(/\n{2,}/);
+  const lines = String(text)
+    .replace(/^\uFEFF/, '')
+    .replace(/\r/g, '')
+    .split('\n');
+
+  let startIdx = 1;
+  let endIdx = 2;
+  let textIdx = 9;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line || line.charCodeAt(0) === 59 /* ; */) continue;
+
+    if (/^Format:\s*/i.test(line)) {
+      const parts = line.replace(/^Format:\s*/i, '').split(',').map((x) => x.trim().toLowerCase());
+      startIdx = parts.indexOf('start');
+      endIdx = parts.indexOf('end');
+      textIdx = parts.indexOf('text');
+      if (startIdx < 0) startIdx = 1;
+      if (endIdx < 0) endIdx = 2;
+      if (textIdx < 0) textIdx = parts.length - 1;
+      continue;
+    }
+
+    if (/^Dialogue:\s*/i.test(line)) {
+      const raw = line.replace(/^Dialogue:\s*/i, '');
+      const limit = textIdx >= 0 ? textIdx : 9;
+      let commaCount = 0;
+      let lastPos = 0;
+      const fields = [];
+      for (let pos = 0; pos < raw.length && commaCount < limit; pos++) {
+        if (raw[pos] === ',') {
+          fields.push(raw.substring(lastPos, pos).trim());
+          lastPos = pos + 1;
+          commaCount++;
+        }
+      }
+      fields.push(raw.substring(lastPos));
+
+      const start = toSec(fields[startIdx]);
+      const end = toSec(fields[endIdx]);
+      let body = fields[fields.length - 1] || '';
+
+      if (!isFinite(start) || !isFinite(end) || end <= start) continue;
+
+      body = body
+        .replace(/\{\\[^}]*\}/g, '')
+        .replace(/\{[^}]*\}/g, '')
+        .replace(/\\[Nn]/g, '\n')
+        .replace(/\\h/g, ' ')
+        .trim();
+
+      if (body) {
+        cues.push({ start: start, end: end, text: sanitize(body) });
+      }
+    }
+  }
+  cues.sort((a, b) => a.start - b.start);
+  return cues;
+}
+
+// Parses SRT and WebVTT subtitles.
+export function parseSrt(text) {
+  const cues = [];
+  const normalized = String(text)
+    .replace(/^\uFEFF/, '')
+    .replace(/\r\n?/g, '\n');
+
+  const blocks = normalized.split(/\n\s*\n+/);
   for (let i = 0; i < blocks.length; i++) {
-    const lines = blocks[i].split('\n');
+    const lines = blocks[i].trim().split('\n');
     let j = 0;
     while (j < lines.length && lines[j].indexOf('-->') < 0) j++;
     if (j >= lines.length) continue;
+
     const parts = lines[j].split('-->');
+    if (parts.length < 2) continue;
     const start = toSec(parts[0]);
-    const end = toSec(parts[1].trim().split(/\s+/)[0]);
-    if (!isFinite(start) || !isFinite(end)) continue;
+    const endToken = parts[1].trim().split(/\s+/)[0];
+    const end = toSec(endToken);
+    if (!isFinite(start) || !isFinite(end) || end <= start) continue;
+
     const body = lines
       .slice(j + 1)
       .join('\n')
       .replace(/\{\\[^}]*\}/g, '')
+      .replace(/\\[Nn]/g, '\n')
       .trim();
+
     if (body) cues.push({ start: start, end: end, text: sanitize(body) });
   }
   cues.sort((a, b) => a.start - b.start);
   return cues;
 }
 
+export function parse(text) {
+  if (!text) return [];
+  const s = String(text);
+  if (/^Dialogue:\s*/im.test(s) || /\[Events\]/i.test(s)) {
+    const assCues = parseAss(s);
+    if (assCues.length) return assCues;
+  }
+  const srtCues = parseSrt(s);
+  if (srtCues.length) return srtCues;
+  return parseAss(s);
+}
+
 // Mantém só <i>, <b>, <u>; o resto vira texto.
 export function sanitize(s) {
-  const esc = s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const esc = String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   return esc.replace(/&lt;(\/?)(i|b|u)&gt;/gi, '<$1$2>').replace(/&lt;\/?[^&]*&gt;/g, '');
 }
 
@@ -56,7 +145,6 @@ export function Renderer(el) {
   let idx = 0;
 
   function find(t) {
-    // Busca a partir do último índice (o vídeo quase sempre avança).
     if (idx >= cues.length || (cues[idx] && cues[idx].start > t)) idx = 0;
     while (idx < cues.length && cues[idx].end < t) idx++;
     const out = [];
@@ -92,7 +180,7 @@ export function Renderer(el) {
       const html = find(t - offset);
       if (html === lastHtml) return;
       lastHtml = html;
-      el.innerHTML = html ? '<span>' + html + '</span>' : '';
+      el.innerHTML = html ? '<span dir="auto">' + html + '</span>' : '';
     },
   };
 }

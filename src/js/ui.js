@@ -3,7 +3,7 @@ import { h, clear } from './lib/dom.js';
 import * as nav from './lib/nav.js';
 import { smallPoster, smallBackground, ratedPoster } from './lib/img.js';
 import * as store from './lib/store.js';
-import { avatar, switchProfile, createProfile } from './views/profiles.js';
+import { avatar, switchProfile, createProfile, showPicker } from './views/profiles.js';
 import { t } from './lib/i18n.js';
 
 let toastTimer = null;
@@ -154,10 +154,12 @@ function profileMenu(onTab) {
   const active = store.activeProfile();
   const opts = store.profiles().map((p) => ({ label: p.name, sub: p.id === active.id ? t('Perfil atual') : t('Trocar para este perfil'), value: p.id, checked: p.id === active.id }));
   opts.push({ label: t('+ Adicionar perfil'), sub: t('Com outra conta Stremio (histórico separado)'), value: '__add' });
+  opts.push({ label: t('Tela "Quem está assistindo?"'), sub: t('Escolher perfil'), value: '__picker' });
   opts.push({ label: t('Gerenciar perfis'), sub: t('Nome, cor, apagar'), value: '__manage' });
   menu(t('Perfis'), opts, {
     onPick: (v) => {
       if (v === '__add') createProfile();
+      else if (v === '__picker') showPicker(() => window.location.reload());
       else if (v === '__manage') onTab('settings');
       else if (v !== active.id) switchProfile(v);
     },

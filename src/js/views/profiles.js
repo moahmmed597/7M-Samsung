@@ -134,7 +134,9 @@ export function clearNewProfileFlag() {
 
 export function needsPicker() {
   if (session(SESSION_PICKED)) return false;
-  return (store.profiles().length > 1 && store.settings().askProfile) || !!store.activeProfile().pin;
+  // If askProfile is enabled (or active profile has a PIN), show the Choose Profile screen
+  // upon launch so the user can pick a profile or create a new one (+).
+  return (store.settings().askProfile !== false) || !!store.activeProfile().pin;
 }
 
 // Tela de escolha mostrada antes de o app carregar a conta.

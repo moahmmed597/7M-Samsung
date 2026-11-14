@@ -51,13 +51,15 @@ function fetchHeaders(req) {
   return h;
 }
 
-// GET a small binary file (follows up to 3 redirects, max 5 MB).
+// GET a small binary file (follows up to 5 redirects, http or https, max 5 MB).
 function fetchBinary(target, hops, done) {
-  var r = require('https').get({ hostname: target.hostname, path: target.path, headers: { 'User-Agent': 'stremio-7m-tizen' }, timeout: 15000 }, function (resp) {
-    if (resp.statusCode >= 300 && resp.statusCode < 400 && resp.headers.location && hops < 3) {
+  var mod = target.protocol === 'http:' ? require('http') : require('https');
+  var port = target.port || (target.protocol === 'http:' ? 80 : 443);
+  var r = mod.get({ hostname: target.hostname, port: port, path: target.path, headers: { 'User-Agent': 'stremio-7m-tizen' }, timeout: 15000 }, function (resp) {
+    if (resp.statusCode >= 300 && resp.statusCode < 400 && resp.headers.location && hops < 5) {
       resp.resume();
-      var next = require('url').parse(require('url').resolve('https://' + target.hostname + target.path, resp.headers.location));
-      if (next.protocol !== 'https:') return done(new Error('redirect'));
+      var resolved = require('url').resolve((target.protocol || 'https:') + '//' + target.hostname + target.path, resp.headers.location);
+      var next = require('url').parse(resolved);
       return fetchBinary(next, hops + 1, done);
     }
     if (resp.statusCode !== 200) { resp.resume(); return done(new Error('HTTP ' + resp.statusCode)); }

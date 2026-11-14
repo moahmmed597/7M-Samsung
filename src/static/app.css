@@ -177,9 +177,11 @@ body.oled .details-shade { background: linear-gradient(to right, #000 25%, rgba(
 /* ---------- Player ---------- */
 .player { background: #000; }
 .player video { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: #000; }
-.subs { position: absolute; left: 160px; right: 160px; bottom: 56px; text-align: center; pointer-events: none; font-family: 'Nata Sans', 'Montserrat', sans-serif; font-size: 64px; font-weight: 700; line-height: 1.25; color: #fff; -webkit-transition: -webkit-transform 0.25s; transition: transform 0.25s; }
-.subs span { display: inline; white-space: pre-line; }
-.subs.box span { background: rgba(0,0,0,0.75); padding: 2px 14px; border-radius: 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.subs { position: absolute; left: 160px; right: 160px; bottom: 56px; text-align: center; pointer-events: none; font-family: 'Nata Sans', 'Montserrat', sans-serif; font-size: 64px; font-weight: 700; line-height: 1.35; color: #fff; -webkit-transition: -webkit-transform 0.25s; transition: transform 0.25s; }
+.subs span { display: inline; white-space: pre-line; unicode-bidi: plaintext; }
+.subs span[dir="auto"] { unicode-bidi: plaintext; }
+.subs.box span { background: rgba(0,0,0,0.75); padding: 4px 16px; border-radius: 6px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.subs.strong-box span { background: rgba(0,0,0,0.92); padding: 6px 20px; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,0.85); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .player.controls-on .subs { -webkit-transform: translateY(-190px); transform: translateY(-190px); }
 .p-overlay { position: absolute; left: 0; top: 0; right: 0; bottom: 0; opacity: 0; -webkit-transition: opacity 0.25s; transition: opacity 0.25s; }
 .player.controls-on .p-overlay { opacity: 1; }

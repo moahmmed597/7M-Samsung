@@ -4880,6 +4880,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "{n} perfis nesta TV": "{n} profiles on this TV",
     "Para outra pessoa, com outra conta Stremio": "For someone else, with another Stremio account",
     'Perguntar "Quem está assistindo?" ao abrir': "Ask \"Who's watching?\" on launch",
+    "Mostra a tela de escolher ou criar perfil ao abrir o app": "Shows the Choose Profile screen when launching the app",
+    "Escolher perfil agora": "Choose profile now",
+    'Abre a tela "Quem está assistindo?"': "Opens the \"Who's watching?\" screen",
+    'Tela "Quem está assistindo?"': "\"Who's watching?\" screen",
+    "Escolher perfil": "Choose profile",
+    "Proteção contra burn-in (OLED)": "OLED Burn-in Protection",
+    "Tela preta pura com relógio móvel após 90s pausado para proteger painéis OLED": "Pure black screen with drifting clock after 90s pause to protect OLED panels",
+    "Samsung Arabic (خط سامسونج عربي)": "Samsung Arabic font",
+    "خط عربي واضح (Noto / Cairo)": "Clear Arabic font (Noto / Cairo)",
+    "خلفية داكنة واضحة (OLED HDR)": "High-contrast box (OLED HDR)",
     "Apagar este perfil": "Delete this profile",
     "Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)": "Removes the profile's account and preferences from this TV (the Stremio account itself is kept)",
     'Apagar o perfil "{name}" desta TV?': 'Delete profile "{name}" from this TV?',
@@ -5687,6 +5697,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "{n} perfis nesta TV": "{n} ملفات على هذا التلفاز",
     "Para outra pessoa, com outra conta Stremio": "لشخص آخر، بحساب Stremio آخر",
     'Perguntar "Quem está assistindo?" ao abrir': 'السؤال "من يشاهد؟" عند التشغيل',
+    "Mostra a tela de escolher ou criar perfil ao abrir o app": "إلغاء الدخول التلقائي وعرض شاشة اختيار الملف الشخصي عند الفتح",
+    "Escolher perfil agora": "اختيار الملف الشخصي الآن",
+    'Abre a tela "Quem está assistindo?"': 'فتح شاشة "من يشاهد؟" لاختيار أو إنشاء ملف',
+    'Tela "Quem está assistindo?"': 'شاشة "من يشاهد؟"',
+    "Escolher perfil": "اختيار الملف الشخصي",
+    "Proteção contra burn-in (OLED)": "حماية شاشات OLED من التطبيع",
+    "Tela preta pura com relógio móvel após 90s pausado para proteger painéis OLED": "شاشة سوداء تامة مع ساعة متحركة بعد 90 ثانية من الإيقاف لحماية لوحة OLED",
+    "Samsung Arabic (خط سامسونج عربي)": "خط سامسونج عربي",
+    "خط عربي واضح (Noto / Cairo)": "خط عربي واضح (Noto / Cairo)",
+    "خلفية داكنة واضحة (OLED HDR)": "خلفية داكنة واضحة (OLED HDR)",
     "Apagar este perfil": "حذف هذا الملف",
     "Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)": "يزيل حساب الملف وتفضيلاته من هذا التلفاز (يبقى حساب Stremio نفسه)",
     'Apagar o perfil "{name}" desta TV?': 'حذف الملف "{name}" من هذا التلفاز؟',
@@ -7117,7 +7137,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function set(key3, value) {
     rawSet(profileKey(activeProfile().id, key3), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -7142,7 +7162,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     playerEngine: "auto",
     // 'auto' = Samsung AVPlay when present (audio track switching) | 'html5'
     askProfile: true,
-    // "Quem está assistindo?" ao abrir, se houver mais de um perfil
+    // "Quem está assistindo?" ao abrir
+    oledProtection: false,
+    // OLED burn-in protection: auto-dim on pause & black screensaver
     wizardDone: false,
     // Perfil
     heroSource: "cinemeta",
@@ -7689,7 +7711,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function needsPicker() {
     if (session(SESSION_PICKED)) return false;
-    return profiles().length > 1 && settings().askProfile || !!activeProfile().pin;
+    return settings().askProfile !== false || !!activeProfile().pin;
   }
   function showPicker(onPicked) {
     var list2 = profiles();
@@ -7964,13 +7986,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       value: "__add"
     });
     opts.push({
+      label: t('Tela "Quem está assistindo?"'),
+      sub: t("Escolher perfil"),
+      value: "__picker"
+    });
+    opts.push({
       label: t("Gerenciar perfis"),
       sub: t("Nome, cor, apagar"),
       value: "__manage"
     });
     menu(t("Perfis"), opts, {
       onPick: function onPick(v) {
-        if (v === "__add") createProfile();else if (v === "__manage") onTab("settings");else if (v !== active2.id) switchProfile(v);
+        if (v === "__add") createProfile();else if (v === "__picker") showPicker(function () {
+          return window.location.reload();
+        });else if (v === "__manage") onTab("settings");else if (v !== active2.id) switchProfile(v);
       }
     });
   }
@@ -9996,23 +10025,85 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
   // src/js/lib/subs.js
   function toSec(ts) {
-    var m = ts.trim().replace(",", ".").match(/(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)/);
+    if (!ts) return NaN;
+    var s = String(ts).trim().replace(",", ".");
+    var m = s.match(/(?:(?:(\d+):)?(\d+):)?(\d+(?:\.\d+)?)/);
     if (!m) return NaN;
-    return parseInt(m[1] || "0", 10) * 3600 + parseInt(m[2], 10) * 60 + parseFloat(m[3]);
+    var h2 = parseInt(m[1] || "0", 10);
+    var min = parseInt(m[2] || "0", 10);
+    var sec = parseFloat(m[3] || "0");
+    return h2 * 3600 + min * 60 + sec;
   }
-  function parse(text) {
+  function parseAss(text) {
     var cues = [];
-    var blocks = String(text).replace(/^﻿/, "").replace(/\r\n?/g, "\n").split(/\n{2,}/);
+    var lines = String(text).replace(/^\uFEFF/, "").replace(/\r/g, "").split("\n");
+    var startIdx = 1;
+    var endIdx = 2;
+    var textIdx = 9;
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line || line.charCodeAt(0) === 59) continue;
+      if (/^Format:\s*/i.test(line)) {
+        var parts = line.replace(/^Format:\s*/i, "").split(",").map(function (x) {
+          return x.trim().toLowerCase();
+        });
+        startIdx = parts.indexOf("start");
+        endIdx = parts.indexOf("end");
+        textIdx = parts.indexOf("text");
+        if (startIdx < 0) startIdx = 1;
+        if (endIdx < 0) endIdx = 2;
+        if (textIdx < 0) textIdx = parts.length - 1;
+        continue;
+      }
+      if (/^Dialogue:\s*/i.test(line)) {
+        var raw = line.replace(/^Dialogue:\s*/i, "");
+        var limit = textIdx >= 0 ? textIdx : 9;
+        var commaCount = 0;
+        var lastPos = 0;
+        var fields = [];
+        for (var pos = 0; pos < raw.length && commaCount < limit; pos++) {
+          if (raw[pos] === ",") {
+            fields.push(raw.substring(lastPos, pos).trim());
+            lastPos = pos + 1;
+            commaCount++;
+          }
+        }
+        fields.push(raw.substring(lastPos));
+        var start3 = toSec(fields[startIdx]);
+        var end = toSec(fields[endIdx]);
+        var body = fields[fields.length - 1] || "";
+        if (!isFinite(start3) || !isFinite(end) || end <= start3) continue;
+        body = body.replace(/\{\\[^}]*\}/g, "").replace(/\{[^}]*\}/g, "").replace(/\\[Nn]/g, "\n").replace(/\\h/g, " ").trim();
+        if (body) {
+          cues.push({
+            start: start3,
+            end: end,
+            text: sanitize(body)
+          });
+        }
+      }
+    }
+    cues.sort(function (a, b) {
+      return a.start - b.start;
+    });
+    return cues;
+  }
+  function parseSrt(text) {
+    var cues = [];
+    var normalized = String(text).replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
+    var blocks = normalized.split(/\n\s*\n+/);
     for (var i = 0; i < blocks.length; i++) {
-      var lines = blocks[i].split("\n");
+      var lines = blocks[i].trim().split("\n");
       var j = 0;
       while (j < lines.length && lines[j].indexOf("-->") < 0) j++;
       if (j >= lines.length) continue;
       var parts = lines[j].split("-->");
+      if (parts.length < 2) continue;
       var start3 = toSec(parts[0]);
-      var end = toSec(parts[1].trim().split(/\s+/)[0]);
-      if (!isFinite(start3) || !isFinite(end)) continue;
-      var body = lines.slice(j + 1).join("\n").replace(/\{\\[^}]*\}/g, "").trim();
+      var endToken = parts[1].trim().split(/\s+/)[0];
+      var end = toSec(endToken);
+      if (!isFinite(start3) || !isFinite(end) || end <= start3) continue;
+      var body = lines.slice(j + 1).join("\n").replace(/\{\\[^}]*\}/g, "").replace(/\\[Nn]/g, "\n").trim();
       if (body) cues.push({
         start: start3,
         end: end,
@@ -10024,8 +10115,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     return cues;
   }
+  function parse(text) {
+    if (!text) return [];
+    var s = String(text);
+    if (/^Dialogue:\s*/im.test(s) || /\[Events\]/i.test(s)) {
+      var assCues = parseAss(s);
+      if (assCues.length) return assCues;
+    }
+    var srtCues = parseSrt(s);
+    if (srtCues.length) return srtCues;
+    return parseAss(s);
+  }
   function sanitize(s) {
-    var esc = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    var esc = String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     return esc.replace(/&lt;(\/?)(i|b|u)&gt;/gi, "<$1$2>").replace(/&lt;\/?[^&]*&gt;/g, "");
   }
   function load3(url2, fallbackUrl) {
@@ -10084,7 +10186,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var html = find2(t2 - _offset);
         if (html === lastHtml) return;
         lastHtml = html;
-        el.innerHTML = html ? "<span>" + html + "</span>" : "";
+        el.innerHTML = html ? '<span dir="auto">' + html + "</span>" : "";
       }
     };
   }
@@ -10099,9 +10201,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     label: "Montserrat",
     css: "'Montserrat', sans-serif"
   }, {
+    id: "samsung-ar",
+    label: "Samsung Arabic (خط سامسونج عربي)",
+    css: "'SamsungOneArabic', 'SamsungOne', 'Noto Sans Arabic', 'Cairo', sans-serif"
+  }, {
+    id: "arabic",
+    label: "خط عربي واضح (Noto / Cairo)",
+    css: "'Noto Sans Arabic', 'Cairo', 'Segoe UI', Tahoma, sans-serif"
+  }, {
     id: "tv",
-    label: "Fonte da TV (LG)",
-    css: "'LG Display', 'Museo Sans', sans-serif"
+    label: "Fonte da TV (Samsung/LG)",
+    css: "'SamsungOne', 'LG Display', 'Museo Sans', sans-serif"
   }, {
     id: "classic",
     label: "Clássica (Arial)",
@@ -10119,6 +10229,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }, {
     id: "box",
     label: "Caixa de fundo"
+  }, {
+    id: "strongbox",
+    label: "خلفية داكنة واضحة (OLED HDR)"
   }];
   var COLORS2 = [{
     id: "#ffffff",
@@ -10159,7 +10272,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     kai: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 2px 2px 3px rgba(0,0,0,0.9)",
     outline: "-3px -3px 0 #000, 0 -3px 0 #000, 3px -3px 0 #000, 3px 0 0 #000, 3px 3px 0 #000, 0 3px 0 #000, -3px 3px 0 #000, -3px 0 0 #000, 0 0 8px rgba(0,0,0,0.8)",
     shadow: "3px 3px 6px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.6)",
-    box: "none"
+    box: "none",
+    strongbox: "none"
   };
   function find(list2, id) {
     return list2.find(function (x) {
@@ -10175,7 +10289,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     el.style.color = s.subtitleColor || "#ffffff";
     el.style.textShadow = SHADOWS[s.subtitleStyle] || SHADOWS.kai;
     el.style.bottom = pos.bottom + "px";
-    el.classList.toggle("box", s.subtitleStyle === "box");
+    el.classList.toggle("box", s.subtitleStyle === "box" || s.subtitleStyle === "strongbox");
+    el.classList.toggle("strong-box", s.subtitleStyle === "strongbox");
   }
   function applyNative(mediaId, s) {
     if (!hasLuna() || !mediaId) return;
@@ -17572,7 +17687,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-14T09:30:26.108Z";
+  var BUILD = "2026-11-14T15:32:04.229Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -19150,13 +19265,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
           }));
         }
+        body.appendChild(row(t('Perguntar "Quem está assistindo?" ao abrir'), t("Mostra a tela de escolher ou criar perfil ao abrir o app"), "", function () {
+          saveSettings({
+            askProfile: settings().askProfile === false
+          });
+          render();
+        }, toggle(s.askProfile !== false)));
+        body.appendChild(row(t("Escolher perfil agora"), t('Abre a tela "Quem está assistindo?"'), "", function () {
+          showPicker(function () {
+            return render();
+          });
+        }));
         if (allProfiles.length > 1) {
-          body.appendChild(row(t('Perguntar "Quem está assistindo?" ao abrir'), "", "", function () {
-            saveSettings({
-              askProfile: !settings().askProfile
-            });
-            render();
-          }, toggle(s.askProfile)));
           body.appendChild(row(t("Apagar este perfil"), t("Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)"), "", function () {
             return confirmDialog(t('Apagar o perfil "{name}" desta TV?', {
               name: prof.name
@@ -19367,6 +19487,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }
           });
         }));
+        body.appendChild(row(t("Proteção contra burn-in (OLED)"), t("Tela preta pura com relógio móvel após 90s pausado para proteger painéis OLED"), "", function () {
+          saveSettings({
+            oledProtection: !settings().oledProtection
+          });
+          render();
+        }, toggle(!!s.oledProtection)));
         body.appendChild(h("div.set-section", {
           text: t("Desempenho")
         }));
@@ -20296,13 +20422,54 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var items2 = [];
   var index = 0;
   function minutes() {
-    return +settings().screensaver || 0;
+    var m = +settings().screensaver;
+    if (!m && settings().oledProtection) return 5;
+    return m || 0;
   }
   function playing2() {
     return !!document.querySelector(".view.player:not(.hidden)") || document.documentElement.classList.contains("av-playing");
   }
-  function show2() {
+  function isVideoPaused() {
+    var v = document.querySelector("video");
+    if (!v) return false;
+    return v.paused || !document.documentElement.classList.contains("av-playing");
+  }
+  function show2(forceOled) {
     if (overlay) return;
+    var oledMode = forceOled || !!settings().oledProtection;
+    if (oledMode) {
+      var clock2 = h("div.ss-clock", {
+        style: {
+          position: "absolute",
+          color: "rgba(255,255,255,0.4)",
+          fontSize: "38px",
+          fontWeight: "600",
+          transition: "top 0.5s, left 0.5s"
+        }
+      });
+      overlay = h("div.screensaver.oled-ss", {
+        style: {
+          position: "fixed",
+          left: 0,
+          top: 0,
+          width: "100%",
+          height: "100%",
+          background: "#000000",
+          zIndex: 99999
+        }
+      }, clock2);
+      document.body.appendChild(overlay);
+      var shift = function shift() {
+        clock2.textContent = timeHM(/* @__PURE__ */new Date());
+        var top2 = Math.floor(15 + Math.random() * 65);
+        var left = Math.floor(15 + Math.random() * 65);
+        clock2.style.top = top2 + "%";
+        clock2.style.left = left + "%";
+      };
+      shift();
+      slideTimer = setInterval(shift, 6e4);
+      return;
+    }
     var img = h("div.ss-bg");
     var title = h("div.ss-title");
     var clock = h("div.ss-clock");
@@ -20355,13 +20522,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, true);
     });
     setInterval(function () {
-      var m = minutes();
-      if (!m || overlay) return;
-      if (playing2()) {
-        lastKey = Date.now();
+      if (overlay) return;
+      var oled = !!settings().oledProtection;
+      var idleMs = Date.now() - lastKey;
+      if (oled && playing2() && isVideoPaused() && idleMs >= 9e4) {
+        show2(true);
         return;
       }
-      if (Date.now() - lastKey >= m * 6e4) show2();
+      var m = minutes();
+      if (!m) return;
+      if (playing2()) {
+        if (!oled || !isVideoPaused()) lastKey = Date.now();
+        return;
+      }
+      if (idleMs >= m * 6e4) show2();
     }, 15e3);
   }
 

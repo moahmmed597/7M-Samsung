@@ -13,7 +13,7 @@ import * as hero from '../api/hero.js';
 import { topbar, toast, menu, confirmDialog, refreshProfileChips } from '../ui.js';
 import * as router from '../router.js';
 import { openLogin } from './login.js';
-import { avatar, switchProfile, createProfile, checkPin, pinDialog } from './profiles.js';
+import { avatar, switchProfile, createProfile, checkPin, pinDialog, showPicker } from './profiles.js';
 import { t } from '../lib/i18n.js';
 import * as phone from '../lib/phone.js';
 import * as theme from '../lib/theme.js';
@@ -788,13 +788,18 @@ export function SettingsView() {
           )
         );
       }
+      body.appendChild(
+        row(t('Perguntar "Quem está assistindo?" ao abrir'), t('Mostra a tela de escolher ou criar perfil ao abrir o app'), '', () => {
+          store.saveSettings({ askProfile: store.settings().askProfile === false });
+          render();
+        }, toggle(s.askProfile !== false))
+      );
+      body.appendChild(
+        row(t('Escolher perfil agora'), t('Abre a tela "Quem está assistindo?"'), '', () => {
+          showPicker(() => render());
+        })
+      );
       if (allProfiles.length > 1) {
-        body.appendChild(
-          row(t('Perguntar "Quem está assistindo?" ao abrir'), '', '', () => {
-            store.saveSettings({ askProfile: !store.settings().askProfile });
-            render();
-          }, toggle(s.askProfile))
-        );
         body.appendChild(
           row(t('Apagar este perfil'), t('Remove deste aparelho a conta e as preferências do perfil (a conta Stremio continua existindo)'), '', () =>
             confirmDialog(t('Apagar o perfil "{name}" desta TV?', { name: prof.name }), t('Apagar'), () => {
@@ -953,6 +958,12 @@ export function SettingsView() {
             },
           })
         )
+      );
+      body.appendChild(
+        row(t('Proteção contra burn-in (OLED)'), t('Tela preta pura com relógio móvel após 90s pausado para proteger painéis OLED'), '', () => {
+          store.saveSettings({ oledProtection: !store.settings().oledProtection });
+          render();
+        }, toggle(!!s.oledProtection))
       );
 
       body.appendChild(h('div.set-section', { text: t('Desempenho') }));

@@ -114,7 +114,7 @@ export function set(key, value) {
 
 // ---------- Preferências ----------
 // Da TV (iguais para todos os perfis):
-const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource', 'debridEnabled', 'debridProvider', 'realDebridKey', 'torboxKey', 'premiumizeKey', 'mediaServer', 'mediaServerEnabled', 'mediaServerDeviceId', 'rpdbKey', 'parentalGuide', 'subdlKey', 'screensaver', 'realDebridAuth', 'appFont'];
+const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'oledProtection', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource', 'debridEnabled', 'debridProvider', 'realDebridKey', 'torboxKey', 'premiumizeKey', 'mediaServer', 'mediaServerEnabled', 'mediaServerDeviceId', 'rpdbKey', 'parentalGuide', 'subdlKey', 'screensaver', 'realDebridAuth', 'appFont'];
 
 const DEFAULT_SETTINGS = {
   // TV
@@ -132,7 +132,8 @@ const DEFAULT_SETTINGS = {
   traktClientSecret: '',
   simklClientId: '',
   playerEngine: 'auto', // 'auto' = Samsung AVPlay when present (audio track switching) | 'html5'
-  askProfile: true, // "Quem está assistindo?" ao abrir, se houver mais de um perfil
+  askProfile: true, // "Quem está assistindo?" ao abrir
+  oledProtection: false, // OLED burn-in protection: auto-dim on pause & black screensaver
   wizardDone: false,
   // Perfil
   heroSource: 'cinemeta',
