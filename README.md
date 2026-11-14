@@ -9,14 +9,14 @@
   </p>
 
   [![Latest Release](https://img.shields.io/github/v/release/moahmmed597/Stremio-Kai-7M?style=for-the-badge&color=blue&logo=github)](https://github.com/moahmmed597/Stremio-Kai-7M/releases/latest)
-  [![Download WGT](https://img.shields.io/badge/Download-Stremio7M.wgt-success?style=for-the-badge&logo=samsung&logoColor=white)](https://github.com/moahmmed597/Stremio-Kai-7M/releases/download/v1.2.0-7m/Stremio7M.wgt)
+  [![Download WGT](https://img.shields.io/badge/Download-Stremio7M.wgt-success?style=for-the-badge&logo=samsung&logoColor=white)](https://github.com/moahmmed597/Stremio-Kai-7M/releases/download/v1.2.1-7m/Stremio7M.wgt)
   [![Samsung Tizen](https://img.shields.io/badge/Samsung-Tizen_OS_3.0_--_8.0+-037bc8?style=for-the-badge&logo=samsung&logoColor=white)](https://www.samsung.com)
   [![Built For OLED](https://img.shields.io/badge/OLED-Burn--in_Protected-000000?style=for-the-badge&logo=target&logoColor=white)](https://github.com/moahmmed597/Stremio-Kai-7M)
   [![License](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)](LICENSE)
 
   <br/><br/>
   <a href="https://github.com/moahmmed597/Stremio-Kai-7M/releases/latest">
-    <img src="https://img.shields.io/badge/📥_Download_Latest_Release_(v1.2.0--7m)-Click_Here-brightgreen?style=for-the-badge&logo=github" alt="Download Latest Release" />
+    <img src="https://img.shields.io/badge/📥_Download_Latest_Release_(v1.2.1--7m)-Click_Here-brightgreen?style=for-the-badge&logo=github" alt="Download Latest Release" />
   </a>
 </div>
 
