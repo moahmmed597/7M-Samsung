@@ -1286,6 +1286,8 @@ export function SettingsView() {
       body.appendChild(phoneKeyRow('mdblistKey', 'MDBList'));
       keyRow(t('Chave RPDB'), t('Pôsteres com as notas desenhadas (ratingposterdb.com)'), 'rpdbKey', 'API key');
       body.appendChild(phoneKeyRow('rpdbKey', 'RPDB'));
+      keyRow(t('Chave OMDb'), t('Prêmios (Oscar, Emmy...) na página do título (grátis em omdbapi.com)'), 'omdbKey', 'API key');
+      body.appendChild(phoneKeyRow('omdbKey', 'OMDb'));
       body.appendChild(
         row(t('Guia para os pais'), t('Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)'), '', () => {
           store.saveSettings({ parentalGuide: !store.settings().parentalGuide });

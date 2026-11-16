@@ -432,7 +432,7 @@ function handle(req, res) {
   if (url.pathname === '/api/keys' && req.method === 'POST') {
     if (q.pin !== PIN) return send(res, 401, { ok: false });
     return readBody(req, function (body) {
-      var allowed = ['traktClientId', 'traktClientSecret', 'simklClientId', 'tmdbKey', 'mdblistKey', 'rpdbKey', 'subdlKey', 'animeSkipClientId', 'realDebridKey', 'torboxKey', 'premiumizeKey'];
+      var allowed = ['traktClientId', 'traktClientSecret', 'simklClientId', 'tmdbKey', 'mdblistKey', 'rpdbKey', 'omdbKey', 'subdlKey', 'animeSkipClientId', 'realDebridKey', 'torboxKey', 'premiumizeKey'];
       var keys = {};
       var n = 0;
       try {

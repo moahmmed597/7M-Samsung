@@ -175,12 +175,16 @@ export function HomeView() {
       const s = it.state;
       const ep = episodeLabel(s.video_id, it._id);
       const bg = /^tt\d+/.test(it._id) ? hero.background(it._id) : it.poster;
+      // The episode's own picture (TMDB still, 300 px wide) when it's a series; the show's art otherwise.
+      const se = /^(tt\d+):(\d+):(\d+)$/.exec(s.video_id || '');
+      const still = se ? 'https://episodes.metahub.space/' + se[1] + '/' + se[2] + '/' + se[3] + '/w300.jpg' : null;
       track.appendChild(
         card(
           { name: it.name, poster: it.poster },
           {
             wide: true,
-            image: bg,
+            image: still || bg,
+            fallback: still ? bg : null,
             title: it.name + (ep ? ' · ' + ep : ''),
             progress: s.duration ? s.timeOffset / s.duration : 0,
             overlay: { ep: ep, title: it.name, chip: s.duration && s.timeOffset / s.duration >= 0.03 ? t('{n}% assistido', { n: Math.round((s.timeOffset / s.duration) * 100) }) : t('A seguir') },

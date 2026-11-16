@@ -733,3 +733,10 @@ body.oled .view { background: #000; }
 
 .src-sec { font-size: 20px; font-weight: 700; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 2px; margin: 26px 0 12px; }
 .flat-list .s-main small { font-size: 18px; color: rgba(255,255,255,0.5); font-weight: 600; }
+
+/* Award laurels */
+.awards { display: -webkit-inline-flex; display: inline-flex; -webkit-align-items: center; align-items: center; margin: 2px 0 14px; padding: 6px 16px; border-radius: 22px; background: linear-gradient(90deg, rgba(212,175,55,0.22), rgba(212,175,55,0.06)); border: 1px solid rgba(212,175,55,0.45); font-size: 19px; color: #f3e3a8; }
+.awards .laurel { margin-right: 8px; }
+.awards b { margin-right: 10px; color: #ffe08a; }
+[dir="rtl"] .awards .laurel { margin-right: 0; margin-left: 8px; }
+[dir="rtl"] .awards b { margin-right: 0; margin-left: 10px; }

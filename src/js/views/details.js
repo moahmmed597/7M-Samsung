@@ -211,6 +211,19 @@ function DetailsView(type, id, opts) {
       .ratings(meta, isAnime(meta))
       .then((list) => alive && renderRatings(ui.ratingsEl, list))
       .catch(() => {});
+    // Award laurels (idea from Harbor): Oscars, Emmys, wins and nominations.
+    extras.awards(meta.imdb_id || (/^tt\d+/.exec(meta.id) || [])[0]).then((a) => {
+      if (!alive || !a || !ui.ratingsEl.parentNode) return;
+      const big = /Won (\d+) (Oscars?|Primetime Emmys?|Golden Globes?|BAFTA Film Awards?)/i.exec(a);
+      const tot = /(\d+) wins?/i.exec(a);
+      const nom = /(\d+) nominations?/i.exec(a);
+      const chip = h('div.awards', null, [
+        h('span.laurel', { text: '🏆' }),
+        big ? h('b', { text: t('{n} × {award}', { n: big[1], award: big[2].replace(/s$/, '') }) }) : null,
+        h('span', { text: [tot ? t('{n} prêmios', { n: tot[1] }) : '', nom ? t('{n} indicações', { n: nom[1] }) : ''].filter(Boolean).join(' · ') || a }),
+      ]);
+      ui.ratingsEl.parentNode.insertBefore(chip, ui.ratingsEl.nextSibling);
+    });
     if (!extras.hasTmdb()) return;
     extras
       .localized(meta)

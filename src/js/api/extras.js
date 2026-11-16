@@ -19,6 +19,18 @@ function tmdbKey() {
   return (store.settings().tmdbKey || '').trim();
 }
 
+// Awards line from OMDb ("Won 3 Oscars. 45 wins & 120 nominations total"), with your own free key.
+export function awards(imdb) {
+  const key = String(store.settings().omdbKey || '').trim();
+  if (!key || !/^tt\d+$/.test(imdb || '')) return Promise.resolve(null);
+  return cachedJSON('https://www.omdbapi.com/?i=' + imdb + '&apikey=' + encodeURIComponent(key), 24 * 3600000, { quiet: true })
+    .then((r) => {
+      const a = r && r.Awards;
+      return a && a !== 'N/A' ? String(a) : null;
+    })
+    .catch(() => null);
+}
+
 export function hasTmdb() {
   return !!tmdbKey();
 }
