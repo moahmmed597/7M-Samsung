@@ -1,17 +1,58 @@
 {
   "name": "stremio-kai-7m",
   "productName": "Stremio Kai 7M",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Stremio Kai 7M for Windows, macOS and Linux",
   "main": "main.js",
   "author": "moahmmed597",
   "license": "GPL-3.0",
-  "devDependencies": { "electron": "^31.7.7", "electron-builder": "^24.13.3" },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
   "build": {
     "appId": "com.kai.stremio7m",
     "productName": "Stremio Kai 7M",
-    "files": ["main.js", "www/**/*"],
-    "win": { "target": ["portable"], "artifactName": "Stremio-Kai-7M-${version}-windows-portable.exe" },
-    "linux": { "target": ["AppImage"], "artifactName": "Stremio-Kai-7M-${version}-linux.AppImage" }
+    "files": [
+      "main.js",
+      "www/**/*"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Stremio Kai 7M",
+      "runAfterFinish": true,
+      "license": "license.txt",
+      "multiLanguageInstaller": true,
+      "installerLanguages": [
+        "en_US",
+        "ar",
+        "pt_BR"
+      ],
+      "artifactName": "Stremio-Kai-7M-Setup-${version}.exe",
+      "deleteAppDataOnUninstall": false
+    },
+    "portable": {
+      "artifactName": "Stremio-Kai-7M-${version}-portable.exe"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "artifactName": "Stremio-Kai-7M-${version}-linux.AppImage"
+    }
   }
 }

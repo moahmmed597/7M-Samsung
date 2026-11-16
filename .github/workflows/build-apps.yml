@@ -74,9 +74,9 @@ jobs:
         run: |
           rm -rf www && mkdir www && cp -r ../../dist/. www/
           npm install
-          npx electron-builder --win portable --publish never
+          npx electron-builder --win nsis portable --publish never
       - uses: actions/upload-artifact@v4
-        with: { name: windows, path: platforms/electron/dist/*.exe }
+        with: { name: windows, path: platforms/electron/dist/Stremio-Kai-7M-*.exe }
 
   release:
     needs: [android, ios, windows]
