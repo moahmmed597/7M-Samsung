@@ -981,6 +981,12 @@ export function SettingsView() {
           window.location.reload(); // the top bar of every tab changes
         }, toggle(s.animeTab !== false))
       );
+      body.appendChild(
+        row(t('Aba Mangás'), t('Mangá, manhwa e manhua com leitor para a TV (AniList e MangaDex)'), '', () => {
+          store.saveSettings({ mangaTab: store.settings().mangaTab === false });
+          window.location.reload();
+        }, toggle(s.mangaTab !== false))
+      );
       body.appendChild(row(t('Fileiras e Continuar assistindo'), t('Ordem das fileiras, listas do MDBList e Continuar assistindo'), '›', () => openPage('home')));
       body.appendChild(
         row(t('Buscas recentes'), t('Mostra as últimas buscas na tela de busca'), '', () => {

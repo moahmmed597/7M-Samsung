@@ -114,7 +114,7 @@ export function set(key, value) {
 
 // ---------- Preferências ----------
 // Da TV (iguais para todos os perfis):
-const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'oledProtection', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource', 'debridEnabled', 'debridProvider', 'realDebridKey', 'torboxKey', 'premiumizeKey', 'mediaServer', 'mediaServerEnabled', 'mediaServerDeviceId', 'rpdbKey', 'parentalGuide', 'subdlKey', 'screensaver', 'realDebridAuth', 'appFont'];
+const DEVICE_KEYS = ['serverUrl', 'tmdbKey', 'mdblistKey', 'smoothScroll', 'perfMode', 'devlogUrl', 'lastUpdateCheck', 'askProfile', 'oledProtection', 'wizardDone', 'language', 'traktClientId', 'traktClientSecret', 'simklClientId', 'playerEngine', 'animeSkipClientId', 'animeSkip', 'librarySource', 'progressSource', 'debridEnabled', 'debridProvider', 'realDebridKey', 'torboxKey', 'premiumizeKey', 'mediaServer', 'mediaServerEnabled', 'mediaServerDeviceId', 'rpdbKey', 'parentalGuide', 'subdlKey', 'screensaver', 'realDebridAuth', 'appFont', 'mangaTab', 'mangaLangs', 'readerMode'];
 
 const DEFAULT_SETTINGS = {
   // TV

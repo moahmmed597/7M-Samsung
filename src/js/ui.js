@@ -100,6 +100,7 @@ export function promptText(title, value, placeholder, onSubmit) {
 export const TABS = [
   { id: 'home', label: 'Início' },
   { id: 'anime', label: 'Animes' },
+  { id: 'manga', label: 'Mangás' },
   { id: 'collections', label: 'Coleções' },
   { id: 'search', label: 'Buscar' },
   { id: 'library', label: 'Biblioteca' },
@@ -115,7 +116,7 @@ export function topbar(activeId, onTab) {
   const bar = h('div.topbar', { 'data-group': '' }, [
     h('div.brand', { html: 'Stremio <b>Kai 7M</b>' }),
     // The Anime tab can be hidden in Settings → Appearance.
-    TABS.filter((tab) => tab.id !== 'anime' || store.settings().animeTab !== false).map((tab) =>
+    TABS.filter((tab) => (tab.id !== 'anime' || store.settings().animeTab !== false) && (tab.id !== 'manga' || store.settings().mangaTab !== false)).map((tab) =>
       h('div.tab', {
         focusable: true,
         cls: tab.id === activeId ? 'active' : '',

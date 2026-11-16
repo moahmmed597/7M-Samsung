@@ -22,16 +22,16 @@ function seasonNow() {
 
 // Sections in UltraAnime's order. Each tile is a list: from the AIOMetadata add-on when it is
 // installed (MAL data: { aio: catalog, g: genre option }), else from AniList ({ ani: filter }).
-const SEASONS = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
+export const SEASONS = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
 const SEASON_LABEL = { WINTER: 'Winter', SPRING: 'Spring', SUMMER: 'Summer', FALL: 'Fall' };
 const SEASON_BASE = 'https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/src/static/seasons/';
-const SEASON_ART_URLS = {
+export const SEASON_ART_URLS = {
   WINTER: 'https://wsrv.nl/?url=' + encodeURIComponent(SEASON_BASE + 'winter.jpg') + '&w=300&h=169&fit=cover&output=jpg&q=80',
   SPRING: 'https://wsrv.nl/?url=' + encodeURIComponent(SEASON_BASE + 'spring.jpg') + '&w=300&h=169&fit=cover&output=jpg&q=80',
   SUMMER: 'https://wsrv.nl/?url=' + encodeURIComponent(SEASON_BASE + 'summer.jpg') + '&w=300&h=169&fit=cover&output=jpg&q=80',
   FALL: 'https://wsrv.nl/?url=' + encodeURIComponent(SEASON_BASE + 'fall.jpg') + '&w=300&h=169&fit=cover&output=jpg&q=80',
 };
-const SEASON_FALLBACK_URLS = {
+export const SEASON_FALLBACK_URLS = {
   WINTER: 'https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/winter.jpg',
   SPRING: 'https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/spring.jpg',
   SUMMER: 'https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@main/src/static/seasons/summer.jpg',
@@ -193,7 +193,7 @@ function posterRow(parent, title, load, onMore) {
 
 // UltraAnime's tile art (aliabdoxd14/collectionsart on GitHub), loaded at tile size through wsrv.nl.
 const ART = 'https://raw.githubusercontent.com/aliabdoxd14/collectionsart/refs/heads/main/';
-function slug(x) {
+export function slug(x) {
   return String(x).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 function artUrl(file) {
@@ -202,7 +202,7 @@ function artUrl(file) {
   return 'https://wsrv.nl/?url=' + encodeURIComponent(ART + file + '.jpg') + '&w=300&h=169&fit=cover&a=' + align + '&output=jpg&q=80';
 }
 
-function tileRow(parent, title, tiles, cls) {
+export function tileRow(parent, title, tiles, cls) {
   const row = h('div.row', { 'data-anchor': '30' });
   row.appendChild(h('div.row-title', { text: title }));
   row.appendChild(
