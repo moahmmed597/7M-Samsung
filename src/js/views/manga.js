@@ -9,9 +9,7 @@ import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { tileRow, slug, SEASONS, SEASON_ART_URLS, SEASON_FALLBACK_URLS } from './anime.js';
 import { openMangaDetails } from './mangaDetails.js';
-import { openSources, openSourceManga } from './sources.js';
-import { openComic } from './comics.js';
-import * as shelf from '../lib/mangaLib.js';
+import { openSources } from './sources.js';
 
 const API = 'https://graphql.anilist.co';
 const FIELDS =
@@ -117,26 +115,8 @@ export function MangaView() {
   scroller.appendChild(bar);
   // Sources of your own Suwayomi server (the app ships none).
   scroller.appendChild(h('div.details-buttons', { 'data-group': '' }, [h('div.btn', { focusable: true, onSelect: openSources }, [h('span.ico', { text: '📚' }), t('Minhas fontes')])]));
-  const shelves = h('div');
-  scroller.appendChild(shelves);
   scroller.appendChild(rows);
   el.appendChild(scroller);
-
-  // "Continue reading" and "Favorites": from your own reading, every source.
-  const openBy = (kind, ref) => (kind === 'md' ? openComic(ref) : kind === 'sw' ? openSourceManga(ref) : openMangaDetails(Object.assign({ id: 'anilist:' + ref.anilist, type: 'manga', media: {} }, ref)));
-  function drawShelves() {
-    clear(shelves);
-    const mk = (title, list) => {
-      if (!list.length) return;
-      const track = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
-      list.forEach((x) => track.appendChild(card({ id: x.key, name: x.name, poster: x.poster }, { onSelect: () => openBy(x.kind, x.ref) })));
-      shelves.appendChild(h('div.row', { 'data-anchor': '30' }, [h('div.row-title', { text: title }), track]));
-      loadVisibleImages(track);
-    };
-    mk(t('Continuar lendo'), shelf.continueList(15).map((p) => ({ key: p.key, kind: p.kind, ref: p.ref, name: (p.title || '') + ' · ' + t('Cap. {n}', { n: p.chapter }), poster: p.poster })));
-    mk(t('Favoritos'), shelf.favs().map((f) => ({ key: f.key, kind: f.kind, ref: f.ref, name: f.ref.name, poster: f.ref.poster })));
-  }
-  drawShelves();
 
   const pending = [];
   let active = 0;
@@ -177,7 +157,7 @@ export function MangaView() {
   );
   tileRow(rows, t('Descobrir'), DISCOVER.map((d) => ({ label: t(d.label), open: () => grid(t(d.label), d.args) })), 'discover');
   add(t('Em alta agora'), 'sort: TRENDING_DESC');
-  tileRow(rows, t('Formatos'), FORMATS.map((f) => ({ label: t(f.label), open: () => grid(t(f.label), f.args) })), 'discover');
+  tileRow(rows, t('Formatos'), FORMATS.map((f) => ({ label: t(f.label), open: () => grid(t(f.label), f.args) })), 'studio');
   tileRow(
     rows,
     t('Gêneros'),
@@ -195,7 +175,6 @@ export function MangaView() {
   return {
     el: el,
     onShow: () => {
-      drawShelves();
       loadNearby();
       loadVisibleImages(el);
     },

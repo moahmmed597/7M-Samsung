@@ -1,7 +1,6 @@
 // Colour themes. The stylesheet is written in the purple theme; another theme fetches it once,
 // swaps the purple shades for the theme's and adds the result after the original.
 export const THEMES = [
-  { id: 'graphite', label: 'Grafite (escuro)', main: '#3b4150', light: '#e6e8ee', pale: '#ffffff' },
   { id: 'purple', label: 'Roxo', main: '#7b5bf5', light: '#9d85ff', pale: '#c9bbff' },
   { id: 'gold', label: 'Dourado', main: '#c9961a', light: '#e0b54a', pale: '#f2dca0' },
   { id: 'teal', label: 'Verde-água', main: '#14958c', light: '#3fc9bf', pale: '#a8ebe6' },
@@ -81,6 +80,7 @@ function recolor(css, th) {
     [BASE.pale, th.pale],
     ['rgba(' + rgb(BASE.main) + ',', 'rgba(' + rgb(th.main) + ','],
     ['rgba(' + rgb(BASE.light) + ',', 'rgba(' + rgb(th.light) + ','],
+    ['#b9a8ff', th.pale],
   ];
   swap.forEach((p) => {
     css = css.split(p[0]).join(p[1]).split(p[0].toUpperCase()).join(p[1]);
