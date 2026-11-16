@@ -10,6 +10,7 @@ import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { openReader } from './reader.js';
 import { openAnime } from './anime.js';
+import { chapterToEpisode, animeMeta } from '../lib/animeLink.js';
 
 const CHUNK = 50;
 
@@ -59,6 +60,7 @@ function MangaDetailsView(m) {
   let langSet = LANG_SETS.find((x) => x.id === store.settings().mangaLangs) || LANG_SETS[0];
   let alive = true;
   let anime = null;
+  let focusIdx = -1;
   const status = h('div.loading-line', { text: t('Procurando capítulos...') });
 
   const progress = () => (store.get('readProgress', {}) || {})[key] || null;
@@ -109,7 +111,17 @@ function MangaDetailsView(m) {
       btns.push(
         h('div.btn', {
           focusable: true,
-          onSelect: () => openAnime({ anilist: anime.id, type: anime.format === 'MOVIE' ? 'movie' : 'series', name: (anime.title && (anime.title.english || anime.title.romaji)) || '', poster: anime.coverImage && anime.coverImage.large }),
+          onSelect: () => {
+            // The episode that matches the chapter you stopped at (or the one you are looking at): an estimate.
+            const cur = idx >= 0 ? parseFloat(chapters[idx].chapter) : m.focusChapter || 1;
+            chapterToEpisode(m.anilist, cur)
+              .then((r) => {
+                if (!r) return openAnime(animeMeta(anime));
+                toast(t('Episódio {n} (aproximado)', { n: r.episode }));
+                openAnime(Object.assign(animeMeta(r.anime), { episode: r.episode }));
+              })
+              .catch(() => openAnime(animeMeta(anime)));
+          },
         }, [h('span.ico', { text: '▶' }), t('Ver no anime')])
       );
     btns.push(
@@ -151,6 +163,7 @@ function MangaDetailsView(m) {
           h('span.s-tag', { text: c.lang.toUpperCase() }),
           h('span.s-tag', { text: c.pages + ' ' + t('pág.') }),
           read2 ? h('span.s-tag.ok', { text: t('Parou aqui') }) : null,
+          !read2 && i === focusIdx ? h('span.s-tag.ok', { text: t('Perto do episódio (aprox.)') }) : null,
         ])
       );
     }
@@ -174,7 +187,13 @@ function MangaDetailsView(m) {
       .then((cs) => {
         if (!alive) return;
         chapters = cs;
-        const idx = indexOfProgress();
+        let idx = indexOfProgress();
+        // Opened from an anime episode: jump to the chapter that matches it (estimate).
+        if (idx < 0 && m.focusChapter) {
+          idx = cs.findIndex((c) => parseFloat(c.chapter) >= m.focusChapter);
+          if (idx < 0) idx = cs.length - 1;
+          focusIdx = idx;
+        }
         chunk = idx >= 0 ? Math.floor(idx / CHUNK) : 0;
         if (!cs.length) status.textContent = t('Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.');
         renderInfo();

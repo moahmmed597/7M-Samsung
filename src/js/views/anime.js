@@ -122,7 +122,8 @@ export function openAnime(m) {
     const kitsuOk = ids.kitsu && addons.withResource('meta', 'series', 'kitsu:' + ids.kitsu).length;
     const id = kitsuOk ? 'kitsu:' + ids.kitsu : ids.imdb || (ids.kitsu ? 'kitsu:' + ids.kitsu : null);
     if (!id) return toast(t('Não encontrei este anime nos addons.'));
-    openDetails(m.type, id);
+    // From the manga: land on the episode that matches the chapter (kitsu ids list "kitsu:ID:EP").
+    openDetails(m.type, id, m.episode && /^kitsu:/.test(id) ? { videoId: id + ':' + m.episode } : {});
   };
   if (idCache[m.anilist]) return go(idCache[m.anilist]);
   getJSON(ARM + m.anilist, { timeout: 10000, quiet: true })
