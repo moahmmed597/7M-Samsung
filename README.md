@@ -44,7 +44,7 @@ One app, one codebase. Downloads are on the [Releases page](https://github.com/m
 | **Samsung TV (Tizen)** | `Stremio7M.wgt` or TizenBrew | See "Installation Guide for Samsung Tizen TVs" below |
 | **Android phone / tablet** | `Stremio-Kai-7M-android.apk` | Open the file, allow "install unknown apps" once |
 | **Android TV / Google TV (TCL, Hisense, Sony, Xiaomi, Chromecast with Google TV…)** | `Stremio-Kai-7M-android.apk` | Put it on a USB stick, or install the **Downloader** app on the TV and type the release link, or `adb install`. It shows in the apps row and works with the TV remote |
-| **iPhone / iPad** | `Stremio-Kai-7M-ios-unsigned.ipa` | Install **SideStore** or **AltStore** (they sign apps with your own Apple ID), open the `.ipa` in it. The TV address is not needed |
+| **iPhone / iPad** | SideStore / AltStore **source** | In SideStore or AltStore: Sources, **+**, paste `https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/apps.json`, then tap **Free** on Stremio Kai 7M. (Or [add the source with one tap](altstore://source?url=https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/apps.json).) Updates arrive by themselves |
 | **Windows** | `Stremio-Kai-7M-*-windows-portable.exe` | Download and run. F11 = full screen |
 
 All builds are made by GitHub Actions from this repository (`.github/workflows/build-apps.yml`), so what you download is what is in the source.
