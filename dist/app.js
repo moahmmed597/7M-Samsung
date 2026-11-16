@@ -5041,6 +5041,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Sincronizar automaticamente": "Auto sync",
+    "Acerta o atraso comparando com outra legenda": "Fixes the delay by comparing with another subtitle",
+    "Ligue uma legenda de addon primeiro.": "Turn on an add-on subtitle first.",
+    "Não deu para sincronizar com segurança. Ajuste à mão.": "Couldn't sync it reliably. Adjust it by hand.",
+    "Sincronizada: {n}s": "Synced: {n}s",
+    "Ouvindo a legenda do arquivo por 40 segundos... continue assistindo.": "Listening to the file's subtitle for 40 seconds... keep watching.",
+    "legenda do arquivo": "file subtitle",
+    "Não há outra legenda para comparar.": "No other subtitle to compare with.",
+    "Comparando com {n} legendas...": "Comparing with {n} subtitles...",
+    "outras legendas": "other subtitles",
     "Foto do perfil": "Profile picture",
     "{n} imagens para escolher": "{n} pictures to choose from",
     "Grafite (escuro)": "Graphite (dark)",
@@ -5316,6 +5326,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Sincronizar automaticamente": "مزامنة تلقائية",
+    "Acerta o atraso comparando com outra legenda": "يضبط التأخير بمقارنتها مع ترجمة ثانية",
+    "Ligue uma legenda de addon primeiro.": "شغّل ترجمة من الإضافات أول.",
+    "Não deu para sincronizar com segurança. Ajuste à mão.": "ما قدرت أضبطها بدقة. اضبطها يدوي.",
+    "Sincronizada: {n}s": "تم الضبط: {n} ث",
+    "Ouvindo a legenda do arquivo por 40 segundos... continue assistindo.": "أسمع ترجمة الملف 40 ثانية... كمّل مشاهدة.",
+    "legenda do arquivo": "ترجمة الملف",
+    "Não há outra legenda para comparar.": "ما فيه ترجمة ثانية أقارن معها.",
+    "Comparando com {n} legendas...": "أقارن مع {n} ترجمات...",
+    "outras legendas": "ترجمات ثانية",
     "Foto do perfil": "صورة الحساب",
     "{n} imagens para escolher": "{n} صورة تختار منها",
     "Grafite (escuro)": "جرافيت (داكن)",
@@ -12547,6 +12567,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }).catch(function () {});
       }
     }
+    var currentCues = null;
     function selectAddonSub(s, silent) {
       disableEmbeddedSubs();
       currentSub = {
@@ -12556,6 +12577,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       renderer.setOffset(savedDelay());
       load3(s.url, subtitlesProxy(s.url)).then(function (cues) {
         if (!alive || currentSub.id !== (s.id || s.url)) return;
+        currentCues = cues;
         renderer.set(cues);
         if (!silent) toast(t("Legenda: {lang}", {
           lang: langName(s.lang)
@@ -12711,6 +12733,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           checked: currentSub.kind === "addon" && currentSub.id === (s.id || s.url)
         });
       });
+      if (currentSub.kind === "addon") opts2.push({
+        label: "⚡ " + t("Sincronizar automaticamente"),
+        sub: t("Acerta o atraso comparando com outra legenda"),
+        value: {
+          kind: "autosync"
+        }
+      });
       opts2.push({
         label: t("Atraso da legenda: {n}s", {
           n: renderer.offset().toFixed(1)
@@ -12739,7 +12768,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             currentSub = {
               kind: "off"
             };
-          } else if (v.kind === "embedded") selectEmbeddedSub(v.index);else if (v.kind === "avtext") selectAvText(v.index);else if (v.kind === "addon") selectAddonSub(v.sub);else if (v.kind === "delay") delayMenu();else if (v.kind === "size") sizeMenu();
+          } else if (v.kind === "embedded") selectEmbeddedSub(v.index);else if (v.kind === "avtext") selectAvText(v.index);else if (v.kind === "addon") selectAddonSub(v.sub);else if (v.kind === "delay") delayMenu();else if (v.kind === "autosync") autoSync();else if (v.kind === "size") sizeMenu();
         }
       });
     }
@@ -12757,6 +12786,140 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return setSubDelay(v);
         }
       });
+    }
+    function bestShift(target, ref) {
+      var T = target.map(function (c) {
+        return c.start;
+      }).sort(function (a, b) {
+        return a - b;
+      });
+      var R = ref.map(function (c) {
+        return c.start;
+      }).sort(function (a, b) {
+        return a - b;
+      });
+      if (T.length < 5 || R.length < 5) return null;
+      var MAX2 = 20;
+      var BIN = 0.1;
+      var bins = {};
+      var j0 = 0;
+      for (var i = 0; i < T.length; i++) {
+        while (j0 < R.length && R[j0] < T[i] - MAX2) j0++;
+        for (var j = j0; j < R.length && R[j] <= T[i] + MAX2; j++) {
+          var b = Math.round((R[j] - T[i]) / BIN);
+          bins[b] = (bins[b] || 0) + 1;
+        }
+      }
+      var best = null;
+      var bestN = 0;
+      Object.keys(bins).forEach(function (k) {
+        var b = +k;
+        var n = (bins[b - 1] || 0) + bins[b] + (bins[b + 1] || 0);
+        if (n > bestN) {
+          bestN = n;
+          best = b;
+        }
+      });
+      if (best === null) return null;
+      var sum = 0;
+      var cnt = 0;
+      j0 = 0;
+      var center2 = best * BIN;
+      for (var _i = 0; _i < T.length; _i++) {
+        for (var _j = 0; _j < R.length; _j++) {
+          var d = R[_j] - T[_i];
+          if (Math.abs(d - center2) <= 0.2) {
+            sum += d;
+            cnt++;
+          }
+        }
+      }
+      var shift = cnt ? sum / cnt : center2;
+      var score = bestN / Math.min(T.length, R.length);
+      return {
+        shift: Math.round(shift * 100) / 100,
+        score: score
+      };
+    }
+    function listenEmbedded(sec) {
+      return new Promise(function (resolve2) {
+        var list2 = videoEl.isAVPlay ? videoEl.textTrackList() : [];
+        var idx = list2.findIndex(function (tr) {
+          return !/PGS|VOBSUB|DVD/i.test(tr.codec || "");
+        });
+        if (idx < 0 || videoEl.paused) return resolve2(null);
+        var starts = [];
+        var last2 = "";
+        videoEl.onSubtitle(function (s) {
+          var text = String(s && s.text || "").trim();
+          if (text && text !== last2) starts.push({
+            start: videoEl.currentTime || 0
+          });
+          last2 = text;
+        });
+        if (!videoEl.selectText(idx)) return resolve2(null);
+        setTimeout(function () {
+          videoEl.disableText();
+          resolve2(starts.length >= 5 ? starts : null);
+        }, sec * 1e3);
+      });
+    }
+    function autoSync() {
+      if (currentSub.kind !== "addon" || !currentCues || !currentCues.length) return toast(t("Ligue uma legenda de addon primeiro."));
+      var target = currentCues;
+      var mine = currentSub.id;
+      var finish = function finish(r, from) {
+        if (!alive) return;
+        if (!r || r.score < 0.2) return toast(t("Não deu para sincronizar com segurança. Ajuste à mão."), 4e3);
+        var v = setSubDelay(r.shift);
+        toast(t("Sincronizada: {n}s", {
+          n: (v > 0 ? "+" : "") + v.toFixed(2)
+        }) + " · " + from + " · " + Math.round(Math.min(1, r.score) * 100) + "%", 4e3);
+      };
+      var hasEmbedded = videoEl.isAVPlay && videoEl.textTrackList().some(function (tr) {
+        return !/PGS|VOBSUB|DVD/i.test(tr.codec || "");
+      });
+      if (hasEmbedded && !videoEl.paused) {
+        toast(t("Ouvindo a legenda do arquivo por 40 segundos... continue assistindo."), 5e3);
+        listenEmbedded(40).then(function (ref) {
+          if (!alive || currentSub.id !== mine) return;
+          var r = ref && bestShift(target, ref);
+          if (r && r.score >= 0.2) return finish(r, t("legenda do arquivo"));
+          fromAddons();
+        });
+        return;
+      }
+      fromAddons();
+      function fromAddons() {
+        var others = (addonSubs || []).filter(function (x) {
+          return (x.id || x.url) !== mine && x.url;
+        });
+        if (!others.length) return toast(t("Não há outra legenda para comparar."), 4e3);
+        var rank = function rank(x) {
+          return /^(en|eng)$/i.test(x.lang) ? 0 : 1;
+        };
+        var pick2 = others.sort(function (a, b) {
+          return rank(a) - rank(b);
+        }).slice(0, 3);
+        toast(t("Comparando com {n} legendas...", {
+          n: pick2.length
+        }), 3e3);
+        Promise.all(pick2.map(function (x) {
+          return load3(x.url, subtitlesProxy(x.url)).then(function (c) {
+            return bestShift(target, c);
+          }, function () {
+            return null;
+          });
+        })).then(function (rs) {
+          if (!alive || currentSub.id !== mine) return;
+          var ok = rs.filter(function (r) {
+            return r && r.score >= 0.2;
+          }).sort(function (a, b) {
+            return b.score - a.score;
+          });
+          finish(ok[0] || null, t("outras legendas"));
+        });
+      }
     }
     function sizeMenu() {
       var vals = [70, 85, 100, 115, 130, 150];
@@ -19195,7 +19358,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T16:17:18.957Z";
+  var BUILD = "2026-11-16T16:19:47.537Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

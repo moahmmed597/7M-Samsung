@@ -1183,6 +1183,7 @@ function PlayerView(opts) {
     }
   }
 
+  let currentCues = null;
   function selectAddonSub(s, silent) {
     disableEmbeddedSubs();
     currentSub = { kind: 'addon', id: s.id || s.url };
@@ -1191,6 +1192,7 @@ function PlayerView(opts) {
       .load(s.url, server.subtitlesProxy(s.url))
       .then((cues) => {
         if (!alive || currentSub.id !== (s.id || s.url)) return;
+        currentCues = cues;
         renderer.set(cues);
         if (!silent) toast(t('Legenda: {lang}', { lang: langName(s.lang) }));
       })
@@ -1318,6 +1320,7 @@ function PlayerView(opts) {
         checked: currentSub.kind === 'addon' && currentSub.id === (s.id || s.url),
       })
     );
+    if (currentSub.kind === 'addon') opts2.push({ label: '⚡ ' + t('Sincronizar automaticamente'), sub: t('Acerta o atraso comparando com outra legenda'), value: { kind: 'autosync' } });
     opts2.push({ label: t('Atraso da legenda: {n}s', { n: renderer.offset().toFixed(1) }), sub: t('Ajustar sincronia'), value: { kind: 'delay' } });
     opts2.push({ label: t('Tamanho: {n}%', { n: store.settings().subtitleSize || 100 }), value: { kind: 'size' } });
     menu(t('Legendas'), opts2, {
@@ -1336,6 +1339,7 @@ function PlayerView(opts) {
         else if (v.kind === 'avtext') selectAvText(v.index);
         else if (v.kind === 'addon') selectAddonSub(v.sub);
         else if (v.kind === 'delay') delayMenu();
+        else if (v.kind === 'autosync') autoSync();
         else if (v.kind === 'size') sizeMenu();
       },
     });
@@ -1348,6 +1352,115 @@ function PlayerView(opts) {
       vals.map((v) => ({ label: (v > 0 ? '+' : '') + v + 's', sub: v < 0 ? t('Legenda aparece antes') : v > 0 ? t('Legenda aparece depois') : t('Sem ajuste'), value: v, checked: renderer.offset() === v })),
       { onPick: (v) => setSubDelay(v) }
     );
+  }
+
+  // ---- Automatic subtitle sync ----
+  // The add-on subtitle is compared with a reference that is in sync with this video: the file's own
+  // subtitle track (Samsung player: listened to for a while as it plays), or else other add-on subtitles.
+  // The best shift is the most common gap between the start times of the two (a histogram of the gaps).
+  function bestShift(target, ref) {
+    const T = target.map((c) => c.start).sort((a, b) => a - b);
+    const R = ref.map((c) => c.start).sort((a, b) => a - b);
+    if (T.length < 5 || R.length < 5) return null;
+    const MAX = 20;
+    const BIN = 0.1;
+    const bins = {};
+    let j0 = 0;
+    for (let i = 0; i < T.length; i++) {
+      while (j0 < R.length && R[j0] < T[i] - MAX) j0++;
+      for (let j = j0; j < R.length && R[j] <= T[i] + MAX; j++) {
+        const b = Math.round((R[j] - T[i]) / BIN);
+        bins[b] = (bins[b] || 0) + 1;
+      }
+    }
+    let best = null;
+    let bestN = 0;
+    Object.keys(bins).forEach((k) => {
+      const b = +k;
+      const n = (bins[b - 1] || 0) + bins[b] + (bins[b + 1] || 0);
+      if (n > bestN) {
+        bestN = n;
+        best = b;
+      }
+    });
+    if (best === null) return null;
+    // refine: mean of the gaps close to the peak
+    let sum = 0;
+    let cnt = 0;
+    j0 = 0;
+    const center = best * BIN;
+    for (let i = 0; i < T.length; i++) {
+      for (let j = 0; j < R.length; j++) {
+        const d = R[j] - T[i];
+        if (Math.abs(d - center) <= 0.2) {
+          sum += d;
+          cnt++;
+        }
+      }
+    }
+    const shift = cnt ? sum / cnt : center;
+    const score = bestN / Math.min(T.length, R.length);
+    return { shift: Math.round(shift * 100) / 100, score: score };
+  }
+
+  // Start times of the file's own subtitle while it plays (Samsung player), for `sec` seconds.
+  function listenEmbedded(sec) {
+    return new Promise((resolve) => {
+      const list = videoEl.isAVPlay ? videoEl.textTrackList() : [];
+      const idx = list.findIndex((tr) => !/PGS|VOBSUB|DVD/i.test(tr.codec || ''));
+      if (idx < 0 || videoEl.paused) return resolve(null);
+      const starts = [];
+      let last = '';
+      videoEl.onSubtitle((s) => {
+        const text = String((s && s.text) || '').trim();
+        if (text && text !== last) starts.push({ start: videoEl.currentTime || 0 });
+        last = text;
+      });
+      if (!videoEl.selectText(idx)) return resolve(null);
+      setTimeout(() => {
+        videoEl.disableText();
+        resolve(starts.length >= 5 ? starts : null);
+      }, sec * 1000);
+    });
+  }
+
+  function autoSync() {
+    if (currentSub.kind !== 'addon' || !currentCues || !currentCues.length) return toast(t('Ligue uma legenda de addon primeiro.'));
+    const target = currentCues;
+    const mine = currentSub.id;
+    const finish = (r, from) => {
+      if (!alive) return;
+      if (!r || r.score < 0.2) return toast(t('Não deu para sincronizar com segurança. Ajuste à mão.'), 4000);
+      const v = setSubDelay(r.shift);
+      toast(t('Sincronizada: {n}s', { n: (v > 0 ? '+' : '') + v.toFixed(2) }) + ' · ' + from + ' · ' + Math.round(Math.min(1, r.score) * 100) + '%', 4000);
+    };
+    // 1) the file's own subtitle (same timing as the video)
+    const hasEmbedded = videoEl.isAVPlay && videoEl.textTrackList().some((tr) => !/PGS|VOBSUB|DVD/i.test(tr.codec || ''));
+    if (hasEmbedded && !videoEl.paused) {
+      toast(t('Ouvindo a legenda do arquivo por 40 segundos... continue assistindo.'), 5000);
+      listenEmbedded(40).then((ref) => {
+        if (!alive || currentSub.id !== mine) return;
+        const r = ref && bestShift(target, ref);
+        if (r && r.score >= 0.2) return finish(r, t('legenda do arquivo'));
+        fromAddons();
+      });
+      return;
+    }
+    fromAddons();
+    // 2) other add-on subtitles (English first), the best match wins
+    function fromAddons() {
+      const others = (addonSubs || []).filter((x) => (x.id || x.url) !== mine && x.url);
+      if (!others.length) return toast(t('Não há outra legenda para comparar.'), 4000);
+      const rank = (x) => (/^(en|eng)$/i.test(x.lang) ? 0 : 1);
+      const pick = others.sort((a, b) => rank(a) - rank(b)).slice(0, 3);
+      toast(t('Comparando com {n} legendas...', { n: pick.length }), 3000);
+      Promise.all(pick.map((x) => subs.load(x.url, server.subtitlesProxy(x.url)).then((c) => bestShift(target, c), () => null))).then((rs) => {
+        if (!alive || currentSub.id !== mine) return;
+        // the shift most references agree on, else the best score
+        const ok = rs.filter((r) => r && r.score >= 0.2).sort((a, b) => b.score - a.score);
+        finish(ok[0] || null, t('outras legendas'));
+      });
+    }
   }
 
   function sizeMenu() {
