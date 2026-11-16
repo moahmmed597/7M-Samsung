@@ -7121,6 +7121,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "home",
     label: "Início"
   }, {
+    id: "movies",
+    label: "Filmes"
+  }, {
+    id: "series",
+    label: "Séries"
+  }, {
     id: "anime",
     label: "Animes"
   }, {
@@ -7150,14 +7156,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return keyed = true;
   }, true);
   var NAV_ICONS = {
-    home: "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",
-    manga: "M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z",
-    anime: "M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z",
-    collections: "M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z",
-    search: "M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z",
-    library: "M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z",
-    calendar: "M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z",
-    settings: "M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"
+    home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/> <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    movies: '<path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/> <path d="m6.2 5.3 3.1 3.9"/> <path d="m12.4 3.4 3.1 4"/> <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
+    series: '<rect width="20" height="15" x="2" y="7" rx="2" ry="2"/> <polyline points="17 2 12 7 7 2"/>',
+    anime: '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/> <path d="M20 3v4"/> <path d="M22 5h-4"/> <path d="M4 17v2"/> <path d="M5 18H3"/>',
+    manga: '<path d="M12 7v14"/> <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+    collections: '<rect width="7" height="7" x="3" y="3" rx="1"/> <rect width="7" height="7" x="14" y="3" rx="1"/> <rect width="7" height="7" x="14" y="14" rx="1"/> <rect width="7" height="7" x="3" y="14" rx="1"/>',
+    search: '<circle cx="11" cy="11" r="8"/> <path d="m21 21-4.3-4.3"/>',
+    library: '<path d="m16 6 4 14"/> <path d="M12 6v14"/> <path d="M8 8v12"/> <path d="M4 4v16"/>',
+    calendar: '<path d="M8 2v4"/> <path d="M16 2v4"/> <rect width="18" height="18" x="3" y="4" rx="2"/> <path d="M3 10h18"/> <path d="M8 14h.01"/> <path d="M12 14h.01"/> <path d="M16 14h.01"/> <path d="M8 18h.01"/> <path d="M12 18h.01"/> <path d="M16 18h.01"/>',
+    settings: '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/> <circle cx="12" cy="12" r="3"/>'
   };
   function topbar(activeId, onTab) {
     var clock = h("div.top-clock");
@@ -7190,7 +7198,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         onFocus: open
       }, [h("span.nav-ico", {
-        html: '<svg viewBox="0 0 24 24" width="30" height="30"><path fill="currentColor" d="' + (NAV_ICONS[tab.id] || NAV_ICONS.home) + '"/></svg>'
+        html: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (NAV_ICONS[tab.id] || NAV_ICONS.home) + "</svg>"
       }), h("span.tab-label", {
         text: t(tab.label)
       })]);
@@ -17577,14 +17585,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
     }), "discover");
     add(t("Em alta agora"), "sort: TRENDING_DESC");
-    tileRow(rows2, t("Formatos"), FORMATS.map(function (f) {
+    tileRow(rows2, t("Formatos"), FORMATS.map(function (f, i) {
       return {
         label: t(f.label),
         open: function open() {
           return grid(t(f.label), f.args);
         }
       };
-    }), "discover");
+    }), "discover formats");
     tileRow(rows2, t("Gêneros"), GENRES.map(function (g) {
       return {
         label: g[1] ? t(g[1]) : g[0],
@@ -17679,316 +17687,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
-  // src/js/api/newEpisodes.js
-  var DAYS = 7;
-  var CHECK = 25;
-  var PARALLEL = 1;
-  function librarySeries() {
-    return cachedLibrary().filter(function (it) {
-      return it.type === "series" && (!it.removed || it.state && it.state.timeOffset > 0);
-    }).sort(function (a, b) {
-      return String(b._mtime || "").localeCompare(String(a._mtime || ""));
-    }).slice(0, CHECK);
-  }
-  function recent(meta, it) {
-    var now = Date.now();
-    var from = now - DAYS * 864e5;
-    return (meta.videos || []).filter(function (v) {
-      var t2 = Date.parse(v.released);
-      return v.id && v.season && t2 >= from && t2 <= now && !isWatched(v.id);
-    }).map(function (v) {
-      return {
-        seriesId: it._id,
-        type: "series",
-        name: meta.name || it.name,
-        poster: meta.poster || it.poster,
-        background: meta.background,
-        thumbnail: v.thumbnail,
-        videoId: v.id,
-        season: v.season,
-        episode: v.episode,
-        title: v.name || v.title || "",
-        released: Date.parse(v.released)
-      };
-    });
-  }
-  function cached() {
-    return (get("newEpisodes", []) || []).filter(function (e) {
-      return !isWatched(e.videoId) && Date.now() - e.released <= DAYS * 864e5;
-    });
-  }
-  var run = 0;
-  function load5() {
-    var my = ++run;
-    return load().then(function () {
-      return scan2(my);
-    }).then(function (list2) {
-      if (my !== run) throw new Error("stopped");
-      set("newEpisodes", list2.slice(0, 40));
-      return list2;
-    });
-  }
-  function stop2() {
-    run++;
-  }
-  function scan2(my) {
-    var series = librarySeries();
-    var out = [];
-    var i = 0;
-    var _worker = function worker() {
-      if (i >= series.length || my !== run) return Promise.resolve();
-      var it = series[i++];
-      return fetchMeta("series", it._id).then(function (meta) {
-        recent(meta, it).forEach(function (e) {
-          return out.push(e);
-        });
-      }).catch(function () {}).then(_worker);
-    };
-    var workers = [];
-    for (var n = 0; n < PARALLEL; n++) workers.push(_worker());
-    return Promise.all(workers).then(function () {
-      return out.sort(function (a, b) {
-        return b.released - a.released;
-      });
-    });
-  }
-
-  // src/js/views/catalog.js
-  var PER_ROW = 7;
-  function canPage(entry) {
-    var c = entry.catalog;
-    return (c.extra || []).some(function (e) {
-      return e && e.name === "skip";
-    }) || (c.extraSupported || []).indexOf("skip") >= 0;
-  }
-  function CatalogView(entry) {
-    var el = h("div.view");
-    var scroller = h("div.scroll-y", {
-      "data-scroll-y": ""
-    });
-    var grid = h("div.grid");
-    var status2 = h("div.grid-status");
-    scroller.appendChild(h("div.row-title.catalog-title", {
-      text: catalogTitle(entry)
-    }));
-    scroller.appendChild(grid);
-    scroller.appendChild(status2);
-    el.appendChild(scroller);
-    var paging = canPage(entry);
-    var seen = {};
-    var count = 0;
-    var loading = false;
-    var done = false;
-    function add(metas) {
-      metas.forEach(function (m) {
-        if (!m || seen[m.id]) return;
-        seen[m.id] = true;
-        var index2 = count++;
-        grid.appendChild(card(m, {
-          onSelect: function onSelect() {
-            return openDetails(m.type || entry.catalog.type, m.id);
-          },
-          onFocus: function onFocus() {
-            if (count - index2 <= PER_ROW * 2) more();
-          }
-        }));
-      });
-      loadVisibleImages(el, 600);
-    }
-    function more() {
-      if (loading || done) return;
-      loading = true;
-      clear(status2);
-      status2.appendChild(spinnerLine(t("Carregando...")));
-      var before = count;
-      fetchCatalog(entry, count ? {
-        skip: count
-      } : null).then(function (metas) {
-        add(metas);
-        if (!paging || count === before) done = true;
-      }).catch(function () {
-        done = true;
-      }).then(function () {
-        loading = false;
-        clear(status2);
-        if (!count) status2.appendChild(h("div.hint", {
-          text: t("Nada por aqui.")
-        }));
-      });
-    }
-    more();
-    return {
-      el: el
-    };
-  }
-
-  // src/js/lib/homeRows.js
-  function key2(entry) {
-    return (entry.addon.transportUrl || entry.addon.manifest.id || "") + "|" + entry.catalog.type + "|" + entry.catalog.id;
-  }
-  function prefs() {
-    var p = settings().homeRows || {};
-    return {
-      order: p.order || [],
-      hidden: p.hidden || []
-    };
-  }
-  function save(p) {
-    saveSettings({
-      homeRows: {
-        order: p.order,
-        hidden: p.hidden
-      }
-    });
-  }
-  function isHidden(entry) {
-    return prefs().hidden.indexOf(key2(entry)) >= 0;
-  }
-  function sort(entries) {
-    var order = prefs().order;
-    return entries.map(function (e, i) {
-      return {
-        e: e,
-        i: i,
-        o: order.indexOf(key2(e))
-      };
-    }).sort(function (a, b) {
-      return (a.o < 0 ? 1e6 + a.i : a.o) - (b.o < 0 ? 1e6 + b.i : b.o);
-    }).map(function (x) {
-      return x.e;
-    });
-  }
-  function visible(entries) {
-    var hidden = prefs().hidden;
-    return sort(entries).filter(function (e) {
-      return hidden.indexOf(key2(e)) < 0;
-    });
-  }
-  function toggleHidden(entry) {
-    var p = prefs();
-    var k = key2(entry);
-    var i = p.hidden.indexOf(k);
-    if (i >= 0) p.hidden.splice(i, 1);else p.hidden.push(k);
-    save(p);
-  }
-  function move2(entries, entry, delta) {
-    var list2 = sort(entries).map(key2);
-    var k = key2(entry);
-    var i = list2.indexOf(k);
-    var j = i + delta;
-    if (i < 0 || j < 0 || j >= list2.length) return;
-    list2.splice(i, 1);
-    list2.splice(j, 0, k);
-    var p = prefs();
-    p.order = list2;
-    save(p);
-  }
-  function reset() {
-    saveSettings({
-      homeRows: null
-    });
-  }
-
-  // src/js/api/mdblistRows.js
-  var API7 = "https://api.mdblist.com/";
-  var POSTER2 = function POSTER2(imdb) {
-    return "https://images.metahub.space/poster/medium/" + imdb + "/img";
-  };
-  function apiKey() {
-    return (settings().mdblistKey || "").trim();
-  }
-  function hasKey() {
-    return !!apiKey();
-  }
-  function call3(path) {
-    var sep = path.indexOf("?") >= 0 ? "&" : "?";
-    return getJSONViaProxy(API7 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
-      timeout: 15e3
-    });
-  }
-  function myLists() {
-    if (!hasKey()) return Promise.resolve([]);
-    return call3("lists/user").then(function (r) {
-      return (Array.isArray(r) ? r : []).map(function (l) {
-        return {
-          id: String(l.id),
-          name: l.name,
-          items: l.items || 0
-        };
-      });
-    });
-  }
-  function findList(text) {
-    var v = String(text || "").trim();
-    var m = v.match(/mdblist\.com\/lists\/([^/?#]+)\/([^/?#]+)/i) || v.match(/^([\w.-]+)\/([\w.-]+)$/);
-    var path = m ? "lists/" + encodeURIComponent(m[1]) + "/" + encodeURIComponent(m[2]) : /^\d+$/.test(v) ? "lists/" + v : null;
-    if (!path) return Promise.reject(new Error("?"));
-    return call3(path).then(function (r) {
-      var l = Array.isArray(r) ? r[0] : r;
-      if (!l || !l.id) throw new Error("?");
-      return {
-        id: String(l.id),
-        name: l.name
-      };
-    });
-  }
-  function rows() {
-    return hasKey() ? settings().mdblistRows || [] : [];
-  }
-  function setRows(list2) {
-    saveSettings({
-      mdblistRows: list2
-    });
-  }
-  function items(id) {
-    return call3("lists/" + encodeURIComponent(id) + "/items?limit=40").then(function (r) {
-      var out = [];
-      var add = function add(x, type) {
-        return x && x.imdb_id && out.push({
-          id: x.imdb_id,
-          type: type,
-          name: x.title,
-          poster: POSTER2(x.imdb_id),
-          rank: x.rank || 0
-        });
-      };
-      (r && r.movies || []).forEach(function (x) {
-        return add(x, "movie");
-      });
-      (r && r.shows || []).forEach(function (x) {
-        return add(x, "series");
-      });
-      return out.sort(function (a, b) {
-        return a.rank - b.rank;
-      });
-    });
-  }
-  function boardEntries() {
-    return rows().map(function (l) {
-      return {
-        addon: {
-          transportUrl: "mdblist",
-          manifest: {
-            id: "mdblist",
-            name: "MDBList"
-          }
-        },
-        catalog: {
-          id: l.id,
-          name: l.name,
-          type: "movie"
-        },
-        fetch: function fetch() {
-          return items(l.id);
-        }
-      };
-    });
-  }
-
   // src/js/api/nuvioCollections.js
   var TMDB_IMG2 = "https://image.tmdb.org/t/p/w342";
   var files = {};
-  function load6(name) {
+  function load5(name) {
     if (!files[name]) {
       var base2 = window.__KAI_BASE__ || "";
       files[name] = getJSON(base2 + "collections/" + name + ".json", {
@@ -18413,6 +18115,312 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/api/newEpisodes.js
+  var DAYS = 7;
+  var CHECK = 25;
+  var PARALLEL = 1;
+  function librarySeries() {
+    return cachedLibrary().filter(function (it) {
+      return it.type === "series" && (!it.removed || it.state && it.state.timeOffset > 0);
+    }).sort(function (a, b) {
+      return String(b._mtime || "").localeCompare(String(a._mtime || ""));
+    }).slice(0, CHECK);
+  }
+  function recent(meta, it) {
+    var now = Date.now();
+    var from = now - DAYS * 864e5;
+    return (meta.videos || []).filter(function (v) {
+      var t2 = Date.parse(v.released);
+      return v.id && v.season && t2 >= from && t2 <= now && !isWatched(v.id);
+    }).map(function (v) {
+      return {
+        seriesId: it._id,
+        type: "series",
+        name: meta.name || it.name,
+        poster: meta.poster || it.poster,
+        background: meta.background,
+        thumbnail: v.thumbnail,
+        videoId: v.id,
+        season: v.season,
+        episode: v.episode,
+        title: v.name || v.title || "",
+        released: Date.parse(v.released)
+      };
+    });
+  }
+  function cached() {
+    return (get("newEpisodes", []) || []).filter(function (e) {
+      return !isWatched(e.videoId) && Date.now() - e.released <= DAYS * 864e5;
+    });
+  }
+  var run = 0;
+  function load6() {
+    var my = ++run;
+    return load().then(function () {
+      return scan2(my);
+    }).then(function (list2) {
+      if (my !== run) throw new Error("stopped");
+      set("newEpisodes", list2.slice(0, 40));
+      return list2;
+    });
+  }
+  function stop2() {
+    run++;
+  }
+  function scan2(my) {
+    var series = librarySeries();
+    var out = [];
+    var i = 0;
+    var _worker = function worker() {
+      if (i >= series.length || my !== run) return Promise.resolve();
+      var it = series[i++];
+      return fetchMeta("series", it._id).then(function (meta) {
+        recent(meta, it).forEach(function (e) {
+          return out.push(e);
+        });
+      }).catch(function () {}).then(_worker);
+    };
+    var workers = [];
+    for (var n = 0; n < PARALLEL; n++) workers.push(_worker());
+    return Promise.all(workers).then(function () {
+      return out.sort(function (a, b) {
+        return b.released - a.released;
+      });
+    });
+  }
+
+  // src/js/views/catalog.js
+  var PER_ROW = 7;
+  function canPage(entry) {
+    var c = entry.catalog;
+    return (c.extra || []).some(function (e) {
+      return e && e.name === "skip";
+    }) || (c.extraSupported || []).indexOf("skip") >= 0;
+  }
+  function CatalogView(entry) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var grid = h("div.grid");
+    var status2 = h("div.grid-status");
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: catalogTitle(entry)
+    }));
+    scroller.appendChild(grid);
+    scroller.appendChild(status2);
+    el.appendChild(scroller);
+    var paging = canPage(entry);
+    var seen = {};
+    var count = 0;
+    var loading = false;
+    var done = false;
+    function add(metas) {
+      metas.forEach(function (m) {
+        if (!m || seen[m.id]) return;
+        seen[m.id] = true;
+        var index2 = count++;
+        grid.appendChild(card(m, {
+          onSelect: function onSelect() {
+            return openDetails(m.type || entry.catalog.type, m.id);
+          },
+          onFocus: function onFocus() {
+            if (count - index2 <= PER_ROW * 2) more();
+          }
+        }));
+      });
+      loadVisibleImages(el, 600);
+    }
+    function more() {
+      if (loading || done) return;
+      loading = true;
+      clear(status2);
+      status2.appendChild(spinnerLine(t("Carregando...")));
+      var before = count;
+      fetchCatalog(entry, count ? {
+        skip: count
+      } : null).then(function (metas) {
+        add(metas);
+        if (!paging || count === before) done = true;
+      }).catch(function () {
+        done = true;
+      }).then(function () {
+        loading = false;
+        clear(status2);
+        if (!count) status2.appendChild(h("div.hint", {
+          text: t("Nada por aqui.")
+        }));
+      });
+    }
+    more();
+    return {
+      el: el
+    };
+  }
+
+  // src/js/lib/homeRows.js
+  function key2(entry) {
+    return (entry.addon.transportUrl || entry.addon.manifest.id || "") + "|" + entry.catalog.type + "|" + entry.catalog.id;
+  }
+  function prefs() {
+    var p = settings().homeRows || {};
+    return {
+      order: p.order || [],
+      hidden: p.hidden || []
+    };
+  }
+  function save(p) {
+    saveSettings({
+      homeRows: {
+        order: p.order,
+        hidden: p.hidden
+      }
+    });
+  }
+  function isHidden(entry) {
+    return prefs().hidden.indexOf(key2(entry)) >= 0;
+  }
+  function sort(entries) {
+    var order = prefs().order;
+    return entries.map(function (e, i) {
+      return {
+        e: e,
+        i: i,
+        o: order.indexOf(key2(e))
+      };
+    }).sort(function (a, b) {
+      return (a.o < 0 ? 1e6 + a.i : a.o) - (b.o < 0 ? 1e6 + b.i : b.o);
+    }).map(function (x) {
+      return x.e;
+    });
+  }
+  function visible(entries) {
+    var hidden = prefs().hidden;
+    return sort(entries).filter(function (e) {
+      return hidden.indexOf(key2(e)) < 0;
+    });
+  }
+  function toggleHidden(entry) {
+    var p = prefs();
+    var k = key2(entry);
+    var i = p.hidden.indexOf(k);
+    if (i >= 0) p.hidden.splice(i, 1);else p.hidden.push(k);
+    save(p);
+  }
+  function move2(entries, entry, delta) {
+    var list2 = sort(entries).map(key2);
+    var k = key2(entry);
+    var i = list2.indexOf(k);
+    var j = i + delta;
+    if (i < 0 || j < 0 || j >= list2.length) return;
+    list2.splice(i, 1);
+    list2.splice(j, 0, k);
+    var p = prefs();
+    p.order = list2;
+    save(p);
+  }
+  function reset() {
+    saveSettings({
+      homeRows: null
+    });
+  }
+
+  // src/js/api/mdblistRows.js
+  var API7 = "https://api.mdblist.com/";
+  var POSTER2 = function POSTER2(imdb) {
+    return "https://images.metahub.space/poster/medium/" + imdb + "/img";
+  };
+  function apiKey() {
+    return (settings().mdblistKey || "").trim();
+  }
+  function hasKey() {
+    return !!apiKey();
+  }
+  function call3(path) {
+    var sep = path.indexOf("?") >= 0 ? "&" : "?";
+    return getJSONViaProxy(API7 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
+      timeout: 15e3
+    });
+  }
+  function myLists() {
+    if (!hasKey()) return Promise.resolve([]);
+    return call3("lists/user").then(function (r) {
+      return (Array.isArray(r) ? r : []).map(function (l) {
+        return {
+          id: String(l.id),
+          name: l.name,
+          items: l.items || 0
+        };
+      });
+    });
+  }
+  function findList(text) {
+    var v = String(text || "").trim();
+    var m = v.match(/mdblist\.com\/lists\/([^/?#]+)\/([^/?#]+)/i) || v.match(/^([\w.-]+)\/([\w.-]+)$/);
+    var path = m ? "lists/" + encodeURIComponent(m[1]) + "/" + encodeURIComponent(m[2]) : /^\d+$/.test(v) ? "lists/" + v : null;
+    if (!path) return Promise.reject(new Error("?"));
+    return call3(path).then(function (r) {
+      var l = Array.isArray(r) ? r[0] : r;
+      if (!l || !l.id) throw new Error("?");
+      return {
+        id: String(l.id),
+        name: l.name
+      };
+    });
+  }
+  function rows() {
+    return hasKey() ? settings().mdblistRows || [] : [];
+  }
+  function setRows(list2) {
+    saveSettings({
+      mdblistRows: list2
+    });
+  }
+  function items(id) {
+    return call3("lists/" + encodeURIComponent(id) + "/items?limit=40").then(function (r) {
+      var out = [];
+      var add = function add(x, type) {
+        return x && x.imdb_id && out.push({
+          id: x.imdb_id,
+          type: type,
+          name: x.title,
+          poster: POSTER2(x.imdb_id),
+          rank: x.rank || 0
+        });
+      };
+      (r && r.movies || []).forEach(function (x) {
+        return add(x, "movie");
+      });
+      (r && r.shows || []).forEach(function (x) {
+        return add(x, "series");
+      });
+      return out.sort(function (a, b) {
+        return a.rank - b.rank;
+      });
+    });
+  }
+  function boardEntries() {
+    return rows().map(function (l) {
+      return {
+        addon: {
+          transportUrl: "mdblist",
+          manifest: {
+            id: "mdblist",
+            name: "MDBList"
+          }
+        },
+        catalog: {
+          id: l.id,
+          name: l.name,
+          type: "movie"
+        },
+        fetch: function fetch() {
+          return items(l.id);
+        }
+      };
+    });
+  }
+
   // src/js/views/home.js
   var ROTATE_MS = 8e3;
   function HomeView() {
@@ -18474,7 +18482,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNew(force) {
       if (perf() || !force && Date.now() - newLoadedAt < 30 * 6e4) return;
       newLoadedAt = Date.now();
-      load5().then(function (list2) {
+      load6().then(function (list2) {
         newList = list2;
         renderNew();
         publishBrowse();
@@ -18715,9 +18723,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (!hasTmdb()) box.appendChild(h("div.nc-hint", {
             text: t("Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.")
           }));
-          load6("home").then(function (data) {
+          load5("home").then(function (data) {
             if (!alive()) return;
-            var list2 = collectionRows(box, data).map(function (x) {
+            var HOME_SKIP = ["Legendary Directors", "Actors", "Film Collections", "Networks"];
+            var list2 = collectionRows(box, data.filter(function (c) {
+              return HOME_SKIP.indexOf(c.t) < 0;
+            })).map(function (x) {
               return Object.assign(x, {
                 state: "idle"
               });
@@ -19096,6 +19107,110 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/views/typeTab.js
+  var MOVIE_GROUPS = ["Film Collections", "Legendary Directors", "Actors", "Studios", "By Decade", "Awards", "International Cinema", "Documentaries"];
+  var SERIES_GROUPS = ["Streaming Services", "Networks", "Reality TV"];
+  function TypeView(type) {
+    var tab = type === "movie" ? "movies" : "series";
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar(tab, goTab);
+    var rows2 = h("div.rows");
+    scroller.appendChild(bar);
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: type === "movie" ? t("Filmes") : t("Séries")
+    }));
+    scroller.appendChild(rows2);
+    el.appendChild(scroller);
+    var pending2 = [];
+    var active2 = 0;
+    function loadNearby() {
+      if (el.offsetParent === null) return;
+      var limit = window.innerHeight * 2.2;
+      var _loop11 = function _loop11() {
+          var p = pending2[i];
+          if (p.state) return 0; // continue
+          if (p.row.getBoundingClientRect().top > limit) return 1; // break
+          p.state = "loading";
+          active2++;
+          Promise.resolve(p.load()).then(function () {
+            p.state = "done";
+            active2--;
+            loadNearby();
+          }, function () {
+            p.state = "done";
+            active2--;
+            loadNearby();
+          });
+        },
+        _ret8;
+      for (var i = 0; i < pending2.length && active2 < 2; i++) {
+        _ret8 = _loop11();
+        if (_ret8 === 0) continue;
+        if (_ret8 === 1) break;
+      }
+    }
+    var loaded = false;
+    function render() {
+      loaded = true;
+      clear(rows2);
+      rows2.appendChild(spinnerLine(t("Carregando catálogos...")));
+      load().then(function () {
+        clear(rows2);
+        var cats = boardCatalogs().filter(function (c) {
+          return c.catalog && c.catalog.type === type;
+        });
+        pending2 = cats.map(function (c) {
+          return Object.assign(buildRow(c, rows2), {
+            state: ""
+          });
+        });
+        var box = h("div");
+        rows2.appendChild(box);
+        var groups = type === "movie" ? MOVIE_GROUPS : SERIES_GROUPS;
+        load5("home").then(function (data) {
+          var list2 = collectionRows(box, data.filter(function (c) {
+            return groups.indexOf(c.t) >= 0;
+          })).map(function (x) {
+            return Object.assign(x, {
+              state: ""
+            });
+          });
+          pending2 = pending2.concat(list2);
+          loadNearby();
+        }).catch(function () {});
+        loadNearby();
+      });
+    }
+    return {
+      el: el,
+      onShow: function onShow() {
+        if (!loaded) render();
+        loadNearby();
+        loadVisibleImages(el);
+      },
+      onScroll: function onScroll() {
+        return loadNearby();
+      },
+      freeMemory: function freeMemory() {
+        pending2 = [];
+        clear(rows2);
+        loaded = false;
+      },
+      destroy: function destroy() {
+        return bar.__destroy && bar.__destroy();
+      }
+    };
+  }
+  var MoviesView = function MoviesView() {
+    return TypeView("movie");
+  };
+  var SeriesView = function SeriesView() {
+    return TypeView("series");
+  };
+
   // src/js/views/search.js
   function SearchView() {
     var el = h("div.view");
@@ -19358,7 +19473,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T16:19:47.537Z";
+  var BUILD = "2026-11-16T16:21:55.463Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -22013,7 +22128,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop11 = function _loop11() {
+      var _loop12 = function _loop12() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -22029,7 +22144,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop11();
+        _loop12();
       }
       days.__last = days.children[current3 + 1];
     }
@@ -22470,6 +22585,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     registerTab("collections", CollectionsView);
     registerTab("anime", AnimeView);
     registerTab("manga", MangaView);
+    registerTab("movies", MoviesView);
+    registerTab("series", SeriesView);
     if (needsPicker() && !window.location.search.includes("nopicker")) {
       var bootEl = document.getElementById("boot");
       if (bootEl) bootEl.style.display = "none";

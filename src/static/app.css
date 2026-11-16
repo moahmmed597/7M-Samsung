@@ -515,12 +515,12 @@ body .card.anime-tile { width: 300px; }
 body .card.anime-tile .poster-wrap { width: 300px; height: 169px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; position: relative; overflow: hidden; border-radius: 14px; }
 .anime-tile .tile-label { font-size: 21px; font-weight: 800; text-align: left; padding: 34px 14px 10px; line-height: 1.2; text-shadow: 0 2px 8px rgba(0,0,0,0.95); position: absolute; left: 0; right: 0; bottom: 0; z-index: 10; display: block !important; color: #ffffff !important; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 100%); text-transform: uppercase; letter-spacing: 0.6px; pointer-events: none; box-sizing: border-box; }
 [dir="rtl"] .anime-tile .tile-label { text-align: right; }
-.anime-tile.hue-0 .poster-wrap { background: linear-gradient(135deg, #2a2f3d, #111319); }
-.anime-tile.hue-1 .poster-wrap { background: linear-gradient(135deg, #3a2530, #140d11); }
-.anime-tile.hue-2 .poster-wrap { background: linear-gradient(135deg, #1d3533, #0b1514); }
-.anime-tile.hue-3 .poster-wrap { background: linear-gradient(135deg, #3a2f22, #15110c); }
-.anime-tile.hue-4 .poster-wrap { background: linear-gradient(135deg, #1f2a3d, #0c111a); }
-.anime-tile.hue-5 .poster-wrap { background: linear-gradient(135deg, #28331f, #10140c); }
+.anime-tile.hue-0 .poster-wrap { background: linear-gradient(135deg, #4a3fb0, #1c1740); }
+.anime-tile.hue-1 .poster-wrap { background: linear-gradient(135deg, #b23a6a, #3a1324); }
+.anime-tile.hue-2 .poster-wrap { background: linear-gradient(135deg, #1f8a83, #0b2f2c); }
+.anime-tile.hue-3 .poster-wrap { background: linear-gradient(135deg, #c06a26, #3d1f09); }
+.anime-tile.hue-4 .poster-wrap { background: linear-gradient(135deg, #2d63c8, #0e2147); }
+.anime-tile.hue-5 .poster-wrap { background: linear-gradient(135deg, #5f8f2a, #1e2e0d); }
 .anime-tile.studio .poster-wrap { background: #f2f0f8; }
 .anime-tile.studio .tile-label { display: none !important; }
 
@@ -698,3 +698,20 @@ body.oled .view { background: #000; }
 .rd-hud { position: absolute; left: 40px; bottom: 36px; padding: 10px 22px; border-radius: 12px; background: rgba(0,0,0,0.7); font-size: 22px; color: rgba(255,255,255,0.85); opacity: 0; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; }
 .rd-hud.show { opacity: 1; }
 .rd-msg { position: absolute; left: 0; right: 0; top: 50%; margin-top: -20px; text-align: center; font-size: 28px; color: rgba(255,255,255,0.7); }
+
+/* Manga formats: Japan, Korea, China... */
+.anime-tile.formats.hue-0 .poster-wrap { background: linear-gradient(135deg, #c8102e 0%, #7a0a1c 55%, #2a0710 100%); }
+.anime-tile.formats.hue-1 .poster-wrap { background: linear-gradient(135deg, #0047a0 0%, #cd2e3a 100%); }
+.anime-tile.formats.hue-2 .poster-wrap { background: linear-gradient(135deg, #de2910 0%, #b8860b 100%); }
+.anime-tile.formats.hue-3 .poster-wrap { background: linear-gradient(135deg, #6a4bc4, #241a4d); }
+.anime-tile.formats.hue-4 .poster-wrap { background: linear-gradient(135deg, #2f8f6a, #0d2e22); }
+
+/* Sidebar icons in rounded tiles (idea from Harbor) */
+.sidebar .tab { padding: 6px 8px; }
+.sidebar .nav-ico { width: 56px; height: 56px; -webkit-flex: none; flex: none; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); color: rgba(235,240,250,0.85); margin-right: 14px; -webkit-transition: background 0.15s, color 0.15s, border-color 0.15s, -webkit-transform 0.15s; transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s; }
+.sidebar .tab.active, .sidebar .tab.active.focused { background: transparent; color: #fff; }
+.sidebar .tab.active .nav-ico { color: #8fb4ff; border-color: rgba(143,180,255,0.7); background: rgba(47,91,211,0.22); }
+.sidebar .tab.focused { background: transparent; border-color: transparent; }
+.sidebar .tab.focused .nav-ico { background: #f2f5ff; color: #0b0f19; border-color: #ffffff; -webkit-transform: scale(1.08); transform: scale(1.08); }
+.sidebar.open .tab.focused { background: rgba(255,255,255,0.06); }
+[dir="rtl"] .sidebar .nav-ico { margin-right: 0; margin-left: 14px; }

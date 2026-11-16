@@ -279,7 +279,9 @@ export function HomeView() {
           nc.load('home')
             .then((data) => {
               if (!alive()) return;
-              const list = collectionRows(box, data).map((x) => Object.assign(x, { state: 'idle' }));
+              // The heaviest groups (directors, actors...) live in the Movies / Series tabs now.
+              const HOME_SKIP = ['Legendary Directors', 'Actors', 'Film Collections', 'Networks'];
+              const list = collectionRows(box, data.filter((c) => HOME_SKIP.indexOf(c.t) < 0)).map((x) => Object.assign(x, { state: 'idle' }));
               pending = list.concat(pending); // they sit above the add-on rows
               loadNearby();
             })
@@ -361,7 +363,7 @@ function episodeLabel(videoId, metaId) {
 
 const ROW_LIMIT = 20;
 
-function buildRow(entry, parent) {
+export function buildRow(entry, parent) {
   const row = h('div.row', { 'data-anchor': '30' });
   const sub = entry.fetch ? entry.addon.manifest.name : typeLabel(entry.catalog.type) + ' · ' + (entry.addon.manifest.name || '');
   const title = h('div.row-title', null, [entry.catalog.name || entry.catalog.id, h('small', { text: sub })]);
