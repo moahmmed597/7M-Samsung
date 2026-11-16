@@ -71,12 +71,36 @@ function pickLogo(logos) {
   return null;
 }
 
+// Streaming services that carry the title in the user's region (Settings → Appearance → Region).
+export const REGIONS = ['SA', 'AE', 'KW', 'QA', 'BH', 'OM', 'EG', 'US', 'GB', 'BR'];
+export function region() {
+  const r = String(store.settings().region || '').toUpperCase();
+  if (REGIONS.indexOf(r) >= 0) return r;
+  const m = /-([A-Z]{2})$/i.exec(navigator.language || '');
+  return m && REGIONS.indexOf(m[1].toUpperCase()) >= 0 ? m[1].toUpperCase() : 'SA';
+}
+function providersOf(wp) {
+  const r = wp && wp.results && wp.results[region()];
+  if (!r) return [];
+  const seen = {};
+  const out = [];
+  [['flatrate', ''], ['free', 'free'], ['ads', 'ads'], ['rent', 'rent'], ['buy', 'buy']].forEach((k) =>
+    (r[k[0]] || []).forEach((p) => {
+      if (seen[p.provider_id] || out.length >= 6) return;
+      seen[p.provider_id] = 1;
+      out.push({ name: p.provider_name, logo: p.logo_path ? TMDB_IMG + 'w92' + p.logo_path : null, kind: k[1] });
+    })
+  );
+  return out;
+}
+
 // Detalhes localizados: título, sinopse, logo e elenco com fotos.
 export function localized(meta) {
   const imdb = imdbOf(meta.id);
   return tmdbFind(imdb).then((f) => {
     if (!f) return null;
-    return tmdb(f.type + '/' + f.id, { language: apiLang(), append_to_response: 'credits,images', include_image_language: 'en,ar,null' }).then((d) => ({
+    return tmdb(f.type + '/' + f.id, { language: apiLang(), append_to_response: 'credits,images,watch/providers', include_image_language: 'en,ar,null' }).then((d) => ({
+      providers: providersOf(d['watch/providers']),
       tmdbId: f.id,
       tmdbType: f.type,
       title: d.title || d.name || f.title,

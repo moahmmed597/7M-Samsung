@@ -149,6 +149,8 @@ function DetailsView(type, id, opts) {
       (meta.genres || meta.genre || []).slice(0, 5).map((g) => h('span', { text: g }))
     );
     const desc = h('div.details-desc', { text: meta.description || '' });
+    const provEl = h('div.providers');
+    provEl.style.display = 'none';
     const cast = (meta.cast || []).slice(0, 5);
     const director = (meta.director || []).slice(0, 2);
     // Texto vindo do addon entra como texto, nunca como HTML (um addon malicioso não injeta código).
@@ -189,11 +191,12 @@ function DetailsView(type, id, opts) {
         guideEl.style.display = '';
       });
     }
+    info.appendChild(provEl);
     info.appendChild(desc);
     info.appendChild(castLine);
     const mangaBtn = isAnime(meta) ? h('div.btn', { focusable: true, onSelect: openMangaFromEpisode }, [h('span.ico', { text: '📖' }), t('Ler o mangá')]) : null;
     info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, collBtn, libBtn]));
-    loadExtras({ logo: logo, title: title, desc: desc, castLine: castLine, ratingsEl: ratingsEl });
+    loadExtras({ logo: logo, title: title, desc: desc, castLine: castLine, ratingsEl: ratingsEl, provEl: provEl });
   }
 
   function renderRatings(el, list) {
@@ -216,6 +219,17 @@ function DetailsView(type, id, opts) {
         tmdbInfo = loc;
         if (loc.collection && ui_collBtn) ui_collBtn.style.display = '';
         if (loc.overview) ui.desc.textContent = loc.overview;
+        // Where to watch (idea from Harbor): the services that carry it in your region.
+        if (loc.providers && loc.providers.length && ui.provEl) {
+          clear(ui.provEl);
+          ui.provEl.appendChild(h('span.prov-label', { text: t('Disponível em') }));
+          loc.providers.forEach((p) =>
+            ui.provEl.appendChild(
+              h('span.prov', null, [p.logo ? h('img', { src: p.logo, alt: '' }) : null, h('span', { text: p.name + (p.kind === 'rent' ? ' · ' + t('aluguel') : p.kind === 'buy' ? ' · ' + t('compra') : p.kind === 'free' || p.kind === 'ads' ? ' · ' + t('grátis') : '') })])
+            )
+          );
+          ui.provEl.style.display = '';
+        }
         if (loc.title) ui.title.textContent = loc.title;
         if (loc.logo) {
           ui.logo.style.display = '';

@@ -39,6 +39,23 @@ function boot() {
   log.info('Iniciando', navigator.userAgent);
 
   registerTizenKeys();
+  // No internet: a calm screen with "Try again" instead of empty rows (idea from Stream Goat).
+  const offline = document.createElement('div');
+  offline.className = 'offline-screen';
+  offline.innerHTML = '<div class="off-ico">⟲</div><div class="off-t"></div><div class="off-s"></div>';
+  offline.querySelector('.off-t').textContent = t('Sem internet');
+  offline.querySelector('.off-s').textContent = t('Confira o Wi-Fi da TV. O app volta sozinho quando a conexão voltar.');
+  document.body.appendChild(offline);
+  const netCheck = () => offline.classList.toggle('show', navigator.onLine === false);
+  window.addEventListener('offline', netCheck);
+  window.addEventListener('online', () => {
+    netCheck();
+    try {
+      const v = router.currentView && router.currentView();
+      if (v && v.reload) v.reload();
+    } catch (e) {}
+  });
+  netCheck();
   phone.start();
   screensaver.init();
   // Opened from the phone's Browse tab: the title's page, ready on the episode when there is one.

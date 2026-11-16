@@ -5041,6 +5041,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Disponível em": "Available on",
+    "aluguel": "rent",
+    "compra": "buy",
+    "grátis": "free",
+    "Região": "Region",
+    'Para "Disponível em" (serviços de streaming) nos detalhes': 'For "Available on" (streaming services) on the details page',
+    "Sem internet": "No internet",
+    "Confira o Wi-Fi da TV. O app volta sozinho quando a conexão voltar.": "Check the TV's Wi-Fi. The app comes back by itself when the connection returns.",
     "Sincronizar automaticamente": "Auto sync",
     "Acerta o atraso comparando com outra legenda": "Fixes the delay by comparing with another subtitle",
     "Ligue uma legenda de addon primeiro.": "Turn on an add-on subtitle first.",
@@ -5326,6 +5334,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Disponível em": "متوفر على",
+    "aluguel": "تأجير",
+    "compra": "شراء",
+    "grátis": "مجاني",
+    "Região": "المنطقة",
+    'Para "Disponível em" (serviços de streaming) nos detalhes': 'لـ"متوفر على" (منصات البث) في صفحة التفاصيل',
+    "Sem internet": "ما فيه إنترنت",
+    "Confira o Wi-Fi da TV. O app volta sozinho quando a conexão voltar.": "تأكد من واي فاي التلفزيون. التطبيق يرجع لحاله أول ما يرجع الاتصال.",
     "Sincronizar automaticamente": "مزامنة تلقائية",
     "Acerta o atraso comparando com outra legenda": "يضبط التأخير بمقارنتها مع ترجمة ثانية",
     "Ligue uma legenda de addon primeiro.": "شغّل ترجمة من الإضافات أول.",
@@ -6344,7 +6360,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function set(key3, value) {
     rawSet(profileKey(activeProfile().id, key3), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont", "clock24", "mangaLangs", "readerMode", "suwayomiUrl", "suwayomiNsfw"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont", "clock24", "region", "mangaLangs", "readerMode", "suwayomiUrl", "suwayomiNsfw"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -8304,13 +8320,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       quiet: true
     });
   }
-  function digitalReleases(ymd2, region) {
+  function digitalReleases(ymd2, region2) {
     if (!tmdbKey()) return Promise.resolve(null);
     return tmdb("discover/movie", {
       with_release_type: 4,
       "release_date.gte": ymd2,
       "release_date.lte": ymd2,
-      region: region,
+      region: region2,
       sort_by: "popularity.desc",
       include_adult: "false",
       language: apiLang()
@@ -8360,16 +8376,42 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     return null;
   }
+  var REGIONS = ["SA", "AE", "KW", "QA", "BH", "OM", "EG", "US", "GB", "BR"];
+  function region() {
+    var r = String(settings().region || "").toUpperCase();
+    if (REGIONS.indexOf(r) >= 0) return r;
+    var m = /-([A-Z]{2})$/i.exec(navigator.language || "");
+    return m && REGIONS.indexOf(m[1].toUpperCase()) >= 0 ? m[1].toUpperCase() : "SA";
+  }
+  function providersOf(wp) {
+    var r = wp && wp.results && wp.results[region()];
+    if (!r) return [];
+    var seen = {};
+    var out = [];
+    [["flatrate", ""], ["free", "free"], ["ads", "ads"], ["rent", "rent"], ["buy", "buy"]].forEach(function (k) {
+      return (r[k[0]] || []).forEach(function (p) {
+        if (seen[p.provider_id] || out.length >= 6) return;
+        seen[p.provider_id] = 1;
+        out.push({
+          name: p.provider_name,
+          logo: p.logo_path ? TMDB_IMG + "w92" + p.logo_path : null,
+          kind: k[1]
+        });
+      });
+    });
+    return out;
+  }
   function localized(meta) {
     var imdb = imdbOf(meta.id);
     return tmdbFind(imdb).then(function (f) {
       if (!f) return null;
       return tmdb(f.type + "/" + f.id, {
         language: apiLang(),
-        append_to_response: "credits,images",
+        append_to_response: "credits,images,watch/providers",
         include_image_language: "en,ar,null"
       }).then(function (d) {
         return {
+          providers: providersOf(d["watch/providers"]),
           tmdbId: f.id,
           tmdbType: f.type,
           title: d.title || d.name || f.title,
@@ -14972,6 +15014,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var desc = h("div.details-desc", {
         text: meta.description || ""
       });
+      var provEl = h("div.providers");
+      provEl.style.display = "none";
       var cast = (meta.cast || []).slice(0, 5);
       var director = (meta.director || []).slice(0, 2);
       var castLine = h("div.details-cast", null, [director.length ? h("b", {
@@ -15043,6 +15087,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           guideEl.style.display = "";
         });
       }
+      info2.appendChild(provEl);
       info2.appendChild(desc);
       info2.appendChild(castLine);
       var mangaBtn = isAnime(meta) ? h("div.btn", {
@@ -15059,7 +15104,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         title: title,
         desc: desc,
         castLine: castLine,
-        ratingsEl: ratingsEl
+        ratingsEl: ratingsEl,
+        provEl: provEl
       });
     }
     function renderRatings(el2, list2) {
@@ -15083,6 +15129,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         tmdbInfo = loc;
         if (loc.collection && ui_collBtn) ui_collBtn.style.display = "";
         if (loc.overview) ui.desc.textContent = loc.overview;
+        if (loc.providers && loc.providers.length && ui.provEl) {
+          clear(ui.provEl);
+          ui.provEl.appendChild(h("span.prov-label", {
+            text: t("Disponível em")
+          }));
+          loc.providers.forEach(function (p) {
+            return ui.provEl.appendChild(h("span.prov", null, [p.logo ? h("img", {
+              src: p.logo,
+              alt: ""
+            }) : null, h("span", {
+              text: p.name + (p.kind === "rent" ? " · " + t("aluguel") : p.kind === "buy" ? " · " + t("compra") : p.kind === "free" || p.kind === "ads" ? " · " + t("grátis") : "")
+            })]));
+          });
+          ui.provEl.style.display = "";
+        }
         if (loc.title) ui.title.textContent = loc.title;
         if (loc.logo) {
           ui.logo.style.display = "";
@@ -19473,7 +19534,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T16:21:55.463Z";
+  var BUILD = "2026-11-16T16:31:35.281Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -21436,6 +21497,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           dropTab("home");
           render();
         }, toggle(!!s.ambientMode)));
+        body.appendChild(row(t("Região"), t('Para "Disponível em" (serviços de streaming) nos detalhes'), region(), function () {
+          return menu(t("Região"), REGIONS.map(function (r) {
+            return {
+              label: r,
+              value: r,
+              checked: r === region()
+            };
+          }), {
+            onPick: function onPick(r) {
+              saveSettings({
+                region: r
+              });
+              render();
+            }
+          });
+        }));
         body.appendChild(row(t("Formato da hora"), t('Relógio e "Termina às" no vídeo'), s.clock24 === true ? t("24 horas") : t("12 horas (AM/PM)"), function () {
           saveSettings({
             clock24: !(settings().clock24 === true)
@@ -22543,6 +22620,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (s.devlogUrl) log.setRemote(s.devlogUrl);
     log.info("Iniciando", navigator.userAgent);
     registerTizenKeys();
+    var offline = document.createElement("div");
+    offline.className = "offline-screen";
+    offline.innerHTML = '<div class="off-ico">⟲</div><div class="off-t"></div><div class="off-s"></div>';
+    offline.querySelector(".off-t").textContent = t("Sem internet");
+    offline.querySelector(".off-s").textContent = t("Confira o Wi-Fi da TV. O app volta sozinho quando a conexão voltar.");
+    document.body.appendChild(offline);
+    var netCheck = function netCheck() {
+      return offline.classList.toggle("show", navigator.onLine === false);
+    };
+    window.addEventListener("offline", netCheck);
+    window.addEventListener("online", function () {
+      netCheck();
+      try {
+        var v = currentView && currentView();
+        if (v && v.reload) v.reload();
+      } catch (e) {}
+    });
+    netCheck();
     start();
     init2();
     onOpen(function (ev) {

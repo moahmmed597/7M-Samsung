@@ -1,6 +1,7 @@
 // Ajustes: conta, servidor do PC, Hero Banner, tema OLED, legendas, addons e depuração.
 import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
+import * as extras from '../api/extras.js';
 import * as store from '../lib/store.js';
 import { log } from '../lib/log.js';
 import { deviceInfo } from '../lib/luna.js';
@@ -1010,6 +1011,16 @@ export function SettingsView() {
           router.dropTab('home');
           render();
         }, toggle(!!s.ambientMode))
+      );
+      body.appendChild(
+        row(t('Região'), t('Para "Disponível em" (serviços de streaming) nos detalhes'), extras.region(), () =>
+          menu(t('Região'), extras.REGIONS.map((r) => ({ label: r, value: r, checked: r === extras.region() })), {
+            onPick: (r) => {
+              store.saveSettings({ region: r });
+              render();
+            },
+          })
+        )
       );
       body.appendChild(
         row(t('Formato da hora'), t('Relógio e "Termina às" no vídeo'), s.clock24 === true ? t('24 horas') : t('12 horas (AM/PM)'), () => {

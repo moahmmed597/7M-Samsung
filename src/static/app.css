@@ -715,3 +715,18 @@ body.oled .view { background: #000; }
 .sidebar .tab.focused .nav-ico { background: #f2f5ff; color: #0b0f19; border-color: #ffffff; -webkit-transform: scale(1.08); transform: scale(1.08); }
 .sidebar.open .tab.focused { background: rgba(255,255,255,0.06); }
 [dir="rtl"] .sidebar .nav-ico { margin-right: 0; margin-left: 14px; }
+
+/* Where to watch */
+.providers { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; -webkit-align-items: center; align-items: center; margin: 4px 0 16px; }
+.prov-label { font-size: 19px; color: rgba(255,255,255,0.6); margin-right: 12px; }
+.prov { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin: 0 10px 8px 0; padding: 4px 14px 4px 4px; border-radius: 12px; background: rgba(255,255,255,0.08); font-size: 18px; font-weight: 600; }
+.prov img { width: 34px; height: 34px; border-radius: 8px; margin-right: 8px; }
+[dir="rtl"] .prov-label { margin-right: 0; margin-left: 12px; }
+[dir="rtl"] .prov { margin: 0 0 8px 10px; padding: 4px 4px 4px 14px; }
+[dir="rtl"] .prov img { margin-right: 0; margin-left: 8px; }
+/* Offline */
+.offline-screen { position: fixed; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 90; background: rgba(8,11,19,0.94); display: none; text-align: center; padding-top: 360px; }
+.offline-screen.show { display: block; }
+.offline-screen .off-ico { font-size: 96px; color: #8fb4ff; }
+.offline-screen .off-t { font-size: 44px; font-weight: 800; margin-top: 10px; }
+.offline-screen .off-s { font-size: 24px; color: rgba(255,255,255,0.7); margin-top: 12px; }
