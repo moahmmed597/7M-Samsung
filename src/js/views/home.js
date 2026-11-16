@@ -183,6 +183,7 @@ export function HomeView() {
             image: bg,
             title: it.name + (ep ? ' · ' + ep : ''),
             progress: s.duration ? s.timeOffset / s.duration : 0,
+            overlay: { ep: ep, title: it.name, chip: s.duration && s.timeOffset / s.duration >= 0.03 ? t('{n}% assistido', { n: Math.round((s.timeOffset / s.duration) * 100) }) : t('A seguir') },
             onSelect: () => openDetails(it.type, it._id, { videoId: s.video_id, autoStreams: true }),
           }
         )

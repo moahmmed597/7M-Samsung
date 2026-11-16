@@ -588,3 +588,45 @@ body .card.nc-tile.nc-square .poster-wrap { width: 250px; height: 250px; backgro
 /* top bar: never wrap a label (a wider system font would stack "Live TV" on two lines) */
 .brand, .tab, .clock, .profile-chip { white-space: nowrap; }
 .tab { -webkit-flex-shrink: 0; flex-shrink: 0; }
+
+/* ---- Sidebar layout (idea: Nuvio) ---- */
+.side-anchor { height: 36px; position: relative; z-index: 5; }
+.sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 268px; padding: 28px 14px 24px 18px; box-sizing: border-box; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; z-index: 30; background: #0a0912; border-right: 1px solid rgba(255,255,255,0.05); }
+body.oled .sidebar { background: #000; }
+.sidebar .profile-chip { margin: 0 0 22px 0; padding: 6px 14px 6px 6px; }
+.side-nav { display: block; }
+.sidebar .tab { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin: 0 0 6px 0; padding: 11px 16px; font-size: 22px; font-weight: 600; color: rgba(255,255,255,0.7); border: 3px solid transparent; border-radius: 40px; -webkit-flex-shrink: 0; flex-shrink: 0; -webkit-transition: background 0.18s ease, color 0.18s ease, -webkit-transform 0.18s ease; transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease; }
+.sidebar .nav-ico { display: -webkit-flex; display: flex; margin-right: 16px; opacity: 0.9; }
+.sidebar .tab-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar .tab.active { background: #fff; color: #111; }
+.sidebar .tab.focused { background: #7b5bf5; color: #fff; border-color: #b9a8ff; -webkit-transform: translateX(6px); transform: translateX(6px); }
+.sidebar .tab.active.focused { background: #fff; color: #111; border-color: #9d85ff; }
+.sidebar .spacer { -webkit-flex: 1; flex: 1; }
+.side-clock { font-size: 22px; font-weight: 600; color: rgba(255,255,255,0.55); padding-left: 18px; }
+.scroll-y.with-side { left: 268px; }
+.with-side .hero { margin-top: -36px; }
+.with-side .row-title { padding-left: 56px; padding-right: 56px; }
+.with-side .row-track { padding-left: 56px; padding-right: 56px; }
+.with-side .hero-info { left: 56px; }
+[dir="rtl"] .sidebar { left: auto; right: 0; padding: 28px 20px 24px 16px; border-right: 0; border-left: 1px solid rgba(255,255,255,0.05); }
+[dir="rtl"] .scroll-y.with-side { left: 0; right: 268px; }
+[dir="rtl"] .sidebar .nav-ico { margin-right: 0; margin-left: 16px; }
+[dir="rtl"] .sidebar .tab.focused { -webkit-transform: translateX(-6px); transform: translateX(-6px); }
+[dir="rtl"] .side-clock { padding-left: 0; padding-right: 18px; }
+[dir="rtl"] .with-side .hero-info { left: auto; right: 56px; }
+
+/* ---- Continue watching card (idea: Nuvio) ---- */
+.card.cw .poster-wrap { border-radius: 18px; }
+.card.cw .name { display: none; }
+.cw-badge { position: absolute; right: 12px; top: 12px; z-index: 2; background: rgba(0,0,0,0.78); color: #fff; padding: 3px 12px; border-radius: 10px; font-size: 16px; font-weight: 700; }
+.cw-info { position: absolute; left: 0; right: 0; bottom: 8px; padding: 40px 16px 10px; background: linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0)); }
+.cw-ep { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 2px; }
+.cw-title { font-size: 21px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card.cw .progress { height: 6px; }
+.card.cw .progress i { height: 6px; }
+
+/* ---- Motion: soft, only opacity/transform ---- */
+@-webkit-keyframes kai-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes kai-in { from { opacity: 0; } to { opacity: 1; } }
+.view { -webkit-animation: kai-in 0.22s ease-out; animation: kai-in 0.22s ease-out; }
+.card { -webkit-transition: -webkit-transform 0.18s ease; transition: transform 0.18s ease; }
