@@ -15,6 +15,10 @@
     "productName": "Stremio Kai 7M",
     "files": [
       "main.js",
+      "preload.js",
+      "installer.html",
+      "logo.png",
+      "license.txt",
       "www/**/*"
     ],
     "directories": {
@@ -22,31 +26,13 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        "dir"
       ],
       "icon": "build/icon.png"
     },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "Stremio Kai 7M",
-      "runAfterFinish": true,
-      "license": "license.txt",
-      "multiLanguageInstaller": true,
-      "installerLanguages": [
-        "en_US",
-        "ar",
-        "pt_BR"
-      ],
-      "artifactName": "Stremio-Kai-7M-Setup-${version}.exe",
-      "deleteAppDataOnUninstall": false
-    },
     "portable": {
-      "artifactName": "Stremio-Kai-7M-${version}-portable.exe"
+      "artifactName": "Stremio-Kai-7M-Setup-${version}.exe",
+      "requestExecutionLevel": "user"
     },
     "linux": {
       "target": [

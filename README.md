@@ -45,7 +45,7 @@ One app, one codebase. Downloads are on the [Releases page](https://github.com/m
 | **Android phone / tablet** | `Stremio-Kai-7M-android.apk` | Open the file, allow "install unknown apps" once |
 | **Android TV / Google TV (TCL, Hisense, Sony, Xiaomi, Chromecast with Google TV…)** | `Stremio-Kai-7M-android.apk` | Put it on a USB stick, or install the **Downloader** app on the TV and type the release link, or `adb install`. It shows in the apps row and works with the TV remote |
 | **iPhone / iPad** | SideStore / AltStore **source** | In SideStore or AltStore: Sources, **+**, paste `https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/apps.json`, then tap **Free** on Stremio Kai 7M. (Or [add the source with one tap](altstore://source?url=https://raw.githubusercontent.com/moahmmed597/Stremio-Kai-7M/main/apps.json).) Updates arrive by themselves |
-| **Windows** | `Stremio-Kai-7M-Setup-*.exe` (installer) or `…-portable.exe` | Run the installer: pick language, accept terms, choose folder, Install, Finish (desktop shortcut and launch). No administrator rights needed. Windows may say "unknown publisher" because the file is not paid-signed: More info → Run anyway. F11 = full screen |
+| **Windows** | `Stremio-Kai-7M-Setup-*.exe` | Run it: a dark setup window walks you through language, terms, shortcuts (desktop, Start menu, start with Windows) and the folder, downloads the app and installs it for your user (no admin). Uninstall from Settings → Apps. Windows may say "unknown publisher" (the file is not paid-signed): More info → Run anyway. F11 = full screen |
 
 All builds are made by GitHub Actions from this repository (`.github/workflows/build-apps.yml`), so what you download is what is in the source.
 

@@ -68,16 +68,22 @@ jobs:
         with: { node-version: 20 }
       - run: npm ci
       - run: npm run build
-      - name: Electron portable exe
+      - name: Windows app (zip) and its installer (Setup.exe)
         working-directory: platforms/electron
         shell: bash
         run: |
           rm -rf www && mkdir www && cp -r ../../dist/. www/
           V="${GITHUB_REF_NAME#app-v}"; case "$V" in [0-9]*) npm version "$V" --no-git-tag-version --allow-same-version ;; esac
+          VER=$(node -p "require('./package.json').version")
           npm install
-          npx electron-builder --win nsis portable --publish never
+          npx electron-builder --win dir --publish never
+          mkdir -p ../../winout
+          (cd dist/win-unpacked && 7z a -tzip "../../../../winout/Stremio-Kai-7M-$VER-win-x64.zip" . > /dev/null)
+          npx electron-builder --win portable --publish never
+          cp dist/Stremio-Kai-7M-Setup-*.exe ../../winout/
+          ls -la ../../winout
       - uses: actions/upload-artifact@v4
-        with: { name: windows, path: platforms/electron/dist/Stremio-Kai-7M-*.exe }
+        with: { name: windows, path: winout/* }
 
   release:
     needs: [android, ios, windows]
