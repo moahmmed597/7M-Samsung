@@ -5041,6 +5041,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Formato da hora": "Time format",
+    'Relógio e "Termina às" no vídeo': 'Clock and "Ends at" in the video',
+    "24 horas": "24 hours",
+    "12 horas (AM/PM)": "12 hours (AM/PM)",
+    "Pacote": "Pack",
     "Transmissão": "Stream",
     "{n} canais": "{n} channels",
     "Só uma faixa de áudio.": "Only one audio track.",
@@ -5935,6 +5940,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Formato da hora": "نظام الساعة",
+    'Relógio e "Termina às" no vídeo': 'الساعة و"ينتهي الساعة" في الفيديو',
+    "24 horas": "24 ساعة",
+    "12 horas (AM/PM)": "12 ساعة (ص/م)",
+    "Pacote": "باقة",
     "Transmissão": "البث",
     "{n} canais": "{n} قنوات",
     "Só uma faixa de áudio.": "مسار صوتي واحد فقط.",
@@ -7562,7 +7572,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function set(key3, value) {
     rawSet(profileKey(activeProfile().id, key3), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont", "mangaTab", "mangaLangs", "readerMode"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont", "mangaTab", "mangaLangs", "readerMode", "clock24"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -8432,7 +8442,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function timeHM(d) {
-    return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+    var m = ("0" + d.getMinutes()).slice(-2);
+    if (settings().clock24 === true) return ("0" + d.getHours()).slice(-2) + ":" + m;
+    var hr = d.getHours();
+    return (hr % 12 || 12) + ":" + m + " " + (hr < 12 ? "AM" : "PM");
   }
   function fmtTime(sec) {
     if (!isFinite(sec) || sec < 0) sec = 0;
@@ -12470,6 +12483,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (/russian|russo|русский|\brus\b|\bru\b/i.test(l) || /russian|russo|русский|\brus\b|\bru\b/i.test(c)) return "rus";
     return c || "und";
   }
+  function trackName(code, label, i) {
+    var guess = detectLang(code, label);
+    if (guess && guess !== "und") return langName(guess);
+    return t("Faixa {n}", {
+      n: i + 1
+    });
+  }
   function langName(code) {
     if (!code || code === "und") return t("Desconhecido");
     var name = LANG_NAMES[String(code).toLowerCase()];
@@ -12491,7 +12511,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (useAV) document.documentElement.classList.add("av-playing");
     var subsEl = h("div.subs");
     var titleEl = h("div.p-title");
-    var clockEl = h("div.p-clock");
+    var clockEl = h("div.p-clock.p-clock-fixed");
     var posEl = h("div.pos");
     var bufEl = h("div.buf");
     var knobEl = h("div.knob");
@@ -12565,7 +12585,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     });
     var skipBox = h("div.p-skip", null, [skipBtn, h("div.bar", null, skipFill)]);
-    var overlay2 = h("div.p-overlay", null, [h("div.p-top", null, [titleEl, clockEl]), h("div.p-bottom", null, [bar, h("div.p-times", null, [curTimeEl, h("div.spacer"), durEl]), buttons])]);
+    var overlay2 = h("div.p-overlay", null, [h("div.p-top", null, [titleEl]), h("div.p-bottom", null, [bar, h("div.p-times", null, [curTimeEl, h("div.spacer"), durEl]), buttons])]);
     var upNextTitle = h("div.un-title");
     var upNextCount = h("div.un-count");
     var upNextPlay = h("div.btn.primary", {
@@ -12602,7 +12622,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }), postTrack, h("div.un-buttons", {
       "data-group": ""
     }, [postClose])]);
-    var el = h("div.view.player", null, [videoNode, subsEl, overlay2, skipBox, upNextBox, postBox, spinner, msgEl]);
+    var el = h("div.view.player", null, [videoNode, subsEl, overlay2, clockEl, skipBox, upNextBox, postBox, spinner, msgEl]);
     var renderer = Renderer(subsEl);
     apply(subsEl, settings2);
     var alive = true;
@@ -13428,17 +13448,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
         }
       } catch (e) {}
+      updateClock();
+    }
+    var clockKey = "";
+    function updateClock() {
+      if (settings2.playerClock === false) {
+        clockEl.style.display = "none";
+        return;
+      }
       var now = /* @__PURE__ */new Date();
+      var d = videoEl.duration;
+      var end = d > 0 && isFinite(d) ? new Date(now.getTime() + Math.max(0, d - videoEl.currentTime) * 1e3) : null;
+      var text = timeHM(now) + (end ? "|" + timeHM(end) : "");
+      if (text === clockKey) return;
+      clockKey = text;
       clear(clockEl);
       clockEl.appendChild(document.createTextNode(timeHM(now)));
-      if (d > 0 && isFinite(d)) {
-        var end = new Date(now.getTime() + Math.max(0, d - videoEl.currentTime) * 1e3);
-        clockEl.appendChild(h("small", {
-          text: t("Termina às {time}", {
-            time: timeHM(end)
-          })
-        }));
-      }
+      if (end) clockEl.appendChild(h("small", {
+        text: t("Termina às {time}", {
+          time: timeHM(end)
+        })
+      }));
     }
     function showControls(focusEl) {
       if (!controlsOn) {
@@ -13731,7 +13761,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function audioName(i) {
       var av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
       var tr = av[i] || embedded && embedded.audio[i];
-      return tr ? langName(tr.language || tr.lang) : "#" + (i + 1);
+      return tr ? trackName(tr.language || tr.lang, tr.label, i) : "#" + (i + 1);
     }
     function openAudioMenu() {
       var native = videoEl.audioTracks;
@@ -13741,7 +13771,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         list2 = av.map(function (tr, i) {
           var info2 = embedded && embedded.audio[i];
           return {
-            label: langName(info2 && info2.lang || tr.language) + (info2 && info2.label ? " · " + info2.label : ""),
+            label: trackName(info2 && info2.lang || tr.language, [info2 && info2.label, tr.label].filter(Boolean).join(" "), i) + (info2 && info2.label ? " · " + info2.label : tr.label ? " · " + tr.label : ""),
             sub: [info2 && info2.codec || tr.codec, tr.channels || info2 && info2.channels ? t("{n} canais", {
               n: tr.channels || info2.channels
             }) : ""].filter(Boolean).join(" · "),
@@ -13752,7 +13782,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       } else if (native && native.length) {
         for (var i = 0; i < native.length; i++) {
           list2.push({
-            label: langName(native[i].language) + (native[i].label ? " · " + native[i].label : ""),
+            label: trackName(native[i].language, native[i].label, i) + (native[i].label ? " · " + native[i].label : ""),
             value: i,
             checked: native[i].enabled
           });
@@ -13760,7 +13790,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       } else if (embedded && embedded.audio.length) {
         list2 = embedded.audio.map(function (tr, i) {
           return {
-            label: langName(tr.lang) + (tr.label ? " · " + tr.label : ""),
+            label: trackName(tr.lang, tr.label, i) + (tr.label ? " · " + tr.label : ""),
             sub: [tr.codec, tr.channels ? t("{n} canais", {
               n: tr.channels
             }) : ""].filter(Boolean).join(" · "),
@@ -14096,6 +14126,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             if (controlsOn) updateTimes();
             renderer.update(videoEl.currentTime);
             checkSkip();
+            updateClock();
             if (!nativeOffDone && !(currentSub.kind === "embedded" && !currentSub.extracted)) nativeSubsOff();
             if (currentSub.extracted) ensureSegments();
           }, 250);
@@ -14878,6 +14909,49 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var mins = (hMatch ? parseInt(hMatch[1], 10) * 60 : 0) + (mMatch ? parseInt(mMatch[1], 10) : 0);
       return mins || (isSeries() ? 45 : 110);
     }
+    var PACK_RE = /(collection|cole[cç][aã]o|complete\s*(series|saga|collection|pack)|\bsaga\b|anthology|trilogy|quadrilogy|filmography|\b(19|20)\d{2}\s*[-–]\s*(19|20)\d{2}\b|\bMCU\b|all\s+seasons)/i;
+    function sizeInfo(text) {
+      var norm2 = String(text || "").replace(/[٠-٩]/g, function (d) {
+        return String(d.charCodeAt(0) - 1632);
+      }).replace(/٫/g, ".").replace(/٬/g, "");
+      var m = norm2.match(/(\d+(?:[.,]\d{1,3})?)\s*(TB|GB|MB)\b/i);
+      if (!m) return null;
+      var v = parseFloat(m[1].replace(",", "."));
+      var unit = m[2].toUpperCase();
+      return {
+        raw: m[0],
+        v: v,
+        unit: unit,
+        hasSep: /[.,]/.test(m[1]),
+        gb: unit === "TB" ? v * 1024 : unit === "GB" ? v : v / 1024
+      };
+    }
+    function streamText(s) {
+      return (s.name || "") + " " + (s.title || s.description || "") + " " + (s.behaviorHints && s.behaviorHints.filename || "");
+    }
+    function isPack(s) {
+      var si = sizeInfo(streamText(s));
+      return PACK_RE.test(streamText(s)) || !!(si && si.gb > 150);
+    }
+    function streamSize(s) {
+      var si = sizeInfo(streamText(s));
+      if (!si) return null;
+      if (si.unit === "GB" && !si.hasSep && si.v >= 1e3 && !PACK_RE.test(streamText(s))) {
+        var gb = si.v / 100;
+        return {
+          gb: gb,
+          fixed: true,
+          raw: si.raw,
+          shown: gb.toFixed(2) + " GB"
+        };
+      }
+      return {
+        gb: si.gb,
+        fixed: false,
+        raw: si.raw,
+        shown: si.raw
+      };
+    }
     function streamBadges(s) {
       var text = (s.name || "") + " " + (s.title || s.description || "") + " " + (s.behaviorHints && s.behaviorHints.filename || "");
       var on = streamBadgeSettings();
@@ -14927,11 +15001,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });else if (/\bmulti\b/i.test(text)) add("lang", {
         t: "Multi"
       });
-      var m = text.match(/(\d+(?:[.,]\d+)?)\s*(GB|MB)\b/i);
-      if (m) {
-        var mb = parseFloat(m[1].replace(",", ".")) * (m[2].toUpperCase() === "GB" ? 1024 : 1);
+      var sz = streamSize(s);
+      if (sz) {
+        var mb = sz.gb * 1024;
         add("size", {
-          t: m[1].replace(",", ".") + " " + m[2].toUpperCase()
+          t: sz.gb >= 1 ? sz.gb.toFixed(2).replace(/\.?0+$/, "") + " GB" : Math.round(mb) + " MB"
         });
         var mbps = Math.round(mb * 8 / (runtimeMinutes() * 60));
         if (mbps > 0) add("bitrate", {
@@ -15027,12 +15101,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             });
             out.push({
               s: s,
-              key: [needs ? 1 : 0, warn ? 1 : 0, heavy ? 1 : 0, gi, si]
+              key: [isPack(s) ? 1 : 0, needs ? 1 : 0, warn ? 1 : 0, heavy ? 1 : 0, gi, si]
             });
           });
         });
         out.sort(function (x, y) {
-          for (var i = 0; i < 5; i++) if (x.key[i] !== y.key[i]) return x.key[i] - y.key[i];
+          for (var i = 0; i < 6; i++) if (x.key[i] !== y.key[i]) return x.key[i] - y.key[i];
           return 0;
         });
         return out.map(function (c) {
@@ -15132,6 +15206,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (g) {
             g.done = true;
             g.count = streams2.length;
+            streams2 = streams2.filter(function (x) {
+              return !isPack(x);
+            }).concat(streams2.filter(function (x) {
+              return isPack(x);
+            }));
             g.streams = streams2;
             streams2.forEach(function (s) {
               all2.push(s);
@@ -15173,6 +15252,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));else tags.push(h("span.s-tag.ok", {
         text: t("Direto")
       }));
+      if (isPack(s)) tags.push(h("span.s-tag.warn", {
+        text: t("Pacote")
+      }));
       streamBadges(s).filter(function (b) {
         return !b.hide;
       }).forEach(function (b) {
@@ -15181,6 +15263,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: b.t
         }));
       });
+      var shownTitle = (s.title || s.description || "").trim();
+      var fixedSize = streamSize(s);
+      if (fixedSize && fixedSize.fixed) shownTitle = shownTitle.replace(fixedSize.raw, fixedSize.shown);
       return h("div.stream", {
         focusable: true,
         cls: disabled ? "disabled" : "",
@@ -15192,7 +15277,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("div.s-addon", {
         text: (s.name || s.addon || "").trim()
       }), h("div.s-body", null, [h("div.s-title", {
-        text: (s.title || s.description || "").trim()
+        text: shownTitle
       }), h("div.s-tags", null, tags)])]);
     }
     function play(video, stream, all2, fallbacks) {
@@ -19496,7 +19581,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T07:32:33.822Z";
+  var BUILD = "2026-11-16T12:24:47.921Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -21389,6 +21474,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           dropTab("home");
           render();
         }, toggle(!!s.ambientMode)));
+        body.appendChild(row(t("Formato da hora"), t('Relógio e "Termina às" no vídeo'), s.clock24 === true ? t("24 horas") : t("12 horas (AM/PM)"), function () {
+          saveSettings({
+            clock24: !(settings().clock24 === true)
+          });
+          render();
+        }));
         body.appendChild(row(t("Aba Animes"), t("Temporada, estúdios e gêneros de anime (AniList)"), "", function () {
           saveSettings({
             animeTab: settings().animeTab === false

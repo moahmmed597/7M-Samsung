@@ -64,6 +64,13 @@ function detectLang(code, label) {
   return c || 'und';
 }
 
+// Name of a track whose language the TV does not report: "Track 2", or the language read from its title.
+function trackName(code, label, i) {
+  const guess = detectLang(code, label);
+  if (guess && guess !== 'und') return langName(guess);
+  return t('Faixa {n}', { n: i + 1 });
+}
+
 function langName(code) {
   if (!code || code === 'und') return t('Desconhecido');
   const name = LANG_NAMES[String(code).toLowerCase()];
@@ -87,7 +94,7 @@ function PlayerView(opts) {
   if (useAV) document.documentElement.classList.add('av-playing');
   const subsEl = h('div.subs');
   const titleEl = h('div.p-title');
-  const clockEl = h('div.p-clock');
+  const clockEl = h('div.p-clock.p-clock-fixed'); // always on, top right (Settings → Player can hide it)
   const posEl = h('div.pos');
   const bufEl = h('div.buf');
   const knobEl = h('div.knob');
@@ -109,7 +116,7 @@ function PlayerView(opts) {
   const skipBtn = h('div.btn', { focusable: true, onSelect: () => doSkip() });
   const skipBox = h('div.p-skip', null, [skipBtn, h('div.bar', null, skipFill)]);
   const overlay = h('div.p-overlay', null, [
-    h('div.p-top', null, [titleEl, clockEl]),
+    h('div.p-top', null, [titleEl]),
     h('div.p-bottom', null, [bar, h('div.p-times', null, [curTimeEl, h('div.spacer'), durEl]), buttons]),
   ]);
   // "Up next": a countdown card near the end of an episode.
@@ -127,7 +134,7 @@ function PlayerView(opts) {
   const postTrack = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
   const postClose = h('div.btn', { focusable: true, onSelect: () => router.pop() }, t('Fechar'));
   const postBox = h('div.p-postplay', null, [h('div.un-label', { text: t('Mais como este') }), postTrack, h('div.un-buttons', { 'data-group': '' }, [postClose])]);
-  const el = h('div.view.player', null, [videoNode, subsEl, overlay, skipBox, upNextBox, postBox, spinner, msgEl]);
+  const el = h('div.view.player', null, [videoNode, subsEl, overlay, clockEl, skipBox, upNextBox, postBox, spinner, msgEl]);
 
   const renderer = subs.Renderer(subsEl);
   substyle.apply(subsEl, settings);
@@ -906,14 +913,25 @@ function PlayerView(opts) {
     } catch (e) {
       /* ignore */
     }
-    // Relógio + horário de término (player-clock-eta do Kai).
+    updateClock();
+  }
+
+  // Clock + end time (player-clock-eta of Kai); drawn only when the minute changes.
+  let clockKey = '';
+  function updateClock() {
+    if (settings.playerClock === false) {
+      clockEl.style.display = 'none';
+      return;
+    }
     const now = new Date();
+    const d = videoEl.duration;
+    const end = d > 0 && isFinite(d) ? new Date(now.getTime() + Math.max(0, d - videoEl.currentTime) * 1000) : null;
+    const text = timeHM(now) + (end ? '|' + timeHM(end) : '');
+    if (text === clockKey) return;
+    clockKey = text;
     clear(clockEl);
     clockEl.appendChild(document.createTextNode(timeHM(now)));
-    if (d > 0 && isFinite(d)) {
-      const end = new Date(now.getTime() + Math.max(0, d - videoEl.currentTime) * 1000);
-      clockEl.appendChild(h('small', { text: t('Termina às {time}', { time: timeHM(end) }) }));
-    }
+    if (end) clockEl.appendChild(h('small', { text: t('Termina às {time}', { time: timeHM(end) }) }));
   }
 
   function showControls(focusEl) {
@@ -1194,7 +1212,7 @@ function PlayerView(opts) {
   function audioName(i) {
     const av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
     const tr = av[i] || (embedded && embedded.audio[i]);
-    return tr ? langName(tr.language || tr.lang) : '#' + (i + 1);
+    return tr ? trackName(tr.language || tr.lang, tr.label, i) : '#' + (i + 1);
   }
 
   function openAudioMenu() {
@@ -1205,7 +1223,7 @@ function PlayerView(opts) {
       list = av.map((tr, i) => {
         const info = embedded && embedded.audio[i];
         return {
-          label: langName((info && info.lang) || tr.language) + (info && info.label ? ' · ' + info.label : ''),
+          label: trackName((info && info.lang) || tr.language, [info && info.label, tr.label].filter(Boolean).join(' '), i) + (info && info.label ? ' · ' + info.label : tr.label ? ' · ' + tr.label : ''),
           sub: [(info && info.codec) || tr.codec, tr.channels || (info && info.channels) ? t('{n} canais', { n: tr.channels || info.channels }) : ''].filter(Boolean).join(' · '),
           value: i,
           checked: tr.enabled,
@@ -1213,11 +1231,11 @@ function PlayerView(opts) {
       });
     } else if (native && native.length) {
       for (let i = 0; i < native.length; i++) {
-        list.push({ label: langName(native[i].language) + (native[i].label ? ' · ' + native[i].label : ''), value: i, checked: native[i].enabled });
+        list.push({ label: trackName(native[i].language, native[i].label, i) + (native[i].label ? ' · ' + native[i].label : ''), value: i, checked: native[i].enabled });
       }
     } else if (embedded && embedded.audio.length) {
       list = embedded.audio.map((tr, i) => ({
-        label: langName(tr.lang) + (tr.label ? ' · ' + tr.label : ''),
+        label: trackName(tr.lang, tr.label, i) + (tr.label ? ' · ' + tr.label : ''),
         sub: [tr.codec, tr.channels ? t('{n} canais', { n: tr.channels }) : ''].filter(Boolean).join(' · '),
         value: i,
         checked: currentAudio === null ? i === 0 : currentAudio === i,
@@ -1516,6 +1534,7 @@ function PlayerView(opts) {
           if (controlsOn) updateTimes();
           renderer.update(videoEl.currentTime);
           checkSkip();
+          updateClock();
           if (!nativeOffDone && !(currentSub.kind === 'embedded' && !currentSub.extracted)) nativeSubsOff();
           if (currentSub.extracted) ensureSegments();
         }, 250);

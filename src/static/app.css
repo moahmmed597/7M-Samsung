@@ -570,3 +570,5 @@ body .card.nc-tile.nc-square .poster-wrap { width: 250px; height: 250px; backgro
 .rd-hud { position: absolute; left: 40px; bottom: 36px; padding: 10px 22px; border-radius: 12px; background: rgba(0,0,0,0.7); font-size: 22px; color: rgba(255,255,255,0.85); opacity: 0; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; }
 .rd-hud.show { opacity: 1; }
 .rd-msg { position: absolute; left: 0; right: 0; top: 50%; margin-top: -20px; text-align: center; font-size: 28px; color: rgba(255,255,255,0.7); }
+
+.p-clock-fixed { position: absolute; top: 28px; right: 48px; z-index: 6; text-shadow: 0 2px 8px rgba(0,0,0,0.8); pointer-events: none; }

@@ -167,8 +167,12 @@ function profileMenu(onTab) {
   });
 }
 
+// Time of day. Default 12 hours ("5:08 PM"); Settings → Appearance switches to 24 hours.
 export function timeHM(d) {
-  return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  const m = ('0' + d.getMinutes()).slice(-2);
+  if (store.settings().clock24 === true) return ('0' + d.getHours()).slice(-2) + ':' + m;
+  const hr = d.getHours();
+  return (hr % 12 || 12) + ':' + m + ' ' + (hr < 12 ? 'AM' : 'PM');
 }
 
 export function fmtTime(sec) {

@@ -976,6 +976,12 @@ export function SettingsView() {
         }, toggle(!!s.ambientMode))
       );
       body.appendChild(
+        row(t('Formato da hora'), t('Relógio e "Termina às" no vídeo'), s.clock24 === true ? t('24 horas') : t('12 horas (AM/PM)'), () => {
+          store.saveSettings({ clock24: !(store.settings().clock24 === true) });
+          render();
+        })
+      );
+      body.appendChild(
         row(t('Aba Animes'), t('Temporada, estúdios e gêneros de anime (AniList)'), '', () => {
           store.saveSettings({ animeTab: store.settings().animeTab === false });
           window.location.reload(); // the top bar of every tab changes

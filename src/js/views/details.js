@@ -372,6 +372,39 @@ function DetailsView(type, id, opts) {
   }
 
   // Estimativa da taxa do arquivo (tamanho ÷ duração): avisa o que pesa no Wi-Fi da TV (~34 Mbps medidos).
+  // ---- Size and packs ----
+  // Some add-on chains lose the decimal point ("48.71 GB" shows as "4871 GB") or use Arabic digits and
+  // separators. Read both, and repair a single film or episode that claims more than 1000 GB.
+  const PACK_RE = /(collection|cole[cç][aã]o|complete\s*(series|saga|collection|pack)|\bsaga\b|anthology|trilogy|quadrilogy|filmography|\b(19|20)\d{2}\s*[-–]\s*(19|20)\d{2}\b|\bMCU\b|all\s+seasons)/i;
+  function sizeInfo(text) {
+    const norm = String(text || '')
+      .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 1632))
+      .replace(/٫/g, '.')
+      .replace(/٬/g, '');
+    const m = norm.match(/(\d+(?:[.,]\d{1,3})?)\s*(TB|GB|MB)\b/i);
+    if (!m) return null;
+    const v = parseFloat(m[1].replace(',', '.'));
+    const unit = m[2].toUpperCase();
+    return { raw: m[0], v: v, unit: unit, hasSep: /[.,]/.test(m[1]), gb: unit === 'TB' ? v * 1024 : unit === 'GB' ? v : v / 1024 };
+  }
+  function streamText(s) {
+    return (s.name || '') + ' ' + (s.title || s.description || '') + ' ' + ((s.behaviorHints && s.behaviorHints.filename) || '');
+  }
+  function isPack(s) {
+    const si = sizeInfo(streamText(s));
+    return PACK_RE.test(streamText(s)) || !!(si && si.gb > 150);
+  }
+  // { gb, fixed, shown } for a stream: gb is what to use, shown the text to display in place of the original size.
+  function streamSize(s) {
+    const si = sizeInfo(streamText(s));
+    if (!si) return null;
+    if (si.unit === 'GB' && !si.hasSep && si.v >= 1000 && !PACK_RE.test(streamText(s))) {
+      const gb = si.v / 100;
+      return { gb: gb, fixed: true, raw: si.raw, shown: gb.toFixed(2) + ' GB' };
+    }
+    return { gb: si.gb, fixed: false, raw: si.raw, shown: si.raw };
+  }
+
   // Settings → Stream badges turns each kind on or off (hide). Warnings (Dolby Vision, REMUX, very
   // high bitrate) still steer Smart Choice when hidden.
   function streamBadges(s) {
@@ -394,10 +427,10 @@ function DetailsView(type, id, opts) {
     else if (/\b5[ .]1\b/.test(text)) add('audio', { t: '5.1' });
     if (/arabic|\bara\b|عربي/i.test(text)) add('lang', { t: t('Árabe') });
     else if (/\bmulti\b/i.test(text)) add('lang', { t: 'Multi' });
-    const m = text.match(/(\d+(?:[.,]\d+)?)\s*(GB|MB)\b/i);
-    if (m) {
-      const mb = parseFloat(m[1].replace(',', '.')) * (m[2].toUpperCase() === 'GB' ? 1024 : 1);
-      add('size', { t: m[1].replace(',', '.') + ' ' + m[2].toUpperCase() });
+    const sz = streamSize(s);
+    if (sz) {
+      const mb = sz.gb * 1024;
+      add('size', { t: sz.gb >= 1 ? sz.gb.toFixed(2).replace(/\.?0+$/, '') + ' GB' : Math.round(mb) + ' MB' });
       const mbps = Math.round((mb * 8) / (runtimeMinutes() * 60));
       if (mbps > 0) add('bitrate', { t: '~' + mbps + ' Mbps', warn: mbps > 30 });
     }
@@ -464,11 +497,11 @@ function DetailsView(type, id, opts) {
           const badges = streamBadges(s);
           const warn = badges.some((b) => b.warn);
           const heavy = badges.some((b) => b.t === '4K' || b.t === 'HDR');
-          out.push({ s: s, key: [needs ? 1 : 0, warn ? 1 : 0, heavy ? 1 : 0, gi, si] });
+          out.push({ s: s, key: [isPack(s) ? 1 : 0, needs ? 1 : 0, warn ? 1 : 0, heavy ? 1 : 0, gi, si] });
         });
       });
       out.sort((x, y) => {
-        for (let i = 0; i < 5; i++) if (x.key[i] !== y.key[i]) return x.key[i] - y.key[i];
+        for (let i = 0; i < 6; i++) if (x.key[i] !== y.key[i]) return x.key[i] - y.key[i];
         return 0;
       });
       return out.map((c) => c.s);
@@ -548,6 +581,8 @@ function DetailsView(type, id, opts) {
           if (g) {
             g.done = true;
             g.count = streams.length;
+            // Whole-collection packs go to the end of their add-on's list (stable order otherwise).
+            streams = streams.filter((x) => !isPack(x)).concat(streams.filter((x) => isPack(x)));
             g.streams = streams;
             streams.forEach((s) => {
               all.push(s);
@@ -582,9 +617,14 @@ function DetailsView(type, id, opts) {
     else if (needs) tags.push(h('span.s-tag', { cls: serverOk ? '' : 'warn', text: serverOk ? t('Torrent · via PC') : t('Torrent · precisa do PC') }));
     else if (server.isTorrent(s) && debrid.active()) tags.push(h('span.s-tag.ok', { text: t('Torrent · via {name}', { name: debrid.active().name }) }));
     else tags.push(h('span.s-tag.ok', { text: t('Direto') }));
+    if (isPack(s)) tags.push(h('span.s-tag.warn', { text: t('Pacote') }));
     streamBadges(s)
       .filter((b) => !b.hide)
       .forEach((b) => tags.push(h('span.s-tag', { cls: b.warn ? 'warn' : '', text: b.t })));
+    // The title as the add-on sent it, with a lost decimal point put back.
+    let shownTitle = (s.title || s.description || '').trim();
+    const fixedSize = streamSize(s);
+    if (fixedSize && fixedSize.fixed) shownTitle = shownTitle.replace(fixedSize.raw, fixedSize.shown);
     return h(
       'div.stream',
       {
@@ -598,7 +638,7 @@ function DetailsView(type, id, opts) {
       },
       [
         h('div.s-addon', { text: (s.name || s.addon || '').trim() }),
-        h('div.s-body', null, [h('div.s-title', { text: (s.title || s.description || '').trim() }), h('div.s-tags', null, tags)]),
+        h('div.s-body', null, [h('div.s-title', { text: shownTitle }), h('div.s-tags', null, tags)]),
       ]
     );
   }
