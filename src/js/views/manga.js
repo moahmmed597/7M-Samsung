@@ -14,7 +14,7 @@ import * as shelf from '../lib/mangaLib.js';
 
 const API = 'https://graphql.anilist.co';
 const FIELDS =
-  'id format status chapters volumes countryOfOrigin averageScore genres description(asHtml: false) startDate { year } title { romaji english native } coverImage { large }';
+  'id format status chapters volumes countryOfOrigin averageScore genres description(asHtml: false) startDate { year } title { romaji english native } synonyms coverImage { large }';
 const SEASON_START = { WINTER: '0101', SPRING: '0401', SUMMER: '0701', FALL: '1001' };
 
 const cache = {};

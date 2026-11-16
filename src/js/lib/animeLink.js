@@ -5,7 +5,7 @@ import { postJSON, getJSON } from './http.js';
 
 const API = 'https://graphql.anilist.co';
 const ARM = 'https://arm.haglund.dev/api/v2/ids?source=';
-const NODE = 'id type format status popularity episodes chapters countryOfOrigin averageScore genres description(asHtml: false) startDate { year } title { romaji english native } coverImage { large }';
+const NODE = 'id type format status popularity episodes chapters countryOfOrigin averageScore genres description(asHtml: false) startDate { year } title { romaji english native } synonyms coverImage { large }';
 const MEDIA = '{ Media(id: %ID%) { ' + NODE + ' relations { edges { relationType node { ' + NODE + ' } } } } }';
 const FALLBACK_CH_PER_EP = 2.5; // ongoing manga: no total to divide by
 

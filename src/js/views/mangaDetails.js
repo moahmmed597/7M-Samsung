@@ -12,10 +12,43 @@ import { openReader } from './reader.js';
 import { openAnime } from './anime.js';
 import { chapterToEpisode, animeMeta } from '../lib/animeLink.js';
 import * as pl from '../api/plugins.js';
-import { searchPlugin } from './sources.js';
+import { searchPlugin, pluginApi } from './sources.js';
 import * as shelf from '../lib/mangaLib.js';
 
 const CHUNK = 50;
+
+// Titles compared loosely: case, accents, punctuation and "the/a" don't matter.
+function norm(x) {
+  return String(x || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9؀-ۿ]+/g, ' ')
+    .replace(/\b(the|a|an)\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+// 1 = same title; less when words differ ("One Piece Colored" vs "One Piece" is about 0.6).
+function likeness(a, b) {
+  const x = norm(a);
+  const y = norm(b);
+  if (!x || !y) return 0;
+  if (x === y) return 1;
+  const A = x.split(' ');
+  const B = y.split(' ');
+  const inB = A.filter((w) => B.indexOf(w) >= 0).length;
+  return (0.9 * inB) / (A.length + B.length - inB);
+}
+// The source title linked to each AniList manga, so it opens right away next time.
+function links() {
+  return store.get('mangaLinks', {}) || {};
+}
+function saveLink(id, v) {
+  const all = links();
+  if (v) all[id] = v;
+  else delete all[id];
+  store.set('mangaLinks', all);
+}
 
 export function openMangaDetails(m) {
   router.push(MangaDetailsView(m));
@@ -64,6 +97,8 @@ function MangaDetailsView(m) {
   let alive = true;
   let anime = null;
   let focusIdx = -1;
+  // Chapters from one of your sources (when MangaDex doesn't have the title): { pid, name, mid, title }.
+  let source = null;
   const status = h('div.loading-line', { text: t('Procurando capítulos...') });
 
   const progress = () => (store.get('readProgress', {}) || {})[key] || null;
@@ -87,6 +122,7 @@ function MangaDetailsView(m) {
       ref: { anilist: m.anilist, name: m.name, poster: m.poster },
       // Korean and Chinese comics read top to bottom, left to right; Japanese manga right to left.
       rtl: media.countryOfOrigin === 'JP' || !media.countryOfOrigin,
+      pagesFn: source ? (cid) => pl.pages(source.pid, cid) : undefined,
     });
   }
 
@@ -139,7 +175,8 @@ function MangaDetailsView(m) {
         },
       }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );
-    btns.push(
+    if (source) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source.name]));
+    else btns.push(
       h('div.btn', {
         focusable: true,
         onSelect: () =>
@@ -175,8 +212,8 @@ function MangaDetailsView(m) {
       list.appendChild(
         h('div.stream', { focusable: true, onSelect: () => read(i, read2 ? p.page : 0) }, [
           h('div.s-main', { text: title }),
-          h('span.s-tag', { text: c.lang.toUpperCase() }),
-          h('span.s-tag', { text: c.pages + ' ' + t('pág.') }),
+          c.lang ? h('span.s-tag', { text: c.lang.toUpperCase() }) : null,
+          c.pages ? h('span.s-tag', { text: c.pages + ' ' + t('pág.') }) : null,
           read2 ? h('span.s-tag.ok', { text: t('Parou aqui') }) : null,
           !read2 && i === focusIdx ? h('span.s-tag.ok', { text: t('Perto do episódio (aprox.)') }) : null,
         ])
@@ -191,6 +228,10 @@ function MangaDetailsView(m) {
 
   function loadChapters() {
     chapters = [];
+    source = null;
+    // Linked before to one of your sources: open from there straight away.
+    const ln = links()[m.anilist];
+    if (ln && pl.installed().some((p) => p.id === ln.pid)) return useSource(ln, true);
     clear(list);
     status.textContent = t('Procurando capítulos...');
     list.appendChild(status);
@@ -210,16 +251,151 @@ function MangaDetailsView(m) {
           focusIdx = idx;
         }
         chunk = idx >= 0 ? Math.floor(idx / CHUNK) : 0;
-        if (!cs.length) status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
+        if (!cs.length) return autoFind();
         renderInfo();
         renderList(false);
-        if (!cs.length) offerPlugins();
       })
       .catch(() => {
         if (!alive) return;
-        status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
-        offerPlugins();
+        autoFind();
       });
+  }
+
+  function showSource(ln, cs) {
+    source = ln;
+    chapters = cs;
+    const idx = indexOfProgress();
+    chunk = idx >= 0 ? Math.floor(idx / CHUNK) : 0;
+    renderInfo();
+    renderList(false);
+  }
+
+  // Chapters of the linked source title.
+  function useSource(ln, fallback) {
+    clear(list);
+    status.textContent = t('Carregando capítulos de {name}...', { name: ln.name });
+    list.appendChild(status);
+    return pluginApi(ln.pid, ln.name)
+      .chapters({ mid: ln.mid })
+      .then((cs) => {
+        if (!alive) return;
+        if (!cs.length) throw new Error('empty');
+        showSource(ln, cs);
+      })
+      .catch(() => {
+        if (!alive) return;
+        if (fallback) {
+          saveLink(m.anilist, null);
+          return loadChaptersMd(true);
+        }
+      });
+  }
+
+  // The names to look for: English, Romaji, the name shown, then the other known titles.
+  function names() {
+    const out = [];
+    [media.title && media.title.english, media.title && media.title.romaji, m.name].concat(media.synonyms || []).forEach((x) => {
+      if (x && !out.some((y) => norm(y) === norm(x)) && out.length < 4) out.push(x);
+    });
+    return out;
+  }
+
+  // MangaDex has no chapters (licensed titles like One Piece): look for the title in your sources,
+  // one source at a time, and use the first one whose title matches.
+  function autoFind() {
+    const plugins = pl.installed();
+    if (!plugins.length) {
+      status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
+      renderInfo();
+      renderList(false);
+      return offerPlugins();
+    }
+    const qs = names();
+    let pi = 0;
+    function nextPlugin() {
+      if (!alive) return;
+      if (pi >= plugins.length) {
+        status.textContent = t('Não encontrei este título nas suas fontes.');
+        renderInfo();
+        renderList(false);
+        return offerPlugins();
+      }
+      const p = plugins[pi++];
+      status.textContent = t('Procurando em {name}...', { name: p.name });
+      let qi = 0;
+      function nextQuery() {
+        if (!alive) return;
+        if (qi >= Math.min(qs.length, 2)) return nextPlugin();
+        const q = qs[qi++];
+        pl.search(p.id, q, 0).then(
+          (items) => {
+            let best = null;
+            let score = 0;
+            (items || []).slice(0, 40).forEach((it) => {
+              const s2 = Math.max.apply(null, qs.map((n) => likeness(n, it.title)));
+              if (s2 > score) {
+                score = s2;
+                best = it;
+              }
+            });
+            if (!best || score < 0.85) return nextQuery();
+            const ln = { pid: p.id, name: p.name, mid: best.id, title: best.title };
+            pluginApi(p.id, p.name)
+              .chapters({ mid: best.id })
+              .then((cs) => {
+                if (!alive) return;
+                if (!cs.length) return nextQuery();
+                saveLink(m.anilist, ln);
+                showSource(ln, cs);
+                toast(t('Capítulos de {name}', { name: p.name }));
+              }, nextQuery);
+          },
+          () => nextQuery()
+        );
+      }
+      nextQuery();
+    }
+    nextPlugin();
+  }
+
+  // Choose another source title by hand, or go back to MangaDex.
+  function pickSource() {
+    const q = names()[0] || m.name;
+    const items = pl.installed().map((p) => ({ label: '🔎 ' + t('Buscar em {name}', { name: p.name }), value: p }));
+    items.unshift({ label: 'MangaDex', value: 'md' });
+    menu(t('Fonte dos capítulos'), items, {
+      onPick: (v) => {
+        if (v === 'md') {
+          saveLink(m.anilist, null);
+          return loadChaptersMd(false);
+        }
+        searchPlugin(v.id, v.name, q);
+      },
+    });
+  }
+  function loadChaptersMd(thenSearch) {
+    chapters = [];
+    source = null;
+    clear(list);
+    status.textContent = t('Procurando capítulos...');
+    list.appendChild(status);
+    md.find(m.anilist, [media.title && media.title.english, media.title && media.title.romaji, m.name])
+      .then((id) => (id ? md.chapters(id, langSet.langs) : []))
+      .then(
+        (cs) => {
+          if (!alive) return;
+          if (!cs.length && thenSearch) return autoFind();
+          chapters = cs;
+          if (!cs.length) status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
+          renderInfo();
+          renderList(false);
+        },
+        () => {
+          if (!alive) return;
+          if (thenSearch) return autoFind();
+          status.textContent = t('Não encontrei capítulos deste título agora.');
+        }
+      );
   }
 
   // Search the title in the plugins you installed (My sources).

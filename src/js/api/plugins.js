@@ -245,7 +245,91 @@ const PRELUDE = String.raw`(function () {
   HDocument.prototype.querySelector = HElement.prototype.querySelector;
   HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;
   Object.defineProperty(HDocument.prototype, "_node", { get: function () { return this._root; } });
-  function parseHtml(html) { return bridge("parse", { html: String(html) }).then(function (tree) { return new HDocument(tree); }); }
+  // HTML parser inside the sandbox, so harbor.parseHtml() works both ways plugins use it:
+  // right away (doc.querySelectorAll(...)) and with await. Tolerant, like a browser for normal pages.
+  var VOID = { area: 1, base: 1, br: 1, col: 1, embed: 1, hr: 1, img: 1, input: 1, link: 1, meta: 1, source: 1, track: 1, wbr: 1 };
+  var RAW = { script: 1, style: 1, textarea: 1, title: 1 };
+  var DROP = { script: 1, style: 1, noscript: 1, template: 1 };
+  var ENT = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", hellip: "…", mdash: "—", ndash: "–", rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“", copy: "©" };
+  function decode(t) {
+    return t.indexOf("&") < 0 ? t : t.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, function (m, e) {
+      if (e.charAt(0) === "#") {
+        var n = e.charAt(1) === "x" || e.charAt(1) === "X" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+        return isFinite(n) ? String.fromCodePoint ? String.fromCodePoint(n) : String.fromCharCode(n) : m;
+      }
+      var v = ENT[e.toLowerCase()];
+      return v === undefined ? m : v;
+    });
+  }
+  function syncParse(html) {
+    html = String(html || "");
+    var root = { t: "body", a: {}, x: "", c: [] };
+    var stack = [root];
+    var i = 0, n = html.length, count = 0;
+    var top = function () { return stack[stack.length - 1]; };
+    while (i < n && count < 80000) {
+      var lt = html.indexOf("<", i);
+      if (lt < 0) lt = n;
+      if (lt > i) {
+        var txt = html.slice(i, lt);
+        top().c.push({ x: txt.trim() ? decode(txt) : " " }); count++;
+      }
+      if (lt >= n) break;
+      if (html.substr(lt, 4) === "<!--") { var ce = html.indexOf("-->", lt + 4); i = ce < 0 ? n : ce + 3; continue; }
+      if (html.charAt(lt + 1) === "!" || html.charAt(lt + 1) === "?") { var de = html.indexOf(">", lt); i = de < 0 ? n : de + 1; continue; }
+      if (html.charAt(lt + 1) === "/") {
+        var ge = html.indexOf(">", lt);
+        var name = html.slice(lt + 2, ge < 0 ? n : ge).trim().toLowerCase();
+        for (var k = stack.length - 1; k > 0; k--) if (stack[k].t === name) { stack.length = k; break; }
+        i = ge < 0 ? n : ge + 1;
+        continue;
+      }
+      var m = /^<([a-zA-Z][a-zA-Z0-9:-]*)/.exec(html.slice(lt, lt + 64));
+      if (!m) { top().c.push({ x: "<" }); i = lt + 1; continue; }
+      var tag = m[1].toLowerCase();
+      var j = lt + m[0].length, attrs = {}, selfClose = false;
+      while (j < n) {
+        while (j < n && /\s/.test(html.charAt(j))) j++;
+        var ch = html.charAt(j);
+        if (ch === ">") { j++; break; }
+        if (ch === "/" && html.charAt(j + 1) === ">") { selfClose = true; j += 2; break; }
+        var am = /^[^\s=>\/]+/.exec(html.slice(j, j + 256));
+        if (!am) { j++; continue; }
+        var an = am[0].toLowerCase(); j += am[0].length;
+        while (j < n && /\s/.test(html.charAt(j))) j++;
+        var av = "";
+        if (html.charAt(j) === "=") {
+          j++;
+          while (j < n && /\s/.test(html.charAt(j))) j++;
+          var q = html.charAt(j);
+          if (q === '"' || q === "'") { var qe = html.indexOf(q, j + 1); av = html.slice(j + 1, qe < 0 ? n : qe); j = qe < 0 ? n : qe + 1; }
+          else { var um = /^[^\s>]*/.exec(html.slice(j, j + 2048)); av = um[0]; j += av.length; }
+        }
+        if (!(an in attrs)) attrs[an] = decode(av);
+      }
+      i = j;
+      if (RAW[tag]) {
+        var re = html.toLowerCase().indexOf("</" + tag, i);
+        var body = html.slice(i, re < 0 ? n : re);
+        i = re < 0 ? n : html.indexOf(">", re) + 1 || n;
+        if (!DROP[tag]) { var el0 = { t: tag, a: attrs, x: "", c: body.trim() ? [{ x: decode(body) }] : [] }; top().c.push(el0); count++; }
+        continue;
+      }
+      if ((tag === "li" || tag === "option" || tag === "p" || tag === "tr" || tag === "td" || tag === "th") && top().t === tag) stack.pop();
+      var el = { t: tag, a: attrs, x: "", c: [] };
+      if (!DROP[tag]) { top().c.push(el); count++; }
+      if (!VOID[tag] && !selfClose) stack.push(el);
+    }
+    return root;
+  }
+  // Works without await; awaiting it gives the same document.
+  function parseHtml(html) {
+    var doc = new HDocument(syncParse(html));
+    var ready = new HDocument(null);
+    ready._root = doc._root;
+    Object.defineProperty(doc, "then", { value: function (ok) { return Promise.resolve(ready).then(ok); }, enumerable: false });
+    return doc;
+  }
   function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push("?"); } } safePost({ type: "log", args: a }); }
   function register(p) { provider = p; }
   var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };
@@ -419,12 +503,19 @@ export function search(id, query, offset) {
 export function detail(id, mangaId) {
   return call(id, 'detail', [mangaId], 25000).then(toSummary);
 }
+// "1160 - title" → "title" when the number is already shown.
+function cleanTitle(title, num) {
+  if (!title || !num) return title || '';
+  const rest = title.replace(/^\s*(ch(apter)?\.?|الفصل|فصل)?\s*/i, '');
+  if (rest.indexOf(num) !== 0) return title;
+  return rest.slice(num.length).replace(/^[\s\-–—:.·|]+/, '').replace(/[.\s]+$/, '');
+}
 export function chapters(id, mangaId) {
   return call(id, 'chapters', [mangaId], 30000).then((v) =>
     (Array.isArray(v) ? v : [])
       .filter((c) => c && str(c.id))
       .slice(0, 5000)
-      .map((c) => ({ id: c.id, chapter: str(c.chapter) || null, title: str(c.title) || '', lang: str(c.language) || '', pages: typeof c.pages === 'number' ? c.pages : 0, scanlator: str(c.group) || '' }))
+      .map((c) => ({ id: c.id, chapter: str(c.chapter) || null, title: cleanTitle(str(c.title), str(c.chapter)), lang: str(c.language) || '', pages: typeof c.pages === 'number' ? c.pages : 0, scanlator: str(c.group) || '' }))
   );
 }
 // Page image URLs, already routed through the TV service with the right Referer.
