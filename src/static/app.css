@@ -775,3 +775,5 @@ body.oled .view { background: #000; }
 .sidebar .profile-chip .avatar { -webkit-flex: none; flex: none; width: 44px; height: 44px; line-height: 44px; border-radius: 50%; }
 .sidebar:not(.open) .profile-chip { width: 72px; padding: 6px 0; -webkit-justify-content: center; justify-content: center; margin-left: 2px; }
 .sidebar:not(.open) .profile-chip span { display: none; }
+.sidebar { z-index: 200; }
+.top-clock { z-index: 201; }
