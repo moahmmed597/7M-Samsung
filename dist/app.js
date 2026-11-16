@@ -5043,6 +5043,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Testar plugins": "Test plugins",
+    "mostra onde falha": "shows where it fails",
+    "Teste dos plugins": "Plugin test",
+    "serviço da TV": "TV service",
+    "Pedido pela TV": "Request through the TV",
+    "Plugin": "Plugin",
+    "Lista": "List",
+    "Capítulos de": "Chapters of",
+    "Páginas do capítulo": "Pages of the chapter",
+    "Páginas": "Pages",
     "Servidor (Host)": "Server (Host)",
     "Preencha servidor, usuário e senha.": "Fill in server, username and password.",
     "O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.": "The TV service is still the old one. Hold the remote's Power button until the TV restarts, then open the app again.",
@@ -5424,6 +5434,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Testar plugins": "اختبار الإضافات",
+    "mostra onde falha": "يوضح وين المشكلة",
+    "Teste dos plugins": "اختبار الإضافات",
+    "serviço da TV": "خدمة التلفزيون",
+    "Pedido pela TV": "طلب عبر التلفزيون",
+    "Plugin": "الإضافة",
+    "Lista": "القائمة",
+    "Capítulos de": "فصول",
+    "Páginas do capítulo": "صفحات الفصل",
+    "Páginas": "الصفحات",
     "Servidor (Host)": "السيرفر (Host)",
     "Preencha servidor, usuário e senha.": "عبّ السيرفر واسم المستخدم وكلمة السر.",
     "O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.": "خدمة التلفزيون لسه القديمة. اضغط مطوّل على زر الباور في الريموت لين يعيد التلفزيون التشغيل، وبعدها افتح التطبيق.",
@@ -6949,7 +6969,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function continueWatching() {
     return cachedLibrary().filter(function (it) {
-      return it.type !== "other" && (!it.removed || it.temp) && it.state && it.state.timeOffset > 0;
+      return it.type !== "other" && !/^live:/.test(it._id) && (!it.removed || it.temp) && it.state && it.state.timeOffset > 0;
     }).sort(function (a, b) {
       return String(b.state.lastWatched || "").localeCompare(String(a.state.lastWatched || ""));
     });
@@ -11667,6 +11687,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var video = opts.video;
     var stream = opts.stream;
     var settings2 = settings();
+    var isLive = !!opts.live || /^live:/.test(String(meta && meta.id || ""));
     var useAV = settings2.playerEngine !== "html5" && available();
     var videoEl = useAV ? create() : h("video", {
       preload: "auto"
@@ -12037,14 +12058,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     videoEl.addEventListener("playing", function () {
       if (!hasPlayed) scheduleAudioPick();
       hasPlayed = true;
-      if (meta.id !== "dev") onPlay(meta, video, frac());
+      if (meta.id !== "dev" && !isLive) onPlay(meta, video, frac());
       showSpinner(false);
       message("");
       updatePlayBtn();
       scheduleHide();
     });
     videoEl.addEventListener("pause", function () {
-      if (!videoEl.ended) onPause(frac());
+      if (!videoEl.ended && !isLive) onPause(frac());
       updatePlayBtn();
       showControls();
       saveProgress2();
@@ -12068,8 +12089,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     videoEl.addEventListener("ended", function () {
       saveProgress2();
-      record(video.id, 1);
-      onStop(1);
+      if (!isLive) {
+        record(video.id, 1);
+        onStop(1);
+      }
       if (sleepAt === -1) {
         sleepAt = 0;
         toast(t("Boa noite!"), 5e3);
@@ -13447,7 +13470,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (!(d > 0) || !isFinite(d) || !videoEl.currentTime) return;
       var delta = watchedDelta;
       watchedDelta = 0;
-      if (meta.id === "dev") return;
+      if (meta.id === "dev" || isLive) return;
       record(video.id, videoEl.currentTime / d);
       onProgress(videoEl.currentTime / d);
       saveProgress(meta, video.id, videoEl.currentTime * 1e3, d * 1e3, delta);
@@ -15736,6 +15759,49 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       });
     }
+    function diagnose() {
+      var out = h("div.diag");
+      var modal = h("div.modal", null, h("div.modal-box.diag-box", null, [h("h3", {
+        text: t("Teste dos plugins")
+      }), out]));
+      document.getElementById("app").appendChild(modal);
+      var layer = pushLayer(modal, {
+        onBack: function onBack() {
+          return popLayer(layer), modal.parentNode && modal.parentNode.removeChild(modal);
+        }
+      });
+      var line = function line(ok, text) {
+        return out.appendChild(h("div", {
+          cls: ok === true ? "ok" : ok === false ? "bad" : "",
+          text: (ok === true ? "✓ " : ok === false ? "✗ " : "… ") + text
+        }));
+      };
+      line(null, "Chrome " + ((/Chrome\/(\d+)/.exec(navigator.userAgent) || [])[1] || "?") + " · " + t("serviço da TV") + " v" + (serviceVersion() || "?"));
+      httpRaw("https://raw.githubusercontent.com/github/gitignore/main/README.md", {}).then(function (r) {
+        line(r && r.ok, t("Pedido pela TV") + ": HTTP " + (r ? r.status : "?") + (r && r.headers && r.headers.server ? "" : ""));
+        var p = installed()[0];
+        line(null, t("Plugin") + ": " + p.name);
+        return popular(p.id, 0).then(function (items3) {
+          line(items3.length > 0, t("Lista") + ": " + items3.length);
+          if (!items3.length) return;
+          return chapters2(p.id, items3[0].id).then(function (cs) {
+            line(cs.length > 0, t("Capítulos de") + ' "' + items3[0].title + '": ' + cs.length);
+            if (!cs.length) return;
+            return pages2(p.id, cs[0].id).then(function (pg) {
+              return line(pg.length > 0, t("Páginas do capítulo") + ": " + pg.length);
+            }, function (e) {
+              return line(false, t("Páginas") + ": " + (e && e.message));
+            });
+          }, function (e) {
+            return line(false, t("Capítulos") + ": " + (e && e.message));
+          });
+        }, function (e) {
+          return line(false, t("Lista") + ": " + (e && e.message));
+        });
+      }, function (e) {
+        return line(false, t("Pedido pela TV") + ": " + (e && e.message));
+      });
+    }
     function load7() {
       clear(body);
       section(t("Plugins (repositórios no formato do Harbor)"));
@@ -15748,6 +15814,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return push(SourceGrid(pluginApi(p.id, p.name)));
         }, (p.lang || "").toUpperCase()));
       });
+      installed().length && body.appendChild(row2("🩺 " + t("Testar plugins"), t("mostra onde falha"), diagnose));
       installed().length && body.appendChild(row2("⚙ " + t("Gerenciar plugins"), "", function () {
         return menu(t("Plugins"), installed().map(function (p) {
           return {
@@ -21381,7 +21448,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function renderGrid() {
       clear(grid);
       var items3 = cachedLibrary().filter(function (it) {
-        return !it.removed && (filter === "all" || it.type === filter);
+        return !it.removed && !/^live:/.test(it._id) && (filter === "all" || it.type === filter);
       }).sort(function (a, b) {
         return String(b._mtime || "").localeCompare(String(a._mtime || ""));
       });
@@ -21427,7 +21494,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T18:17:58.233Z";
+  var BUILD = "2026-11-16T18:24:55.023Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

@@ -275,6 +275,6 @@ export function mergeExternalProgress(list) {
 
 export function continueWatching() {
   return cachedLibrary()
-    .filter((it) => it.type !== 'other' && (!it.removed || it.temp) && it.state && it.state.timeOffset > 0)
+    .filter((it) => it.type !== 'other' && !/^live:/.test(it._id) && (!it.removed || it.temp) && it.state && it.state.timeOffset > 0)
     .sort((a, b) => String(b.state.lastWatched || '').localeCompare(String(a.state.lastWatched || '')));
 }

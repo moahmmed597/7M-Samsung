@@ -209,6 +209,42 @@ function SourcesView() {
     });
   }
 
+  // Runs each step and writes the result on screen (to see what fails on this TV).
+  function diagnose() {
+    const out = h('div.diag');
+    const modal = h('div.modal', null, h('div.modal-box.diag-box', null, [h('h3', { text: t('Teste dos plugins') }), out]));
+    document.getElementById('app').appendChild(modal);
+    const layer = nav.pushLayer(modal, { onBack: () => (nav.popLayer(layer), modal.parentNode && modal.parentNode.removeChild(modal)) });
+    const line = (ok, text) => out.appendChild(h('div', { cls: ok === true ? 'ok' : ok === false ? 'bad' : '', text: (ok === true ? '✓ ' : ok === false ? '✗ ' : '… ') + text }));
+    line(null, 'Chrome ' + ((/Chrome\/(\d+)/.exec(navigator.userAgent) || [])[1] || '?') + ' · ' + t('serviço da TV') + ' v' + (serviceVersion() || '?'));
+    pl.httpRaw('https://raw.githubusercontent.com/github/gitignore/main/README.md', {}).then(
+      (r) => {
+        line(r && r.ok, t('Pedido pela TV') + ': HTTP ' + (r ? r.status : '?') + (r && r.headers && r.headers.server ? '' : ''));
+        const p = pl.installed()[0];
+        line(null, t('Plugin') + ': ' + p.name);
+        return pl.popular(p.id, 0).then(
+          (items) => {
+            line(items.length > 0, t('Lista') + ': ' + items.length);
+            if (!items.length) return;
+            return pl.chapters(p.id, items[0].id).then(
+              (cs) => {
+                line(cs.length > 0, t('Capítulos de') + ' "' + items[0].title + '": ' + cs.length);
+                if (!cs.length) return;
+                return pl.pages(p.id, cs[0].id).then(
+                  (pg) => line(pg.length > 0, t('Páginas do capítulo') + ': ' + pg.length),
+                  (e) => line(false, t('Páginas') + ': ' + (e && e.message))
+                );
+              },
+              (e) => line(false, t('Capítulos') + ': ' + (e && e.message))
+            );
+          },
+          (e) => line(false, t('Lista') + ': ' + (e && e.message))
+        );
+      },
+      (e) => line(false, t('Pedido pela TV') + ': ' + (e && e.message))
+    );
+  }
+
   function load() {
     clear(body);
     // Plugins (Harbor repositories)
@@ -217,6 +253,7 @@ function SourcesView() {
       body.appendChild(h('div.modal-text', { text: t('O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.') }));
     body.appendChild(row('＋ ' + t('Adicionar repositório'), t('cole o link do repo.json'), addRepo));
     pl.installed().forEach((p) => body.appendChild(row(p.name, 'v' + p.version, () => router.push(SourceGrid(pluginApi(p.id, p.name))), (p.lang || '').toUpperCase())));
+    pl.installed().length && body.appendChild(row('🩺 ' + t('Testar plugins'), t('mostra onde falha'), diagnose));
     pl.installed().length &&
       body.appendChild(row('⚙ ' + t('Gerenciar plugins'), '', () =>
         menu(t('Plugins'), pl.installed().map((p) => ({ label: p.name, sub: 'v' + p.version, value: p })), { onPick: pluginMenu })

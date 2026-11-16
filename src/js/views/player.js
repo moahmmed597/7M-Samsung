@@ -86,6 +86,8 @@ function PlayerView(opts) {
   let video = opts.video;
   let stream = opts.stream;
   const settings = store.settings();
+  // Live TV: nothing is saved (no progress, no history, no Continue watching, no Trakt).
+  const isLive = !!opts.live || /^live:/.test(String((meta && meta.id) || ''));
 
   // Samsung: AVPlay (switches audio tracks); elsewhere or if turned off: the page's <video>.
   const useAV = settings.playerEngine !== 'html5' && avvideo.available();
@@ -366,14 +368,14 @@ function PlayerView(opts) {
   videoEl.addEventListener('playing', () => {
     if (!hasPlayed) scheduleAudioPick();
     hasPlayed = true;
-    if (meta.id !== 'dev') tracker.onPlay(meta, video, frac());
+    if (meta.id !== 'dev' && !isLive) tracker.onPlay(meta, video, frac());
     showSpinner(false);
     message('');
     updatePlayBtn();
     scheduleHide();
   });
   videoEl.addEventListener('pause', () => {
-    if (!videoEl.ended) tracker.onPause(frac());
+    if (!videoEl.ended && !isLive) tracker.onPause(frac());
     updatePlayBtn();
     showControls();
     saveProgress();
@@ -393,8 +395,10 @@ function PlayerView(opts) {
   });
   videoEl.addEventListener('ended', () => {
     saveProgress();
-    watched.record(video.id, 1);
-    tracker.onStop(1);
+    if (!isLive) {
+      watched.record(video.id, 1);
+      tracker.onStop(1);
+    }
     if (sleepAt === -1) {
       sleepAt = 0;
       toast(t('Boa noite!'), 5000);
@@ -1626,7 +1630,7 @@ function PlayerView(opts) {
     if (!(d > 0) || !isFinite(d) || !videoEl.currentTime) return;
     const delta = watchedDelta;
     watchedDelta = 0;
-    if (meta.id === 'dev') return; // teste de desenvolvimento: não mexe na biblioteca
+    if (meta.id === 'dev' || isLive) return; // test / live TV: the library is not touched
     watched.record(video.id, videoEl.currentTime / d);
     tracker.onProgress(videoEl.currentTime / d);
     stremio.saveProgress(meta, video.id, videoEl.currentTime * 1000, d * 1000, delta);

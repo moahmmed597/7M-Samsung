@@ -49,7 +49,7 @@ export function LibraryView() {
     clear(grid);
     const items = stremio
       .cachedLibrary()
-      .filter((it) => !it.removed && (filter === 'all' || it.type === filter))
+      .filter((it) => !it.removed && !/^live:/.test(it._id) && (filter === 'all' || it.type === filter))
       .sort((a, b) => String(b._mtime || '').localeCompare(String(a._mtime || '')));
     if (!items.length) {
       grid.appendChild(h('div.hint', { text: stremio.isLoggedIn() ? t('Sua biblioteca está vazia.') : t('Entre na sua conta em Ajustes para ver a biblioteca.') }));
