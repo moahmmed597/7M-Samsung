@@ -5041,6 +5041,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Favoritar": "Favorite",
+    "Nos favoritos": "In favorites",
+    "Continuar lendo": "Continue reading",
+    "Favoritos": "Favorites",
     "Minhas fontes": "My sources",
     "Endereço do servidor Suwayomi": "Suwayomi server address",
     "Servidor conectado.": "Server connected.",
@@ -5570,6 +5574,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Favoritar": "أضف للمفضلة",
+    "Nos favoritos": "في المفضلة",
+    "Continuar lendo": "تابع القراءة",
+    "Favoritos": "المفضلة",
     "Minhas fontes": "مصادري",
     "Endereço do servidor Suwayomi": "عنوان سيرفر Suwayomi",
     "Servidor conectado.": "تم الاتصال بالسيرفر.",
@@ -14079,7 +14087,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       all2[opts.key] = {
         chapterId: chapter().id,
         chapter: chapter().chapter,
-        page: pi
+        page: pi,
+        title: opts.title,
+        poster: opts.poster,
+        kind: opts.kind,
+        ref: opts.ref,
+        at: Date.now()
       };
       var keys2 = Object.keys(all2);
       if (keys2.length > 200) delete all2[keys2[0]];
@@ -14751,6 +14764,52 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/lib/mangaLib.js
+  var FAVS = "mangaFavs";
+  var favs = function favs() {
+    return get(FAVS, []) || [];
+  };
+  var isFav = function isFav(key3) {
+    return favs().some(function (f) {
+      return f.key === key3;
+    });
+  };
+  function toggleFav(key3, kind, ref) {
+    var all2 = favs();
+    var i = all2.findIndex(function (f) {
+      return f.key === key3;
+    });
+    if (i >= 0) all2.splice(i, 1);else all2.unshift({
+      key: key3,
+      kind: kind,
+      ref: {
+        anilist: ref.anilist,
+        mdId: ref.mdId,
+        swId: ref.swId,
+        name: ref.name,
+        poster: ref.poster,
+        description: ref.description,
+        author: ref.author,
+        status: ref.status,
+        year: ref.year
+      }
+    });
+    set(FAVS, all2.slice(0, 200));
+    return i < 0;
+  }
+  function continueList(limit) {
+    var all2 = get("readProgress", {}) || {};
+    return Object.keys(all2).map(function (k) {
+      return Object.assign({
+        key: k
+      }, all2[k]);
+    }).filter(function (p) {
+      return p.kind && p.ref && p.at;
+    }).sort(function (a, b) {
+      return b.at - a.at;
+    }).slice(0, limit || 20);
+  }
+
   // src/js/views/mangaDetails.js
   var CHUNK = 50;
   function openMangaDetails(m) {
@@ -14830,6 +14889,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         chapters: chapters3,
         index: Math.max(0, index2),
         startPage: page3 || 0,
+        poster: m.poster,
+        kind: "al",
+        ref: {
+          anilist: m.anilist,
+          name: m.name,
+          poster: m.poster
+        },
         // Korean and Chinese comics read top to bottom, left to right; Japanese manga right to left.
         rtl: media2.countryOfOrigin === "JP" || !media2.countryOfOrigin
       });
@@ -14902,6 +14968,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: "▶"
       }), t("Ver no anime")]));
+      btns.push(h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          toggleFav(key3, "al", m);
+          renderInfo();
+        }
+      }, [h("span.ico", {
+        text: isFav(key3) ? "♥" : "♡"
+      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")]));
       btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
@@ -16365,16 +16440,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return current() === "ar" && f.ar ? f.ar : f.name;
   }
   var FAV_KEY = "franchiseFavs";
-  function favs() {
+  function favs2() {
     return get(FAV_KEY, []) || [];
   }
-  function isFav(id) {
-    return favs().some(function (x) {
+  function isFav2(id) {
+    return favs2().some(function (x) {
       return x.id === id;
     });
   }
-  function toggleFav(f) {
-    var list3 = favs();
+  function toggleFav2(f) {
+    var list3 = favs2();
     var i = list3.findIndex(function (x) {
       return x.id === f.id;
     });
@@ -16389,7 +16464,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return i < 0;
   }
   function favEntries() {
-    return favs().map(function (x) {
+    return favs2().map(function (x) {
       var f = findFranchise(x.id);
       if (f) return {
         f: f
@@ -16782,7 +16857,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         name: displayName(f),
         poster: POSTER(f.items[0][0])
       }, {
-        badge: tmdbId ? "★" : (isFav(f.id) ? "★ " : "") + (done ? done + "/" + f.items.length : String(f.items.length)),
+        badge: tmdbId ? "★" : (isFav2(f.id) ? "★ " : "") + (done ? done + "/" + f.items.length : String(f.items.length)),
         progress: done ? done / f.items.length : 0,
         onSelect: function onSelect() {
           return tmdbId ? openTmdbCollection(tmdbId) : openFranchise(f);
@@ -17012,8 +17087,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         hideWatched = !hideWatched;
         render("hide");
       }));
-      filters.appendChild(chip("fav", isFav(f.id) ? "★ " + t("Fixada no topo") : "☆ " + t("Fixar no topo"), isFav(f.id), function () {
-        var on = toggleFav(f);
+      filters.appendChild(chip("fav", isFav2(f.id) ? "★ " + t("Fixada no topo") : "☆ " + t("Fixar no topo"), isFav2(f.id), function () {
+        var on = toggleFav2(f);
         toast(on ? t("Fixada no topo da aba Coleções") : t("Removida das favoritas"));
         render("fav");
       }));
@@ -17366,6 +17441,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     };
   }
+  function openSourceManga(m) {
+    push(SourceDetails(m));
+  }
   function SourceDetails(m) {
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
@@ -17402,7 +17480,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         index: Math.max(0, i),
         startPage: page3 || 0,
         rtl: true,
-        pagesFn: pages2
+        pagesFn: pages2,
+        poster: m.poster,
+        kind: "sw",
+        ref: m
       });
     }
     function renderInfo() {
@@ -17437,7 +17518,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: "📖"
       }), idx >= 0 ? t("Continuar: cap. {n}", {
         n: chapters3[idx].chapter
-      }) : t("Ler")])]));
+      }) : t("Ler")]), h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return toggleFav(key3, "sw", m), renderInfo();
+        }
+      }, [h("span.ico", {
+        text: isFav(key3) ? "♥" : "♡"
+      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")])]));
       info2.appendChild(text);
       loadVisibleImages(info2);
     }
@@ -17498,6 +17586,310 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       renderInfo();
       renderList();
     }, function () {
+      return alive && (status2.textContent = t("Não encontrei capítulos deste título agora."));
+    });
+    return {
+      el: el,
+      onShow: function onShow() {
+        if (chapters3.length) {
+          renderInfo();
+          renderList();
+        }
+        loadVisibleImages(el);
+      },
+      destroy: function destroy() {
+        return alive = false;
+      }
+    };
+  }
+
+  // src/js/views/comics.js
+  var MD2 = "https://api.mangadex.org/";
+  var enc2 = encodeURIComponent;
+  var CHUNK3 = 50;
+  function cover(m) {
+    var rel = (m.relationships || []).filter(function (r) {
+      return r.type === "cover_art";
+    })[0];
+    var f = rel && rel.attributes && rel.attributes.fileName;
+    return f ? "https://uploads.mangadex.org/covers/" + m.id + "/" + f + ".256.jpg" : "";
+  }
+  function titleOf(m) {
+    var a = m.attributes || {};
+    return a.title && (a.title.en || a.title[Object.keys(a.title)[0]]) || "";
+  }
+  function toMeta2(m) {
+    var a = m.attributes || {};
+    var d = a.description || {};
+    return {
+      id: "md:" + m.id,
+      mdId: m.id,
+      type: "comic",
+      name: titleOf(m),
+      poster: cover(m),
+      description: d.en || d[Object.keys(d)[0]] || "",
+      year: a.year
+    };
+  }
+  function list2(query, offset) {
+    var url2 = MD2 + "manga?limit=30&offset=" + (offset || 0) + "&includes%5B%5D=cover_art&originalLanguage%5B%5D=en&originalLanguage%5B%5D=fr&originalLanguage%5B%5D=es&availableTranslatedLanguage%5B%5D=en&hasAvailableChapters=true&contentRating%5B%5D=safe&contentRating%5B%5D=suggestive" + (query ? "&title=" + enc2(query) + "&order%5Brelevance%5D=desc" : "&order%5BfollowedCount%5D=desc");
+    return getJSONViaProxy(url2, {
+      timeout: 25e3
+    }).then(function (r) {
+      return {
+        items: (r && r.data || []).map(toMeta2),
+        more: !!(r && r.total > (offset || 0) + 30)
+      };
+    });
+  }
+  function ComicsView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar("comics", goTab);
+    scroller.appendChild(bar);
+    var head = h("div.row-title.catalog-title", {
+      text: t("Quadrinhos")
+    });
+    var searchBtn = h("div.btn", {
+      focusable: true,
+      "data-autofocus": "",
+      onSelect: function onSelect() {
+        return promptText(t("Buscar quadrinhos"), "", "", function (q2) {
+          return push(ComicGrid(t("Resultados") + ": " + q2, q2));
+        });
+      }
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar quadrinhos")]);
+    scroller.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [searchBtn]));
+    scroller.appendChild(head);
+    var gridHost = h("div");
+    scroller.appendChild(gridHost);
+    el.appendChild(scroller);
+    var grid = ComicGrid("", "", gridHost);
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      onScroll: function onScroll() {
+        return loadVisibleImages(el, 400);
+      },
+      destroy: function destroy() {
+        bar.__destroy && bar.__destroy();
+        grid.destroy && grid.destroy();
+      }
+    };
+  }
+  function ComicGrid(title, query, host) {
+    var el = host || h("div.view");
+    var scroller = host ? el : h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var gridEl = h("div.grid");
+    if (!host) {
+      scroller.appendChild(h("div.row-title.catalog-title", {
+        text: title
+      }));
+      el.appendChild(scroller);
+    }
+    scroller.appendChild(gridEl);
+    var offset = 0;
+    var more = null;
+    function next() {
+      if (more && more.parentNode) gridEl.removeChild(more);
+      var sp = spinnerLine(t("Carregando..."));
+      gridEl.appendChild(sp);
+      list2(query, offset).then(function (r) {
+        if (sp.parentNode) gridEl.removeChild(sp);
+        r.items.forEach(function (m) {
+          return gridEl.appendChild(card(m, {
+            onSelect: function onSelect() {
+              return push(ComicDetails(m));
+            }
+          }));
+        });
+        offset += 30;
+        if (r.more) {
+          more = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return next();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          gridEl.appendChild(more);
+        }
+        loadVisibleImages(el, 400);
+        if (!host && offset === 30) {
+          var first = gridEl.querySelector(".card");
+          if (first) focus(first);
+        }
+      }).catch(function () {
+        if (sp.parentNode) gridEl.removeChild(sp);
+        toast(t("Não foi possível carregar agora."));
+      });
+    }
+    next();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      destroy: function destroy() {}
+    };
+  }
+  function openComic(m) {
+    push(ComicDetails(m));
+  }
+  function ComicDetails(m) {
+    var el = h("div.view.md-view");
+    var info2 = h("div.md-info");
+    var listEl = h("div.md-list", {
+      "data-scroll-y": "",
+      "data-pad-y": "120",
+      "data-group": "",
+      "data-vertical": ""
+    });
+    el.appendChild(info2);
+    el.appendChild(listEl);
+    var chapters3 = [];
+    var chunk = 0;
+    var alive = true;
+    var status2 = h("div.loading-line", {
+      text: t("Procurando capítulos...")
+    });
+    var key3 = "md" + m.mdId;
+    var progress2 = function progress2() {
+      return (get("readProgress", {}) || {})[key3] || null;
+    };
+    var idxOf = function idxOf() {
+      var p = progress2();
+      return p ? chapters3.findIndex(function (c) {
+        return c.id === p.chapterId;
+      }) : -1;
+    };
+    function read(i, page3) {
+      if (!chapters3.length) return toast(t("Nenhum capítulo encontrado."));
+      openReader({
+        key: key3,
+        title: m.name,
+        chapters: chapters3,
+        index: Math.max(0, i),
+        startPage: page3 || 0,
+        rtl: false,
+        poster: m.poster,
+        kind: "md",
+        ref: m
+      });
+    }
+    function renderInfo() {
+      clear(info2);
+      var img2 = h("img.md-cover", {
+        alt: ""
+      });
+      img2.setAttribute("data-lazy", m.poster || "");
+      info2.appendChild(img2);
+      var text = h("div.md-text");
+      text.appendChild(h("div.md-title", {
+        text: m.name
+      }));
+      text.appendChild(h("div.md-meta", {
+        text: [m.year, chapters3.length ? t("{n} capítulos", {
+          n: chapters3.length
+        }) : ""].filter(Boolean).join("  ·  ")
+      }));
+      text.appendChild(h("div.md-desc", {
+        text: m.description
+      }));
+      var idx = idxOf();
+      text.appendChild(h("div.details-buttons", {
+        "data-group": ""
+      }, [h("div.btn.primary", {
+        focusable: true,
+        "data-autofocus": "",
+        onSelect: function onSelect() {
+          return idx >= 0 ? read(idx, progress2().page) : read(0, 0);
+        }
+      }, [h("span.ico", {
+        text: "📖"
+      }), idx >= 0 ? t("Continuar: cap. {n}", {
+        n: chapters3[idx].chapter
+      }) : t("Ler")]), h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return toggleFav(key3, "md", m), renderInfo();
+        }
+      }, [h("span.ico", {
+        text: isFav(key3) ? "♥" : "♡"
+      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")])]));
+      info2.appendChild(text);
+      loadVisibleImages(info2);
+    }
+    function renderList() {
+      clear(listEl);
+      if (!chapters3.length) return listEl.appendChild(status2);
+      var start3 = chunk * CHUNK3;
+      var end = Math.min(chapters3.length, start3 + CHUNK3);
+      var p = progress2();
+      var jump = function jump(label, to) {
+        return h("div.stream.md-nav", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return chunk = to, renderList();
+          }
+        }, [h("div.s-main", {
+          text: label
+        })]);
+      };
+      if (chunk > 0) listEl.appendChild(jump("◀ " + t("Capítulos {a}–{b}", {
+        a: (chunk - 1) * CHUNK3 + 1,
+        b: chunk * CHUNK3
+      }), chunk - 1));
+      var _loop0 = function _loop0(i) {
+        var c = chapters3[i];
+        var here = p && p.chapterId === c.id;
+        listEl.appendChild(h("div.stream", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return read(i, here ? p.page : 0);
+          }
+        }, [h("div.s-main", {
+          text: (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
+            n: c.chapter
+          }) : t("Especial")) + (c.title ? " · " + c.title : "")
+        }), h("span.s-tag", {
+          text: c.pages + " " + t("pág.")
+        }), here ? h("span.s-tag.ok", {
+          text: t("Parou aqui")
+        }) : null]));
+      };
+      for (var i = start3; i < end; i++) {
+        _loop0(i);
+      }
+      if (end < chapters3.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
+        a: end + 1,
+        b: Math.min(chapters3.length, end + CHUNK3)
+      }) + " ▶", chunk + 1));
+    }
+    renderInfo();
+    renderList();
+    chapters(m.mdId, ["en", "fr", "es"]).then(function (cs) {
+      if (!alive) return;
+      chapters3 = cs;
+      var i = idxOf();
+      chunk = i >= 0 ? Math.floor(i / CHUNK3) : 0;
+      if (!cs.length) status2.textContent = t("Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.");
+      renderInfo();
+      renderList();
+    }).catch(function () {
       return alive && (status2.textContent = t("Não encontrei capítulos deste título agora."));
     });
     return {
@@ -17669,14 +18061,71 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }, [h("span.ico", {
       text: "📚"
     }), t("Minhas fontes")])]));
+    var shelves = h("div");
+    scroller.appendChild(shelves);
     scroller.appendChild(rows2);
     el.appendChild(scroller);
+    var openBy = function openBy(kind, ref) {
+      return kind === "md" ? openComic(ref) : kind === "sw" ? openSourceManga(ref) : openMangaDetails(Object.assign({
+        id: "anilist:" + ref.anilist,
+        type: "manga",
+        media: {}
+      }, ref));
+    };
+    function drawShelves() {
+      clear(shelves);
+      var mk = function mk(title, list3) {
+        if (!list3.length) return;
+        var track = h("div.row-track", {
+          "data-scroll-x": "",
+          "data-group": ""
+        });
+        list3.forEach(function (x) {
+          return track.appendChild(card({
+            id: x.key,
+            name: x.name,
+            poster: x.poster
+          }, {
+            onSelect: function onSelect() {
+              return openBy(x.kind, x.ref);
+            }
+          }));
+        });
+        shelves.appendChild(h("div.row", {
+          "data-anchor": "30"
+        }, [h("div.row-title", {
+          text: title
+        }), track]));
+        loadVisibleImages(track);
+      };
+      mk(t("Continuar lendo"), continueList(15).map(function (p) {
+        return {
+          key: p.key,
+          kind: p.kind,
+          ref: p.ref,
+          name: (p.title || "") + " · " + t("Cap. {n}", {
+            n: p.chapter
+          }),
+          poster: p.poster
+        };
+      }));
+      mk(t("Favoritos"), favs().map(function (f) {
+        return {
+          key: f.key,
+          kind: f.kind,
+          ref: f.ref,
+          name: f.ref.name,
+          poster: f.ref.poster
+        };
+      }));
+    }
+    drawShelves();
     var pending2 = [];
     var active2 = 0;
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop0 = function _loop0() {
+      var _loop1 = function _loop1() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -17690,7 +18139,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret5;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret5 = _loop0();
+        _ret5 = _loop1();
         if (_ret5 === 0) continue;
         if (_ret5 === 1) break;
       }
@@ -17732,7 +18181,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return grid(t(f.label), f.args);
         }
       };
-    }), "studio");
+    }), "discover");
     tileRow(rows2, t("Gêneros"), GENRES.map(function (g) {
       return {
         label: g[1] ? t(g[1]) : g[0],
@@ -17755,6 +18204,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       onShow: function onShow() {
+        drawShelves();
         loadNearby();
         loadVisibleImages(el);
       },
@@ -17822,297 +18272,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       el: el,
       onShow: function onShow() {
         return loadVisibleImages(el, 400);
-      }
-    };
-  }
-
-  // src/js/views/comics.js
-  var MD2 = "https://api.mangadex.org/";
-  var enc2 = encodeURIComponent;
-  var CHUNK3 = 50;
-  function cover(m) {
-    var rel = (m.relationships || []).filter(function (r) {
-      return r.type === "cover_art";
-    })[0];
-    var f = rel && rel.attributes && rel.attributes.fileName;
-    return f ? "https://uploads.mangadex.org/covers/" + m.id + "/" + f + ".256.jpg" : "";
-  }
-  function titleOf(m) {
-    var a = m.attributes || {};
-    return a.title && (a.title.en || a.title[Object.keys(a.title)[0]]) || "";
-  }
-  function toMeta2(m) {
-    var a = m.attributes || {};
-    var d = a.description || {};
-    return {
-      id: "md:" + m.id,
-      mdId: m.id,
-      type: "comic",
-      name: titleOf(m),
-      poster: cover(m),
-      description: d.en || d[Object.keys(d)[0]] || "",
-      year: a.year
-    };
-  }
-  function list2(query, offset) {
-    var url2 = MD2 + "manga?limit=30&offset=" + (offset || 0) + "&includes%5B%5D=cover_art&originalLanguage%5B%5D=en&originalLanguage%5B%5D=fr&originalLanguage%5B%5D=es&availableTranslatedLanguage%5B%5D=en&hasAvailableChapters=true&contentRating%5B%5D=safe&contentRating%5B%5D=suggestive" + (query ? "&title=" + enc2(query) + "&order%5Brelevance%5D=desc" : "&order%5BfollowedCount%5D=desc");
-    return getJSONViaProxy(url2, {
-      timeout: 25e3
-    }).then(function (r) {
-      return {
-        items: (r && r.data || []).map(toMeta2),
-        more: !!(r && r.total > (offset || 0) + 30)
-      };
-    });
-  }
-  function ComicsView() {
-    var el = h("div.view");
-    var scroller = h("div.scroll-y", {
-      "data-scroll-y": ""
-    });
-    var bar = topbar("comics", goTab);
-    scroller.appendChild(bar);
-    var head = h("div.row-title.catalog-title", {
-      text: t("Quadrinhos")
-    });
-    var searchBtn = h("div.btn", {
-      focusable: true,
-      "data-autofocus": "",
-      onSelect: function onSelect() {
-        return promptText(t("Buscar quadrinhos"), "", "", function (q2) {
-          return push(ComicGrid(t("Resultados") + ": " + q2, q2));
-        });
-      }
-    }, [h("span.ico", {
-      text: "🔍"
-    }), t("Buscar quadrinhos")]);
-    scroller.appendChild(h("div.details-buttons", {
-      "data-group": ""
-    }, [searchBtn]));
-    scroller.appendChild(head);
-    var gridHost = h("div");
-    scroller.appendChild(gridHost);
-    el.appendChild(scroller);
-    var grid = ComicGrid("", "", gridHost);
-    return {
-      el: el,
-      onShow: function onShow() {
-        return loadVisibleImages(el, 400);
-      },
-      onScroll: function onScroll() {
-        return loadVisibleImages(el, 400);
-      },
-      destroy: function destroy() {
-        bar.__destroy && bar.__destroy();
-        grid.destroy && grid.destroy();
-      }
-    };
-  }
-  function ComicGrid(title, query, host) {
-    var el = host || h("div.view");
-    var scroller = host ? el : h("div.scroll-y", {
-      "data-scroll-y": ""
-    });
-    var gridEl = h("div.grid");
-    if (!host) {
-      scroller.appendChild(h("div.row-title.catalog-title", {
-        text: title
-      }));
-      el.appendChild(scroller);
-    }
-    scroller.appendChild(gridEl);
-    var offset = 0;
-    var more = null;
-    function next() {
-      if (more && more.parentNode) gridEl.removeChild(more);
-      var sp = spinnerLine(t("Carregando..."));
-      gridEl.appendChild(sp);
-      list2(query, offset).then(function (r) {
-        if (sp.parentNode) gridEl.removeChild(sp);
-        r.items.forEach(function (m) {
-          return gridEl.appendChild(card(m, {
-            onSelect: function onSelect() {
-              return push(ComicDetails(m));
-            }
-          }));
-        });
-        offset += 30;
-        if (r.more) {
-          more = h("div.card.see-all", {
-            focusable: true,
-            onSelect: function onSelect() {
-              return next();
-            }
-          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
-            text: "+"
-          }), t("Carregar mais")])), h("div.name", {
-            text: ""
-          })]);
-          gridEl.appendChild(more);
-        }
-        loadVisibleImages(el, 400);
-        if (!host && offset === 30) {
-          var first = gridEl.querySelector(".card");
-          if (first) focus(first);
-        }
-      }).catch(function () {
-        if (sp.parentNode) gridEl.removeChild(sp);
-        toast(t("Não foi possível carregar agora."));
-      });
-    }
-    next();
-    return {
-      el: el,
-      onShow: function onShow() {
-        return loadVisibleImages(el, 400);
-      },
-      destroy: function destroy() {}
-    };
-  }
-  function ComicDetails(m) {
-    var el = h("div.view.md-view");
-    var info2 = h("div.md-info");
-    var listEl = h("div.md-list", {
-      "data-scroll-y": "",
-      "data-pad-y": "120",
-      "data-group": "",
-      "data-vertical": ""
-    });
-    el.appendChild(info2);
-    el.appendChild(listEl);
-    var chapters3 = [];
-    var chunk = 0;
-    var alive = true;
-    var status2 = h("div.loading-line", {
-      text: t("Procurando capítulos...")
-    });
-    var key3 = "md" + m.mdId;
-    var progress2 = function progress2() {
-      return (get("readProgress", {}) || {})[key3] || null;
-    };
-    var idxOf = function idxOf() {
-      var p = progress2();
-      return p ? chapters3.findIndex(function (c) {
-        return c.id === p.chapterId;
-      }) : -1;
-    };
-    function read(i, page3) {
-      if (!chapters3.length) return toast(t("Nenhum capítulo encontrado."));
-      openReader({
-        key: key3,
-        title: m.name,
-        chapters: chapters3,
-        index: Math.max(0, i),
-        startPage: page3 || 0,
-        rtl: false
-      });
-    }
-    function renderInfo() {
-      clear(info2);
-      var img2 = h("img.md-cover", {
-        alt: ""
-      });
-      img2.setAttribute("data-lazy", m.poster || "");
-      info2.appendChild(img2);
-      var text = h("div.md-text");
-      text.appendChild(h("div.md-title", {
-        text: m.name
-      }));
-      text.appendChild(h("div.md-meta", {
-        text: [m.year, chapters3.length ? t("{n} capítulos", {
-          n: chapters3.length
-        }) : ""].filter(Boolean).join("  ·  ")
-      }));
-      text.appendChild(h("div.md-desc", {
-        text: m.description
-      }));
-      var idx = idxOf();
-      text.appendChild(h("div.details-buttons", {
-        "data-group": ""
-      }, [h("div.btn.primary", {
-        focusable: true,
-        "data-autofocus": "",
-        onSelect: function onSelect() {
-          return idx >= 0 ? read(idx, progress2().page) : read(0, 0);
-        }
-      }, [h("span.ico", {
-        text: "📖"
-      }), idx >= 0 ? t("Continuar: cap. {n}", {
-        n: chapters3[idx].chapter
-      }) : t("Ler")])]));
-      info2.appendChild(text);
-      loadVisibleImages(info2);
-    }
-    function renderList() {
-      clear(listEl);
-      if (!chapters3.length) return listEl.appendChild(status2);
-      var start3 = chunk * CHUNK3;
-      var end = Math.min(chapters3.length, start3 + CHUNK3);
-      var p = progress2();
-      var jump = function jump(label, to) {
-        return h("div.stream.md-nav", {
-          focusable: true,
-          onSelect: function onSelect() {
-            return chunk = to, renderList();
-          }
-        }, [h("div.s-main", {
-          text: label
-        })]);
-      };
-      if (chunk > 0) listEl.appendChild(jump("◀ " + t("Capítulos {a}–{b}", {
-        a: (chunk - 1) * CHUNK3 + 1,
-        b: chunk * CHUNK3
-      }), chunk - 1));
-      var _loop1 = function _loop1(i) {
-        var c = chapters3[i];
-        var here = p && p.chapterId === c.id;
-        listEl.appendChild(h("div.stream", {
-          focusable: true,
-          onSelect: function onSelect() {
-            return read(i, here ? p.page : 0);
-          }
-        }, [h("div.s-main", {
-          text: (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
-            n: c.chapter
-          }) : t("Especial")) + (c.title ? " · " + c.title : "")
-        }), h("span.s-tag", {
-          text: c.pages + " " + t("pág.")
-        }), here ? h("span.s-tag.ok", {
-          text: t("Parou aqui")
-        }) : null]));
-      };
-      for (var i = start3; i < end; i++) {
-        _loop1(i);
-      }
-      if (end < chapters3.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
-        a: end + 1,
-        b: Math.min(chapters3.length, end + CHUNK3)
-      }) + " ▶", chunk + 1));
-    }
-    renderInfo();
-    renderList();
-    chapters(m.mdId, ["en", "fr", "es"]).then(function (cs) {
-      if (!alive) return;
-      chapters3 = cs;
-      var i = idxOf();
-      chunk = i >= 0 ? Math.floor(i / CHUNK3) : 0;
-      if (!cs.length) status2.textContent = t("Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.");
-      renderInfo();
-      renderList();
-    }).catch(function () {
-      return alive && (status2.textContent = t("Não encontrei capítulos deste título agora."));
-    });
-    return {
-      el: el,
-      onShow: function onShow() {
-        if (chapters3.length) {
-          renderInfo();
-          renderList();
-        }
-        loadVisibleImages(el);
-      },
-      destroy: function destroy() {
-        return alive = false;
       }
     };
   }
@@ -20142,7 +20301,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T14:12:56.759Z";
+  var BUILD = "2026-11-16T15:25:44.758Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
