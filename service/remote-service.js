@@ -258,6 +258,29 @@ function handle(req, res) {
     if (isPost) return readBody(req, function (body) { run(typeof body === 'string' ? body : JSON.stringify(body)); });
     return run('');
   }
+  // Live TV playlists (M3U) from any address the user typed: the sites rarely allow the app's origin.
+  // Local only (the app on this TV), GET only, text only, 30 MB at most, up to 4 redirects.
+  if (url.pathname === '/api/playlist') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    var pt = require('url').parse(String(q.url || ''));
+    if ((pt.protocol !== 'https:' && pt.protocol !== 'http:') || !pt.hostname) return send(res, 400, { error: 'bad url' });
+    var getText = function (target, hops) {
+      var mod = target.protocol === 'http:' ? require('http') : require('https');
+      var r = mod.get({ hostname: target.hostname, port: target.port || (target.protocol === 'http:' ? 80 : 443), path: target.path, headers: { 'User-Agent': 'stremio-7m-tizen' }, timeout: 20000 }, function (resp) {
+        if (resp.statusCode >= 300 && resp.statusCode < 400 && resp.headers.location && hops < 4) {
+          resp.resume();
+          return getText(require('url').parse(require('url').resolve(target.protocol + '//' + target.hostname + target.path, resp.headers.location)), hops + 1);
+        }
+        if (resp.statusCode !== 200) { resp.resume(); return send(res, 502, { error: 'HTTP ' + resp.statusCode }); }
+        var chunks = [], size = 0, dead = false;
+        resp.on('data', function (c) { size += c.length; if (size > 31457280) { dead = true; r.abort(); return send(res, 413, { error: 'too big' }); } chunks.push(c); });
+        resp.on('end', function () { if (!dead) send(res, 200, Buffer.concat(chunks).toString('utf8'), 'text/plain; charset=utf-8'); });
+      });
+      r.on('error', function () { send(res, 502, { error: 'upstream failed' }); });
+      r.on('timeout', function () { r.abort(); });
+    };
+    return getText(pt, 0);
+  }
   // SubDL subtitles come as ZIP files (often Windows-1256 Arabic): download, unzip the .srt
   // (the one for ?ep=S01E02 when there are several) and return it as UTF-8 text.
   if (url.pathname === '/api/subzip') {

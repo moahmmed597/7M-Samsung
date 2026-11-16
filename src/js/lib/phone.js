@@ -10,6 +10,9 @@ export const PORT = 8095;
 export function fetchUrl(url) {
   return 'http://127.0.0.1:' + PORT + '/api/fetch?url=' + encodeURIComponent(url);
 }
+export function playlistUrl(url) {
+  return 'http://127.0.0.1:' + PORT + '/api/playlist?url=' + encodeURIComponent(url);
+}
 const BASE = 'http://127.0.0.1:' + PORT;
 const ENTER = 13;
 

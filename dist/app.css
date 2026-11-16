@@ -576,3 +576,6 @@ body .card.nc-tile.nc-square .poster-wrap { width: 250px; height: 250px; backgro
 /* Book reader: OLED black, large type */
 .view.book-reader { background: #000; }
 .bk-text { position: absolute; top: 60px; bottom: 60px; left: 160px; right: 160px; overflow: hidden; color: #e8e8e8; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; }
+
+/* Top 10 numerals */
+.card.top10 .rank { position: absolute; left: 10px; bottom: -4px; z-index: 2; font-size: 96px; line-height: 1; font-weight: 900; color: rgba(0,0,0,0.35); -webkit-text-stroke: 3px rgba(255,255,255,0.92); text-shadow: 0 4px 14px rgba(0,0,0,0.8); pointer-events: none; }
