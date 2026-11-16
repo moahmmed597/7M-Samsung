@@ -3,6 +3,7 @@ import './polyfills.js';
 import { CollectionsView } from './views/collections.js';
 import { MangaView } from './views/manga.js';
 import { DiscoverView } from './views/discover.js';
+import { LiveView } from './views/live.js';
 import { MoviesView, SeriesView } from './views/typeTab.js';
 import { AnimeView } from './views/anime.js';
 import { log } from './lib/log.js';
@@ -100,6 +101,7 @@ function boot() {
   router.registerTab('anime', AnimeView);
   router.registerTab('manga', MangaView);
   router.registerTab('discover', DiscoverView);
+  router.registerTab('live', LiveView);
   router.registerTab('movies', MoviesView);
   router.registerTab('series', SeriesView);
 

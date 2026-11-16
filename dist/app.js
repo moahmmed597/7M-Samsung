@@ -873,15 +873,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var TypeError2 = globalThis2.TypeError;
       var WeakMap = globalThis2.WeakMap;
       var set2;
-      var get2;
+      var get3;
       var has;
       var enforce = function enforce(it) {
-        return has(it) ? get2(it) : set2(it, {});
+        return has(it) ? get3(it) : set2(it, {});
       };
       var getterFor = function getterFor(TYPE) {
         return function (it) {
           var state;
-          if (!isObject(it) || (state = get2(it)).type !== TYPE) {
+          if (!isObject(it) || (state = get3(it)).type !== TYPE) {
             throw new TypeError2("Incompatible receiver, " + TYPE + " required");
           }
           return state;
@@ -898,7 +898,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           store.set(it, metadata);
           return metadata;
         };
-        get2 = function get2(it) {
+        get3 = function get3(it) {
           return store.get(it) || {};
         };
         has = function has(it) {
@@ -913,7 +913,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           createNonEnumerableProperty(it, STATE, metadata);
           return metadata;
         };
-        get2 = function get2(it) {
+        get3 = function get3(it) {
           return hasOwn(it, STATE) ? it[STATE] : {};
         };
         has = function has(it) {
@@ -924,7 +924,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var STATE;
       module.exports = {
         set: set2,
-        get: get2,
+        get: get3,
         has: has,
         enforce: enforce,
         getterFor: getterFor
@@ -1966,7 +1966,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var nativeIterator = IterablePrototype[ITERATOR] || IterablePrototype["@@iterator"] || DEFAULT && IterablePrototype[DEFAULT];
         var defaultIterator = !BUGGY_SAFARI_ITERATORS && nativeIterator || getIterationMethod(DEFAULT);
         var anyNativeIterator = NAME === "Array" ? IterablePrototype.entries || nativeIterator : nativeIterator;
-        var CurrentIteratorPrototype, methods, KEY3;
+        var CurrentIteratorPrototype, methods, KEY4;
         if (anyNativeIterator) {
           CurrentIteratorPrototype = getPrototypeOf(anyNativeIterator.call(new Iterable()));
           if (CurrentIteratorPrototype !== Object.prototype && CurrentIteratorPrototype.next) {
@@ -1997,9 +1997,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             keys: IS_SET ? defaultIterator : getIterationMethod(KEYS),
             entries: getIterationMethod(ENTRIES)
           };
-          if (FORCED) for (KEY3 in methods) {
-            if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY3 in IterablePrototype)) {
-              defineBuiltIn(IterablePrototype, KEY3, methods[KEY3]);
+          if (FORCED) for (KEY4 in methods) {
+            if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY4 in IterablePrototype)) {
+              defineBuiltIn(IterablePrototype, KEY4, methods[KEY4]);
             }
           } else $({
             target: NAME,
@@ -5043,6 +5043,31 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "TV ao vivo": "Live TV",
+    "OK: assistir  ·  🟢 Verde: favorito": "OK: watch  ·  🟢 Green: favourite",
+    "Adicionar fonte": "Add a source",
+    "Buscar canal": "Search channel",
+    "Conta Xtream Codes": "Xtream Codes account",
+    "Servidor, usuário e senha do seu IPTV": "Your IPTV server, username and password",
+    "Lista M3U": "M3U playlist",
+    "Link da sua lista": "Your playlist link",
+    "Remover {name}": "Remove {name}",
+    "Fontes de TV ao vivo": "Live TV sources",
+    "Servidor (ex.: http://exemplo.com:8080)": "Server (e.g. http://example.com:8080)",
+    "Conta adicionada.": "Account added.",
+    "Não consegui entrar. Confira servidor, usuário e senha.": "Couldn't sign in. Check the server, username and password.",
+    "Link da lista M3U": "M3U playlist link",
+    "Não consegui carregar a lista.": "Couldn't load the list.",
+    "A busca procura nas categorias que você já abriu.": "Search looks in the categories you have opened.",
+    "Sem fontes ainda": "No sources yet",
+    "Adicione sua conta Xtream Codes ou um link M3U. O app não traz nenhum canal.": "Add your Xtream Codes account or an M3U link. The app ships no channels.",
+    "Sem favoritos ainda": "No favourites yet",
+    "Escolha uma categoria e aperte o botão verde num canal.": "Pick a category and press the green button on a channel.",
+    "até {time}": "until {time}",
+    "{n} min restantes": "{n} min left",
+    "Depois: {title}": "Next: {title}",
+    "Adicionado aos favoritos.": "Added to favourites.",
+    "Removido dos favoritos.": "Removed from favourites.",
     "Coloque sua chave TMDB (Ajustes → Integrações) para ver as sugestões.": "Add your TMDB key (Settings → Integrations) to see suggestions.",
     "Porque você assistiu {name}": "Because you watched {name}",
     "Em alta hoje": "Trending today",
@@ -5390,6 +5415,31 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "TV ao vivo": "بث مباشر",
+    "OK: assistir  ·  🟢 Verde: favorito": "OK: مشاهدة  ·  🟢 الأخضر: مفضلة",
+    "Adicionar fonte": "أضف مصدر",
+    "Buscar canal": "ابحث عن قناة",
+    "Conta Xtream Codes": "حساب Xtream Codes",
+    "Servidor, usuário e senha do seu IPTV": "سيرفر واسم مستخدم وكلمة سر الـIPTV حقك",
+    "Lista M3U": "قائمة M3U",
+    "Link da sua lista": "رابط قائمتك",
+    "Remover {name}": "حذف {name}",
+    "Fontes de TV ao vivo": "مصادر البث المباشر",
+    "Servidor (ex.: http://exemplo.com:8080)": "السيرفر (مثال: http://example.com:8080)",
+    "Conta adicionada.": "تمت إضافة الحساب.",
+    "Não consegui entrar. Confira servidor, usuário e senha.": "ما قدرت أدخل. تأكد من السيرفر واسم المستخدم وكلمة السر.",
+    "Link da lista M3U": "رابط قائمة M3U",
+    "Não consegui carregar a lista.": "ما قدرت أحمّل القائمة.",
+    "A busca procura nas categorias que você já abriu.": "البحث يدوّر في التصنيفات اللي فتحتها.",
+    "Sem fontes ainda": "ما فيه مصادر للحين",
+    "Adicione sua conta Xtream Codes ou um link M3U. O app não traz nenhum canal.": "أضف حساب Xtream Codes حقك أو رابط M3U. التطبيق ما يجي بأي قناة.",
+    "Sem favoritos ainda": "ما فيه مفضلة للحين",
+    "Escolha uma categoria e aperte o botão verde num canal.": "اختر تصنيف واضغط الزر الأخضر على أي قناة.",
+    "até {time}": "لين {time}",
+    "{n} min restantes": "باقي {n} د",
+    "Depois: {title}": "بعده: {title}",
+    "Adicionado aos favoritos.": "أُضيف للمفضلة.",
+    "Removido dos favoritos.": "انشال من المفضلة.",
     "Coloque sua chave TMDB (Ajustes → Integrações) para ver as sugestões.": "حط مفتاح TMDB (الإعدادات ← التكاملات) عشان تطلع الاقتراحات.",
     "Porque você assistiu {name}": "لأنك شفت {name}",
     "Em alta hoje": "الرائج اليوم",
@@ -6282,20 +6332,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var layer = top();
     if (!layer) return;
     var code = e.keyCode;
-    var active2 = document.activeElement;
-    var typing = active2 && (active2.tagName === "INPUT" || active2.tagName === "TEXTAREA");
+    var active3 = document.activeElement;
+    var typing = active3 && (active3.tagName === "INPUT" || active3.tagName === "TEXTAREA");
     if (typing) {
       if (code === KEY.ENTER || code === KEY.IME_DONE) {
         if (code === KEY.ENTER) e.preventDefault();
-        active2.blur();
-        if (active2.__submit) active2.__submit(active2.value);
+        active3.blur();
+        if (active3.__submit) active3.__submit(active3.value);
         return;
       } else if (code === KEY.BACK || code === KEY.ESC || code === KEY.IME_CANCEL) {
         if (code !== KEY.IME_CANCEL) e.preventDefault();
-        active2.blur();
+        active3.blur();
         return;
       } else if (code === KEY.UP || code === KEY.DOWN) {
-        active2.blur();
+        active3.blur();
       } else return;
     }
     if (code >= 37 && code <= 40 && pointerMode) pointerMode = false;
@@ -6564,10 +6614,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       en: ["eng", "en"],
       ar: ["ara", "ar"]
     }[current()];
-    var base2 = Object.assign({}, DEFAULT_SETTINGS, subs ? {
+    var base3 = Object.assign({}, DEFAULT_SETTINGS, subs ? {
       subtitleLangs: subs
     } : null);
-    return Object.assign(base2, rawGet("device", {}), get("settings", {}));
+    return Object.assign(base3, rawGet("device", {}), get("settings", {}));
   }
   function copySettingsFrom(profileId) {
     var from = getFor(profileId, "settings", {}) || {};
@@ -7061,11 +7111,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function showPicker(onPicked) {
     var list2 = profiles();
-    var active2 = activeProfile();
+    var active3 = activeProfile();
     var cards = list2.map(function (p) {
       return h("div.profile-card", {
         focusable: true,
-        "data-autofocus": p.id === active2.id ? "" : null,
+        "data-autofocus": p.id === active3.id ? "" : null,
         onSelect: function onSelect() {
           return pick2(p.id);
         }
@@ -7095,7 +7145,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     document.getElementById("app").appendChild(el);
     var layer = pushLayer(el, {
       onBack: function onBack() {
-        return pick2(active2.id);
+        return pick2(active3.id);
       }
     });
     focusFirst(el);
@@ -7262,6 +7312,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "manga",
     label: "Mangás"
   }, {
+    id: "live",
+    label: "TV ao vivo"
+  }, {
     id: "collections",
     label: "Coleções"
   }, {
@@ -7285,6 +7338,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return keyed = true;
   }, true);
   var NAV_ICONS = {
+    live: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m342.976,371.707c3.755,3.805,8.668,5.704,13.581,5.704s9.854-1.909,13.609-5.728c62.714-63.788,62.714-167.575-.007-231.359-7.509-7.631-19.674-7.641-27.183-.025-7.516,7.616-7.523,19.973-.021,27.6,47.765,48.58,47.765,127.625-.007,176.208-7.495,7.627-7.489,19.987.028,27.6Z" fill="currentColor" stroke-width="0"/><path d="m409.926,72.323c-7.509,7.616-7.516,19.977-.014,27.6,84.677,86.06,84.677,226.095,0,312.155-7.502,7.624-7.495,19.984.014,27.6,3.755,3.805,8.675,5.707,13.588,5.707s9.847-1.909,13.602-5.725c99.64-101.272,99.64-266.049,0-367.321-7.502-7.627-19.674-7.638-27.19-.018Z" fill="currentColor" stroke-width="0"/><path d="m88.485,445.386c4.913,0,9.833-1.902,13.588-5.707,7.509-7.616,7.516-19.977.014-27.6-84.677-86.06-84.677-226.095,0-312.155,7.502-7.624,7.495-19.984-.014-27.6-7.509-7.613-19.681-7.603-27.19.018-99.64,101.272-99.64,266.049,0,367.321,3.755,3.819,8.675,5.725,13.602,5.725Z" fill="currentColor" stroke-width="0"/><path d="m141.84,371.682c3.755,3.819,8.675,5.728,13.602,5.728s9.826-1.902,13.581-5.704c7.516-7.616,7.523-19.973.021-27.6-47.771-48.583-47.771-127.629,0-176.208,7.503-7.627,7.496-19.984-.021-27.6-7.523-7.616-19.688-7.606-27.183.025-62.728,63.784-62.728,167.572,0,231.359Z" fill="currentColor" stroke-width="0"/><path d="m255.996,323.592c36.717,0,66.587-30.321,66.587-67.589s-29.87-67.593-66.587-67.593-66.58,30.321-66.58,67.593,29.87,67.589,66.58,67.589Z" fill="currentColor" stroke-width="0"/></svg>',
     discover: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m256.003,0C114.845,0-.002,114.84-.002,256.002s114.847,255.998,256.005,255.998,255.999-114.84,255.999-255.998S397.162,0,256.003,0Zm0,473.552c-119.963,0-217.551-97.592-217.551-217.551S136.041,38.448,256.003,38.448s217.544,97.595,217.544,217.554-97.588,217.551-217.544,217.551Z" fill="currentColor" stroke-width="0"/><path d="m350.297,137.382l-128.191,42.729c-9.771,3.305-18.732,8.849-25.927,16.034-7.286,7.293-12.862,16.307-16.108,26.063l-42.705,128.1c-2.303,6.906-.509,14.523,4.641,19.67,3.664,3.667,8.577,5.632,13.595,5.632,2.038,0,4.089-.321,6.079-.988l128.107-42.701c9.764-3.252,18.78-8.829,26.06-16.118,7.188-7.192,12.737-16.16,16.059-26.004l42.705-128.104c2.303-6.906.509-14.523-4.641-19.67-5.15-5.157-12.792-6.948-19.674-4.645Zm-72.666,158.068l-91.627,30.54,30.54-91.628c1.375-4.128,3.734-7.939,6.818-11.023.002-.002.004-.004.007-.006l65.292,65.292s-.002.002-.003.003c-3.084,3.085-6.902,5.444-11.027,6.822Z" fill="currentColor" stroke-width="0"/></svg>',
     home: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m496.463,180.74L281.201,11.614h-.007C266.413-.007,245.748-.003,230.952,11.61L15.551,180.806C5.669,188.564-.005,200.222-.005,212.788v255.649c0,22.424,18.243,40.663,40.667,40.663h147c10.615,0,19.227-8.605,19.227-19.224v-131.297h98.384v131.297c0,10.619,8.612,19.224,19.227,19.224h146.839c22.423,0,40.667-18.24,40.667-40.663v-255.723c0-12.555-5.667-24.21-15.542-31.974Zm-22.912,287.697c0,1.221-.991,2.216-2.212,2.216h-127.612v-131.297c0-10.619-8.612-19.224-19.228-19.224h-136.838c-10.615,0-19.228,8.605-19.228,19.224v131.297H40.662c-1.221,0-2.212-.994-2.212-2.216v-255.649c0-.684.307-1.319.852-1.745L254.702,41.847c.796-.635,1.926-.642,2.75,0l215.254,169.123c.53.419.845,1.071.845,1.745v255.723Z" fill="currentColor" stroke-width="0"/></svg>',
     movies: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m440.16,0H71.841C32.228,0-.002,32.229-.002,71.842v368.319c0,39.613,32.229,71.839,71.842,71.839h368.319c39.613,0,71.842-32.226,71.842-71.839V71.842C512.002,32.229,479.773,0,440.16,0ZM38.453,275.226h58.694v79.92h-58.694v-79.92Zm337.946-38.448h-240.798V38.448h240.798v198.33Zm-279.252,0h-58.694v-79.948h58.694v79.948Zm38.454,38.448h240.798v198.327h-240.798v-198.327Zm279.252,0h58.694v79.92h-58.694v-79.92Zm0-38.448v-79.948h58.694v79.948h-58.694Zm58.694-164.936v46.54h-58.694V38.448h25.306c18.411,0,33.388,14.98,33.388,33.395ZM71.841,38.448h25.306v79.934h-58.694v-46.54c0-18.414,14.977-33.395,33.388-33.395Zm-33.388,401.714v-46.568h58.694v79.959h-25.306c-18.411,0-33.388-14.981-33.388-33.391Zm401.707,33.391h-25.306v-79.959h58.694v46.568c0,18.411-14.977,33.391-33.388,33.391Z" fill="currentColor" stroke-width="0"/></svg>',
@@ -7373,13 +7427,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     Array.prototype.forEach.call(document.querySelectorAll(".profile-chip"), fillChip);
   }
   function profileMenu(onTab) {
-    var active2 = activeProfile();
+    var active3 = activeProfile();
     var opts = profiles().map(function (p) {
       return {
         label: p.name,
-        sub: p.id === active2.id ? t("Perfil atual") : t("Trocar para este perfil"),
+        sub: p.id === active3.id ? t("Perfil atual") : t("Trocar para este perfil"),
         value: p.id,
-        checked: p.id === active2.id
+        checked: p.id === active3.id
       };
     });
     opts.push({
@@ -7401,7 +7455,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       onPick: function onPick(v) {
         if (v === "__add") createProfile();else if (v === "__picker") showPicker(function () {
           return window.location.reload();
-        });else if (v === "__manage") onTab("settings");else if (v !== active2.id) switchProfile(v);
+        });else if (v === "__manage") onTab("settings");else if (v !== active3.id) switchProfile(v);
       }
     });
   }
@@ -7618,7 +7672,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function info() {
-    var get2 = function get2() {
+    var get3 = function get3() {
       return request2(BASE + "/api/info", 4e3).then(function (r) {
         return r && r.ip ? {
           ip: r.ip,
@@ -7630,10 +7684,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return null;
       });
     };
-    return get2().then(function (i) {
+    return get3().then(function (i) {
       return i || !startService() ? i : new Promise(function (r) {
         return setTimeout(r, 5e3);
-      }).then(get2);
+      }).then(get3);
     });
   }
   function qrImage(text, size) {
@@ -7799,8 +7853,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     } : null;
   }
   var VIDEO_RE = /\.(mkv|mp4|avi|m4v|mov|ts|webm|wmv)$/i;
-  function magnet(infoHash, sources2) {
-    var tr = (sources2 || []).filter(function (x) {
+  function magnet(infoHash, sources3) {
+    var tr = (sources3 || []).filter(function (x) {
       return /^tracker:/.test(x);
     }).map(function (x) {
       return "&tr=" + encodeURIComponent(x.slice(8));
@@ -7813,12 +7867,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     var pool = vids.length ? vids : files2;
     if (!pool.length) return null;
-    var base2 = function base2(n) {
+    var base3 = function base3(n) {
       return String(n || "").split("/").pop().toLowerCase();
     };
     if (hint.filename) {
       var m = pool.find(function (f) {
-        return base2(f.name) === base2(hint.filename);
+        return base3(f.name) === base3(hint.filename);
       });
       if (m) return m;
     }
@@ -7827,7 +7881,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var e = +hint.episode;
       var re = new RegExp("(s0*" + s + "[ ._-]*e0*" + e + "(?!\\d))|(\\b" + s + "x0*" + e + "(?!\\d))", "i");
       var _m = pool.find(function (f) {
-        return re.test(base2(f.name));
+        return re.test(base3(f.name));
       });
       if (_m) return _m;
     }
@@ -7969,15 +8023,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return file.link;
     });
   }
-  function resolve(infoHash, sources2, hint) {
+  function resolve(infoHash, sources3, hint) {
     return freshRealDebrid().then(function () {
-      return resolveNow(infoHash, sources2, hint);
+      return resolveNow(infoHash, sources3, hint);
     });
   }
-  function resolveNow(infoHash, sources2, hint) {
+  function resolveNow(infoHash, sources3, hint) {
     var p = active();
     if (!p) return Promise.reject(new Error("debrid off"));
-    var mag = magnet(String(infoHash).toLowerCase(), sources2);
+    var mag = magnet(String(infoHash).toLowerCase(), sources3);
     var fn = p.id === "realdebrid" ? realDebrid : p.id === "torbox" ? torbox : premiumize;
     return fn(p.key, mag, hint || {}).catch(function (e) {
       if (e.status === 401 || e.status === 403) throw new Error(t("{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", {
@@ -8230,25 +8284,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     for (var i = 0; i + 4 <= bits.length; i += 4) hex += parseInt(bits.substr(i, 4), 2).toString(16);
     return hex;
   }
-  function torrentUrl(base2, infoHash, fileIdx, sources2) {
-    var u = base2 + encodeURIComponent(infoHash) + "/" + encodeURIComponent(fileIdx);
-    if (sources2 && sources2.length) {
-      u += "?" + sources2.map(function (s) {
+  function torrentUrl(base3, infoHash, fileIdx, sources3) {
+    var u = base3 + encodeURIComponent(infoHash) + "/" + encodeURIComponent(fileIdx);
+    if (sources3 && sources3.length) {
+      u += "?" + sources3.map(function (s) {
         return "tr=" + encodeURIComponent(s);
       }).join("&");
     }
     return u;
   }
-  function createTorrent(base2, infoHash, fileIdx, sources2, seriesInfo) {
+  function createTorrent(base3, infoHash, fileIdx, sources3, seriesInfo) {
     var hasIdx = fileIdx !== null && fileIdx !== void 0 && isFinite(fileIdx);
-    if ((!sources2 || !sources2.length) && hasIdx) return Promise.resolve(torrentUrl(base2, infoHash, fileIdx, []));
+    if ((!sources3 || !sources3.length) && hasIdx) return Promise.resolve(torrentUrl(base3, infoHash, fileIdx, []));
     var body = {
       torrent: {
         infoHash: infoHash
       }
     };
-    if (sources2 && sources2.length) {
-      var all2 = ["dht:" + infoHash].concat(sources2.map(function (s) {
+    if (sources3 && sources3.length) {
+      var all2 = ["dht:" + infoHash].concat(sources3.map(function (s) {
         return /^(tracker|dht):/.test(s) ? s : "tracker:" + s;
       }));
       body.peerSearch = {
@@ -8264,13 +8318,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (seriesInfo && isFinite(seriesInfo.season)) body.guessFileIdx.season = seriesInfo.season;
       if (seriesInfo && isFinite(seriesInfo.episode)) body.guessFileIdx.episode = seriesInfo.episode;
     } else body.guessFileIdx = false;
-    return postJSON(base2 + encodeURIComponent(infoHash) + "/create", body, {
+    return postJSON(base3 + encodeURIComponent(infoHash) + "/create", body, {
       timeout: 3e4
     }).then(function (r) {
-      return torrentUrl(base2, infoHash, hasIdx ? fileIdx : r && r.guessedFileIdx, body.peerSearch ? body.peerSearch.sources : []);
+      return torrentUrl(base3, infoHash, hasIdx ? fileIdx : r && r.guessedFileIdx, body.peerSearch ? body.peerSearch.sources : []);
     });
   }
-  function proxyUrl(base2, streamUrl2, reqHeaders, resHeaders) {
+  function proxyUrl(base3, streamUrl2, reqHeaders, resHeaders) {
     var m = streamUrl2.match(/^(https?:\/\/[^/?#]+)([^?#]*)(\?[^#]*)?/);
     if (!m) return streamUrl2;
     var parts = ["d=" + encodeURIComponent(m[1])];
@@ -8280,13 +8334,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     Object.keys(resHeaders || {}).forEach(function (k) {
       return parts.push("r=" + encodeURIComponent(k + ":" + resHeaders[k]));
     });
-    return base2 + "proxy/" + parts.join("&") + (m[2] || "/") + (m[3] || "");
+    return base3 + "proxy/" + parts.join("&") + (m[2] || "/") + (m[3] || "");
   }
   function corsProxyUrl(url2) {
-    var base2 = isAvailable() ? baseUrl() : "";
+    var base3 = isAvailable() ? baseUrl() : "";
     var m = url2.match(/^(https?:\/\/[^/?#]+)(.*)$/);
-    if (!base2 || !m) return null;
-    return base2 + "proxy/d=" + encodeURIComponent(m[1]) + "&r=" + encodeURIComponent("Access-Control-Allow-Origin:*") + (m[2] || "/");
+    if (!base3 || !m) return null;
+    return base3 + "proxy/d=" + encodeURIComponent(m[1]) + "&r=" + encodeURIComponent("Access-Control-Allow-Origin:*") + (m[2] || "/");
   }
   function getJSONViaProxy(url2, opts) {
     return getJSON(url2, Object.assign({
@@ -8343,13 +8397,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function toPlayableLocal(stream, seriesInfo) {
-    var base2 = baseUrl();
+    var base3 = baseUrl();
     if (typeof stream.url === "string") {
       if (stream.url.indexOf("magnet:") === 0) {
-        if (!base2) return Promise.reject(new Error(t("Este link é torrent: configure o servidor do PC")));
+        if (!base3) return Promise.reject(new Error(t("Este link é torrent: configure o servidor do PC")));
         var mg = parseMagnet(stream.url);
         if (!mg) return Promise.reject(new Error(t("Magnet inválido")));
-        return createTorrent(base2, mg.infoHash, null, mg.sources, seriesInfo).then(function (u) {
+        return createTorrent(base3, mg.infoHash, null, mg.sources, seriesInfo).then(function (u) {
           return {
             url: u,
             viaServer: true
@@ -8357,9 +8411,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }
       var ph = stream.behaviorHints && stream.behaviorHints.proxyHeaders;
-      if (ph && base2) {
+      if (ph && base3) {
         return Promise.resolve({
-          url: proxyUrl(base2, stream.url, ph.request, ph.response),
+          url: proxyUrl(base3, stream.url, ph.request, ph.response),
           viaServer: true
         });
       }
@@ -8369,8 +8423,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     if (typeof stream.infoHash === "string") {
-      if (!base2) return Promise.reject(new Error(t("Este link é torrent: configure o servidor do PC")));
-      return createTorrent(base2, stream.infoHash.toLowerCase(), stream.fileIdx, stream.sources || [], seriesInfo).then(function (u) {
+      if (!base3) return Promise.reject(new Error(t("Este link é torrent: configure o servidor do PC")));
+      return createTorrent(base3, stream.infoHash.toLowerCase(), stream.fileIdx, stream.sources || [], seriesInfo).then(function (u) {
         return {
           url: u,
           viaServer: true
@@ -8380,9 +8434,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return Promise.reject(new Error(t("Tipo de link não suportado na TV")));
   }
   function tracks(mediaUrl) {
-    var base2 = baseUrl();
-    if (!base2) return Promise.resolve(null);
-    return getJSON(base2 + "tracks/" + encodeURIComponent(mediaUrl), {
+    var base3 = baseUrl();
+    if (!base3) return Promise.resolve(null);
+    return getJSON(base3 + "tracks/" + encodeURIComponent(mediaUrl), {
       timeout: 2e4,
       quiet: true
     }).then(function (list2) {
@@ -8399,9 +8453,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function streamProgress(mediaUrl) {
     var m = String(mediaUrl || "").match(/\/([a-f0-9]{40})\/(\d+)/i);
-    var base2 = baseUrl();
-    if (!m || !base2) return Promise.resolve(null);
-    return getJSON(base2 + m[1] + "/" + m[2] + "/stats.json", {
+    var base3 = baseUrl();
+    if (!m || !base3) return Promise.resolve(null);
+    return getJSON(base3 + m[1] + "/" + m[2] + "/stats.json", {
       timeout: 5e3,
       quiet: true
     }).then(function (r) {
@@ -8411,8 +8465,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function subtitlesProxy(subUrl) {
-    var base2 = baseUrl();
-    return base2 ? base2 + "subtitles.vtt?from=" + encodeURIComponent(subUrl) : null;
+    var base3 = baseUrl();
+    return base3 ? base3 + "subtitles.vtt?from=" + encodeURIComponent(subUrl) : null;
   }
 
   // src/js/api/extras.js
@@ -8733,13 +8787,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function ratings(meta, anime) {
-    var base2 = meta.imdbRating ? [{
+    var base3 = meta.imdbRating ? [{
       cls: "imdb",
       label: "IMDb",
       value: String(meta.imdbRating)
     }] : [];
     return Promise.all([mdblist(meta), anime ? anilistScore(meta) : Promise.resolve([])]).then(function (r) {
-      return base2.concat(r[0], r[1]);
+      return base3.concat(r[0], r[1]);
     });
   }
   function searchCollections(query) {
@@ -9305,14 +9359,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function fetchMeta(type, id) {
-    var sources2 = withResource("meta", type, id);
-    if (!sources2.length) return Promise.reject(new Error(t("Nenhum addon fornece detalhes para {id}", {
+    var sources3 = withResource("meta", type, id);
+    if (!sources3.length) return Promise.reject(new Error(t("Nenhum addon fornece detalhes para {id}", {
       id: id
     })));
     var i = 0;
     var _next = function next() {
-      if (i >= sources2.length) throw new Error(t("Detalhes não encontrados"));
-      var a = sources2[i++];
+      if (i >= sources3.length) throw new Error(t("Detalhes não encontrados"));
+      var a = sources3[i++];
       return cachedJSON(url(a, "meta", type, id), 30 * 6e4).then(function (r) {
         if (r && r.meta) return r.meta;
         return _next();
@@ -9323,8 +9377,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return _next();
   }
   function fetchStreams(type, id, onAddon) {
-    var sources2 = withResource("stream", type, id);
-    return Promise.all(sources2.map(function (a) {
+    var sources3 = withResource("stream", type, id);
+    return Promise.all(sources3.map(function (a) {
       return (a.virtualStreams ? a.virtualStreams(type, id).then(function (list2) {
         return {
           streams: list2
@@ -9350,8 +9404,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function fetchSubtitles(type, id, extra, onAddon) {
-    var sources2 = withResource("subtitles", type, id);
-    return Promise.all(sources2.map(function (a) {
+    var sources3 = withResource("subtitles", type, id);
+    return Promise.all(sources3.map(function (a) {
       return getJSON(url(a, "subtitles", type, id, extra), {
         timeout: 15e3
       }).then(function (r) {
@@ -10106,9 +10160,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var list2 = (listeners[type] || []).slice();
       for (var i = 0; i < list2.length; i++) {
         try {
-          list2[i].call(api, {
+          list2[i].call(api2, {
             type: type,
-            target: api
+            target: api2
           });
         } catch (e) {
           log.warn("avplay listener", type, e && e.message);
@@ -10225,7 +10279,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       pendingAudio = null;
       pendingText = null;
       textOn = false;
-      wantPlay = !!api.autoplay;
+      wantPlay = !!api2.autoplay;
       if (!url2) {
         emit("emptied");
         return;
@@ -10403,7 +10457,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return false;
       }
     }
-    var api = {
+    var api2 = {
       node: node,
       isAVPlay: true,
       mediaId: "",
@@ -10533,7 +10587,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }
     };
-    Object.defineProperty(api, "src", {
+    Object.defineProperty(api2, "src", {
       get: function get() {
         return src;
       },
@@ -10541,12 +10595,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return open2(String(v || ""));
       }
     });
-    Object.defineProperty(api, "currentSrc", {
+    Object.defineProperty(api2, "currentSrc", {
       get: function get() {
         return src;
       }
     });
-    Object.defineProperty(api, "currentTime", {
+    Object.defineProperty(api2, "currentTime", {
       get: function get() {
         return curMs / 1e3;
       },
@@ -10563,37 +10617,37 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         doSeek(ms);
       }
     });
-    Object.defineProperty(api, "duration", {
+    Object.defineProperty(api2, "duration", {
       get: function get() {
         return durMs > 0 ? durMs / 1e3 : NaN;
       }
     });
-    Object.defineProperty(api, "paused", {
+    Object.defineProperty(api2, "paused", {
       get: function get() {
         return readState() !== "PLAYING";
       }
     });
-    Object.defineProperty(api, "ended", {
+    Object.defineProperty(api2, "ended", {
       get: function get() {
         return ended;
       }
     });
-    Object.defineProperty(api, "error", {
+    Object.defineProperty(api2, "error", {
       get: function get() {
         return error;
       }
     });
-    Object.defineProperty(api, "readyState", {
+    Object.defineProperty(api2, "readyState", {
       get: function get() {
         return prepared ? buffering ? 2 : 4 : 0;
       }
     });
-    Object.defineProperty(api, "networkState", {
+    Object.defineProperty(api2, "networkState", {
       get: function get() {
         return opened ? 2 : 0;
       }
     });
-    Object.defineProperty(api, "buffered", {
+    Object.defineProperty(api2, "buffered", {
       // AVPlay doesn't report buffered ranges; the seek bar just shows no buffer line.
       get: function get() {
         return {
@@ -10607,12 +10661,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         };
       }
     });
-    Object.defineProperty(api, "audioTracks", {
+    Object.defineProperty(api2, "audioTracks", {
       get: function get() {
         return null;
       }
     });
-    return api;
+    return api2;
   }
 
   // src/js/api/tracker.js
@@ -12426,7 +12480,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function transcode() {
       triedTranscode = true;
-      var base2 = baseUrl();
+      var base3 = baseUrl();
       var id = Math.random().toString(36).slice(2) + Date.now().toString(36);
       var q2 = ["mediaURL=" + encodeURIComponent(mediaUrl)];
       ["h264", "h265", "hevc"].forEach(function (c) {
@@ -12436,7 +12490,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return q2.push("audioCodecs=" + c);
       });
       q2.push("maxAudioChannels=6");
-      var url2 = base2 + "hlsv2/" + id + "/master.m3u8?" + q2.join("&");
+      var url2 = base3 + "hlsv2/" + id + "/master.m3u8?" + q2.join("&");
       pendingStart = videoEl.currentTime * 1e3 || pendingStart;
       showSpinner(true);
       message("");
@@ -14548,7 +14602,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var pending2 = [];
-    var active2 = 0;
+    var active3 = 0;
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
@@ -14557,15 +14611,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
           p.state = "loading";
-          active2++;
+          active3++;
           p.load().then(function () {
             p.state = "done";
-            active2--;
+            active3--;
             loadNearby();
           });
         },
         _ret4;
-      for (var i = 0; i < pending2.length && active2 < 2; i++) {
+      for (var i = 0; i < pending2.length && active3 < 2; i++) {
         _ret4 = _loop7();
         if (_ret4 === 0) continue;
         if (_ret4 === 1) break;
@@ -17069,10 +17123,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           title: next[1]
         })));
       }
-      var chip = function chip(key3, label, active2, onSelect) {
+      var chip = function chip(key3, label, active3, onSelect) {
         var c = h("div.chip", {
           focusable: true,
-          cls: active2 ? "active" : "",
+          cls: active3 ? "active" : "",
           text: label,
           onSelect: onSelect
         });
@@ -17411,9 +17465,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
     });
   }
-  function resolveUrl(base2, rel) {
+  function resolveUrl(base3, rel) {
     if (/^https?:\/\//i.test(rel)) return rel;
-    return base2.replace(/[^/]*$/, "") + rel.replace(/^\.\//, "");
+    return base3.replace(/[^/]*$/, "") + rel.replace(/^\.\//, "");
   }
   function install2(repoUrl, man) {
     return getText2(resolveUrl(repoUrl, man.entry)).then(function (source) {
@@ -17965,7 +18019,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       el: el
     };
   }
-  function SourceGrid(api) {
+  function SourceGrid(api2) {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
       "data-scroll-y": ""
@@ -17980,7 +18034,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "data-group": ""
     });
     scroller.appendChild(h("div.row-title.catalog-title", {
-      text: api.name
+      text: api2.name
     }));
     scroller.appendChild(bar);
     scroller.appendChild(gridEl);
@@ -17998,7 +18052,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return reload("popular");
       }
     }, t("Populares")));
-    if (api.latest) bar.appendChild(h("div.btn", {
+    if (api2.latest) bar.appendChild(h("div.btn", {
       focusable: true,
       onSelect: function onSelect() {
         return reload("latest");
@@ -18019,13 +18073,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var sp = spinnerLine(t("Carregando..."));
       gridEl.appendChild(sp);
       var my = kind + query;
-      api.browse(kind, ++page3, query).then(function (r) {
+      api2.browse(kind, ++page3, query).then(function (r) {
         if (my !== kind + query) return;
         if (sp.parentNode) gridEl.removeChild(sp);
         r.items.forEach(function (m) {
           return gridEl.appendChild(card(m, {
             onSelect: function onSelect() {
-              return push(SourceDetails(m, api));
+              return push(SourceDetails(m, api2));
             }
           }));
         });
@@ -18063,14 +18117,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
   function openSourceManga(m) {
-    var api = m.plId ? pluginApi(m.plId, m.plName || "") : suwayomiApi({
+    var api2 = m.plId ? pluginApi(m.plId, m.plName || "") : suwayomiApi({
       id: "",
       name: "",
       latest: false
     });
-    push(SourceDetails(m, api));
+    push(SourceDetails(m, api2));
   }
-  function SourceDetails(m, api) {
+  function SourceDetails(m, api2) {
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
     var listEl = h("div.md-list", {
@@ -18084,7 +18138,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var chapters4 = [];
     var chunk = 0;
     var alive = true;
-    var key3 = api.key(m);
+    var key3 = api2.key(m);
     var status2 = h("div.loading-line", {
       text: t("Procurando capítulos...")
     });
@@ -18106,9 +18160,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         index: Math.max(0, i),
         startPage: page3 || 0,
         rtl: true,
-        pagesFn: api.pagesFn,
+        pagesFn: api2.pagesFn,
         poster: m.poster,
-        kind: api.kind,
+        kind: api2.kind,
         ref: m
       });
     }
@@ -18147,7 +18201,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }) : t("Ler")]), h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
-          return toggleFav(key3, api.kind, m), renderInfo();
+          return toggleFav(key3, api2.kind, m), renderInfo();
         }
       }, [h("span.ico", {
         text: isFav(key3) ? "♥" : "♡"
@@ -18203,14 +18257,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     renderInfo();
     renderList();
-    if (api.detail && !m.description) api.detail(m).then(function (d) {
+    if (api2.detail && !m.description) api2.detail(m).then(function (d) {
       if (!alive || !d) return;
       m.description = d.description || m.description;
       m.author = d.author || m.author;
       m.status = d.status || m.status;
       renderInfo();
     }, function () {});
-    api.chapters(m).then(function (cs) {
+    api2.chapters(m).then(function (cs) {
       if (!alive) return;
       chapters4 = cs;
       var i = idxOf();
@@ -18450,7 +18504,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     drawShelves();
     var pending2 = [];
-    var active2 = 0;
+    var active3 = 0;
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
@@ -18459,15 +18513,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
           p.state = "loading";
-          active2++;
+          active3++;
           p.load().then(function () {
             p.state = "done";
-            active2--;
+            active3--;
             loadNearby();
           });
         },
         _ret5;
-      for (var i = 0; i < pending2.length && active2 < 2; i++) {
+      for (var i = 0; i < pending2.length && active3 < 2; i++) {
         _ret5 = _loop0();
         if (_ret5 === 0) continue;
         if (_ret5 === 1) break;
@@ -18697,18 +18751,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var pending2 = [];
-    var active2 = 0;
+    var active3 = 0;
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      for (var i = 0; i < pending2.length && active2 < 2; i++) {
+      for (var i = 0; i < pending2.length && active3 < 2; i++) {
         var p = pending2[i];
         if (p.state) continue;
         if (p.row.getBoundingClientRect().top > limit) break;
         p.state = "loading";
-        active2++;
+        active3++;
         p.load().then(function () {
-          active2--;
+          active3--;
           loadNearby();
         });
       }
@@ -18797,13 +18851,590 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/api/iptv.js
+  var KEY3 = "iptvSources";
+  var FAVS2 = "iptvFavs";
+  var sources2 = function sources2() {
+    return get(KEY3, []) || [];
+  };
+  function saveSource(src) {
+    var all2 = sources2().filter(function (x) {
+      return x.id !== src.id;
+    });
+    all2.push(src);
+    set(KEY3, all2);
+    set("iptvActive", src.id);
+  }
+  function removeSource(id) {
+    set(KEY3, sources2().filter(function (x) {
+      return x.id !== id;
+    }));
+    if (get("iptvActive", "") === id) set("iptvActive", "");
+    delete cache7[id];
+  }
+  function active2() {
+    var all2 = sources2();
+    return all2.find(function (x) {
+      return x.id === get("iptvActive", "");
+    }) || all2[0] || null;
+  }
+  function setActive(id) {
+    set("iptvActive", id);
+  }
+  var favs3 = function favs3() {
+    return get(FAVS2, {}) || {};
+  };
+  function toggleFav3(srcId, ch) {
+    var all2 = favs3();
+    var k = srcId + "|" + ch.id;
+    if (all2[k]) delete all2[k];else all2[k] = {
+      id: ch.id,
+      name: ch.name,
+      logo: ch.logo,
+      url: ch.url,
+      cat: ch.cat,
+      epg: ch.epg,
+      src: srcId
+    };
+    set(FAVS2, all2);
+    return !!all2[k];
+  }
+  var isFav3 = function isFav3(srcId, chId) {
+    return !!favs3()[srcId + "|" + chId];
+  };
+  var favList = function favList(srcId) {
+    return Object.keys(favs3()).map(function (k) {
+      return favs3()[k];
+    }).filter(function (c) {
+      return c.src === srcId;
+    });
+  };
+  function get2(url2, json) {
+    return httpRaw(url2, {
+      timeoutMs: 3e4
+    }).then(function (r) {
+      if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "?"));
+      if (!json) return r.body;
+      try {
+        return JSON.parse(r.body);
+      } catch (e) {
+        throw new Error("bad answer");
+      }
+    });
+  }
+  var base2 = function base2(s) {
+    return String(s.url || "").replace(/\/+$/, "");
+  };
+  var api = function api(s, action, extra) {
+    return base2(s) + "/player_api.php?username=" + encodeURIComponent(s.user) + "&password=" + encodeURIComponent(s.pass) + (action ? "&action=" + action : "") + (extra || "");
+  };
+  function checkXtream(s) {
+    return get2(api(s, ""), true).then(function (r) {
+      if (!r || !r.user_info || String(r.user_info.auth) !== "1") throw new Error("login");
+      return r.user_info;
+    });
+  }
+  var cache7 = {};
+  function categories(s) {
+    var c = cache7[s.id] = cache7[s.id] || {
+      byCat: {}
+    };
+    if (c.cats) return Promise.resolve(c.cats);
+    if (s.type === "xtream") {
+      return get2(api(s, "get_live_categories"), true).then(function (list2) {
+        c.cats = (Array.isArray(list2) ? list2 : []).map(function (x) {
+          return {
+            id: String(x.category_id),
+            name: String(x.category_name || "")
+          };
+        });
+        return c.cats;
+      });
+    }
+    return loadM3u(s).then(function () {
+      return c.cats;
+    });
+  }
+  function channels(s, catId) {
+    var c = cache7[s.id] = cache7[s.id] || {
+      byCat: {}
+    };
+    if (c.byCat[catId]) return Promise.resolve(c.byCat[catId]);
+    if (s.type === "xtream") {
+      return get2(api(s, "get_live_streams", "&category_id=" + encodeURIComponent(catId)), true).then(function (list2) {
+        var out = (Array.isArray(list2) ? list2 : []).map(function (x) {
+          return {
+            id: String(x.stream_id),
+            name: String(x.name || ""),
+            logo: x.stream_icon || "",
+            url: base2(s) + "/live/" + encodeURIComponent(s.user) + "/" + encodeURIComponent(s.pass) + "/" + x.stream_id + "." + (s.format || "m3u8"),
+            cat: String(x.category_id || catId),
+            epg: x.epg_channel_id || "",
+            num: x.num || ""
+          };
+        });
+        c.byCat[catId] = out;
+        return out;
+      });
+    }
+    return loadM3u(s).then(function () {
+      return c.byCat[catId] || [];
+    });
+  }
+  function loaded(s) {
+    var c = cache7[s.id];
+    return c ? Object.keys(c.byCat).map(function (k) {
+      return c.byCat[k];
+    }) : [];
+  }
+  function loadM3u(s) {
+    var c = cache7[s.id] = cache7[s.id] || {
+      byCat: {}
+    };
+    if (c.cats) return Promise.resolve();
+    return get2(s.url, false).then(function (text) {
+      var cats = [];
+      var seen = {};
+      var lines = String(text || "").split(/\r?\n/);
+      var info2 = null;
+      var n = 0;
+      var _loop1 = function _loop1() {
+        var l = lines[i].trim();
+        if (!l) return 1; // continue
+        if (l.indexOf("#EXTINF") === 0) {
+          var attr = function attr(k) {
+            var m = new RegExp(k + '="([^"]*)"', "i").exec(l);
+            return m ? m[1] : "";
+          };
+          var comma = l.lastIndexOf(",");
+          info2 = {
+            name: comma >= 0 ? l.slice(comma + 1).trim() : "",
+            logo: attr("tvg-logo"),
+            group: attr("group-title") || "—",
+            epg: attr("tvg-id")
+          };
+        } else if (l.charAt(0) !== "#" && info2) {
+          var g = info2.group;
+          if (!seen[g]) {
+            seen[g] = 1;
+            cats.push({
+              id: g,
+              name: g
+            });
+            c.byCat[g] = [];
+          }
+          c.byCat[g].push({
+            id: "m" + n,
+            name: info2.name || l,
+            logo: info2.logo,
+            url: l,
+            cat: g,
+            epg: info2.epg,
+            num: String(n + 1)
+          });
+          n++;
+          info2 = null;
+        }
+      };
+      for (var i = 0; i < lines.length && n < 3e4; i++) {
+        if (_loop1()) continue;
+      }
+      c.cats = cats;
+    });
+  }
+  var epgCache = {};
+  function nowNext(s, ch) {
+    if (!s || s.type !== "xtream") return Promise.resolve([]);
+    var k = s.id + "|" + ch.id;
+    var hit = epgCache[k];
+    if (hit && Date.now() - hit.at < 10 * 6e4) return Promise.resolve(hit.list);
+    return get2(api(s, "get_short_epg", "&stream_id=" + encodeURIComponent(ch.id) + "&limit=2"), true).then(function (r) {
+      var list2 = (r && r.epg_listings || []).map(function (e) {
+        return {
+          title: b64(e.title),
+          start: Number(e.start_timestamp) * 1e3,
+          end: Number(e.stop_timestamp) * 1e3
+        };
+      });
+      epgCache[k] = {
+        at: Date.now(),
+        list: list2
+      };
+      return list2;
+    }).catch(function () {
+      return [];
+    });
+  }
+  function b64(x) {
+    try {
+      return decodeURIComponent(escape(atob(String(x || ""))));
+    } catch (e) {
+      return String(x || "");
+    }
+  }
+
+  // src/js/views/live.js
+  var PAGE = 40;
+  function LiveView() {
+    var el = h("div.view.live-view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar("live", goTab);
+    var head = h("div.live-head");
+    var chips = h("div.live-chips", {
+      "data-scroll-x": "",
+      "data-group": ""
+    });
+    var grid = h("div.live-grid", {
+      "data-group": ""
+    });
+    var hint = h("div.live-hint", {
+      text: t("OK: assistir  ·  🟢 Verde: favorito")
+    });
+    scroller.appendChild(bar);
+    scroller.appendChild(head);
+    scroller.appendChild(chips);
+    scroller.appendChild(grid);
+    el.appendChild(scroller);
+    el.appendChild(hint);
+    var src = active2();
+    var cat = "fav";
+    var shown = [];
+    var count = 0;
+    var token = 0;
+    function drawHead() {
+      clear(head);
+      head.appendChild(h("div.row-title.catalog-title", {
+        text: t("TV ao vivo")
+      }));
+      head.appendChild(h("div.details-buttons", {
+        "data-group": ""
+      }, [h("div.btn", {
+        focusable: true,
+        onSelect: sourcesMenu
+      }, [h("span.ico", {
+        text: "📡"
+      }), src ? src.name : t("Adicionar fonte")]), src ? h("div.btn", {
+        focusable: true,
+        onSelect: search3
+      }, [h("span.ico", {
+        text: "🔍"
+      }), t("Buscar canal")]) : null]));
+    }
+    function sourcesMenu() {
+      var list2 = sources2().map(function (s) {
+        return {
+          label: s.name,
+          sub: s.type === "xtream" ? "Xtream Codes" : "M3U",
+          value: {
+            kind: "use",
+            s: s
+          },
+          checked: src && s.id === src.id
+        };
+      });
+      list2.push({
+        label: "＋ " + t("Conta Xtream Codes"),
+        sub: t("Servidor, usuário e senha do seu IPTV"),
+        value: {
+          kind: "xtream"
+        }
+      });
+      list2.push({
+        label: "＋ " + t("Lista M3U"),
+        sub: t("Link da sua lista"),
+        value: {
+          kind: "m3u"
+        }
+      });
+      if (src) list2.push({
+        label: "🗑 " + t("Remover {name}", {
+          name: src.name
+        }),
+        value: {
+          kind: "rm"
+        }
+      });
+      menu(t("Fontes de TV ao vivo"), list2, {
+        onPick: function onPick(v) {
+          if (v.kind === "use") {
+            setActive(v.s.id);
+            src = v.s;
+            cat = "fav";
+            render();
+          } else if (v.kind === "xtream") addXtream();else if (v.kind === "m3u") addM3u();else if (v.kind === "rm") confirmDialog(t("Remover {name}?", {
+            name: src.name
+          }), t("Remover"), function () {
+            return removeSource(src.id), src = active2(), render();
+          });
+        }
+      });
+    }
+    function addXtream() {
+      promptText(t("Servidor (ex.: http://exemplo.com:8080)"), "http://", "", function (url2) {
+        var u = url2.trim().replace(/\/+$/, "");
+        if (!/^https?:\/\//i.test(u)) u = "http://" + u;
+        promptText(t("Usuário"), "", "", function (user2) {
+          return promptText(t("Senha"), "", "", function (pass) {
+            var s = {
+              id: "x" + Date.now(),
+              type: "xtream",
+              url: u,
+              user: user2.trim(),
+              pass: pass.trim(),
+              name: u.replace(/^https?:\/\//, "").split(/[:/]/)[0],
+              format: "m3u8"
+            };
+            toast(t("Entrando..."));
+            checkXtream(s).then(function (info2) {
+              if (info2 && info2.username) s.name = s.name + " · " + info2.username;
+              saveSource(s);
+              src = s;
+              cat = "fav";
+              render();
+              toast(t("Conta adicionada."));
+            }, function () {
+              return toast(t("Não consegui entrar. Confira servidor, usuário e senha."), 6e3);
+            });
+          });
+        });
+      });
+    }
+    function addM3u() {
+      promptText(t("Link da lista M3U"), "http://", "", function (url2) {
+        var u = url2.trim();
+        if (!/^https?:\/\//i.test(u)) return toast(t("Endereço inválido."));
+        var s = {
+          id: "m" + Date.now(),
+          type: "m3u",
+          url: u,
+          name: u.replace(/^https?:\/\//, "").split(/[/?]/)[0]
+        };
+        saveSource(s);
+        src = s;
+        cat = "fav";
+        render();
+      });
+    }
+    function search3() {
+      promptText(t("Buscar canal"), "", "", function (q2) {
+        var needle = q2.trim().toLowerCase();
+        if (!needle) return;
+        cat = "search:" + needle;
+        drawGrid();
+      });
+    }
+    function chip(label, key3) {
+      return h("div.chip", {
+        focusable: true,
+        cls: key3 === cat ? "primary-chip" : "",
+        onSelect: function onSelect() {
+          return cat = key3, drawChips(), drawGrid();
+        }
+      }, label);
+    }
+    function drawChips() {
+      clear(chips);
+      if (!src) return;
+      chips.appendChild(chip("★ " + t("Favoritos"), "fav"));
+      categories(src).then(function (cats) {
+        if (!src) return;
+        cats.slice(0, 80).forEach(function (c) {
+          return chips.appendChild(chip(c.name, c.id));
+        });
+      }).catch(function () {
+        return toast(t("Não consegui carregar a lista."), 5e3);
+      });
+    }
+    function load7() {
+      if (cat === "fav") return Promise.resolve(favList(src.id));
+      if (cat.indexOf("search:") === 0) {
+        var needle = cat.slice(7);
+        return categories(src).then(function () {
+          var res = [];
+          var seen = {};
+          loaded(src).concat([favList(src.id)]).forEach(function (list2) {
+            return list2.forEach(function (c) {
+              if (res.length < 200 && !seen[c.id] && String(c.name).toLowerCase().indexOf(needle) >= 0) {
+                seen[c.id] = 1;
+                res.push(c);
+              }
+            });
+          });
+          if (!res.length && src.type === "xtream") toast(t("A busca procura nas categorias que você já abriu."), 5e3);
+          return res;
+        });
+      }
+      return channels(src, cat);
+    }
+    function drawGrid() {
+      var my = ++token;
+      clear(grid);
+      if (!src) {
+        grid.appendChild(h("div.live-empty", null, [h("div.t", {
+          text: t("Sem fontes ainda")
+        }), h("div.s", {
+          text: t("Adicione sua conta Xtream Codes ou um link M3U. O app não traz nenhum canal.")
+        })]));
+        return;
+      }
+      grid.appendChild(spinnerLine(t("Carregando...")));
+      load7().then(function (list2) {
+        if (my !== token) return;
+        clear(grid);
+        shown = list2 || [];
+        count = 0;
+        if (!shown.length) grid.appendChild(h("div.live-empty", null, [h("div.t", {
+          text: cat === "fav" ? t("Sem favoritos ainda") : t("Nada por aqui.")
+        }), h("div.s", {
+          text: cat === "fav" ? t("Escolha uma categoria e aperte o botão verde num canal.") : ""
+        })]));
+        more();
+        var first = grid.querySelector(".live-cell");
+        if (first && cat !== "fav") focus(first, {
+          noScroll: true
+        });
+      }, function () {
+        if (my !== token) return;
+        clear(grid);
+        grid.appendChild(h("div.live-empty", null, [h("div.t", {
+          text: t("Não consegui carregar a lista.")
+        })]));
+      });
+    }
+    function more() {
+      var old = grid.querySelector(".live-more");
+      if (old) grid.removeChild(old);
+      var end = Math.min(shown.length, count + PAGE);
+      for (var i = count; i < end; i++) grid.appendChild(cell(shown[i]));
+      count = end;
+      if (count < shown.length) grid.appendChild(h("div.live-cell.live-more", {
+        focusable: true,
+        onSelect: more
+      }, [h("div.lc-head", {
+        text: "+ " + t("Carregar mais") + " (" + (shown.length - count) + ")"
+      })]));
+      loadVisibleImages(grid);
+    }
+    function cell(ch) {
+      var logo2 = h("div.lc-logo");
+      if (ch.logo) {
+        var im = h("img", {
+          alt: ""
+        });
+        im.setAttribute("data-lazy", ch.logo);
+        im.onerror = function () {
+          return im.style.display = "none";
+        };
+        logo2.appendChild(im);
+      } else logo2.appendChild(h("span", {
+        text: (ch.name || "?").charAt(0)
+      }));
+      var now = h("div.lc-now", {
+        text: ch.name
+      });
+      var meta = h("div.lc-meta");
+      var prog = h("div.lc-prog", null, h("i"));
+      var star = h("span.lc-star", {
+        text: isFav3(src.id, ch.id) ? "★" : ""
+      });
+      var el2 = h("div.live-cell", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return play(ch);
+        },
+        onFocus: function onFocus() {
+          return epg();
+        }
+      }, [h("div.lc-top", null, [logo2, h("div.lc-id", null, [h("div.lc-name", {
+        text: ch.name
+      }), h("div.lc-cat", {
+        text: ch.num ? "#" + ch.num : ""
+      })]), star]), now, h("div.lc-bottom", null, [meta, prog])]);
+      el2.__ch = ch;
+      el2.__star = star;
+      var asked = false;
+      function epg() {
+        if (asked) return;
+        asked = true;
+        nowNext(src, ch).then(function (list2) {
+          var n = list2.find(function (e) {
+            return e.start <= Date.now() && e.end > Date.now();
+          }) || list2[0];
+          if (!n) return;
+          now.textContent = n.title || ch.name;
+          var left = Math.max(0, Math.round((n.end - Date.now()) / 6e4));
+          var nx = list2.find(function (e) {
+            return e.start >= n.end - 1e3;
+          });
+          meta.textContent = t("até {time}", {
+            time: timeHM(new Date(n.end))
+          }) + " · " + t("{n} min restantes", {
+            n: left
+          }) + (nx ? "  ·  " + t("Depois: {title}", {
+            title: nx.title
+          }) : "");
+          prog.firstChild.style.width = Math.max(0, Math.min(100, (Date.now() - n.start) / (n.end - n.start) * 100)) + "%";
+          prog.style.display = "block";
+        });
+      }
+      if (count < 8) setTimeout(epg, 300 + count * 150);
+      return el2;
+    }
+    function play(ch) {
+      var id = "live:" + src.id + ":" + ch.id;
+      openPlayer({
+        meta: {
+          id: id,
+          type: "tv",
+          name: ch.name,
+          poster: ch.logo
+        },
+        video: {
+          id: id,
+          title: ch.name
+        },
+        stream: {
+          url: ch.url,
+          name: ch.name
+        },
+        live: true
+      });
+    }
+    function render() {
+      drawHead();
+      drawChips();
+      drawGrid();
+    }
+    render();
+    return {
+      el: el,
+      onKey: function onKey(e) {
+        if (e.keyCode !== KEY.GREEN) return false;
+        var cur = current2();
+        if (!cur || !cur.__ch || !src) return false;
+        var on = toggleFav3(src.id, cur.__ch);
+        cur.__star.textContent = on ? "★" : "";
+        toast(on ? t("Adicionado aos favoritos.") : t("Removido dos favoritos."));
+        return true;
+      },
+      onShow: function onShow() {
+        return loadVisibleImages(el);
+      },
+      destroy: function destroy() {
+        return bar.__destroy && bar.__destroy();
+      }
+    };
+  }
+
   // src/js/api/nuvioCollections.js
   var TMDB_IMG2 = "https://image.tmdb.org/t/p/w342";
   var files = {};
   function load5(name) {
     if (!files[name]) {
-      var base2 = window.__KAI_BASE__ || "";
-      files[name] = getJSON(base2 + "collections/" + name + ".json", {
+      var base3 = window.__KAI_BASE__ || "";
+      files[name] = getJSON(base3 + "collections/" + name + ".json", {
         timeout: 3e4
       }).catch(function (e) {
         delete files[name];
@@ -19095,11 +19726,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function lazyQueue(el) {
     var pending2 = [];
-    var active2 = 0;
+    var active3 = 0;
     function run3() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop1 = function _loop1() {
+      var _loop10 = function _loop10() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (!p.row.parentNode) {
@@ -19108,20 +19739,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
           p.state = "loading";
-          active2++;
+          active3++;
           p.load().then(function () {
             p.state = "done";
-            active2--;
+            active3--;
             run3();
           }, function () {
             p.state = "done";
-            active2--;
+            active3--;
             run3();
           });
         },
         _ret6;
-      for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret6 = _loop1();
+      for (var i = 0; i < pending2.length && active3 < 2; i++) {
+        _ret6 = _loop10();
         if (_ret6 === 0) continue;
         if (_ret6 === 1) break;
       }
@@ -19741,7 +20372,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderSagas() {
       clear(sagasRow);
-      var active3 = FRANCHISES.map(function (f) {
+      var active4 = FRANCHISES.map(function (f) {
         var done = watchedCount(f);
         return {
           f: f,
@@ -19751,7 +20382,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).filter(function (x) {
         return x.done > 0 && x.done < x.total;
       });
-      if (!active3.length) {
+      if (!active4.length) {
         sagasRow.style.display = "none";
         return;
       }
@@ -19763,7 +20394,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         "data-scroll-x": "",
         "data-group": ""
       });
-      active3.forEach(function (x) {
+      active4.forEach(function (x) {
         var f = x.f;
         var title = displayName(f);
         var firstUnseen = f.items.find(function (it) {
@@ -19790,11 +20421,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       loadVisibleImages(sagasRow);
     }
     var pending2 = [];
-    var active2 = 0;
+    var active3 = 0;
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop10 = function _loop10() {
+      var _loop11 = function _loop11() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -19803,16 +20434,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
           p.state = "loading";
-          active2++;
+          active3++;
           p.load().then(function () {
             p.state = "done";
-            active2--;
+            active3--;
             loadNearby();
           });
         },
         _ret7;
-      for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret7 = _loop10();
+      for (var i = 0; i < pending2.length && active3 < 2; i++) {
+        _ret7 = _loop11();
         if (_ret7 === 0) continue;
         if (_ret7 === 1) break;
       }
@@ -20238,36 +20869,36 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var pending2 = [];
-    var active2 = 0;
+    var active3 = 0;
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop11 = function _loop11() {
+      var _loop12 = function _loop12() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
           p.state = "loading";
-          active2++;
+          active3++;
           Promise.resolve(p.load()).then(function () {
             p.state = "done";
-            active2--;
+            active3--;
             loadNearby();
           }, function () {
             p.state = "done";
-            active2--;
+            active3--;
             loadNearby();
           });
         },
         _ret8;
-      for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret8 = _loop11();
+      for (var i = 0; i < pending2.length && active3 < 2; i++) {
+        _ret8 = _loop12();
         if (_ret8 === 0) continue;
         if (_ret8 === 1) break;
       }
     }
-    var loaded = false;
+    var loaded2 = false;
     function render() {
-      loaded = true;
+      loaded2 = true;
       clear(rows2);
       rows2.appendChild(spinnerLine(t("Carregando catálogos...")));
       load().then(function () {
@@ -20300,7 +20931,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       onShow: function onShow() {
-        if (!loaded) render();
+        if (!loaded2) render();
         loadNearby();
         loadVisibleImages(el);
       },
@@ -20310,7 +20941,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       freeMemory: function freeMemory() {
         pending2 = [];
         clear(rows2);
-        loaded = false;
+        loaded2 = false;
       },
       destroy: function destroy() {
         return bar.__destroy && bar.__destroy();
@@ -20586,7 +21217,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T17:39:26.241Z";
+  var BUILD = "2026-11-16T17:47:20.667Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -23259,7 +23890,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop12 = function _loop12() {
+      var _loop13 = function _loop13() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -23275,7 +23906,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop12();
+        _loop13();
       }
       days.__last = days.children[current3 + 1];
     }
@@ -23735,6 +24366,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     registerTab("anime", AnimeView);
     registerTab("manga", MangaView);
     registerTab("discover", DiscoverView);
+    registerTab("live", LiveView);
     registerTab("movies", MoviesView);
     registerTab("series", SeriesView);
     if (needsPicker() && !window.location.search.includes("nopicker")) {
