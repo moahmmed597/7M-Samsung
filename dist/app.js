@@ -5043,6 +5043,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Plugins podem rodar nesta TV": "Plugins can run on this TV",
+    "Iniciar": "Start",
+    "Iniciou": "Started",
+    "Fim do teste.": "End of the test.",
     "Perfil {n}": "Profile {n}",
     "O plugin não respondeu em 30 s (não iniciou nesta TV?)": "The plugin didn't answer in 30 s (didn't start on this TV?)",
     "Testar plugins": "Test plugins",
@@ -5436,6 +5440,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Plugins podem rodar nesta TV": "الإضافات تقدر تشتغل على هذا التلفزيون",
+    "Iniciar": "التشغيل",
+    "Iniciou": "اشتغلت",
+    "Fim do teste.": "انتهى الاختبار.",
     "Perfil {n}": "الملف {n}",
     "O plugin não respondeu em 30 s (não iniciou nesta TV?)": "الإضافة ما ردت خلال 30 ثانية (ما اشتغلت على هذا التلفزيون؟)",
     "Testar plugins": "اختبار الإضافات",
@@ -15263,12 +15271,50 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     while (order.length > 2) stop2(order[0]);
     return w;
   }
+  function ready(id) {
+    var p = installed().find(function (x) {
+      return x.id === id;
+    });
+    if (!p) return Promise.reject(new Error("not installed"));
+    try {
+      return (workers[id] || start2(p)).ready;
+    } catch (e) {
+      return Promise.reject(new Error("worker: " + (e && e.message || e)));
+    }
+  }
+  function workerCheck() {
+    return new Promise(function (resolve2, reject) {
+      var url2 = "";
+      try {
+        url2 = URL.createObjectURL(new Blob(['postMessage("ok")'], {
+          type: "text/javascript"
+        }));
+        var w = new Worker(url2);
+        var timer = setTimeout(function () {
+          return reject(new Error("no answer"));
+        }, 5e3);
+        w.onmessage = function () {
+          return clearTimeout(timer), w.terminate(), URL.revokeObjectURL(url2), resolve2();
+        };
+        w.onerror = function (e) {
+          return clearTimeout(timer), reject(new Error(e && e.message || "blocked"));
+        };
+      } catch (e) {
+        reject(new Error((e && e.name ? e.name + ": " : "") + (e && e.message || e)));
+      }
+    });
+  }
   function call3(id, method, args, timeout) {
     var p = installed().find(function (x) {
       return x.id === id;
     });
     if (!p) return Promise.reject(new Error("not installed"));
-    var w = workers[id] || start2(p);
+    var w;
+    try {
+      w = workers[id] || start2(p);
+    } catch (e) {
+      return Promise.reject(new Error("worker: " + (e && e.message || e)));
+    }
     order = order.filter(function (x) {
       return x !== id;
     }).concat([id]);
@@ -15792,37 +15838,82 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
       var ua = navigator.userAgent || "";
       line(null, "Chrome " + ((/Chrome\/(\d+)/.exec(ua) || /\) (\d+)\.\d+\.\d+\.\d+/.exec(ua) || [])[1] || "?") + " · Tizen " + ((/Tizen ([\d.]+)/.exec(ua) || [])[1] || "?") + " · " + t("serviço da TV") + " v" + (serviceVersion() || "?"));
-      serviceOnly("https://raw.githubusercontent.com/github/gitignore/main/README.md").then(function (r) {
-        line(r && r.ok, t("Pedido pela TV") + ": HTTP " + (r ? r.status : "?") + (r && r.headers && r.headers.server ? "" : ""));
-        var p = installed()[0];
-        line(null, t("Plugin") + ": " + p.name);
-        var slow = setTimeout(function () {
-          return line(false, t("O plugin não respondeu em 30 s (não iniciou nesta TV?)"));
-        }, 3e4);
-        return popular(p.id, 0).then(function (items3) {
-          return clearTimeout(slow), items3;
-        }, function (e) {
-          clearTimeout(slow);
-          throw e;
-        }).then(function (items3) {
-          line(items3.length > 0, t("Lista") + ": " + items3.length);
-          if (!items3.length) return;
-          return chapters2(p.id, items3[0].id).then(function (cs) {
-            line(cs.length > 0, t("Capítulos de") + ' "' + items3[0].title + '": ' + cs.length);
-            if (!cs.length) return;
-            return pages2(p.id, cs[0].id).then(function (pg) {
-              return line(pg.length > 0, t("Páginas do capítulo") + ": " + pg.length);
-            }, function (e) {
-              return line(false, t("Páginas") + ": " + (e && e.message));
-            });
+      var t0 = function t0() {
+        return Date.now();
+      };
+      var secs = function secs(st) {
+        return " (" + ((Date.now() - st) / 1e3).toFixed(1) + " s)";
+      };
+      var step = function step(label, run3, limit) {
+        var st = t0();
+        return new Promise(function (resolve2) {
+          var timer = setTimeout(function () {
+            return line(false, label + ": " + t("sem resposta") + secs(st)), resolve2(null);
+          }, limit || 3e4);
+          var p2;
+          try {
+            p2 = Promise.resolve(run3());
+          } catch (e) {
+            p2 = Promise.reject(e);
+          }
+          p2.then(function (v) {
+            clearTimeout(timer);
+            resolve2(v === void 0 ? true : v);
           }, function (e) {
-            return line(false, t("Capítulos") + ": " + (e && e.message));
+            clearTimeout(timer);
+            line(false, label + ": " + (e && e.message || e) + secs(st));
+            resolve2(null);
           });
-        }, function (e) {
-          return line(false, t("Lista") + ": " + (e && e.message));
         });
-      }, function (e) {
-        return line(false, t("Pedido pela TV") + ": " + (e && e.message));
+      };
+      step(t("Pedido pela TV"), function () {
+        return serviceOnly("https://raw.githubusercontent.com/github/gitignore/main/README.md").then(function (r) {
+          return line(r && r.ok, t("Pedido pela TV") + ": HTTP " + (r ? r.status : "?")), r;
+        });
+      }, 2e4).then(function () {
+        return step("Worker", function () {
+          return workerCheck().then(function () {
+            return line(true, t("Plugins podem rodar nesta TV"));
+          });
+        }, 8e3);
+      }).then(function () {
+        return installed().reduce(function (chain, p) {
+          return chain.then(function () {
+            line(null, t("Plugin") + ": " + p.name);
+            var st = t0();
+            return step(t("Iniciar"), function () {
+              return ready(p.id).then(function () {
+                return line(true, t("Iniciou") + secs(st));
+              });
+            }, 2e4).then(function (ok) {
+              if (!ok) return;
+              var st2 = t0();
+              return step(t("Lista"), function () {
+                return popular(p.id, 0).then(function (items3) {
+                  return line(items3.length > 0, t("Lista") + ": " + items3.length + secs(st2)), items3;
+                });
+              }, 45e3).then(function (items3) {
+                if (!items3 || !items3.length) return;
+                var st3 = t0();
+                return step(t("Capítulos"), function () {
+                  return chapters2(p.id, items3[0].id).then(function (cs) {
+                    return line(cs.length > 0, t("Capítulos de") + ' "' + items3[0].title + '": ' + cs.length + secs(st3)), cs;
+                  });
+                }, 45e3).then(function (cs) {
+                  if (!cs || !cs.length) return;
+                  var st4 = t0();
+                  return step(t("Páginas"), function () {
+                    return pages2(p.id, cs[0].id).then(function (pg) {
+                      return line(pg.length > 0, t("Páginas do capítulo") + ": " + pg.length + secs(st4));
+                    });
+                  }, 45e3);
+                });
+              });
+            });
+          });
+        }, Promise.resolve());
+      }).then(function () {
+        return line(null, t("Fim do teste."));
       });
     }
     function load7() {
@@ -21517,7 +21608,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T18:34:44.835Z";
+  var BUILD = "2026-11-16T18:41:04.231Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -24547,12 +24638,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }, 900);
       }
     };
-    var ready = items2.length ? Promise.resolve() : load2().then(function (l) {
+    var ready2 = items2.length ? Promise.resolve() : load2().then(function (l) {
       return items2 = (l || []).filter(function (x) {
         return x.background;
       });
     }).catch(function () {});
-    ready.then(function () {
+    ready2.then(function () {
       if (!overlay) return;
       next();
       slideTimer = setInterval(next, SLIDE_MS);

@@ -351,10 +351,42 @@ function start(p) {
   return w;
 }
 
+// Starts a plugin (for the test screen): resolves when it is running.
+export function ready(id) {
+  const p = installed().find((x) => x.id === id);
+  if (!p) return Promise.reject(new Error('not installed'));
+  try {
+    return (workers[id] || start(p)).ready;
+  } catch (e) {
+    return Promise.reject(new Error('worker: ' + ((e && e.message) || e)));
+  }
+}
+
+// Can this TV run a sandboxed worker at all? (test screen)
+export function workerCheck() {
+  return new Promise((resolve, reject) => {
+    let url = '';
+    try {
+      url = URL.createObjectURL(new Blob(['postMessage("ok")'], { type: 'text/javascript' }));
+      const w = new Worker(url);
+      const timer = setTimeout(() => reject(new Error('no answer')), 5000);
+      w.onmessage = () => (clearTimeout(timer), w.terminate(), URL.revokeObjectURL(url), resolve());
+      w.onerror = (e) => (clearTimeout(timer), reject(new Error((e && e.message) || 'blocked')));
+    } catch (e) {
+      reject(new Error((e && e.name ? e.name + ': ' : '') + ((e && e.message) || e)));
+    }
+  });
+}
+
 function call(id, method, args, timeout) {
   const p = installed().find((x) => x.id === id);
   if (!p) return Promise.reject(new Error('not installed'));
-  const w = workers[id] || start(p);
+  let w;
+  try {
+    w = workers[id] || start(p);
+  } catch (e) {
+    return Promise.reject(new Error('worker: ' + ((e && e.message) || e)));
+  }
   order = order.filter((x) => x !== id).concat([id]);
   return w.ready.then(
     () =>

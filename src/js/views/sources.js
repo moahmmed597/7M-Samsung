@@ -218,39 +218,58 @@ function SourcesView() {
     const line = (ok, text) => out.appendChild(h('div', { cls: ok === true ? 'ok' : ok === false ? 'bad' : '', text: (ok === true ? '✓ ' : ok === false ? '✗ ' : '… ') + text }));
     const ua = navigator.userAgent || '';
     line(null, 'Chrome ' + ((/Chrome\/(\d+)/.exec(ua) || /\) (\d+)\.\d+\.\d+\.\d+/.exec(ua) || [])[1] || '?') + ' · Tizen ' + ((/Tizen ([\d.]+)/.exec(ua) || [])[1] || '?') + ' · ' + t('serviço da TV') + ' v' + (serviceVersion() || '?'));
-    pl.serviceOnly('https://raw.githubusercontent.com/github/gitignore/main/README.md').then(
-      (r) => {
-        line(r && r.ok, t('Pedido pela TV') + ': HTTP ' + (r ? r.status : '?') + (r && r.headers && r.headers.server ? '' : ''));
-        const p = pl.installed()[0];
-        line(null, t('Plugin') + ': ' + p.name);
-        const slow = setTimeout(() => line(false, t('O plugin não respondeu em 30 s (não iniciou nesta TV?)')), 30000);
-        return pl.popular(p.id, 0).then(
-          (items) => (clearTimeout(slow), items),
-          (e) => {
-            clearTimeout(slow);
-            throw e;
-          }
-        ).then(
-          (items) => {
-            line(items.length > 0, t('Lista') + ': ' + items.length);
-            if (!items.length) return;
-            return pl.chapters(p.id, items[0].id).then(
-              (cs) => {
-                line(cs.length > 0, t('Capítulos de') + ' "' + items[0].title + '": ' + cs.length);
-                if (!cs.length) return;
-                return pl.pages(p.id, cs[0].id).then(
-                  (pg) => line(pg.length > 0, t('Páginas do capítulo') + ': ' + pg.length),
-                  (e) => line(false, t('Páginas') + ': ' + (e && e.message))
-                );
-              },
-              (e) => line(false, t('Capítulos') + ': ' + (e && e.message))
-            );
+    // Each step with its own time limit and the exact error; then every plugin in turn.
+    const t0 = () => Date.now();
+    const secs = (st) => ' (' + ((Date.now() - st) / 1000).toFixed(1) + ' s)';
+    const step = (label, run, limit) => {
+      const st = t0();
+      return new Promise((resolve) => {
+        const timer = setTimeout(() => (line(false, label + ': ' + t('sem resposta') + secs(st)), resolve(null)), limit || 30000);
+        let p2;
+        try {
+          p2 = Promise.resolve(run());
+        } catch (e) {
+          p2 = Promise.reject(e);
+        }
+        p2.then(
+          (v) => {
+            clearTimeout(timer);
+            resolve(v === undefined ? true : v);
           },
-          (e) => line(false, t('Lista') + ': ' + (e && e.message))
+          (e) => {
+            clearTimeout(timer);
+            line(false, label + ': ' + ((e && e.message) || e) + secs(st));
+            resolve(null);
+          }
         );
-      },
-      (e) => line(false, t('Pedido pela TV') + ': ' + (e && e.message))
-    );
+      });
+    };
+    step(t('Pedido pela TV'), () => pl.serviceOnly('https://raw.githubusercontent.com/github/gitignore/main/README.md').then((r) => (line(r && r.ok, t('Pedido pela TV') + ': HTTP ' + (r ? r.status : '?')), r)), 20000)
+      .then(() => step('Worker', () => pl.workerCheck().then(() => line(true, t('Plugins podem rodar nesta TV'))), 8000))
+      .then(() =>
+        pl.installed().reduce(
+          (chain, p) =>
+            chain.then(() => {
+              line(null, t('Plugin') + ': ' + p.name);
+              const st = t0();
+              return step(t('Iniciar'), () => pl.ready(p.id).then(() => line(true, t('Iniciou') + secs(st))), 20000).then((ok) => {
+                if (!ok) return;
+                const st2 = t0();
+                return step(t('Lista'), () => pl.popular(p.id, 0).then((items) => (line(items.length > 0, t('Lista') + ': ' + items.length + secs(st2)), items)), 45000).then((items) => {
+                  if (!items || !items.length) return;
+                  const st3 = t0();
+                  return step(t('Capítulos'), () => pl.chapters(p.id, items[0].id).then((cs) => (line(cs.length > 0, t('Capítulos de') + ' "' + items[0].title + '": ' + cs.length + secs(st3)), cs)), 45000).then((cs) => {
+                    if (!cs || !cs.length) return;
+                    const st4 = t0();
+                    return step(t('Páginas'), () => pl.pages(p.id, cs[0].id).then((pg) => line(pg.length > 0, t('Páginas do capítulo') + ': ' + pg.length + secs(st4))), 45000);
+                  });
+                });
+              });
+            }),
+          Promise.resolve()
+        )
+      )
+      .then(() => line(null, t('Fim do teste.')));
   }
 
   function load() {
