@@ -35,6 +35,29 @@
 
 ---
 
+## 📲 Get it on every device
+
+One app, one codebase. Downloads are on the [Releases page](https://github.com/moahmmed597/Stremio-Kai-7M/releases/latest).
+
+| Device | File | How to install |
+| --- | --- | --- |
+| **Samsung TV (Tizen)** | `Stremio7M.wgt` or TizenBrew | See "Installation Guide for Samsung Tizen TVs" below |
+| **Android phone / tablet** | `Stremio-Kai-7M-android.apk` | Open the file, allow "install unknown apps" once |
+| **Android TV / Google TV (TCL, Hisense, Sony, Xiaomi, Chromecast with Google TV…)** | `Stremio-Kai-7M-android.apk` | Put it on a USB stick, or install the **Downloader** app on the TV and type the release link, or `adb install`. It shows in the apps row and works with the TV remote |
+| **iPhone / iPad** | `Stremio-Kai-7M-ios-unsigned.ipa` | Install **SideStore** or **AltStore** (they sign apps with your own Apple ID), open the `.ipa` in it. The TV address is not needed |
+| **Windows** | `Stremio-Kai-7M-*-windows-portable.exe` | Download and run. F11 = full screen |
+
+All builds are made by GitHub Actions from this repository (`.github/workflows/build-apps.yml`), so what you download is what is in the source.
+
+> The iPhone and Android files are **not** from an app store and are **not** signed by a company. Android may show a warning once; the iPhone build is signed by your own SideStore/AltStore.
+
+**Same features everywhere:** home, anime, manga (your own Suwayomi server), comics, books, live TV (your own M3U lists), calendar, library, multi-profile, 3 languages. On phones and PC the screen is scaled to fit and works with touch, mouse and keyboard. Samsung-only extras (hardware AVPlay, embedded audio track switching) stay on the Samsung build; other devices use the system player.
+
+### What the app does not contain
+No movies, no channels, no manga, no sources. Streams come from the Stremio add-ons of **your** account; manga from **your** Suwayomi server; live TV from **your** playlists.
+
+---
+
 ## 🌟 What's New in 7M Edition?
 
 The **7M Edition** introduces over **22,000+ lines of enhancements** across 69 files over the upstream base, heavily tailored for Samsung OLED TVs:
