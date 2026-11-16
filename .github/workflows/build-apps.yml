@@ -73,6 +73,7 @@ jobs:
         shell: bash
         run: |
           rm -rf www && mkdir www && cp -r ../../dist/. www/
+          V="${GITHUB_REF_NAME#app-v}"; case "$V" in [0-9]*) npm version "$V" --no-git-tag-version --allow-same-version ;; esac
           npm install
           npx electron-builder --win nsis portable --publish never
       - uses: actions/upload-artifact@v4
