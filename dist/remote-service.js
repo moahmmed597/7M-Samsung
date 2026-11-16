@@ -536,6 +536,7 @@ server.on('error', function () {
 // runs instead of this one. Offline or same version: this copy starts.
 function startHere() { server.listen(PORT, '0.0.0.0'); }
 (function selfUpdate() {
+  try { require('https'); } catch (e) { return startHere(); }
   if (global.__KAI_SVC_CHILD) return startHere();
   var https = require('https');
   var done = false;
@@ -555,20 +556,30 @@ function startHere() { server.listen(PORT, '0.0.0.0'); }
     }
     startHere();
   }
+  // Old Node on the TV: https.get(options, callback) only (no url + options form).
   function get(url, cb) {
-    var r = https.get(url, { headers: { 'User-Agent': 'stremio-7m-tizen', Accept: 'application/vnd.github.sha' }, timeout: 6000 }, function (res) {
-      var body = '';
-      res.setEncoding('utf8');
-      res.on('data', function (c) { body += c; });
-      res.on('end', function () { cb(res.statusCode === 200 ? body : null); });
-    });
-    r.on('error', function () { cb(null); });
-    r.on('timeout', function () { r.abort(); });
+    try {
+      var o = require('url').parse(url);
+      var r = https.get({ hostname: o.hostname, path: o.path, port: 443, headers: { 'User-Agent': 'stremio-7m-tizen', Accept: 'application/vnd.github.sha' } }, function (res) {
+        var body = '';
+        res.setEncoding('utf8');
+        res.on('data', function (c) { body += c; });
+        res.on('end', function () { cb(res.statusCode === 200 ? body : null); });
+      });
+      r.on('error', function () { cb(null); });
+      r.setTimeout(6000, function () { r.abort(); });
+    } catch (e) {
+      cb(null);
+    }
   }
   setTimeout(function () { finish(null); }, 15000);
-  get('https://api.github.com/repos/moahmmed597/Stremio-Kai-7M/commits/main', function (sha) {
-    sha = String(sha || '').replace(/\s/g, '');
-    if (!/^[0-9a-f]{40}$/.test(sha)) return finish(null);
-    get('https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@' + sha + '/dist/remote-service.js', finish);
-  });
+  try {
+    get('https://api.github.com/repos/moahmmed597/Stremio-Kai-7M/commits/main', function (sha) {
+      sha = String(sha || '').replace(/\s/g, '');
+      if (!/^[0-9a-f]{40}$/.test(sha)) return finish(null);
+      get('https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@' + sha + '/dist/remote-service.js', finish);
+    });
+  } catch (e) {
+    finish(null);
+  }
 })();

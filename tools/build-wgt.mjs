@@ -96,14 +96,15 @@ module.exports.onExit = function () {};
     }
   }
   function get(url, cb) {
-    var r = https.get(url, { headers: { 'User-Agent': 'stremio-7m-tizen', Accept: 'application/vnd.github.sha' }, timeout: 6000 }, function (res) {
+    var o = require('url').parse(url);
+    var r = https.get({ hostname: o.hostname, path: o.path, port: 443, headers: { 'User-Agent': 'stremio-7m-tizen', Accept: 'application/vnd.github.sha' } }, function (res) {
       var body = '';
       res.setEncoding('utf8');
       res.on('data', function (c) { body += c; });
       res.on('end', function () { cb(res.statusCode === 200 ? body : null); });
     });
     r.on('error', function () { cb(null); });
-    r.on('timeout', function () { r.abort(); });
+    r.setTimeout(6000, function () { r.abort(); });
   }
   var fallback = setTimeout(function () { if (!started) { started = true; require('./bundled.js'); } }, 15000);
   get('https://api.github.com/repos/moahmmed597/7M-Samsung/commits/main', function (sha) {
