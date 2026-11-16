@@ -20,8 +20,6 @@ import { collectionMenu } from './collections.js';
 import * as parental from '../api/parental.js';
 import * as debrid from '../api/debrid.js';
 import { streamBadgeSettings } from '../lib/badges.js';
-import * as animeLink from '../lib/animeLink.js';
-import { openMangaDetails } from './mangaDetails.js';
 
 export function openDetails(type, id, opts) {
   router.push(DetailsView(type, id, opts || {}));
@@ -88,26 +86,6 @@ function DetailsView(type, id, opts) {
 
   function movieVideoId() {
     return (meta.behaviorHints && meta.behaviorHints.defaultVideoId) || meta.id;
-  }
-
-  function openMangaFromEpisode() {
-    const v = isSeries() ? nextUpVideo() : null;
-    const vids = sortedVideos(meta).filter((x) => x.season !== 0);
-    const idx = v ? vids.findIndex((x) => x.id === v.id) : 0;
-    // Entries with one season each (kitsu) number from 1; a long show under one id counts from the first episode.
-    const ep = v && /^kitsu:|^mal:|^anilist:/.test(meta.id) ? v.episode || idx + 1 : idx + 1;
-    toast(t('Procurando o mangá...'));
-    animeLink
-      .anilistIdOf(meta.id)
-      .then((al) => (al ? animeLink.episodeToChapter(al, ep) : null))
-      .then((r) => {
-        if (!r) return toast(t('Não achei o mangá deste anime.'));
-        const mm = animeLink.mangaMeta(r.manga);
-        mm.focusChapter = r.chapter;
-        toast(t('Capítulo {n} (aproximado)', { n: r.chapter }));
-        openMangaDetails(mm);
-      })
-      .catch(() => toast(t('Não achei o mangá deste anime.')));
   }
 
   function nextUpVideo() {
@@ -192,11 +170,7 @@ function DetailsView(type, id, opts) {
     }
     info.appendChild(desc);
     info.appendChild(castLine);
-    // Anime: jump to the manga chapter that matches the episode you are on (an estimate).
-    const mangaBtn = isAnime(meta)
-      ? h('div.btn', { focusable: true, onSelect: openMangaFromEpisode }, [h('span.ico', { text: '📖' }), t('Ler o mangá')])
-      : null;
-    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, collBtn, libBtn]));
+    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, collBtn, libBtn]));
     loadExtras({ logo: logo, title: title, desc: desc, castLine: castLine, ratingsEl: ratingsEl });
   }
 
