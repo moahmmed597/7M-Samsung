@@ -162,7 +162,7 @@ function MyCollectionView(id) {
         card(
           { id: it.id, name: it.name, poster: it.poster || POSTER(it.id) },
           {
-            badge: watched.isWatched(it.id) ? '✓' : '',
+            watched: watched.isWatched(it.id),
             onSelect: () =>
               menu(it.name, [
                 { label: t('Abrir'), value: 'open' },

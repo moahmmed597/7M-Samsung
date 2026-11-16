@@ -63,7 +63,7 @@ export function LibraryView() {
           { name: it.name, poster: it.poster },
           {
             progress: !isDone && prog > 0.02 ? prog : 0,
-            badge: isDone ? '✓' : '',
+            watched: isDone,
             onSelect: () => openDetails(it.type, it._id),
           }
         )

@@ -1,5 +1,5 @@
 // Ajustes: conta, servidor do PC, Hero Banner, tema OLED, legendas, addons e depuração.
-import { h, clear } from '../lib/dom.js';
+import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
 import * as store from '../lib/store.js';
 import { log } from '../lib/log.js';
@@ -13,7 +13,7 @@ import * as hero from '../api/hero.js';
 import { topbar, toast, menu, confirmDialog, refreshProfileChips } from '../ui.js';
 import * as router from '../router.js';
 import { openLogin } from './login.js';
-import { avatar, switchProfile, createProfile, checkPin, pinDialog, showPicker } from './profiles.js';
+import { avatar, switchProfile, createProfile, checkPin, pinDialog, showPicker, avatarFiles, avatarUrl } from './profiles.js';
 import { t } from '../lib/i18n.js';
 import * as phone from '../lib/phone.js';
 import * as theme from '../lib/theme.js';
@@ -71,6 +71,32 @@ const RECOMMENDED = [
   { id: 'community.anime.kitsu', name: 'Anime Kitsu', url: 'https://anime-kitsu.strem.fun/manifest.json', desc: 'Catálogos e detalhes de animes (usado pelo calendário)' },
   { id: 'org.stremio.opensubtitlesv3', name: 'OpenSubtitles v3', url: 'https://opensubtitles-v3.strem.io/manifest.json', desc: 'Legendas em português para quase tudo' },
 ];
+
+// Grid of profile pictures in a modal (the first tile = no picture, the initial letter).
+function avatarPicker(current, onPick) {
+  const grid = h('div.av-grid', { 'data-scroll-y': '', 'data-pad-y': '120', 'data-group': '' });
+  const box = h('div.modal-box.av-box', null, [h('h3', { text: t('Foto do perfil') }), grid]);
+  const modal = h('div.modal', null, box);
+  document.getElementById('app').appendChild(modal);
+  const close = () => {
+    nav.popLayer(layer);
+    if (modal.parentNode) modal.parentNode.removeChild(modal);
+  };
+  const pick = (f) => {
+    close();
+    onPick(f);
+  };
+  grid.appendChild(h('div.av-tile.none', { focusable: true, cls: current ? '' : 'checked', 'data-autofocus': current ? null : '', onSelect: () => pick('') }, 'Aa'));
+  avatarFiles().forEach((f) => {
+    const im = h('img', { alt: '' });
+    im.setAttribute('data-lazy', avatarUrl(f));
+    grid.appendChild(h('div.av-tile', { focusable: true, cls: f === current ? 'checked' : '', 'data-autofocus': f === current ? '' : null, onSelect: () => pick(f) }, im));
+  });
+  const layer = nav.pushLayer(modal, { onBack: () => close() });
+  nav.focusFirst(modal);
+  loadVisibleImages(modal, 600);
+  grid.__onScroll = () => loadVisibleImages(modal, 600);
+}
 
 export function SettingsView() {
   const el = h('div.view');
@@ -746,6 +772,16 @@ export function SettingsView() {
           h('div.label', null, [avatar(prof, 'small'), ' ' + t('Nome do perfil'), h('small', { text: t('Este perfil usa a conta Stremio abaixo') })]),
           nameInput,
         ])
+      );
+      body.appendChild(
+        row(t('Foto do perfil'), t('{n} imagens para escolher', { n: avatarFiles().length }), '', () =>
+          avatarPicker(prof.avatar, (file) => {
+            store.updateProfile(prof.id, { avatar: file || '' });
+            refreshProfileChips();
+            render();
+          }),
+          avatar(prof, 'small')
+        )
       );
       body.appendChild(
         row(t('Cor do perfil'), '', '', () =>

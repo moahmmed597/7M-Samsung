@@ -330,7 +330,7 @@ function DetailsView(type, id, opts) {
         // Watched markers: a check on finished episodes, a bar on half-watched ones.
         const done = watched.isWatched(v.id);
         const part = done ? 0 : watched.progress(v.id) || (inProgress && li.state.duration ? li.state.timeOffset / li.state.duration : 0);
-        if (done) thumb.appendChild(h('div.ep-watched', { text: '✓' }));
+        if (done) thumb.appendChild(h('div.ep-watched'));
         else if (part > 0) thumb.appendChild(h('div.progress', null, h('i', { style: { width: Math.round(part * 100) + '%' } })));
         const row = h('div.episode', { focusable: true, cls: done ? 'watched' : '', onSelect: () => showStreams(v, true) }, [
           thumb,
@@ -369,6 +369,8 @@ function DetailsView(type, id, opts) {
   }
 
   // Estimativa da taxa do arquivo (tamanho ÷ duração): avisa o que pesa no Wi-Fi da TV (~34 Mbps medidos).
+  // Look-alike dots (U+2024 one dot leader, U+FF0E...) become real dots: the TV font has no glyph for them.
+  const dots = (x) => String(x || '').replace(/[\u2024\u2027\uFE52\uFF0E\u2E31]/g, '.');
   // ---- Size and packs ----
   // Some add-on chains lose the decimal point ("48.71 GB" shows as "4871 GB") or use Arabic digits and
   // separators. Read both, and repair a single film or episode that claims more than 1000 GB.
@@ -385,7 +387,7 @@ function DetailsView(type, id, opts) {
     return { raw: m[0], v: v, unit: unit, hasSep: /[.,]/.test(m[1]), gb: unit === 'TB' ? v * 1024 : unit === 'GB' ? v : v / 1024 };
   }
   function streamText(s) {
-    return (s.name || '') + ' ' + (s.title || s.description || '') + ' ' + ((s.behaviorHints && s.behaviorHints.filename) || '');
+    return dots((s.name || '') + ' ' + (s.title || s.description || '') + ' ' + ((s.behaviorHints && s.behaviorHints.filename) || ''));
   }
   function isPack(s) {
     const si = sizeInfo(streamText(s));
@@ -619,7 +621,7 @@ function DetailsView(type, id, opts) {
       .filter((b) => !b.hide)
       .forEach((b) => tags.push(h('span.s-tag', { cls: b.warn ? 'warn' : '', text: b.t })));
     // The title as the add-on sent it, with a lost decimal point put back.
-    let shownTitle = (s.title || s.description || '').trim();
+    let shownTitle = dots(s.title || s.description || '').trim();
     const fixedSize = streamSize(s);
     if (fixedSize && fixedSize.fixed) shownTitle = shownTitle.replace(fixedSize.raw, fixedSize.shown);
     return h(

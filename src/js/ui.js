@@ -125,7 +125,7 @@ const NAV_ICONS = {
 // Left sidebar (profile, one row per tab with icon, clock). It is fixed on the screen and the scroll area of
 // the page starts after its collapsed width. The returned node sits at the top of the page's scroll area.
 export function topbar(activeId, onTab) {
-  const clock = h('div.side-clock');
+  const clock = h('div.top-clock');
   const tick = () => (clock.textContent = timeHM(new Date()));
   tick();
   const timer = setInterval(tick, 20000);
@@ -150,8 +150,6 @@ export function topbar(activeId, onTab) {
         ])
       )
     ),
-    h('div.spacer'),
-    clock,
   ]);
   Array.prototype.forEach.call(side.querySelectorAll('[data-focus]'), (el) => {
     if (!el.__focus) el.__focus = open;
@@ -159,7 +157,7 @@ export function topbar(activeId, onTab) {
   });
   const chip = side.querySelector('.profile-chip');
   if (chip) chip.__focus = open;
-  const anchor = h('div.side-anchor', null, side);
+  const anchor = h('div.side-anchor', null, [side, clock]);
   anchor.__destroy = () => clearInterval(timer);
   setTimeout(() => {
     const sc = anchor.closest ? anchor.closest('.scroll-y') || anchor.parentNode : anchor.parentNode;
@@ -245,6 +243,7 @@ export function card(item, opts) {
   } else wrap.appendChild(h('div.ph', { text: item.name || '' }));
   if (o.progress) wrap.appendChild(h('div.progress', null, h('i', { style: { width: Math.round(o.progress * 100) + '%' } })));
   if (o.badge) wrap.appendChild(h('div.badge', { text: o.badge }));
+  if (o.watched) wrap.appendChild(h('div.done-dot'));
   // Continue watching card (idea: Nuvio): a status chip on top, episode + title over a shade at the bottom.
   if (o.overlay) {
     if (o.overlay.chip) wrap.appendChild(h('div.cw-badge', { text: o.overlay.chip }));

@@ -20,9 +20,21 @@ function session(key, value) {
 }
 
 export function avatar(p, cls) {
+  if (p.avatar) return h('div.avatar.pic', { cls: cls || '', style: { backgroundImage: 'url("' + avatarUrl(p.avatar) + '")' } });
   const initial = String(p.name || '?').trim().charAt(0).toUpperCase() || '?';
   return h('div.avatar', { cls: cls || '', style: { backgroundColor: p.color || store.COLORS[0] }, text: initial });
 }
+
+// Profile pictures (art from Harbor, MIT licence), shipped with the app in avatars/.
+export const AVATARS = ['harbor_person', 17, 'harbor_face', 12, 'harbor_kawaii', 9, 'harbor_misc', 7, 'harbor_animal', 7, 'harbor_element', 4, 'harbor_cat', 4, 'harbor_space', 3];
+export function avatarUrl(file) {
+  return (window.__KAI_BASE__ || '') + 'avatars/' + file;
+}
+export function avatarFiles() {
+  return AVAILABLE.slice();
+}
+const AVAILABLE = ["eboy_manga_eyes_bw_zoomed.webp", "egirl_manga_eyes_bw_zoomed_distinct.webp", "harbor_animal_01.webp", "harbor_animal_02.webp", "harbor_animal_04.webp", "harbor_animal_05.webp", "harbor_animal_06.webp", "harbor_animal_07.webp", "harbor_animal_08.webp", "harbor_cat_01.webp", "harbor_cat_02.webp", "harbor_cat_03.webp", "harbor_cat_04.webp", "harbor_element_01.webp", "harbor_element_02.webp", "harbor_element_03.webp", "harbor_element_04.webp", "harbor_face_01.webp", "harbor_face_02.webp", "harbor_face_03.webp", "harbor_face_04.webp", "harbor_face_05.webp", "harbor_face_06.webp", "harbor_face_07.webp", "harbor_face_08.webp", "harbor_face_09.webp", "harbor_face_10.webp", "harbor_face_11.webp", "harbor_face_12.webp", "harbor_kawaii_01.webp", "harbor_kawaii_02.webp", "harbor_kawaii_03.webp", "harbor_kawaii_04.webp", "harbor_kawaii_05.webp", "harbor_kawaii_06.webp", "harbor_kawaii_07.webp", "harbor_kawaii_08.webp", "harbor_kawaii_10.webp", "harbor_misc_01.webp", "harbor_misc_02.webp", "harbor_misc_03.webp", "harbor_misc_04.webp", "harbor_misc_05.webp", "harbor_misc_06.webp", "harbor_misc_08.webp", "harbor_person_01.webp", "harbor_person_02.webp", "harbor_person_03.webp", "harbor_person_04.webp", "harbor_person_05.webp", "harbor_person_06.webp", "harbor_person_07.webp", "harbor_person_08.webp", "harbor_person_09.webp", "harbor_person_10.webp", "harbor_person_11.webp", "harbor_person_12.webp", "harbor_person_13.webp", "harbor_person_14.webp", "harbor_person_15.webp", "harbor_person_16.webp", "harbor_person_17.webp", "harbor_space_01.webp", "harbor_space_02.webp", "harbor_space_03.webp"];
+
 
 // Troca de perfil recarregando o app: conta, biblioteca e addons do outro perfil entram limpos.
 export function switchProfile(id) {
