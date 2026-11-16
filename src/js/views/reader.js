@@ -126,7 +126,7 @@ function ReaderView(opts) {
     pages = [];
     img.removeAttribute('src');
     say(t('Carregando...'));
-    md.pages(chapter().id)
+    (opts.pagesFn || md.pages)(chapter().id)
       .then((list) => {
         if (my !== token || !alive) return;
         if (!list.length) return say(t('Este capítulo não tem páginas.'));

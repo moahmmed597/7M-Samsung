@@ -1937,21 +1937,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
       module.exports = function (Iterable, NAME, IteratorConstructor, next, DEFAULT, IS_SET, FORCED) {
         createIteratorConstructor(IteratorConstructor, NAME, next);
-        var getIterationMethod = function getIterationMethod(KIND) {
-          if (KIND === DEFAULT && defaultIterator) return defaultIterator;
-          if (!BUGGY_SAFARI_ITERATORS && KIND && KIND in IterablePrototype) return IterablePrototype[KIND];
-          switch (KIND) {
+        var getIterationMethod = function getIterationMethod(KIND2) {
+          if (KIND2 === DEFAULT && defaultIterator) return defaultIterator;
+          if (!BUGGY_SAFARI_ITERATORS && KIND2 && KIND2 in IterablePrototype) return IterablePrototype[KIND2];
+          switch (KIND2) {
             case KEYS:
               return function keys2() {
-                return new IteratorConstructor(this, KIND);
+                return new IteratorConstructor(this, KIND2);
               };
             case VALUES:
               return function values() {
-                return new IteratorConstructor(this, KIND);
+                return new IteratorConstructor(this, KIND2);
               };
             case ENTRIES:
               return function entries() {
-                return new IteratorConstructor(this, KIND);
+                return new IteratorConstructor(this, KIND2);
               };
           }
           return function () {
@@ -3573,24 +3573,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             cellSize = cellSize || 2;
             margin = typeof margin == "undefined" ? cellSize * 4 : margin;
             var size = _this.getModuleCount() * cellSize + margin * 2;
-            var img = "";
-            img += "<img";
-            img += ' src="';
-            img += _this.createDataURL(cellSize, margin);
-            img += '"';
-            img += ' width="';
-            img += size;
-            img += '"';
-            img += ' height="';
-            img += size;
-            img += '"';
+            var img2 = "";
+            img2 += "<img";
+            img2 += ' src="';
+            img2 += _this.createDataURL(cellSize, margin);
+            img2 += '"';
+            img2 += ' width="';
+            img2 += size;
+            img2 += '"';
+            img2 += ' height="';
+            img2 += size;
+            img2 += '"';
             if (alt) {
-              img += ' alt="';
-              img += escapeXml(alt);
-              img += '"';
+              img2 += ' alt="';
+              img2 += escapeXml(alt);
+              img2 += '"';
             }
-            img += "/>";
-            return img;
+            img2 += "/>";
+            return img2;
           };
           var escapeXml = function escapeXml(s) {
             var escaped = "";
@@ -5041,6 +5041,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Minhas fontes": "My sources",
+    "Endereço do servidor Suwayomi": "Suwayomi server address",
+    "Servidor conectado.": "Server connected.",
+    "Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.": "Couldn't reach the server. Check the address and that CORS is on.",
+    "Conectar servidor Suwayomi": "Connect Suwayomi server",
+    "Suwayomi é um servidor gratuito que você instala no PC ou NAS. Você escolhe as fontes nele; este app não traz nenhuma.": "Suwayomi is a free server you install on a PC or NAS. You pick the sources on it; this app ships none.",
+    "Nenhuma fonte instalada no servidor.": "No source installed on the server.",
+    "Populares": "Popular",
+    "Recentes": "Latest",
+    "Buscar mangá": "Search manga",
     "Quadrinhos": "Comics",
     "Livros": "Books",
     "Buscar quadrinhos": "Search comics",
@@ -5560,6 +5570,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Minhas fontes": "مصادري",
+    "Endereço do servidor Suwayomi": "عنوان سيرفر Suwayomi",
+    "Servidor conectado.": "تم الاتصال بالسيرفر.",
+    "Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.": "ما قدرت أتصل بالسيرفر. تأكد من العنوان وأن CORS شغّال.",
+    "Conectar servidor Suwayomi": "اربط سيرفر Suwayomi",
+    "Suwayomi é um servidor gratuito que você instala no PC ou NAS. Você escolhe as fontes nele; este app não traz nenhuma.": "Suwayomi سيرفر مجاني تنصّبه على الكمبيوتر أو NAS. أنت تختار المصادر فيه، والتطبيق ما يجي بأي مصدر.",
+    "Nenhuma fonte instalada no servidor.": "ما فيه مصدر منصّب على السيرفر.",
+    "Populares": "الأشهر",
+    "Recentes": "الأحدث",
+    "Buscar mangá": "ابحث عن مانجا",
     "Quadrinhos": "الكوميكس",
     "Livros": "الكتب",
     "Buscar quadrinhos": "ابحث في الكوميكس",
@@ -6812,7 +6832,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function set(key3, value) {
     rawSet(profileKey(activeProfile().id, key3), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont", "mangaTab", "mangaLangs", "readerMode", "clock24"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont", "mangaTab", "mangaLangs", "readerMode", "clock24", "suwayomiUrl", "suwayomiNsfw"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -6906,10 +6926,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       en: ["eng", "en"],
       ar: ["ara", "ar"]
     }[current()];
-    var base = Object.assign({}, DEFAULT_SETTINGS, subs ? {
+    var base2 = Object.assign({}, DEFAULT_SETTINGS, subs ? {
       subtitleLangs: subs
     } : null);
-    return Object.assign(base, rawGet("device", {}), get("settings", {}));
+    return Object.assign(base2, rawGet("device", {}), get("settings", {}));
   }
   function copySettingsFrom(profileId) {
     var from = getFor(profileId, "settings", {}) || {};
@@ -8066,8 +8086,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     } : null;
   }
   var VIDEO_RE = /\.(mkv|mp4|avi|m4v|mov|ts|webm|wmv)$/i;
-  function magnet(infoHash, sources) {
-    var tr = (sources || []).filter(function (x) {
+  function magnet(infoHash, sources2) {
+    var tr = (sources2 || []).filter(function (x) {
       return /^tracker:/.test(x);
     }).map(function (x) {
       return "&tr=" + encodeURIComponent(x.slice(8));
@@ -8080,12 +8100,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     var pool = vids.length ? vids : files2;
     if (!pool.length) return null;
-    var base = function base(n) {
+    var base2 = function base2(n) {
       return String(n || "").split("/").pop().toLowerCase();
     };
     if (hint.filename) {
       var m = pool.find(function (f) {
-        return base(f.name) === base(hint.filename);
+        return base2(f.name) === base2(hint.filename);
       });
       if (m) return m;
     }
@@ -8094,7 +8114,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var e = +hint.episode;
       var re = new RegExp("(s0*" + s + "[ ._-]*e0*" + e + "(?!\\d))|(\\b" + s + "x0*" + e + "(?!\\d))", "i");
       var _m = pool.find(function (f) {
-        return re.test(base(f.name));
+        return re.test(base2(f.name));
       });
       if (_m) return _m;
     }
@@ -8236,15 +8256,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return file.link;
     });
   }
-  function resolve(infoHash, sources, hint) {
+  function resolve(infoHash, sources2, hint) {
     return freshRealDebrid().then(function () {
-      return resolveNow(infoHash, sources, hint);
+      return resolveNow(infoHash, sources2, hint);
     });
   }
-  function resolveNow(infoHash, sources, hint) {
+  function resolveNow(infoHash, sources2, hint) {
     var p = active();
     if (!p) return Promise.reject(new Error("debrid off"));
-    var mag = magnet(String(infoHash).toLowerCase(), sources);
+    var mag = magnet(String(infoHash).toLowerCase(), sources2);
     var fn = p.id === "realdebrid" ? realDebrid : p.id === "torbox" ? torbox : premiumize;
     return fn(p.key, mag, hint || {}).catch(function (e) {
       if (e.status === 401 || e.status === 403) throw new Error(t("{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", {
@@ -8497,25 +8517,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     for (var i = 0; i + 4 <= bits.length; i += 4) hex += parseInt(bits.substr(i, 4), 2).toString(16);
     return hex;
   }
-  function torrentUrl(base, infoHash, fileIdx, sources) {
-    var u = base + encodeURIComponent(infoHash) + "/" + encodeURIComponent(fileIdx);
-    if (sources && sources.length) {
-      u += "?" + sources.map(function (s) {
+  function torrentUrl(base2, infoHash, fileIdx, sources2) {
+    var u = base2 + encodeURIComponent(infoHash) + "/" + encodeURIComponent(fileIdx);
+    if (sources2 && sources2.length) {
+      u += "?" + sources2.map(function (s) {
         return "tr=" + encodeURIComponent(s);
       }).join("&");
     }
     return u;
   }
-  function createTorrent(base, infoHash, fileIdx, sources, seriesInfo) {
+  function createTorrent(base2, infoHash, fileIdx, sources2, seriesInfo) {
     var hasIdx = fileIdx !== null && fileIdx !== void 0 && isFinite(fileIdx);
-    if ((!sources || !sources.length) && hasIdx) return Promise.resolve(torrentUrl(base, infoHash, fileIdx, []));
+    if ((!sources2 || !sources2.length) && hasIdx) return Promise.resolve(torrentUrl(base2, infoHash, fileIdx, []));
     var body = {
       torrent: {
         infoHash: infoHash
       }
     };
-    if (sources && sources.length) {
-      var all2 = ["dht:" + infoHash].concat(sources.map(function (s) {
+    if (sources2 && sources2.length) {
+      var all2 = ["dht:" + infoHash].concat(sources2.map(function (s) {
         return /^(tracker|dht):/.test(s) ? s : "tracker:" + s;
       }));
       body.peerSearch = {
@@ -8531,13 +8551,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (seriesInfo && isFinite(seriesInfo.season)) body.guessFileIdx.season = seriesInfo.season;
       if (seriesInfo && isFinite(seriesInfo.episode)) body.guessFileIdx.episode = seriesInfo.episode;
     } else body.guessFileIdx = false;
-    return postJSON(base + encodeURIComponent(infoHash) + "/create", body, {
+    return postJSON(base2 + encodeURIComponent(infoHash) + "/create", body, {
       timeout: 3e4
     }).then(function (r) {
-      return torrentUrl(base, infoHash, hasIdx ? fileIdx : r && r.guessedFileIdx, body.peerSearch ? body.peerSearch.sources : []);
+      return torrentUrl(base2, infoHash, hasIdx ? fileIdx : r && r.guessedFileIdx, body.peerSearch ? body.peerSearch.sources : []);
     });
   }
-  function proxyUrl(base, streamUrl2, reqHeaders, resHeaders) {
+  function proxyUrl(base2, streamUrl2, reqHeaders, resHeaders) {
     var m = streamUrl2.match(/^(https?:\/\/[^/?#]+)([^?#]*)(\?[^#]*)?/);
     if (!m) return streamUrl2;
     var parts = ["d=" + encodeURIComponent(m[1])];
@@ -8547,13 +8567,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     Object.keys(resHeaders || {}).forEach(function (k) {
       return parts.push("r=" + encodeURIComponent(k + ":" + resHeaders[k]));
     });
-    return base + "proxy/" + parts.join("&") + (m[2] || "/") + (m[3] || "");
+    return base2 + "proxy/" + parts.join("&") + (m[2] || "/") + (m[3] || "");
   }
   function corsProxyUrl(url2) {
-    var base = isAvailable() ? baseUrl() : "";
+    var base2 = isAvailable() ? baseUrl() : "";
     var m = url2.match(/^(https?:\/\/[^/?#]+)(.*)$/);
-    if (!base || !m) return null;
-    return base + "proxy/d=" + encodeURIComponent(m[1]) + "&r=" + encodeURIComponent("Access-Control-Allow-Origin:*") + (m[2] || "/");
+    if (!base2 || !m) return null;
+    return base2 + "proxy/d=" + encodeURIComponent(m[1]) + "&r=" + encodeURIComponent("Access-Control-Allow-Origin:*") + (m[2] || "/");
   }
   function getJSONViaProxy(url2, opts) {
     return getJSON(url2, Object.assign({
@@ -8610,13 +8630,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function toPlayableLocal(stream, seriesInfo) {
-    var base = baseUrl();
+    var base2 = baseUrl();
     if (typeof stream.url === "string") {
       if (stream.url.indexOf("magnet:") === 0) {
-        if (!base) return Promise.reject(new Error(t("Este link é torrent: configure o servidor do PC")));
+        if (!base2) return Promise.reject(new Error(t("Este link é torrent: configure o servidor do PC")));
         var mg = parseMagnet(stream.url);
         if (!mg) return Promise.reject(new Error(t("Magnet inválido")));
-        return createTorrent(base, mg.infoHash, null, mg.sources, seriesInfo).then(function (u) {
+        return createTorrent(base2, mg.infoHash, null, mg.sources, seriesInfo).then(function (u) {
           return {
             url: u,
             viaServer: true
@@ -8624,9 +8644,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }
       var ph = stream.behaviorHints && stream.behaviorHints.proxyHeaders;
-      if (ph && base) {
+      if (ph && base2) {
         return Promise.resolve({
-          url: proxyUrl(base, stream.url, ph.request, ph.response),
+          url: proxyUrl(base2, stream.url, ph.request, ph.response),
           viaServer: true
         });
       }
@@ -8636,8 +8656,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     if (typeof stream.infoHash === "string") {
-      if (!base) return Promise.reject(new Error(t("Este link é torrent: configure o servidor do PC")));
-      return createTorrent(base, stream.infoHash.toLowerCase(), stream.fileIdx, stream.sources || [], seriesInfo).then(function (u) {
+      if (!base2) return Promise.reject(new Error(t("Este link é torrent: configure o servidor do PC")));
+      return createTorrent(base2, stream.infoHash.toLowerCase(), stream.fileIdx, stream.sources || [], seriesInfo).then(function (u) {
         return {
           url: u,
           viaServer: true
@@ -8647,9 +8667,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return Promise.reject(new Error(t("Tipo de link não suportado na TV")));
   }
   function tracks(mediaUrl) {
-    var base = baseUrl();
-    if (!base) return Promise.resolve(null);
-    return getJSON(base + "tracks/" + encodeURIComponent(mediaUrl), {
+    var base2 = baseUrl();
+    if (!base2) return Promise.resolve(null);
+    return getJSON(base2 + "tracks/" + encodeURIComponent(mediaUrl), {
       timeout: 2e4,
       quiet: true
     }).then(function (list3) {
@@ -8666,9 +8686,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function streamProgress(mediaUrl) {
     var m = String(mediaUrl || "").match(/\/([a-f0-9]{40})\/(\d+)/i);
-    var base = baseUrl();
-    if (!m || !base) return Promise.resolve(null);
-    return getJSON(base + m[1] + "/" + m[2] + "/stats.json", {
+    var base2 = baseUrl();
+    if (!m || !base2) return Promise.resolve(null);
+    return getJSON(base2 + m[1] + "/" + m[2] + "/stats.json", {
       timeout: 5e3,
       quiet: true
     }).then(function (r) {
@@ -8678,8 +8698,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function subtitlesProxy(subUrl) {
-    var base = baseUrl();
-    return base ? base + "subtitles.vtt?from=" + encodeURIComponent(subUrl) : null;
+    var base2 = baseUrl();
+    return base2 ? base2 + "subtitles.vtt?from=" + encodeURIComponent(subUrl) : null;
   }
 
   // src/js/api/extras.js
@@ -8962,13 +8982,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function ratings(meta, anime) {
-    var base = meta.imdbRating ? [{
+    var base2 = meta.imdbRating ? [{
       cls: "imdb",
       label: "IMDb",
       value: String(meta.imdbRating)
     }] : [];
     return Promise.all([mdblist(meta), anime ? anilistScore(meta) : Promise.resolve([])]).then(function (r) {
-      return base.concat(r[0], r[1]);
+      return base2.concat(r[0], r[1]);
     });
   }
   function searchCollections(query) {
@@ -9534,14 +9554,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function fetchMeta(type, id) {
-    var sources = withResource("meta", type, id);
-    if (!sources.length) return Promise.reject(new Error(t("Nenhum addon fornece detalhes para {id}", {
+    var sources2 = withResource("meta", type, id);
+    if (!sources2.length) return Promise.reject(new Error(t("Nenhum addon fornece detalhes para {id}", {
       id: id
     })));
     var i = 0;
     var _next = function next() {
-      if (i >= sources.length) throw new Error(t("Detalhes não encontrados"));
-      var a = sources[i++];
+      if (i >= sources2.length) throw new Error(t("Detalhes não encontrados"));
+      var a = sources2[i++];
       return cachedJSON(url(a, "meta", type, id), 30 * 6e4).then(function (r) {
         if (r && r.meta) return r.meta;
         return _next();
@@ -9552,8 +9572,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return _next();
   }
   function fetchStreams(type, id, onAddon) {
-    var sources = withResource("stream", type, id);
-    return Promise.all(sources.map(function (a) {
+    var sources2 = withResource("stream", type, id);
+    return Promise.all(sources2.map(function (a) {
       return (a.virtualStreams ? a.virtualStreams(type, id).then(function (list3) {
         return {
           streams: list3
@@ -9579,8 +9599,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function fetchSubtitles(type, id, extra, onAddon) {
-    var sources = withResource("subtitles", type, id);
-    return Promise.all(sources.map(function (a) {
+    var sources2 = withResource("subtitles", type, id);
+    return Promise.all(sources2.map(function (a) {
       return getJSON(url(a, "subtitles", type, id, extra), {
         timeout: 15e3
       }).then(function (r) {
@@ -12651,7 +12671,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function transcode() {
       triedTranscode = true;
-      var base = baseUrl();
+      var base2 = baseUrl();
       var id = Math.random().toString(36).slice(2) + Date.now().toString(36);
       var q2 = ["mediaURL=" + encodeURIComponent(mediaUrl)];
       ["h264", "h265", "hevc"].forEach(function (c) {
@@ -12661,7 +12681,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return q2.push("audioCodecs=" + c);
       });
       q2.push("maxAudioChannels=6");
-      var url2 = base + "hlsv2/" + id + "/master.m3u8?" + q2.join("&");
+      var url2 = base2 + "hlsv2/" + id + "/master.m3u8?" + q2.join("&");
       pendingStart = videoEl.currentTime * 1e3 || pendingStart;
       showSpinner(true);
       message("");
@@ -13991,7 +14011,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function ReaderView(opts) {
     var ci = opts.index;
-    var pages2 = [];
+    var pages3 = [];
     var pi = 0;
     var mode = settings().readerMode === "width" ? "width" : "fit";
     var zi = 0;
@@ -14006,12 +14026,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var token = 0;
     var alive = true;
     var retried = false;
-    var img = h("img.rd-img", {
+    var img2 = h("img.rd-img", {
       alt: ""
     });
     var hud = h("div.rd-hud");
     var msg = h("div.rd-msg");
-    var el = h("div.view.reader", null, [img, hud, msg]);
+    var el = h("div.view.reader", null, [img2, hud, msg]);
     var chapter = function chapter() {
       return opts.chapters[ci];
     };
@@ -14032,7 +14052,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var c = chapter();
       hud.textContent = (opts.title ? opts.title + " · " : "") + t("Cap. {n}", {
         n: c && c.chapter !== null && c.chapter !== void 0 ? c.chapter : ci + 1
-      }) + " · " + (pi + 1) + " / " + pages2.length + (extra ? " · " + extra : "");
+      }) + " · " + (pi + 1) + " / " + pages3.length + (extra ? " · " + extra : "");
       hud.classList.add("show");
       clearTimeout(hudTimer);
       hudTimer = setTimeout(function () {
@@ -14043,9 +14063,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var z = size();
       px = z.w <= W ? (W - z.w) / 2 : Math.max(W - z.w, Math.min(0, px));
       py = z.h <= H ? (H - z.h) / 2 : Math.max(H - z.h, Math.min(0, py));
-      img.style.width = Math.round(z.w) + "px";
-      img.style.height = Math.round(z.h) + "px";
-      img.style.webkitTransform = img.style.transform = "translate(" + Math.round(px) + "px," + Math.round(py) + "px)";
+      img2.style.width = Math.round(z.w) + "px";
+      img2.style.height = Math.round(z.h) + "px";
+      img2.style.webkitTransform = img2.style.transform = "translate(" + Math.round(px) + "px," + Math.round(py) + "px)";
     }
     function layout(anchor) {
       var z = size();
@@ -14066,49 +14086,49 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       set("readProgress", all2);
     }
     function showPage(anchor) {
-      if (!pages2.length) return;
+      if (!pages3.length) return;
       retried = false;
       var my = ++token;
-      img.style.visibility = "hidden";
-      img.onload = function () {
+      img2.style.visibility = "hidden";
+      img2.onload = function () {
         if (my !== token || !alive) return;
         nat = {
-          w: img.naturalWidth || 1,
-          h: img.naturalHeight || 1
+          w: img2.naturalWidth || 1,
+          h: img2.naturalHeight || 1
         };
         layout(anchor);
-        img.style.visibility = "";
+        img2.style.visibility = "";
         say("");
         showHud();
         save2();
         pre = null;
-        if (pi + 1 < pages2.length) {
+        if (pi + 1 < pages3.length) {
           pre = new Image();
-          pre.src = pages2[pi + 1];
+          pre.src = pages3[pi + 1];
         }
       };
-      img.onerror = function () {
+      img2.onerror = function () {
         if (my !== token || !alive) return;
         if (!retried) {
           retried = true;
-          img.src = pages2[pi] + (pages2[pi].indexOf("?") < 0 ? "?r=1" : "&r=1");
+          img2.src = pages3[pi] + (pages3[pi].indexOf("?") < 0 ? "?r=1" : "&r=1");
           return;
         }
         say(t("Não foi possível carregar esta página. Aperte para o lado para continuar."));
       };
       say(t("Carregando..."));
-      img.src = pages2[pi];
+      img2.src = pages3[pi];
     }
     function loadChapter(i, start3) {
       var my = ++token;
       ci = i;
-      pages2 = [];
-      img.removeAttribute("src");
+      pages3 = [];
+      img2.removeAttribute("src");
       say(t("Carregando..."));
-      pages(chapter().id).then(function (list3) {
+      (opts.pagesFn || pages)(chapter().id).then(function (list3) {
         if (my !== token || !alive) return;
         if (!list3.length) return say(t("Este capítulo não tem páginas."));
-        pages2 = list3;
+        pages3 = list3;
         pi = start3 === "last" ? list3.length - 1 : Math.max(0, Math.min(start3 || 0, list3.length - 1));
         showPage(start3 === "last" ? "bottom" : "top");
       }).catch(function () {
@@ -14123,7 +14143,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function turn(dir) {
       if (dir > 0) {
-        if (pi + 1 < pages2.length) {
+        if (pi + 1 < pages3.length) {
           pi++;
           zi = 0;
           showPage("top");
@@ -14152,7 +14172,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var z = size();
       var panX = z.w > W + 1;
       var panY = z.h > H + 1;
-      if (!pages2.length) return k === KEY.BACK ? false : true;
+      if (!pages3.length) return k === KEY.BACK ? false : true;
       if (k === KEY.RED) return zoomStep(), true;
       if (k === KEY.GREEN) {
         mode = mode === "fit" ? "width" : "fit";
@@ -14214,8 +14234,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         token++;
         clearTimeout(hudTimer);
         pre = null;
-        img.onload = img.onerror = null;
-        img.removeAttribute("src");
+        img2.onload = img2.onerror = null;
+        img2.removeAttribute("src");
       }
     };
   }
@@ -14781,7 +14801,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     el.appendChild(info2);
     el.appendChild(list3);
-    var chapters2 = [];
+    var chapters3 = [];
     var chunk = 0;
     var langSet = LANG_SETS.find(function (x) {
       return x.id === settings().mangaLangs;
@@ -14798,16 +14818,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function indexOfProgress() {
       var p = progress2();
       if (!p) return -1;
-      return chapters2.findIndex(function (c) {
+      return chapters3.findIndex(function (c) {
         return c.id === p.chapterId;
       });
     }
     function read(index2, page3) {
-      if (!chapters2.length) return toast(t("Nenhum capítulo encontrado."));
+      if (!chapters3.length) return toast(t("Nenhum capítulo encontrado."));
       openReader({
         key: key3,
         title: m.name,
-        chapters: chapters2,
+        chapters: chapters3,
         index: Math.max(0, index2),
         startPage: page3 || 0,
         // Korean and Chinese comics read top to bottom, left to right; Japanese manga right to left.
@@ -14860,13 +14880,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: "📖"
       }), idx >= 0 ? t("Continuar: cap. {n}", {
-        n: chapters2[idx].chapter
+        n: chapters3[idx].chapter
       }) : t("Ler")]);
       var btns = [readBtn];
       if (anime) btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
-          var cur = idx >= 0 ? parseFloat(chapters2[idx].chapter) : m.focusChapter || 1;
+          var cur = idx >= 0 ? parseFloat(chapters3[idx].chapter) : m.focusChapter || 1;
           chapterToEpisode(m.anilist, cur).then(function (r) {
             if (!r) return openAnime(animeMeta(anime));
             toast(t("Episódio {n} (aproximado)", {
@@ -14912,12 +14932,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderList(focusFirst2) {
       clear(list3);
-      if (!chapters2.length) {
+      if (!chapters3.length) {
         list3.appendChild(status2);
         return;
       }
       var start3 = chunk * CHUNK;
-      var end = Math.min(chapters2.length, start3 + CHUNK);
+      var end = Math.min(chapters3.length, start3 + CHUNK);
       var p = progress2();
       var nav2 = function nav2(label, to) {
         return h("div.stream.md-nav", {
@@ -14934,7 +14954,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         b: chunk * CHUNK
       }), chunk - 1));
       var _loop8 = function _loop8(i) {
-        var c = chapters2[i];
+        var c = chapters3[i];
         var read2 = p && p.chapterId === c.id;
         var title = (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
           n: c.chapter
@@ -14959,9 +14979,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       for (var i = start3; i < end; i++) {
         _loop8(i);
       }
-      if (end < chapters2.length) list3.appendChild(nav2(t("Capítulos {a}–{b}", {
+      if (end < chapters3.length) list3.appendChild(nav2(t("Capítulos {a}–{b}", {
         a: end + 1,
-        b: Math.min(chapters2.length, end + CHUNK)
+        b: Math.min(chapters3.length, end + CHUNK)
       }) + " ▶", chunk + 1));
       if (focusFirst2) {
         var first = list3.querySelector(".stream");
@@ -14969,7 +14989,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     }
     function loadChapters() {
-      chapters2 = [];
+      chapters3 = [];
       clear(list3);
       status2.textContent = t("Procurando capítulos...");
       list3.appendChild(status2);
@@ -14978,7 +14998,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return chapters(id, langSet.langs);
       }).then(function (cs) {
         if (!alive) return;
-        chapters2 = cs;
+        chapters3 = cs;
         var idx = indexOfProgress();
         if (idx < 0 && m.focusChapter) {
           idx = cs.findIndex(function (c) {
@@ -15006,7 +15026,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       onShow: function onShow() {
-        if (chapters2.length) {
+        if (chapters3.length) {
           renderInfo();
           renderList(false);
         }
@@ -17048,6 +17068,453 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/api/suwayomi.js
+  var base = function base() {
+    return String(settings().suwayomiUrl || "").replace(/\/+$/, "");
+  };
+  var enabled2 = function enabled2() {
+    return !!base();
+  };
+  var digits = function digits(x) {
+    return /^\d+$/.test(String(x));
+  };
+  function gql(query, variables) {
+    return postJSON(base() + "/api/graphql", {
+      query: query,
+      variables: variables || {}
+    }, {
+      timeout: 4e4,
+      quiet: true
+    }).then(function (r) {
+      if (r && r.errors && r.errors.length && !r.data) throw new Error(String(r.errors[0].message || "server"));
+      if (!r || !r.data) throw new Error("server");
+      return r.data;
+    });
+  }
+  function img(path) {
+    if (!path) return "";
+    return /^https?:/i.test(path) ? path : base() + path;
+  }
+  function ping() {
+    return gql("query { aboutServer { name version } }").then(function (d) {
+      return d.aboutServer;
+    });
+  }
+  function sources() {
+    return gql("query { sources { nodes { id name lang iconUrl supportsLatest isNsfw isLocal } } }").then(function (d) {
+      return (d.sources && d.sources.nodes || []).filter(function (s) {
+        return s && s.id != null && digits(s.id) && (!s.isNsfw || settings().suwayomiNsfw === true);
+      }).map(function (s) {
+        return {
+          id: String(s.id),
+          name: String(s.name || s.id),
+          lang: String(s.lang || ""),
+          latest: !!s.supportsLatest,
+          local: !!s.isLocal
+        };
+      });
+    });
+  }
+  var KIND = {
+    popular: "POPULAR",
+    latest: "LATEST",
+    search: "SEARCH"
+  };
+  function toMeta(m) {
+    return {
+      id: "sw:" + m.id,
+      swId: String(m.id),
+      type: "manga",
+      name: m.title || "",
+      poster: base() + "/api/v1/manga/" + m.id + "/thumbnail",
+      description: m.description || "",
+      author: m.author || m.artist || "",
+      status: m.status || ""
+    };
+  }
+  function browse2(sourceId, kind, page3, query) {
+    if (!digits(sourceId)) return Promise.resolve({
+      items: [],
+      more: false
+    });
+    var q2 = 'mutation($page: Int!, $query: String) { fetchSourceManga(input: { source: "' + sourceId + '", type: ' + KIND[kind] + ", page: $page, query: $query }) { hasNextPage mangas { id title author artist status description } } }";
+    return gql(q2, {
+      page: page3 || 1,
+      query: query || null
+    }).then(function (d) {
+      var p = d.fetchSourceManga || {};
+      return {
+        items: (p.mangas || []).map(toMeta),
+        more: !!p.hasNextPage
+      };
+    });
+  }
+  function chapters2(mangaId) {
+    if (!digits(mangaId)) return Promise.resolve([]);
+    var map = function map(nodes) {
+      return (nodes || []).filter(function (c) {
+        return c && c.id != null;
+      }).map(function (c) {
+        return {
+          id: String(c.id),
+          chapter: c.chapterNumber >= 0 ? c.chapterNumber : null,
+          title: c.name || "",
+          lang: "",
+          pages: c.pageCount > 0 ? c.pageCount : 0,
+          scanlator: c.scanlator || ""
+        };
+      }).sort(function (a, b) {
+        return (a.chapter === null ? 1e9 : a.chapter) - (b.chapter === null ? 1e9 : b.chapter);
+      });
+    };
+    return gql("query { chapters(condition: { mangaId: " + mangaId + " }) { nodes { id name chapterNumber scanlator pageCount } } }").then(function (d) {
+      var cached2 = d.chapters && d.chapters.nodes;
+      if (cached2 && cached2.length) return map(cached2);
+      return gql("mutation { fetchChapters(input: { mangaId: " + mangaId + " }) { chapters { id name chapterNumber scanlator pageCount } } }").then(function (x) {
+        return map(x.fetchChapters && x.fetchChapters.chapters);
+      });
+    });
+  }
+  function pages2(chapterId) {
+    if (!digits(chapterId)) return Promise.resolve([]);
+    return gql("mutation { fetchChapterPages(input: { chapterId: " + chapterId + " }) { pages } }").then(function (d) {
+      return (d.fetchChapterPages && d.fetchChapterPages.pages || []).filter(function (p) {
+        return typeof p === "string" && p;
+      }).map(img);
+    });
+  }
+
+  // src/js/views/sources.js
+  var CHUNK2 = 50;
+  function openSources() {
+    push(SourcesView());
+  }
+  function connectServer(done) {
+    promptText(t("Endereço do servidor Suwayomi"), base() || "http://", "http://192.168.1.20:4567", function (url2) {
+      var u = url2.trim().replace(/\/+$/, "");
+      if (!/^https?:\/\//i.test(u)) u = "http://" + u;
+      saveSettings({
+        suwayomiUrl: u
+      });
+      ping().then(function () {
+        toast(t("Servidor conectado."));
+        if (done) done();
+      }, function () {
+        toast(t("Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado."), 6e3);
+        if (done) done();
+      });
+    });
+  }
+  function SourcesView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    el.appendChild(scroller);
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: t("Minhas fontes")
+    }));
+    var body = h("div.md-list", {
+      "data-group": "",
+      "data-vertical": ""
+    });
+    scroller.appendChild(body);
+    function load7() {
+      clear(body);
+      body.appendChild(h("div.stream", {
+        focusable: true,
+        "data-autofocus": "",
+        onSelect: function onSelect() {
+          return connectServer(load7);
+        }
+      }, [h("div.s-main", {
+        text: "🔌 " + (enabled2() ? base() : t("Conectar servidor Suwayomi"))
+      })]));
+      if (!enabled2()) {
+        body.appendChild(h("div.modal-text", {
+          text: t("Suwayomi é um servidor gratuito que você instala no PC ou NAS. Você escolhe as fontes nele; este app não traz nenhuma.")
+        }));
+        return;
+      }
+      var sp = spinnerLine(t("Carregando..."));
+      body.appendChild(sp);
+      sources().then(function (list3) {
+        if (sp.parentNode) body.removeChild(sp);
+        if (!list3.length) body.appendChild(h("div.modal-text", {
+          text: t("Nenhuma fonte instalada no servidor.")
+        }));
+        list3.forEach(function (s) {
+          return body.appendChild(h("div.stream", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return push(SourceGrid(s));
+            }
+          }, [h("div.s-main", {
+            text: s.name
+          }), h("span.s-tag", {
+            text: s.lang.toUpperCase()
+          })]));
+        });
+        var first = body.querySelectorAll(".stream")[1];
+        if (first) focus(first);
+      }, function () {
+        if (sp.parentNode) body.removeChild(sp);
+        body.appendChild(h("div.modal-text", {
+          text: t("Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.")
+        }));
+      });
+    }
+    load7();
+    return {
+      el: el
+    };
+  }
+  function SourceGrid(src) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    el.appendChild(scroller);
+    var kind = "popular";
+    var query = "";
+    var page3 = 0;
+    var more = null;
+    var gridEl = h("div.grid");
+    var bar = h("div.details-buttons", {
+      "data-group": ""
+    });
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: src.name
+    }));
+    scroller.appendChild(bar);
+    scroller.appendChild(gridEl);
+    function reload(k, q2) {
+      kind = k;
+      query = q2 || "";
+      page3 = 0;
+      clear(gridEl);
+      next();
+    }
+    bar.appendChild(h("div.btn.primary", {
+      focusable: true,
+      "data-autofocus": "",
+      onSelect: function onSelect() {
+        return reload("popular");
+      }
+    }, t("Populares")));
+    if (src.latest) bar.appendChild(h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return reload("latest");
+      }
+    }, t("Recentes")));
+    bar.appendChild(h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return promptText(t("Buscar mangá"), "", "", function (q2) {
+          return reload("search", q2);
+        });
+      }
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar mangá")]));
+    function next() {
+      if (more && more.parentNode) gridEl.removeChild(more);
+      var sp = spinnerLine(t("Carregando..."));
+      gridEl.appendChild(sp);
+      var my = kind + query;
+      browse2(src.id, kind, ++page3, query).then(function (r) {
+        if (my !== kind + query) return;
+        if (sp.parentNode) gridEl.removeChild(sp);
+        r.items.forEach(function (m) {
+          return gridEl.appendChild(card(m, {
+            onSelect: function onSelect() {
+              return push(SourceDetails(m));
+            }
+          }));
+        });
+        if (!r.items.length && page3 === 1) gridEl.appendChild(h("div.modal-text", {
+          text: t("Nada por aqui.")
+        }));
+        if (r.more) {
+          more = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return next();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          gridEl.appendChild(more);
+        }
+        loadVisibleImages(el, 400);
+      }, function () {
+        if (sp.parentNode) gridEl.removeChild(sp);
+        toast(t("Não foi possível carregar agora."));
+      });
+    }
+    next();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      onScroll: function onScroll() {
+        return loadVisibleImages(el, 400);
+      }
+    };
+  }
+  function SourceDetails(m) {
+    var el = h("div.view.md-view");
+    var info2 = h("div.md-info");
+    var listEl = h("div.md-list", {
+      "data-scroll-y": "",
+      "data-pad-y": "120",
+      "data-group": "",
+      "data-vertical": ""
+    });
+    el.appendChild(info2);
+    el.appendChild(listEl);
+    var chapters3 = [];
+    var chunk = 0;
+    var alive = true;
+    var key3 = "sw" + m.swId;
+    var status2 = h("div.loading-line", {
+      text: t("Procurando capítulos...")
+    });
+    var progress2 = function progress2() {
+      return (get("readProgress", {}) || {})[key3] || null;
+    };
+    var idxOf = function idxOf() {
+      var p = progress2();
+      return p ? chapters3.findIndex(function (c) {
+        return c.id === p.chapterId;
+      }) : -1;
+    };
+    function read(i, page3) {
+      if (!chapters3.length) return toast(t("Nenhum capítulo encontrado."));
+      openReader({
+        key: key3,
+        title: m.name,
+        chapters: chapters3,
+        index: Math.max(0, i),
+        startPage: page3 || 0,
+        rtl: true,
+        pagesFn: pages2
+      });
+    }
+    function renderInfo() {
+      clear(info2);
+      var c = h("img.md-cover", {
+        alt: ""
+      });
+      c.setAttribute("data-lazy", m.poster || "");
+      info2.appendChild(c);
+      var text = h("div.md-text");
+      text.appendChild(h("div.md-title", {
+        text: m.name
+      }));
+      text.appendChild(h("div.md-meta", {
+        text: [m.author, m.status, chapters3.length ? t("{n} capítulos", {
+          n: chapters3.length
+        }) : ""].filter(Boolean).join("  ·  ")
+      }));
+      text.appendChild(h("div.md-desc", {
+        text: m.description
+      }));
+      var idx = idxOf();
+      text.appendChild(h("div.details-buttons", {
+        "data-group": ""
+      }, [h("div.btn.primary", {
+        focusable: true,
+        "data-autofocus": "",
+        onSelect: function onSelect() {
+          return idx >= 0 ? read(idx, progress2().page) : read(0, 0);
+        }
+      }, [h("span.ico", {
+        text: "📖"
+      }), idx >= 0 ? t("Continuar: cap. {n}", {
+        n: chapters3[idx].chapter
+      }) : t("Ler")])]));
+      info2.appendChild(text);
+      loadVisibleImages(info2);
+    }
+    function renderList() {
+      clear(listEl);
+      if (!chapters3.length) return listEl.appendChild(status2);
+      var start3 = chunk * CHUNK2;
+      var end = Math.min(chapters3.length, start3 + CHUNK2);
+      var p = progress2();
+      var jump = function jump(label, to) {
+        return h("div.stream.md-nav", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return chunk = to, renderList();
+          }
+        }, [h("div.s-main", {
+          text: label
+        })]);
+      };
+      if (chunk > 0) listEl.appendChild(jump("◀ " + t("Capítulos {a}–{b}", {
+        a: (chunk - 1) * CHUNK2 + 1,
+        b: chunk * CHUNK2
+      }), chunk - 1));
+      var _loop9 = function _loop9(i) {
+        var c = chapters3[i];
+        var here = p && p.chapterId === c.id;
+        listEl.appendChild(h("div.stream", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return read(i, here ? p.page : 0);
+          }
+        }, [h("div.s-main", {
+          text: (c.chapter !== null ? t("Cap. {n}", {
+            n: c.chapter
+          }) : t("Especial")) + (c.title ? " · " + c.title : "")
+        }), c.scanlator ? h("span.s-tag", {
+          text: c.scanlator
+        }) : null, here ? h("span.s-tag.ok", {
+          text: t("Parou aqui")
+        }) : null]));
+      };
+      for (var i = start3; i < end; i++) {
+        _loop9(i);
+      }
+      if (end < chapters3.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
+        a: end + 1,
+        b: Math.min(chapters3.length, end + CHUNK2)
+      }) + " ▶", chunk + 1));
+    }
+    renderInfo();
+    renderList();
+    chapters2(m.swId).then(function (cs) {
+      if (!alive) return;
+      chapters3 = cs;
+      var i = idxOf();
+      chunk = i >= 0 ? Math.floor(i / CHUNK2) : 0;
+      if (!cs.length) status2.textContent = t("Nenhum capítulo encontrado.");
+      renderInfo();
+      renderList();
+    }, function () {
+      return alive && (status2.textContent = t("Não encontrei capítulos deste título agora."));
+    });
+    return {
+      el: el,
+      onShow: function onShow() {
+        if (chapters3.length) {
+          renderInfo();
+          renderList();
+        }
+        loadVisibleImages(el);
+      },
+      destroy: function destroy() {
+        return alive = false;
+      }
+    };
+  }
+
   // src/js/views/manga.js
   var API6 = "https://graphql.anilist.co";
   var FIELDS2 = "id format status chapters volumes countryOfOrigin averageScore genres description(asHtml: false) startDate { year } title { romaji english native } coverImage { large }";
@@ -17194,6 +17661,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var bar = topbar("manga", goTab);
     var rows2 = h("div.rows");
     scroller.appendChild(bar);
+    scroller.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [h("div.btn", {
+      focusable: true,
+      onSelect: openSources
+    }, [h("span.ico", {
+      text: "📚"
+    }), t("Minhas fontes")])]));
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var pending2 = [];
@@ -17201,7 +17676,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop9 = function _loop9() {
+      var _loop0 = function _loop0() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -17215,7 +17690,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret5;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret5 = _loop9();
+        _ret5 = _loop0();
         if (_ret5 === 0) continue;
         if (_ret5 === 1) break;
       }
@@ -17354,7 +17829,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/views/comics.js
   var MD2 = "https://api.mangadex.org/";
   var enc2 = encodeURIComponent;
-  var CHUNK2 = 50;
+  var CHUNK3 = 50;
   function cover(m) {
     var rel = (m.relationships || []).filter(function (r) {
       return r.type === "cover_art";
@@ -17366,7 +17841,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var a = m.attributes || {};
     return a.title && (a.title.en || a.title[Object.keys(a.title)[0]]) || "";
   }
-  function toMeta(m) {
+  function toMeta2(m) {
     var a = m.attributes || {};
     var d = a.description || {};
     return {
@@ -17385,7 +17860,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       timeout: 25e3
     }).then(function (r) {
       return {
-        items: (r && r.data || []).map(toMeta),
+        items: (r && r.data || []).map(toMeta2),
         more: !!(r && r.total > (offset || 0) + 30)
       };
     });
@@ -17505,7 +17980,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     el.appendChild(info2);
     el.appendChild(listEl);
-    var chapters2 = [];
+    var chapters3 = [];
     var chunk = 0;
     var alive = true;
     var status2 = h("div.loading-line", {
@@ -17517,16 +17992,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     var idxOf = function idxOf() {
       var p = progress2();
-      return p ? chapters2.findIndex(function (c) {
+      return p ? chapters3.findIndex(function (c) {
         return c.id === p.chapterId;
       }) : -1;
     };
     function read(i, page3) {
-      if (!chapters2.length) return toast(t("Nenhum capítulo encontrado."));
+      if (!chapters3.length) return toast(t("Nenhum capítulo encontrado."));
       openReader({
         key: key3,
         title: m.name,
-        chapters: chapters2,
+        chapters: chapters3,
         index: Math.max(0, i),
         startPage: page3 || 0,
         rtl: false
@@ -17534,18 +18009,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderInfo() {
       clear(info2);
-      var img = h("img.md-cover", {
+      var img2 = h("img.md-cover", {
         alt: ""
       });
-      img.setAttribute("data-lazy", m.poster || "");
-      info2.appendChild(img);
+      img2.setAttribute("data-lazy", m.poster || "");
+      info2.appendChild(img2);
       var text = h("div.md-text");
       text.appendChild(h("div.md-title", {
         text: m.name
       }));
       text.appendChild(h("div.md-meta", {
-        text: [m.year, chapters2.length ? t("{n} capítulos", {
-          n: chapters2.length
+        text: [m.year, chapters3.length ? t("{n} capítulos", {
+          n: chapters3.length
         }) : ""].filter(Boolean).join("  ·  ")
       }));
       text.appendChild(h("div.md-desc", {
@@ -17563,16 +18038,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: "📖"
       }), idx >= 0 ? t("Continuar: cap. {n}", {
-        n: chapters2[idx].chapter
+        n: chapters3[idx].chapter
       }) : t("Ler")])]));
       info2.appendChild(text);
       loadVisibleImages(info2);
     }
     function renderList() {
       clear(listEl);
-      if (!chapters2.length) return listEl.appendChild(status2);
-      var start3 = chunk * CHUNK2;
-      var end = Math.min(chapters2.length, start3 + CHUNK2);
+      if (!chapters3.length) return listEl.appendChild(status2);
+      var start3 = chunk * CHUNK3;
+      var end = Math.min(chapters3.length, start3 + CHUNK3);
       var p = progress2();
       var jump = function jump(label, to) {
         return h("div.stream.md-nav", {
@@ -17585,11 +18060,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         })]);
       };
       if (chunk > 0) listEl.appendChild(jump("◀ " + t("Capítulos {a}–{b}", {
-        a: (chunk - 1) * CHUNK2 + 1,
-        b: chunk * CHUNK2
+        a: (chunk - 1) * CHUNK3 + 1,
+        b: chunk * CHUNK3
       }), chunk - 1));
-      var _loop0 = function _loop0(i) {
-        var c = chapters2[i];
+      var _loop1 = function _loop1(i) {
+        var c = chapters3[i];
         var here = p && p.chapterId === c.id;
         listEl.appendChild(h("div.stream", {
           focusable: true,
@@ -17607,20 +18082,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }) : null]));
       };
       for (var i = start3; i < end; i++) {
-        _loop0(i);
+        _loop1(i);
       }
-      if (end < chapters2.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
+      if (end < chapters3.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
         a: end + 1,
-        b: Math.min(chapters2.length, end + CHUNK2)
+        b: Math.min(chapters3.length, end + CHUNK3)
       }) + " ▶", chunk + 1));
     }
     renderInfo();
     renderList();
     chapters(m.mdId, ["en", "fr", "es"]).then(function (cs) {
       if (!alive) return;
-      chapters2 = cs;
+      chapters3 = cs;
       var i = idxOf();
-      chunk = i >= 0 ? Math.floor(i / CHUNK2) : 0;
+      chunk = i >= 0 ? Math.floor(i / CHUNK3) : 0;
       if (!cs.length) status2.textContent = t("Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.");
       renderInfo();
       renderList();
@@ -17630,7 +18105,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       onShow: function onShow() {
-        if (chapters2.length) {
+        if (chapters3.length) {
           renderInfo();
           renderList();
         }
@@ -17673,7 +18148,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return fn(fetchUrl(url2), opts);
     });
   }
-  function toMeta2(b, lang3) {
+  function toMeta3(b, lang3) {
     var ia = (b.ia || []).filter(function (x) {
       return !/librivox|^isbn_|^bwb_/.test(x);
     })[0] || "";
@@ -17704,7 +18179,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             return !/librivox|^isbn_|^bwb_/.test(x);
           });
         }).map(function (b) {
-          return toMeta2(b, lang3);
+          return toMeta3(b, lang3);
         }),
         more: !!(r && r.numFound > (page3 || 1) * 30)
       };
@@ -17843,11 +18318,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
     el.appendChild(info2);
-    var img = h("img.md-cover", {
+    var img2 = h("img.md-cover", {
       alt: ""
     });
-    img.setAttribute("data-lazy", b.poster || "");
-    info2.appendChild(img);
+    img2.setAttribute("data-lazy", b.poster || "");
+    info2.appendChild(img2);
     var text = h("div.md-text");
     text.appendChild(h("div.md-title", {
       text: b.name
@@ -18306,8 +18781,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var files = {};
   function load6(name) {
     if (!files[name]) {
-      var base = window.__KAI_BASE__ || "";
-      files[name] = getJSON(base + "collections/" + name + ".json", {
+      var base2 = window.__KAI_BASE__ || "";
+      files[name] = getJSON(base2 + "collections/" + name + ".json", {
         timeout: 3e4
       }).catch(function (e) {
         delete files[name];
@@ -18603,7 +19078,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function run3() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop1 = function _loop1() {
+      var _loop10 = function _loop10() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (!p.row.parentNode) {
@@ -18625,7 +19100,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret6;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret6 = _loop1();
+        _ret6 = _loop10();
         if (_ret6 === 0) continue;
         if (_ret6 === 1) break;
       }
@@ -18982,7 +19457,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop10 = function _loop10() {
+      var _loop11 = function _loop11() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -19000,7 +19475,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret7;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret7 = _loop10();
+        _ret7 = _loop11();
         if (_ret7 === 0) continue;
         if (_ret7 === 1) break;
       }
@@ -19667,7 +20142,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T12:54:31.422Z";
+  var BUILD = "2026-11-16T14:12:56.759Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -20264,13 +20739,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function run2(onStep) {
     var pings = [];
-    var ping = function ping() {
+    var ping2 = function ping2() {
       return xhr(TRACE, false, 5e3).then(function (r) {
         return pings.push(r.ms);
       });
     };
     onStep && onStep("ping");
-    return ping().then(ping).then(ping).then(function () {
+    return ping2().then(ping2).then(ping2).then(function () {
       onStep && onStep("download");
       return xhr(DOWN + 2e6, true, 2e4);
     }).then(function (warm) {
@@ -22258,7 +22733,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop11 = function _loop11() {
+      var _loop12 = function _loop12() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -22274,7 +22749,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop11();
+        _loop12();
       }
       days.__last = days.children[current3 + 1];
     }
@@ -22597,21 +23072,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       slideTimer = setInterval(shift, 6e4);
       return;
     }
-    var img = h("div.ss-bg");
+    var img2 = h("div.ss-bg");
     var title = h("div.ss-title");
     var clock = h("div.ss-clock");
-    overlay = h("div.screensaver", null, [img, h("div.ss-shade"), h("div.ss-info", null, [clock, title])]);
+    overlay = h("div.screensaver", null, [img2, h("div.ss-shade"), h("div.ss-info", null, [clock, title])]);
     document.body.appendChild(overlay);
     var next = function next() {
       clock.textContent = timeHM(/* @__PURE__ */new Date());
       var it = items2.length ? items2[index++ % items2.length] : null;
       if (it) {
-        img.classList.remove("show");
+        img2.classList.remove("show");
         setTimeout(function () {
           if (!overlay) return;
-          img.style.backgroundImage = 'url("' + it.background + '")';
+          img2.style.backgroundImage = 'url("' + it.background + '")';
           title.textContent = it.name || "";
-          img.classList.add("show");
+          img2.classList.add("show");
         }, 900);
       }
     };
