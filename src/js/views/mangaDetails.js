@@ -41,13 +41,13 @@ function likeness(a, b) {
 }
 // The source title linked to each AniList manga, so it opens right away next time.
 function links() {
-  return store.get('mangaLinks', {}) || {};
+  return store.get('mangaLinks2', {}) || {};
 }
 function saveLink(id, v) {
   const all = links();
   if (v) all[id] = v;
   else delete all[id];
-  store.set('mangaLinks', all);
+  store.set('mangaLinks2', all);
 }
 
 export function openMangaDetails(m) {
@@ -106,7 +106,9 @@ function MangaDetailsView(m) {
   function indexOfProgress() {
     const p = progress();
     if (!p) return -1;
-    return chapters.findIndex((c) => c.id === p.chapterId);
+    const i = chapters.findIndex((c) => c.id === p.chapterId);
+    if (i >= 0 || p.chapter == null) return i;
+    return chapters.findIndex((c) => c.chapter != null && parseFloat(c.chapter) === parseFloat(p.chapter));
   }
 
   function read(index, page) {
@@ -175,8 +177,8 @@ function MangaDetailsView(m) {
         },
       }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );
-    if (source) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source.name]));
-    else btns.push(
+    if (pl.installed().length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : 'MangaDex']));
+    if (!source) btns.push(
       h('div.btn', {
         focusable: true,
         onSelect: () =>
@@ -226,39 +228,16 @@ function MangaDetailsView(m) {
     }
   }
 
+  let mdCount = null; // chapters MangaDex has (null = not asked yet)
+  let found = null; // titles found in your sources, most chapters first
+  let scanning = null;
+  let picked = false; // you chose the source by hand on this screen
+
   function loadChapters() {
-    chapters = [];
-    source = null;
-    // Linked before to one of your sources: open from there straight away.
     const ln = links()[m.anilist];
+    if (ln && ln.md) return loadChaptersMd(false);
     if (ln && pl.installed().some((p) => p.id === ln.pid)) return useSource(ln, true);
-    clear(list);
-    status.textContent = t('Procurando capítulos...');
-    list.appendChild(status);
-    md.find(m.anilist, [media.title && media.title.english, media.title && media.title.romaji, m.name])
-      .then((id) => {
-        if (!id) throw new Error('none');
-        return md.chapters(id, langSet.langs);
-      })
-      .then((cs) => {
-        if (!alive) return;
-        chapters = cs;
-        let idx = indexOfProgress();
-        // Opened from an anime episode: jump to the chapter that matches it (estimate).
-        if (idx < 0 && m.focusChapter) {
-          idx = cs.findIndex((c) => parseFloat(c.chapter) >= m.focusChapter);
-          if (idx < 0) idx = cs.length - 1;
-          focusIdx = idx;
-        }
-        chunk = idx >= 0 ? Math.floor(idx / CHUNK) : 0;
-        if (!cs.length) return autoFind();
-        renderInfo();
-        renderList(false);
-      })
-      .catch(() => {
-        if (!alive) return;
-        autoFind();
-      });
+    loadChaptersMd(true);
   }
 
   function showSource(ln, cs) {
@@ -272,6 +251,7 @@ function MangaDetailsView(m) {
 
   // Chapters of the linked source title.
   function useSource(ln, fallback) {
+    chapters = [];
     clear(list);
     status.textContent = t('Carregando capítulos de {name}...', { name: ln.name });
     list.appendChild(status);
@@ -288,6 +268,8 @@ function MangaDetailsView(m) {
           saveLink(m.anilist, null);
           return loadChaptersMd(true);
         }
+        status.textContent = t('Não consegui carregar os capítulos de {name}.', { name: ln.name });
+        renderList(false);
       });
   }
 
@@ -300,79 +282,126 @@ function MangaDetailsView(m) {
     return out;
   }
 
-  // MangaDex has no chapters (licensed titles like One Piece): look for the title in your sources,
-  // one source at a time, and use the first one whose title matches.
-  function autoFind() {
+  // This title in one source: the best-matching search result and its chapters, or null.
+  function findIn(p, qs) {
+    let qi = 0;
+    function next() {
+      if (!alive || qi >= Math.min(qs.length, 2)) return Promise.resolve(null);
+      const q = qs[qi++];
+      return pl.search(p.id, q, 0).then(
+        (items) => {
+          let best = null;
+          let score = 0;
+          (items || []).slice(0, 40).forEach((it) => {
+            const s2 = Math.max.apply(null, qs.map((n) => likeness(n, it.title)));
+            if (s2 > score) {
+              score = s2;
+              best = it;
+            }
+          });
+          if (!best || score < 0.85) return next();
+          return pluginApi(p.id, p.name)
+            .chapters({ mid: best.id })
+            .then((cs) => (cs.length ? { pid: p.id, name: p.name, mid: best.id, title: best.title, count: cs.length, cs: cs } : next()), next);
+        },
+        () => next()
+      );
+    }
+    return next();
+  }
+
+  // Look in all your sources, two at a time; onHit gets each source that has the title.
+  function scan(onHit) {
+    if (scanning) return scanning;
     const plugins = pl.installed();
-    if (!plugins.length) {
+    const qs = names();
+    const hits = [];
+    let i = 0;
+    function lane() {
+      if (!alive || i >= plugins.length) return Promise.resolve();
+      const p = plugins[i++];
+      return findIn(p, qs)
+        .then((hit) => {
+          if (hit && alive) {
+            hits.push(hit);
+            if (onHit) onHit(hit);
+          }
+        }, () => {})
+        .then(lane);
+    }
+    scanning = Promise.all([lane(), lane()]).then(() => {
+      found = hits.sort((x, y) => y.count - x.count);
+      return found;
+    });
+    return scanning;
+  }
+  const linkOf = (hit) => ({ pid: hit.pid, name: hit.name, mid: hit.mid, title: hit.title, count: hit.count });
+
+  // MangaDex has no chapters (licensed titles like One Piece): look in all your sources.
+  // The first one found opens right away; when the search ends, the one with the most chapters wins.
+  function autoFind() {
+    if (!pl.installed().length) {
       status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
       renderInfo();
       renderList(false);
       return offerPlugins();
     }
-    const qs = names();
-    let pi = 0;
-    function nextPlugin() {
+    status.textContent = t('Procurando nas suas fontes...');
+    scan((hit) => {
+      if (!source && !picked) showSource(linkOf(hit), hit.cs);
+    }).then((all) => {
       if (!alive) return;
-      if (pi >= plugins.length) {
+      if (!all.length) {
         status.textContent = t('Não encontrei este título nas suas fontes.');
         renderInfo();
         renderList(false);
         return offerPlugins();
       }
-      const p = plugins[pi++];
-      status.textContent = t('Procurando em {name}...', { name: p.name });
-      let qi = 0;
-      function nextQuery() {
-        if (!alive) return;
-        if (qi >= Math.min(qs.length, 2)) return nextPlugin();
-        const q = qs[qi++];
-        pl.search(p.id, q, 0).then(
-          (items) => {
-            let best = null;
-            let score = 0;
-            (items || []).slice(0, 40).forEach((it) => {
-              const s2 = Math.max.apply(null, qs.map((n) => likeness(n, it.title)));
-              if (s2 > score) {
-                score = s2;
-                best = it;
-              }
-            });
-            if (!best || score < 0.85) return nextQuery();
-            const ln = { pid: p.id, name: p.name, mid: best.id, title: best.title };
-            pluginApi(p.id, p.name)
-              .chapters({ mid: best.id })
-              .then((cs) => {
-                if (!alive) return;
-                if (!cs.length) return nextQuery();
-                saveLink(m.anilist, ln);
-                showSource(ln, cs);
-                toast(t('Capítulos de {name}', { name: p.name }));
-              }, nextQuery);
-          },
-          () => nextQuery()
-        );
+      if (picked) return;
+      const best = all[0];
+      saveLink(m.anilist, linkOf(best));
+      if (!source || source.pid !== best.pid) {
+        showSource(linkOf(best), best.cs);
+        toast(t('{name}: {n} capítulos', { name: best.name, n: best.count }), 5000);
       }
-      nextQuery();
-    }
-    nextPlugin();
+      if (all.length > 1) toast(t('Achei em {n} fontes. Troque no botão 📚.', { n: all.length }), 5000);
+    });
   }
 
-  // Choose another source title by hand, or go back to MangaDex.
+  // Choose the source for this title: every source that has it, with its number of chapters.
   function pickSource() {
-    const q = names()[0] || m.name;
-    const items = pl.installed().map((p) => ({ label: '🔎 ' + t('Buscar em {name}', { name: p.name }), value: p }));
-    items.unshift({ label: 'MangaDex', value: 'md' });
+    if (!found) {
+      toast(t('Procurando nas suas fontes...'), 4000);
+      return scan().then(() => alive && pickSource());
+    }
+    const items = found.map((hit) => ({
+      label: hit.name,
+      sub: t('{n} capítulos', { n: hit.count }) + (norm(hit.title) !== norm(m.name) ? '  ·  ' + hit.title : ''),
+      value: hit,
+      checked: !!source && source.pid === hit.pid,
+    }));
+    items.unshift({ label: 'MangaDex', sub: mdCount ? t('{n} capítulos', { n: mdCount }) : '', value: 'md', checked: !source });
+    items.push({ label: '🔎 ' + t('Buscar manualmente'), sub: t('Procure com outro nome numa fonte'), value: 'manual' });
     menu(t('Fonte dos capítulos'), items, {
       onPick: (v) => {
+        picked = true;
         if (v === 'md') {
-          saveLink(m.anilist, null);
+          saveLink(m.anilist, { md: true });
           return loadChaptersMd(false);
         }
-        searchPlugin(v.id, v.name, q);
+        if (v === 'manual') return manualSearch();
+        saveLink(m.anilist, Object.assign(linkOf(v), { manual: true }));
+        showSource(linkOf(v), v.cs);
       },
     });
   }
+  function manualSearch() {
+    const q = names()[0] || m.name;
+    menu(t('Buscar manualmente'), pl.installed().map((p) => ({ label: t('Buscar em {name}', { name: p.name }), value: p })), {
+      onPick: (p) => searchPlugin(p.id, p.name, q),
+    });
+  }
+
   function loadChaptersMd(thenSearch) {
     chapters = [];
     source = null;
@@ -384,8 +413,17 @@ function MangaDetailsView(m) {
       .then(
         (cs) => {
           if (!alive) return;
+          mdCount = cs.length;
           if (!cs.length && thenSearch) return autoFind();
           chapters = cs;
+          let idx = indexOfProgress();
+          // Opened from an anime episode: jump to the chapter that matches it (estimate).
+          if (idx < 0 && m.focusChapter && cs.length) {
+            idx = cs.findIndex((c) => parseFloat(c.chapter) >= m.focusChapter);
+            if (idx < 0) idx = cs.length - 1;
+            focusIdx = idx;
+          }
+          chunk = idx >= 0 ? Math.floor(idx / CHUNK) : 0;
           if (!cs.length) status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
           renderInfo();
           renderList(false);
@@ -394,26 +432,24 @@ function MangaDetailsView(m) {
           if (!alive) return;
           if (thenSearch) return autoFind();
           status.textContent = t('Não encontrei capítulos deste título agora.');
+          renderList(false);
         }
       );
   }
 
   // Search the title in the plugins you installed (My sources).
   function offerPlugins() {
-    const q = (media.title && (media.title.english || media.title.romaji)) || m.name;
+    const q = names()[0] || m.name;
     const plugins = pl.installed();
     if (!plugins.length) {
-      listEl().appendChild(h('div.modal-text', { text: t('Adicione fontes em Mangá → Minhas fontes para ler outros títulos.') }));
+      list.appendChild(h('div.modal-text', { text: t('Adicione fontes em Mangá → Minhas fontes para ler outros títulos.') }));
       return;
     }
     plugins.forEach((p) =>
-      listEl().appendChild(
+      list.appendChild(
         h('div.stream', { focusable: true, onSelect: () => searchPlugin(p.id, p.name, q) }, [h('div.s-main', { text: '🔎 ' + t('Buscar em {name}', { name: p.name }) }), h('span.s-tag', { text: (p.lang || '').toUpperCase() })])
       )
     );
-  }
-  function listEl() {
-    return list;
   }
 
   renderInfo();

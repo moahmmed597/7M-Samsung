@@ -787,3 +787,10 @@ body.oled .view { background: #000; }
 .diag div { font-size: 24px; margin: 8px 0; color: rgba(255,255,255,0.75); word-break: break-word; }
 .diag .ok { color: #4ade80; }
 .diag .bad { color: #f87171; }
+
+/* lists: tags in line with the text, source icons */
+.flat-list .stream, .md-list .stream { -webkit-align-items: center; align-items: center; }
+.flat-list .stream .s-tag, .md-list .stream .s-tag { margin: 0 0 0 10px; -webkit-flex: none; flex: none; }
+.src-ico { position: relative; -webkit-flex: none; flex: none; width: 46px; height: 46px; margin-right: 18px; border-radius: 12px; overflow: hidden; color: #ffffff; font-size: 24px; font-weight: 800; line-height: 46px; text-align: center; }
+.src-ico img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; background: #ffffff; opacity: 0; }
+.src-ico.has-img img { opacity: 1; }

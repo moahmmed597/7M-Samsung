@@ -5043,6 +5043,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Procurando nas suas fontes...": "Searching your sources...",
+    "{name}: {n} capítulos": "{name}: {n} chapters",
+    "Achei em {n} fontes. Troque no botão 📚.": "Found in {n} sources. Switch with the 📚 button.",
+    "Buscar manualmente": "Search manually",
+    "Procure com outro nome numa fonte": "Search a source under another name",
+    "Não consegui carregar os capítulos de {name}.": "Couldn't load the chapters from {name}.",
     "Carregando capítulos de {name}...": "Loading chapters from {name}...",
     "Não encontrei este título nas suas fontes.": "Couldn't find this title in your sources.",
     "Procurando em {name}...": "Searching {name}...",
@@ -5445,6 +5451,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Procurando nas suas fontes...": "جاري البحث في مصادرك...",
+    "{name}: {n} capítulos": "{name}: {n} فصل",
+    "Achei em {n} fontes. Troque no botão 📚.": "لقيته في {n} مصادر. غيّر المصدر من زر 📚.",
+    "Buscar manualmente": "بحث يدوي",
+    "Procure com outro nome numa fonte": "دوّر باسم ثاني في مصدر معيّن",
+    "Não consegui carregar os capítulos de {name}.": "ما قدرت أحمّل الفصول من {name}.",
     "Carregando capítulos de {name}...": "جاري تحميل الفصول من {name}...",
     "Não encontrei este título nas suas fontes.": "ما لقيت هذا العمل في مصادرك.",
     "Procurando em {name}...": "جاري البحث في {name}...",
@@ -15183,6 +15195,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       try {
         w.worker.terminate();
       } catch (e) {}
+      Object.keys(w.calls || {}).forEach(function (cid) {
+        clearTimeout(w.calls[cid].timer);
+        w.calls[cid].reject(new Error("stopped"));
+      });
+      w.calls = {};
       if (w.url) URL.revokeObjectURL(w.url);
       delete workers[id];
     }
@@ -15278,7 +15295,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     workers[p.id] = w;
     order.push(p.id);
-    while (order.length > 2) stop2(order[0]);
+    while (order.length > 3) stop2(order[0]);
     return w;
   }
   function ready(id) {
@@ -15709,6 +15726,30 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     };
   }
+  var ICON_COLORS = ["#2f5bd3", "#c2410c", "#15803d", "#7e22ce", "#b91c1c", "#0e7490", "#a16207", "#be185d"];
+  function sourceIcon(p) {
+    var name = String(p.name || "?");
+    var n = 0;
+    for (var i = 0; i < name.length; i++) n = (n * 31 + name.charCodeAt(i)) % 9973;
+    var box = h("div.src-ico", {
+      text: name.replace(/^[^\w؀-ۿ]+/, "").charAt(0).toUpperCase() || "?"
+    });
+    box.style.background = ICON_COLORS[n % ICON_COLORS.length];
+    if (/^https?:\/\//i.test(p.icon || "")) {
+      var im = h("img", {
+        alt: ""
+      });
+      im.onload = function () {
+        return box.classList.add("has-img");
+      };
+      im.onerror = function () {
+        return im.parentNode && im.parentNode.removeChild(im);
+      };
+      im.src = imageUrl(p.icon, (/^https?:\/\/[^/]+/i.exec(p.icon) || [""])[0] + "/");
+      box.appendChild(im);
+    }
+    return box;
+  }
   function SourcesView() {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
@@ -15940,9 +15981,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));
       body.appendChild(row2("＋ " + t("Adicionar repositório"), t("cole o link do repo.json"), addRepo2));
       installed().forEach(function (p) {
-        return body.appendChild(row2(p.name, "v" + p.version, function () {
+        var r = row2(p.name, "v" + p.version, function () {
           return push(SourceGrid(pluginApi(p.id, p.name)));
-        }, (p.lang || "").toUpperCase()));
+        }, (p.lang || "").toUpperCase());
+        r.insertBefore(sourceIcon(p), r.firstChild);
+        body.appendChild(r);
       });
       installed().length && body.appendChild(row2("🩺 " + t("Testar plugins"), t("mostra onde falha"), diagnose));
       installed().length && body.appendChild(row2("⚙ " + t("Gerenciar plugins"), "", function () {
@@ -16302,12 +16345,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return 0.9 * inB / (A.length + B.length - inB);
   }
   function links() {
-    return get("mangaLinks", {}) || {};
+    return get("mangaLinks2", {}) || {};
   }
   function saveLink(id, v) {
     var all2 = links();
     if (v) all2[id] = v;else delete all2[id];
-    set("mangaLinks", all2);
+    set("mangaLinks2", all2);
   }
   function openMangaDetails(m) {
     push(MangaDetailsView(m));
@@ -16375,8 +16418,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function indexOfProgress() {
       var p = progress2();
       if (!p) return -1;
-      return chapters4.findIndex(function (c) {
+      var i = chapters4.findIndex(function (c) {
         return c.id === p.chapterId;
+      });
+      if (i >= 0 || p.chapter == null) return i;
+      return chapters4.findIndex(function (c) {
+        return c.chapter != null && parseFloat(c.chapter) === parseFloat(p.chapter);
       });
     }
     function read(index2, page3) {
@@ -16478,12 +16525,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: isFav(key3) ? "♥" : "♡"
       }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")]));
-      if (source) btns.push(h("div.btn", {
+      if (installed().length) btns.push(h("div.btn", {
         focusable: true,
         onSelect: pickSource
       }, [h("span.ico", {
         text: "📚"
-      }), source.name]));else btns.push(h("div.btn", {
+      }), source ? source.name : "MangaDex"]));
+      if (!source) btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
           return menu(t("Idioma dos capítulos"), LANG_SETS.map(function (x) {
@@ -16569,38 +16617,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (first) focus(first);
       }
     }
+    var mdCount = null;
+    var found = null;
+    var scanning = null;
+    var picked = false;
     function loadChapters() {
-      chapters4 = [];
-      source = null;
       var ln = links()[m.anilist];
+      if (ln && ln.md) return loadChaptersMd(false);
       if (ln && installed().some(function (p) {
         return p.id === ln.pid;
       })) return useSource(ln, true);
-      clear(list2);
-      status2.textContent = t("Procurando capítulos...");
-      list2.appendChild(status2);
-      find2(m.anilist, [media2.title && media2.title.english, media2.title && media2.title.romaji, m.name]).then(function (id) {
-        if (!id) throw new Error("none");
-        return chapters(id, langSet.langs);
-      }).then(function (cs) {
-        if (!alive) return;
-        chapters4 = cs;
-        var idx = indexOfProgress();
-        if (idx < 0 && m.focusChapter) {
-          idx = cs.findIndex(function (c) {
-            return parseFloat(c.chapter) >= m.focusChapter;
-          });
-          if (idx < 0) idx = cs.length - 1;
-          focusIdx = idx;
-        }
-        chunk = idx >= 0 ? Math.floor(idx / CHUNK2) : 0;
-        if (!cs.length) return autoFind();
-        renderInfo();
-        renderList(false);
-      }).catch(function () {
-        if (!alive) return;
-        autoFind();
-      });
+      loadChaptersMd(true);
     }
     function showSource(ln, cs) {
       source = ln;
@@ -16611,6 +16638,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       renderList(false);
     }
     function useSource(ln, fallback) {
+      chapters4 = [];
       clear(list2);
       status2.textContent = t("Carregando capítulos de {name}...", {
         name: ln.name
@@ -16628,6 +16656,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           saveLink(m.anilist, null);
           return loadChaptersMd(true);
         }
+        status2.textContent = t("Não consegui carregar os capítulos de {name}.", {
+          name: ln.name
+        });
+        renderList(false);
       });
     }
     function names2() {
@@ -16639,92 +16671,167 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       return out;
     }
-    function autoFind() {
+    function findIn(p, qs) {
+      var qi = 0;
+      function next() {
+        if (!alive || qi >= Math.min(qs.length, 2)) return Promise.resolve(null);
+        var q2 = qs[qi++];
+        return search2(p.id, q2, 0).then(function (items3) {
+          var best = null;
+          var score = 0;
+          (items3 || []).slice(0, 40).forEach(function (it) {
+            var s2 = Math.max.apply(null, qs.map(function (n) {
+              return likeness(n, it.title);
+            }));
+            if (s2 > score) {
+              score = s2;
+              best = it;
+            }
+          });
+          if (!best || score < 0.85) return next();
+          return pluginApi(p.id, p.name).chapters({
+            mid: best.id
+          }).then(function (cs) {
+            return cs.length ? {
+              pid: p.id,
+              name: p.name,
+              mid: best.id,
+              title: best.title,
+              count: cs.length,
+              cs: cs
+            } : next();
+          }, next);
+        }, function () {
+          return next();
+        });
+      }
+      return next();
+    }
+    function scan3(onHit) {
+      if (scanning) return scanning;
       var plugins = installed();
-      if (!plugins.length) {
+      var qs = names2();
+      var hits = [];
+      var i = 0;
+      function lane() {
+        if (!alive || i >= plugins.length) return Promise.resolve();
+        var p = plugins[i++];
+        return findIn(p, qs).then(function (hit) {
+          if (hit && alive) {
+            hits.push(hit);
+            if (onHit) onHit(hit);
+          }
+        }, function () {}).then(lane);
+      }
+      scanning = Promise.all([lane(), lane()]).then(function () {
+        found = hits.sort(function (x, y) {
+          return y.count - x.count;
+        });
+        return found;
+      });
+      return scanning;
+    }
+    var linkOf = function linkOf(hit) {
+      return {
+        pid: hit.pid,
+        name: hit.name,
+        mid: hit.mid,
+        title: hit.title,
+        count: hit.count
+      };
+    };
+    function autoFind() {
+      if (!installed().length) {
         status2.textContent = t("O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).");
         renderInfo();
         renderList(false);
         return offerPlugins();
       }
-      var qs = names2();
-      var pi = 0;
-      function nextPlugin() {
+      status2.textContent = t("Procurando nas suas fontes...");
+      scan3(function (hit) {
+        if (!source && !picked) showSource(linkOf(hit), hit.cs);
+      }).then(function (all2) {
         if (!alive) return;
-        if (pi >= plugins.length) {
+        if (!all2.length) {
           status2.textContent = t("Não encontrei este título nas suas fontes.");
           renderInfo();
           renderList(false);
           return offerPlugins();
         }
-        var p = plugins[pi++];
-        status2.textContent = t("Procurando em {name}...", {
-          name: p.name
-        });
-        var qi = 0;
-        function nextQuery() {
-          if (!alive) return;
-          if (qi >= Math.min(qs.length, 2)) return nextPlugin();
-          var q2 = qs[qi++];
-          search2(p.id, q2, 0).then(function (items3) {
-            var best = null;
-            var score = 0;
-            (items3 || []).slice(0, 40).forEach(function (it) {
-              var s2 = Math.max.apply(null, qs.map(function (n) {
-                return likeness(n, it.title);
-              }));
-              if (s2 > score) {
-                score = s2;
-                best = it;
-              }
-            });
-            if (!best || score < 0.85) return nextQuery();
-            var ln = {
-              pid: p.id,
-              name: p.name,
-              mid: best.id,
-              title: best.title
-            };
-            pluginApi(p.id, p.name).chapters({
-              mid: best.id
-            }).then(function (cs) {
-              if (!alive) return;
-              if (!cs.length) return nextQuery();
-              saveLink(m.anilist, ln);
-              showSource(ln, cs);
-              toast(t("Capítulos de {name}", {
-                name: p.name
-              }));
-            }, nextQuery);
-          }, function () {
-            return nextQuery();
-          });
+        if (picked) return;
+        var best = all2[0];
+        saveLink(m.anilist, linkOf(best));
+        if (!source || source.pid !== best.pid) {
+          showSource(linkOf(best), best.cs);
+          toast(t("{name}: {n} capítulos", {
+            name: best.name,
+            n: best.count
+          }), 5e3);
         }
-        nextQuery();
-      }
-      nextPlugin();
+        if (all2.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
+          n: all2.length
+        }), 5e3);
+      });
     }
     function pickSource() {
-      var q2 = names2()[0] || m.name;
-      var items3 = installed().map(function (p) {
+      if (!found) {
+        toast(t("Procurando nas suas fontes..."), 4e3);
+        return scan3().then(function () {
+          return alive && pickSource();
+        });
+      }
+      var items3 = found.map(function (hit) {
         return {
-          label: "🔎 " + t("Buscar em {name}", {
-            name: p.name
-          }),
-          value: p
+          label: hit.name,
+          sub: t("{n} capítulos", {
+            n: hit.count
+          }) + (norm2(hit.title) !== norm2(m.name) ? "  ·  " + hit.title : ""),
+          value: hit,
+          checked: !!source && source.pid === hit.pid
         };
       });
       items3.unshift({
         label: "MangaDex",
-        value: "md"
+        sub: mdCount ? t("{n} capítulos", {
+          n: mdCount
+        }) : "",
+        value: "md",
+        checked: !source
+      });
+      items3.push({
+        label: "🔎 " + t("Buscar manualmente"),
+        sub: t("Procure com outro nome numa fonte"),
+        value: "manual"
       });
       menu(t("Fonte dos capítulos"), items3, {
         onPick: function onPick(v) {
+          picked = true;
           if (v === "md") {
-            saveLink(m.anilist, null);
+            saveLink(m.anilist, {
+              md: true
+            });
             return loadChaptersMd(false);
           }
-          searchPlugin(v.id, v.name, q2);
+          if (v === "manual") return manualSearch();
+          saveLink(m.anilist, Object.assign(linkOf(v), {
+            manual: true
+          }));
+          showSource(linkOf(v), v.cs);
+        }
+      });
+    }
+    function manualSearch() {
+      var q2 = names2()[0] || m.name;
+      menu(t("Buscar manualmente"), installed().map(function (p) {
+        return {
+          label: t("Buscar em {name}", {
+            name: p.name
+          }),
+          value: p
+        };
+      }), {
+        onPick: function onPick(p) {
+          return searchPlugin(p.id, p.name, q2);
         }
       });
     }
@@ -16738,8 +16845,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return id ? chapters(id, langSet.langs) : [];
       }).then(function (cs) {
         if (!alive) return;
+        mdCount = cs.length;
         if (!cs.length && thenSearch) return autoFind();
         chapters4 = cs;
+        var idx = indexOfProgress();
+        if (idx < 0 && m.focusChapter && cs.length) {
+          idx = cs.findIndex(function (c) {
+            return parseFloat(c.chapter) >= m.focusChapter;
+          });
+          if (idx < 0) idx = cs.length - 1;
+          focusIdx = idx;
+        }
+        chunk = idx >= 0 ? Math.floor(idx / CHUNK2) : 0;
         if (!cs.length) status2.textContent = t("O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).");
         renderInfo();
         renderList(false);
@@ -16747,19 +16864,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (!alive) return;
         if (thenSearch) return autoFind();
         status2.textContent = t("Não encontrei capítulos deste título agora.");
+        renderList(false);
       });
     }
     function offerPlugins() {
-      var q2 = media2.title && (media2.title.english || media2.title.romaji) || m.name;
+      var q2 = names2()[0] || m.name;
       var plugins = installed();
       if (!plugins.length) {
-        listEl().appendChild(h("div.modal-text", {
+        list2.appendChild(h("div.modal-text", {
           text: t("Adicione fontes em Mangá → Minhas fontes para ler outros títulos.")
         }));
         return;
       }
       plugins.forEach(function (p) {
-        return listEl().appendChild(h("div.stream", {
+        return list2.appendChild(h("div.stream", {
           focusable: true,
           onSelect: function onSelect() {
             return searchPlugin(p.id, p.name, q2);
@@ -16772,9 +16890,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: (p.lang || "").toUpperCase()
         })]));
       });
-    }
-    function listEl() {
-      return list2;
     }
     renderInfo();
     loadChapters();
@@ -21806,7 +21921,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T19:31:37.101Z";
+  var BUILD = "2026-11-16T19:52:26.481Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

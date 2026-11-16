@@ -372,6 +372,11 @@ function stop(id) {
     try {
       w.worker.terminate();
     } catch (e) {}
+    Object.keys(w.calls || {}).forEach((cid) => {
+      clearTimeout(w.calls[cid].timer);
+      w.calls[cid].reject(new Error('stopped'));
+    });
+    w.calls = {};
     if (w.url) URL.revokeObjectURL(w.url);
     delete workers[id];
   }
@@ -430,8 +435,8 @@ function start(p) {
   };
   workers[p.id] = w;
   order.push(p.id);
-  // keep at most two plugins running (memory on the TV)
-  while (order.length > 2) stop(order[0]);
+  // keep at most three plugins running (memory on the TV)
+  while (order.length > 3) stop(order[0]);
   return w;
 }
 

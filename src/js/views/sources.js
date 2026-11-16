@@ -126,6 +126,24 @@ export function pluginApi(pid, name) {
   };
 }
 
+// A source's icon: its own picture, or its first letter on a colour of its own.
+const ICON_COLORS = ['#2f5bd3', '#c2410c', '#15803d', '#7e22ce', '#b91c1c', '#0e7490', '#a16207', '#be185d'];
+export function sourceIcon(p) {
+  const name = String(p.name || '?');
+  let n = 0;
+  for (let i = 0; i < name.length; i++) n = (n * 31 + name.charCodeAt(i)) % 9973;
+  const box = h('div.src-ico', { text: name.replace(/^[^\w؀-ۿ]+/, '').charAt(0).toUpperCase() || '?' });
+  box.style.background = ICON_COLORS[n % ICON_COLORS.length];
+  if (/^https?:\/\//i.test(p.icon || '')) {
+    const im = h('img', { alt: '' });
+    im.onload = () => box.classList.add('has-img');
+    im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
+    im.src = pl.imageUrl(p.icon, (/^https?:\/\/[^/]+/i.exec(p.icon) || [''])[0] + '/');
+    box.appendChild(im);
+  }
+  return box;
+}
+
 // ---------- the list of sources ----------
 function SourcesView() {
   const el = h('div.view');
@@ -279,7 +297,11 @@ function SourcesView() {
     if (serviceVersion() && serviceVersion() < 2)
       body.appendChild(h('div.modal-text', { text: t('O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.') }));
     body.appendChild(row('＋ ' + t('Adicionar repositório'), t('cole o link do repo.json'), addRepo));
-    pl.installed().forEach((p) => body.appendChild(row(p.name, 'v' + p.version, () => router.push(SourceGrid(pluginApi(p.id, p.name))), (p.lang || '').toUpperCase())));
+    pl.installed().forEach((p) => {
+      const r = row(p.name, 'v' + p.version, () => router.push(SourceGrid(pluginApi(p.id, p.name))), (p.lang || '').toUpperCase());
+      r.insertBefore(sourceIcon(p), r.firstChild);
+      body.appendChild(r);
+    });
     pl.installed().length && body.appendChild(row('🩺 ' + t('Testar plugins'), t('mostra onde falha'), diagnose));
     pl.installed().length &&
       body.appendChild(row('⚙ ' + t('Gerenciar plugins'), '', () =>
