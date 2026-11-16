@@ -40,7 +40,7 @@ function SourcesView() {
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   el.appendChild(scroller);
   scroller.appendChild(h('div.row-title.catalog-title', { text: t('Minhas fontes') }));
-  const body = h('div.md-list', { 'data-group': '', 'data-vertical': '' });
+  const body = h('div.flat-list', { 'data-group': '', 'data-vertical': '' });
   scroller.appendChild(body);
 
   function load() {

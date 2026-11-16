@@ -177,7 +177,7 @@ export function MangaView() {
   );
   tileRow(rows, t('Descobrir'), DISCOVER.map((d) => ({ label: t(d.label), open: () => grid(t(d.label), d.args) })), 'discover');
   add(t('Em alta agora'), 'sort: TRENDING_DESC');
-  tileRow(rows, t('Formatos'), FORMATS.map((f) => ({ label: t(f.label), open: () => grid(t(f.label), f.args) })), 'studio');
+  tileRow(rows, t('Formatos'), FORMATS.map((f) => ({ label: t(f.label), open: () => grid(t(f.label), f.args) })), 'discover');
   tileRow(
     rows,
     t('Gêneros'),

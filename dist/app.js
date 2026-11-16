@@ -17316,7 +17316,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(h("div.row-title.catalog-title", {
       text: t("Minhas fontes")
     }));
-    var body = h("div.md-list", {
+    var body = h("div.flat-list", {
       "data-group": "",
       "data-vertical": ""
     });
@@ -18208,7 +18208,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return grid(t(f.label), f.args);
         }
       };
-    }), "studio");
+    }), "discover");
     tileRow(rows2, t("Gêneros"), GENRES.map(function (g) {
       return {
         label: g[1] ? t(g[1]) : g[0],
@@ -18742,7 +18742,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(h("div.row-title.catalog-title", {
       text: t("TV ao vivo")
     }));
-    var body = h("div.md-list", {
+    var body = h("div.flat-list", {
       "data-group": "",
       "data-vertical": ""
     });
@@ -18829,7 +18829,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var bar = h("div.details-buttons", {
       "data-group": ""
     });
-    var body = h("div.md-list", {
+    var body = h("div.flat-list", {
       "data-group": "",
       "data-vertical": ""
     });
@@ -20652,7 +20652,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T14:37:02.060Z";
+  var BUILD = "2026-11-16T14:40:21.149Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

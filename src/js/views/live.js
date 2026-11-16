@@ -49,7 +49,7 @@ export function LiveView() {
   const bar = topbar('live', router.goTab);
   scroller.appendChild(bar);
   scroller.appendChild(h('div.row-title.catalog-title', { text: t('TV ao vivo') }));
-  const body = h('div.md-list', { 'data-group': '', 'data-vertical': '' });
+  const body = h('div.flat-list', { 'data-group': '', 'data-vertical': '' });
   scroller.appendChild(body);
   el.appendChild(scroller);
 
@@ -112,7 +112,7 @@ function ChannelsView(pl) {
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   scroller.appendChild(h('div.row-title.catalog-title', { text: pl.name }));
   const bar = h('div.details-buttons', { 'data-group': '' });
-  const body = h('div.md-list', { 'data-group': '', 'data-vertical': '' });
+  const body = h('div.flat-list', { 'data-group': '', 'data-vertical': '' });
   scroller.appendChild(bar);
   scroller.appendChild(body);
   el.appendChild(scroller);
