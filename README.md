@@ -243,3 +243,7 @@ The compiled package is output to `out/Stremio7M.wgt`.
 
 ## 📄 License
 This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)** - see the [LICENSE](LICENSE) file for details.
+
+## Credits
+
+- Profile pictures in `src/static/avatars/` come from [Harbor](https://github.com/Harborofficial/Harbor) (MIT licence, Copyright (c) 2026 Harbor).
