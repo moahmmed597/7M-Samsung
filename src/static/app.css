@@ -680,3 +680,21 @@ body.oled .view { background: #000; }
 .av-tile img { width: 100%; height: 100%; object-fit: cover; }
 .av-tile.checked { border-color: #22c55e; }
 .av-tile.focused { border-color: #ffffff; -webkit-transform: scale(1.1); transform: scale(1.1); }
+.md-view { background: #0d0b14; }
+.md-info { position: absolute; left: 96px; top: 70px; width: 820px; display: -webkit-flex; display: flex; }
+[dir="rtl"] .md-info { left: auto; right: 96px; }
+.md-cover { width: 240px; height: 360px; border-radius: 14px; object-fit: cover; background: rgba(255,255,255,0.06); margin-right: 32px; -webkit-flex-shrink: 0; flex-shrink: 0; }
+[dir="rtl"] .md-cover { margin-right: 0; margin-left: 32px; }
+.md-title { font-size: 40px; font-weight: 800; margin-bottom: 8px; }
+.md-meta { font-size: 21px; color: rgba(255,255,255,0.65); margin-bottom: 12px; }
+.md-desc { font-size: 21px; color: rgba(255,255,255,0.8); display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; max-height: 210px; margin-bottom: 22px; white-space: pre-line; }
+.md-list { position: absolute; right: 60px; top: 60px; width: 860px; height: 960px; overflow: hidden; }
+[dir="rtl"] .md-list { right: auto; left: 60px; }
+.md-list .stream { margin: 0 0 10px; }
+.md-list .s-main { -webkit-flex: 1; flex: 1; font-size: 22px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.md-list .md-nav { text-align: center; color: #c9bbff; }
+.view.reader { background: #000; }
+.rd-img { position: absolute; left: 0; top: 0; max-width: none; -webkit-transform-origin: 0 0; transform-origin: 0 0; }
+.rd-hud { position: absolute; left: 40px; bottom: 36px; padding: 10px 22px; border-radius: 12px; background: rgba(0,0,0,0.7); font-size: 22px; color: rgba(255,255,255,0.85); opacity: 0; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; }
+.rd-hud.show { opacity: 1; }
+.rd-msg { position: absolute; left: 0; right: 0; top: 50%; margin-top: -20px; text-align: center; font-size: 28px; color: rgba(255,255,255,0.7); }
