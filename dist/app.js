@@ -4881,11 +4881,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Trocar de perfil": "Switch profile",
     "{n} perfis nesta TV": "{n} profiles on this TV",
     "Para outra pessoa, com outra conta Stremio": "For someone else, with another Stremio account",
-    'Perguntar "Quem está assistindo?" ao abrir': "Ask \"Who\\'s watching?\" on launch",
+    'Perguntar "Quem está assistindo?" ao abrir': "Ask \"Who's watching?\" on launch",
     "Mostra a tela de escolher ou criar perfil ao abrir o app": "Shows the Choose Profile screen when launching the app",
     "Escolher perfil agora": "Choose profile now",
-    'Abre a tela "Quem está assistindo?"': "Opens the \"Who\\'s watching?\" screen",
-    'Tela "Quem está assistindo?"': "\"Who\\'s watching?\" screen",
+    'Abre a tela "Quem está assistindo?"': "Opens the \"Who's watching?\" screen",
+    'Tela "Quem está assistindo?"': "\"Who's watching?\" screen",
     "Escolher perfil": "Choose profile",
     "Proteção contra burn-in (OLED)": "OLED Burn-in Protection",
     "Tela preta pura com relógio móvel após 90s pausado para proteger painéis OLED": "Pure black screen with drifting clock after 90s pause to protect OLED panels",
@@ -5043,6 +5043,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Perfil {n}": "Profile {n}",
+    "O plugin não respondeu em 30 s (não iniciou nesta TV?)": "The plugin didn't answer in 30 s (didn't start on this TV?)",
     "Testar plugins": "Test plugins",
     "mostra onde falha": "shows where it fails",
     "Teste dos plugins": "Plugin test",
@@ -5434,6 +5436,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Perfil {n}": "الملف {n}",
+    "O plugin não respondeu em 30 s (não iniciou nesta TV?)": "الإضافة ما ردت خلال 30 ثانية (ما اشتغلت على هذا التلفزيون؟)",
     "Testar plugins": "اختبار الإضافات",
     "mostra onde falha": "يوضح وين المشكلة",
     "Teste dos plugins": "اختبار الإضافات",
@@ -14984,6 +14988,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return direct(url2, o);
     });
   }
+  function serviceOnly(url2) {
+    return request("POST", SVC + "/api/phttp", {
+      url: url2
+    }, {
+      timeout: 2e4,
+      quiet: true
+    }).catch(function (e) {
+      throw new Error(e && e.status === 404 ? "old TV service (no /api/phttp)" : e && e.message || "service");
+    });
+  }
   function direct(url2, o) {
     return new Promise(function (resolve2, reject) {
       var x = new XMLHttpRequest();
@@ -15776,12 +15790,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: (ok === true ? "✓ " : ok === false ? "✗ " : "… ") + text
         }));
       };
-      line(null, "Chrome " + ((/Chrome\/(\d+)/.exec(navigator.userAgent) || [])[1] || "?") + " · " + t("serviço da TV") + " v" + (serviceVersion() || "?"));
-      httpRaw("https://raw.githubusercontent.com/github/gitignore/main/README.md", {}).then(function (r) {
+      var ua = navigator.userAgent || "";
+      line(null, "Chrome " + ((/Chrome\/(\d+)/.exec(ua) || /\) (\d+)\.\d+\.\d+\.\d+/.exec(ua) || [])[1] || "?") + " · Tizen " + ((/Tizen ([\d.]+)/.exec(ua) || [])[1] || "?") + " · " + t("serviço da TV") + " v" + (serviceVersion() || "?"));
+      serviceOnly("https://raw.githubusercontent.com/github/gitignore/main/README.md").then(function (r) {
         line(r && r.ok, t("Pedido pela TV") + ": HTTP " + (r ? r.status : "?") + (r && r.headers && r.headers.server ? "" : ""));
         var p = installed()[0];
         line(null, t("Plugin") + ": " + p.name);
+        var slow = setTimeout(function () {
+          return line(false, t("O plugin não respondeu em 30 s (não iniciou nesta TV?)"));
+        }, 3e4);
         return popular(p.id, 0).then(function (items3) {
+          return clearTimeout(slow), items3;
+        }, function (e) {
+          clearTimeout(slow);
+          throw e;
+        }).then(function (items3) {
           line(items3.length > 0, t("Lista") + ": " + items3.length);
           if (!items3.length) return;
           return chapters2(p.id, items3[0].id).then(function (cs) {
@@ -21494,7 +21517,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T18:24:55.023Z";
+  var BUILD = "2026-11-16T18:29:15.710Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -24579,6 +24602,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function boot() {
     var s = settings();
     init(s.language);
+    profiles().forEach(function (p) {
+      var m = /^Perfil (\d+)$/.exec(p.name || "");
+      if (m && t("Perfil {n}", {
+        n: m[1]
+      }) !== p.name) updateProfile(p.id, {
+        name: t("Perfil {n}", {
+          n: m[1]
+        })
+      });
+    });
     if (s.devlogUrl) log.setRemote(s.devlogUrl);
     log.info("Iniciando", navigator.userAgent);
     registerTizenKeys();

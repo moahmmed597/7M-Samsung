@@ -216,13 +216,21 @@ function SourcesView() {
     document.getElementById('app').appendChild(modal);
     const layer = nav.pushLayer(modal, { onBack: () => (nav.popLayer(layer), modal.parentNode && modal.parentNode.removeChild(modal)) });
     const line = (ok, text) => out.appendChild(h('div', { cls: ok === true ? 'ok' : ok === false ? 'bad' : '', text: (ok === true ? '✓ ' : ok === false ? '✗ ' : '… ') + text }));
-    line(null, 'Chrome ' + ((/Chrome\/(\d+)/.exec(navigator.userAgent) || [])[1] || '?') + ' · ' + t('serviço da TV') + ' v' + (serviceVersion() || '?'));
-    pl.httpRaw('https://raw.githubusercontent.com/github/gitignore/main/README.md', {}).then(
+    const ua = navigator.userAgent || '';
+    line(null, 'Chrome ' + ((/Chrome\/(\d+)/.exec(ua) || /\) (\d+)\.\d+\.\d+\.\d+/.exec(ua) || [])[1] || '?') + ' · Tizen ' + ((/Tizen ([\d.]+)/.exec(ua) || [])[1] || '?') + ' · ' + t('serviço da TV') + ' v' + (serviceVersion() || '?'));
+    pl.serviceOnly('https://raw.githubusercontent.com/github/gitignore/main/README.md').then(
       (r) => {
         line(r && r.ok, t('Pedido pela TV') + ': HTTP ' + (r ? r.status : '?') + (r && r.headers && r.headers.server ? '' : ''));
         const p = pl.installed()[0];
         line(null, t('Plugin') + ': ' + p.name);
+        const slow = setTimeout(() => line(false, t('O plugin não respondeu em 30 s (não iniciou nesta TV?)')), 30000);
         return pl.popular(p.id, 0).then(
+          (items) => (clearTimeout(slow), items),
+          (e) => {
+            clearTimeout(slow);
+            throw e;
+          }
+        ).then(
           (items) => {
             line(items.length > 0, t('Lista') + ': ' + items.length);
             if (!items.length) return;

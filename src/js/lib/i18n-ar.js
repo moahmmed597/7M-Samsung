@@ -273,6 +273,8 @@ export const AR = {
   'Não foi possível baixar a legenda.': 'تعذّر تنزيل الترجمة.',
   'Lendo as faixas do arquivo...': 'جارٍ قراءة مسارات الملف...',
   'Faixa {n}': 'المسار {n}',
+  "Perfil {n}": "الملف {n}",
+  "O plugin não respondeu em 30 s (não iniciou nesta TV?)": "الإضافة ما ردت خلال 30 ثانية (ما اشتغلت على هذا التلفزيون؟)",
   "Testar plugins": "اختبار الإضافات",
   "mostra onde falha": "يوضح وين المشكلة",
   "Teste dos plugins": "اختبار الإضافات",

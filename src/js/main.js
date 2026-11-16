@@ -39,6 +39,11 @@ import { openTrackLink } from './views/trackLink.js';
 function boot() {
   const s = store.settings();
   initI18n(s.language);
+  // Default profile names were saved in Portuguese ("Perfil 1"): shown in the app's language.
+  store.profiles().forEach((p) => {
+    const m = /^Perfil (\d+)$/.exec(p.name || '');
+    if (m && t('Perfil {n}', { n: m[1] }) !== p.name) store.updateProfile(p.id, { name: t('Perfil {n}', { n: m[1] }) });
+  });
   if (s.devlogUrl) log.setRemote(s.devlogUrl);
   log.info('Iniciando', navigator.userAgent);
 

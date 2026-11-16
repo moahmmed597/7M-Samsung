@@ -41,6 +41,13 @@ export function httpRaw(url, opts) {
   );
 }
 
+// Only through the TV service (the plugin test uses it to tell an old service from a working one).
+export function serviceOnly(url) {
+  return request('POST', SVC + '/api/phttp', { url: url }, { timeout: 20000, quiet: true }).catch((e) => {
+    throw new Error(e && e.status === 404 ? 'old TV service (no /api/phttp)' : (e && e.message) || 'service');
+  });
+}
+
 // Without the TV service (old copy still running, or a PC browser): ask the site directly.
 // Works for sites that allow it (GitHub raw files, many APIs); others refuse.
 function direct(url, o) {
