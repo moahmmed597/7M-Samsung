@@ -6,7 +6,7 @@
 // (done by the TV service, see /api/phttp in service/remote-service.js) and (2) parse HTML into a plain
 // tree. The worker prelude below is adapted from Harbor's sandbox (MIT, Copyright (c) 2026 Harbor).
 import { request } from '../lib/http.js';
-import { PORT } from '../lib/phone.js';
+import { PORT, serviceVersion } from '../lib/phone.js';
 import * as store from '../lib/store.js';
 
 const SVC = 'http://127.0.0.1:' + PORT;
@@ -36,7 +36,22 @@ export function uninstall(id) {
 // opts: { method, headers, body, responseType: 'text'|'json'|'base64', timeoutMs, redirect }
 export function httpRaw(url, opts) {
   const o = opts || {};
-  return request('POST', SVC + '/api/phttp', { url: url, method: o.method, headers: o.headers, body: o.body, responseType: o.responseType, timeoutMs: o.timeoutMs, redirect: o.redirect }, { timeout: (o.timeoutMs || 20000) + 5000, quiet: true });
+  return request('POST', SVC + '/api/phttp', { url: url, method: o.method, headers: o.headers, body: o.body, responseType: o.responseType, timeoutMs: o.timeoutMs, redirect: o.redirect }, { timeout: (o.timeoutMs || 20000) + 5000, quiet: true }).catch(
+    () => direct(url, o)
+  );
+}
+
+// Without the TV service (old copy still running, or a PC browser): ask the site directly.
+// Works for sites that allow it (GitHub raw files, many APIs); others refuse.
+function direct(url, o) {
+  return new Promise((resolve, reject) => {
+    const x = new XMLHttpRequest();
+    x.open(o.method || 'GET', url, true);
+    x.timeout = o.timeoutMs || 20000;
+    x.onload = () => resolve({ status: x.status, ok: x.status >= 200 && x.status < 300, headers: { 'content-type': x.getResponseHeader('content-type') || '' }, body: x.responseText, url: url });
+    x.onerror = x.ontimeout = () => reject(new Error(serviceVersion() && serviceVersion() < 2 ? 'old TV service: restart the TV' : 'network'));
+    x.send(typeof o.body === 'string' ? o.body : null);
+  });
 }
 function getText(url) {
   return httpRaw(url, {}).then((r) => {

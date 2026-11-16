@@ -7,6 +7,7 @@ import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
 import * as sw from '../api/suwayomi.js';
 import * as pl from '../api/plugins.js';
+import { serviceVersion } from '../lib/phone.js';
 import * as store from '../lib/store.js';
 import { card, spinnerLine, toast, promptText, menu, confirmDialog } from '../ui.js';
 import * as router from '../router.js';
@@ -209,6 +210,8 @@ function SourcesView() {
     clear(body);
     // Plugins (Harbor repositories)
     section(t('Plugins (repositórios no formato do Harbor)'));
+    if (serviceVersion() && serviceVersion() < 2)
+      body.appendChild(h('div.modal-text', { text: t('O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.') }));
     body.appendChild(row('＋ ' + t('Adicionar repositório'), t('cole o link do repo.json'), addRepo));
     pl.installed().forEach((p) => body.appendChild(row(p.name, 'v' + p.version, () => router.push(SourceGrid(pluginApi(p.id, p.name))), (p.lang || '').toUpperCase())));
     pl.installed().length &&

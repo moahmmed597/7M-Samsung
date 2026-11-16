@@ -373,9 +373,15 @@ function handle(req, res) {
       send(res, 200, text, 'text/plain; charset=utf-8');
     });
   }
+  // The app asks an old copy of this service to quit, so the new one can start (updates).
+  if (url.pathname === '/api/exit') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    send(res, 200, { ok: true });
+    return setTimeout(function () { process.exit(0); }, 300);
+  }
   if (url.pathname === '/api/info') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
-    return send(res, 200, { ip: tvIp(), port: PORT, pin: PIN, last: nextId - 1, version: 1 });
+    return send(res, 200, { ip: tvIp(), port: PORT, pin: PIN, last: nextId - 1, version: 2 });
   }
   if (url.pathname === '/api/events') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });

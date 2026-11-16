@@ -273,6 +273,7 @@ export const EN = {
   'Não foi possível baixar a legenda.': "Couldn't download the subtitle.",
   'Lendo as faixas do arquivo...': "Reading the file's tracks...",
   'Faixa {n}': 'Track {n}',
+  "O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.": "The TV service is still the old one. Hold the remote's Power button until the TV restarts, then open the app again.",
   "{n} plugins instalados de {name}.": "{n} plugins installed from {name}.",
   "O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).": "MangaDex has no chapters of this title (many licensed series aren't there).",
   "Adicione fontes em Mangá → Minhas fontes para ler outros títulos.": "Add sources in Manga → My sources to read other titles.",

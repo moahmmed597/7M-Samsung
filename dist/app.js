@@ -5043,6 +5043,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.": "The TV service is still the old one. Hold the remote's Power button until the TV restarts, then open the app again.",
     "{n} plugins instalados de {name}.": "{n} plugins installed from {name}.",
     "O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).": "MangaDex has no chapters of this title (many licensed series aren't there).",
     "Adicione fontes em Mangá → Minhas fontes para ler outros títulos.": "Add sources in Manga → My sources to read other titles.",
@@ -5421,6 +5422,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.": "خدمة التلفزيون لسه القديمة. اضغط مطوّل على زر الباور في الريموت لين يعيد التلفزيون التشغيل، وبعدها افتح التطبيق.",
     "{n} plugins instalados de {name}.": "تم تثبيت {n} إضافة من {name}.",
     "O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).": "MangaDex ما فيه فصول لهذا العمل (أغلب السلاسل المرخّصة ما تكون فيه).",
     "Adicione fontes em Mangá → Minhas fontes para ler outros títulos.": "أضف مصادر من مانجا ← مصادري عشان تقرأ أعمال ثانية.",
@@ -7668,11 +7670,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return false;
     }
   }
+  var svcVersion = 0;
+  var serviceVersion = function serviceVersion() {
+    return svcVersion;
+  };
   function start() {
     if (started) return;
     started = true;
     request2(BASE + "/api/info", 3e3).then(function (r) {
       if (r) last = r.last || 0;
+      svcVersion = r && r.version || 1;
+      if (svcVersion < 2) {
+        request2(BASE + "/api/exit", 3e3).then(function () {
+          return setTimeout(startService, 1500);
+        }, function () {});
+      }
     }).catch(function () {
       setTimeout(function () {
         return request2(BASE + "/api/info", 4e3).catch(function () {
@@ -10120,8 +10132,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return false;
       });
     };
-    return tryOne(url2).then(function (direct) {
-      if (direct) return "direct";
+    return tryOne(url2).then(function (direct2) {
+      if (direct2) return "direct";
       return tryOne(fetchUrl(url2)).then(function (viaTv) {
         if (viaTv) return "tv";
         var p = getJSONViaProxy(url2, {
@@ -14876,6 +14888,30 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }, {
       timeout: (o.timeoutMs || 2e4) + 5e3,
       quiet: true
+    }).catch(function () {
+      return direct(url2, o);
+    });
+  }
+  function direct(url2, o) {
+    return new Promise(function (resolve2, reject) {
+      var x = new XMLHttpRequest();
+      x.open(o.method || "GET", url2, true);
+      x.timeout = o.timeoutMs || 2e4;
+      x.onload = function () {
+        return resolve2({
+          status: x.status,
+          ok: x.status >= 200 && x.status < 300,
+          headers: {
+            "content-type": x.getResponseHeader("content-type") || ""
+          },
+          body: x.responseText,
+          url: url2
+        });
+      };
+      x.onerror = x.ontimeout = function () {
+        return reject(new Error(serviceVersion() && serviceVersion() < 2 ? "old TV service: restart the TV" : "network"));
+      };
+      x.send(typeof o.body === "string" ? o.body : null);
     });
   }
   function getText2(url2) {
@@ -15621,6 +15657,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function load7() {
       clear(body);
       section(t("Plugins (repositórios no formato do Harbor)"));
+      if (serviceVersion() && serviceVersion() < 2) body.appendChild(h("div.modal-text", {
+        text: t("O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.")
+      }));
       body.appendChild(row2("＋ " + t("Adicionar repositório"), t("cole o link do repo.json"), addRepo2));
       installed().forEach(function (p) {
         return body.appendChild(row2(p.name, "v" + p.version, function () {
@@ -21296,7 +21335,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T18:00:49.430Z";
+  var BUILD = "2026-11-16T18:04:10.955Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -21772,8 +21811,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: link.url.replace(/^https?:\/\//, "")
       }));
       urlEl.appendChild(document.createTextNode(" " + t("e digite o código:")));
-      var direct = provider === "trakt" ? link.url.replace(/\/+$/, "") + "/" + encodeURIComponent(link.code) : "https://simkl.com/pin/" + encodeURIComponent(link.code);
-      qr.src = qrImage(direct, 360);
+      var direct2 = provider === "trakt" ? link.url.replace(/\/+$/, "") + "/" + encodeURIComponent(link.code) : "https://simkl.com/pin/" + encodeURIComponent(link.code);
+      qr.src = qrImage(direct2, 360);
       status2.textContent = t("Aguardando confirmação...");
     }).catch(function () {});
     return {

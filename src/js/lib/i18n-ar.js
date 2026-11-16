@@ -273,6 +273,7 @@ export const AR = {
   'Não foi possível baixar a legenda.': 'تعذّر تنزيل الترجمة.',
   'Lendo as faixas do arquivo...': 'جارٍ قراءة مسارات الملف...',
   'Faixa {n}': 'المسار {n}',
+  "O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.": "خدمة التلفزيون لسه القديمة. اضغط مطوّل على زر الباور في الريموت لين يعيد التلفزيون التشغيل، وبعدها افتح التطبيق.",
   "{n} plugins instalados de {name}.": "تم تثبيت {n} إضافة من {name}.",
   "O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).": "MangaDex ما فيه فصول لهذا العمل (أغلب السلاسل المرخّصة ما تكون فيه).",
   "Adicione fontes em Mangá → Minhas fontes para ler outros títulos.": "أضف مصادر من مانجا ← مصادري عشان تقرأ أعمال ثانية.",

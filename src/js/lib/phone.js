@@ -150,6 +150,10 @@ function startService() {
   }
 }
 
+// Version of the TV service that is running (1 = before plugins / Live TV requests existed).
+let svcVersion = 0;
+export const serviceVersion = () => svcVersion;
+
 export function start() {
   if (started) return;
   started = true;
@@ -157,6 +161,14 @@ export function start() {
   request(BASE + '/api/info', 3000)
     .then((r) => {
       if (r) last = r.last || 0;
+      svcVersion = (r && r.version) || 1;
+      // An old copy keeps running after an app update: ask it to quit (newer ones can), then start the new one.
+      if (svcVersion < 2) {
+        request(BASE + '/api/exit', 3000).then(
+          () => setTimeout(startService, 1500),
+          () => {}
+        );
+      }
     })
     .catch(() => {
       // TizenBrew may still be starting it: only step in if it's still off after 15 s.
