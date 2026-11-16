@@ -1,0 +1,91 @@
+name: Build apps (Android / Android TV, iPhone, Windows)
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['app-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - name: Capacitor Android project
+        working-directory: platforms/capacitor
+        run: |
+          rm -rf www && mkdir www && cp -r ../../dist/. www/
+          npm install
+          npx cap add android
+          python3 patch-android.py
+          npx cap sync android
+          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+      - run: cp platforms/capacitor/android/app/build/outputs/apk/debug/app-debug.apk Stremio-Kai-7M-android.apk
+      - uses: actions/upload-artifact@v4
+        with: { name: android, path: Stremio-Kai-7M-android.apk }
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npm run build
+      - name: Capacitor iOS project (unsigned IPA for SideStore / AltStore)
+        working-directory: platforms/capacitor
+        run: |
+          rm -rf www && mkdir www && cp -r ../../dist/. www/
+          npm install
+          npx cap add ios
+          PLIST=ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Delete :UISupportedInterfaceOrientations" $PLIST || true
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations array" $PLIST
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations:0 string UIInterfaceOrientationLandscapeLeft" $PLIST
+          /usr/libexec/PlistBuddy -c "Add :UISupportedInterfaceOrientations:1 string UIInterfaceOrientationLandscapeRight" $PLIST
+          /usr/libexec/PlistBuddy -c "Delete :UISupportedInterfaceOrientations~ipad" $PLIST || true
+          npx cap sync ios
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -sdk iphoneos -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+          mkdir -p Payload && cp -R build/Build/Products/Release-iphoneos/App.app Payload/
+          zip -qr Stremio-Kai-7M-ios-unsigned.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with: { name: ios, path: platforms/capacitor/ios/App/Stremio-Kai-7M-ios-unsigned.ipa }
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npm run build
+      - name: Electron portable exe
+        working-directory: platforms/electron
+        shell: bash
+        run: |
+          rm -rf www && mkdir www && cp -r ../../dist/. www/
+          npm install
+          npx electron-builder --win portable --publish never
+      - uses: actions/upload-artifact@v4
+        with: { name: windows, path: platforms/electron/dist/*.exe }
+
+  release:
+    needs: [android, ios, windows]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { path: out, merge-multiple: true }
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: out/*
+          generate_release_notes: true

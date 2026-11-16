@@ -1,0 +1,17 @@
+{
+  "name": "stremio-kai-7m",
+  "productName": "Stremio Kai 7M",
+  "version": "1.0.0",
+  "description": "Stremio Kai 7M for Windows, macOS and Linux",
+  "main": "main.js",
+  "author": "moahmmed597",
+  "license": "GPL-3.0",
+  "devDependencies": { "electron": "^31.7.7", "electron-builder": "^24.13.3" },
+  "build": {
+    "appId": "com.kai.stremio7m",
+    "productName": "Stremio Kai 7M",
+    "files": ["main.js", "www/**/*"],
+    "win": { "target": ["portable"], "artifactName": "Stremio-Kai-7M-${version}-windows-portable.exe" },
+    "linux": { "target": ["AppImage"], "artifactName": "Stremio-Kai-7M-${version}-linux.AppImage" }
+  }
+}
