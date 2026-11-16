@@ -21,17 +21,17 @@
       "tintColor": "7b5bf5",
       "category": "entertainment",
       "screenshots": [],
-      "version": "1.0.0",
+      "version": "1.0.1",
       "versionDate": "2026-11-16",
-      "downloadURL": "https://github.com/moahmmed597/Stremio-Kai-7M/releases/download/app-v1.0.0/Stremio-Kai-7M-ios-unsigned.ipa",
-      "size": 1703018,
+      "downloadURL": "https://github.com/moahmmed597/Stremio-Kai-7M/releases/download/app-v1.0.1/Stremio-Kai-7M-ios-unsigned.ipa",
+      "size": 1706710,
       "versions": [
         {
-          "version": "1.0.0",
+          "version": "1.0.1",
           "date": "2026-11-16",
-          "localizedDescription": "Release app-v1.0.0",
-          "downloadURL": "https://github.com/moahmmed597/Stremio-Kai-7M/releases/download/app-v1.0.0/Stremio-Kai-7M-ios-unsigned.ipa",
-          "size": 1703018
+          "localizedDescription": "Release app-v1.0.1",
+          "downloadURL": "https://github.com/moahmmed597/Stremio-Kai-7M/releases/download/app-v1.0.1/Stremio-Kai-7M-ios-unsigned.ipa",
+          "size": 1706710
         }
       ],
       "appPermissions": {
