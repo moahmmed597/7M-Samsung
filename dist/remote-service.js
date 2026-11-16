@@ -9,6 +9,8 @@ var SETUP_PAGE = "<!DOCTYPE html>\r\n<html lang=\"ar\" dir=\"rtl\">\r\n<head>\r\
 var http = require('http');
 var os = require('os');
 
+// Bump when the service changes: a running copy compares it with the newest one on GitHub.
+var SERVICE_VERSION = 3;
 var PORT = 8095;
 var HOLD_MS = 25000; // long-poll hold time
 var KEEP = 50; // events kept for late pollers
@@ -383,7 +385,7 @@ function handle(req, res) {
   }
   if (url.pathname === '/api/info') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
-    return send(res, 200, { ip: tvIp(), port: PORT, pin: PIN, last: nextId - 1, version: 2 });
+    return send(res, 200, { ip: tvIp(), port: PORT, pin: PIN, last: nextId - 1, version: SERVICE_VERSION });
   }
   if (url.pathname === '/api/events') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
@@ -529,4 +531,44 @@ var tries = 0;
 server.on('error', function () {
   if (++tries < 12) setTimeout(function () { server.listen(PORT, '0.0.0.0'); }, 5000);
 });
-server.listen(PORT, '0.0.0.0');
+// TizenBrew runs this file from the newest release tag, which can be older than the app (the app always
+// loads the newest commit). So, once, the newest copy on GitHub is fetched; when it is a newer version it
+// runs instead of this one. Offline or same version: this copy starts.
+function startHere() { server.listen(PORT, '0.0.0.0'); }
+(function selfUpdate() {
+  if (global.__KAI_SVC_CHILD) return startHere();
+  var https = require('https');
+  var done = false;
+  function finish(code) {
+    if (done) return;
+    done = true;
+    var m = code && /var SERVICE_VERSION = (\d+);/.exec(code);
+    if (m && Number(m[1]) > SERVICE_VERSION && code.indexOf('REMOTE_PAGE') >= 0) {
+      try {
+        global.__KAI_SVC_CHILD = true;
+        new Function('require', 'module', 'exports', '__dirname', code)(require, { exports: {} }, {}, typeof __dirname === 'string' ? __dirname : '.');
+        console.log('Stremio 7M service updated to v' + m[1]);
+        return;
+      } catch (e) {
+        console.log('Newer service failed: ' + e.message);
+      }
+    }
+    startHere();
+  }
+  function get(url, cb) {
+    var r = https.get(url, { headers: { 'User-Agent': 'stremio-7m-tizen', Accept: 'application/vnd.github.sha' }, timeout: 6000 }, function (res) {
+      var body = '';
+      res.setEncoding('utf8');
+      res.on('data', function (c) { body += c; });
+      res.on('end', function () { cb(res.statusCode === 200 ? body : null); });
+    });
+    r.on('error', function () { cb(null); });
+    r.on('timeout', function () { r.abort(); });
+  }
+  setTimeout(function () { finish(null); }, 15000);
+  get('https://api.github.com/repos/moahmmed597/Stremio-Kai-7M/commits/main', function (sha) {
+    sha = String(sha || '').replace(/\s/g, '');
+    if (!/^[0-9a-f]{40}$/.test(sha)) return finish(null);
+    get('https://cdn.jsdelivr.net/gh/moahmmed597/Stremio-Kai-7M@' + sha + '/dist/remote-service.js', finish);
+  });
+})();

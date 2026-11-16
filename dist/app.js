@@ -7773,7 +7773,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     request2(BASE + "/api/info", 3e3).then(function (r) {
       if (r) last = r.last || 0;
       svcVersion = r && r.version || 1;
-      if (svcVersion < 2) {
+      if (svcVersion < 3) {
         request2(BASE + "/api/exit", 3e3).then(function () {
           return setTimeout(startService, 1500);
         }, function () {});
@@ -21517,7 +21517,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T18:29:15.710Z";
+  var BUILD = "2026-11-16T18:30:54.923Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
