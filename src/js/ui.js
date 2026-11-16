@@ -101,6 +101,8 @@ export const TABS = [
   { id: 'home', label: 'Início' },
   { id: 'anime', label: 'Animes' },
   { id: 'manga', label: 'Mangás' },
+  { id: 'comics', label: 'Quadrinhos' },
+  { id: 'books', label: 'Livros' },
   { id: 'collections', label: 'Coleções' },
   { id: 'search', label: 'Buscar' },
   { id: 'library', label: 'Biblioteca' },

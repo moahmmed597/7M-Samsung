@@ -5,7 +5,7 @@ function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-(function () {
+(function (_EN, _AR) {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -2895,9 +2895,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         startsWith: function startsWith(searchString) {
           var that = toString(requireObjectCoercible(this));
           notARegExp(searchString);
-          var search2 = toString(searchString);
+          var search3 = toString(searchString);
           var index2 = toLength(min(arguments.length > 1 ? arguments[1] : void 0, that.length));
-          return stringSlice(that, index2, index2 + search2.length) === search2;
+          return stringSlice(that, index2, index2 + search3.length) === search3;
         }
       });
     }
@@ -2943,11 +2943,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         endsWith: function endsWith(searchString) {
           var that = toString(requireObjectCoercible(this));
           notARegExp(searchString);
-          var search2 = toString(searchString);
+          var search3 = toString(searchString);
           var endPosition = arguments.length > 1 ? arguments[1] : void 0;
           var len = that.length;
           var end = endPosition === void 0 ? len : min(toLength(endPosition), len);
-          return slice(that, end - search2.length, end) === search2;
+          return slice(that, end - search3.length, end) === search3;
         }
       });
     }
@@ -4164,16 +4164,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               throw "bad rs block @ typeNumber:" + typeNumber + "/errorCorrectionLevel:" + errorCorrectionLevel;
             }
             var length = rsBlock.length / 3;
-            var list2 = [];
+            var list3 = [];
             for (var i = 0; i < length; i += 1) {
               var count = rsBlock[i * 3 + 0];
               var totalCount = rsBlock[i * 3 + 1];
               var dataCount = rsBlock[i * 3 + 2];
               for (var j = 0; j < count; j += 1) {
-                list2.push(qrRSBlock(totalCount, dataCount));
+                list3.push(qrRSBlock(totalCount, dataCount));
               }
             }
-            return list2;
+            return list3;
           };
           return _this;
         }();
@@ -4773,7 +4773,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   };
 
   // src/js/lib/i18n-en.js
-  var EN = {
+  var EN = (_EN = {
     // Navegação e geral
     "Início": "Home",
     "Buscar": "Search",
@@ -5041,6 +5041,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Quadrinhos": "Comics",
+    "Livros": "Books",
+    "Buscar quadrinhos": "Search comics",
+    "Buscar livros": "Search books",
+    "Resultados": "Results",
+    "Idioma dos livros": "Book language",
+    "Livros gratuitos (domínio público)": "Free books (public domain)",
+    "Este livro não tem texto para ler aqui.": "This book has no text to read here.",
+    "Fim do livro.": "End of the book.",
+    "Início do livro.": "Start of the book.",
+    "Tamanho {n}": "Size {n}",
+    "Não foi possível abrir este livro agora.": "Couldn't open this book right now.",
     "Episódio {n} (aproximado)": "Episode {n} (approximate)",
     "Perto do episódio (aprox.)": "Near the episode (approx.)",
     "Ler o mangá": "Read the manga",
@@ -5276,409 +5288,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Coleções": "Collections",
     "Buscar outra coleção (ex.: Shrek, Rambo, Saw)...": "Search another collection (e.g. Shrek, Rambo, Saw)...",
     "Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes.": "With a TMDB key in Settings you can search any other film collection.",
-    "Nenhuma coleção encontrada.": "No collection found.",
-    "Resultados": "Results",
-    "Não foi possível buscar agora.": "Couldn't search right now.",
-    "Assistidos: {done} de {n}": "Watched: {done} of {n}",
-    "Ordem da história": "Story order",
-    "Ordem de lançamento": "Release order",
-    "Próximo: {title}": "Next: {title}",
-    "Esconder assistidos": "Hide watched",
-    "série": "series",
-    "Você já assistiu tudo desta coleção.": "You've watched everything in this collection.",
-    "Coleção": "Collection",
-    "Favoritas": "Favorites",
-    "Fixar no topo": "Pin to top",
-    "Fixada no topo": "Pinned to top",
-    "Fixada no topo da aba Coleções": "Pinned to the top of Collections",
-    "Removida das favoritas": "Removed from favorites",
-    "Contas conectadas": "Connected accounts",
-    "Trakt e Simkl": "Trakt and Simkl",
-    "Fonte da biblioteca": "Library source",
-    "De onde vêm os assistidos e o Continuar assistindo": "Where watched items and Continue watching come from",
-    "Fonte do progresso": "Watch progress source",
-    "Para onde o progresso de reprodução é enviado": "Where playback progress is sent",
-    "Recursos do Trakt": "Trakt features",
-    "Atualiza assistidos e Continuar assistindo": "Refreshes watched items and Continue watching",
-    "Conecte uma conta primeiro": "Connect an account first",
-    "Pular trechos": "Skip segments",
-    "IntroDB (séries e filmes) — introdb.app": "IntroDB (series and movies) — introdb.app",
-    'Desligado: mostra o botão "Pular"': 'Off: shows the "Skip" button',
-    "Anime Skip": "Anime Skip",
-    "Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes": "Anime-Skip (anime-skip.com) and AniSkip: anime openings and endings",
-    "AnimeSkip Client ID": "AnimeSkip Client ID",
-    "Sua chave do anime-skip.com (fica só nesta TV)": "Your anime-skip.com key (stays on this TV only)",
-    "Integrações": "Integrations",
-    "Contas, fontes e recursos do Trakt": "Accounts, sources and Trakt features",
-    "Abertura, recapitulação e encerramento": "Intro, recap and outro",
-    "Ligado": "On",
-    "Filmes e séries": "Movies and series",
-    "Desenhos animados": "Cartoons",
-    "Animes": "Anime",
-    "{name}: este torrent ainda não está no cache. Escolha outra fonte.": "{name}: this torrent is not cached yet. Pick another source.",
-    "Chave inválida": "Invalid key",
-    "Endereço inválido": "Invalid address",
-    "Usuário ou senha errados": "Wrong user name or password",
-    "Leve": "Mild",
-    "Moderado": "Moderate",
-    "Forte": "Severe",
-    "Nudez": "Nudity",
-    "Violência": "Violence",
-    "Palavrões": "Profanity",
-    "Álcool e drogas": "Alcohol and drugs",
-    "Cenas assustadoras": "Frightening scenes",
-    "Torrent · via {name}": "Torrent · via {name}",
-    "Debrid": "Debrid",
-    "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.": "Plays torrent sources through your debrid account, no PC server needed. Everyone uses their own key, kept only on this TV.",
-    "Usar debrid": "Use debrid",
-    "Usando {name}": "Using {name}",
-    "Preencha uma chave abaixo": "Fill in a key below",
-    "Serviço preferido": "Preferred service",
-    "Usado quando há mais de uma chave": "Used when there is more than one key",
-    "Chaves de API": "API keys",
-    "Sua chave de API em {site}": "Your API key at {site}",
-    "Testar {name}": "Test {name}",
-    "Testando...": "Testing...",
-    "{name} OK: {user}": "{name} OK: {user}",
-    "{name} recusou a chave: {msg}": "{name} rejected the key: {msg}",
-    "Servidores de mídia (Jellyfin e Emby)": "Media servers (Jellyfin and Emby)",
-    "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.": "Movies and series on your server show up as a source, next to the add-ons.",
-    "Mostrar como fonte": "Show as a source",
-    "Lista os arquivos do servidor nas fontes": "Lists the server files among the sources",
-    "Tipo de servidor": "Server type",
-    "Endereço do servidor": "Server address",
-    "Ex.: 192.168.0.20:8096": "E.g. 192.168.0.20:8096",
-    "Usuário": "User name",
-    "Usada só para entrar; não fica salva": "Only used to sign in; it is not saved",
-    "Conectar": "Connect",
-    "Preencha o endereço e o usuário": "Fill in the address and the user name",
-    "Conectando...": "Connecting...",
-    "Conectado a {name}": "Connected to {name}",
-    "Não foi possível conectar: {msg}": "Could not connect: {msg}",
-    "Seu próprio servidor como fonte": "Your own server as a source",
-    "Chave RPDB": "RPDB key",
-    "Pôsteres com as notas desenhadas (ratingposterdb.com)": "Posters with the ratings drawn on them (ratingposterdb.com)",
-    "Guia para os pais": "Parental guide",
-    "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)": "Violence, profanity and intense scenes on the title page (IMDb via tiffara.com)",
-    "Abrir": "Open",
-    'Adicionado a "{name}"': 'Added to "{name}"',
-    "Adicionar a esta coleção": "Add to this collection",
-    "Adicionar lista pública": "Add a public list",
-    "Ajustes copiados de {name}": "Settings copied from {name}",
-    'Ao terminar um filme, mostra "Mais como este"': 'When a film ends, shows "More like this"',
-    'Apagar a coleção "{name}"?': 'Delete the collection "{name}"?',
-    "Apagar coleção": "Delete collection",
-    "Baixando arquivo de teste...": "Downloading a test file...",
-    "Capítulo {n}": "Chapter {n}",
-    "Capítulos": "Chapters",
-    'Coleção "{name}" criada': 'Collection "{name}" created',
-    "Coleção sua": "Your collection",
-    "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.": "Put your MDBList key in Settings → Extra metadata to use lists.",
-    "Copiar": "Copy",
-    "Copiar ajustes de": "Copy settings from",
-    "Copiar ajustes de outro perfil": "Copy settings from another profile",
-    "Descer": "Move down",
-    "Escolha quais das suas listas aparecem na tela inicial": "Choose which of your lists show on the home screen",
-    "Esconder": "Hide",
-    "Escondida": "Hidden",
-    "Este arquivo não tem capítulos.": "This file has no chapters.",
-    "Ex.: Para ver no fim de semana": "E.g. For the weekend",
-    "Ex.: usuario/nome-da-lista ou o link do mdblist.com": "E.g. user/list-name or the mdblist.com link",
-    "Fechar": "Close",
-    "Fileiras": "Rows",
-    "Internet: {mbps} Mbps, ping {ms} ms ({verdict})": "Internet: {mbps} Mbps, ping {ms} ms ({verdict})",
-    "Legendas, aparência, tela inicial e coleções (a conta não é copiada)": "Subtitles, appearance, home screen and collections (the account is not copied)",
-    'Lista "{name}" adicionada': 'List "{name}" added',
-    "Lista não encontrada": "List not found",
-    "Listas do MDBList": "MDBList lists",
-    "Mais como este": "More like this",
-    "Medindo o ping...": "Measuring ping...",
-    "Minhas coleções": "My collections",
-    "Minhas listas": "My lists",
-    "Modo ambiente": "Ambient mode",
-    "Mostrar": "Show",
-    "Nome da nova coleção": "New collection name",
-    "Nova coleção": "New collection",
-    "Nova coleção...": "New collection...",
-    "O teste falhou: {msg}": "The test failed: {msg}",
-    "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)": "The trailer plays muted behind the Hero Banner (heavier on the TV)",
-    "OK numa fileira: subir, descer ou esconder.": "OK on a row: move up, move down or hide.",
-    "Ordem das fileiras, listas do MDBList e Continuar assistindo": "Row order, MDBList lists and Continue watching",
-    "Ordem do Continuar assistindo": "Continue watching order",
-    "Ordem padrão restaurada": "Default order restored",
-    "Ping e velocidade de download (Cloudflare)": "Ping and download speed (Cloudflare)",
-    "Procurando capítulos...": "Looking for chapters...",
-    "Qualidade, HDR, áudio, idioma, tamanho...": "Quality, HDR, audio, language, size...",
-    'Removido de "{name}"': 'Removed from "{name}"',
-    "Renomear": "Rename",
-    "Restaurar ordem padrão": "Restore default order",
-    "Selos das fontes": "Stream badges",
-    "Subir": "Move up",
-    "Sugestões no fim": "Suggestions at the end",
-    "Tela inicial": "Home screen",
-    "Testar a internet": "Test the internet",
-    "Tirar desta coleção": "Remove from this collection",
-    "Toque para tirar desta coleção": "Select to remove it from this collection",
-    'Trocar os ajustes de "{to}" pelos de "{from}"?': 'Replace the settings of "{to}" with those of "{from}"?',
-    "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.": "Empty. On a film or series page, use the Collection button to add it.",
-    "Visível": "Visible",
-    "Você ainda não tem listas no MDBList.": "You have no MDBList lists yet.",
-    "bom para 1080p": "good for 1080p",
-    "dá para 4K": "enough for 4K",
-    "lenta para vídeo": "slow for video",
-    "só 720p com folga": "720p only, comfortably",
-    "Assistidos por último": "Last watched",
-    "Quase terminados primeiro": "Almost finished first",
-    "Nome (A–Z)": "Name (A–Z)",
-    "Qualidade (4K, 1080p, 720p)": "Quality (4K, 1080p, 720p)",
-    "HDR e Dolby Vision": "HDR and Dolby Vision",
-    "REMUX": "REMUX",
-    "Codec (HEVC, AV1)": "Codec (HEVC, AV1)",
-    "Áudio (Atmos, DTS, 5.1)": "Audio (Atmos, DTS, 5.1)",
-    "Idioma (Árabe, Multi)": "Language (Arabic, Multi)",
-    "Tamanho do arquivo": "File size",
-    "Taxa estimada (Mbps)": "Estimated bitrate (Mbps)",
-    "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.": "{name}: the API key was rejected. Check Settings → Debrid.",
-    "A legenda e o áudio que você escolher valem para os outros episódios": "The subtitle and audio you pick apply to the other episodes",
-    "Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.": "Point your phone camera at the QR, sign in and that is it: it links by itself.",
-    "Boa noite!": "Good night!",
-    "Boa noite! O vídeo foi pausado.": "Good night! The video was paused.",
-    "Buscas recentes": "Recent searches",
-    "Buscas recentes:": "Recent searches:",
-    "Cantos dos pôsteres e botões": "Corners of posters and buttons",
-    "Chave SubDL": "SubDL key",
-    "Como o item selecionado aparece": "How the selected item looks",
-    "Contagem regressiva": "Countdown",
-    "Contagem regressiva nos créditos e toca o próximo": "Counts down at the credits and plays the next one",
-    "Cor de destaque de botões, foco e barras": "Accent colour of buttons, focus and bars",
-    "Cor do app": "App colour",
-    "Cores e formas": "Colours and shapes",
-    "Depois de {n} min": "After {n} min",
-    "Desempenho": "Performance",
-    "Diagnóstico": "Diagnostics",
-    "Dormir": "Sleep",
-    "Escuro, preto puro ou com brilho da cor": "Dark, pure black or with a colour glow",
-    "Estilo do foco": "Focus style",
-    "Ex.: só os pais abrem este perfil": "E.g. only parents can open this profile",
-    "Fileiras e Continuar assistindo": "Rows and Continue watching",
-    "Formato dos cartões": "Card shape",
-    "Funciona (direto)": "Works (direct)",
-    "Funciona (pelo servidor do PC)": "Works (through the PC server)",
-    "Funciona (pelo serviço da TV)": "Works (through the TV service)",
-    "Fundo": "Background",
-    "Fundos de filmes e o relógio quando a TV fica parada": "Film backdrops and the clock when the TV sits idle",
-    "Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)": "Arabic subtitles from subdl.com (get a free key at subdl.com/panel/api)",
-    "Lembrar por série": "Remember per series",
-    "Limpar": "Clear",
-    "Mais pôsteres por linha ou pôsteres maiores": "More posters per row or bigger posters",
-    "Minha lista do Trakt": "My Trakt watchlist",
-    "Mostra as últimas buscas na tela de busca": "Shows your last searches on the search screen",
-    "No fim deste vídeo": "At the end of this video",
-    "Novo PIN (4 a 8 números)": "New PIN (4 to 8 digits)",
-    "Não funciona: o serviço da TV não respondeu. Feche o app e abra de novo pelo TizenBrew.": "Not working: the TV service did not answer. Close the app and open it again from TizenBrew.",
-    "O player da Samsung (AVPlay) não carregou nesta TV, então o app usa o do navegador e não consegue trocar o áudio. Feche o app e abra de novo pelo TizenBrew; se continuar, avise.": "The Samsung player (AVPlay) did not load on this TV, so the app uses the browser one and cannot switch audio. Close the app and open it again from TizenBrew; if it stays like this, let us know.",
-    "O vídeo para em {n} minutos": "The video stops in {n} minutes",
-    "O vídeo para no fim deste episódio": "The video stops at the end of this episode",
-    "Ou abra": "Or open",
-    "PIN de {name}": "PIN for {name}",
-    "PIN errado. Tente de novo.": "Wrong PIN. Try again.",
-    "PIN removido": "PIN removed",
-    "PIN salvo": "PIN saved",
-    "Para trocar o áudio, o app precisa do player da Samsung (AVPlay), que não carregou. Veja Ajustes → Reprodução.": "To switch audio the app needs the Samsung player (AVPlay), which did not load. See Settings → Playback.",
-    "Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou": "Asks IntroDB for the WandaVision S1E1 intro and says which way worked",
-    "Pede o PIN para abrir este perfil": "Asks for the PIN to open this profile",
-    "Proteção de tela": "Screensaver",
-    "Próximo episódio automático": "Play next episode automatically",
-    "Quanto tempo o aviso do próximo episódio espera": "How long the next episode notice waits",
-    "Tamanho dos pôsteres": "Poster size",
-    "Testar o pulo de abertura": "Test intro skipping",
-    "Timer desligado": "Timer off",
-    "Tirar o PIN": "Remove the PIN",
-    "Trancar com PIN": "Lock with a PIN",
-    "Trocar o PIN": "Change the PIN",
-    "faltam {n} min": "{n} min left",
-    "{n} minutos": "{n} minutes",
-    "{n} segundos": "{n} seconds",
-    "Conta e perfis": "Account and profiles",
-    "Idioma, perfis, conta Stremio, controle pelo celular": "Language, profiles, Stremio account, phone remote",
-    "Reprodução": "Playback",
-    "Servidor do PC, player, próximo episódio, selos das fontes": "PC server, player, next episode, stream badges",
-    "Idiomas, SubDL, aparência da legenda": "Languages, SubDL, subtitle look",
-    "Aparência": "Appearance",
-    "Tema, tela inicial, modo ambiente, proteção de tela": "Theme, home screen, ambient mode, screensaver",
-    "Trakt, Simkl, pular trechos, debrid, Jellyfin, chaves, addons": "Trakt, Simkl, skip segments, debrid, Jellyfin, keys, add-ons",
-    "Sobre": "About",
-    "Atualizações, teste de internet, log": "Updates, internet test, log",
-    "Arredondado": "Rounded",
-    "Reto": "Square",
-    "Bem redondo": "Very round",
-    "Pequeno": "Small",
-    "Médio": "Medium",
-    "Grande": "Large",
-    "Contorno e aumento": "Outline and zoom",
-    "Só contorno": "Outline only",
-    "Só aumento": "Zoom only",
-    "Escuro (padrão)": "Dark (default)",
-    "Preto puro (OLED)": "Pure black (OLED)",
-    "Escuro com brilho da cor": "Dark with a colour glow",
-    "Índigo": "Indigo",
-    "Prata": "Silver",
-    "Turco": "Turkish",
-    "Persa": "Persian",
-    "Urdu": "Urdu",
-    "Indonésio": "Indonesian",
-    "Malaio": "Malay",
-    "Use de 4 a 8 números.": "Use 4 to 8 digits.",
-    "Chaves próprias (opcional)": "Your own keys (optional)",
-    "Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.": "Point the camera at the code, paste the keys and tap Send. They stay on this TV only.",
-    "Chaves pelo celular": "Keys from your phone",
-    "Chaves recebidas do celular: {n}": "Keys received from the phone: {n}",
-    "Coloque as chaves pelo celular": "Add the keys from your phone",
-    "O serviço da TV não está rodando. Feche o app e abra de novo.": "The TV service is not running. Close the app and open it again.",
-    "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "First add the keys from your phone: point the camera at the QR on this page.",
-    "Opcional: só apps antigos do Trakt têm": "Optional: only older Trakt apps have one",
-    "Fonte do app": "App font",
-    "Letra dos menus e textos": "Font of the menus and texts",
-    "Samsung (da TV)": "Samsung (TV font)",
-    "Montserrat (Kai)": "Montserrat (Kai)",
-    "Aponte a câmera: abra a página da chave, copie, cole e envie.": "Point the camera: open the key page, copy, paste and send.",
-    "Aponte o celular para o QR e entre na sua conta": "Point your phone at the QR and sign in",
-    "Ative o Quick Connect no painel do Jellyfin": "Turn on Quick Connect in the Jellyfin dashboard",
-    "Entrar com QR (sem chave)": "Sign in with a QR (no key)",
-    "Entrar com Quick Connect": "Sign in with Quick Connect",
-    "Entrar no {name}": "Sign in to {name}",
-    "No app ou site do Jellyfin: Configurações → Quick Connect, e digite o código.": "In the Jellyfin app or site: Settings → Quick Connect, then type the code.",
-    "Ou cole a chave": "Or paste the key",
-    "Preencha o endereço do servidor primeiro": "Fill in the server address first",
-    "QR que abre direto a página da chave": "QR that opens the key page directly",
-    "Sem senha: aprove um código no Jellyfin do celular": "No password: approve a code in Jellyfin on your phone",
-    "{name} pelo celular": "{name} from your phone",
-    "Aba Animes": "Anime tab",
-    "Carregar mais": "Load more",
-    "Descobrir": "Discover",
-    "Em alta agora": "Trending now",
-    "Esta temporada": "This season",
-    "Estúdios": "Studios",
-    "Filmes de anime": "Anime movies",
-    "Gêneros": "Genres",
-    "Lançando agora": "Airing now",
-    "Não encontrei este anime nos addons.": "Could not find this anime in your add-ons.",
-    "Não foi possível carregar agora.": "Could not load right now.",
-    "Temporada, estúdios e gêneros de anime (AniList)": "Anime season, studios and genres (AniList)",
-    "Mais populares": "Most popular",
-    "Mais bem avaliados": "Top rated",
-    "Em breve": "Upcoming",
-    "Ação": "Action",
-    "Aventura": "Adventure",
-    "Comédia": "Comedy",
-    "Drama": "Drama",
-    "Fantasia": "Fantasy",
-    "Terror": "Horror",
-    "Mistério": "Mystery",
-    "Romance": "Romance",
-    "Ficção científica": "Sci-Fi",
-    "Cotidiano": "Slice of Life",
-    "Esportes": "Sports",
-    "Sobrenatural": "Supernatural",
-    "Mecha": "Mecha",
-    "Psicológico": "Psychological",
-    "Música": "Music",
-    "Anime da temporada": "Seasonal anime",
-    "Coleções prontas (filmes, séries, atores, estúdios...) ou os catálogos dos seus addons": "Ready-made collections (movies, series, actors, studios...) or your add-ons' catalogs",
-    "Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.": "Add your TMDB key (Settings → Integrations) to see the home collections.",
-    "Conteúdo da tela inicial": "Home screen content",
-    "Crime e vida cotidiana": "Crime & everyday life",
-    "Décadas": "Decades",
-    "Estilos de comédia e romance": "Comedy & romance styles",
-    "Mais favoritados": "Most favourites",
-    "Melhores filmes": "Top anime movies",
-    "Melhores séries": "Top anime series",
-    "Não foi possível abrir agora.": "Could not open it right now.",
-    "Não foi possível carregar as coleções agora.": "Could not load the collections right now.",
-    "Próxima temporada": "Upcoming season",
-    "Temas": "Themes",
-    "{n} pastas": "{n} folders",
-    "Coleções (Kaptain)": "Collections (Kaptain)",
-    "Coleções e addons": "Collections and add-ons",
-    "Só os catálogos dos addons": "Add-on catalogs only",
-    "Infantil": "Kids",
-    "Inverno": "Winter",
-    "Primavera": "Spring",
-    "Verão": "Summer",
-    "Outono": "Fall",
-    "Não foi possível ligar esta legenda.": "Could not turn this subtitle on.",
-    "Marvel Studios": "Marvel Studios",
-    "Sagas em andamento": "Sagas in progress",
-    "Clique para continuar a maratona": "Click to continue the saga",
-    "Carmim": "Crimson",
-    "Esmeralda": "Emerald",
-    "Âmbar": "Amber",
-    "Violeta real": "Royal Violet",
-    "Fúcsia neon": "Neon Fuchsia",
-    "Rosa rubi": "Ruby Rose",
-    "Azul céu": "Sky Blue",
-    "Lima neon": "Neon Lime",
-    "Ardósia": "Charcoal Slate",
-    "Vermelho Netflix": "Netflix Red",
-    "Azul Samsung": "Samsung Blue",
-    "Cyberpunk neon": "Cyberpunk",
-    "Pôr do sol": "Sunset Flame",
-    "Ucraniano": "Ukrainian",
-    "Polonês": "Polish",
-    "Holandês": "Dutch",
-    "Grego": "Greek",
-    "Sueco": "Swedish",
-    "Vietnamita": "Vietnamese",
-    "Tailandês": "Thai",
-    "Hebraico": "Hebrew",
-    "Romeno": "Romanian",
-    "Húngaro": "Hungarian",
-    "Tcheco": "Czech",
-    "Filipino": "Filipino",
-    "Perfil infantil": "Kids Profile",
-    "Destaca o perfil para crianças e família": "Highlights this profile for kids and family",
-    "Aba Mangás": "Manga tab",
-    "Ajustar à largura": "Fit to width",
-    "Ajustar à tela": "Fit to screen",
-    "Cancelado": "Cancelled",
-    "Cap. {n}": "Ch. {n}",
-    "Capítulos {a}–{b}": "Chapters {a}–{b}",
-    "Completo": "Completed",
-    "Continuar: cap. {n}": "Continue: ch. {n}",
-    "Em hiato": "On hiatus",
-    "Em lançamento": "Ongoing",
-    "Especial": "Special",
-    "Este capítulo não tem páginas.": "This chapter has no pages.",
-    "Este é o primeiro capítulo.": "This is the first chapter.",
-    "Este é o último capítulo.": "This is the last chapter.",
-    "Formatos": "Formats",
-    "Idioma dos capítulos": "Chapter language",
-    "Ler": "Read",
-    "Mangá da temporada": "Seasonal manga",
-    "Mangá, manhwa e manhua com leitor para a TV (AniList e MangaDex)": "Manga, manhwa and manhua with a TV reader (AniList and MangaDex)",
-    "Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.": "No chapters in this language. Change the language with the globe button.",
-    "Nenhum capítulo encontrado.": "No chapters found.",
-    "Não encontrei capítulos deste título agora.": "Could not find chapters for this title right now.",
-    "Não foi possível abrir este capítulo agora.": "Could not open this chapter right now.",
-    "Não foi possível carregar esta página. Aperte para o lado para continuar.": "Could not load this page. Press sideways to continue.",
-    "Parou aqui": "You stopped here",
-    "Ver no anime": "Watch the anime",
-    "Zoom {n}%": "Zoom {n}%",
-    "pág.": "pages",
-    "{n} capítulos": "{n} chapters",
-    "Completos": "Completed",
-    "Mangá (Japão)": "Manga (Japan)",
-    "Manhwa (Coreia)": "Manhwa (Korea)",
-    "Manhua (China)": "Manhua (China)",
-    "Romances leves": "Light novels",
-    "One-shots": "One-shots",
-    "Viagem no tempo": "Time travel",
-    "Árabe, depois inglês": "Arabic, then English",
-    "Mangás": "Manga"
-  };
+    "Nenhuma coleção encontrada.": "No collection found."
+  }, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Resultados", "Results"), "Não foi possível buscar agora.", "Couldn't search right now."), "Assistidos: {done} de {n}", "Watched: {done} of {n}"), "Ordem da história", "Story order"), "Ordem de lançamento", "Release order"), "Próximo: {title}", "Next: {title}"), "Esconder assistidos", "Hide watched"), "série", "series"), "Você já assistiu tudo desta coleção.", "You've watched everything in this collection."), "Coleção", "Collection"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Favoritas", "Favorites"), "Fixar no topo", "Pin to top"), "Fixada no topo", "Pinned to top"), "Fixada no topo da aba Coleções", "Pinned to the top of Collections"), "Removida das favoritas", "Removed from favorites"), "Contas conectadas", "Connected accounts"), "Trakt e Simkl", "Trakt and Simkl"), "Fonte da biblioteca", "Library source"), "De onde vêm os assistidos e o Continuar assistindo", "Where watched items and Continue watching come from"), "Fonte do progresso", "Watch progress source"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Para onde o progresso de reprodução é enviado", "Where playback progress is sent"), "Recursos do Trakt", "Trakt features"), "Atualiza assistidos e Continuar assistindo", "Refreshes watched items and Continue watching"), "Conecte uma conta primeiro", "Connect an account first"), "Pular trechos", "Skip segments"), "IntroDB (séries e filmes) — introdb.app", "IntroDB (series and movies) — introdb.app"), 'Desligado: mostra o botão "Pular"', 'Off: shows the "Skip" button'), "Anime Skip", "Anime Skip"), "Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes", "Anime-Skip (anime-skip.com) and AniSkip: anime openings and endings"), "AnimeSkip Client ID", "AnimeSkip Client ID"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Sua chave do anime-skip.com (fica só nesta TV)", "Your anime-skip.com key (stays on this TV only)"), "Integrações", "Integrations"), "Contas, fontes e recursos do Trakt", "Accounts, sources and Trakt features"), "Abertura, recapitulação e encerramento", "Intro, recap and outro"), "Ligado", "On"), "Filmes e séries", "Movies and series"), "Desenhos animados", "Cartoons"), "Animes", "Anime"), "{name}: este torrent ainda não está no cache. Escolha outra fonte.", "{name}: this torrent is not cached yet. Pick another source."), "Chave inválida", "Invalid key"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Endereço inválido", "Invalid address"), "Usuário ou senha errados", "Wrong user name or password"), "Leve", "Mild"), "Moderado", "Moderate"), "Forte", "Severe"), "Nudez", "Nudity"), "Violência", "Violence"), "Palavrões", "Profanity"), "Álcool e drogas", "Alcohol and drugs"), "Cenas assustadoras", "Frightening scenes"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Torrent · via {name}", "Torrent · via {name}"), "Debrid", "Debrid"), "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.", "Plays torrent sources through your debrid account, no PC server needed. Everyone uses their own key, kept only on this TV."), "Usar debrid", "Use debrid"), "Usando {name}", "Using {name}"), "Preencha uma chave abaixo", "Fill in a key below"), "Serviço preferido", "Preferred service"), "Usado quando há mais de uma chave", "Used when there is more than one key"), "Chaves de API", "API keys"), "Sua chave de API em {site}", "Your API key at {site}"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Testar {name}", "Test {name}"), "Testando...", "Testing..."), "{name} OK: {user}", "{name} OK: {user}"), "{name} recusou a chave: {msg}", "{name} rejected the key: {msg}"), "Servidores de mídia (Jellyfin e Emby)", "Media servers (Jellyfin and Emby)"), "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.", "Movies and series on your server show up as a source, next to the add-ons."), "Mostrar como fonte", "Show as a source"), "Lista os arquivos do servidor nas fontes", "Lists the server files among the sources"), "Tipo de servidor", "Server type"), "Endereço do servidor", "Server address"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Ex.: 192.168.0.20:8096", "E.g. 192.168.0.20:8096"), "Usuário", "User name"), "Usada só para entrar; não fica salva", "Only used to sign in; it is not saved"), "Conectar", "Connect"), "Preencha o endereço e o usuário", "Fill in the address and the user name"), "Conectando...", "Connecting..."), "Conectado a {name}", "Connected to {name}"), "Não foi possível conectar: {msg}", "Could not connect: {msg}"), "Seu próprio servidor como fonte", "Your own server as a source"), "Chave RPDB", "RPDB key"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Pôsteres com as notas desenhadas (ratingposterdb.com)", "Posters with the ratings drawn on them (ratingposterdb.com)"), "Guia para os pais", "Parental guide"), "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)", "Violence, profanity and intense scenes on the title page (IMDb via tiffara.com)"), "Abrir", "Open"), 'Adicionado a "{name}"', 'Added to "{name}"'), "Adicionar a esta coleção", "Add to this collection"), "Adicionar lista pública", "Add a public list"), "Ajustes copiados de {name}", "Settings copied from {name}"), 'Ao terminar um filme, mostra "Mais como este"', 'When a film ends, shows "More like this"'), 'Apagar a coleção "{name}"?', 'Delete the collection "{name}"?'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Apagar coleção", "Delete collection"), "Baixando arquivo de teste...", "Downloading a test file..."), "Capítulo {n}", "Chapter {n}"), "Capítulos", "Chapters"), 'Coleção "{name}" criada', 'Collection "{name}" created'), "Coleção sua", "Your collection"), "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.", "Put your MDBList key in Settings → Extra metadata to use lists."), "Copiar", "Copy"), "Copiar ajustes de", "Copy settings from"), "Copiar ajustes de outro perfil", "Copy settings from another profile"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Descer", "Move down"), "Escolha quais das suas listas aparecem na tela inicial", "Choose which of your lists show on the home screen"), "Esconder", "Hide"), "Escondida", "Hidden"), "Este arquivo não tem capítulos.", "This file has no chapters."), "Ex.: Para ver no fim de semana", "E.g. For the weekend"), "Ex.: usuario/nome-da-lista ou o link do mdblist.com", "E.g. user/list-name or the mdblist.com link"), "Fechar", "Close"), "Fileiras", "Rows"), "Internet: {mbps} Mbps, ping {ms} ms ({verdict})", "Internet: {mbps} Mbps, ping {ms} ms ({verdict})"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Legendas, aparência, tela inicial e coleções (a conta não é copiada)", "Subtitles, appearance, home screen and collections (the account is not copied)"), 'Lista "{name}" adicionada', 'List "{name}" added'), "Lista não encontrada", "List not found"), "Listas do MDBList", "MDBList lists"), "Mais como este", "More like this"), "Medindo o ping...", "Measuring ping..."), "Minhas coleções", "My collections"), "Minhas listas", "My lists"), "Modo ambiente", "Ambient mode"), "Mostrar", "Show"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Nome da nova coleção", "New collection name"), "Nova coleção", "New collection"), "Nova coleção...", "New collection..."), "O teste falhou: {msg}", "The test failed: {msg}"), "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)", "The trailer plays muted behind the Hero Banner (heavier on the TV)"), "OK numa fileira: subir, descer ou esconder.", "OK on a row: move up, move down or hide."), "Ordem das fileiras, listas do MDBList e Continuar assistindo", "Row order, MDBList lists and Continue watching"), "Ordem do Continuar assistindo", "Continue watching order"), "Ordem padrão restaurada", "Default order restored"), "Ping e velocidade de download (Cloudflare)", "Ping and download speed (Cloudflare)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Procurando capítulos...", "Looking for chapters..."), "Qualidade, HDR, áudio, idioma, tamanho...", "Quality, HDR, audio, language, size..."), 'Removido de "{name}"', 'Removed from "{name}"'), "Renomear", "Rename"), "Restaurar ordem padrão", "Restore default order"), "Selos das fontes", "Stream badges"), "Subir", "Move up"), "Sugestões no fim", "Suggestions at the end"), "Tela inicial", "Home screen"), "Testar a internet", "Test the internet"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Tirar desta coleção", "Remove from this collection"), "Toque para tirar desta coleção", "Select to remove it from this collection"), 'Trocar os ajustes de "{to}" pelos de "{from}"?', 'Replace the settings of "{to}" with those of "{from}"?'), "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.", "Empty. On a film or series page, use the Collection button to add it."), "Visível", "Visible"), "Você ainda não tem listas no MDBList.", "You have no MDBList lists yet."), "bom para 1080p", "good for 1080p"), "dá para 4K", "enough for 4K"), "lenta para vídeo", "slow for video"), "só 720p com folga", "720p only, comfortably"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Assistidos por último", "Last watched"), "Quase terminados primeiro", "Almost finished first"), "Nome (A–Z)", "Name (A–Z)"), "Qualidade (4K, 1080p, 720p)", "Quality (4K, 1080p, 720p)"), "HDR e Dolby Vision", "HDR and Dolby Vision"), "REMUX", "REMUX"), "Codec (HEVC, AV1)", "Codec (HEVC, AV1)"), "Áudio (Atmos, DTS, 5.1)", "Audio (Atmos, DTS, 5.1)"), "Idioma (Árabe, Multi)", "Language (Arabic, Multi)"), "Tamanho do arquivo", "File size"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Taxa estimada (Mbps)", "Estimated bitrate (Mbps)"), "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", "{name}: the API key was rejected. Check Settings → Debrid."), "A legenda e o áudio que você escolher valem para os outros episódios", "The subtitle and audio you pick apply to the other episodes"), "Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.", "Point your phone camera at the QR, sign in and that is it: it links by itself."), "Boa noite!", "Good night!"), "Boa noite! O vídeo foi pausado.", "Good night! The video was paused."), "Buscas recentes", "Recent searches"), "Buscas recentes:", "Recent searches:"), "Cantos dos pôsteres e botões", "Corners of posters and buttons"), "Chave SubDL", "SubDL key"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Como o item selecionado aparece", "How the selected item looks"), "Contagem regressiva", "Countdown"), "Contagem regressiva nos créditos e toca o próximo", "Counts down at the credits and plays the next one"), "Cor de destaque de botões, foco e barras", "Accent colour of buttons, focus and bars"), "Cor do app", "App colour"), "Cores e formas", "Colours and shapes"), "Depois de {n} min", "After {n} min"), "Desempenho", "Performance"), "Diagnóstico", "Diagnostics"), "Dormir", "Sleep"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Escuro, preto puro ou com brilho da cor", "Dark, pure black or with a colour glow"), "Estilo do foco", "Focus style"), "Ex.: só os pais abrem este perfil", "E.g. only parents can open this profile"), "Fileiras e Continuar assistindo", "Rows and Continue watching"), "Formato dos cartões", "Card shape"), "Funciona (direto)", "Works (direct)"), "Funciona (pelo servidor do PC)", "Works (through the PC server)"), "Funciona (pelo serviço da TV)", "Works (through the TV service)"), "Fundo", "Background"), "Fundos de filmes e o relógio quando a TV fica parada", "Film backdrops and the clock when the TV sits idle"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)", "Arabic subtitles from subdl.com (get a free key at subdl.com/panel/api)"), "Lembrar por série", "Remember per series"), "Limpar", "Clear"), "Mais pôsteres por linha ou pôsteres maiores", "More posters per row or bigger posters"), "Minha lista do Trakt", "My Trakt watchlist"), "Mostra as últimas buscas na tela de busca", "Shows your last searches on the search screen"), "No fim deste vídeo", "At the end of this video"), "Novo PIN (4 a 8 números)", "New PIN (4 to 8 digits)"), "Não funciona: o serviço da TV não respondeu. Feche o app e abra de novo pelo TizenBrew.", "Not working: the TV service did not answer. Close the app and open it again from TizenBrew."), "O player da Samsung (AVPlay) não carregou nesta TV, então o app usa o do navegador e não consegue trocar o áudio. Feche o app e abra de novo pelo TizenBrew; se continuar, avise.", "The Samsung player (AVPlay) did not load on this TV, so the app uses the browser one and cannot switch audio. Close the app and open it again from TizenBrew; if it stays like this, let us know."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "O vídeo para em {n} minutos", "The video stops in {n} minutes"), "O vídeo para no fim deste episódio", "The video stops at the end of this episode"), "Ou abra", "Or open"), "PIN de {name}", "PIN for {name}"), "PIN errado. Tente de novo.", "Wrong PIN. Try again."), "PIN removido", "PIN removed"), "PIN salvo", "PIN saved"), "Para trocar o áudio, o app precisa do player da Samsung (AVPlay), que não carregou. Veja Ajustes → Reprodução.", "To switch audio the app needs the Samsung player (AVPlay), which did not load. See Settings → Playback."), "Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou", "Asks IntroDB for the WandaVision S1E1 intro and says which way worked"), "Pede o PIN para abrir este perfil", "Asks for the PIN to open this profile"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Proteção de tela", "Screensaver"), "Próximo episódio automático", "Play next episode automatically"), "Quanto tempo o aviso do próximo episódio espera", "How long the next episode notice waits"), "Tamanho dos pôsteres", "Poster size"), "Testar o pulo de abertura", "Test intro skipping"), "Timer desligado", "Timer off"), "Tirar o PIN", "Remove the PIN"), "Trancar com PIN", "Lock with a PIN"), "Trocar o PIN", "Change the PIN"), "faltam {n} min", "{n} min left"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "{n} minutos", "{n} minutes"), "{n} segundos", "{n} seconds"), "Conta e perfis", "Account and profiles"), "Idioma, perfis, conta Stremio, controle pelo celular", "Language, profiles, Stremio account, phone remote"), "Reprodução", "Playback"), "Servidor do PC, player, próximo episódio, selos das fontes", "PC server, player, next episode, stream badges"), "Idiomas, SubDL, aparência da legenda", "Languages, SubDL, subtitle look"), "Aparência", "Appearance"), "Tema, tela inicial, modo ambiente, proteção de tela", "Theme, home screen, ambient mode, screensaver"), "Trakt, Simkl, pular trechos, debrid, Jellyfin, chaves, addons", "Trakt, Simkl, skip segments, debrid, Jellyfin, keys, add-ons"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Sobre", "About"), "Atualizações, teste de internet, log", "Updates, internet test, log"), "Arredondado", "Rounded"), "Reto", "Square"), "Bem redondo", "Very round"), "Pequeno", "Small"), "Médio", "Medium"), "Grande", "Large"), "Contorno e aumento", "Outline and zoom"), "Só contorno", "Outline only"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Só aumento", "Zoom only"), "Escuro (padrão)", "Dark (default)"), "Preto puro (OLED)", "Pure black (OLED)"), "Escuro com brilho da cor", "Dark with a colour glow"), "Índigo", "Indigo"), "Prata", "Silver"), "Turco", "Turkish"), "Persa", "Persian"), "Urdu", "Urdu"), "Indonésio", "Indonesian"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Malaio", "Malay"), "Use de 4 a 8 números.", "Use 4 to 8 digits."), "Chaves próprias (opcional)", "Your own keys (optional)"), "Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.", "Point the camera at the code, paste the keys and tap Send. They stay on this TV only."), "Chaves pelo celular", "Keys from your phone"), "Chaves recebidas do celular: {n}", "Keys received from the phone: {n}"), "Coloque as chaves pelo celular", "Add the keys from your phone"), "O serviço da TV não está rodando. Feche o app e abra de novo.", "The TV service is not running. Close the app and open it again."), "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.", "First add the keys from your phone: point the camera at the QR on this page."), "Opcional: só apps antigos do Trakt têm", "Optional: only older Trakt apps have one"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Fonte do app", "App font"), "Letra dos menus e textos", "Font of the menus and texts"), "Samsung (da TV)", "Samsung (TV font)"), "Montserrat (Kai)", "Montserrat (Kai)"), "Aponte a câmera: abra a página da chave, copie, cole e envie.", "Point the camera: open the key page, copy, paste and send."), "Aponte o celular para o QR e entre na sua conta", "Point your phone at the QR and sign in"), "Ative o Quick Connect no painel do Jellyfin", "Turn on Quick Connect in the Jellyfin dashboard"), "Entrar com QR (sem chave)", "Sign in with a QR (no key)"), "Entrar com Quick Connect", "Sign in with Quick Connect"), "Entrar no {name}", "Sign in to {name}"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "No app ou site do Jellyfin: Configurações → Quick Connect, e digite o código.", "In the Jellyfin app or site: Settings → Quick Connect, then type the code."), "Ou cole a chave", "Or paste the key"), "Preencha o endereço do servidor primeiro", "Fill in the server address first"), "QR que abre direto a página da chave", "QR that opens the key page directly"), "Sem senha: aprove um código no Jellyfin do celular", "No password: approve a code in Jellyfin on your phone"), "{name} pelo celular", "{name} from your phone"), "Aba Animes", "Anime tab"), "Carregar mais", "Load more"), "Descobrir", "Discover"), "Em alta agora", "Trending now"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Esta temporada", "This season"), "Estúdios", "Studios"), "Filmes de anime", "Anime movies"), "Gêneros", "Genres"), "Lançando agora", "Airing now"), "Não encontrei este anime nos addons.", "Could not find this anime in your add-ons."), "Não foi possível carregar agora.", "Could not load right now."), "Temporada, estúdios e gêneros de anime (AniList)", "Anime season, studios and genres (AniList)"), "Mais populares", "Most popular"), "Mais bem avaliados", "Top rated"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Em breve", "Upcoming"), "Ação", "Action"), "Aventura", "Adventure"), "Comédia", "Comedy"), "Drama", "Drama"), "Fantasia", "Fantasy"), "Terror", "Horror"), "Mistério", "Mystery"), "Romance", "Romance"), "Ficção científica", "Sci-Fi"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Cotidiano", "Slice of Life"), "Esportes", "Sports"), "Sobrenatural", "Supernatural"), "Mecha", "Mecha"), "Psicológico", "Psychological"), "Música", "Music"), "Anime da temporada", "Seasonal anime"), "Coleções prontas (filmes, séries, atores, estúdios...) ou os catálogos dos seus addons", "Ready-made collections (movies, series, actors, studios...) or your add-ons' catalogs"), "Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.", "Add your TMDB key (Settings → Integrations) to see the home collections."), "Conteúdo da tela inicial", "Home screen content"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Crime e vida cotidiana", "Crime & everyday life"), "Décadas", "Decades"), "Estilos de comédia e romance", "Comedy & romance styles"), "Mais favoritados", "Most favourites"), "Melhores filmes", "Top anime movies"), "Melhores séries", "Top anime series"), "Não foi possível abrir agora.", "Could not open it right now."), "Não foi possível carregar as coleções agora.", "Could not load the collections right now."), "Próxima temporada", "Upcoming season"), "Temas", "Themes"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "{n} pastas", "{n} folders"), "Coleções (Kaptain)", "Collections (Kaptain)"), "Coleções e addons", "Collections and add-ons"), "Só os catálogos dos addons", "Add-on catalogs only"), "Infantil", "Kids"), "Inverno", "Winter"), "Primavera", "Spring"), "Verão", "Summer"), "Outono", "Fall"), "Não foi possível ligar esta legenda.", "Could not turn this subtitle on."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Marvel Studios", "Marvel Studios"), "Sagas em andamento", "Sagas in progress"), "Clique para continuar a maratona", "Click to continue the saga"), "Carmim", "Crimson"), "Esmeralda", "Emerald"), "Âmbar", "Amber"), "Violeta real", "Royal Violet"), "Fúcsia neon", "Neon Fuchsia"), "Rosa rubi", "Ruby Rose"), "Azul céu", "Sky Blue"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Lima neon", "Neon Lime"), "Ardósia", "Charcoal Slate"), "Vermelho Netflix", "Netflix Red"), "Azul Samsung", "Samsung Blue"), "Cyberpunk neon", "Cyberpunk"), "Pôr do sol", "Sunset Flame"), "Ucraniano", "Ukrainian"), "Polonês", "Polish"), "Holandês", "Dutch"), "Grego", "Greek"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Sueco", "Swedish"), "Vietnamita", "Vietnamese"), "Tailandês", "Thai"), "Hebraico", "Hebrew"), "Romeno", "Romanian"), "Húngaro", "Hungarian"), "Tcheco", "Czech"), "Filipino", "Filipino"), "Perfil infantil", "Kids Profile"), "Destaca o perfil para crianças e família", "Highlights this profile for kids and family"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Aba Mangás", "Manga tab"), "Ajustar à largura", "Fit to width"), "Ajustar à tela", "Fit to screen"), "Cancelado", "Cancelled"), "Cap. {n}", "Ch. {n}"), "Capítulos {a}–{b}", "Chapters {a}–{b}"), "Completo", "Completed"), "Continuar: cap. {n}", "Continue: ch. {n}"), "Em hiato", "On hiatus"), "Em lançamento", "Ongoing"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Especial", "Special"), "Este capítulo não tem páginas.", "This chapter has no pages."), "Este é o primeiro capítulo.", "This is the first chapter."), "Este é o último capítulo.", "This is the last chapter."), "Formatos", "Formats"), "Idioma dos capítulos", "Chapter language"), "Ler", "Read"), "Mangá da temporada", "Seasonal manga"), "Mangá, manhwa e manhua com leitor para a TV (AniList e MangaDex)", "Manga, manhwa and manhua with a TV reader (AniList and MangaDex)"), "Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.", "No chapters in this language. Change the language with the globe button."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Nenhum capítulo encontrado.", "No chapters found."), "Não encontrei capítulos deste título agora.", "Could not find chapters for this title right now."), "Não foi possível abrir este capítulo agora.", "Could not open this chapter right now."), "Não foi possível carregar esta página. Aperte para o lado para continuar.", "Could not load this page. Press sideways to continue."), "Parou aqui", "You stopped here"), "Ver no anime", "Watch the anime"), "Zoom {n}%", "Zoom {n}%"), "pág.", "pages"), "{n} capítulos", "{n} chapters"), "Completos", "Completed"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_EN, "Mangá (Japão)", "Manga (Japan)"), "Manhwa (Coreia)", "Manhwa (Korea)"), "Manhua (China)", "Manhua (China)"), "Romances leves", "Light novels"), "One-shots", "One-shots"), "Viagem no tempo", "Time travel"), "Árabe, depois inglês", "Arabic, then English"), "Mangás", "Manga"));
 
   // src/js/lib/i18n-ar.js
-  var AR = {
+  var AR = (_AR = {
     // Navegação e geral
     "Início": "الرئيسية",
     "Buscar": "بحث",
@@ -5946,6 +5560,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Quadrinhos": "الكوميكس",
+    "Livros": "الكتب",
+    "Buscar quadrinhos": "ابحث في الكوميكس",
+    "Buscar livros": "ابحث عن كتاب",
+    "Resultados": "النتائج",
+    "Idioma dos livros": "لغة الكتب",
+    "Livros gratuitos (domínio público)": "كتب مجانية (ملكية عامة)",
+    "Este livro não tem texto para ler aqui.": "هذا الكتاب ما فيه نص للقراءة هنا.",
+    "Fim do livro.": "نهاية الكتاب.",
+    "Início do livro.": "بداية الكتاب.",
+    "Tamanho {n}": "الحجم {n}",
+    "Não foi possível abrir este livro agora.": "ما قدرت أفتح الكتاب الحين.",
     "Episódio {n} (aproximado)": "الحلقة {n} (تقريبي)",
     "Perto do episódio (aprox.)": "قريب من الحلقة (تقريبي)",
     "Ler o mangá": "اقرأ المانجا",
@@ -6181,406 +5807,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Coleções": "السلاسل",
     "Buscar outra coleção (ex.: Shrek, Rambo, Saw)...": "ابحث عن سلسلة أخرى (مثل Shrek أو Rambo أو Saw)...",
     "Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes.": "بإضافة مفتاح TMDB في الإعدادات تقدر تبحث عن أي سلسلة أفلام أخرى.",
-    "Nenhuma coleção encontrada.": "لم يُعثر على أي سلسلة.",
-    "Resultados": "النتائج",
-    "Não foi possível buscar agora.": "تعذّر البحث الآن.",
-    "Assistidos: {done} de {n}": "شاهدت {done} من {n}",
-    "Ordem da história": "ترتيب الأحداث",
-    "Ordem de lançamento": "ترتيب الصدور",
-    "Próximo: {title}": "التالي: {title}",
-    "Esconder assistidos": "إخفاء ما شاهدته",
-    "série": "مسلسل",
-    "Você já assistiu tudo desta coleção.": "شاهدت كل أعمال هذه السلسلة.",
-    "Coleção": "السلسلة",
-    "Favoritas": "المفضلة",
-    "Fixar no topo": "تثبيت في الأعلى",
-    "Fixada no topo": "مثبّتة في الأعلى",
-    "Fixada no topo da aba Coleções": "تم تثبيتها في أعلى السلاسل",
-    "Removida das favoritas": "أُزيلت من المفضلة",
-    "Contas conectadas": "الحسابات المربوطة",
-    "Trakt e Simkl": "Trakt و Simkl",
-    "Fonte da biblioteca": "مصدر المكتبة",
-    "De onde vêm os assistidos e o Continuar assistindo": "من وين تجي المشاهَدات وإكمال المشاهدة",
-    "Fonte do progresso": "مصدر تقدّم المشاهدة",
-    "Para onde o progresso de reprodução é enviado": "وين يُرسل تقدّم التشغيل",
-    "Recursos do Trakt": "ميزات Trakt",
-    "Atualiza assistidos e Continuar assistindo": "يحدّث المشاهَدات وإكمال المشاهدة",
-    "Conecte uma conta primeiro": "اربط حساب أول",
-    "Pular trechos": "تخطي المقاطع",
-    "IntroDB (séries e filmes) — introdb.app": "IntroDB (مسلسلات وأفلام) — introdb.app",
-    'Desligado: mostra o botão "Pular"': "مطفي: يطلع زر «تخطي»",
-    "Anime Skip": "Anime Skip",
-    "Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes": "Anime-Skip (anime-skip.com) و AniSkip: مقدمات ونهايات الأنمي",
-    "AnimeSkip Client ID": "AnimeSkip Client ID",
-    "Sua chave do anime-skip.com (fica só nesta TV)": "مفتاحك من anime-skip.com (يبقى في هالتلفزيون فقط)",
-    "Integrações": "التكاملات",
-    "Contas, fontes e recursos do Trakt": "الحسابات والمصادر وميزات Trakt",
-    "Abertura, recapitulação e encerramento": "المقدمة والملخص والخاتمة",
-    "Ligado": "شغّال",
-    "Filmes e séries": "أفلام ومسلسلات",
-    "Desenhos animados": "كرتون",
-    "Animes": "أنمي",
-    "{name}: este torrent ainda não está no cache. Escolha outra fonte.": "{name}: هذا التورنت مو موجود بالكاش. اختر مصدر ثاني.",
-    "Chave inválida": "المفتاح غلط",
-    "Endereço inválido": "العنوان غلط",
-    "Usuário ou senha errados": "اسم المستخدم أو كلمة المرور غلط",
-    "Leve": "خفيف",
-    "Moderado": "متوسط",
-    "Forte": "قوي",
-    "Nudez": "عُري",
-    "Violência": "عنف",
-    "Palavrões": "ألفاظ",
-    "Álcool e drogas": "كحول ومخدرات",
-    "Cenas assustadoras": "مشاهد مخيفة",
-    "Torrent · via {name}": "تورنت · عبر {name}",
-    "Debrid": "Debrid",
-    "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.": "يشغّل مصادر التورنت عن طريق حسابك في الـ debrid بدون سيرفر الكمبيوتر. كل واحد يحط مفتاحه، ويبقى بس في هالتلفزيون.",
-    "Usar debrid": "استخدم الـ debrid",
-    "Usando {name}": "يستخدم {name}",
-    "Preencha uma chave abaixo": "حط مفتاح تحت",
-    "Serviço preferido": "الخدمة المفضلة",
-    "Usado quando há mais de uma chave": "تُستخدم إذا عندك أكثر من مفتاح",
-    "Chaves de API": "مفاتيح API",
-    "Sua chave de API em {site}": "مفتاح API حقك من {site}",
-    "Testar {name}": "اختبر {name}",
-    "Testando...": "جاري الاختبار...",
-    "{name} OK: {user}": "{name} شغّال: {user}",
-    "{name} recusou a chave: {msg}": "{name} رفض المفتاح: {msg}",
-    "Servidores de mídia (Jellyfin e Emby)": "سيرفرات الوسائط (Jellyfin و Emby)",
-    "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.": "الأفلام والمسلسلات اللي في سيرفرك تطلع كمصدر مع الإضافات.",
-    "Mostrar como fonte": "اعرضه كمصدر",
-    "Lista os arquivos do servidor nas fontes": "يعرض ملفات السيرفر مع المصادر",
-    "Tipo de servidor": "نوع السيرفر",
-    "Endereço do servidor": "عنوان السيرفر",
-    "Ex.: 192.168.0.20:8096": "مثال: 192.168.0.20:8096",
-    "Usuário": "اسم المستخدم",
-    "Usada só para entrar; não fica salva": "تُستخدم للدخول بس وما تنحفظ",
-    "Conectar": "اتصال",
-    "Preencha o endereço e o usuário": "حط العنوان واسم المستخدم",
-    "Conectando...": "جاري الاتصال...",
-    "Conectado a {name}": "متصل بـ {name}",
-    "Não foi possível conectar: {msg}": "ما قدر يتصل: {msg}",
-    "Seu próprio servidor como fonte": "سيرفرك الخاص كمصدر",
-    "Chave RPDB": "مفتاح RPDB",
-    "Pôsteres com as notas desenhadas (ratingposterdb.com)": "بوسترات عليها التقييمات (ratingposterdb.com)",
-    "Guia para os pais": "دليل الأهل",
-    "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)": "العنف والألفاظ والمشاهد القوية في صفحة العمل (IMDb عن طريق tiffara.com)",
-    "Abrir": "افتح",
-    'Adicionado a "{name}"': 'انضاف إلى "{name}"',
-    "Adicionar a esta coleção": "أضف لهالمجموعة",
-    "Adicionar lista pública": "أضف قائمة عامة",
-    "Ajustes copiados de {name}": "انتسخت الإعدادات من {name}",
-    'Ao terminar um filme, mostra "Mais como este"': 'لما يخلص الفيلم يعرض "أعمال مشابهة"',
-    'Apagar a coleção "{name}"?': 'تحذف مجموعة "{name}"؟',
-    "Apagar coleção": "احذف المجموعة",
-    "Baixando arquivo de teste...": "جاري تنزيل ملف الاختبار...",
-    "Capítulo {n}": "الفصل {n}",
-    "Capítulos": "الفصول",
-    'Coleção "{name}" criada': 'انسوّت مجموعة "{name}"',
-    "Coleção sua": "مجموعتك",
-    "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.": "حط مفتاح MDBList في الإعدادات ← بيانات إضافية عشان تستخدم القوائم.",
-    "Copiar": "انسخ",
-    "Copiar ajustes de": "انسخ الإعدادات من",
-    "Copiar ajustes de outro perfil": "انسخ الإعدادات من بروفايل ثاني",
-    "Descer": "نزّل",
-    "Escolha quais das suas listas aparecem na tela inicial": "اختر أي قوائمك تطلع في الرئيسية",
-    "Esconder": "إخفاء",
-    "Escondida": "مخفية",
-    "Este arquivo não tem capítulos.": "هالملف ما فيه فصول.",
-    "Ex.: Para ver no fim de semana": "مثال: للويكند",
-    "Ex.: usuario/nome-da-lista ou o link do mdblist.com": "مثال: user/list-name أو رابط mdblist.com",
-    "Fechar": "إغلاق",
-    "Fileiras": "الصفوف",
-    "Internet: {mbps} Mbps, ping {ms} ms ({verdict})": "النت: {mbps} ميغابت، البنق {ms} ms ({verdict})",
-    "Legendas, aparência, tela inicial e coleções (a conta não é copiada)": "الترجمة والشكل والرئيسية والمجموعات (الحساب ما ينسخ)",
-    'Lista "{name}" adicionada': 'انضافت قائمة "{name}"',
-    "Lista não encontrada": "ما لقيت القائمة",
-    "Listas do MDBList": "قوائم MDBList",
-    "Mais como este": "أعمال مشابهة",
-    "Medindo o ping...": "جاري قياس البنق...",
-    "Minhas coleções": "مجموعاتي",
-    "Minhas listas": "قوائمي",
-    "Modo ambiente": "وضع الأجواء (Ambient)",
-    "Mostrar": "إظهار",
-    "Nome da nova coleção": "اسم المجموعة الجديدة",
-    "Nova coleção": "مجموعة جديدة",
-    "Nova coleção...": "مجموعة جديدة...",
-    "O teste falhou: {msg}": "الاختبار فشل: {msg}",
-    "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)": "التريلر يشتغل بدون صوت خلف البانر (أثقل على التلفزيون)",
-    "OK numa fileira: subir, descer ou esconder.": "اضغط OK على صف: طلّعه أو نزّله أو اخفه.",
-    "Ordem das fileiras, listas do MDBList e Continuar assistindo": "ترتيب الصفوف وقوائم MDBList وأكمل المشاهدة",
-    "Ordem do Continuar assistindo": "ترتيب أكمل المشاهدة",
-    "Ordem padrão restaurada": "رجع الترتيب الأصلي",
-    "Ping e velocidade de download (Cloudflare)": "البنق وسرعة التنزيل (Cloudflare)",
-    "Procurando capítulos...": "جاري البحث عن الفصول...",
-    "Qualidade, HDR, áudio, idioma, tamanho...": "الجودة و HDR والصوت واللغة والحجم...",
-    'Removido de "{name}"': 'انشال من "{name}"',
-    "Renomear": "إعادة تسمية",
-    "Restaurar ordem padrão": "رجّع الترتيب الأصلي",
-    "Selos das fontes": "شارات المصادر",
-    "Subir": "طلّع",
-    "Sugestões no fim": "اقتراحات بعد النهاية",
-    "Tela inicial": "الصفحة الرئيسية",
-    "Testar a internet": "اختبر النت",
-    "Tirar desta coleção": "شيله من هالمجموعة",
-    "Toque para tirar desta coleção": "اضغط عشان تشيله من هالمجموعة",
-    'Trocar os ajustes de "{to}" pelos de "{from}"?': 'تستبدل إعدادات "{to}" بإعدادات "{from}"؟',
-    "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.": "فاضية. من صفحة أي فيلم أو مسلسل اضغط زر المجموعة عشان تضيفه.",
-    "Visível": "ظاهرة",
-    "Você ainda não tem listas no MDBList.": "ما عندك قوائم في MDBList للحين.",
-    "bom para 1080p": "زين للـ 1080p",
-    "dá para 4K": "يكفي للـ 4K",
-    "lenta para vídeo": "بطيء على الفيديو",
-    "só 720p com folga": "720p بس براحة",
-    "Assistidos por último": "آخر شي شفته",
-    "Quase terminados primeiro": "اللي قربت تخلصه أول",
-    "Nome (A–Z)": "الاسم (أ–ي)",
-    "Qualidade (4K, 1080p, 720p)": "الجودة (4K و 1080p و 720p)",
-    "HDR e Dolby Vision": "HDR و Dolby Vision",
-    "REMUX": "REMUX",
-    "Codec (HEVC, AV1)": "الترميز (HEVC و AV1)",
-    "Áudio (Atmos, DTS, 5.1)": "الصوت (Atmos و DTS و 5.1)",
-    "Idioma (Árabe, Multi)": "اللغة (عربي، متعدد)",
-    "Tamanho do arquivo": "حجم الملف",
-    "Taxa estimada (Mbps)": "معدل البت التقريبي (Mbps)",
-    "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.": "{name}: المفتاح انرفض. تأكد منه في الإعدادات ← Debrid.",
-    "A legenda e o áudio que você escolher valem para os outros episódios": "الترجمة والصوت اللي تختارهم ينطبقون على باقي الحلقات",
-    "Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.": "وجّه كاميرا الجوال على الباركود، سجّل دخول بحسابك، ويرتبط لحاله.",
-    "Boa noite!": "تصبح على خير!",
-    "Boa noite! O vídeo foi pausado.": "تصبح على خير! وقّفت الفيديو.",
-    "Buscas recentes": "آخر عمليات البحث",
-    "Buscas recentes:": "آخر عمليات البحث:",
-    "Cantos dos pôsteres e botões": "زوايا البوسترات والأزرار",
-    "Chave SubDL": "مفتاح SubDL",
-    "Como o item selecionado aparece": "شكل العنصر المحدد",
-    "Contagem regressiva": "العد التنازلي",
-    "Contagem regressiva nos créditos e toca o próximo": "يعد تنازلي عند النهاية ويشغّل الحلقة الجاية",
-    "Cor de destaque de botões, foco e barras": "لون الأزرار والتحديد والأشرطة",
-    "Cor do app": "لون التطبيق",
-    "Cores e formas": "الألوان والأشكال",
-    "Depois de {n} min": "بعد {n} دقيقة",
-    "Desempenho": "الأداء",
-    "Diagnóstico": "الفحص",
-    "Dormir": "مؤقت النوم",
-    "Escuro, preto puro ou com brilho da cor": "داكن، أسود خالص أو مع توهج اللون",
-    "Estilo do foco": "شكل التحديد",
-    "Ex.: só os pais abrem este perfil": "مثال: بس الأهل يفتحون هالبروفايل",
-    "Fileiras e Continuar assistindo": "الصفوف وأكمل المشاهدة",
-    "Formato dos cartões": "شكل البطاقات",
-    "Funciona (direto)": "شغّال (مباشر)",
-    "Funciona (pelo servidor do PC)": "شغّال (عن طريق سيرفر الكمبيوتر)",
-    "Funciona (pelo serviço da TV)": "شغّال (عن طريق خدمة التلفزيون)",
-    "Fundo": "الخلفية",
-    "Fundos de filmes e o relógio quando a TV fica parada": "خلفيات أفلام والساعة لما يكون التلفزيون واقف",
-    "Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)": "ترجمات عربية من subdl.com (المفتاح مجاني من subdl.com/panel/api)",
-    "Lembrar por série": "تذكّر لكل مسلسل",
-    "Limpar": "مسح",
-    "Mais pôsteres por linha ou pôsteres maiores": "بوسترات أكثر في الصف أو بوسترات أكبر",
-    "Minha lista do Trakt": "قائمتي في Trakt",
-    "Mostra as últimas buscas na tela de busca": "يعرض آخر عمليات البحث في شاشة البحث",
-    "No fim deste vídeo": "في نهاية هالفيديو",
-    "Novo PIN (4 a 8 números)": "رقم سري جديد (من 4 إلى 8 أرقام)",
-    "Não funciona: o serviço da TV não respondeu. Feche o app e abra de novo pelo TizenBrew.": "ما يشتغل: خدمة التلفزيون ما ردّت. سكّر التطبيق وافتحه من TizenBrew من جديد.",
-    "O player da Samsung (AVPlay) não carregou nesta TV, então o app usa o do navegador e não consegue trocar o áudio. Feche o app e abra de novo pelo TizenBrew; se continuar, avise.": "مشغّل سامسونج (AVPlay) ما اشتغل في هالتلفزيون، فالتطبيق يستخدم مشغّل المتصفح وما يقدر يغيّر الصوت. سكّر التطبيق وافتحه من TizenBrew من جديد، وإذا استمر قول لنا.",
-    "O vídeo para em {n} minutos": "الفيديو بيوقف بعد {n} دقيقة",
-    "O vídeo para no fim deste episódio": "الفيديو بيوقف في نهاية هالحلقة",
-    "Ou abra": "أو افتح",
-    "PIN de {name}": "الرقم السري لـ {name}",
-    "PIN errado. Tente de novo.": "الرقم السري غلط. جرّب مرة ثانية.",
-    "PIN removido": "انشال الرقم السري",
-    "PIN salvo": "انحفظ الرقم السري",
-    "Para trocar o áudio, o app precisa do player da Samsung (AVPlay), que não carregou. Veja Ajustes → Reprodução.": "عشان يتغيّر الصوت لازم مشغّل سامسونج (AVPlay)، وهو ما اشتغل. شوف الإعدادات ← التشغيل.",
-    "Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou": "يطلب من IntroDB مقدمة WandaVision الموسم 1 الحلقة 1 ويقول لك أي طريق اشتغل",
-    "Pede o PIN para abrir este perfil": "يطلب الرقم السري لفتح هالبروفايل",
-    "Proteção de tela": "شاشة التوقف",
-    "Próximo episódio automático": "تشغيل الحلقة الجاية تلقائياً",
-    "Quanto tempo o aviso do próximo episódio espera": "كم ينتظر تنبيه الحلقة الجاية",
-    "Tamanho dos pôsteres": "حجم البوسترات",
-    "Testar o pulo de abertura": "اختبر تخطي المقدمة",
-    "Timer desligado": "المؤقت طافي",
-    "Tirar o PIN": "شيل الرقم السري",
-    "Trancar com PIN": "قفل برقم سري",
-    "Trocar o PIN": "غيّر الرقم السري",
-    "faltam {n} min": "باقي {n} دقيقة",
-    "{n} minutos": "{n} دقيقة",
-    "{n} segundos": "{n} ثانية",
-    "Conta e perfis": "الحساب والبروفايلات",
-    "Idioma, perfis, conta Stremio, controle pelo celular": "اللغة، البروفايلات، حساب Stremio، التحكم بالجوال",
-    "Reprodução": "التشغيل",
-    "Servidor do PC, player, próximo episódio, selos das fontes": "سيرفر الكمبيوتر، المشغّل، الحلقة الجاية، شارات المصادر",
-    "Idiomas, SubDL, aparência da legenda": "اللغات، SubDL، شكل الترجمة",
-    "Aparência": "المظهر",
-    "Tema, tela inicial, modo ambiente, proteção de tela": "الألوان، الرئيسية، وضع الأجواء، شاشة التوقف",
-    "Trakt, Simkl, pular trechos, debrid, Jellyfin, chaves, addons": "Trakt و Simkl، التخطي، Debrid، Jellyfin، المفاتيح، الإضافات",
-    "Sobre": "حول التطبيق",
-    "Atualizações, teste de internet, log": "التحديثات، اختبار النت، السجل",
-    "Arredondado": "مدوّر",
-    "Reto": "حاد",
-    "Bem redondo": "مدوّر كثير",
-    "Pequeno": "صغير",
-    "Médio": "متوسط",
-    "Grande": "كبير",
-    "Contorno e aumento": "إطار وتكبير",
-    "Só contorno": "إطار بس",
-    "Só aumento": "تكبير بس",
-    "Escuro (padrão)": "داكن (الافتراضي)",
-    "Preto puro (OLED)": "أسود خالص (OLED)",
-    "Escuro com brilho da cor": "داكن مع توهج اللون",
-    "Índigo": "نيلي",
-    "Prata": "فضي",
-    "Turco": "تركي",
-    "Persa": "فارسي",
-    "Urdu": "أردو",
-    "Indonésio": "إندونيسي",
-    "Malaio": "ملايو",
-    "Use de 4 a 8 números.": "استخدم من 4 إلى 8 أرقام.",
-    "Chaves próprias (opcional)": "مفاتيحك الخاصة (اختياري)",
-    "Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.": "وجّه الكاميرا على الباركود، الصق المفاتيح واضغط إرسال. تبقى في هالتلفزيون بس.",
-    "Chaves pelo celular": "المفاتيح من الجوال",
-    "Chaves recebidas do celular: {n}": "وصلت المفاتيح من الجوال: {n}",
-    "Coloque as chaves pelo celular": "حط المفاتيح من جوالك",
-    "O serviço da TV não está rodando. Feche o app e abra de novo.": "خدمة التلفزيون مو شغالة. سكّر التطبيق وافتحه من جديد.",
-    "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.": "أول شي حط المفاتيح من جوالك: صوّر الباركود اللي في هالصفحة.",
-    "Opcional: só apps antigos do Trakt têm": "اختياري: بس تطبيقات Trakt القديمة فيها",
-    "Fonte do app": "خط التطبيق",
-    "Letra dos menus e textos": "خط القوائم والنصوص",
-    "Samsung (da TV)": "سامسونج (خط التلفزيون)",
-    "Montserrat (Kai)": "Montserrat (Kai)",
-    "Aponte a câmera: abra a página da chave, copie, cole e envie.": "صوّر الباركود: افتح صفحة المفتاح، انسخه، الصقه، وأرسله.",
-    "Aponte o celular para o QR e entre na sua conta": "صوّر الباركود بجوالك وسجّل دخول بحسابك",
-    "Ative o Quick Connect no painel do Jellyfin": "فعّل Quick Connect من لوحة تحكم Jellyfin",
-    "Entrar com QR (sem chave)": "الدخول بالباركود (بدون مفتاح)",
-    "Entrar com Quick Connect": "الدخول بـ Quick Connect",
-    "Entrar no {name}": "الدخول إلى {name}",
-    "No app ou site do Jellyfin: Configurações → Quick Connect, e digite o código.": "في تطبيق أو موقع Jellyfin: الإعدادات ← Quick Connect، واكتب الكود.",
-    "Ou cole a chave": "أو الصق المفتاح",
-    "Preencha o endereço do servidor primeiro": "اكتب عنوان السيرفر أول",
-    "QR que abre direto a página da chave": "باركود يفتح لك صفحة المفتاح مباشرة",
-    "Sem senha: aprove um código no Jellyfin do celular": "بدون كلمة مرور: وافق على كود من Jellyfin في جوالك",
-    "{name} pelo celular": "{name} من الجوال",
-    "Aba Animes": "تبويب الأنمي",
-    "Carregar mais": "تحميل المزيد",
-    "Descobrir": "اكتشف",
-    "Em alta agora": "الرائج الحين",
-    "Esta temporada": "هذا الموسم",
-    "Estúdios": "الاستوديوهات",
-    "Filmes de anime": "أفلام أنمي",
-    "Gêneros": "التصنيفات",
-    "Lançando agora": "ينعرض الحين",
-    "Não encontrei este anime nos addons.": "ما لقيت هالأنمي في الإضافات.",
-    "Não foi possível carregar agora.": "ما قدرت أحمّل الحين.",
-    "Temporada, estúdios e gêneros de anime (AniList)": "موسم الأنمي والاستوديوهات والتصنيفات (AniList)",
-    "Mais populares": "الأشهر",
-    "Mais bem avaliados": "الأعلى تقييماً",
-    "Em breve": "قريباً",
-    "Ação": "أكشن",
-    "Aventura": "مغامرة",
-    "Comédia": "كوميدي",
-    "Drama": "دراما",
-    "Fantasia": "فانتازيا",
-    "Terror": "رعب",
-    "Mistério": "غموض",
-    "Romance": "رومانسي",
-    "Ficção científica": "خيال علمي",
-    "Cotidiano": "شريحة من الحياة",
-    "Esportes": "رياضة",
-    "Sobrenatural": "خارق للطبيعة",
-    "Mecha": "ميكا",
-    "Psicológico": "نفسي",
-    "Música": "موسيقى",
-    "Anime da temporada": "أنمي المواسم",
-    "Coleções prontas (filmes, séries, atores, estúdios...) ou os catálogos dos seus addons": "مجموعات جاهزة (أفلام، مسلسلات، ممثلين، استوديوهات...) أو كتالوجات إضافاتك",
-    "Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.": "حط مفتاح TMDB (الإعدادات ← التكاملات) عشان تشتغل مجموعات الرئيسية.",
-    "Conteúdo da tela inicial": "محتوى الصفحة الرئيسية",
-    "Crime e vida cotidiana": "الجريمة والحياة اليومية",
-    "Décadas": "العقود",
-    "Estilos de comédia e romance": "أنواع الكوميديا والرومانسي",
-    "Mais favoritados": "الأكثر تفضيلاً",
-    "Melhores filmes": "أفضل الأفلام",
-    "Melhores séries": "أفضل المسلسلات",
-    "Não foi possível abrir agora.": "ما قدرت أفتحه الحين.",
-    "Não foi possível carregar as coleções agora.": "ما قدرت أحمّل المجموعات الحين.",
-    "Próxima temporada": "الموسم الجاي",
-    "Temas": "المواضيع",
-    "{n} pastas": "{n} مجلد",
-    "Coleções (Kaptain)": "المجموعات (Kaptain)",
-    "Coleções e addons": "المجموعات والإضافات",
-    "Só os catálogos dos addons": "كتالوجات الإضافات بس",
-    "Infantil": "أطفال",
-    "Inverno": "الشتاء",
-    "Primavera": "الربيع",
-    "Verão": "الصيف",
-    "Outono": "الخريف",
-    "Não foi possível ligar esta legenda.": "ما قدرت أشغّل هالترجمة.",
-    "Marvel Studios": "مارفل الرسمية (Marvel Studios)",
-    "Sagas em andamento": "سلاسل قيد المتابعة",
-    "Clique para continuar a maratona": "اضغط لمتابعة السلسلة",
-    "Carmim": "قرمزي دم الغزال (Crimson)",
-    "Esmeralda": "زمردي فاخر (Emerald)",
-    "Âmbar": "كهرماني (Amber)",
-    "Violeta real": "بنفسجي ملكي (Royal Violet)",
-    "Fúcsia neon": "فوشيا نيون (Neon Fuchsia)",
-    "Rosa rubi": "وردي ياقوتي (Ruby Rose)",
-    "Azul céu": "أزرق سماوي ناصع (Sky Blue)",
-    "Lima neon": "ليموني مضيء (Neon Lime)",
-    "Ardósia": "فحمي داكن (Charcoal Slate)",
-    "Vermelho Netflix": "أحمر نتفليكس (Netflix Red)",
-    "Azul Samsung": "أزرق سامسونج (Samsung Blue)",
-    "Cyberpunk neon": "نيون سايبربانك (Cyberpunk)",
-    "Pôr do sol": "شروق وغروب (Sunset Flame)",
-    "Ucraniano": "الأوكرانية",
-    "Polonês": "البولندية",
-    "Holandês": "الهولندية",
-    "Grego": "اليونانية",
-    "Sueco": "السويدية",
-    "Vietnamita": "الفيتنامية",
-    "Tailandês": "التايلاندية",
-    "Hebraico": "العبرية",
-    "Romeno": "الرومانية",
-    "Húngaro": "المجرية",
-    "Tcheco": "التشيكية",
-    "Filipino": "الفلبينية",
-    "Perfil infantil": "بروفايل أطفال",
-    "Destaca o perfil para crianças e família": "يخصص ويميز هذا الحساب للأطفال والعائلة",
-    "Aba Mangás": "تبويب المانجا",
-    "Ajustar à largura": "ملائمة للعرض",
-    "Ajustar à tela": "ملائمة للشاشة",
-    "Cancelado": "ملغي",
-    "Cap. {n}": "فصل {n}",
-    "Capítulos {a}–{b}": "الفصول {a}–{b}",
-    "Completo": "مكتمل",
-    "Continuar: cap. {n}": "أكمل: فصل {n}",
-    "Em hiato": "متوقف مؤقتاً",
-    "Em lançamento": "مستمر",
-    "Especial": "خاص",
-    "Este capítulo não tem páginas.": "هذا الفصل ما فيه صفحات.",
-    "Este é o primeiro capítulo.": "هذا أول فصل.",
-    "Este é o último capítulo.": "هذا آخر فصل.",
-    "Formatos": "الصيغ",
-    "Idioma dos capítulos": "لغة الفصول",
-    "Ler": "اقرأ",
-    "Mangá da temporada": "مانجا الموسم",
-    "Mangá, manhwa e manhua com leitor para a TV (AniList e MangaDex)": "مانجا ومانهوا ومانهوا صينية مع قارئ للتلفزيون (AniList و MangaDex)",
-    "Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.": "ما فيه فصول بهاللغة. غيّر اللغة من زر الكرة الأرضية.",
-    "Nenhum capítulo encontrado.": "ما لقيت فصول.",
-    "Não encontrei capítulos deste título agora.": "ما لقيت فصول لهالعمل الحين.",
-    "Não foi possível abrir este capítulo agora.": "ما قدرت أفتح هالفصل الحين.",
-    "Não foi possível carregar esta página. Aperte para o lado para continuar.": "ما قدرت أحمّل هالصفحة. اضغط يمين أو يسار للمتابعة.",
-    "Parou aqui": "وقفت هنا",
-    "Ver no anime": "شاهد الأنمي",
-    "Zoom {n}%": "تكبير {n}%",
-    "pág.": "صفحة",
-    "{n} capítulos": "{n} فصل",
-    "Completos": "المكتملة",
-    "Mangá (Japão)": "مانجا (اليابان)",
-    "Manhwa (Coreia)": "مانهوا (كوريا)",
-    "Manhua (China)": "مانهوا (الصين)",
-    "Romances leves": "روايات خفيفة",
-    "One-shots": "فصل واحد",
-    "Viagem no tempo": "السفر عبر الزمن",
-    "Árabe, depois inglês": "عربي ثم إنجليزي",
-    "Mangás": "مانجا"
-  };
+    "Nenhuma coleção encontrada.": "لم يُعثر على أي سلسلة."
+  }, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Resultados", "النتائج"), "Não foi possível buscar agora.", "تعذّر البحث الآن."), "Assistidos: {done} de {n}", "شاهدت {done} من {n}"), "Ordem da história", "ترتيب الأحداث"), "Ordem de lançamento", "ترتيب الصدور"), "Próximo: {title}", "التالي: {title}"), "Esconder assistidos", "إخفاء ما شاهدته"), "série", "مسلسل"), "Você já assistiu tudo desta coleção.", "شاهدت كل أعمال هذه السلسلة."), "Coleção", "السلسلة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Favoritas", "المفضلة"), "Fixar no topo", "تثبيت في الأعلى"), "Fixada no topo", "مثبّتة في الأعلى"), "Fixada no topo da aba Coleções", "تم تثبيتها في أعلى السلاسل"), "Removida das favoritas", "أُزيلت من المفضلة"), "Contas conectadas", "الحسابات المربوطة"), "Trakt e Simkl", "Trakt و Simkl"), "Fonte da biblioteca", "مصدر المكتبة"), "De onde vêm os assistidos e o Continuar assistindo", "من وين تجي المشاهَدات وإكمال المشاهدة"), "Fonte do progresso", "مصدر تقدّم المشاهدة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Para onde o progresso de reprodução é enviado", "وين يُرسل تقدّم التشغيل"), "Recursos do Trakt", "ميزات Trakt"), "Atualiza assistidos e Continuar assistindo", "يحدّث المشاهَدات وإكمال المشاهدة"), "Conecte uma conta primeiro", "اربط حساب أول"), "Pular trechos", "تخطي المقاطع"), "IntroDB (séries e filmes) — introdb.app", "IntroDB (مسلسلات وأفلام) — introdb.app"), 'Desligado: mostra o botão "Pular"', "مطفي: يطلع زر «تخطي»"), "Anime Skip", "Anime Skip"), "Anime-Skip (anime-skip.com) e AniSkip: abertura e encerramento de animes", "Anime-Skip (anime-skip.com) و AniSkip: مقدمات ونهايات الأنمي"), "AnimeSkip Client ID", "AnimeSkip Client ID"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Sua chave do anime-skip.com (fica só nesta TV)", "مفتاحك من anime-skip.com (يبقى في هالتلفزيون فقط)"), "Integrações", "التكاملات"), "Contas, fontes e recursos do Trakt", "الحسابات والمصادر وميزات Trakt"), "Abertura, recapitulação e encerramento", "المقدمة والملخص والخاتمة"), "Ligado", "شغّال"), "Filmes e séries", "أفلام ومسلسلات"), "Desenhos animados", "كرتون"), "Animes", "أنمي"), "{name}: este torrent ainda não está no cache. Escolha outra fonte.", "{name}: هذا التورنت مو موجود بالكاش. اختر مصدر ثاني."), "Chave inválida", "المفتاح غلط"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Endereço inválido", "العنوان غلط"), "Usuário ou senha errados", "اسم المستخدم أو كلمة المرور غلط"), "Leve", "خفيف"), "Moderado", "متوسط"), "Forte", "قوي"), "Nudez", "عُري"), "Violência", "عنف"), "Palavrões", "ألفاظ"), "Álcool e drogas", "كحول ومخدرات"), "Cenas assustadoras", "مشاهد مخيفة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Torrent · via {name}", "تورنت · عبر {name}"), "Debrid", "Debrid"), "Toca fontes torrent pela sua conta debrid, sem o servidor do PC. Cada um usa a própria chave, que fica só nesta TV.", "يشغّل مصادر التورنت عن طريق حسابك في الـ debrid بدون سيرفر الكمبيوتر. كل واحد يحط مفتاحه، ويبقى بس في هالتلفزيون."), "Usar debrid", "استخدم الـ debrid"), "Usando {name}", "يستخدم {name}"), "Preencha uma chave abaixo", "حط مفتاح تحت"), "Serviço preferido", "الخدمة المفضلة"), "Usado quando há mais de uma chave", "تُستخدم إذا عندك أكثر من مفتاح"), "Chaves de API", "مفاتيح API"), "Sua chave de API em {site}", "مفتاح API حقك من {site}"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Testar {name}", "اختبر {name}"), "Testando...", "جاري الاختبار..."), "{name} OK: {user}", "{name} شغّال: {user}"), "{name} recusou a chave: {msg}", "{name} رفض المفتاح: {msg}"), "Servidores de mídia (Jellyfin e Emby)", "سيرفرات الوسائط (Jellyfin و Emby)"), "Os filmes e séries do seu servidor aparecem como fonte, junto com os addons.", "الأفلام والمسلسلات اللي في سيرفرك تطلع كمصدر مع الإضافات."), "Mostrar como fonte", "اعرضه كمصدر"), "Lista os arquivos do servidor nas fontes", "يعرض ملفات السيرفر مع المصادر"), "Tipo de servidor", "نوع السيرفر"), "Endereço do servidor", "عنوان السيرفر"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Ex.: 192.168.0.20:8096", "مثال: 192.168.0.20:8096"), "Usuário", "اسم المستخدم"), "Usada só para entrar; não fica salva", "تُستخدم للدخول بس وما تنحفظ"), "Conectar", "اتصال"), "Preencha o endereço e o usuário", "حط العنوان واسم المستخدم"), "Conectando...", "جاري الاتصال..."), "Conectado a {name}", "متصل بـ {name}"), "Não foi possível conectar: {msg}", "ما قدر يتصل: {msg}"), "Seu próprio servidor como fonte", "سيرفرك الخاص كمصدر"), "Chave RPDB", "مفتاح RPDB"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Pôsteres com as notas desenhadas (ratingposterdb.com)", "بوسترات عليها التقييمات (ratingposterdb.com)"), "Guia para os pais", "دليل الأهل"), "Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)", "العنف والألفاظ والمشاهد القوية في صفحة العمل (IMDb عن طريق tiffara.com)"), "Abrir", "افتح"), 'Adicionado a "{name}"', 'انضاف إلى "{name}"'), "Adicionar a esta coleção", "أضف لهالمجموعة"), "Adicionar lista pública", "أضف قائمة عامة"), "Ajustes copiados de {name}", "انتسخت الإعدادات من {name}"), 'Ao terminar um filme, mostra "Mais como este"', 'لما يخلص الفيلم يعرض "أعمال مشابهة"'), 'Apagar a coleção "{name}"?', 'تحذف مجموعة "{name}"؟'), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Apagar coleção", "احذف المجموعة"), "Baixando arquivo de teste...", "جاري تنزيل ملف الاختبار..."), "Capítulo {n}", "الفصل {n}"), "Capítulos", "الفصول"), 'Coleção "{name}" criada', 'انسوّت مجموعة "{name}"'), "Coleção sua", "مجموعتك"), "Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.", "حط مفتاح MDBList في الإعدادات ← بيانات إضافية عشان تستخدم القوائم."), "Copiar", "انسخ"), "Copiar ajustes de", "انسخ الإعدادات من"), "Copiar ajustes de outro perfil", "انسخ الإعدادات من بروفايل ثاني"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Descer", "نزّل"), "Escolha quais das suas listas aparecem na tela inicial", "اختر أي قوائمك تطلع في الرئيسية"), "Esconder", "إخفاء"), "Escondida", "مخفية"), "Este arquivo não tem capítulos.", "هالملف ما فيه فصول."), "Ex.: Para ver no fim de semana", "مثال: للويكند"), "Ex.: usuario/nome-da-lista ou o link do mdblist.com", "مثال: user/list-name أو رابط mdblist.com"), "Fechar", "إغلاق"), "Fileiras", "الصفوف"), "Internet: {mbps} Mbps, ping {ms} ms ({verdict})", "النت: {mbps} ميغابت، البنق {ms} ms ({verdict})"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Legendas, aparência, tela inicial e coleções (a conta não é copiada)", "الترجمة والشكل والرئيسية والمجموعات (الحساب ما ينسخ)"), 'Lista "{name}" adicionada', 'انضافت قائمة "{name}"'), "Lista não encontrada", "ما لقيت القائمة"), "Listas do MDBList", "قوائم MDBList"), "Mais como este", "أعمال مشابهة"), "Medindo o ping...", "جاري قياس البنق..."), "Minhas coleções", "مجموعاتي"), "Minhas listas", "قوائمي"), "Modo ambiente", "وضع الأجواء (Ambient)"), "Mostrar", "إظهار"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Nome da nova coleção", "اسم المجموعة الجديدة"), "Nova coleção", "مجموعة جديدة"), "Nova coleção...", "مجموعة جديدة..."), "O teste falhou: {msg}", "الاختبار فشل: {msg}"), "O trailer toca sem som atrás do Hero Banner (mais pesado na TV)", "التريلر يشتغل بدون صوت خلف البانر (أثقل على التلفزيون)"), "OK numa fileira: subir, descer ou esconder.", "اضغط OK على صف: طلّعه أو نزّله أو اخفه."), "Ordem das fileiras, listas do MDBList e Continuar assistindo", "ترتيب الصفوف وقوائم MDBList وأكمل المشاهدة"), "Ordem do Continuar assistindo", "ترتيب أكمل المشاهدة"), "Ordem padrão restaurada", "رجع الترتيب الأصلي"), "Ping e velocidade de download (Cloudflare)", "البنق وسرعة التنزيل (Cloudflare)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Procurando capítulos...", "جاري البحث عن الفصول..."), "Qualidade, HDR, áudio, idioma, tamanho...", "الجودة و HDR والصوت واللغة والحجم..."), 'Removido de "{name}"', 'انشال من "{name}"'), "Renomear", "إعادة تسمية"), "Restaurar ordem padrão", "رجّع الترتيب الأصلي"), "Selos das fontes", "شارات المصادر"), "Subir", "طلّع"), "Sugestões no fim", "اقتراحات بعد النهاية"), "Tela inicial", "الصفحة الرئيسية"), "Testar a internet", "اختبر النت"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Tirar desta coleção", "شيله من هالمجموعة"), "Toque para tirar desta coleção", "اضغط عشان تشيله من هالمجموعة"), 'Trocar os ajustes de "{to}" pelos de "{from}"?', 'تستبدل إعدادات "{to}" بإعدادات "{from}"؟'), "Vazia. Na página de um filme ou série, use o botão Coleção para adicionar.", "فاضية. من صفحة أي فيلم أو مسلسل اضغط زر المجموعة عشان تضيفه."), "Visível", "ظاهرة"), "Você ainda não tem listas no MDBList.", "ما عندك قوائم في MDBList للحين."), "bom para 1080p", "زين للـ 1080p"), "dá para 4K", "يكفي للـ 4K"), "lenta para vídeo", "بطيء على الفيديو"), "só 720p com folga", "720p بس براحة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Assistidos por último", "آخر شي شفته"), "Quase terminados primeiro", "اللي قربت تخلصه أول"), "Nome (A–Z)", "الاسم (أ–ي)"), "Qualidade (4K, 1080p, 720p)", "الجودة (4K و 1080p و 720p)"), "HDR e Dolby Vision", "HDR و Dolby Vision"), "REMUX", "REMUX"), "Codec (HEVC, AV1)", "الترميز (HEVC و AV1)"), "Áudio (Atmos, DTS, 5.1)", "الصوت (Atmos و DTS و 5.1)"), "Idioma (Árabe, Multi)", "اللغة (عربي، متعدد)"), "Tamanho do arquivo", "حجم الملف"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Taxa estimada (Mbps)", "معدل البت التقريبي (Mbps)"), "{name}: a chave de API foi recusada. Confira em Ajustes → Debrid.", "{name}: المفتاح انرفض. تأكد منه في الإعدادات ← Debrid."), "A legenda e o áudio que você escolher valem para os outros episódios", "الترجمة والصوت اللي تختارهم ينطبقون على باقي الحلقات"), "Aponte a câmera do celular para o QR, entre na sua conta e pronto: conecta sozinho.", "وجّه كاميرا الجوال على الباركود، سجّل دخول بحسابك، ويرتبط لحاله."), "Boa noite!", "تصبح على خير!"), "Boa noite! O vídeo foi pausado.", "تصبح على خير! وقّفت الفيديو."), "Buscas recentes", "آخر عمليات البحث"), "Buscas recentes:", "آخر عمليات البحث:"), "Cantos dos pôsteres e botões", "زوايا البوسترات والأزرار"), "Chave SubDL", "مفتاح SubDL"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Como o item selecionado aparece", "شكل العنصر المحدد"), "Contagem regressiva", "العد التنازلي"), "Contagem regressiva nos créditos e toca o próximo", "يعد تنازلي عند النهاية ويشغّل الحلقة الجاية"), "Cor de destaque de botões, foco e barras", "لون الأزرار والتحديد والأشرطة"), "Cor do app", "لون التطبيق"), "Cores e formas", "الألوان والأشكال"), "Depois de {n} min", "بعد {n} دقيقة"), "Desempenho", "الأداء"), "Diagnóstico", "الفحص"), "Dormir", "مؤقت النوم"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Escuro, preto puro ou com brilho da cor", "داكن، أسود خالص أو مع توهج اللون"), "Estilo do foco", "شكل التحديد"), "Ex.: só os pais abrem este perfil", "مثال: بس الأهل يفتحون هالبروفايل"), "Fileiras e Continuar assistindo", "الصفوف وأكمل المشاهدة"), "Formato dos cartões", "شكل البطاقات"), "Funciona (direto)", "شغّال (مباشر)"), "Funciona (pelo servidor do PC)", "شغّال (عن طريق سيرفر الكمبيوتر)"), "Funciona (pelo serviço da TV)", "شغّال (عن طريق خدمة التلفزيون)"), "Fundo", "الخلفية"), "Fundos de filmes e o relógio quando a TV fica parada", "خلفيات أفلام والساعة لما يكون التلفزيون واقف"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Legendas em árabe do subdl.com (crie a chave grátis em subdl.com/panel/api)", "ترجمات عربية من subdl.com (المفتاح مجاني من subdl.com/panel/api)"), "Lembrar por série", "تذكّر لكل مسلسل"), "Limpar", "مسح"), "Mais pôsteres por linha ou pôsteres maiores", "بوسترات أكثر في الصف أو بوسترات أكبر"), "Minha lista do Trakt", "قائمتي في Trakt"), "Mostra as últimas buscas na tela de busca", "يعرض آخر عمليات البحث في شاشة البحث"), "No fim deste vídeo", "في نهاية هالفيديو"), "Novo PIN (4 a 8 números)", "رقم سري جديد (من 4 إلى 8 أرقام)"), "Não funciona: o serviço da TV não respondeu. Feche o app e abra de novo pelo TizenBrew.", "ما يشتغل: خدمة التلفزيون ما ردّت. سكّر التطبيق وافتحه من TizenBrew من جديد."), "O player da Samsung (AVPlay) não carregou nesta TV, então o app usa o do navegador e não consegue trocar o áudio. Feche o app e abra de novo pelo TizenBrew; se continuar, avise.", "مشغّل سامسونج (AVPlay) ما اشتغل في هالتلفزيون، فالتطبيق يستخدم مشغّل المتصفح وما يقدر يغيّر الصوت. سكّر التطبيق وافتحه من TizenBrew من جديد، وإذا استمر قول لنا."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "O vídeo para em {n} minutos", "الفيديو بيوقف بعد {n} دقيقة"), "O vídeo para no fim deste episódio", "الفيديو بيوقف في نهاية هالحلقة"), "Ou abra", "أو افتح"), "PIN de {name}", "الرقم السري لـ {name}"), "PIN errado. Tente de novo.", "الرقم السري غلط. جرّب مرة ثانية."), "PIN removido", "انشال الرقم السري"), "PIN salvo", "انحفظ الرقم السري"), "Para trocar o áudio, o app precisa do player da Samsung (AVPlay), que não carregou. Veja Ajustes → Reprodução.", "عشان يتغيّر الصوت لازم مشغّل سامسونج (AVPlay)، وهو ما اشتغل. شوف الإعدادات ← التشغيل."), "Pede ao IntroDB a abertura de WandaVision T1E1 e diz por qual caminho funcionou", "يطلب من IntroDB مقدمة WandaVision الموسم 1 الحلقة 1 ويقول لك أي طريق اشتغل"), "Pede o PIN para abrir este perfil", "يطلب الرقم السري لفتح هالبروفايل"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Proteção de tela", "شاشة التوقف"), "Próximo episódio automático", "تشغيل الحلقة الجاية تلقائياً"), "Quanto tempo o aviso do próximo episódio espera", "كم ينتظر تنبيه الحلقة الجاية"), "Tamanho dos pôsteres", "حجم البوسترات"), "Testar o pulo de abertura", "اختبر تخطي المقدمة"), "Timer desligado", "المؤقت طافي"), "Tirar o PIN", "شيل الرقم السري"), "Trancar com PIN", "قفل برقم سري"), "Trocar o PIN", "غيّر الرقم السري"), "faltam {n} min", "باقي {n} دقيقة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "{n} minutos", "{n} دقيقة"), "{n} segundos", "{n} ثانية"), "Conta e perfis", "الحساب والبروفايلات"), "Idioma, perfis, conta Stremio, controle pelo celular", "اللغة، البروفايلات، حساب Stremio، التحكم بالجوال"), "Reprodução", "التشغيل"), "Servidor do PC, player, próximo episódio, selos das fontes", "سيرفر الكمبيوتر، المشغّل، الحلقة الجاية، شارات المصادر"), "Idiomas, SubDL, aparência da legenda", "اللغات، SubDL، شكل الترجمة"), "Aparência", "المظهر"), "Tema, tela inicial, modo ambiente, proteção de tela", "الألوان، الرئيسية، وضع الأجواء، شاشة التوقف"), "Trakt, Simkl, pular trechos, debrid, Jellyfin, chaves, addons", "Trakt و Simkl، التخطي، Debrid، Jellyfin، المفاتيح، الإضافات"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Sobre", "حول التطبيق"), "Atualizações, teste de internet, log", "التحديثات، اختبار النت، السجل"), "Arredondado", "مدوّر"), "Reto", "حاد"), "Bem redondo", "مدوّر كثير"), "Pequeno", "صغير"), "Médio", "متوسط"), "Grande", "كبير"), "Contorno e aumento", "إطار وتكبير"), "Só contorno", "إطار بس"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Só aumento", "تكبير بس"), "Escuro (padrão)", "داكن (الافتراضي)"), "Preto puro (OLED)", "أسود خالص (OLED)"), "Escuro com brilho da cor", "داكن مع توهج اللون"), "Índigo", "نيلي"), "Prata", "فضي"), "Turco", "تركي"), "Persa", "فارسي"), "Urdu", "أردو"), "Indonésio", "إندونيسي"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Malaio", "ملايو"), "Use de 4 a 8 números.", "استخدم من 4 إلى 8 أرقام."), "Chaves próprias (opcional)", "مفاتيحك الخاصة (اختياري)"), "Aponte a câmera para o código, cole as chaves e toque em Enviar. Elas ficam só nesta TV.", "وجّه الكاميرا على الباركود، الصق المفاتيح واضغط إرسال. تبقى في هالتلفزيون بس."), "Chaves pelo celular", "المفاتيح من الجوال"), "Chaves recebidas do celular: {n}", "وصلت المفاتيح من الجوال: {n}"), "Coloque as chaves pelo celular", "حط المفاتيح من جوالك"), "O serviço da TV não está rodando. Feche o app e abra de novo.", "خدمة التلفزيون مو شغالة. سكّر التطبيق وافتحه من جديد."), "Primeiro coloque as chaves pelo celular: aponte a câmera para o QR desta página.", "أول شي حط المفاتيح من جوالك: صوّر الباركود اللي في هالصفحة."), "Opcional: só apps antigos do Trakt têm", "اختياري: بس تطبيقات Trakt القديمة فيها"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Fonte do app", "خط التطبيق"), "Letra dos menus e textos", "خط القوائم والنصوص"), "Samsung (da TV)", "سامسونج (خط التلفزيون)"), "Montserrat (Kai)", "Montserrat (Kai)"), "Aponte a câmera: abra a página da chave, copie, cole e envie.", "صوّر الباركود: افتح صفحة المفتاح، انسخه، الصقه، وأرسله."), "Aponte o celular para o QR e entre na sua conta", "صوّر الباركود بجوالك وسجّل دخول بحسابك"), "Ative o Quick Connect no painel do Jellyfin", "فعّل Quick Connect من لوحة تحكم Jellyfin"), "Entrar com QR (sem chave)", "الدخول بالباركود (بدون مفتاح)"), "Entrar com Quick Connect", "الدخول بـ Quick Connect"), "Entrar no {name}", "الدخول إلى {name}"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "No app ou site do Jellyfin: Configurações → Quick Connect, e digite o código.", "في تطبيق أو موقع Jellyfin: الإعدادات ← Quick Connect، واكتب الكود."), "Ou cole a chave", "أو الصق المفتاح"), "Preencha o endereço do servidor primeiro", "اكتب عنوان السيرفر أول"), "QR que abre direto a página da chave", "باركود يفتح لك صفحة المفتاح مباشرة"), "Sem senha: aprove um código no Jellyfin do celular", "بدون كلمة مرور: وافق على كود من Jellyfin في جوالك"), "{name} pelo celular", "{name} من الجوال"), "Aba Animes", "تبويب الأنمي"), "Carregar mais", "تحميل المزيد"), "Descobrir", "اكتشف"), "Em alta agora", "الرائج الحين"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Esta temporada", "هذا الموسم"), "Estúdios", "الاستوديوهات"), "Filmes de anime", "أفلام أنمي"), "Gêneros", "التصنيفات"), "Lançando agora", "ينعرض الحين"), "Não encontrei este anime nos addons.", "ما لقيت هالأنمي في الإضافات."), "Não foi possível carregar agora.", "ما قدرت أحمّل الحين."), "Temporada, estúdios e gêneros de anime (AniList)", "موسم الأنمي والاستوديوهات والتصنيفات (AniList)"), "Mais populares", "الأشهر"), "Mais bem avaliados", "الأعلى تقييماً"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Em breve", "قريباً"), "Ação", "أكشن"), "Aventura", "مغامرة"), "Comédia", "كوميدي"), "Drama", "دراما"), "Fantasia", "فانتازيا"), "Terror", "رعب"), "Mistério", "غموض"), "Romance", "رومانسي"), "Ficção científica", "خيال علمي"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Cotidiano", "شريحة من الحياة"), "Esportes", "رياضة"), "Sobrenatural", "خارق للطبيعة"), "Mecha", "ميكا"), "Psicológico", "نفسي"), "Música", "موسيقى"), "Anime da temporada", "أنمي المواسم"), "Coleções prontas (filmes, séries, atores, estúdios...) ou os catálogos dos seus addons", "مجموعات جاهزة (أفلام، مسلسلات، ممثلين، استوديوهات...) أو كتالوجات إضافاتك"), "Coloque sua chave TMDB (Ajustes → Integrações) para ver as coleções da tela inicial.", "حط مفتاح TMDB (الإعدادات ← التكاملات) عشان تشتغل مجموعات الرئيسية."), "Conteúdo da tela inicial", "محتوى الصفحة الرئيسية"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Crime e vida cotidiana", "الجريمة والحياة اليومية"), "Décadas", "العقود"), "Estilos de comédia e romance", "أنواع الكوميديا والرومانسي"), "Mais favoritados", "الأكثر تفضيلاً"), "Melhores filmes", "أفضل الأفلام"), "Melhores séries", "أفضل المسلسلات"), "Não foi possível abrir agora.", "ما قدرت أفتحه الحين."), "Não foi possível carregar as coleções agora.", "ما قدرت أحمّل المجموعات الحين."), "Próxima temporada", "الموسم الجاي"), "Temas", "المواضيع"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "{n} pastas", "{n} مجلد"), "Coleções (Kaptain)", "المجموعات (Kaptain)"), "Coleções e addons", "المجموعات والإضافات"), "Só os catálogos dos addons", "كتالوجات الإضافات بس"), "Infantil", "أطفال"), "Inverno", "الشتاء"), "Primavera", "الربيع"), "Verão", "الصيف"), "Outono", "الخريف"), "Não foi possível ligar esta legenda.", "ما قدرت أشغّل هالترجمة."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Marvel Studios", "مارفل الرسمية (Marvel Studios)"), "Sagas em andamento", "سلاسل قيد المتابعة"), "Clique para continuar a maratona", "اضغط لمتابعة السلسلة"), "Carmim", "قرمزي دم الغزال (Crimson)"), "Esmeralda", "زمردي فاخر (Emerald)"), "Âmbar", "كهرماني (Amber)"), "Violeta real", "بنفسجي ملكي (Royal Violet)"), "Fúcsia neon", "فوشيا نيون (Neon Fuchsia)"), "Rosa rubi", "وردي ياقوتي (Ruby Rose)"), "Azul céu", "أزرق سماوي ناصع (Sky Blue)"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Lima neon", "ليموني مضيء (Neon Lime)"), "Ardósia", "فحمي داكن (Charcoal Slate)"), "Vermelho Netflix", "أحمر نتفليكس (Netflix Red)"), "Azul Samsung", "أزرق سامسونج (Samsung Blue)"), "Cyberpunk neon", "نيون سايبربانك (Cyberpunk)"), "Pôr do sol", "شروق وغروب (Sunset Flame)"), "Ucraniano", "الأوكرانية"), "Polonês", "البولندية"), "Holandês", "الهولندية"), "Grego", "اليونانية"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Sueco", "السويدية"), "Vietnamita", "الفيتنامية"), "Tailandês", "التايلاندية"), "Hebraico", "العبرية"), "Romeno", "الرومانية"), "Húngaro", "المجرية"), "Tcheco", "التشيكية"), "Filipino", "الفلبينية"), "Perfil infantil", "بروفايل أطفال"), "Destaca o perfil para crianças e família", "يخصص ويميز هذا الحساب للأطفال والعائلة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Aba Mangás", "تبويب المانجا"), "Ajustar à largura", "ملائمة للعرض"), "Ajustar à tela", "ملائمة للشاشة"), "Cancelado", "ملغي"), "Cap. {n}", "فصل {n}"), "Capítulos {a}–{b}", "الفصول {a}–{b}"), "Completo", "مكتمل"), "Continuar: cap. {n}", "أكمل: فصل {n}"), "Em hiato", "متوقف مؤقتاً"), "Em lançamento", "مستمر"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Especial", "خاص"), "Este capítulo não tem páginas.", "هذا الفصل ما فيه صفحات."), "Este é o primeiro capítulo.", "هذا أول فصل."), "Este é o último capítulo.", "هذا آخر فصل."), "Formatos", "الصيغ"), "Idioma dos capítulos", "لغة الفصول"), "Ler", "اقرأ"), "Mangá da temporada", "مانجا الموسم"), "Mangá, manhwa e manhua com leitor para a TV (AniList e MangaDex)", "مانجا ومانهوا ومانهوا صينية مع قارئ للتلفزيون (AniList و MangaDex)"), "Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.", "ما فيه فصول بهاللغة. غيّر اللغة من زر الكرة الأرضية."), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Nenhum capítulo encontrado.", "ما لقيت فصول."), "Não encontrei capítulos deste título agora.", "ما لقيت فصول لهالعمل الحين."), "Não foi possível abrir este capítulo agora.", "ما قدرت أفتح هالفصل الحين."), "Não foi possível carregar esta página. Aperte para o lado para continuar.", "ما قدرت أحمّل هالصفحة. اضغط يمين أو يسار للمتابعة."), "Parou aqui", "وقفت هنا"), "Ver no anime", "شاهد الأنمي"), "Zoom {n}%", "تكبير {n}%"), "pág.", "صفحة"), "{n} capítulos", "{n} فصل"), "Completos", "المكتملة"), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_AR, "Mangá (Japão)", "مانجا (اليابان)"), "Manhwa (Coreia)", "مانهوا (كوريا)"), "Manhua (China)", "مانهوا (الصين)"), "Romances leves", "روايات خفيفة"), "One-shots", "فصل واحد"), "Viagem no tempo", "السفر عبر الزمن"), "Árabe, depois inglês", "عربي ثم إنجليزي"), "Mangás", "مانجا"));
 
   // src/js/lib/i18n-es.js
   var ES = {
@@ -7213,14 +6441,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       y: (r.top + r.bottom) / 2
     };
   }
-  function pick(list2, cur, dir) {
+  function pick(list3, cur, dir) {
     var cr = cur.getBoundingClientRect();
     var cc = center(cr);
     var tol = 8;
     var best = null;
     var bestScore = Infinity;
-    for (var i = 0; i < list2.length; i++) {
-      var el = list2[i];
+    for (var i = 0; i < list3.length; i++) {
+      var el = list3[i];
       var r = el.getBoundingClientRect();
       var primary = void 0;
       var secondary = void 0;
@@ -7497,12 +6725,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return "p." + id + "." + key3;
   }
   function ensureProfiles() {
-    var list2 = rawGet("profiles", null);
-    if (list2 && list2.length) return list2;
+    var list3 = rawGet("profiles", null);
+    if (list3 && list3.length) return list3;
     var id = "p" + Date.now().toString(36);
     var oldAuth = rawGet("auth", null);
     var email = oldAuth && oldAuth.user && oldAuth.user.email;
-    list2 = [email ? {
+    list3 = [email ? {
       id: id,
       name: email.split("@")[0],
       color: COLORS[0]
@@ -7529,50 +6757,50 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       rawSet(profileKey(id, "settings"), prof);
       rawSet("settings", null);
     }
-    rawSet("profiles", list2);
+    rawSet("profiles", list3);
     rawSet("activeProfile", id);
-    return list2;
+    return list3;
   }
   function profiles() {
     return ensureProfiles();
   }
   function activeProfile() {
-    var list2 = ensureProfiles();
+    var list3 = ensureProfiles();
     var id = rawGet("activeProfile", null);
-    return list2.find(function (p) {
+    return list3.find(function (p) {
       return p.id === id;
-    }) || list2[0];
+    }) || list3[0];
   }
   function setActiveProfile(id) {
     rawSet("activeProfile", id);
   }
   function addProfile(name, color) {
-    var list2 = ensureProfiles();
+    var list3 = ensureProfiles();
     var p = {
       id: "p" + Date.now().toString(36),
-      name: name || "Perfil " + (list2.length + 1),
-      color: color || COLORS[list2.length % COLORS.length]
+      name: name || "Perfil " + (list3.length + 1),
+      color: color || COLORS[list3.length % COLORS.length]
     };
-    list2.push(p);
-    rawSet("profiles", list2);
+    list3.push(p);
+    rawSet("profiles", list3);
     return p;
   }
   function updateProfile(id, patch) {
-    var list2 = ensureProfiles().map(function (p) {
+    var list3 = ensureProfiles().map(function (p) {
       return p.id === id ? Object.assign({}, p, patch) : p;
     });
-    rawSet("profiles", list2);
+    rawSet("profiles", list3);
   }
   function removeProfile(id) {
-    var list2 = ensureProfiles().filter(function (p) {
+    var list3 = ensureProfiles().filter(function (p) {
       return p.id !== id;
     });
-    if (!list2.length) return false;
+    if (!list3.length) return false;
     ["auth", "addons", "library", "settings", "watched", "track.trakt", "track.simkl"].forEach(function (k) {
       return rawSet(profileKey(id, k), null);
     });
-    rawSet("profiles", list2);
-    if (rawGet("activeProfile", null) === id) rawSet("activeProfile", list2[0].id);
+    rawSet("profiles", list3);
+    if (rawGet("activeProfile", null) === id) rawSet("activeProfile", list3[0].id);
     return true;
   }
   function getFor(profileId, key3, fallback) {
@@ -7813,13 +7041,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         authKey: auth.authKey,
         update: true
       }).then(function (r) {
-        var list2 = r && r.addons || [];
-        if (list2.some(function (a) {
+        var list3 = r && r.addons || [];
+        if (list3.some(function (a) {
           return a.transportUrl === transportUrl || a.manifest && a.manifest.id === manifest.id;
         })) {
           throw new Error(t("Esse addon já está instalado"));
         }
-        var next = list2.concat([{
+        var next = list3.concat([{
           transportUrl: transportUrl,
           transportName: "http",
           manifest: manifest,
@@ -7850,15 +7078,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       ids: [],
       all: true
     }).then(function (items3) {
-      var list2 = Array.isArray(items3) ? items3 : [];
-      setLibrary(list2);
-      return list2;
+      var list3 = Array.isArray(items3) ? items3 : [];
+      setLibrary(list3);
+      return list3;
     });
   }
   var libMem = null;
   var libSaveTimer = null;
-  function setLibrary(list2) {
-    libMem = list2;
+  function setLibrary(list3) {
+    libMem = list3;
     clearTimeout(libSaveTimer);
     libSaveTimer = setTimeout(function () {
       var slim = (libMem || []).filter(function (it) {
@@ -7968,9 +7196,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     item2._mtime = nowIso();
     return putLibraryItems([item2]);
   }
-  function mergeExternalProgress(list2) {
+  function mergeExternalProgress(list3) {
     var changed = [];
-    (list2 || []).forEach(function (p) {
+    (list3 || []).forEach(function (p) {
       var existing = libraryItem(p.id);
       var localAt = existing && existing.state && existing.state.lastWatched;
       if (localAt && String(localAt) >= String(p.at || "")) return;
@@ -8161,9 +7389,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return settings().askProfile !== false || !!activeProfile().pin;
   }
   function showPicker(onPicked) {
-    var list2 = profiles();
+    var list3 = profiles();
     var active2 = activeProfile();
-    var cards = list2.map(function (p) {
+    var cards = list3.map(function (p) {
       return h("div.profile-card", {
         focusable: true,
         "data-autofocus": p.id === active2.id ? "" : null,
@@ -8201,7 +7429,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     focusFirst(el);
     function pick2(id) {
-      checkPin(list2.find(function (p) {
+      checkPin(list3.find(function (p) {
         return p.id === id;
       }), function () {
         return done(id);
@@ -8229,12 +7457,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function menu(title, options, opts) {
     var o = opts || {};
-    var list2 = h("div.modal-list", {
+    var list3 = h("div.modal-list", {
       "data-scroll-y": "",
       "data-pad-y": "80"
     });
     options.forEach(function (opt) {
-      list2.appendChild(h("div.opt", {
+      list3.appendChild(h("div.opt", {
         focusable: true,
         cls: opt.checked ? "checked" : "",
         "data-autofocus": opt.checked ? "" : null,
@@ -8247,14 +7475,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: opt.sub
       }) : null]));
     });
-    if (!options.length) list2.appendChild(h("div.modal-text", {
+    if (!options.length) list3.appendChild(h("div.modal-text", {
       text: o.empty || t("Nada por aqui.")
     }));
     var box = h("div.modal-box", {
       cls: o.center ? "center" : ""
     }, [h("h3", {
       text: title
-    }), list2]);
+    }), list3]);
     var modal = h("div.modal", null, box);
     document.getElementById("app").appendChild(modal);
     var layer = pushLayer(modal, {
@@ -8353,6 +7581,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }, {
     id: "manga",
     label: "Mangás"
+  }, {
+    id: "comics",
+    label: "Quadrinhos"
+  }, {
+    id: "books",
+    label: "Livros"
   }, {
     id: "collections",
     label: "Coleções"
@@ -8790,8 +8024,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }).catch(function () {
           return null;
         });
-      })).then(function (list2) {
-        return list2.filter(Boolean);
+      })).then(function (list3) {
+        return list3.filter(Boolean);
       });
     }).catch(function () {
       return [];
@@ -9418,8 +8652,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return getJSON(base + "tracks/" + encodeURIComponent(mediaUrl), {
       timeout: 2e4,
       quiet: true
-    }).then(function (list2) {
-      var arr = Array.isArray(list2) ? list2 : [];
+    }).then(function (list3) {
+      var arr = Array.isArray(list3) ? list3 : [];
       return {
         audio: arr.filter(function (tk) {
           return tk && tk.type === "audio";
@@ -10158,8 +9392,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var CINEMETA = "https://v3-cinemeta.strem.io/manifest.json";
   var OPENSUBTITLES = "https://opensubtitles-v3.strem.io/manifest.json";
   var addons = null;
-  function normalize(list2) {
-    return (list2 || []).filter(function (a) {
+  function normalize(list3) {
+    return (list3 || []).filter(function (a) {
       return a && a.transportUrl && a.manifest;
     }).filter(function (a) {
       return /^https?:/.test(a.transportUrl);
@@ -10183,16 +9417,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).catch(function () {
         return null;
       });
-    })).then(function (list2) {
-      return list2.filter(Boolean);
+    })).then(function (list3) {
+      return list3.filter(Boolean);
     });
   }
   function load(force) {
     if (addons && !force) return Promise.resolve(addons);
     if (isLoggedIn()) {
       var cached2 = cachedAddons();
-      var fresh = getAddonCollection().then(function (list2) {
-        return addons = normalize(list2);
+      var fresh = getAddonCollection().then(function (list3) {
+        return addons = normalize(list3);
       });
       if (cached2 && cached2.length && !force) {
         addons = normalize(cached2);
@@ -10206,8 +9440,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return addons;
       });
     }
-    return defaultAddons().then(function (list2) {
-      return addons = normalize(list2);
+    return defaultAddons().then(function (list3) {
+      return addons = normalize(list3);
     });
   }
   function list() {
@@ -10320,9 +9554,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function fetchStreams(type, id, onAddon) {
     var sources = withResource("stream", type, id);
     return Promise.all(sources.map(function (a) {
-      return (a.virtualStreams ? a.virtualStreams(type, id).then(function (list2) {
+      return (a.virtualStreams ? a.virtualStreams(type, id).then(function (list3) {
         return {
-          streams: list2
+          streams: list3
         };
       }) : getJSON(url(a, "stream", type, id), {
         timeout: 3e4
@@ -10357,9 +9591,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }).catch(function () {
         return [];
-      }).then(function (list2) {
-        if (onAddon) onAddon(list2);
-        return list2;
+      }).then(function (list3) {
+        if (onAddon) onAddon(list3);
+        return list3;
       });
     })).then(function (all2) {
       return all2.reduce(function (acc, x) {
@@ -10431,8 +9665,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return Promise.all(["movie", "series"].map(function (t2) {
       return getJSONViaProxy(MDBLIST[t2], {
         timeout: 15e3
-      }).then(function (list2) {
-        return Promise.all((list2 || []).filter(function (x) {
+      }).then(function (list3) {
+        return Promise.all((list3 || []).filter(function (x) {
           return x.imdb_id;
         }).slice(0, 6).map(function (x) {
           return fetchMeta(t2, x.imdb_id).then(fromMeta).catch(function () {
@@ -10744,10 +9978,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     box: "none",
     strongbox: "none"
   };
-  function find(list2, id) {
-    return list2.find(function (x) {
+  function find(list3, id) {
+    return list3.find(function (x) {
       return x.id === id;
-    }) || list2[0];
+    }) || list3[0];
   }
   function apply(el, s) {
     var font = find(FONTS, s.subtitleFont);
@@ -10832,7 +10066,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return postJSON(fetchUrl(ANIMESKIP), body, opts);
     });
   }
-  function fromAnimeSkipTimestamps(list2, baseDuration) {
+  function fromAnimeSkipTimestamps(list3, baseDuration) {
     var map = {
       intro: "intro",
       "new intro": "intro",
@@ -10842,7 +10076,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "new credits": "outro",
       "mixed credits": "outro"
     };
-    var sorted = (list2 || []).filter(function (x) {
+    var sorted = (list3 || []).filter(function (x) {
       return isFinite(x.at) && x.at >= 0;
     }).sort(function (a, b) {
       return a.at - b.at;
@@ -10969,8 +10203,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var key3 = imdb + ":" + season;
     if (!malCache[key3]) malCache[key3] = getJSON(ARM2 + "imdb?id=" + imdb, {
       quiet: true
-    }).then(function (list2) {
-      var arr = Array.isArray(list2) ? list2 : [];
+    }).then(function (list3) {
+      var arr = Array.isArray(list3) ? list3 : [];
       var hit = arr.find(function (x) {
         return (x.myanimelist || x.anilist) && (x["thetvdb-season"] === season || x["themoviedb-season"] === season);
       }) || (arr.length === 1 ? arr[0] : null);
@@ -11051,8 +10285,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     return tryOne(url2).then(function (direct) {
       if (direct) return "direct";
-      return tryOne(fetchUrl(url2)).then(function (viaTv) {
-        if (viaTv) return "tv";
+      return tryOne(fetchUrl(url2)).then(function (viaTv2) {
+        if (viaTv2) return "tv";
         var p = getJSONViaProxy(url2, {
           timeout: 8e3
         }).then(ok, function () {
@@ -11098,10 +10332,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var lastTimeEmit = 0;
     var generation = 0;
     function emit(type) {
-      var list2 = (listeners[type] || []).slice();
-      for (var i = 0; i < list2.length; i++) {
+      var list3 = (listeners[type] || []).slice();
+      for (var i = 0; i < list3.length; i++) {
         try {
-          list2[i].call(api, {
+          list3[i].call(api, {
             type: type,
             target: api
           });
@@ -11467,9 +10701,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       // Audio: list in file order, the playing one marked.
       audioTrackList: function audioTrackList() {
-        var list2 = trackInfo("AUDIO");
+        var list3 = trackInfo("AUDIO");
         var cur = pendingAudio !== null ? pendingAudio : currentIndex("AUDIO");
-        return list2.map(function (tr, i) {
+        return list3.map(function (tr, i) {
           return {
             language: tr.language,
             label: "",
@@ -11481,8 +10715,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       // position = place in audioTrackList()
       selectAudio: function selectAudio(position) {
-        var list2 = trackInfo("AUDIO");
-        var tr = list2[position];
+        var list3 = trackInfo("AUDIO");
+        var tr = list3[position];
         if (!tr) return false;
         if (readState() !== "PLAYING") {
           pendingAudio = tr.index;
@@ -12025,9 +11259,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     playbackSink = fn;
   }
   function pullTraktPlayback() {
-    return trakt("GET", "/sync/playback?extended=full").then(function (list2) {
+    return trakt("GET", "/sync/playback?extended=full").then(function (list3) {
       var out = [];
-      (list2 || []).forEach(function (p) {
+      (list3 || []).forEach(function (p) {
         var at = p.paused_at;
         var pct = Number(p.progress) || 0;
         if (pct < 1 || pct > 95) return;
@@ -12072,8 +11306,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         type: "movie"
       },
       fetch: function fetch() {
-        return trakt("GET", "/sync/watchlist?sort=added,desc").then(function (list2) {
-          return (list2 || []).map(function (x) {
+        return trakt("GET", "/sync/watchlist?sort=added,desc").then(function (list3) {
+          return (list3 || []).map(function (x) {
             var m = x.movie || x.show;
             var imdb = m && m.ids && m.ids.imdb;
             return imdb ? {
@@ -12747,16 +11981,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         addonSubs = (addonSubs || []).concat(stSubs);
       }
-      fetchSubtitles(meta.type, video.id, {}, function (list2) {
+      fetchSubtitles(meta.type, video.id, {}, function (list3) {
         if (!alive || forVideo !== video) return;
-        addonSubs = (addonSubs || []).concat(list2);
+        addonSubs = (addonSubs || []).concat(list3);
         autoPick();
       }).catch(function () {
         if (!addonSubs) addonSubs = [];
       });
-      if (key()) search(meta.type, video.id, meta, video).then(function (list2) {
-        if (!alive || forVideo !== video || !list2.length) return;
-        addonSubs = (addonSubs || []).concat(list2);
+      if (key()) search(meta.type, video.id, meta, video).then(function (list3) {
+        if (!alive || forVideo !== video || !list3.length) return;
+        addonSubs = (addonSubs || []).concat(list3);
         autoPick();
       });
     }
@@ -12935,12 +12169,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         quiet: true
       }).then(function (r) {
         if (!alive) return;
-        var list2 = (r && r.metas || []).filter(function (m) {
+        var list3 = (r && r.metas || []).filter(function (m) {
           return m.id !== meta.id && !isWatched(m.id);
         }).slice(0, 10);
-        if (!list2.length) return pop();
+        if (!list3.length) return pop();
         clear(postTrack);
-        list2.forEach(function (m) {
+        list3.forEach(function (m) {
           return postTrack.appendChild(card(m, {
             onSelect: function onSelect() {
               pop();
@@ -13028,14 +12262,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var chapterList = null;
     function chaptersMenu() {
       var forUrl = mediaUrl;
-      var open = function open(list2) {
-        if (!list2.length) return toast(t("Este arquivo não tem capítulos."));
+      var open = function open(list3) {
+        if (!list3.length) return toast(t("Este arquivo não tem capítulos."));
         var now = videoEl.currentTime || 0;
         var cur = 0;
-        list2.forEach(function (c, i) {
+        list3.forEach(function (c, i) {
           return c.start <= now + 0.5 && (cur = i);
         });
-        menu(t("Capítulos"), list2.map(function (c, i) {
+        menu(t("Capítulos"), list3.map(function (c, i) {
           return {
             label: c.title || t("Capítulo {n}", {
               n: i + 1
@@ -13046,20 +12280,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           };
         }), {
           onPick: function onPick(i) {
-            videoEl.currentTime = Math.max(0, list2[i].start);
+            videoEl.currentTime = Math.max(0, list3[i].start);
             showControls();
           }
         });
       };
       if (chapterList && chapterList.url === forUrl) return open(chapterList.list);
       toast(t("Procurando capítulos..."));
-      load4(forUrl).then(function (list2) {
+      load4(forUrl).then(function (list3) {
         if (!alive || forUrl !== mediaUrl) return;
         chapterList = {
           url: forUrl,
-          list: list2
+          list: list3
         };
-        open(list2);
+        open(list3);
       });
     }
     function sendNowPlaying() {
@@ -13204,8 +12438,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (segmentsLoaded || settings().skipMode === "off") return;
       segmentsLoaded = true;
       var forVideo = video;
-      getSegments(meta, video, videoEl.duration).then(function (list2) {
-        if (alive && forVideo === video) segments = list2;
+      getSegments(meta, video, videoEl.duration).then(function (list3) {
+        if (alive && forVideo === video) segments = list3;
       }).catch(function () {});
     }
     function segLabel(seg) {
@@ -13778,9 +13012,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function openAudioMenu() {
       var native = videoEl.audioTracks;
       var av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
-      var list2 = [];
+      var list3 = [];
       if (av.length) {
-        list2 = av.map(function (tr, i) {
+        list3 = av.map(function (tr, i) {
           var info2 = embedded && embedded.audio[i];
           return {
             label: trackName(info2 && info2.lang || tr.language, [info2 && info2.label, tr.label].filter(Boolean).join(" "), i) + (info2 && info2.label ? " · " + info2.label : tr.label ? " · " + tr.label : ""),
@@ -13793,14 +13027,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       } else if (native && native.length) {
         for (var i = 0; i < native.length; i++) {
-          list2.push({
+          list3.push({
             label: trackName(native[i].language, native[i].label, i) + (native[i].label ? " · " + native[i].label : ""),
             value: i,
             checked: native[i].enabled
           });
         }
       } else if (embedded && embedded.audio.length) {
-        list2 = embedded.audio.map(function (tr, i) {
+        list3 = embedded.audio.map(function (tr, i) {
           return {
             label: trackName(tr.lang, tr.label, i) + (tr.label ? " · " + tr.label : ""),
             sub: [tr.codec, tr.channels ? t("{n} canais", {
@@ -13811,7 +13045,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           };
         });
       }
-      menu(t("Áudio"), list2, {
+      menu(t("Áudio"), list3, {
         empty: isAvailable() || videoEl.isAVPlay ? t("Só uma faixa de áudio.") : t("Para listar as faixas, conecte o servidor do PC em Ajustes."),
         onPick: function onPick(i) {
           selectEmbeddedAudio(i);
@@ -13973,7 +13207,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function sourcesMenu() {
-      var list2 = (opts.streams || []).map(function (s, i) {
+      var list3 = (opts.streams || []).map(function (s, i) {
         return {
           label: ((s.name || s.addon || "") + "").replace(/\n/g, " "),
           sub: ((s.title || s.description || "") + "").replace(/\n/g, " · "),
@@ -13981,7 +13215,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           checked: s === stream
         };
       });
-      menu(t("Fontes"), list2, {
+      menu(t("Fontes"), list3, {
         onPick: function onPick(i) {
           var s = opts.streams[i];
           if (!s || s === stream) return;
@@ -14006,15 +13240,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var group = stream.behaviorHints && stream.behaviorHints.bingeGroup;
       showSpinner(true);
       message(t("Procurando o próximo episódio..."));
-      fetchStreams(meta.type, nv.id).then(function (list2) {
+      fetchStreams(meta.type, nv.id).then(function (list3) {
         if (!alive) return;
-        var match = group ? list2.find(function (s) {
+        var match = group ? list3.find(function (s) {
           return s.behaviorHints && s.behaviorHints.bingeGroup === group;
         }) : null;
         if (match && (!needsServer(match) || isAvailable())) {
           video = nv;
           stream = match;
-          opts.streams = list2;
+          opts.streams = list3;
           pendingStart = 0;
           triedTranscode = false;
           autoDone = {
@@ -14401,18 +13635,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }];
   var cache3 = {};
   function severity(cat) {
-    var list2 = (cat && cat.severityBreakdowns || []).map(function (x) {
+    var list3 = (cat && cat.severityBreakdowns || []).map(function (x) {
       return {
         level: String(x.severityLevel || "").toLowerCase(),
         votes: +x.voteCount || 0
       };
     });
-    var none = (list2.find(function (x) {
+    var none = (list3.find(function (x) {
       return x.level === "none";
     }) || {
       votes: 0
     }).votes;
-    var top2 = list2.filter(function (x) {
+    var top2 = list3.filter(function (x) {
       return x.level && x.level !== "none";
     }).sort(function (a, b) {
       return b.votes - a.votes;
@@ -14673,12 +13907,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function find2(anilistId, titles) {
     if (idCache[anilistId]) return idCache[anilistId];
-    var list2 = (titles || []).filter(Boolean);
-    var wanted = list2.map(norm);
+    var list3 = (titles || []).filter(Boolean);
+    var wanted = list3.map(norm);
     var fallback = null;
     var _tryTitle = function tryTitle(i) {
-      if (i >= list2.length) return Promise.resolve(fallback);
-      return md("manga?title=" + enc(list2[i]) + "&limit=10&order%5Brelevance%5D=desc").then(function (r) {
+      if (i >= list3.length) return Promise.resolve(fallback);
+      return md("manga?title=" + enc(list3[i]) + "&limit=10&order%5Brelevance%5D=desc").then(function (r) {
         var data = r && r.data || [];
         var hit = data.find(function (m) {
           return m.attributes && m.attributes.links && String(m.attributes.links.al) === String(anilistId);
@@ -14871,11 +14105,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       pages2 = [];
       img.removeAttribute("src");
       say(t("Carregando..."));
-      pages(chapter().id).then(function (list2) {
+      pages(chapter().id).then(function (list3) {
         if (my !== token || !alive) return;
-        if (!list2.length) return say(t("Este capítulo não tem páginas."));
-        pages2 = list2;
-        pi = start3 === "last" ? list2.length - 1 : Math.max(0, Math.min(start3 || 0, list2.length - 1));
+        if (!list3.length) return say(t("Este capítulo não tem páginas."));
+        pages2 = list3;
+        pi = start3 === "last" ? list3.length - 1 : Math.max(0, Math.min(start3 || 0, list3.length - 1));
         showPage(start3 === "last" ? "bottom" : "top");
       }).catch(function () {
         return alive && say(t("Não foi possível abrir este capítulo agora."));
@@ -15051,8 +14285,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     cache5[query] = p;
     return p;
   }
-  function toMetas(list2) {
-    return (list2 || []).map(function (m) {
+  function toMetas(list3) {
+    return (list3 || []).map(function (m) {
       return {
         id: "anilist:" + m.id,
         anilist: m.id,
@@ -15313,8 +14547,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var add = function add(title, load7, onMore) {
       return pending2.push(posterRow(rows2, title, load7, onMore));
     };
-    var tiles = function tiles(title, list2, cls) {
-      var usable = list2.filter(function (x) {
+    var tiles = function tiles(title, list3, cls) {
+      var usable = list3.filter(function (x) {
         return x.src;
       });
       if (usable.length) tileRow(rows2, title, usable.map(function (x) {
@@ -15332,8 +14566,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       Suspense: "thriller",
       Mecha: "mecha"
     };
-    var malList = function malList(list2, cls, title, themes) {
-      return tiles(title, list2.map(function (g) {
+    var malList = function malList(list3, cls, title, themes) {
+      return tiles(title, list3.map(function (g) {
         return {
           label: g[1] ? t(g[1]) : g[0],
           art: "genre-" + (themes && g[0] === "Mecha" ? "real-robot" : GENRE_ART[g[0]] || slug(g[0])),
@@ -15539,14 +14773,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var key3 = "al" + m.anilist;
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
-    var list2 = h("div.md-list", {
+    var list3 = h("div.md-list", {
       "data-scroll-y": "",
       "data-pad-y": "120",
       "data-group": "",
       "data-vertical": ""
     });
     el.appendChild(info2);
-    el.appendChild(list2);
+    el.appendChild(list3);
     var chapters2 = [];
     var chunk = 0;
     var langSet = LANG_SETS.find(function (x) {
@@ -15582,11 +14816,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderInfo() {
       clear(info2);
-      var cover = h("img.md-cover", {
+      var cover2 = h("img.md-cover", {
         alt: ""
       });
-      cover.setAttribute("data-lazy", m.poster || "");
-      info2.appendChild(cover);
+      cover2.setAttribute("data-lazy", m.poster || "");
+      info2.appendChild(cover2);
       var text = h("div.md-text");
       text.appendChild(h("div.md-title", {
         text: m.name
@@ -15677,9 +14911,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       loadVisibleImages(info2);
     }
     function renderList(focusFirst2) {
-      clear(list2);
+      clear(list3);
       if (!chapters2.length) {
-        list2.appendChild(status2);
+        list3.appendChild(status2);
         return;
       }
       var start3 = chunk * CHUNK;
@@ -15695,7 +14929,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: label
         })]);
       };
-      if (chunk > 0) list2.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
+      if (chunk > 0) list3.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
         a: (chunk - 1) * CHUNK + 1,
         b: chunk * CHUNK
       }), chunk - 1));
@@ -15705,7 +14939,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var title = (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
           n: c.chapter
         }) : t("Especial")) + (c.title ? " · " + c.title : "");
-        list2.appendChild(h("div.stream", {
+        list3.appendChild(h("div.stream", {
           focusable: true,
           onSelect: function onSelect() {
             return read(i, read2 ? p.page : 0);
@@ -15725,20 +14959,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       for (var i = start3; i < end; i++) {
         _loop8(i);
       }
-      if (end < chapters2.length) list2.appendChild(nav2(t("Capítulos {a}–{b}", {
+      if (end < chapters2.length) list3.appendChild(nav2(t("Capítulos {a}–{b}", {
         a: end + 1,
         b: Math.min(chapters2.length, end + CHUNK)
       }) + " ▶", chunk + 1));
       if (focusFirst2) {
-        var first = list2.querySelector(".stream");
+        var first = list3.querySelector(".stream");
         if (first) focus(first);
       }
     }
     function loadChapters() {
       chapters2 = [];
-      clear(list2);
+      clear(list3);
       status2.textContent = t("Procurando capítulos...");
-      list2.appendChild(status2);
+      list3.appendChild(status2);
       find2(m.anilist, [media2.title && media2.title.english, media2.title && media2.title.romaji, m.name]).then(function (id) {
         if (!id) throw new Error("none");
         return chapters(id, langSet.langs);
@@ -15816,10 +15050,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function finishTimeStr(mins) {
     if (!mins || mins <= 0) return "";
-    var d = new Date(Date.now() + mins * 6e4);
-    var hh = String(d.getHours()).padStart(2, "0");
-    var mm = String(d.getMinutes()).padStart(2, "0");
-    return "".concat(hh, ":").concat(mm);
+    return timeHM(new Date(Date.now() + mins * 6e4));
   }
   function DetailsView(type, id, opts) {
     var el = h("div.view");
@@ -15986,14 +15217,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var guideEl = h("div.details-guide");
         guideEl.style.display = "none";
         info2.appendChild(guideEl);
-        guide(meta.imdb_id || meta.id).then(function (list2) {
-          if (!list2.length) return;
+        guide(meta.imdb_id || meta.id).then(function (list3) {
+          if (!list3.length) return;
           var LV = {
             mild: t("Leve"),
             moderate: t("Moderado"),
             severe: t("Forte")
           };
-          list2.forEach(function (g) {
+          list3.forEach(function (g) {
             return guideEl.appendChild(h("span", {
               cls: "lv-" + g.level
             }, [h("b", {
@@ -16022,20 +15253,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         ratingsEl: ratingsEl
       });
     }
-    function renderRatings(el2, list2) {
+    function renderRatings(el2, list3) {
       clear(el2);
-      list2.forEach(function (r) {
+      list3.forEach(function (r) {
         return el2.appendChild(h("span.rating", {
           cls: r.cls
         }, [h("b", {
           text: r.label
         }), r.value]));
       });
-      el2.style.display = list2.length ? "" : "none";
+      el2.style.display = list3.length ? "" : "none";
     }
     function loadExtras(ui) {
-      ratings(meta, isAnime(meta)).then(function (list2) {
-        return alive && renderRatings(ui.ratingsEl, list2);
+      ratings(meta, isAnime(meta)).then(function (list3) {
+        return alive && renderRatings(ui.ratingsEl, list3);
       }).catch(function () {});
       if (!hasTmdb()) return;
       localized(meta).then(function (loc) {
@@ -16157,13 +15388,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }));
       panel.appendChild(chips);
-      var list2 = h("div.list", {
+      var list3 = h("div.list", {
         "data-scroll-y": "",
         "data-pad-y": "120",
         "data-group": "",
         "data-vertical": ""
       });
-      list2.style.top = "190px";
+      list3.style.top = "190px";
       var li = libraryItem(meta.id);
       var focusEl = null;
       sortedVideos(meta).filter(function (v) {
@@ -16216,10 +15447,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         })])]);
         row.__episode = v.episode;
         if (v.id === focusVideoId || !focusVideoId && inProgress) focusEl = row;
-        list2.appendChild(row);
+        list3.appendChild(row);
       });
-      panel.appendChild(list2);
-      list2.__last = focusEl || list2.firstChild;
+      panel.appendChild(list3);
+      list3.__last = focusEl || list3.firstChild;
       localizeEpisodes();
       loadVisibleImages(panel, 300);
       if (focusEl && focusVideoId) setTimeout(function () {
@@ -16366,14 +15597,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var barFill = h("i");
       panel.appendChild(sub);
       panel.appendChild(h("div.load-bar", null, barFill));
-      var list2 = h("div.list", {
+      var list3 = h("div.list", {
         "data-scroll-y": "",
         "data-pad-y": "120",
         "data-group": "",
         "data-vertical": ""
       });
-      list2.style.top = "178px";
-      panel.appendChild(list2);
+      list3.style.top = "178px";
+      panel.appendChild(list3);
       var srcs = withResource("stream", meta.type, video.id).map(function (a, i) {
         return {
           a: a,
@@ -16385,14 +15616,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return x.a;
       });
       if (!srcs.length) {
-        list2.appendChild(h("div.loading-line", {
+        list3.appendChild(h("div.loading-line", {
           text: t("Nenhum addon de streams instalado (ex.: Torrentio). Instale pela sua conta Stremio.")
         }));
         return;
       }
       var groups = srcs.map(function (a) {
         var el2 = h("div.stream-group");
-        list2.appendChild(el2);
+        list3.appendChild(el2);
         return {
           addon: a,
           el: el2,
@@ -16401,7 +15632,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         };
       });
       var loadingLine = spinnerLine(t("Buscando fontes nos addons..."));
-      list2.appendChild(loadingLine);
+      list3.appendChild(loadingLine);
       var filter = "all";
       var pendingCount = srcs.length;
       var all2 = [];
@@ -16446,12 +15677,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       function decideSmart(timedOut) {
         if (!smartActive || !alive || streamsVideo !== video) return;
         if (focusFirst2 && autoFocused && current2() !== autoFocused) return stopSmart();
-        var list3 = smartCandidates();
+        var list4 = smartCandidates();
         var debridPending = groups.some(function (g) {
           return addonRank(g.addon) === 0 && !g.done;
         });
-        var best = list3[0];
-        var clean = best && !needsServer(best) && !streamBadges(best).some(function (b) {
+        var best = list4[0];
+        var clean2 = best && !needsServer(best) && !streamBadges(best).some(function (b) {
           return b.warn;
         });
         if (!best) {
@@ -16461,9 +15692,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
           return;
         }
-        if (pendingCount > 0 && !timedOut && (debridPending || !clean)) return;
+        if (pendingCount > 0 && !timedOut && (debridPending || !clean2)) return;
         stopSmart();
-        play(video, best, all2, list3.slice(1, 1 + SMART_FALLBACKS));
+        play(video, best, all2, list4.slice(1, 1 + SMART_FALLBACKS));
       }
       function status2() {
         if (smartActive) {
@@ -16484,7 +15715,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         filterBtn.textContent = (g ? g.addon.manifest.name : t("Todos")) + " ▾";
       }
       function firstVisibleItem() {
-        var items3 = list2.querySelectorAll(".stream");
+        var items3 = list3.querySelectorAll(".stream");
         for (var i = 0; i < items3.length; i++) if (items3[i].offsetParent !== null && !items3[i].classList.contains("disabled")) return items3[i];
         return null;
       }
@@ -16492,7 +15723,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         groups.forEach(function (g) {
           return g.el.style.display = filter === "all" || filter === g.addon.transportUrl ? "" : "none";
         });
-        list2.scrollTop = 0;
+        list3.scrollTop = 0;
         status2();
         var first = firstVisibleItem();
         if (first) focus(first);
@@ -16555,8 +15786,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }
           }
           if (pendingCount <= 0) {
-            if (loadingLine.parentNode) list2.removeChild(loadingLine);
-            if (!all2.length) list2.appendChild(h("div.loading-line", {
+            if (loadingLine.parentNode) list3.removeChild(loadingLine);
+            if (!all2.length) list3.appendChild(h("div.loading-line", {
               text: t("Nenhuma fonte encontrada.")
             }));
           }
@@ -17123,18 +16354,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function toggleFav(f) {
-    var list2 = favs();
-    var i = list2.findIndex(function (x) {
+    var list3 = favs();
+    var i = list3.findIndex(function (x) {
       return x.id === f.id;
     });
-    if (i >= 0) list2.splice(i, 1);else list2.push(findFranchise(f.id) ? {
+    if (i >= 0) list3.splice(i, 1);else list3.push(findFranchise(f.id) ? {
       id: f.id
     } : {
       id: f.id,
       name: f.name,
       poster: f.items[0][0]
     });
-    set(FAV_KEY, list2);
+    set(FAV_KEY, list3);
     return i < 0;
   }
   function favEntries() {
@@ -17159,23 +16390,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function myCollections() {
     return get(MINE_KEY, []) || [];
   }
-  function saveMine(list2) {
-    set(MINE_KEY, list2);
+  function saveMine(list3) {
+    set(MINE_KEY, list3);
   }
   function newCollection(name, first) {
-    var list2 = myCollections();
+    var list3 = myCollections();
     var c = {
       id: "my" + Date.now().toString(36),
       name: name,
       items: first ? [first] : []
     };
-    list2.push(c);
-    saveMine(list2);
+    list3.push(c);
+    saveMine(list3);
     return c;
   }
   function toggleInCollection(id, item2) {
-    var list2 = myCollections();
-    var c = list2.find(function (x) {
+    var list3 = myCollections();
+    var c = list3.find(function (x) {
       return x.id === id;
     });
     if (!c) return false;
@@ -17183,7 +16414,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return x.id === item2.id;
     });
     if (i >= 0) c.items.splice(i, 1);else c.items.push(item2);
-    saveMine(list2);
+    saveMine(list3);
     return i < 0;
   }
   function collectionMenu(meta, tmdbCollection2) {
@@ -17292,12 +16523,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: t("Renomear"),
         onSelect: function onSelect() {
           return promptText(t("Renomear"), c.name, "", function (name) {
-            var list2 = myCollections();
-            var x = list2.find(function (y) {
+            var list3 = myCollections();
+            var x = list3.find(function (y) {
               return y.id === id;
             });
             if (x) x.name = name;
-            saveMine(list2);
+            saveMine(list3);
             render();
           });
         }
@@ -17472,7 +16703,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         focusable: true
       });
       input.__submit = function (q2) {
-        return search2(q2);
+        return search3(q2);
       };
       searchBox.appendChild(input);
     } else {
@@ -17481,7 +16712,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));
     }
     var token = 0;
-    function search2(q2) {
+    function search3(q2) {
       var query = (q2 || "").trim();
       clear(results);
       if (query.length < 2) return;
@@ -17489,10 +16720,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       results.appendChild(spinnerLine(t('Buscando "{q}"...', {
         q: query
       })));
-      searchCollections(query).then(function (list2) {
+      searchCollections(query).then(function (list3) {
         if (my !== token) return;
         clear(results);
-        if (!list2.length) {
+        if (!list3.length) {
           results.appendChild(h("div.hint", {
             text: t("Nenhuma coleção encontrada.")
           }));
@@ -17505,7 +16736,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           "data-scroll-x": "",
           "data-group": ""
         });
-        list2.forEach(function (c) {
+        list3.forEach(function (c) {
           return track.appendChild(card({
             name: c.name,
             poster: c.poster
@@ -17603,15 +16834,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return c.id === activeCat;
       });
       catsToShow.forEach(function (c) {
-        var list2 = FRANCHISES.filter(function (f) {
+        var list3 = FRANCHISES.filter(function (f) {
           return (activeCat !== "all" || pinnedIds.indexOf(f.id) < 0) && catOf(f) === c.id;
         });
-        if (!list2.length) return;
+        if (!list3.length) return;
         grid.appendChild(h("div.row-title.cat-title", {
           text: t(c.label)
         }));
         var g = h("div.grid");
-        list2.forEach(function (f) {
+        list3.forEach(function (f) {
           return g.appendChild(franchiseCard(f));
         });
         grid.appendChild(g);
@@ -17659,8 +16890,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (sagaFilter === "mcu_core") return (!XMEN_IDS.has(id) || id === "tt6263850") && !SPIDEY_LEGACY_IDS.has(id);
       return true;
     }
-    function nextUp(list2) {
-      return list2.find(function (it) {
+    function nextUp(list3) {
+      return list3.find(function (it) {
         if (!matchSaga(it[0])) return false;
         if (mediaFilter === "movies" && isSeriesItem(it)) return false;
         if (mediaFilter === "series" && !isSeriesItem(it)) return false;
@@ -17671,22 +16902,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       openDetails(isSeriesItem(it) ? "series" : "movie", it[0]);
     }
     function render(keepFocus) {
-      var list2 = ordered(f, order);
-      var done = list2.filter(itemWatched).length;
+      var list3 = ordered(f, order);
+      var done = list3.filter(itemWatched).length;
       clear(head);
       head.appendChild(h("h1", {
         text: displayName(f)
       }));
       head.appendChild(h("div.franchise-sub", {
         text: t("{n} títulos", {
-          n: list2.length
+          n: list3.length
         }) + "  ·  " + t("Assistidos: {done} de {n}", {
           done: done,
-          n: list2.length
+          n: list3.length
         }) + (order === "chrono" ? "  ·  " + t("Ordem da história") : "  ·  " + t("Ordem de lançamento"))
       }));
       clear(filters);
-      var next = nextUp(list2);
+      var next = nextUp(list3);
       if (next) {
         filters.appendChild(h("div.chip.primary-chip", {
           focusable: true,
@@ -17778,7 +17009,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       clear(grid);
       var count = 0;
-      list2.forEach(function (it, i) {
+      list3.forEach(function (it, i) {
         if (!matchSaga(it[0])) return;
         if (mediaFilter === "movies" && isSeriesItem(it)) return;
         if (mediaFilter === "series" && !isSeriesItem(it)) return;
@@ -17843,8 +17074,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     return cache6[query];
   }
-  function toMetas2(list2) {
-    return (list2 || []).map(function (m) {
+  function toMetas2(list3) {
+    return (list3 || []).map(function (m) {
       return {
         id: "anilist:" + m.id,
         anilist: m.id,
@@ -18120,6 +17351,650 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/views/comics.js
+  var MD2 = "https://api.mangadex.org/";
+  var enc2 = encodeURIComponent;
+  var CHUNK2 = 50;
+  function cover(m) {
+    var rel = (m.relationships || []).filter(function (r) {
+      return r.type === "cover_art";
+    })[0];
+    var f = rel && rel.attributes && rel.attributes.fileName;
+    return f ? "https://uploads.mangadex.org/covers/" + m.id + "/" + f + ".256.jpg" : "";
+  }
+  function titleOf(m) {
+    var a = m.attributes || {};
+    return a.title && (a.title.en || a.title[Object.keys(a.title)[0]]) || "";
+  }
+  function toMeta(m) {
+    var a = m.attributes || {};
+    var d = a.description || {};
+    return {
+      id: "md:" + m.id,
+      mdId: m.id,
+      type: "comic",
+      name: titleOf(m),
+      poster: cover(m),
+      description: d.en || d[Object.keys(d)[0]] || "",
+      year: a.year
+    };
+  }
+  function list2(query, offset) {
+    var url2 = MD2 + "manga?limit=30&offset=" + (offset || 0) + "&includes%5B%5D=cover_art&originalLanguage%5B%5D=en&originalLanguage%5B%5D=fr&originalLanguage%5B%5D=es&availableTranslatedLanguage%5B%5D=en&hasAvailableChapters=true&contentRating%5B%5D=safe&contentRating%5B%5D=suggestive" + (query ? "&title=" + enc2(query) + "&order%5Brelevance%5D=desc" : "&order%5BfollowedCount%5D=desc");
+    return getJSONViaProxy(url2, {
+      timeout: 25e3
+    }).then(function (r) {
+      return {
+        items: (r && r.data || []).map(toMeta),
+        more: !!(r && r.total > (offset || 0) + 30)
+      };
+    });
+  }
+  function ComicsView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar("comics", goTab);
+    scroller.appendChild(bar);
+    var head = h("div.row-title.catalog-title", {
+      text: t("Quadrinhos")
+    });
+    var searchBtn = h("div.btn", {
+      focusable: true,
+      "data-autofocus": "",
+      onSelect: function onSelect() {
+        return promptText(t("Buscar quadrinhos"), "", "", function (q2) {
+          return push(ComicGrid(t("Resultados") + ": " + q2, q2));
+        });
+      }
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar quadrinhos")]);
+    scroller.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [searchBtn]));
+    scroller.appendChild(head);
+    var gridHost = h("div");
+    scroller.appendChild(gridHost);
+    el.appendChild(scroller);
+    var grid = ComicGrid("", "", gridHost);
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      onScroll: function onScroll() {
+        return loadVisibleImages(el, 400);
+      },
+      destroy: function destroy() {
+        bar.__destroy && bar.__destroy();
+        grid.destroy && grid.destroy();
+      }
+    };
+  }
+  function ComicGrid(title, query, host) {
+    var el = host || h("div.view");
+    var scroller = host ? el : h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var gridEl = h("div.grid");
+    if (!host) {
+      scroller.appendChild(h("div.row-title.catalog-title", {
+        text: title
+      }));
+      el.appendChild(scroller);
+    }
+    scroller.appendChild(gridEl);
+    var offset = 0;
+    var more = null;
+    function next() {
+      if (more && more.parentNode) gridEl.removeChild(more);
+      var sp = spinnerLine(t("Carregando..."));
+      gridEl.appendChild(sp);
+      list2(query, offset).then(function (r) {
+        if (sp.parentNode) gridEl.removeChild(sp);
+        r.items.forEach(function (m) {
+          return gridEl.appendChild(card(m, {
+            onSelect: function onSelect() {
+              return push(ComicDetails(m));
+            }
+          }));
+        });
+        offset += 30;
+        if (r.more) {
+          more = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return next();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          gridEl.appendChild(more);
+        }
+        loadVisibleImages(el, 400);
+        if (!host && offset === 30) {
+          var first = gridEl.querySelector(".card");
+          if (first) focus(first);
+        }
+      }).catch(function () {
+        if (sp.parentNode) gridEl.removeChild(sp);
+        toast(t("Não foi possível carregar agora."));
+      });
+    }
+    next();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      destroy: function destroy() {}
+    };
+  }
+  function ComicDetails(m) {
+    var el = h("div.view.md-view");
+    var info2 = h("div.md-info");
+    var listEl = h("div.md-list", {
+      "data-scroll-y": "",
+      "data-pad-y": "120",
+      "data-group": "",
+      "data-vertical": ""
+    });
+    el.appendChild(info2);
+    el.appendChild(listEl);
+    var chapters2 = [];
+    var chunk = 0;
+    var alive = true;
+    var status2 = h("div.loading-line", {
+      text: t("Procurando capítulos...")
+    });
+    var key3 = "md" + m.mdId;
+    var progress2 = function progress2() {
+      return (get("readProgress", {}) || {})[key3] || null;
+    };
+    var idxOf = function idxOf() {
+      var p = progress2();
+      return p ? chapters2.findIndex(function (c) {
+        return c.id === p.chapterId;
+      }) : -1;
+    };
+    function read(i, page3) {
+      if (!chapters2.length) return toast(t("Nenhum capítulo encontrado."));
+      openReader({
+        key: key3,
+        title: m.name,
+        chapters: chapters2,
+        index: Math.max(0, i),
+        startPage: page3 || 0,
+        rtl: false
+      });
+    }
+    function renderInfo() {
+      clear(info2);
+      var img = h("img.md-cover", {
+        alt: ""
+      });
+      img.setAttribute("data-lazy", m.poster || "");
+      info2.appendChild(img);
+      var text = h("div.md-text");
+      text.appendChild(h("div.md-title", {
+        text: m.name
+      }));
+      text.appendChild(h("div.md-meta", {
+        text: [m.year, chapters2.length ? t("{n} capítulos", {
+          n: chapters2.length
+        }) : ""].filter(Boolean).join("  ·  ")
+      }));
+      text.appendChild(h("div.md-desc", {
+        text: m.description
+      }));
+      var idx = idxOf();
+      text.appendChild(h("div.details-buttons", {
+        "data-group": ""
+      }, [h("div.btn.primary", {
+        focusable: true,
+        "data-autofocus": "",
+        onSelect: function onSelect() {
+          return idx >= 0 ? read(idx, progress2().page) : read(0, 0);
+        }
+      }, [h("span.ico", {
+        text: "📖"
+      }), idx >= 0 ? t("Continuar: cap. {n}", {
+        n: chapters2[idx].chapter
+      }) : t("Ler")])]));
+      info2.appendChild(text);
+      loadVisibleImages(info2);
+    }
+    function renderList() {
+      clear(listEl);
+      if (!chapters2.length) return listEl.appendChild(status2);
+      var start3 = chunk * CHUNK2;
+      var end = Math.min(chapters2.length, start3 + CHUNK2);
+      var p = progress2();
+      var jump = function jump(label, to) {
+        return h("div.stream.md-nav", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return chunk = to, renderList();
+          }
+        }, [h("div.s-main", {
+          text: label
+        })]);
+      };
+      if (chunk > 0) listEl.appendChild(jump("◀ " + t("Capítulos {a}–{b}", {
+        a: (chunk - 1) * CHUNK2 + 1,
+        b: chunk * CHUNK2
+      }), chunk - 1));
+      var _loop0 = function _loop0(i) {
+        var c = chapters2[i];
+        var here = p && p.chapterId === c.id;
+        listEl.appendChild(h("div.stream", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return read(i, here ? p.page : 0);
+          }
+        }, [h("div.s-main", {
+          text: (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
+            n: c.chapter
+          }) : t("Especial")) + (c.title ? " · " + c.title : "")
+        }), h("span.s-tag", {
+          text: c.pages + " " + t("pág.")
+        }), here ? h("span.s-tag.ok", {
+          text: t("Parou aqui")
+        }) : null]));
+      };
+      for (var i = start3; i < end; i++) {
+        _loop0(i);
+      }
+      if (end < chapters2.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
+        a: end + 1,
+        b: Math.min(chapters2.length, end + CHUNK2)
+      }) + " ▶", chunk + 1));
+    }
+    renderInfo();
+    renderList();
+    chapters(m.mdId, ["en", "fr", "es"]).then(function (cs) {
+      if (!alive) return;
+      chapters2 = cs;
+      var i = idxOf();
+      chunk = i >= 0 ? Math.floor(i / CHUNK2) : 0;
+      if (!cs.length) status2.textContent = t("Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.");
+      renderInfo();
+      renderList();
+    }).catch(function () {
+      return alive && (status2.textContent = t("Não encontrei capítulos deste título agora."));
+    });
+    return {
+      el: el,
+      onShow: function onShow() {
+        if (chapters2.length) {
+          renderInfo();
+          renderList();
+        }
+        loadVisibleImages(el);
+      },
+      destroy: function destroy() {
+        return alive = false;
+      }
+    };
+  }
+
+  // src/js/views/books.js
+  var API7 = "https://openlibrary.org/search.json";
+  var enc3 = encodeURIComponent;
+  var LANGS2 = [{
+    id: "en",
+    ol: "eng",
+    label: "English"
+  }, {
+    id: "ar",
+    ol: "ara",
+    label: "العربية"
+  }, {
+    id: "fr",
+    ol: "fre",
+    label: "Français"
+  }, {
+    id: "es",
+    ol: "spa",
+    label: "Español"
+  }, {
+    id: "pt",
+    ol: "por",
+    label: "Português"
+  }];
+  var SIZES2 = [34, 44, 56, 70];
+  function viaTv(fn, url2, opts) {
+    return fn(url2, opts).catch(function (e) {
+      if (e && e.status && e.status !== 0) throw e;
+      return fn(fetchUrl(url2), opts);
+    });
+  }
+  function toMeta2(b, lang3) {
+    var ia = (b.ia || []).filter(function (x) {
+      return !/librivox|^isbn_|^bwb_/.test(x);
+    })[0] || "";
+    return {
+      id: "ol:" + b.key,
+      bookId: b.key,
+      type: "book",
+      name: b.title || "",
+      poster: b.cover_i ? "https://covers.openlibrary.org/b/id/" + b.cover_i + "-M.jpg" : "",
+      author: (b.author_name || []).slice(0, 2).join(", "),
+      lang: lang3,
+      downloads: 0,
+      textUrl: ia ? "https://archive.org/download/" + ia + "/" + ia + "_djvu.txt" : ""
+    };
+  }
+  function search2(query, lang3, page3) {
+    var ol = (LANGS2.filter(function (x) {
+      return x.id === lang3;
+    })[0] || LANGS2[0]).ol;
+    var q2 = API7 + "?q=" + enc3((query || "subject:fiction") + " AND ebook_access:public AND language:" + ol) + "&sort=" + (query ? "relevance" : "rating") + "&limit=30&page=" + (page3 || 1) + "&fields=key,title,author_name,cover_i,ia,ebook_access";
+    return viaTv(getJSON, q2, {
+      timeout: 2e4,
+      quiet: true
+    }).then(function (r) {
+      return {
+        items: (r && r.docs || []).filter(function (b) {
+          return b.ia && b.ia.length && b.ebook_access === "public" && b.ia.some(function (x) {
+            return !/librivox|^isbn_|^bwb_/.test(x);
+          });
+        }).map(function (b) {
+          return toMeta2(b, lang3);
+        }),
+        more: !!(r && r.numFound > (page3 || 1) * 30)
+      };
+    });
+  }
+  function BooksView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar("books", goTab);
+    scroller.appendChild(bar);
+    var lang3 = LANGS2.filter(function (x) {
+      return x.id === settings().booksLang;
+    })[0] || LANGS2[0];
+    var host = h("div");
+    var searchBtn = h("div.btn", {
+      focusable: true,
+      "data-autofocus": "",
+      onSelect: function onSelect() {
+        return promptText(t("Buscar livros"), "", "", function (q2) {
+          return push(BookGrid(t("Resultados") + ": " + q2, q2, lang3.id));
+        });
+      }
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar livros")]);
+    scroller.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [searchBtn, h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return menu(t("Idioma dos livros"), LANGS2.map(function (x) {
+          return {
+            label: x.label,
+            value: x,
+            checked: x.id === lang3.id
+          };
+        }), {
+          onPick: function onPick(v) {
+            lang3 = v;
+            saveSettings({
+              booksLang: v.id
+            });
+            clear(host);
+            host.appendChild(BookGrid("", "", lang3.id, host).el);
+            loadVisibleImages(el, 400);
+          }
+        });
+      }
+    }, [h("span.ico", {
+      text: "🌐"
+    }), t("Idioma dos livros")])]));
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: t("Livros gratuitos (domínio público)")
+    }));
+    scroller.appendChild(host);
+    host.appendChild(BookGrid("", "", lang3.id, host).el);
+    el.appendChild(scroller);
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      onScroll: function onScroll() {
+        return loadVisibleImages(el, 400);
+      },
+      destroy: function destroy() {
+        return bar.__destroy && bar.__destroy();
+      }
+    };
+  }
+  function BookGrid(title, query, lang3, host) {
+    var el = host ? h("div") : h("div.view");
+    var scroller = host ? el : h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var gridEl = h("div.grid");
+    if (!host) {
+      scroller.appendChild(h("div.row-title.catalog-title", {
+        text: title
+      }));
+      el.appendChild(scroller);
+    }
+    scroller.appendChild(gridEl);
+    var page3 = 0;
+    var more = null;
+    function next() {
+      if (more && more.parentNode) gridEl.removeChild(more);
+      var sp = spinnerLine(t("Carregando..."));
+      gridEl.appendChild(sp);
+      search2(query, lang3, ++page3).then(function (r) {
+        if (sp.parentNode) gridEl.removeChild(sp);
+        r.items.forEach(function (b) {
+          return gridEl.appendChild(card(b, {
+            onSelect: function onSelect() {
+              return push(BookDetails(b));
+            }
+          }));
+        });
+        if (!r.items.length && page3 === 1) gridEl.appendChild(h("div.modal-text", {
+          text: t("Nada por aqui.")
+        }));
+        if (r.more) {
+          more = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return next();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          gridEl.appendChild(more);
+        }
+        loadVisibleImages(el, 400);
+        if (!host && page3 === 1) {
+          var first = gridEl.querySelector(".card");
+          if (first) focus(first);
+        }
+      }).catch(function () {
+        if (sp.parentNode) gridEl.removeChild(sp);
+        toast(t("Não foi possível carregar agora."));
+      });
+    }
+    next();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      }
+    };
+  }
+  function BookDetails(b) {
+    var el = h("div.view.md-view");
+    var info2 = h("div.md-info");
+    el.appendChild(info2);
+    var img = h("img.md-cover", {
+      alt: ""
+    });
+    img.setAttribute("data-lazy", b.poster || "");
+    info2.appendChild(img);
+    var text = h("div.md-text");
+    text.appendChild(h("div.md-title", {
+      text: b.name
+    }));
+    text.appendChild(h("div.md-meta", {
+      text: [b.author, b.lang.toUpperCase()].filter(Boolean).join("  ·  ")
+    }));
+    var prog = function prog() {
+      return (get("bookProgress", {}) || {})[b.id] || null;
+    };
+    var p = prog();
+    text.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [h("div.btn.primary", {
+      focusable: true,
+      "data-autofocus": "",
+      onSelect: function onSelect() {
+        return b.textUrl ? push(BookReader(b)) : toast(t("Este livro não tem texto para ler aqui."));
+      }
+    }, [h("span.ico", {
+      text: "📖"
+    }), p ? t("Continuar") : t("Ler")])]));
+    info2.appendChild(text);
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el);
+      }
+    };
+  }
+  function clean(raw) {
+    var s = String(raw || "").replace(/\r\n?/g, "\n");
+    var a = s.search(/\*\*\* ?START OF[^\n]*\n/);
+    if (a >= 0) s = s.slice(s.indexOf("\n", a) + 1);
+    var z = s.search(/\*\*\* ?END OF/);
+    if (z >= 0) s = s.slice(0, z);
+    return s.split(/\n{2,}/).map(function (p) {
+      return p.replace(/\s*\n\s*/g, " ").trim();
+    }).filter(Boolean).join("\n\n");
+  }
+  function BookReader(b) {
+    var el = h("div.view.book-reader");
+    var body = h("div.bk-text");
+    var hud = h("div.rd-hud");
+    el.appendChild(body);
+    el.appendChild(hud);
+    var rtl = b.lang === "ar" || b.lang === "he" || b.lang === "fa";
+    var text = "";
+    var starts = [0];
+    var pi = 0;
+    var saved0 = (get("bookProgress", {}) || {})[b.id];
+    var si = saved0 ? SIZES2.indexOf(saved0.fs) : 1;
+    if (si < 0) si = 1;
+    var hudTimer = null;
+    var alive = true;
+    var fs = function fs() {
+      return SIZES2[si] || 44;
+    };
+    function paginate(keepOffset) {
+      var per = Math.round(940 * Math.pow(44 / fs(), 2));
+      starts = [0];
+      var i = 0;
+      while (i < text.length) {
+        var end = Math.min(text.length, i + per);
+        if (end < text.length) {
+          var cut = Math.max(text.lastIndexOf("\n", end), text.lastIndexOf(" ", end));
+          if (cut > i + per * 0.6) end = cut;
+        }
+        while (text.charAt(end) === " " || text.charAt(end) === "\n") end++;
+        i = end;
+        if (i < text.length) starts.push(i);
+      }
+      pi = 0;
+      for (var k = 0; k < starts.length; k++) if (starts[k] <= keepOffset) pi = k;
+    }
+    function showHud(extra) {
+      hud.textContent = b.name + " · " + (pi + 1) + " / " + starts.length + (extra ? " · " + extra : "");
+      hud.classList.add("show");
+      clearTimeout(hudTimer);
+      hudTimer = setTimeout(function () {
+        return hud.classList.remove("show");
+      }, 2500);
+    }
+    function render() {
+      body.style.fontSize = fs() + "px";
+      body.style.direction = rtl ? "rtl" : "ltr";
+      body.style.textAlign = rtl ? "right" : "left";
+      body.textContent = text.slice(starts[pi], starts[pi + 1] === void 0 ? text.length : starts[pi + 1]).replace(/\n\n/g, "\n");
+      var all2 = get("bookProgress", {}) || {};
+      all2[b.id] = {
+        offset: starts[pi],
+        fs: fs()
+      };
+      var keys2 = Object.keys(all2);
+      if (keys2.length > 100) delete all2[keys2[0]];
+      set("bookProgress", all2);
+    }
+    function turn(d) {
+      var n = pi + d;
+      if (n < 0 || n >= starts.length) return toast(d > 0 ? t("Fim do livro.") : t("Início do livro."));
+      pi = n;
+      render();
+      showHud();
+    }
+    function onKey(e) {
+      var k = e.keyCode;
+      if (!text) return k === KEY.BACK ? false : true;
+      if (k === KEY.LEFT || k === KEY.RIGHT) return turn(k === KEY.RIGHT !== rtl ? 1 : -1), true;
+      if (k === KEY.DOWN || k === KEY.CH_UP || k === KEY.YELLOW) return turn(1), true;
+      if (k === KEY.UP || k === KEY.CH_DOWN || k === KEY.BLUE) return turn(-1), true;
+      if (k === KEY.RED) {
+        var off = starts[pi];
+        si = (si + 1) % SIZES2.length;
+        paginate(off);
+        render();
+        showHud(t("Tamanho {n}", {
+          n: fs()
+        }));
+        return true;
+      }
+      if (k === KEY.ENTER) return showHud(), true;
+      return false;
+    }
+    body.textContent = t("Carregando...");
+    viaTv(getText, b.textUrl, {
+      timeout: 6e4,
+      quiet: true
+    }).then(function (raw) {
+      if (!alive) return;
+      text = clean(raw);
+      if (!text) return body.textContent = t("Este livro não tem texto para ler aqui.");
+      var saved = (get("bookProgress", {}) || {})[b.id];
+      paginate(saved ? saved.offset : 0);
+      render();
+      showHud();
+    }).catch(function () {
+      return alive && (body.textContent = t("Não foi possível abrir este livro agora."));
+    });
+    return {
+      el: el,
+      onKey: onKey,
+      destroy: function destroy() {
+        return alive = false, clearTimeout(hudTimer);
+      }
+    };
+  }
+
   // src/js/api/newEpisodes.js
   var DAYS = 7;
   var CHECK = 25;
@@ -18163,10 +18038,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var my = ++run;
     return load().then(function () {
       return scan2(my);
-    }).then(function (list2) {
+    }).then(function (list3) {
       if (my !== run) throw new Error("stopped");
-      set("newEpisodes", list2.slice(0, 40));
-      return list2;
+      set("newEpisodes", list3.slice(0, 40));
+      return list3;
     });
   }
   function stop2() {
@@ -18313,15 +18188,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     save(p);
   }
   function move2(entries, entry, delta) {
-    var list2 = sort(entries).map(key2);
+    var list3 = sort(entries).map(key2);
     var k = key2(entry);
-    var i = list2.indexOf(k);
+    var i = list3.indexOf(k);
     var j = i + delta;
-    if (i < 0 || j < 0 || j >= list2.length) return;
-    list2.splice(i, 1);
-    list2.splice(j, 0, k);
+    if (i < 0 || j < 0 || j >= list3.length) return;
+    list3.splice(i, 1);
+    list3.splice(j, 0, k);
     var p = prefs();
-    p.order = list2;
+    p.order = list3;
     save(p);
   }
   function reset() {
@@ -18331,7 +18206,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/mdblistRows.js
-  var API7 = "https://api.mdblist.com/";
+  var API8 = "https://api.mdblist.com/";
   var POSTER2 = function POSTER2(imdb) {
     return "https://images.metahub.space/poster/medium/" + imdb + "/img";
   };
@@ -18343,7 +18218,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function call3(path) {
     var sep = path.indexOf("?") >= 0 ? "&" : "?";
-    return getJSONViaProxy(API7 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
+    return getJSONViaProxy(API8 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
       timeout: 15e3
     });
   }
@@ -18376,9 +18251,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function rows() {
     return hasKey() ? settings().mdblistRows || [] : [];
   }
-  function setRows(list2) {
+  function setRows(list3) {
     saveSettings({
-      mdblistRows: list2
+      mdblistRows: list3
     });
   }
   function items(id) {
@@ -18441,8 +18316,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     return files[name];
   }
-  function fromTmdb(list2, media2) {
-    return (list2 || []).filter(function (x) {
+  function fromTmdb(list3, media2) {
+    return (list3 || []).filter(function (x) {
       return x && x.poster_path;
     }).map(function (x) {
       var type = (x.media_type || media2) === "tv" ? "series" : "movie";
@@ -18509,9 +18384,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     if (src.trakt) {
       var kind = src.m === "tv" ? "show" : "movie";
-      return traktPublic("/lists/" + src.trakt + "/items/" + kind + "?limit=40&page=" + n).then(function (list2) {
+      return traktPublic("/lists/" + src.trakt + "/items/" + kind + "?limit=40&page=" + n).then(function (list3) {
         return {
-          items: (list2 || []).map(function (x) {
+          items: (list3 || []).map(function (x) {
             var m = x.movie || x.show;
             var imdb = m && m.ids && m.ids.imdb;
             return imdb ? {
@@ -18521,7 +18396,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               poster: "https://images.metahub.space/poster/medium/" + imdb + "/img"
             } : null;
           }).filter(Boolean),
-          more: (list2 || []).length >= 40
+          more: (list3 || []).length >= 40
         };
       });
     }
@@ -18728,7 +18603,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function run3() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop0 = function _loop0() {
+      var _loop1 = function _loop1() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (!p.row.parentNode) {
@@ -18750,14 +18625,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret6;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret6 = _loop0();
+        _ret6 = _loop1();
         if (_ret6 === 0) continue;
         if (_ret6 === 1) break;
       }
     }
     return {
-      add: function add(list2) {
-        list2.forEach(function (p) {
+      add: function add(list3) {
+        list3.forEach(function (p) {
           return pending2.push(p);
         });
         run3();
@@ -18881,8 +18756,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var loadedBoard = false;
-    onPlayback(function (list2) {
-      if (mergeExternalProgress(list2)) {
+    onPlayback(function (list3) {
+      if (mergeExternalProgress(list3)) {
         renderContinue();
         renderSagas();
         publishBrowse();
@@ -18915,8 +18790,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNew(force) {
       if (perf() || !force && Date.now() - newLoadedAt < 30 * 6e4) return;
       newLoadedAt = Date.now();
-      load5().then(function (list2) {
-        newList = list2;
+      load5().then(function (list3) {
+        newList = list3;
         renderNew();
         publishBrowse();
       }).catch(function () {});
@@ -19107,7 +18982,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop1 = function _loop1() {
+      var _loop10 = function _loop10() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -19125,7 +19000,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret7;
       for (var i = 0; i < pending2.length && active2 < 2; i++) {
-        _ret7 = _loop1();
+        _ret7 = _loop10();
         if (_ret7 === 0) continue;
         if (_ret7 === 1) break;
       }
@@ -19151,12 +19026,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }));
           load6("home").then(function (data) {
             if (!alive()) return;
-            var list2 = collectionRows(box, data).map(function (x) {
+            var list3 = collectionRows(box, data).map(function (x) {
               return Object.assign(x, {
                 state: "idle"
               });
             });
-            pending2 = list2.concat(pending2);
+            pending2 = list3.concat(pending2);
             loadNearby();
           }).catch(function () {
             return box.appendChild(h("div.nc-hint", {
@@ -19239,18 +19114,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "name",
     label: "Nome (A–Z)"
   }];
-  function sortContinue(list2) {
+  function sortContinue(list3) {
     var mode = settings().cwSort;
     var frac = function frac(it) {
       return it.state && it.state.duration ? it.state.timeOffset / it.state.duration : 0;
     };
-    if (mode === "progress") return list2.slice().sort(function (a, b) {
+    if (mode === "progress") return list3.slice().sort(function (a, b) {
       return frac(b) - frac(a);
     });
-    if (mode === "name") return list2.slice().sort(function (a, b) {
+    if (mode === "name") return list3.slice().sort(function (a, b) {
       return String(a.name || "").localeCompare(String(b.name || ""));
     });
-    return list2;
+    return list3;
   }
   function episodeLabel(videoId, metaId) {
     if (!videoId || videoId === metaId) return "";
@@ -19382,8 +19257,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var ids2 = it.trailers && it.trailers.length ? Promise.resolve(it.trailers) : fetchMeta(it.type, it.id).then(function (m) {
           return it.trailers = trailerIds(m || {});
         });
-        ids2.then(function (list2) {
-          if (paused || items3[index2] !== it || !list2.length) return;
+        ids2.then(function (list3) {
+          if (paused || items3[index2] !== it || !list3.length) return;
           clearTimeout(timer);
           ambientOn = true;
           var frame = h("iframe", {
@@ -19396,7 +19271,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               return ambientOn && ambient.classList.add("show");
             }, 1500);
           };
-          frame.src = "https://www.youtube-nocookie.com/embed/" + list2[0] + "?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5";
+          frame.src = "https://www.youtube-nocookie.com/embed/" + list3[0] + "?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5";
           ambient.appendChild(frame);
           ambientTimer = setTimeout(function () {
             stopAmbient();
@@ -19477,8 +19352,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       load: function load() {
-        return load2().then(function (list2) {
-          items3 = list2.slice(0, 12);
+        return load2().then(function (list3) {
+          items3 = list3.slice(0, 12);
           index2 = 0;
           render();
           schedule();
@@ -19560,12 +19435,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function renderHistory() {
       clear(history);
       if (settings().searchHistory === false) return;
-      var list2 = get(HIST, []) || [];
-      if (!list2.length) return;
+      var list3 = get(HIST, []) || [];
+      if (!list3.length) return;
       history.appendChild(h("span.hist-label", {
         text: t("Buscas recentes:")
       }));
-      list2.forEach(function (q2) {
+      list3.forEach(function (q2) {
         return history.appendChild(h("div.chip", {
           focusable: true,
           text: q2,
@@ -19586,11 +19461,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function remember(q2) {
       if (settings().searchHistory === false) return;
-      var list2 = (get(HIST, []) || []).filter(function (x) {
+      var list3 = (get(HIST, []) || []).filter(function (x) {
         return x.toLowerCase() !== q2.toLowerCase();
       });
-      list2.unshift(q2);
-      set(HIST, list2.slice(0, 8));
+      list3.unshift(q2);
+      set(HIST, list3.slice(0, 8));
       renderHistory();
     }
     renderHistory();
@@ -19611,15 +19486,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var people = h("div.row.people-row", {
         "data-anchor": "30"
       });
-      searchPeople(query).then(function (list2) {
-        if (my !== token || !list2.length) return;
+      searchPeople(query).then(function (list3) {
+        if (my !== token || !list3.length) return;
         people.appendChild(h("div.row-title", {
           text: t("Pessoas")
         }));
         people.appendChild(h("div.row-track", {
           "data-scroll-x": "",
           "data-group": ""
-        }, list2.map(function (p) {
+        }, list3.map(function (p) {
           return h("div.cast.person-card", {
             focusable: true,
             onSelect: function onSelect() {
@@ -19792,7 +19667,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T12:46:53.350Z";
+  var BUILD = "2026-11-16T12:54:31.422Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -20115,7 +19990,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "soft",
     label: "Bem redondo"
   }];
-  var SIZES2 = [{
+  var SIZES3 = [{
     id: "small",
     label: "Pequeno"
   }, {
@@ -20161,7 +20036,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     };
     set2("shape-", s.cardShape || "rounded", SHAPES);
-    set2("cards-", s.cardSize || "medium", SIZES2);
+    set2("cards-", s.cardSize || "medium", SIZES3);
     set2("focus-", s.focusStyle || "glow", FOCUS);
     var bg = s.bgStyle || (s.oled ? "oled" : "default");
     b.classList.toggle("oled", bg === "oled");
@@ -20413,8 +20288,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/views/settings.js
-  var LANGS2 = [["Árabe", ["ara", "ar"]], ["Inglês", ["eng", "en"]], ["Francês", ["fre", "fra", "fr"]], ["Espanhol", ["spa", "es"]], ["Turco", ["tur", "tr"]], ["Persa", ["per", "fas", "fa"]], ["Urdu", ["urd", "ur"]], ["Hindi", ["hin", "hi"]], ["Russo", ["rus", "ru"]], ["Alemão", ["ger", "deu", "de"]], ["Italiano", ["ita", "it"]], ["Português", ["por", "pob", "pt"]], ["Japonês", ["jpn", "ja"]], ["Coreano", ["kor", "ko"]], ["Chinês", ["chi", "zho", "zh"]], ["Indonésio", ["ind", "id"]], ["Malaio", ["may", "msa", "ms"]], ["Ucraniano", ["ukr", "uk"]], ["Polonês", ["pol", "pl"]], ["Holandês", ["dut", "nld", "nl"]], ["Grego", ["gre", "ell", "el"]], ["Sueco", ["swe", "sv"]], ["Vietnamita", ["vie", "vi"]], ["Tailandês", ["tha", "th"]], ["Hebraico", ["heb", "he"]], ["Romeno", ["ron", "rum", "ro"]], ["Húngaro", ["hun", "hu"]], ["Tcheco", ["ces", "cze", "cs"]], ["Filipino", ["fil", "tgl", "tl"]]];
-  var SUB_LANGS = LANGS2.map(function (l) {
+  var LANGS3 = [["Árabe", ["ara", "ar"]], ["Inglês", ["eng", "en"]], ["Francês", ["fre", "fra", "fr"]], ["Espanhol", ["spa", "es"]], ["Turco", ["tur", "tr"]], ["Persa", ["per", "fas", "fa"]], ["Urdu", ["urd", "ur"]], ["Hindi", ["hin", "hi"]], ["Russo", ["rus", "ru"]], ["Alemão", ["ger", "deu", "de"]], ["Italiano", ["ita", "it"]], ["Português", ["por", "pob", "pt"]], ["Japonês", ["jpn", "ja"]], ["Coreano", ["kor", "ko"]], ["Chinês", ["chi", "zho", "zh"]], ["Indonésio", ["ind", "id"]], ["Malaio", ["may", "msa", "ms"]], ["Ucraniano", ["ukr", "uk"]], ["Polonês", ["pol", "pl"]], ["Holandês", ["dut", "nld", "nl"]], ["Grego", ["gre", "ell", "el"]], ["Sueco", ["swe", "sv"]], ["Vietnamita", ["vie", "vi"]], ["Tailandês", ["tha", "th"]], ["Hebraico", ["heb", "he"]], ["Romeno", ["ron", "rum", "ro"]], ["Húngaro", ["hun", "hu"]], ["Tcheco", ["ces", "cze", "cs"]], ["Filipino", ["fil", "tgl", "tl"]]];
+  var SUB_LANGS = LANGS3.map(function (l) {
     return {
       label: l[0],
       value: l[1]
@@ -20426,7 +20301,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var AUDIO_LANGS = [{
     label: "Original do arquivo",
     value: []
-  }].concat(LANGS2.map(function (l) {
+  }].concat(LANGS3.map(function (l) {
     return {
       label: l[0],
       value: l[1]
@@ -20958,8 +20833,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: t("Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.")
         }));
       } else {
-        var saveRows = function saveRows(list2) {
-          setRows(list2);
+        var saveRows = function saveRows(list3) {
+          setRows(list3);
           dropTab("home");
           render();
         };
@@ -21265,9 +21140,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return g.id === page3;
       });
       pageHeader(t(GROUP.label));
-      var choose = function choose(title, sub, list2, key3, value, label) {
+      var choose = function choose(title, sub, list3, key3, value, label) {
         return body.appendChild(row(title, sub, t(String(label)), function () {
-          return menu(title, list2.map(function (x) {
+          return menu(title, list3.map(function (x) {
             return {
               label: t(String(x.label)),
               value: x.id,
@@ -21284,7 +21159,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       if (page3 === "c-account") {
-        var LANGS3 = [{
+        var LANGS4 = [{
           id: "auto",
           label: t("Automático (idioma da TV)")
         }, {
@@ -21348,10 +21223,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         body.appendChild(h("div.set-section", {
           text: "Language / اللغة"
         }));
-        body.appendChild(row("Language / اللغة", "", (LANGS3.find(function (l) {
+        body.appendChild(row("Language / اللغة", "", (LANGS4.find(function (l) {
           return l.id === s.language;
-        }) || LANGS3[0]).label, function () {
-          return menu("Language / اللغة", LANGS3.map(function (l) {
+        }) || LANGS4[0]).label, function () {
+          return menu("Language / اللغة", LANGS4.map(function (l) {
             return {
               label: l.label,
               value: l.id,
@@ -21623,13 +21498,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             backgroundColor: curTheme.main
           }
         })));
-        var lookChoose = function lookChoose(title, sub, list2, key3, dflt) {
-          var cur = list2.find(function (x) {
+        var lookChoose = function lookChoose(title, sub, list3, key3, dflt) {
+          var cur = list3.find(function (x) {
             return x.id === s[key3];
-          }) || list2.find(function (x) {
+          }) || list3.find(function (x) {
             return x.id === dflt;
           });
-          choose(title, sub, list2, key3, cur.id, cur.label);
+          choose(title, sub, list3, key3, cur.id, cur.label);
         };
         var bg = s.bgStyle || (s.oled ? "oled" : "default");
         body.appendChild(row(t("Fundo"), t("Escuro, preto puro ou com brilho da cor"), t((BACKGROUNDS.find(function (x) {
@@ -21652,7 +21527,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
         }));
         lookChoose(t("Formato dos cartões"), t("Cantos dos pôsteres e botões"), SHAPES, "cardShape", "rounded");
-        lookChoose(t("Tamanho dos pôsteres"), t("Mais pôsteres por linha ou pôsteres maiores"), SIZES2, "cardSize", "medium");
+        lookChoose(t("Tamanho dos pôsteres"), t("Mais pôsteres por linha ou pôsteres maiores"), SIZES3, "cardSize", "medium");
         lookChoose(t("Estilo do foco"), t("Como o item selecionado aparece"), FOCUS, "focusStyle", "glow");
         lookChoose(t("Fonte do app"), t("Letra dos menus e textos"), FONTS2, "appFont", "samsung");
         body.appendChild(h("div.set-section", {
@@ -22026,11 +21901,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         body.appendChild(h("div.set-section", {
           text: t("Addons")
         }));
-        var list2 = list();
+        var list3 = list();
         body.appendChild(row(t("Addons ativos"), isLoggedIn() ? t("Gerencie pela sua conta em web.stremio.com") : t("Sem conta: Cinemeta, OpenSubtitles e os adicionados aqui"), t("{n} addon(s)", {
-          n: list2.length
+          n: list3.length
         }), function () {
-          return menu(t("Addons ativos"), list2.map(function (a) {
+          return menu(t("Addons ativos"), list3.map(function (a) {
             return {
               label: a.manifest.name || a.manifest.id,
               sub: a.transportUrl
@@ -22038,7 +21913,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }), {});
         }));
         RECOMMENDED.filter(function (r) {
-          return !list2.some(function (a) {
+          return !list3.some(function (a) {
             return a.transportUrl === r.url || a.manifest && a.manifest.id === r.id;
           });
         }).forEach(function (r) {
@@ -22219,8 +22094,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return pg.pageInfo.hasNextPage && p < 10 ? _page(p + 1) : all2;
       });
     };
-    return _page(1).then(function (list2) {
-      return list2.map(function (s) {
+    return _page(1).then(function (list3) {
+      return list3.map(function (s) {
         var m = s.media;
         var name = m.title && (m.title.english || m.title.romaji) || "";
         return {
@@ -22312,9 +22187,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function moviesDay(offset) {
-    return digitalReleases(ymd(dayStart(offset)), MOVIE_REGION).then(function (list2) {
-      if (list2 === null) return null;
-      return list2.map(function (m) {
+    return digitalReleases(ymd(dayStart(offset)), MOVIE_REGION).then(function (list3) {
+      if (list3 === null) return null;
+      return list3.map(function (m) {
         return {
           name: m.name,
           poster: m.poster,
@@ -22383,7 +22258,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop10 = function _loop10() {
+      var _loop11 = function _loop11() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -22399,7 +22274,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop10();
+        _loop11();
       }
       days.__last = days.children[current3 + 1];
     }
@@ -22407,23 +22282,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var my = ++token;
       clear(grid);
       grid.appendChild(spinnerLine(t("Buscando lançamentos...")));
-      FETCH[mode](current3).then(function (list2) {
+      FETCH[mode](current3).then(function (list3) {
         if (my !== token) return;
         clear(grid);
-        if (list2 === null) {
+        if (list3 === null) {
           grid.appendChild(h("div.hint", {
             text: t("As datas de streaming dos filmes vêm do TMDB: coloque sua chave grátis do TMDB em Ajustes.")
           }));
           return;
         }
-        if (!list2.length) {
+        if (!list3.length) {
           grid.appendChild(h("div.hint", {
             text: mode === "movies" ? t("Nenhum filme chega ao streaming neste dia.") : t("Nenhum episódio neste dia.")
           }));
           return;
         }
         var now = Date.now();
-        list2.forEach(function (it) {
+        list3.forEach(function (it) {
           var c = card({
             name: it.name,
             poster: it.poster
@@ -22840,6 +22715,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     registerTab("collections", CollectionsView);
     registerTab("anime", AnimeView);
     registerTab("manga", MangaView);
+    registerTab("comics", ComicsView);
+    registerTab("books", BooksView);
     if (needsPicker() && !window.location.search.includes("nopicker")) {
       var bootEl = document.getElementById("boot");
       if (bootEl) bootEl.style.display = "none";

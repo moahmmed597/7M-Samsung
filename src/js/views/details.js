@@ -6,7 +6,7 @@ import * as stremio from '../api/stremio.js';
 import * as store from '../lib/store.js';
 import * as server from '../api/server.js';
 import * as hero from '../api/hero.js';
-import { toast, spinnerLine, menu, fmtTime } from '../ui.js';
+import { toast, spinnerLine, menu, fmtTime, timeHM } from '../ui.js';
 import * as router from '../router.js';
 import { openPlayer } from './player.js';
 import { PersonView } from './person.js';
@@ -61,10 +61,7 @@ function parseRuntimeMinutes(val) {
 
 function finishTimeStr(mins) {
   if (!mins || mins <= 0) return '';
-  const d = new Date(Date.now() + mins * 60000);
-  const hh = String(d.getHours()).padStart(2, '0');
-  const mm = String(d.getMinutes()).padStart(2, '0');
-  return `${hh}:${mm}`;
+  return timeHM(new Date(Date.now() + mins * 60000));
 }
 
 function DetailsView(type, id, opts) {
