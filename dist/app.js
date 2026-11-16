@@ -5043,6 +5043,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Uma página": "One page",
+    "Duas páginas": "Two pages",
+    "Modo de leitura": "Reading mode",
+    "A página inteira na tela": "The whole page on screen",
+    "Lado a lado, como um livro aberto": "Side by side, like an open book",
+    "Para webtoons: role com as setas": "For webtoons: scroll with the arrows",
     "Ir para o capítulo": "Go to chapter",
     "Número do capítulo": "Chapter number",
     "Não achei esse capítulo.": "Couldn't find that chapter.",
@@ -5456,6 +5462,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Uma página": "صفحة واحدة",
+    "Duas páginas": "صفحتين",
+    "Modo de leitura": "طريقة القراءة",
+    "A página inteira na tela": "الصفحة كاملة على الشاشة",
+    "Lado a lado, como um livro aberto": "جنب بعض، مثل الكتاب المفتوح",
+    "Para webtoons: role com as setas": "للويبتون: انزل بالأسهم",
     "Ir para o capítulo": "روح للفصل",
     "Número do capítulo": "رقم الفصل",
     "Não achei esse capítulo.": "ما لقيت هذا الفصل.",
@@ -14238,7 +14250,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var ci = opts.index;
     var pages4 = [];
     var pi = 0;
-    var mode = settings().readerMode === "width" ? "width" : "fit";
+    var MODES2 = ["fit", "double", "width"];
+    var mode = MODES2.indexOf(settings().readerMode) >= 0 ? settings().readerMode : "fit";
+    var two = false;
+    var f1 = 1;
+    var pre2 = null;
     var zi = 0;
     var lastOk = 0;
     var okTimer = null;
@@ -14256,14 +14272,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var img2 = h("img.rd-img", {
       alt: ""
     });
+    var img22 = h("img.rd-img", {
+      alt: ""
+    });
+    img22.style.display = "none";
     var hud = h("div.rd-hud");
     var msg = h("div.rd-msg");
-    var el = h("div.view.reader", null, [img2, hud, msg]);
+    var el = h("div.view.reader", null, [img2, img22, hud, msg]);
     var chapter = function chapter() {
       return opts.chapters[ci];
     };
     var size = function size() {
-      var fit = mode === "fit" ? Math.min(W / nat.w, H / nat.h) : W / nat.w;
+      var fit = mode === "width" ? W / nat.w : Math.min(W / nat.w, H / nat.h);
       var s = fit * ZOOMS[zi];
       return {
         s: s,
@@ -14279,7 +14299,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var c = chapter();
       hud.textContent = (opts.title ? opts.title + " · " : "") + t("Cap. {n}", {
         n: c && c.chapter !== null && c.chapter !== void 0 ? c.chapter : ci + 1
-      }) + " · " + (pi + 1) + " / " + pages4.length + (extra ? " · " + extra : "");
+      }) + " · " + (pi + 1) + (two ? "–" + (pi + 2) : "") + " / " + pages4.length + (extra ? " · " + extra : "");
       hud.classList.add("show");
       clearTimeout(hudTimer);
       hudTimer = setTimeout(function () {
@@ -14290,9 +14310,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var z = size();
       px = z.w <= W ? (W - z.w) / 2 : Math.max(W - z.w, Math.min(0, px));
       py = z.h <= H ? (H - z.h) / 2 : Math.max(H - z.h, Math.min(0, py));
-      img2.style.width = Math.round(z.w) + "px";
-      img2.style.height = Math.round(z.h) + "px";
-      img2.style.webkitTransform = img2.style.transform = "translate(" + Math.round(px) + "px," + Math.round(py) + "px)";
+      var place = function place(im, x, w) {
+        im.style.width = Math.round(w) + "px";
+        im.style.height = Math.round(z.h) + "px";
+        im.style.webkitTransform = im.style.transform = "translate(" + Math.round(x) + "px," + Math.round(py) + "px)";
+      };
+      if (!two) {
+        place(img2, px, z.w);
+        img22.style.display = "none";
+        return;
+      }
+      var w1 = z.w * f1;
+      var w2 = z.w - w1;
+      place(img2, opts.rtl ? px + w2 : px, w1);
+      place(img22, opts.rtl ? px : px + w1, w2);
+      img22.style.display = "";
     }
     function layout(anchor) {
       var z = size();
@@ -14322,22 +14354,53 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       retried = false;
       var my = ++token;
       img2.style.visibility = "hidden";
-      img2.onload = function () {
+      img22.style.visibility = "hidden";
+      img22.onload = img22.onerror = null;
+      var wide = function wide(im) {
+        return (im.naturalWidth || 1) > (im.naturalHeight || 1) * 1.1;
+      };
+      var done = function done(both) {
         if (my !== token || !alive) return;
-        nat = {
+        two = both;
+        var a = {
           w: img2.naturalWidth || 1,
           h: img2.naturalHeight || 1
         };
+        if (both) {
+          var bw = (img22.naturalWidth || 1) * a.h / (img22.naturalHeight || 1);
+          nat = {
+            w: a.w + bw,
+            h: a.h
+          };
+          f1 = a.w / nat.w;
+        } else nat = a;
         layout(anchor);
         img2.style.visibility = "";
+        img22.style.visibility = "";
         say("");
         showHud();
         save2();
-        pre = null;
-        if (pi + 1 < pages4.length) {
+        var next = pi + (both ? 2 : 1);
+        pre = pre2 = null;
+        if (next < pages4.length) {
           pre = new Image();
-          pre.src = pages4[pi + 1];
+          pre.src = pages4[next];
         }
+        if (mode === "double" && next + 1 < pages4.length) {
+          pre2 = new Image();
+          pre2.src = pages4[next + 1];
+        }
+      };
+      img2.onload = function () {
+        if (my !== token || !alive) return;
+        if (mode !== "double" || pi + 1 >= pages4.length || wide(img2)) return done(false);
+        img22.onload = function () {
+          return done(!wide(img22));
+        };
+        img22.onerror = function () {
+          return done(false);
+        };
+        img22.src = pages4[pi + 1];
       };
       img2.onerror = function () {
         if (my !== token || !alive) return;
@@ -14375,16 +14438,56 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function turn(dir) {
       if (dir > 0) {
-        if (pi + 1 < pages4.length) {
-          pi++;
+        var step = two ? 2 : 1;
+        if (pi + step < pages4.length) {
+          pi += step;
           zi = 0;
           showPage("top");
         } else chapterStep(1);
       } else if (pi > 0) {
-        pi--;
+        pi = Math.max(0, pi - (mode === "double" ? 2 : 1));
         zi = 0;
         showPage("bottom");
       } else chapterStep(-1);
+    }
+    var MODE_NAMES = {
+      fit: "Uma página",
+      double: "Duas páginas",
+      width: "Ajustar à largura"
+    };
+    function setMode(m) {
+      mode = m;
+      saveSettings({
+        readerMode: m
+      });
+      zi = 0;
+      showPage("top");
+      toast(t(MODE_NAMES[m]));
+    }
+    function modeMenu() {
+      menu(t("Modo de leitura"), [{
+        label: t("Uma página"),
+        sub: t("A página inteira na tela"),
+        value: "fit",
+        checked: mode === "fit"
+      }, {
+        label: t("Duas páginas"),
+        sub: t("Lado a lado, como um livro aberto"),
+        value: "double",
+        checked: mode === "double"
+      }, {
+        label: t("Ajustar à largura"),
+        sub: t("Para webtoons: role com as setas"),
+        value: "width",
+        checked: mode === "width"
+      }, {
+        label: "🔍 " + t("OK 2x ou CH +/−: zoom"),
+        value: ""
+      }], {
+        onPick: function onPick(v) {
+          return v && v !== mode && setMode(v);
+        }
+      });
     }
     function zoomStep(to) {
       var z0 = size();
@@ -14422,7 +14525,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           lastOk = now;
           clearTimeout(okTimer);
           okTimer = setTimeout(function () {
-            return alive && showHud(t("OK 2x ou CH +/−: zoom"));
+            return alive && modeMenu();
           }, DOUBLE_MS);
         }
         return true;
@@ -14437,16 +14540,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         apply4();
         return true;
       }
-      if (k === KEY.GREEN) {
-        mode = mode === "fit" ? "width" : "fit";
-        saveSettings({
-          readerMode: mode
-        });
-        zi = 0;
-        layout("top");
-        showHud(mode === "fit" ? t("Ajustar à tela") : t("Ajustar à largura"));
-        return true;
-      }
+      if (k === KEY.GREEN) return setMode(MODES2[(MODES2.indexOf(mode) + 1) % MODES2.length]), true;
       if (k === KEY.YELLOW) return chapterStep(1), true;
       if (k === KEY.BLUE) return chapterStep(-1), true;
       if (k === KEY.LEFT || k === KEY.RIGHT) {
@@ -14497,8 +14591,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         clearTimeout(hudTimer);
         clearTimeout(okTimer);
         pre = null;
-        img2.onload = img2.onerror = null;
+        pre2 = null;
+        img2.onload = img2.onerror = img22.onload = img22.onerror = null;
         img2.removeAttribute("src");
+        img22.removeAttribute("src");
       }
     };
   }
@@ -22078,7 +22174,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T20:01:18.563Z";
+  var BUILD = "2026-11-16T20:09:26.662Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
