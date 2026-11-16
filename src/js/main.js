@@ -104,7 +104,8 @@ function start() {
   stremio.reloadProfile();
   const s = store.settings();
   theme.applyLook(s);
-  theme.apply(s.theme);
+  // The dark Graphite look for everyone until they pick a colour in Settings → Appearance.
+  theme.apply(s.themePicked ? s.theme : 'graphite');
   document.body.classList.toggle('perf', s.perfMode !== false);
   log.info('Perfil', store.activeProfile().name);
 

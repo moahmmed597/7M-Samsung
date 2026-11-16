@@ -818,7 +818,7 @@ export function SettingsView() {
                 const from = allProfiles.find((p) => p.id === id);
                 confirmDialog(t('Trocar os ajustes de "{to}" pelos de "{from}"?', { to: prof.name, from: from.name }), t('Copiar'), () => {
                   store.copySettingsFrom(id);
-                  theme.apply(store.settings().theme);
+                  theme.apply(store.settings().themePicked ? store.settings().theme : 'graphite');
                   document.body.classList.toggle('oled', !!store.settings().oled);
                   router.dropTab('home');
                   toast(t('Ajustes copiados de {name}', { name: from.name }));
@@ -914,7 +914,7 @@ export function SettingsView() {
 
     if (page === 'c-appearance') {
       body.appendChild(h('div.set-section', { text: t('Cores e formas') }));
-      const curTheme = theme.THEMES.find((x) => x.id === s.theme) || theme.THEMES[0];
+      const curTheme = theme.THEMES.find((x) => x.id === (s.themePicked ? s.theme : 'graphite')) || theme.THEMES[0];
       body.appendChild(
         row(t('Cor do app'), t('Cor de destaque de botões, foco e barras'), t(curTheme.label), () =>
           menu(
@@ -922,7 +922,7 @@ export function SettingsView() {
             theme.THEMES.map((x) => ({ label: '● ' + t(x.label), value: x.id, checked: x.id === curTheme.id })),
             {
               onPick: (v) => {
-                store.saveSettings({ theme: v });
+                store.saveSettings({ theme: v, themePicked: true });
                 theme.apply(v);
                 render();
               },
