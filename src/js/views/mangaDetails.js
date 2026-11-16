@@ -11,6 +11,7 @@ import { t } from '../lib/i18n.js';
 import { openReader } from './reader.js';
 import { openAnime } from './anime.js';
 import { chapterToEpisode, animeMeta } from '../lib/animeLink.js';
+import * as shelf from '../lib/mangaLib.js';
 
 const CHUNK = 50;
 
@@ -79,6 +80,9 @@ function MangaDetailsView(m) {
       chapters: chapters,
       index: Math.max(0, index),
       startPage: page || 0,
+      poster: m.poster,
+      kind: 'al',
+      ref: { anilist: m.anilist, name: m.name, poster: m.poster },
       // Korean and Chinese comics read top to bottom, left to right; Japanese manga right to left.
       rtl: media.countryOfOrigin === 'JP' || !media.countryOfOrigin,
     });
@@ -124,6 +128,15 @@ function MangaDetailsView(m) {
           },
         }, [h('span.ico', { text: '▶' }), t('Ver no anime')])
       );
+    btns.push(
+      h('div.btn', {
+        focusable: true,
+        onSelect: () => {
+          shelf.toggleFav(key, 'al', m);
+          renderInfo();
+        },
+      }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
+    );
     btns.push(
       h('div.btn', {
         focusable: true,
