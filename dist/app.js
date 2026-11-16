@@ -5043,6 +5043,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Ir para o capítulo": "Go to chapter",
+    "Número do capítulo": "Chapter number",
+    "Não achei esse capítulo.": "Couldn't find that chapter.",
+    "Ir para o capítulo...": "Go to chapter...",
+    "OK 2x ou CH +/−: zoom": "OK twice or CH +/−: zoom",
     "Procurando nas suas fontes...": "Searching your sources...",
     "{name}: {n} capítulos": "{name}: {n} chapters",
     "Achei em {n} fontes. Troque no botão 📚.": "Found in {n} sources. Switch with the 📚 button.",
@@ -5451,6 +5456,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Ir para o capítulo": "روح للفصل",
+    "Número do capítulo": "رقم الفصل",
+    "Não achei esse capítulo.": "ما لقيت هذا الفصل.",
+    "Ir para o capítulo...": "روح لفصل رقم...",
+    "OK 2x ou CH +/−: zoom": "اضغط OK مرتين أو CH +/− للزوم",
     "Procurando nas suas fontes...": "جاري البحث في مصادرك...",
     "{name}: {n} capítulos": "{name}: {n} فصل",
     "Achei em {n} fontes. Troque no botão 📚.": "لقيته في {n} مصادر. غيّر المصدر من زر 📚.",
@@ -14219,7 +14229,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var W = 1920;
   var H = 1080;
   var PAN = 300;
-  var ZOOMS = [1, 1.5, 2];
+  var ZOOMS = [1, 1.5, 2, 3];
+  var DOUBLE_MS = 450;
   function openReader(opts) {
     push(ReaderView(opts));
   }
@@ -14229,6 +14240,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var pi = 0;
     var mode = settings().readerMode === "width" ? "width" : "fit";
     var zi = 0;
+    var lastOk = 0;
+    var okTimer = null;
     var px = 0;
     var py = 0;
     var nat = {
@@ -14373,11 +14386,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         showPage("bottom");
       } else chapterStep(-1);
     }
-    function zoomStep() {
+    function zoomStep(to) {
       var z0 = size();
       var cx = (W / 2 - px) / z0.w;
       var cy = (H / 2 - py) / z0.h;
-      zi = (zi + 1) % ZOOMS.length;
+      var n = typeof to === "number" ? Math.max(0, Math.min(ZOOMS.length - 1, to)) : (zi + 1) % ZOOMS.length;
+      if (n === zi) return showHud(t("Zoom {n}%", {
+        n: Math.round(ZOOMS[zi] * 100)
+      }));
+      zi = n;
       var z1 = size();
       px = W / 2 - cx * z1.w;
       py = H / 2 - cy * z1.h;
@@ -14393,6 +14410,33 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var panY = z.h > H + 1;
       if (!pages4.length) return k === KEY.BACK ? false : true;
       if (k === KEY.RED) return zoomStep(), true;
+      if (k === KEY.CH_UP) return zoomStep(zi + 1), true;
+      if (k === KEY.CH_DOWN) return zoomStep(zi - 1), true;
+      if (k === KEY.ENTER) {
+        var now = Date.now();
+        if (now - lastOk < DOUBLE_MS) {
+          lastOk = 0;
+          clearTimeout(okTimer);
+          zoomStep(zi > 0 ? 0 : 2);
+        } else {
+          lastOk = now;
+          clearTimeout(okTimer);
+          okTimer = setTimeout(function () {
+            return alive && showHud(t("OK 2x ou CH +/−: zoom"));
+          }, DOUBLE_MS);
+        }
+        return true;
+      }
+      if (zi > 0 && (k === KEY.LEFT || k === KEY.RIGHT || k === KEY.UP || k === KEY.DOWN)) {
+        if (k === KEY.LEFT) px = Math.min(0, px + PAN);
+        if (k === KEY.RIGHT) px = Math.max(Math.min(0, W - z.w), px - PAN);
+        if (k === KEY.UP) py = Math.min(0, py + PAN);
+        if (k === KEY.DOWN) py = Math.max(Math.min(0, H - z.h), py - PAN);
+        if (!panX) px = (W - z.w) / 2;
+        if (!panY) py = (H - z.h) / 2;
+        apply4();
+        return true;
+      }
       if (k === KEY.GREEN) {
         mode = mode === "fit" ? "width" : "fit";
         saveSettings({
@@ -14403,9 +14447,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         showHud(mode === "fit" ? t("Ajustar à tela") : t("Ajustar à largura"));
         return true;
       }
-      if (k === KEY.YELLOW || k === KEY.CH_UP) return chapterStep(1), true;
-      if (k === KEY.BLUE || k === KEY.CH_DOWN) return chapterStep(-1), true;
-      if (k === KEY.ENTER) return showHud(), true;
+      if (k === KEY.YELLOW) return chapterStep(1), true;
+      if (k === KEY.BLUE) return chapterStep(-1), true;
       if (k === KEY.LEFT || k === KEY.RIGHT) {
         var next = k === KEY.RIGHT !== !!opts.rtl;
         if (panX) {
@@ -14452,6 +14495,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         alive = false;
         token++;
         clearTimeout(hudTimer);
+        clearTimeout(okTimer);
         pre = null;
         img2.onload = img2.onerror = null;
         img2.removeAttribute("src");
@@ -14740,6 +14784,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     })));
     parent.appendChild(row2);
     loadVisibleImages(row2);
+    return row2;
+  }
+  function setTileArt(row2, urls) {
+    var tiles = row2 ? row2.querySelectorAll(".anime-tile .poster-wrap") : [];
+    var _loop7 = function _loop7() {
+      var url2 = urls[i];
+      var wrap = tiles[i];
+      if (!url2 || wrap.querySelector(".tile-art")) return 1; // continue
+      var im = h("img.tile-art", {
+        alt: ""
+      });
+      im.onload = function () {
+        return wrap.classList.add("has-art-label");
+      };
+      im.onerror = function () {
+        return im.parentNode && im.parentNode.removeChild(im);
+      };
+      im.src = url2;
+      wrap.insertBefore(im, wrap.firstChild);
+    };
+    for (var i = 0; i < tiles.length; i++) {
+      if (_loop7()) continue;
+    }
   }
   function AnimeView() {
     var el = h("div.view");
@@ -14756,7 +14823,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop7 = function _loop7() {
+      var _loop8 = function _loop8() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -14770,7 +14837,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret4;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret4 = _loop7();
+        _ret4 = _loop8();
         if (_ret4 === 0) continue;
         if (_ret4 === 1) break;
       }
@@ -15596,6 +15663,42 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }).slice(0, limit || 20);
   }
 
+  // src/js/lib/chapterJump.js
+  function findChapter(chapters4, text) {
+    var n = parseFloat(String(text).replace(",", ".").replace(/[^\d.]/g, ""));
+    if (!isFinite(n)) return -1;
+    var best = -1;
+    var gap = Infinity;
+    chapters4.forEach(function (c, i) {
+      var v = parseFloat(c.chapter);
+      if (!isFinite(v)) return;
+      var d = v >= n ? v - n : (n - v) * 1e3;
+      if (d < gap) {
+        gap = d;
+        best = i;
+      }
+    });
+    return best;
+  }
+  function chapterSearchRow(chapters4, show3) {
+    return h("div.stream.md-nav.md-jump", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return promptText(t("Ir para o capítulo"), "", t("Número do capítulo"), function (q2) {
+          var i = findChapter(chapters4(), q2);
+          if (i < 0) return toast(t("Não achei esse capítulo."));
+          show3(i);
+        });
+      }
+    }, [h("div.s-main", {
+      text: "🔢 " + t("Ir para o capítulo...")
+    })]);
+  }
+  function focusChapter(list2, i) {
+    var row2 = list2.querySelector('[data-ci="' + i + '"]');
+    if (row2) focus(row2);
+  }
+
   // src/js/views/sources.js
   var CHUNK = 50;
   function openSources() {
@@ -16262,15 +16365,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: label
         })]);
       };
+      if (chapters4.length > 8) listEl.appendChild(chapterSearchRow(function () {
+        return chapters4;
+      }, function (i) {
+        chunk = Math.floor(i / CHUNK);
+        renderList();
+        focusChapter(listEl, i);
+      }));
       if (chunk > 0) listEl.appendChild(jump("◀ " + t("Capítulos {a}–{b}", {
         a: (chunk - 1) * CHUNK + 1,
         b: chunk * CHUNK
       }), chunk - 1));
-      var _loop8 = function _loop8(i) {
+      var _loop9 = function _loop9(i) {
         var c = chapters4[i];
         var here = p && p.chapterId === c.id;
         listEl.appendChild(h("div.stream", {
           focusable: true,
+          "data-ci": String(i),
           onSelect: function onSelect() {
             return read(i, here ? p.page : 0);
           }
@@ -16285,7 +16396,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }) : null]));
       };
       for (var i = start4; i < end; i++) {
-        _loop8(i);
+        _loop9(i);
       }
       if (end < chapters4.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
         a: end + 1,
@@ -16578,11 +16689,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: label
         })]);
       };
+      if (chapters4.length > 8) list2.appendChild(chapterSearchRow(function () {
+        return chapters4;
+      }, function (i) {
+        chunk = Math.floor(i / CHUNK2);
+        renderList(false);
+        focusChapter(list2, i);
+      }));
       if (chunk > 0) list2.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
         a: (chunk - 1) * CHUNK2 + 1,
         b: chunk * CHUNK2
       }), chunk - 1));
-      var _loop9 = function _loop9(i) {
+      var _loop0 = function _loop0(i) {
         var c = chapters4[i];
         var read2 = p && p.chapterId === c.id;
         var title = (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
@@ -16590,6 +16708,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }) : t("Especial")) + (c.title ? " · " + c.title : "");
         list2.appendChild(h("div.stream", {
           focusable: true,
+          "data-ci": String(i),
           onSelect: function onSelect() {
             return read(i, read2 ? p.page : 0);
           }
@@ -16606,7 +16725,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }) : null]));
       };
       for (var i = start4; i < end; i++) {
-        _loop9(i);
+        _loop0(i);
       }
       if (end < chapters4.length) list2.appendChild(nav2(t("Capítulos {a}–{b}", {
         a: end + 1,
@@ -19056,6 +19175,40 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     label: "Em breve",
     args: "status: NOT_YET_RELEASED, sort: POPULARITY_DESC"
   }];
+  function tileArt() {
+    var cached2 = get("mangaTileArt", null);
+    if (cached2 && cached2.at > Date.now() - 864e5 && cached2.urls && cached2.urls.length === DISCOVER.length + FORMATS.length) return Promise.resolve(cached2.urls);
+    var lists = DISCOVER.concat(FORMATS);
+    var q2 = "{" + lists.map(function (d, i) {
+      return "l" + i + ": Page(perPage: 8) { media(type: MANGA, isAdult: false, " + d.args + ") { id bannerImage coverImage { extraLarge } } }";
+    }).join(" ") + "}";
+    return postJSON("https://graphql.anilist.co", {
+      query: q2
+    }, {
+      timeout: 15e3,
+      quiet: true
+    }).then(function (r) {
+      var used = {};
+      var urls = lists.map(function (d, i) {
+        var media2 = r && r.data && r.data["l" + i] && r.data["l" + i].media || [];
+        var pick2 = media2.find(function (x) {
+          return x.bannerImage && !used[x.id];
+        }) || media2.find(function (x) {
+          return !used[x.id];
+        });
+        if (!pick2) return "";
+        used[pick2.id] = 1;
+        return pick2.bannerImage || pick2.coverImage && pick2.coverImage.extraLarge || "";
+      });
+      if (urls.some(Boolean)) set("mangaTileArt", {
+        at: Date.now(),
+        urls: urls
+      });
+      return urls;
+    }).catch(function () {
+      return [];
+    });
+  }
   var FORMATS = [{
     label: "Mangá (Japão)",
     args: 'countryOfOrigin: "JP", format: MANGA, sort: POPULARITY_DESC'
@@ -19202,7 +19355,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop0 = function _loop0() {
+      var _loop1 = function _loop1() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -19216,7 +19369,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret5;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret5 = _loop0();
+        _ret5 = _loop1();
         if (_ret5 === 0) continue;
         if (_ret5 === 1) break;
       }
@@ -19242,7 +19395,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       };
     }), "genre");
-    tileRow(rows2, t("Descobrir"), DISCOVER.map(function (d) {
+    var discoverRow = tileRow(rows2, t("Descobrir"), DISCOVER.map(function (d) {
       return {
         label: t(d.label),
         open: function open() {
@@ -19251,7 +19404,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
     }), "discover");
     add(t("Em alta agora"), "sort: TRENDING_DESC");
-    tileRow(rows2, t("Formatos"), FORMATS.map(function (f, i) {
+    var formatsRow = tileRow(rows2, t("Formatos"), FORMATS.map(function (f, i) {
       return {
         label: t(f.label),
         open: function open() {
@@ -19259,6 +19412,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       };
     }), "discover formats");
+    tileArt().then(function (a) {
+      setTileArt(discoverRow, a.slice(0, DISCOVER.length));
+      setTileArt(formatsRow, a.slice(DISCOVER.length));
+    });
     tileRow(rows2, t("Gêneros"), GENRES.map(function (g) {
       return {
         label: g[1] ? t(g[1]) : g[0],
@@ -19692,7 +19849,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var lines = String(text || "").split(/\r?\n/);
       var info2 = null;
       var n = 0;
-      var _loop1 = function _loop1() {
+      var _loop10 = function _loop10() {
         var l = lines[i].trim();
         if (!l) return 1; // continue
         if (l.indexOf("#EXTINF") === 0) {
@@ -19731,7 +19888,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       };
       for (var i = 0; i < lines.length && n < 3e4; i++) {
-        if (_loop1()) continue;
+        if (_loop10()) continue;
       }
       c.cats = cats;
     });
@@ -20434,7 +20591,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function run3() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop10 = function _loop10() {
+      var _loop11 = function _loop11() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (!p.row.parentNode) {
@@ -20456,7 +20613,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret6;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret6 = _loop10();
+        _ret6 = _loop11();
         if (_ret6 === 0) continue;
         if (_ret6 === 1) break;
       }
@@ -21129,7 +21286,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop11 = function _loop11() {
+      var _loop12 = function _loop12() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -21147,7 +21304,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret7;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret7 = _loop11();
+        _ret7 = _loop12();
         if (_ret7 === 0) continue;
         if (_ret7 === 1) break;
       }
@@ -21577,7 +21734,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop12 = function _loop12() {
+      var _loop13 = function _loop13() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -21595,7 +21752,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret8;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret8 = _loop12();
+        _ret8 = _loop13();
         if (_ret8 === 0) continue;
         if (_ret8 === 1) break;
       }
@@ -21921,7 +22078,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T19:52:26.481Z";
+  var BUILD = "2026-11-16T20:01:18.563Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -24594,7 +24751,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop13 = function _loop13() {
+      var _loop14 = function _loop14() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -24610,7 +24767,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop13();
+        _loop14();
       }
       days.__last = days.children[current3 + 1];
     }

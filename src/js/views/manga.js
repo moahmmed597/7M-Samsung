@@ -4,10 +4,11 @@
 import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
 import { postJSON } from '../lib/http.js';
+import * as store from '../lib/store.js';
 import { topbar, card, spinnerLine, toast } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
-import { tileRow, slug, SEASONS, SEASON_ART_URLS, SEASON_FALLBACK_URLS } from './anime.js';
+import { tileRow, setTileArt, slug, SEASONS, SEASON_ART_URLS, SEASON_FALLBACK_URLS } from './anime.js';
 import { openMangaDetails } from './mangaDetails.js';
 import { openSources, openSourceManga } from './sources.js';
 import * as shelf from '../lib/mangaLib.js';
@@ -65,6 +66,32 @@ const DISCOVER = [
   { label: 'Lançando agora', args: 'status: RELEASING, sort: POPULARITY_DESC' },
   { label: 'Em breve', args: 'status: NOT_YET_RELEASED, sort: POPULARITY_DESC' },
 ];
+// A picture for each Discover / Formats tile: the wide banner of the top title of that list
+// (a different title on each tile). One AniList request, kept for a day.
+function tileArt() {
+  const cached = store.get('mangaTileArt', null);
+  if (cached && cached.at > Date.now() - 864e5 && cached.urls && cached.urls.length === DISCOVER.length + FORMATS.length) return Promise.resolve(cached.urls);
+  const lists = DISCOVER.concat(FORMATS);
+  const q =
+    '{' +
+    lists.map((d, i) => 'l' + i + ': Page(perPage: 8) { media(type: MANGA, isAdult: false, ' + d.args + ') { id bannerImage coverImage { extraLarge } } }').join(' ') +
+    '}';
+  return postJSON('https://graphql.anilist.co', { query: q }, { timeout: 15000, quiet: true })
+    .then((r) => {
+      const used = {};
+      const urls = lists.map((d, i) => {
+        const media = (r && r.data && r.data['l' + i] && r.data['l' + i].media) || [];
+        const pick = media.find((x) => x.bannerImage && !used[x.id]) || media.find((x) => !used[x.id]);
+        if (!pick) return '';
+        used[pick.id] = 1;
+        return pick.bannerImage || (pick.coverImage && pick.coverImage.extraLarge) || '';
+      });
+      if (urls.some(Boolean)) store.set('mangaTileArt', { at: Date.now(), urls: urls });
+      return urls;
+    })
+    .catch(() => []);
+}
+
 const FORMATS = [
   { label: 'Mangá (Japão)', args: 'countryOfOrigin: "JP", format: MANGA, sort: POPULARITY_DESC' },
   { label: 'Manhwa (Coreia)', args: 'countryOfOrigin: "KR", sort: POPULARITY_DESC' },
@@ -174,9 +201,13 @@ export function MangaView() {
     })),
     'genre'
   );
-  tileRow(rows, t('Descobrir'), DISCOVER.map((d) => ({ label: t(d.label), open: () => grid(t(d.label), d.args) })), 'discover');
+  const discoverRow = tileRow(rows, t('Descobrir'), DISCOVER.map((d) => ({ label: t(d.label), open: () => grid(t(d.label), d.args) })), 'discover');
   add(t('Em alta agora'), 'sort: TRENDING_DESC');
-  tileRow(rows, t('Formatos'), FORMATS.map((f, i) => ({ label: t(f.label), open: () => grid(t(f.label), f.args) })), 'discover formats');
+  const formatsRow = tileRow(rows, t('Formatos'), FORMATS.map((f, i) => ({ label: t(f.label), open: () => grid(t(f.label), f.args) })), 'discover formats');
+  tileArt().then((a) => {
+    setTileArt(discoverRow, a.slice(0, DISCOVER.length));
+    setTileArt(formatsRow, a.slice(DISCOVER.length));
+  });
   tileRow(
     rows,
     t('Gêneros'),

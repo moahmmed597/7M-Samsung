@@ -14,6 +14,7 @@ import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { openReader } from './reader.js';
 import * as shelf from '../lib/mangaLib.js';
+import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
 
 const CHUNK = 50;
 
@@ -457,12 +458,20 @@ function SourceDetails(m, api) {
     const end = Math.min(chapters.length, start + CHUNK);
     const p = progress();
     const jump = (label, to) => h('div.stream.md-nav', { focusable: true, onSelect: () => ((chunk = to), renderList()) }, [h('div.s-main', { text: label })]);
+    if (chapters.length > 8)
+      listEl.appendChild(
+        chapterSearchRow(() => chapters, (i) => {
+          chunk = Math.floor(i / CHUNK);
+          renderList();
+          focusChapter(listEl, i);
+        })
+      );
     if (chunk > 0) listEl.appendChild(jump('◀ ' + t('Capítulos {a}–{b}', { a: (chunk - 1) * CHUNK + 1, b: chunk * CHUNK }), chunk - 1));
     for (let i = start; i < end; i++) {
       const c = chapters[i];
       const here = p && p.chapterId === c.id;
       listEl.appendChild(
-        h('div.stream', { focusable: true, onSelect: () => read(i, here ? p.page : 0) }, [
+        h('div.stream', { focusable: true, 'data-ci': String(i), onSelect: () => read(i, here ? p.page : 0) }, [
           h('div.s-main', { text: (c.chapter !== null && c.chapter !== undefined ? t('Cap. {n}', { n: c.chapter }) : t('Especial')) + (c.title ? ' · ' + c.title : '') }),
           c.scanlator ? h('span.s-tag', { text: c.scanlator }) : null,
           here ? h('span.s-tag.ok', { text: t('Parou aqui') }) : null,

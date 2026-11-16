@@ -236,6 +236,22 @@ export function tileRow(parent, title, tiles, cls) {
   );
   parent.appendChild(row);
   loadVisibleImages(row);
+  return row;
+}
+
+// Puts a picture on tiles that only have a colour: urls[i] goes on tile i, the name stays on top.
+export function setTileArt(row, urls) {
+  const tiles = row ? row.querySelectorAll('.anime-tile .poster-wrap') : [];
+  for (let i = 0; i < tiles.length; i++) {
+    const url = urls[i];
+    const wrap = tiles[i];
+    if (!url || wrap.querySelector('.tile-art')) continue;
+    const im = h('img.tile-art', { alt: '' });
+    im.onload = () => wrap.classList.add('has-art-label');
+    im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
+    im.src = url;
+    wrap.insertBefore(im, wrap.firstChild);
+  }
 }
 
 export function AnimeView() {

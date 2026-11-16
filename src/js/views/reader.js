@@ -1,7 +1,9 @@
 // Reader for manga and webtoons, made for the TV remote.
 //   Left/Right: turn the page (Right = previous for right-to-left manga). Up/Down: pan a tall page, or turn.
-//   Red: zoom 100% → 150% → 200% (arrows then pan). Green: fit the screen ↔ fit the width (webtoons).
-//   Yellow / Blue (or Channel up/down): next / previous chapter. Back: reset the zoom, then close.
+//   Zoom (made for the smart remote): OK twice = zoom in / back to normal; Channel up/down = zoom in / out;
+//   Red = next zoom step. While zoomed the arrows move around the page like a mouse (they don't turn pages).
+//   Green: fit the screen ↔ fit the width (webtoons). Yellow / Blue: next / previous chapter.
+//   Back: reset the zoom, then close.
 // Memory: one <img> on screen plus one preloaded page; everything else is dropped at once.
 import { h } from '../lib/dom.js';
 import { KEY } from '../lib/nav.js';
@@ -14,7 +16,8 @@ import { t } from '../lib/i18n.js';
 const W = 1920;
 const H = 1080;
 const PAN = 300;
-const ZOOMS = [1, 1.5, 2];
+const ZOOMS = [1, 1.5, 2, 3];
+const DOUBLE_MS = 450;
 
 // opts: { key, title, chapters, index, startPage, rtl }
 export function openReader(opts) {
@@ -27,6 +30,8 @@ function ReaderView(opts) {
   let pi = 0;
   let mode = store.settings().readerMode === 'width' ? 'width' : 'fit';
   let zi = 0; // index in ZOOMS
+  let lastOk = 0;
+  let okTimer = null;
   let px = 0;
   let py = 0;
   let nat = { w: 0, h: 0 };
@@ -159,11 +164,14 @@ function ReaderView(opts) {
     } else chapterStep(-1);
   }
 
-  function zoomStep() {
+  // to: the zoom step to go to (default: the next one, back to 100% after the last).
+  function zoomStep(to) {
     const z0 = size();
     const cx = (W / 2 - px) / z0.w;
     const cy = (H / 2 - py) / z0.h;
-    zi = (zi + 1) % ZOOMS.length;
+    const n = typeof to === 'number' ? Math.max(0, Math.min(ZOOMS.length - 1, to)) : (zi + 1) % ZOOMS.length;
+    if (n === zi) return showHud(t('Zoom {n}%', { n: Math.round(ZOOMS[zi] * 100) }));
+    zi = n;
     const z1 = size();
     px = W / 2 - cx * z1.w;
     py = H / 2 - cy * z1.h;
@@ -178,6 +186,34 @@ function ReaderView(opts) {
     const panY = z.h > H + 1;
     if (!pages.length) return k === KEY.BACK ? false : true;
     if (k === KEY.RED) return zoomStep(), true;
+    // Channel up / down: zoom in / out.
+    if (k === KEY.CH_UP) return zoomStep(zi + 1), true;
+    if (k === KEY.CH_DOWN) return zoomStep(zi - 1), true;
+    // OK twice quickly: zoom in (or back to normal when zoomed). OK once: show the page info.
+    if (k === KEY.ENTER) {
+      const now = Date.now();
+      if (now - lastOk < DOUBLE_MS) {
+        lastOk = 0;
+        clearTimeout(okTimer);
+        zoomStep(zi > 0 ? 0 : 2);
+      } else {
+        lastOk = now;
+        clearTimeout(okTimer);
+        okTimer = setTimeout(() => alive && showHud(t('OK 2x ou CH +/−: zoom')), DOUBLE_MS);
+      }
+      return true;
+    }
+    // Zoomed: the arrows only move around the page and stop at its edges.
+    if (zi > 0 && (k === KEY.LEFT || k === KEY.RIGHT || k === KEY.UP || k === KEY.DOWN)) {
+      if (k === KEY.LEFT) px = Math.min(0, px + PAN);
+      if (k === KEY.RIGHT) px = Math.max(Math.min(0, W - z.w), px - PAN);
+      if (k === KEY.UP) py = Math.min(0, py + PAN);
+      if (k === KEY.DOWN) py = Math.max(Math.min(0, H - z.h), py - PAN);
+      if (!panX) px = (W - z.w) / 2;
+      if (!panY) py = (H - z.h) / 2;
+      apply();
+      return true;
+    }
     if (k === KEY.GREEN) {
       mode = mode === 'fit' ? 'width' : 'fit';
       store.saveSettings({ readerMode: mode });
@@ -186,9 +222,8 @@ function ReaderView(opts) {
       showHud(mode === 'fit' ? t('Ajustar à tela') : t('Ajustar à largura'));
       return true;
     }
-    if (k === KEY.YELLOW || k === KEY.CH_UP) return chapterStep(1), true;
-    if (k === KEY.BLUE || k === KEY.CH_DOWN) return chapterStep(-1), true;
-    if (k === KEY.ENTER) return showHud(), true;
+    if (k === KEY.YELLOW) return chapterStep(1), true;
+    if (k === KEY.BLUE) return chapterStep(-1), true;
     if (k === KEY.LEFT || k === KEY.RIGHT) {
       const next = (k === KEY.RIGHT) !== !!opts.rtl; // RTL: Left = next
       if (panX) {
@@ -237,6 +272,7 @@ function ReaderView(opts) {
       alive = false;
       token++;
       clearTimeout(hudTimer);
+      clearTimeout(okTimer);
       pre = null;
       img.onload = img.onerror = null;
       img.removeAttribute('src');

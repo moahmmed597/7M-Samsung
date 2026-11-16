@@ -14,6 +14,7 @@ import { chapterToEpisode, animeMeta } from '../lib/animeLink.js';
 import * as pl from '../api/plugins.js';
 import { searchPlugin, pluginApi } from './sources.js';
 import * as shelf from '../lib/mangaLib.js';
+import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
 
 const CHUNK = 50;
 
@@ -206,13 +207,21 @@ function MangaDetailsView(m) {
     const end = Math.min(chapters.length, start + CHUNK);
     const p = progress();
     const nav2 = (label, to) => h('div.stream.md-nav', { focusable: true, onSelect: () => ((chunk = to), renderList(true)) }, [h('div.s-main', { text: label })]);
+    if (chapters.length > 8)
+      list.appendChild(
+        chapterSearchRow(() => chapters, (i) => {
+          chunk = Math.floor(i / CHUNK);
+          renderList(false);
+          focusChapter(list, i);
+        })
+      );
     if (chunk > 0) list.appendChild(nav2('◀ ' + t('Capítulos {a}–{b}', { a: (chunk - 1) * CHUNK + 1, b: chunk * CHUNK }), chunk - 1));
     for (let i = start; i < end; i++) {
       const c = chapters[i];
       const read2 = p && p.chapterId === c.id;
       const title = (c.chapter !== null && c.chapter !== undefined ? t('Cap. {n}', { n: c.chapter }) : t('Especial')) + (c.title ? ' · ' + c.title : '');
       list.appendChild(
-        h('div.stream', { focusable: true, onSelect: () => read(i, read2 ? p.page : 0) }, [
+        h('div.stream', { focusable: true, 'data-ci': String(i), onSelect: () => read(i, read2 ? p.page : 0) }, [
           h('div.s-main', { text: title }),
           c.lang ? h('span.s-tag', { text: c.lang.toUpperCase() }) : null,
           c.pages ? h('span.s-tag', { text: c.pages + ' ' + t('pág.') }) : null,
