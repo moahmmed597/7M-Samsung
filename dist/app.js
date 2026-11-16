@@ -1,3 +1,5 @@
+var _templateObject, _templateObject2;
+function _taggedTemplateLiteral(e, t) { return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } })); }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, e) { if ("object" != _typeof(t) || !t) return t; var r; if ("undefined" != typeof Symbol && void 0 !== (r = t[Symbol.toPrimitive])) { var i = r.call(t, e || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === e ? String : Number)(t); }
@@ -127,9 +129,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var NATIVE_BIND = require_function_bind_native();
-      var call4 = Function.prototype.call;
-      module.exports = NATIVE_BIND ? call4.bind(call4) : function () {
-        return call4.apply(call4, arguments);
+      var call5 = Function.prototype.call;
+      module.exports = NATIVE_BIND ? call5.bind(call5) : function () {
+        return call5.apply(call5, arguments);
       };
     }
   });
@@ -174,11 +176,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var NATIVE_BIND = require_function_bind_native();
       var FunctionPrototype = Function.prototype;
-      var call4 = FunctionPrototype.call;
-      var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call4, call4);
+      var call5 = FunctionPrototype.call;
+      var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call5, call5);
       module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
         return function () {
-          return call4.apply(fn, arguments);
+          return call5.apply(fn, arguments);
         };
       };
     }
@@ -443,15 +445,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "node_modules/core-js/internals/ordinary-to-primitive.js": function node_modules_coreJs_internals_ordinaryToPrimitiveJs(exports, module) {
       "use strict";
 
-      var call4 = require_function_call();
+      var call5 = require_function_call();
       var isCallable = require_is_callable();
       var isObject = require_is_object();
       var $TypeError = TypeError;
       module.exports = function (input, pref) {
         var fn, val;
-        if (pref === "string" && isCallable(fn = input.toString) && !isObject(val = call4(fn, input))) return val;
-        if (isCallable(fn = input.valueOf) && !isObject(val = call4(fn, input))) return val;
-        if (pref !== "string" && isCallable(fn = input.toString) && !isObject(val = call4(fn, input))) return val;
+        if (pref === "string" && isCallable(fn = input.toString) && !isObject(val = call5(fn, input))) return val;
+        if (isCallable(fn = input.valueOf) && !isObject(val = call5(fn, input))) return val;
+        if (pref !== "string" && isCallable(fn = input.toString) && !isObject(val = call5(fn, input))) return val;
         throw new $TypeError("Can't convert object to primitive value");
       };
     }
@@ -591,7 +593,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "node_modules/core-js/internals/to-primitive.js": function node_modules_coreJs_internals_toPrimitiveJs(exports, module) {
       "use strict";
 
-      var call4 = require_function_call();
+      var call5 = require_function_call();
       var isObject = require_is_object();
       var isSymbol = require_is_symbol();
       var getMethod = require_get_method();
@@ -605,7 +607,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var result;
         if (exoticToPrim) {
           if (pref === void 0) pref = "default";
-          result = call4(exoticToPrim, input, pref);
+          result = call5(exoticToPrim, input, pref);
           if (!isObject(result) || isSymbol(result)) return result;
           throw new $TypeError("Can't convert object to primitive value");
         }
@@ -668,7 +670,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var DESCRIPTORS = require_descriptors();
-      var call4 = require_function_call();
+      var call5 = require_function_call();
       var propertyIsEnumerableModule = require_object_property_is_enumerable();
       var createPropertyDescriptor = require_create_property_descriptor();
       var toIndexedObject = require_to_indexed_object();
@@ -682,7 +684,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (IE8_DOM_DEFINE) try {
           return $getOwnPropertyDescriptor(O, P);
         } catch (error) {}
-        if (hasOwn(O, P)) return createPropertyDescriptor(!call4(propertyIsEnumerableModule.f, O, P), O[P]);
+        if (hasOwn(O, P)) return createPropertyDescriptor(!call5(propertyIsEnumerableModule.f, O, P), O[P]);
       };
     }
   });
@@ -1312,7 +1314,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var DESCRIPTORS = require_descriptors();
       var uncurryThis = require_function_uncurry_this();
-      var call4 = require_function_call();
+      var call5 = require_function_call();
       var fails = require_fails();
       var objectKeys = require_object_keys();
       var getOwnPropertySymbolsModule = require_object_get_own_property_symbols();
@@ -1359,7 +1361,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var key3;
           while (length > j) {
             key3 = keys2[j++];
-            if (!DESCRIPTORS || call4(propertyIsEnumerable, S, key3)) T[key3] = S[key3];
+            if (!DESCRIPTORS || call5(propertyIsEnumerable, S, key3)) T[key3] = S[key3];
           }
         }
         return T;
@@ -1911,7 +1913,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var $ = require_export();
-      var call4 = require_function_call();
+      var call5 = require_function_call();
       var IS_PURE = require_is_pure();
       var FunctionName = require_function_name();
       var isCallable = require_is_callable();
@@ -1985,7 +1987,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           } else {
             INCORRECT_VALUES_NAME = true;
             defaultIterator = function values() {
-              return call4(nativeIterator, this);
+              return call5(nativeIterator, this);
             };
           }
         }
@@ -2098,7 +2100,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "node_modules/core-js/internals/iterator-close.js": function node_modules_coreJs_internals_iteratorCloseJs(exports, module) {
       "use strict";
 
-      var call4 = require_function_call();
+      var call5 = require_function_call();
       var anObject = require_an_object();
       var getMethod = require_get_method();
       module.exports = function (iterator, kind, value) {
@@ -2110,7 +2112,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             if (kind === "throw") throw value;
             return value;
           }
-          innerResult = call4(innerResult, iterator);
+          innerResult = call5(innerResult, iterator);
         } catch (error) {
           innerError = true;
           innerResult = error;
@@ -2282,7 +2284,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "node_modules/core-js/internals/get-iterator-internal.js": function node_modules_coreJs_internals_getIteratorInternalJs(exports, module) {
       "use strict";
 
-      var call4 = require_function_call();
+      var call5 = require_function_call();
       var isCallable = require_is_callable();
       var anObject = require_an_object();
       var tryToString = require_try_to_string();
@@ -2290,7 +2292,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var $TypeError = TypeError;
       module.exports = function (argument, usingIterator) {
         var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
-        if (isCallable(iteratorMethod)) return anObject(call4(iteratorMethod, argument));
+        if (isCallable(iteratorMethod)) return anObject(call5(iteratorMethod, argument));
         throw new $TypeError(tryToString(argument) + " is not iterable");
       };
     }
@@ -2316,7 +2318,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "use strict";
 
       var bind = require_function_bind_context();
-      var call4 = require_function_call();
+      var call5 = require_function_call();
       var toObject = require_to_object();
       var callWithSafeIterationClosing = require_call_with_safe_iteration_closing();
       var isArrayIteratorMethod = require_is_array_iterator_method();
@@ -2343,7 +2345,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           result = IS_CONSTRUCTOR ? new this() : [];
           iterator = getIterator(O, iteratorMethod);
           next = iterator.next;
-          for (; !(step = call4(next, iterator)).done; index2++) {
+          for (; !(step = call5(next, iterator)).done; index2++) {
             try {
               doesNotExceedSafeInteger(index2);
             } catch (error) {
@@ -2895,9 +2897,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         startsWith: function startsWith(searchString) {
           var that = toString(requireObjectCoercible(this));
           notARegExp(searchString);
-          var search2 = toString(searchString);
+          var search3 = toString(searchString);
           var index2 = toLength(min(arguments.length > 1 ? arguments[1] : void 0, that.length));
-          return stringSlice(that, index2, index2 + search2.length) === search2;
+          return stringSlice(that, index2, index2 + search3.length) === search3;
         }
       });
     }
@@ -2943,11 +2945,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         endsWith: function endsWith(searchString) {
           var that = toString(requireObjectCoercible(this));
           notARegExp(searchString);
-          var search2 = toString(searchString);
+          var search3 = toString(searchString);
           var endPosition = arguments.length > 1 ? arguments[1] : void 0;
           var len = that.length;
           var end = endPosition === void 0 ? len : min(toLength(endPosition), len);
-          return slice(that, end - search2.length, end) === search2;
+          return slice(that, end - search3.length, end) === search3;
         }
       });
     }
@@ -2975,11 +2977,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var $RangeError = RangeError;
       var floor = Math.floor;
       module.exports = function repeat(count) {
-        var str = toString(requireObjectCoercible(this));
+        var str2 = toString(requireObjectCoercible(this));
         var result = "";
         var n = toIntegerOrInfinity(count);
         if (n < 0 || n === Infinity) throw new $RangeError("Wrong number of repetitions");
-        for (; n > 0; (n = floor(n / 2)) && (str += str)) if (n % 2) result += str;
+        for (; n > 0; (n = floor(n / 2)) && (str2 += str2)) if (n % 2) result += str2;
         return result;
       };
     }
@@ -4451,8 +4453,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           };
           return _this;
         };
-        var base64DecodeInputStream = function base64DecodeInputStream(str) {
-          var _str = str;
+        var base64DecodeInputStream = function base64DecodeInputStream(str2) {
+          var _str = str2;
           var _pos = 0;
           var _buffer = 0;
           var _buflen = 0;
@@ -4646,17 +4648,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }();
       !function () {
         qrcode2.stringToBytesFuncs["UTF-8"] = function (s) {
-          function toUTF8Array(str) {
+          function toUTF8Array(str2) {
             var utf82 = [];
-            for (var i = 0; i < str.length; i++) {
-              var charcode = str.charCodeAt(i);
+            for (var i = 0; i < str2.length; i++) {
+              var charcode = str2.charCodeAt(i);
               if (charcode < 128) utf82.push(charcode);else if (charcode < 2048) {
                 utf82.push(192 | charcode >> 6, 128 | charcode & 63);
               } else if (charcode < 55296 || charcode >= 57344) {
                 utf82.push(224 | charcode >> 12, 128 | charcode >> 6 & 63, 128 | charcode & 63);
               } else {
                 i++;
-                charcode = 65536 + ((charcode & 1023) << 10 | str.charCodeAt(i) & 1023);
+                charcode = 65536 + ((charcode & 1023) << 10 | str2.charCodeAt(i) & 1023);
                 utf82.push(240 | charcode >> 18, 128 | charcode >> 12 & 63, 128 | charcode >> 6 & 63, 128 | charcode & 63);
               }
             }
@@ -4879,11 +4881,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Trocar de perfil": "Switch profile",
     "{n} perfis nesta TV": "{n} profiles on this TV",
     "Para outra pessoa, com outra conta Stremio": "For someone else, with another Stremio account",
-    'Perguntar "Quem está assistindo?" ao abrir': "Ask \"Who's watching?\" on launch",
+    'Perguntar "Quem está assistindo?" ao abrir': "Ask \"Who\\'s watching?\" on launch",
     "Mostra a tela de escolher ou criar perfil ao abrir o app": "Shows the Choose Profile screen when launching the app",
     "Escolher perfil agora": "Choose profile now",
-    'Abre a tela "Quem está assistindo?"': "Opens the \"Who's watching?\" screen",
-    'Tela "Quem está assistindo?"': "\"Who's watching?\" screen",
+    'Abre a tela "Quem está assistindo?"': "Opens the \"Who\\'s watching?\" screen",
+    'Tela "Quem está assistindo?"': "\"Who\\'s watching?\" screen",
     "Escolher perfil": "Choose profile",
     "Proteção contra burn-in (OLED)": "OLED Burn-in Protection",
     "Tela preta pura com relógio móvel após 90s pausado para proteger painéis OLED": "Pure black screen with drifting clock after 90s pause to protect OLED panels",
@@ -5041,6 +5043,45 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Adicionar repositório": "Add repository",
+    "Endereço do repositório (repo.json)": "Repository address (repo.json)",
+    "Endereço inválido.": "Invalid address.",
+    "Este é um repositório Aidoku (iPhone). O formato dele não roda na TV.": "This is an Aidoku (iPhone) repository. Its format doesn't run on a TV.",
+    "Este é um repositório Mangayomi. Ainda não roda na TV.": "This is a Mangayomi repository. It doesn't run on the TV yet.",
+    "Este é um repositório Tachiyomi/Mihon (apps Android). Adicione-o no seu servidor Suwayomi e conecte o servidor aqui.": "This is a Tachiyomi/Mihon repository (Android apps). Add it on your Suwayomi server and connect the server here.",
+    "Gerenciar plugins": "Manage plugins",
+    "Instalando {name}...": "Installing {name}...",
+    'Isso é um repositório, não um servidor. Use "Adicionar repositório".': "That's a repository, not a server. Use \"Add repository\".",
+    "Lendo o repositório...": "Reading the repository...",
+    "Nenhum plugin neste repositório.": "No plugin in this repository.",
+    "Não consegui abrir o repositório.": "Couldn't open the repository.",
+    "Não consegui atualizar.": "Couldn't update.",
+    "Não consegui instalar {name}.": "Couldn't install {name}.",
+    "Não reconheci este repositório.": "I don't recognise this repository.",
+    "Plugins": "Plugins",
+    "Plugins (repositórios no formato do Harbor)": "Plugins (Harbor-format repositories)",
+    "Remover": "Remove",
+    "Remover repositório": "Remove repository",
+    "Remover {name}?": "Remove {name}?",
+    "Repositório": "Repository",
+    "Servidor Suwayomi (extensões Tachiyomi/Mihon)": "Suwayomi server (Tachiyomi/Mihon extensions)",
+    "Ver plugins": "See plugins",
+    "cole o link do repo.json": "paste the repo.json link",
+    "instalado": "installed",
+    "{name} atualizado.": "{name} updated.",
+    "{name} instalado.": "{name} installed.",
+    "Ouvindo a legenda do arquivo por 60 segundos... continue assistindo.": "Listening to the file's subtitle for 60 seconds... keep watching.",
+    "Nada para desfazer.": "Nothing to undo.",
+    'Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".': "Couldn't sync it reliably. Use \"Sync by ear\".",
+    "Qual frase você acabou de ouvir?": "Which line did you just hear?",
+    "Nenhuma linha perto deste momento.": "No line near this moment.",
+    "de ouvido": "by ear",
+    "Sincronizada automaticamente": "Auto synced",
+    "Compara com a legenda do arquivo ou outras legendas": "Compares with the file's subtitle or other subtitles",
+    "Sincronizar de ouvido": "Sync by ear",
+    "Escolha a frase que você acabou de ouvir": "Pick the line you just heard",
+    "Desfazer sincronização": "Undo sync",
+    "Volta ao atraso de antes": "Back to the delay before",
     "Disponível em": "Available on",
     "aluguel": "rent",
     "compra": "buy",
@@ -5334,6 +5375,45 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Adicionar repositório": "أضف مستودع",
+    "Endereço do repositório (repo.json)": "رابط المستودع (repo.json)",
+    "Endereço inválido.": "الرابط غير صحيح.",
+    "Este é um repositório Aidoku (iPhone). O formato dele não roda na TV.": "هذا مستودع Aidoku (للآيفون). صيغته ما تشتغل على الشاشة.",
+    "Este é um repositório Mangayomi. Ainda não roda na TV.": "هذا مستودع Mangayomi. ما يشتغل على الشاشة حالياً.",
+    "Este é um repositório Tachiyomi/Mihon (apps Android). Adicione-o no seu servidor Suwayomi e conecte o servidor aqui.": "هذا مستودع Tachiyomi/Mihon (تطبيقات أندرويد). أضفه في سيرفر Suwayomi حقك واربط السيرفر هنا.",
+    "Gerenciar plugins": "إدارة الإضافات",
+    "Instalando {name}...": "أثبّت {name}...",
+    'Isso é um repositório, não um servidor. Use "Adicionar repositório".': 'هذا مستودع مو سيرفر. استخدم "أضف مستودع".',
+    "Lendo o repositório...": "أقرأ المستودع...",
+    "Nenhum plugin neste repositório.": "ما فيه إضافات في هذا المستودع.",
+    "Não consegui abrir o repositório.": "ما قدرت أفتح المستودع.",
+    "Não consegui atualizar.": "ما قدرت أحدّث.",
+    "Não consegui instalar {name}.": "ما قدرت أثبّت {name}.",
+    "Não reconheci este repositório.": "ما عرفت نوع هذا المستودع.",
+    "Plugins": "الإضافات",
+    "Plugins (repositórios no formato do Harbor)": "إضافات (مستودعات بصيغة هاربر)",
+    "Remover": "حذف",
+    "Remover repositório": "حذف المستودع",
+    "Remover {name}?": "تحذف {name}؟",
+    "Repositório": "مستودع",
+    "Servidor Suwayomi (extensões Tachiyomi/Mihon)": "سيرفر Suwayomi (إضافات Tachiyomi/Mihon)",
+    "Ver plugins": "عرض الإضافات",
+    "cole o link do repo.json": "الصق رابط repo.json",
+    "instalado": "مثبّت",
+    "{name} atualizado.": "تم تحديث {name}.",
+    "{name} instalado.": "تم تثبيت {name}.",
+    "Ouvindo a legenda do arquivo por 60 segundos... continue assistindo.": "أسمع ترجمة الملف 60 ثانية... كمّل مشاهدة.",
+    "Nada para desfazer.": "ما فيه شي أتراجع عنه.",
+    'Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".': 'ما قدرت أضبطها بدقة. استخدم "مزامنة بالسمع".',
+    "Qual frase você acabou de ouvir?": "أي جملة سمعتها الحين؟",
+    "Nenhuma linha perto deste momento.": "ما فيه جمل قريبة من هذي اللحظة.",
+    "de ouvido": "بالسمع",
+    "Sincronizada automaticamente": "تمت المزامنة تلقائياً",
+    "Compara com a legenda do arquivo ou outras legendas": "يقارن مع ترجمة الملف أو ترجمات ثانية",
+    "Sincronizar de ouvido": "مزامنة بالسمع",
+    "Escolha a frase que você acabou de ouvir": "اختر الجملة اللي سمعتها الحين",
+    "Desfazer sincronização": "تراجع عن المزامنة",
+    "Volta ao atraso de antes": "يرجع التأخير اللي قبل",
     "Disponível em": "متوفر على",
     "aluguel": "تأجير",
     "compra": "شراء",
@@ -6032,8 +6112,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function animateScroll(node, prop, target) {
     if (node.__anim) cancelAnimationFrame(node.__anim);
-    var start3 = node[prop];
-    var delta = target - start3;
+    var start4 = node[prop];
+    var delta = target - start4;
     if (!smooth || Math.abs(delta) < 2) {
       node[prop] = target;
       if (scrollHook) scrollHook(node);
@@ -6043,7 +6123,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var t0 = Date.now();
     var _step2 = function step() {
       var k = Math.min(1, (Date.now() - t0) / dur);
-      node[prop] = start3 + delta * (1 - Math.pow(1 - k, 3));
+      node[prop] = start4 + delta * (1 - Math.pow(1 - k, 3));
       if (k < 1) node.__anim = requestAnimationFrame(_step2);else {
         node.__anim = null;
         if (scrollHook) scrollHook(node);
@@ -8066,9 +8146,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var found = null;
       var done = 0;
       var batch2 = 24;
-      var _runBatch = function runBatch(start3) {
-        if (found || start3 >= hosts.length) return Promise.resolve(found);
-        var slice = hosts.slice(start3, start3 + batch2);
+      var _runBatch = function runBatch(start4) {
+        if (found || start4 >= hosts.length) return Promise.resolve(found);
+        var slice = hosts.slice(start4, start4 + batch2);
         return Promise.all(slice.map(function (h2) {
           return getJSON("http://" + h2 + ":11470/settings", {
             timeout: 1500,
@@ -8080,7 +8160,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             if (onProgress2) onProgress2(done, hosts.length);
           });
         })).then(function () {
-          return _runBatch(start3 + batch2);
+          return _runBatch(start4 + batch2);
         });
       };
       return _runBatch(0);
@@ -9397,14 +9477,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
         }
         fields.push(raw.substring(lastPos));
-        var start3 = toSec(fields[startIdx]);
+        var start4 = toSec(fields[startIdx]);
         var end = toSec(fields[endIdx]);
         var body = fields[fields.length - 1] || "";
-        if (!isFinite(start3) || !isFinite(end) || end <= start3) continue;
+        if (!isFinite(start4) || !isFinite(end) || end <= start4) continue;
         body = body.replace(/\{\\[^}]*\}/g, "").replace(/\{[^}]*\}/g, "").replace(/\\[Nn]/g, "\n").replace(/\\h/g, " ").trim();
         if (body) {
           cues.push({
-            start: start3,
+            start: start4,
             end: end,
             text: sanitize(body)
           });
@@ -9427,13 +9507,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (j >= lines.length) continue;
       var parts = lines[j].split("-->");
       if (parts.length < 2) continue;
-      var start3 = toSec(parts[0]);
+      var start4 = toSec(parts[0]);
       var endToken = parts[1].trim().split(/\s+/)[0];
       var end = toSec(endToken);
-      if (!isFinite(start3) || !isFinite(end) || end <= start3) continue;
+      if (!isFinite(start4) || !isFinite(end) || end <= start4) continue;
       var body = lines.slice(j + 1).join("\n").replace(/\{\\[^}]*\}/g, "").replace(/\\[Nn]/g, "\n").trim();
       if (body) cues.push({
-        start: start3,
+        start: start4,
         end: end,
         text: sanitize(body)
       });
@@ -10782,8 +10862,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     connected().filter(function (p) {
       return useFor("progressSource", p);
     }).forEach(function (p) {
-      var call4 = p === "trakt" ? trakt("POST", "/scrobble/" + action, body) : simkl("POST", "/scrobble/" + action, body);
-      call4.then(function () {
+      var call5 = p === "trakt" ? trakt("POST", "/scrobble/" + action, body) : simkl("POST", "/scrobble/" + action, body);
+      call5.then(function () {
         return log.info("tracker", p, action, body.progress);
       }).catch(function (e) {
         if (e.status !== 409) log.warn("tracker", p, action, e.message);
@@ -11019,11 +11099,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (!id || id.len > 4) return null;
     var size = vint(b, pos + id.len, false);
     if (!size) return null;
-    var start3 = pos + id.len + size.len;
+    var start4 = pos + id.len + size.len;
     return {
       id: id.value,
-      start: start3,
-      end: size.unknown ? Infinity : start3 + size.value,
+      start: start4,
+      end: size.unknown ? Infinity : start4 + size.value,
       pos: pos
     };
   }
@@ -11080,26 +11160,26 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var disp = parts.find(function (x) {
         return x.id === ID.DISPLAY;
       });
-      var str = disp && kids(b, disp).find(function (x) {
+      var str2 = disp && kids(b, disp).find(function (x) {
         return x.id === ID.STRING;
       });
       return {
         start: uint(b, st) / 1e9,
-        title: str ? utf8(b, str) : ""
+        title: str2 ? utf8(b, str2) : ""
       };
     }).filter(Boolean).sort(function (x, y) {
       return x.start - y.start;
     });
   }
-  function range(url2, start3, length) {
+  function range(url2, start4, length) {
     return new Promise(function (resolve2) {
       var xhr2 = new XMLHttpRequest();
       xhr2.open("GET", url2, true);
       xhr2.responseType = "arraybuffer";
       xhr2.timeout = 8e3;
-      xhr2.setRequestHeader("Range", "bytes=" + start3 + "-" + (start3 + length - 1));
+      xhr2.setRequestHeader("Range", "bytes=" + start4 + "-" + (start4 + length - 1));
       xhr2.onload = function () {
-        var ok = xhr2.status === 206 || xhr2.status === 200 && start3 === 0;
+        var ok = xhr2.status === 206 || xhr2.status === 200 && start4 === 0;
         if (!ok || !xhr2.response) return resolve2(null);
         var b = new Uint8Array(xhr2.response);
         if (b.length > length) b = b.subarray(0, length);
@@ -11559,7 +11639,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       return i >= 0 && i + 1 < vids.length ? vids[i + 1] : null;
     }
-    function start3() {
+    function start4() {
       setTitle();
       showSpinner(true);
       message("");
@@ -12014,6 +12094,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     var SUB_STEP = 0.25;
     var SUB_DELAYS = "subDelays";
+    if (!get("subDelaysFixed1", false)) {
+      set(SUB_DELAYS, {});
+      set("subDelaysFixed1", true);
+    }
     function savedDelay() {
       return (get(SUB_DELAYS, {}) || {})[video.id] || 0;
     }
@@ -12064,7 +12148,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           sub: false,
           audio: false
         };
-        start3();
+        start4();
         return;
       }
       if (!triedTranscode && isAvailable()) {
@@ -12546,9 +12630,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       });
     }
-    function nthIndex(str, pat, n) {
+    function nthIndex(str2, pat, n) {
       var i = -1;
-      while (n-- > 0 && (i = str.indexOf(pat, i + 1)) !== -1) {}
+      while (n-- > 0 && (i = str2.indexOf(pat, i + 1)) !== -1) {}
       return i;
     }
     function cleanAvText(raw) {
@@ -12629,6 +12713,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (!alive || currentSub.id !== (s.id || s.url)) return;
         currentCues = cues;
         renderer.set(cues);
+        if (settings2.subAutoSync !== false && !savedDelay()) setTimeout(function () {
+          return alive && currentSub.id === (s.id || s.url) && autoSync(true);
+        }, 4e3);
         if (!silent) toast(t("Legenda: {lang}", {
           lang: langName(s.lang)
         }));
@@ -12783,13 +12870,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           checked: currentSub.kind === "addon" && currentSub.id === (s.id || s.url)
         });
       });
-      if (currentSub.kind === "addon") opts2.push({
-        label: "⚡ " + t("Sincronizar automaticamente"),
-        sub: t("Acerta o atraso comparando com outra legenda"),
-        value: {
-          kind: "autosync"
-        }
-      });
+      if (currentSub.kind === "addon") {
+        opts2.push({
+          label: "⚡ " + t("Sincronizar automaticamente"),
+          sub: autoSyncedId === currentSub.id ? t("Sincronizada automaticamente") : t("Compara com a legenda do arquivo ou outras legendas"),
+          value: {
+            kind: "autosync"
+          }
+        });
+        opts2.push({
+          label: "👂 " + t("Sincronizar de ouvido"),
+          sub: t("Escolha a frase que você acabou de ouvir"),
+          value: {
+            kind: "byear"
+          }
+        });
+        if (syncedBefore !== null) opts2.push({
+          label: "↩ " + t("Desfazer sincronização"),
+          sub: t("Volta ao atraso de antes"),
+          value: {
+            kind: "undosync"
+          }
+        });
+      }
       opts2.push({
         label: t("Atraso da legenda: {n}s", {
           n: renderer.offset().toFixed(1)
@@ -12818,7 +12921,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             currentSub = {
               kind: "off"
             };
-          } else if (v.kind === "embedded") selectEmbeddedSub(v.index);else if (v.kind === "avtext") selectAvText(v.index);else if (v.kind === "addon") selectAddonSub(v.sub);else if (v.kind === "delay") delayMenu();else if (v.kind === "autosync") autoSync();else if (v.kind === "size") sizeMenu();
+          } else if (v.kind === "embedded") selectEmbeddedSub(v.index);else if (v.kind === "avtext") selectAvText(v.index);else if (v.kind === "addon") selectAddonSub(v.sub);else if (v.kind === "delay") delayMenu();else if (v.kind === "autosync") autoSync(false);else if (v.kind === "byear") syncByEar();else if (v.kind === "undosync") undoSync();else if (v.kind === "size") sizeMenu();
         }
       });
     }
@@ -12840,118 +12943,166 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function bestShift(target, ref) {
       var T = target.map(function (c) {
         return c.start;
+      }).filter(function (x) {
+        return isFinite(x);
       }).sort(function (a, b) {
         return a - b;
       });
       var R = ref.map(function (c) {
         return c.start;
+      }).filter(function (x) {
+        return isFinite(x);
       }).sort(function (a, b) {
         return a - b;
       });
       if (T.length < 5 || R.length < 5) return null;
-      var MAX2 = 20;
-      var BIN = 0.1;
-      var bins = {};
+      var MAX2 = 15;
+      var TOL = 0.35;
+      var lo = R[0] - MAX2 - 1;
+      var hi = R[R.length - 1] + MAX2 + 1;
+      var Tw = T.filter(function (x) {
+        return x >= lo && x <= hi;
+      });
+      if (Tw.length < 5) return null;
+      var cand = [];
       var j0 = 0;
-      for (var i = 0; i < T.length; i++) {
-        while (j0 < R.length && R[j0] < T[i] - MAX2) j0++;
-        for (var j = j0; j < R.length && R[j] <= T[i] + MAX2; j++) {
-          var b = Math.round((R[j] - T[i]) / BIN);
-          bins[b] = (bins[b] || 0) + 1;
-        }
+      for (var i = 0; i < R.length; i++) {
+        while (j0 < Tw.length && Tw[j0] < R[i] - MAX2) j0++;
+        for (var j = j0; j < Tw.length && Tw[j] <= R[i] + MAX2; j++) cand.push(R[i] - Tw[j]);
       }
-      var best = null;
-      var bestN = 0;
-      Object.keys(bins).forEach(function (k) {
-        var b = +k;
-        var n = (bins[b - 1] || 0) + bins[b] + (bins[b + 1] || 0);
-        if (n > bestN) {
+      function matches(s) {
+        var n = 0;
+        var k2 = 0;
+        for (var _i = 0; _i < R.length; _i++) {
+          var want = R[_i] - s;
+          while (k2 < Tw.length && Tw[k2] < want - TOL) k2++;
+          if (k2 < Tw.length && Math.abs(Tw[k2] - want) <= TOL) n++;
+        }
+        return n;
+      }
+      var seen = {};
+      var best = 0;
+      var bestN = -1;
+      cand.forEach(function (c) {
+        var s = Math.round(c / 0.05) * 0.05;
+        var key3 = s.toFixed(2);
+        if (seen[key3]) return;
+        seen[key3] = 1;
+        var n = matches(s);
+        if (n > bestN || n === bestN && Math.abs(s) < Math.abs(best)) {
           bestN = n;
-          best = b;
+          best = s;
         }
       });
-      if (best === null) return null;
+      var second = 0;
+      Object.keys(seen).forEach(function (key3) {
+        var s = +key3;
+        if (Math.abs(s - best) < 1) return;
+        var n = matches(s);
+        if (n > second) second = n;
+      });
       var sum = 0;
       var cnt = 0;
-      j0 = 0;
-      var center2 = best * BIN;
-      for (var _i = 0; _i < T.length; _i++) {
-        for (var _j = 0; _j < R.length; _j++) {
-          var d = R[_j] - T[_i];
-          if (Math.abs(d - center2) <= 0.2) {
-            sum += d;
-            cnt++;
-          }
+      var k = 0;
+      for (var _i2 = 0; _i2 < R.length; _i2++) {
+        var want = R[_i2] - best;
+        while (k < Tw.length && Tw[k] < want - TOL) k++;
+        if (k < Tw.length && Math.abs(Tw[k] - want) <= TOL) {
+          sum += R[_i2] - Tw[k];
+          cnt++;
         }
       }
-      var shift = cnt ? sum / cnt : center2;
-      var score = bestN / Math.min(T.length, R.length);
+      var shift = cnt ? sum / cnt : best;
+      var frac2 = bestN / R.length;
+      var ok = bestN >= 6 && frac2 >= 0.45 && bestN >= second * 1.6 + 2;
       return {
         shift: Math.round(shift * 100) / 100,
-        score: score
+        score: ok ? frac2 : 0,
+        matched: bestN,
+        second: second
       };
     }
-    function listenEmbedded(sec) {
+    function listenEmbedded(sec, isAlive) {
       return new Promise(function (resolve2) {
         var list2 = videoEl.isAVPlay ? videoEl.textTrackList() : [];
         var idx = list2.findIndex(function (tr) {
           return !/PGS|VOBSUB|DVD/i.test(tr.codec || "");
         });
-        if (idx < 0 || videoEl.paused) return resolve2(null);
+        if (idx < 0) return resolve2(null);
         var starts = [];
         var last2 = "";
         videoEl.onSubtitle(function (s) {
+          if (currentSub.kind === "avtext") return;
           var text = String(s && s.text || "").trim();
-          if (text && text !== last2) starts.push({
+          if (text && text !== last2 && !videoEl.paused) starts.push({
             start: videoEl.currentTime || 0
           });
           last2 = text;
         });
         if (!videoEl.selectText(idx)) return resolve2(null);
         setTimeout(function () {
-          videoEl.disableText();
-          resolve2(starts.length >= 5 ? starts : null);
+          if (currentSub.kind !== "avtext") videoEl.disableText();
+          resolve2(isAlive() && starts.length >= 6 ? starts : null);
         }, sec * 1e3);
       });
     }
-    function autoSync() {
-      if (currentSub.kind !== "addon" || !currentCues || !currentCues.length) return toast(t("Ligue uma legenda de addon primeiro."));
+    var syncedBefore = null;
+    var autoSyncedId = "";
+    function applySync(r, from) {
+      syncedBefore = renderer.offset();
+      var v = setSubDelay(r.shift);
+      autoSyncedId = currentSub.id;
+      toast(t("Sincronizada: {n}s", {
+        n: (v > 0 ? "+" : "") + v.toFixed(2)
+      }) + " · " + from, 4e3);
+    }
+    function undoSync() {
+      if (syncedBefore === null) return toast(t("Nada para desfazer."));
+      var v = setSubDelay(syncedBefore);
+      syncedBefore = null;
+      autoSyncedId = "";
+      toast(t("Atraso da legenda: {n}s", {
+        n: (v > 0 ? "+" : "") + v.toFixed(2)
+      }));
+    }
+    function autoSync(quiet) {
+      if (currentSub.kind !== "addon" || !currentCues || !currentCues.length) return quiet ? null : toast(t("Ligue uma legenda de addon primeiro."));
       var target = currentCues;
       var mine = currentSub.id;
-      var finish = function finish(r, from) {
-        if (!alive) return;
-        if (!r || r.score < 0.2) return toast(t("Não deu para sincronizar com segurança. Ajuste à mão."), 4e3);
-        var v = setSubDelay(r.shift);
-        toast(t("Sincronizada: {n}s", {
-          n: (v > 0 ? "+" : "") + v.toFixed(2)
-        }) + " · " + from + " · " + Math.round(Math.min(1, r.score) * 100) + "%", 4e3);
+      var still = function still() {
+        return alive && currentSub.id === mine;
+      };
+      var say = function say(msg, ms) {
+        return !quiet && toast(msg, ms);
       };
       var hasEmbedded = videoEl.isAVPlay && videoEl.textTrackList().some(function (tr) {
         return !/PGS|VOBSUB|DVD/i.test(tr.codec || "");
       });
-      if (hasEmbedded && !videoEl.paused) {
-        toast(t("Ouvindo a legenda do arquivo por 40 segundos... continue assistindo."), 5e3);
-        listenEmbedded(40).then(function (ref) {
-          if (!alive || currentSub.id !== mine) return;
+      if (hasEmbedded) {
+        say(t("Ouvindo a legenda do arquivo por 60 segundos... continue assistindo."), 5e3);
+        listenEmbedded(60, still).then(function (ref) {
+          if (!still()) return;
           var r = ref && bestShift(target, ref);
-          if (r && r.score >= 0.2) return finish(r, t("legenda do arquivo"));
+          if (r && r.score > 0) return applySync(r, t("legenda do arquivo"));
+          if (quiet) return;
           fromAddons();
         });
         return;
       }
+      if (quiet) return;
       fromAddons();
       function fromAddons() {
         var others = (addonSubs || []).filter(function (x) {
           return (x.id || x.url) !== mine && x.url;
         });
-        if (!others.length) return toast(t("Não há outra legenda para comparar."), 4e3);
+        if (!others.length) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5e3);
         var rank = function rank(x) {
           return /^(en|eng)$/i.test(x.lang) ? 0 : 1;
         };
         var pick2 = others.sort(function (a, b) {
           return rank(a) - rank(b);
-        }).slice(0, 3);
-        toast(t("Comparando com {n} legendas...", {
+        }).slice(0, 4);
+        say(t("Comparando com {n} legendas...", {
           n: pick2.length
         }), 3e3);
         Promise.all(pick2.map(function (x) {
@@ -12961,15 +13112,60 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             return null;
           });
         })).then(function (rs) {
-          if (!alive || currentSub.id !== mine) return;
+          if (!still()) return;
           var ok = rs.filter(function (r) {
-            return r && r.score >= 0.2;
-          }).sort(function (a, b) {
-            return b.score - a.score;
+            return r && r.score > 0;
           });
-          finish(ok[0] || null, t("outras legendas"));
+          var best = null;
+          ok.forEach(function (r) {
+            var agree = ok.filter(function (o) {
+              return Math.abs(o.shift - r.shift) <= 0.3;
+            }).length;
+            if ((agree >= 2 || r.score >= 0.8) && (!best || r.score > best.score)) best = r;
+          });
+          if (!best) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5e3);
+          applySync(best, t("outras legendas"));
         });
       }
+    }
+    function syncByEar() {
+      if (currentSub.kind !== "addon" || !currentCues || !currentCues.length) return toast(t("Ligue uma legenda de addon primeiro."));
+      var now = videoEl.currentTime || 0;
+      var off = renderer.offset();
+      var near = currentCues.map(function (c, i) {
+        return {
+          c: c,
+          i: i,
+          at: c.start + off
+        };
+      }).filter(function (x) {
+        return x.at > now - 90 && x.at < now + 90;
+      }).sort(function (a, b) {
+        return Math.abs(a.at - now) - Math.abs(b.at - now);
+      }).slice(0, 24).sort(function (a, b) {
+        return a.at - b.at;
+      });
+      if (!near.length) return toast(t("Nenhuma linha perto deste momento."));
+      var closest = near.reduce(function (b, x) {
+        return Math.abs(x.at - now) < Math.abs(b.at - now) ? x : b;
+      }, near[0]);
+      menu(t("Qual frase você acabou de ouvir?"), near.map(function (x) {
+        return {
+          label: String(x.c.text || "").replace(/<[^>]+>/g, "").replace(/\n/g, " ").slice(0, 90),
+          sub: fmtTime(x.c.start),
+          value: x.c,
+          checked: x === closest
+        };
+      }), {
+        onPick: function onPick(c) {
+          syncedBefore = renderer.offset();
+          var v = setSubDelay(now - c.start - 0.3);
+          autoSyncedId = currentSub.id;
+          toast(t("Sincronizada: {n}s", {
+            n: (v > 0 ? "+" : "") + v.toFixed(2)
+          }) + " · " + t("de ouvido"), 4e3);
+        }
+      });
     }
     function sizeMenu() {
       var vals = [70, 85, 100, 115, 130, 150];
@@ -13012,7 +13208,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             sub: false,
             audio: false
           };
-          start3();
+          start4();
         }
       });
     }
@@ -13039,7 +13235,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             sub: false,
             audio: false
           };
-          start3();
+          start4();
         } else {
           pop();
           openDetails(meta.type, meta.id, {
@@ -13151,7 +13347,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       onKey: onKey,
       onShow: function onShow() {
         if (!ticker) {
-          start3();
+          start4();
           ticker = setInterval(function () {
             if (controlsOn) updateTimes();
             renderer.update(videoEl.currentTime);
@@ -13775,7 +13971,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function ReaderView(opts) {
     var ci = opts.index;
-    var pages3 = [];
+    var pages4 = [];
     var pi = 0;
     var mode = settings().readerMode === "width" ? "width" : "fit";
     var zi = 0;
@@ -13816,7 +14012,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var c = chapter();
       hud.textContent = (opts.title ? opts.title + " · " : "") + t("Cap. {n}", {
         n: c && c.chapter !== null && c.chapter !== void 0 ? c.chapter : ci + 1
-      }) + " · " + (pi + 1) + " / " + pages3.length + (extra ? " · " + extra : "");
+      }) + " · " + (pi + 1) + " / " + pages4.length + (extra ? " · " + extra : "");
       hud.classList.add("show");
       clearTimeout(hudTimer);
       hudTimer = setTimeout(function () {
@@ -13855,7 +14051,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       set("readProgress", all2);
     }
     function showPage(anchor) {
-      if (!pages3.length) return;
+      if (!pages4.length) return;
       retried = false;
       var my = ++token;
       img2.style.visibility = "hidden";
@@ -13871,35 +14067,35 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         showHud();
         save2();
         pre = null;
-        if (pi + 1 < pages3.length) {
+        if (pi + 1 < pages4.length) {
           pre = new Image();
-          pre.src = pages3[pi + 1];
+          pre.src = pages4[pi + 1];
         }
       };
       img2.onerror = function () {
         if (my !== token || !alive) return;
         if (!retried) {
           retried = true;
-          img2.src = pages3[pi] + (pages3[pi].indexOf("?") < 0 ? "?r=1" : "&r=1");
+          img2.src = pages4[pi] + (pages4[pi].indexOf("?") < 0 ? "?r=1" : "&r=1");
           return;
         }
         say(t("Não foi possível carregar esta página. Aperte para o lado para continuar."));
       };
       say(t("Carregando..."));
-      img2.src = pages3[pi];
+      img2.src = pages4[pi];
     }
-    function loadChapter(i, start3) {
+    function loadChapter(i, start4) {
       var my = ++token;
       ci = i;
-      pages3 = [];
+      pages4 = [];
       img2.removeAttribute("src");
       say(t("Carregando..."));
       (opts.pagesFn || pages)(chapter().id).then(function (list2) {
         if (my !== token || !alive) return;
         if (!list2.length) return say(t("Este capítulo não tem páginas."));
-        pages3 = list2;
-        pi = start3 === "last" ? list2.length - 1 : Math.max(0, Math.min(start3 || 0, list2.length - 1));
-        showPage(start3 === "last" ? "bottom" : "top");
+        pages4 = list2;
+        pi = start4 === "last" ? list2.length - 1 : Math.max(0, Math.min(start4 || 0, list2.length - 1));
+        showPage(start4 === "last" ? "bottom" : "top");
       }).catch(function () {
         return alive && say(t("Não foi possível abrir este capítulo agora."));
       });
@@ -13912,7 +14108,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function turn(dir) {
       if (dir > 0) {
-        if (pi + 1 < pages3.length) {
+        if (pi + 1 < pages4.length) {
           pi++;
           zi = 0;
           showPage("top");
@@ -13941,7 +14137,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var z = size();
       var panX = z.w > W + 1;
       var panY = z.h > H + 1;
-      if (!pages3.length) return k === KEY.BACK ? false : true;
+      if (!pages4.length) return k === KEY.BACK ? false : true;
       if (k === KEY.RED) return zoomStep(), true;
       if (k === KEY.GREEN) {
         mode = mode === "fit" ? "width" : "fit";
@@ -14542,6 +14738,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         anilist: ref.anilist,
         mdId: ref.mdId,
         swId: ref.swId,
+        plId: ref.plId,
+        plName: ref.plName,
+        mid: ref.mid,
         name: ref.name,
         poster: ref.poster,
         description: ref.description,
@@ -14616,7 +14815,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     el.appendChild(info2);
     el.appendChild(list2);
-    var chapters3 = [];
+    var chapters4 = [];
     var chunk = 0;
     var langSet = LANG_SETS.find(function (x) {
       return x.id === settings().mangaLangs;
@@ -14633,16 +14832,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function indexOfProgress() {
       var p = progress2();
       if (!p) return -1;
-      return chapters3.findIndex(function (c) {
+      return chapters4.findIndex(function (c) {
         return c.id === p.chapterId;
       });
     }
     function read(index2, page3) {
-      if (!chapters3.length) return toast(t("Nenhum capítulo encontrado."));
+      if (!chapters4.length) return toast(t("Nenhum capítulo encontrado."));
       openReader({
         key: key3,
         title: m.name,
-        chapters: chapters3,
+        chapters: chapters4,
         index: Math.max(0, index2),
         startPage: page3 || 0,
         poster: m.poster,
@@ -14702,13 +14901,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: "📖"
       }), idx >= 0 ? t("Continuar: cap. {n}", {
-        n: chapters3[idx].chapter
+        n: chapters4[idx].chapter
       }) : t("Ler")]);
       var btns = [readBtn];
       if (anime) btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
-          var cur = idx >= 0 ? parseFloat(chapters3[idx].chapter) : m.focusChapter || 1;
+          var cur = idx >= 0 ? parseFloat(chapters4[idx].chapter) : m.focusChapter || 1;
           chapterToEpisode(m.anilist, cur).then(function (r) {
             if (!r) return openAnime(animeMeta(anime));
             toast(t("Episódio {n} (aproximado)", {
@@ -14763,12 +14962,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderList(focusFirst2) {
       clear(list2);
-      if (!chapters3.length) {
+      if (!chapters4.length) {
         list2.appendChild(status2);
         return;
       }
-      var start3 = chunk * CHUNK;
-      var end = Math.min(chapters3.length, start3 + CHUNK);
+      var start4 = chunk * CHUNK;
+      var end = Math.min(chapters4.length, start4 + CHUNK);
       var p = progress2();
       var nav2 = function nav2(label, to) {
         return h("div.stream.md-nav", {
@@ -14785,7 +14984,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         b: chunk * CHUNK
       }), chunk - 1));
       var _loop8 = function _loop8(i) {
-        var c = chapters3[i];
+        var c = chapters4[i];
         var read2 = p && p.chapterId === c.id;
         var title = (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
           n: c.chapter
@@ -14807,12 +15006,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: t("Perto do episódio (aprox.)")
         }) : null]));
       };
-      for (var i = start3; i < end; i++) {
+      for (var i = start4; i < end; i++) {
         _loop8(i);
       }
-      if (end < chapters3.length) list2.appendChild(nav2(t("Capítulos {a}–{b}", {
+      if (end < chapters4.length) list2.appendChild(nav2(t("Capítulos {a}–{b}", {
         a: end + 1,
-        b: Math.min(chapters3.length, end + CHUNK)
+        b: Math.min(chapters4.length, end + CHUNK)
       }) + " ▶", chunk + 1));
       if (focusFirst2) {
         var first = list2.querySelector(".stream");
@@ -14820,7 +15019,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     }
     function loadChapters() {
-      chapters3 = [];
+      chapters4 = [];
       clear(list2);
       status2.textContent = t("Procurando capítulos...");
       list2.appendChild(status2);
@@ -14829,7 +15028,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return chapters(id, langSet.langs);
       }).then(function (cs) {
         if (!alive) return;
-        chapters3 = cs;
+        chapters4 = cs;
         var idx = indexOfProgress();
         if (idx < 0 && m.focusChapter) {
           idx = cs.findIndex(function (c) {
@@ -14857,7 +15056,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       onShow: function onShow() {
-        if (chapters3.length) {
+        if (chapters4.length) {
           renderInfo();
           renderList(false);
         }
@@ -15715,7 +15914,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function play(video, stream, all2, fallbacks) {
       var li = libraryItem(meta.id);
       var resumeMs = li && li.state && li.state.video_id === video.id ? li.state.timeOffset : 0;
-      var start3 = function start3(ms) {
+      var start4 = function start4(ms) {
         return openPlayer({
           meta: meta,
           video: video,
@@ -15739,10 +15938,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }], {
           center: true,
           onPick: function onPick(v) {
-            return start3(v);
+            return start4(v);
           }
         });
-      } else start3(0);
+      } else start4(0);
     }
     function formatDate(iso) {
       var d = new Date(iso);
@@ -16477,13 +16676,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var all2 = get(ORDER_KEY, {}) || {};
     return f.chrono && all2[f.id] === "chrono" ? "chrono" : "release";
   }
-  function setOrder(f, order) {
+  function setOrder(f, order2) {
     var all2 = get(ORDER_KEY, {}) || {};
-    all2[f.id] = order;
+    all2[f.id] = order2;
     set(ORDER_KEY, all2);
   }
-  function ordered(f, order) {
-    if (order !== "chrono" || !f.chrono) return f.items.slice();
+  function ordered(f, order2) {
+    if (order2 !== "chrono" || !f.chrono) return f.items.slice();
     var byId = {};
     f.items.forEach(function (it) {
       return byId[it[0]] = it;
@@ -16574,7 +16773,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         focusable: true
       });
       input.__submit = function (q2) {
-        return search2(q2);
+        return search3(q2);
       };
       searchBox.appendChild(input);
     } else {
@@ -16583,7 +16782,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));
     }
     var token = 0;
-    function search2(q2) {
+    function search3(q2) {
       var query = (q2 || "").trim();
       clear(results);
       if (query.length < 2) return;
@@ -16747,7 +16946,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(filters);
     scroller.appendChild(grid);
     el.appendChild(scroller);
-    var order = orderOf(f);
+    var order2 = orderOf(f);
     var hideWatched = false;
     var mediaFilter = "all";
     var sagaFilter = "all";
@@ -16773,7 +16972,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       openDetails(isSeriesItem(it) ? "series" : "movie", it[0]);
     }
     function render(keepFocus) {
-      var list2 = ordered(f, order);
+      var list2 = ordered(f, order2);
       var done = list2.filter(itemWatched).length;
       clear(head);
       head.appendChild(h("h1", {
@@ -16785,7 +16984,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }) + "  ·  " + t("Assistidos: {done} de {n}", {
           done: done,
           n: list2.length
-        }) + (order === "chrono" ? "  ·  " + t("Ordem da história") : "  ·  " + t("Ordem de lançamento"))
+        }) + (order2 === "chrono" ? "  ·  " + t("Ordem da história") : "  ·  " + t("Ordem de lançamento"))
       }));
       clear(filters);
       var next = nextUp(list2);
@@ -16847,15 +17046,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           render("type_series");
         }));
       }
-      filters.appendChild(chip("release", t("Ordem de lançamento"), order === "release", function () {
-        order = "release";
-        setOrder(f, order);
+      filters.appendChild(chip("release", t("Ordem de lançamento"), order2 === "release", function () {
+        order2 = "release";
+        setOrder(f, order2);
         render("release");
       }));
       if (f.chrono) {
-        filters.appendChild(chip("chrono", t("Ordem da história"), order === "chrono", function () {
-          order = "chrono";
-          setOrder(f, order);
+        filters.appendChild(chip("chrono", t("Ordem da história"), order2 === "chrono", function () {
+          order2 = "chrono";
+          setOrder(f, order2);
           render("chrono");
         }));
       }
@@ -17035,6 +17234,384 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/api/plugins.js
+  var SVC = "http://127.0.0.1:" + PORT;
+  var REPOS = "mangaRepos";
+  var PLUGINS = "mangaPlugins";
+  var repos = function repos() {
+    return get(REPOS, []) || [];
+  };
+  var installed = function installed() {
+    return get(PLUGINS, []) || [];
+  };
+  function saveInstalled(list2) {
+    set(PLUGINS, list2);
+  }
+  function addRepo(url2) {
+    var r = repos().filter(function (x) {
+      return x !== url2;
+    });
+    r.push(url2);
+    set(REPOS, r);
+  }
+  function removeRepo(url2) {
+    set(REPOS, repos().filter(function (x) {
+      return x !== url2;
+    }));
+  }
+  function uninstall(id) {
+    saveInstalled(installed().filter(function (p) {
+      return p.id !== id;
+    }));
+    stop2(id);
+  }
+  function httpRaw(url2, opts) {
+    var o = opts || {};
+    return request("POST", SVC + "/api/phttp", {
+      url: url2,
+      method: o.method,
+      headers: o.headers,
+      body: o.body,
+      responseType: o.responseType,
+      timeoutMs: o.timeoutMs,
+      redirect: o.redirect
+    }, {
+      timeout: (o.timeoutMs || 2e4) + 5e3,
+      quiet: true
+    });
+  }
+  function getText2(url2) {
+    return httpRaw(url2, {}).then(function (r) {
+      if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "?"));
+      return r.body;
+    });
+  }
+  function imageUrl(url2, referer) {
+    if (!url2) return "";
+    return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "");
+  }
+  function classify(parsed) {
+    if (parsed && Array.isArray(parsed.plugins)) return "harbor";
+    var arr = Array.isArray(parsed) ? parsed : parsed && (parsed.sources || parsed.mangayomiSources);
+    if (!Array.isArray(arr) || !arr.length) return "unknown";
+    if (arr.some(function (e) {
+      return e && typeof e.apk === "string";
+    })) return "tachiyomi";
+    if (arr.some(function (e) {
+      return e && (e.sourceCodeUrl || e.pkgPath);
+    })) return "mangayomi";
+    if (arr.some(function (e) {
+      return e && (e.file || e.downloadURL) && /\.aix/i.test(e.file || e.downloadURL || "");
+    })) return "aidoku";
+    if (parsed && parsed.info && Array.isArray(parsed.sources)) return "aidoku";
+    return "unknown";
+  }
+  function fetchRepo(url2) {
+    return getText2(url2).then(function (text) {
+      var parsed = null;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        throw new Error("not json");
+      }
+      var kind = classify(parsed);
+      if (kind !== "harbor") return {
+        kind: kind,
+        name: parsed && parsed.name || "",
+        plugins: []
+      };
+      var plugins = parsed.plugins.filter(function (p) {
+        return p && typeof p.id === "string" && typeof p.name === "string" && typeof p.entry === "string";
+      }).map(function (p) {
+        return {
+          id: p.id,
+          name: p.name,
+          version: String(p.version || "0"),
+          lang: String(p.lang || ""),
+          nsfw: p.nsfw === true,
+          icon: typeof p.icon === "string" ? p.icon : "",
+          entry: p.entry
+        };
+      });
+      return {
+        kind: kind,
+        name: String(parsed.name || ""),
+        plugins: plugins
+      };
+    });
+  }
+  function resolveUrl(base2, rel) {
+    if (/^https?:\/\//i.test(rel)) return rel;
+    return base2.replace(/[^/]*$/, "") + rel.replace(/^\.\//, "");
+  }
+  function install2(repoUrl, man) {
+    return getText2(resolveUrl(repoUrl, man.entry)).then(function (source) {
+      if (source.length > 2 * 1024 * 1024) throw new Error("too big");
+      var list2 = installed().filter(function (p) {
+        return p.id !== man.id;
+      });
+      list2.push({
+        id: man.id,
+        name: man.name,
+        version: man.version,
+        lang: man.lang,
+        nsfw: man.nsfw,
+        icon: man.icon,
+        repoUrl: repoUrl,
+        entry: man.entry,
+        source: source
+      });
+      saveInstalled(list2);
+      stop2(man.id);
+      return man;
+    });
+  }
+  var DROP = {
+    script: 1,
+    style: 1,
+    noscript: 1,
+    template: 1,
+    iframe: 1,
+    object: 1,
+    embed: 1,
+    link: 1,
+    meta: 1
+  };
+  function serialize(el, depth, budget) {
+    var a = {};
+    for (var i = 0; i < el.attributes.length; i++) a[el.attributes[i].name] = el.attributes[i].value;
+    var c = [];
+    if (depth < 200) {
+      var kids2 = el.childNodes;
+      for (var _i3 = 0; _i3 < kids2.length && budget.n < 6e4; _i3++) {
+        var k = kids2[_i3];
+        if (k.nodeType === 1) {
+          if (DROP[k.tagName.toLowerCase()]) continue;
+          budget.n++;
+          c.push(serialize(k, depth + 1, budget));
+        } else if (k.nodeType === 3 && k.nodeValue && k.nodeValue.trim()) {
+          budget.n++;
+          c.push({
+            x: k.nodeValue
+          });
+        }
+      }
+    }
+    return {
+      t: el.tagName.toLowerCase(),
+      a: a,
+      x: "",
+      c: c
+    };
+  }
+  function parseHtml(html) {
+    var doc = new DOMParser().parseFromString(String(html || ""), "text/html");
+    return doc.body ? serialize(doc.body, 0, {
+      n: 0
+    }) : {
+      t: "body",
+      a: {},
+      x: "",
+      c: []
+    };
+  }
+  var PRELUDE = String.raw(_templateObject || (_templateObject = _taggedTemplateLiteral(["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/s*>s*/g, \" > \").trim().split(/s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  function parseHtml(html) { return bridge(\"parse\", { html: String(html) }).then(function (tree) { return new HDocument(tree); }); }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"], ["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/\\s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/\\s*>\\s*/g, \" > \").trim().split(/\\s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/\\s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/\\s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  function parseHtml(html) { return bridge(\"parse\", { html: String(html) }).then(function (tree) { return new HDocument(tree); }); }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"])));
+  var EPILOGUE = String.raw(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n      ;return (typeof plugin !== \"undefined\") ? plugin : undefined;\n    })(harbor);\n    if (!provider) provider = ret;\n    if (!provider || typeof provider !== \"object\") throw new Error(\"plugin registered no provider\");\n    safePost({ type: \"ready\", meta: { id: String(provider.id), name: String(provider.name) } });\n  } catch (err) {\n    safePost({ type: \"initError\", error: String(err && err.message ? err.message : err) });\n  }\n})();\n"])));
+  var workers = {};
+  var order = [];
+  function stop2(id) {
+    var w = workers[id];
+    if (w) {
+      try {
+        w.worker.terminate();
+      } catch (e) {}
+      if (w.url) URL.revokeObjectURL(w.url);
+      delete workers[id];
+    }
+    order = order.filter(function (x) {
+      return x !== id;
+    });
+  }
+  function start2(p) {
+    var blob = new Blob([PRELUDE, p.source, EPILOGUE], {
+      type: "text/javascript"
+    });
+    var url2 = URL.createObjectURL(blob);
+    var worker = new Worker(url2);
+    var w = {
+      worker: worker,
+      url: url2,
+      calls: {},
+      seq: 0,
+      origin: "",
+      ready: null
+    };
+    w.ready = new Promise(function (resolve2, reject) {
+      var timer = setTimeout(function () {
+        return reject(new Error("plugin did not start"));
+      }, 15e3);
+      w.onReady = function (ok, err) {
+        clearTimeout(timer);
+        if (ok) resolve2();else reject(new Error(err || "plugin failed"));
+      };
+    });
+    worker.onmessage = function (e) {
+      var m = e.data || {};
+      if (m.type === "ready") return w.onReady(true);
+      if (m.type === "initError") return w.onReady(false, m.error);
+      if (m.type === "result" || m.type === "error") {
+        var c = w.calls[m.id];
+        if (!c) return;
+        delete w.calls[m.id];
+        clearTimeout(c.timer);
+        return m.type === "result" ? c.resolve(m.value) : c.reject(new Error(m.error));
+      }
+      if (m.type === "http") {
+        var u = String(m.payload && m.payload.url || "");
+        var o = m.payload && m.payload.opts || {};
+        if (!/^https?:\/\//i.test(u)) return worker.postMessage({
+          type: "bridgeResult",
+          id: m.id,
+          ok: false,
+          error: "bad url"
+        });
+        var mm = /^(https?:\/\/[^/]+)/i.exec(u);
+        if (mm) w.origin = mm[1] + "/";
+        httpRaw(u, o).then(function (r) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: true,
+            value: r
+          });
+        }, function (err) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: false,
+            error: String(err && err.message || err)
+          });
+        });
+        return;
+      }
+      if (m.type === "parse") {
+        var tree = null;
+        try {
+          tree = parseHtml(m.payload && m.payload.html);
+        } catch (err) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: false,
+            error: "parse failed"
+          });
+        }
+        return worker.postMessage({
+          type: "bridgeResult",
+          id: m.id,
+          ok: true,
+          value: tree
+        });
+      }
+    };
+    worker.onerror = function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      w.onReady(false, e && e.message || "worker error");
+    };
+    workers[p.id] = w;
+    order.push(p.id);
+    while (order.length > 2) stop2(order[0]);
+    return w;
+  }
+  function call3(id, method, args, timeout) {
+    var p = installed().find(function (x) {
+      return x.id === id;
+    });
+    if (!p) return Promise.reject(new Error("not installed"));
+    var w = workers[id] || start2(p);
+    order = order.filter(function (x) {
+      return x !== id;
+    }).concat([id]);
+    return w.ready.then(function () {
+      return new Promise(function (resolve2, reject) {
+        var cid = "c" + ++w.seq;
+        w.calls[cid] = {
+          resolve: resolve2,
+          reject: reject,
+          timer: setTimeout(function () {
+            return delete w.calls[cid], reject(new Error("timeout"));
+          }, timeout || 25e3)
+        };
+        w.worker.postMessage({
+          type: "call",
+          id: cid,
+          method: method,
+          args: args || []
+        });
+      });
+    });
+  }
+  function refererOf(id) {
+    var w = workers[id];
+    return w && w.origin || "";
+  }
+  var str = function str(v) {
+    return typeof v === "string" ? v : void 0;
+  };
+  function toSummary(o) {
+    if (!o || _typeof(o) !== "object" || !str(o.id) || !str(o.title)) return null;
+    return {
+      id: o.id,
+      title: o.title,
+      cover: /^https?:\/\//i.test(o.cover || "") ? o.cover : "",
+      description: str(o.description) || "",
+      status: str(o.status) || "",
+      author: str(o.author) || "",
+      year: typeof o.year === "number" ? o.year : null
+    };
+  }
+  function popular(id, offset) {
+    return call3(id, "popular", [offset || 0, void 0], 25e3).then(function (v) {
+      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
+    });
+  }
+  function search2(id, query, offset) {
+    return call3(id, "search", [query, offset || 0, void 0], 25e3).then(function (v) {
+      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
+    });
+  }
+  function _detail(id, mangaId) {
+    return call3(id, "detail", [mangaId], 25e3).then(toSummary);
+  }
+  function chapters3(id, mangaId) {
+    return call3(id, "chapters", [mangaId], 3e4).then(function (v) {
+      return (Array.isArray(v) ? v : []).filter(function (c) {
+        return c && str(c.id);
+      }).slice(0, 5e3).map(function (c) {
+        return {
+          id: c.id,
+          chapter: str(c.chapter) || null,
+          title: str(c.title) || "",
+          lang: str(c.language) || "",
+          pages: typeof c.pages === "number" ? c.pages : 0,
+          scanlator: str(c.group) || ""
+        };
+      });
+    });
+  }
+  function pages3(id, chapterId) {
+    return call3(id, "pageUrls", [chapterId], 35e3).then(function (v) {
+      var ref = refererOf(id);
+      return (Array.isArray(v) ? v : []).map(function (x) {
+        var u = typeof x === "string" ? x : x && (x.url || x.imageUrl || x.src || x.img || x.image);
+        if (!/^https?:\/\//i.test(u || "")) return null;
+        var h2 = x && _typeof(x) === "object" && x.headers ? x.headers : {};
+        var r = h2.Referer || h2.referer || ref;
+        return imageUrl(String(u).trim(), r);
+      }).filter(Boolean);
+    });
+  }
+
   // src/js/views/sources.js
   var CHUNK2 = 50;
   function openSources() {
@@ -17044,6 +17621,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     promptText(t("Endereço do servidor Suwayomi"), base() || "http://", "http://192.168.1.20:4567", function (url2) {
       var u = url2.trim().replace(/\/+$/, "");
       if (!/^https?:\/\//i.test(u)) u = "http://" + u;
+      if (/\.json(\?|$)/i.test(u)) {
+        toast(t('Isso é um repositório, não um servidor. Use "Adicionar repositório".'), 6e3);
+        return done && done();
+      }
       saveSettings({
         suwayomiUrl: u
       });
@@ -17056,6 +17637,80 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
+  function suwayomiApi(src) {
+    return {
+      name: src.name,
+      latest: src.latest,
+      kind: "sw",
+      browse: function browse(k, page3, q2) {
+        return browse2(src.id, k, page3, q2);
+      },
+      chapters: function chapters(m) {
+        return chapters2(m.swId);
+      },
+      pagesFn: pages2,
+      key: function key(m) {
+        return "sw" + m.swId;
+      }
+    };
+  }
+  var numOf = function numOf(c) {
+    var n = parseFloat(c.chapter);
+    return isNaN(n) ? null : n;
+  };
+  function pluginApi(pid, name) {
+    var offset = 0;
+    var toMeta2 = function toMeta2(it) {
+      return {
+        id: "pl:" + pid + ":" + it.id,
+        plId: pid,
+        plName: name,
+        mid: it.id,
+        type: "manga",
+        name: it.title,
+        poster: it.cover ? imageUrl(it.cover, refererOf(pid)) : "",
+        description: it.description,
+        author: it.author,
+        status: it.status
+      };
+    };
+    return {
+      name: name,
+      latest: false,
+      kind: "pl",
+      browse: function browse(k, page3, q2) {
+        if (page3 === 1) offset = 0;
+        var p = k === "search" ? search2(pid, q2, offset) : popular(pid, offset);
+        return p.then(function (items3) {
+          offset += items3.length;
+          return {
+            items: items3.map(toMeta2),
+            more: items3.length > 0
+          };
+        });
+      },
+      detail: function detail(m) {
+        return _detail(pid, m.mid);
+      },
+      chapters: function chapters(m) {
+        return chapters3(pid, m.mid).then(function (cs) {
+          var numbered = cs.filter(function (c) {
+            return numOf(c) !== null;
+          }).length;
+          if (numbered >= cs.length * 0.6) cs.sort(function (a, b) {
+            return (numOf(a) === null ? 1e9 : numOf(a)) - (numOf(b) === null ? 1e9 : numOf(b));
+          });
+          return cs;
+        });
+      },
+      pagesFn: function pagesFn(cid) {
+        return pages3(pid, cid);
+      },
+      key: function key(m) {
+        return "pl" + pid + ":" + m.mid;
+      }
+    };
+  }
   function SourcesView() {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
@@ -17065,62 +17720,181 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(h("div.row-title.catalog-title", {
       text: t("Minhas fontes")
     }));
-    var body = h("div.md-list", {
+    var body = h("div.flat-list", {
       "data-group": "",
       "data-vertical": ""
     });
     scroller.appendChild(body);
+    var row = function row(text, sub, onSelect, tag) {
+      return h("div.stream", {
+        focusable: true,
+        onSelect: onSelect
+      }, [h("div.s-main", null, [text, sub ? h("small", {
+        text: " " + sub
+      }) : null]), tag ? h("span.s-tag", {
+        text: tag
+      }) : null]);
+    };
+    var section = function section(text) {
+      return body.appendChild(h("div.src-sec", {
+        text: text
+      }));
+    };
+    function addRepo2() {
+      promptText(t("Endereço do repositório (repo.json)"), "https://", "", function (url2) {
+        var u = url2.trim();
+        if (!/^https?:\/\//i.test(u)) return toast(t("Endereço inválido."));
+        toast(t("Lendo o repositório..."));
+        fetchRepo(u).then(function (r) {
+          if (r.kind === "harbor") {
+            addRepo(u);
+            load7();
+            return pickPlugins(u, r);
+          }
+          var why = {
+            tachiyomi: t("Este é um repositório Tachiyomi/Mihon (apps Android). Adicione-o no seu servidor Suwayomi e conecte o servidor aqui."),
+            aidoku: t("Este é um repositório Aidoku (iPhone). O formato dele não roda na TV."),
+            mangayomi: t("Este é um repositório Mangayomi. Ainda não roda na TV.")
+          }[r.kind];
+          toast(why || t("Não reconheci este repositório."), 8e3);
+        }, function () {
+          return toast(t("Não consegui abrir o repositório."), 5e3);
+        });
+      });
+    }
+    function pickPlugins(url2, r) {
+      var have = installed().map(function (p) {
+        return p.id;
+      });
+      menu(r.name || t("Repositório"), r.plugins.map(function (p) {
+        return {
+          label: p.name,
+          sub: [p.lang.toUpperCase(), "v" + p.version, have.indexOf(p.id) >= 0 ? t("instalado") : "", p.nsfw ? "18+" : ""].filter(Boolean).join(" · "),
+          value: p,
+          checked: have.indexOf(p.id) >= 0
+        };
+      }), {
+        empty: t("Nenhum plugin neste repositório."),
+        onPick: function onPick(p) {
+          toast(t("Instalando {name}...", {
+            name: p.name
+          }));
+          install2(url2, p).then(function () {
+            toast(t("{name} instalado.", {
+              name: p.name
+            }));
+            load7();
+          }, function () {
+            return toast(t("Não consegui instalar {name}.", {
+              name: p.name
+            }), 5e3);
+          });
+        }
+      });
+    }
+    function pluginMenu(p) {
+      menu(p.name, [{
+        label: t("Abrir"),
+        value: "open"
+      }, {
+        label: t("Atualizar"),
+        value: "update"
+      }, {
+        label: t("Remover"),
+        value: "remove"
+      }], {
+        onPick: function onPick(v) {
+          if (v === "open") push(SourceGrid(pluginApi(p.id, p.name)));else if (v === "update") fetchRepo(p.repoUrl).then(function (r) {
+            var man = r.plugins.find(function (x) {
+              return x.id === p.id;
+            });
+            if (!man) throw new Error("gone");
+            return install2(p.repoUrl, man);
+          }).then(function () {
+            return toast(t("{name} atualizado.", {
+              name: p.name
+            })), load7();
+          }, function () {
+            return toast(t("Não consegui atualizar."));
+          });else if (v === "remove") confirmDialog(t("Remover {name}?", {
+            name: p.name
+          }), t("Remover"), function () {
+            return uninstall(p.id), load7();
+          });
+        }
+      });
+    }
     function load7() {
       clear(body);
-      body.appendChild(h("div.stream", {
-        focusable: true,
-        "data-autofocus": "",
-        onSelect: function onSelect() {
-          return connectServer(load7);
-        }
-      }, [h("div.s-main", {
-        text: "🔌 " + (enabled2() ? base() : t("Conectar servidor Suwayomi"))
-      })]));
-      if (!enabled2()) {
-        body.appendChild(h("div.modal-text", {
-          text: t("Suwayomi é um servidor gratuito que você instala no PC ou NAS. Você escolhe as fontes nele; este app não traz nenhuma.")
-        }));
-        return;
-      }
-      var sp = spinnerLine(t("Carregando..."));
-      body.appendChild(sp);
-      sources().then(function (list2) {
-        if (sp.parentNode) body.removeChild(sp);
-        if (!list2.length) body.appendChild(h("div.modal-text", {
-          text: t("Nenhuma fonte instalada no servidor.")
-        }));
-        list2.forEach(function (s) {
-          return body.appendChild(h("div.stream", {
-            focusable: true,
-            onSelect: function onSelect() {
-              return push(SourceGrid(s));
-            }
-          }, [h("div.s-main", {
-            text: s.name
-          }), h("span.s-tag", {
-            text: s.lang.toUpperCase()
-          })]));
+      section(t("Plugins (repositórios no formato do Harbor)"));
+      body.appendChild(row("＋ " + t("Adicionar repositório"), t("cole o link do repo.json"), addRepo2));
+      installed().forEach(function (p) {
+        return body.appendChild(row(p.name, "v" + p.version, function () {
+          return push(SourceGrid(pluginApi(p.id, p.name)));
+        }, (p.lang || "").toUpperCase()));
+      });
+      installed().length && body.appendChild(row("⚙ " + t("Gerenciar plugins"), "", function () {
+        return menu(t("Plugins"), installed().map(function (p) {
+          return {
+            label: p.name,
+            sub: "v" + p.version,
+            value: p
+          };
+        }), {
+          onPick: pluginMenu
         });
-        var first = body.querySelectorAll(".stream")[1];
-        if (first) focus(first);
-      }, function () {
-        if (sp.parentNode) body.removeChild(sp);
-        body.appendChild(h("div.modal-text", {
-          text: t("Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.")
+      }));
+      repos().forEach(function (u) {
+        return body.appendChild(row("📦 " + u.replace(/^https?:\/\//, ""), "", function () {
+          return menu(t("Repositório"), [{
+            label: t("Ver plugins"),
+            value: "list"
+          }, {
+            label: t("Remover repositório"),
+            value: "rm"
+          }], {
+            onPick: function onPick(v) {
+              if (v === "rm") return removeRepo(u), load7();
+              toast(t("Lendo o repositório..."));
+              fetchRepo(u).then(function (r) {
+                return pickPlugins(u, r);
+              }, function () {
+                return toast(t("Não consegui abrir o repositório."));
+              });
+            }
+          });
         }));
       });
+      section(t("Servidor Suwayomi (extensões Tachiyomi/Mihon)"));
+      body.appendChild(row("🔌 " + (enabled2() ? base() : t("Conectar servidor Suwayomi")), "", function () {
+        return connectServer(load7);
+      }));
+      if (enabled2()) {
+        var sp = spinnerLine(t("Carregando..."));
+        body.appendChild(sp);
+        sources().then(function (list2) {
+          if (sp.parentNode) body.removeChild(sp);
+          list2.forEach(function (s) {
+            return body.appendChild(row(s.name, "", function () {
+              return push(SourceGrid(suwayomiApi(s)));
+            }, s.lang.toUpperCase()));
+          });
+        }, function () {
+          if (sp.parentNode) body.removeChild(sp);
+          body.appendChild(h("div.modal-text", {
+            text: t("Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.")
+          }));
+        });
+      }
+      var first = body.querySelector(".stream");
+      if (first) focus(first);
     }
     load7();
     return {
       el: el
     };
   }
-  function SourceGrid(src) {
+  function SourceGrid(api) {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
       "data-scroll-y": ""
@@ -17135,7 +17909,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "data-group": ""
     });
     scroller.appendChild(h("div.row-title.catalog-title", {
-      text: src.name
+      text: api.name
     }));
     scroller.appendChild(bar);
     scroller.appendChild(gridEl);
@@ -17153,7 +17927,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return reload("popular");
       }
     }, t("Populares")));
-    if (src.latest) bar.appendChild(h("div.btn", {
+    if (api.latest) bar.appendChild(h("div.btn", {
       focusable: true,
       onSelect: function onSelect() {
         return reload("latest");
@@ -17174,13 +17948,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var sp = spinnerLine(t("Carregando..."));
       gridEl.appendChild(sp);
       var my = kind + query;
-      browse2(src.id, kind, ++page3, query).then(function (r) {
+      api.browse(kind, ++page3, query).then(function (r) {
         if (my !== kind + query) return;
         if (sp.parentNode) gridEl.removeChild(sp);
         r.items.forEach(function (m) {
           return gridEl.appendChild(card(m, {
             onSelect: function onSelect() {
-              return push(SourceDetails(m));
+              return push(SourceDetails(m, api));
             }
           }));
         });
@@ -17201,9 +17975,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           gridEl.appendChild(more);
         }
         loadVisibleImages(el, 400);
-      }, function () {
+      }, function (e) {
         if (sp.parentNode) gridEl.removeChild(sp);
-        toast(t("Não foi possível carregar agora."));
+        toast(t("Não foi possível carregar agora.") + (e && e.message ? " (" + e.message + ")" : ""), 5e3);
       });
     }
     next();
@@ -17218,9 +17992,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
   function openSourceManga(m) {
-    push(SourceDetails(m));
+    var api = m.plId ? pluginApi(m.plId, m.plName || "") : suwayomiApi({
+      id: "",
+      name: "",
+      latest: false
+    });
+    push(SourceDetails(m, api));
   }
-  function SourceDetails(m) {
+  function SourceDetails(m, api) {
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
     var listEl = h("div.md-list", {
@@ -17231,10 +18010,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     el.appendChild(info2);
     el.appendChild(listEl);
-    var chapters3 = [];
+    var chapters4 = [];
     var chunk = 0;
     var alive = true;
-    var key3 = "sw" + m.swId;
+    var key3 = api.key(m);
     var status2 = h("div.loading-line", {
       text: t("Procurando capítulos...")
     });
@@ -17243,22 +18022,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     var idxOf = function idxOf() {
       var p = progress2();
-      return p ? chapters3.findIndex(function (c) {
+      return p ? chapters4.findIndex(function (c) {
         return c.id === p.chapterId;
       }) : -1;
     };
     function read(i, page3) {
-      if (!chapters3.length) return toast(t("Nenhum capítulo encontrado."));
+      if (!chapters4.length) return toast(t("Nenhum capítulo encontrado."));
       openReader({
         key: key3,
         title: m.name,
-        chapters: chapters3,
+        chapters: chapters4,
         index: Math.max(0, i),
         startPage: page3 || 0,
         rtl: true,
-        pagesFn: pages2,
+        pagesFn: api.pagesFn,
         poster: m.poster,
-        kind: "sw",
+        kind: api.kind,
         ref: m
       });
     }
@@ -17274,12 +18053,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: m.name
       }));
       text.appendChild(h("div.md-meta", {
-        text: [m.author, m.status, chapters3.length ? t("{n} capítulos", {
-          n: chapters3.length
+        text: [m.author, m.status, chapters4.length ? t("{n} capítulos", {
+          n: chapters4.length
         }) : ""].filter(Boolean).join("  ·  ")
       }));
       text.appendChild(h("div.md-desc", {
-        text: m.description
+        text: m.description || ""
       }));
       var idx = idxOf();
       text.appendChild(h("div.details-buttons", {
@@ -17293,11 +18072,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: "📖"
       }), idx >= 0 ? t("Continuar: cap. {n}", {
-        n: chapters3[idx].chapter
+        n: chapters4[idx].chapter
       }) : t("Ler")]), h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
-          return toggleFav(key3, "sw", m), renderInfo();
+          return toggleFav(key3, api.kind, m), renderInfo();
         }
       }, [h("span.ico", {
         text: isFav(key3) ? "♥" : "♡"
@@ -17307,9 +18086,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderList() {
       clear(listEl);
-      if (!chapters3.length) return listEl.appendChild(status2);
-      var start3 = chunk * CHUNK2;
-      var end = Math.min(chapters3.length, start3 + CHUNK2);
+      if (!chapters4.length) return listEl.appendChild(status2);
+      var start4 = chunk * CHUNK2;
+      var end = Math.min(chapters4.length, start4 + CHUNK2);
       var p = progress2();
       var jump = function jump(label, to) {
         return h("div.stream.md-nav", {
@@ -17326,7 +18105,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         b: chunk * CHUNK2
       }), chunk - 1));
       var _loop9 = function _loop9(i) {
-        var c = chapters3[i];
+        var c = chapters4[i];
         var here = p && p.chapterId === c.id;
         listEl.appendChild(h("div.stream", {
           focusable: true,
@@ -17334,7 +18113,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             return read(i, here ? p.page : 0);
           }
         }, [h("div.s-main", {
-          text: (c.chapter !== null ? t("Cap. {n}", {
+          text: (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
             n: c.chapter
           }) : t("Especial")) + (c.title ? " · " + c.title : "")
         }), c.scanlator ? h("span.s-tag", {
@@ -17343,31 +18122,38 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: t("Parou aqui")
         }) : null]));
       };
-      for (var i = start3; i < end; i++) {
+      for (var i = start4; i < end; i++) {
         _loop9(i);
       }
-      if (end < chapters3.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
+      if (end < chapters4.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
         a: end + 1,
-        b: Math.min(chapters3.length, end + CHUNK2)
+        b: Math.min(chapters4.length, end + CHUNK2)
       }) + " ▶", chunk + 1));
     }
     renderInfo();
     renderList();
-    chapters2(m.swId).then(function (cs) {
+    if (api.detail && !m.description) api.detail(m).then(function (d) {
+      if (!alive || !d) return;
+      m.description = d.description || m.description;
+      m.author = d.author || m.author;
+      m.status = d.status || m.status;
+      renderInfo();
+    }, function () {});
+    api.chapters(m).then(function (cs) {
       if (!alive) return;
-      chapters3 = cs;
+      chapters4 = cs;
       var i = idxOf();
       chunk = i >= 0 ? Math.floor(i / CHUNK2) : 0;
       if (!cs.length) status2.textContent = t("Nenhum capítulo encontrado.");
       renderInfo();
       renderList();
-    }, function () {
-      return alive && (status2.textContent = t("Não encontrei capítulos deste título agora."));
+    }, function (e) {
+      return alive && (status2.textContent = t("Não encontrei capítulos deste título agora.") + (e && e.message ? " (" + e.message + ")" : ""));
     });
     return {
       el: el,
       onShow: function onShow() {
-        if (chapters3.length) {
+        if (chapters4.length) {
           renderInfo();
           renderList();
         }
@@ -17538,7 +18324,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var openBy = function openBy(kind, ref) {
-      return kind === "sw" ? openSourceManga(ref) : openMangaDetails(Object.assign({
+      return kind === "sw" || kind === "pl" ? openSourceManga(ref) : openMangaDetails(Object.assign({
         id: "anilist:" + ref.anilist,
         type: "manga",
         media: {}
@@ -18225,7 +19011,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return list2;
     });
   }
-  function stop2() {
+  function stop3() {
     run++;
   }
   function scan2(my) {
@@ -18241,9 +19027,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }).catch(function () {}).then(_worker);
     };
-    var workers = [];
-    for (var n = 0; n < PARALLEL; n++) workers.push(_worker());
-    return Promise.all(workers).then(function () {
+    var workers2 = [];
+    for (var n = 0; n < PARALLEL; n++) workers2.push(_worker());
+    return Promise.all(workers2).then(function () {
       return out.sort(function (a, b) {
         return b.released - a.released;
       });
@@ -18342,12 +19128,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return prefs().hidden.indexOf(key2(entry)) >= 0;
   }
   function sort(entries) {
-    var order = prefs().order;
+    var order2 = prefs().order;
     return entries.map(function (e, i) {
       return {
         e: e,
         i: i,
-        o: order.indexOf(key2(e))
+        o: order2.indexOf(key2(e))
       };
     }).sort(function (a, b) {
       return (a.o < 0 ? 1e6 + a.i : a.o) - (b.o < 0 ? 1e6 + b.i : b.o);
@@ -18397,7 +19183,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function hasKey() {
     return !!apiKey();
   }
-  function call3(path) {
+  function call4(path) {
     var sep = path.indexOf("?") >= 0 ? "&" : "?";
     return getJSONViaProxy(API7 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
       timeout: 15e3
@@ -18405,7 +19191,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function myLists() {
     if (!hasKey()) return Promise.resolve([]);
-    return call3("lists/user").then(function (r) {
+    return call4("lists/user").then(function (r) {
       return (Array.isArray(r) ? r : []).map(function (l) {
         return {
           id: String(l.id),
@@ -18420,7 +19206,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var m = v.match(/mdblist\.com\/lists\/([^/?#]+)\/([^/?#]+)/i) || v.match(/^([\w.-]+)\/([\w.-]+)$/);
     var path = m ? "lists/" + encodeURIComponent(m[1]) + "/" + encodeURIComponent(m[2]) : /^\d+$/.test(v) ? "lists/" + v : null;
     if (!path) return Promise.reject(new Error("?"));
-    return call3(path).then(function (r) {
+    return call4(path).then(function (r) {
       var l = Array.isArray(r) ? r[0] : r;
       if (!l || !l.id) throw new Error("?");
       return {
@@ -18438,7 +19224,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function items(id) {
-    return call3("lists/" + encodeURIComponent(id) + "/items?limit=40").then(function (r) {
+    return call4("lists/" + encodeURIComponent(id) + "/items?limit=40").then(function (r) {
       var out = [];
       var add = function add(x, type) {
         return x && x.imdb_id && out.push({
@@ -18846,7 +19632,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       // Chamado quando um vídeo começa: solta as fileiras (o catálogo volta do cache ao retornar).
       freeMemory: function freeMemory() {
-        stop2();
+        stop3();
         newLoadedAt = 0;
         pending2 = [];
         clear(rows2);
@@ -19534,7 +20320,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T16:37:29.737Z";
+  var BUILD = "2026-11-16T17:24:48.016Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -22687,9 +23473,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (bootEl) bootEl.style.display = "none";
       showPicker(function () {
         if (bootEl) bootEl.style.display = "";
-        start2();
+        start3();
       });
-    } else start2();
+    } else start3();
     document.addEventListener("webOSRelaunch", function () {
       check();
       devLaunch();
@@ -22698,7 +23484,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (!document.hidden) check();
     });
   }
-  function start2() {
+  function start3() {
     reloadProfile();
     var s = settings();
     applyLook(s);

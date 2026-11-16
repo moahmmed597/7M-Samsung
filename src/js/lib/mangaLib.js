@@ -11,7 +11,7 @@ export function toggleFav(key, kind, ref) {
   const all = favs();
   const i = all.findIndex((f) => f.key === key);
   if (i >= 0) all.splice(i, 1);
-  else all.unshift({ key: key, kind: kind, ref: { anilist: ref.anilist, mdId: ref.mdId, swId: ref.swId, name: ref.name, poster: ref.poster, description: ref.description, author: ref.author, status: ref.status, year: ref.year } });
+  else all.unshift({ key: key, kind: kind, ref: { anilist: ref.anilist, mdId: ref.mdId, swId: ref.swId, plId: ref.plId, plName: ref.plName, mid: ref.mid, name: ref.name, poster: ref.poster, description: ref.description, author: ref.author, status: ref.status, year: ref.year } });
   store.set(FAVS, all.slice(0, 200));
   return i < 0;
 }

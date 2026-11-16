@@ -1,10 +1,14 @@
-// "My sources": manga from the Suwayomi server the user connected (Settings → Integrations or here).
-// The app bundles no source. Pick a source → Popular / Latest / Search → title → chapters → reader.
+// "My sources": manga from sources YOU add. The app bundles none. Two kinds:
+//  - Plugin repositories in Harbor's format (a repo.json with *.plugin.js files): paste the repo URL,
+//    install the plugins you want, they run on the TV in a sandbox (api/plugins.js).
+//  - A Suwayomi server on your PC/NAS (Tachiyomi/Mihon extension repos are added there).
+// Pick a source → Popular / Search → title → chapters → the TV reader.
 import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
 import * as sw from '../api/suwayomi.js';
+import * as pl from '../api/plugins.js';
 import * as store from '../lib/store.js';
-import { card, spinnerLine, toast, promptText } from '../ui.js';
+import { card, spinnerLine, toast, promptText, menu, confirmDialog } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { openReader } from './reader.js';
@@ -21,6 +25,10 @@ export function connectServer(done) {
   promptText(t('Endereço do servidor Suwayomi'), sw.base() || 'http://', 'http://192.168.1.20:4567', (url) => {
     let u = url.trim().replace(/\/+$/, '');
     if (!/^https?:\/\//i.test(u)) u = 'http://' + u;
+    if (/\.json(\?|$)/i.test(u)) {
+      toast(t('Isso é um repositório, não um servidor. Use "Adicionar repositório".'), 6000);
+      return done && done();
+    }
     store.saveSettings({ suwayomiUrl: u });
     sw.ping().then(
       () => {
@@ -35,44 +43,192 @@ export function connectServer(done) {
   });
 }
 
+// ---------- adapters: one per kind of source ----------
+function suwayomiApi(src) {
+  return {
+    name: src.name,
+    latest: src.latest,
+    kind: 'sw',
+    browse: (k, page, q) => sw.browse(src.id, k, page, q),
+    chapters: (m) => sw.chapters(m.swId),
+    pagesFn: sw.pages,
+    key: (m) => 'sw' + m.swId,
+  };
+}
+
+const numOf = (c) => {
+  const n = parseFloat(c.chapter);
+  return isNaN(n) ? null : n;
+};
+
+export function pluginApi(pid, name) {
+  let offset = 0;
+  const toMeta = (it) => ({
+    id: 'pl:' + pid + ':' + it.id,
+    plId: pid,
+    plName: name,
+    mid: it.id,
+    type: 'manga',
+    name: it.title,
+    poster: it.cover ? pl.imageUrl(it.cover, pl.refererOf(pid)) : '',
+    description: it.description,
+    author: it.author,
+    status: it.status,
+  });
+  return {
+    name: name,
+    latest: false,
+    kind: 'pl',
+    browse: (k, page, q) => {
+      if (page === 1) offset = 0;
+      const p = k === 'search' ? pl.search(pid, q, offset) : pl.popular(pid, offset);
+      return p.then((items) => {
+        offset += items.length;
+        return { items: items.map(toMeta), more: items.length > 0 };
+      });
+    },
+    detail: (m) => pl.detail(pid, m.mid),
+    chapters: (m) =>
+      pl.chapters(pid, m.mid).then((cs) => {
+        // Reading order: oldest first when the chapters are numbered (sites usually list newest first).
+        const numbered = cs.filter((c) => numOf(c) !== null).length;
+        if (numbered >= cs.length * 0.6) cs.sort((a, b) => (numOf(a) === null ? 1e9 : numOf(a)) - (numOf(b) === null ? 1e9 : numOf(b)));
+        return cs;
+      }),
+    pagesFn: (cid) => pl.pages(pid, cid),
+    key: (m) => 'pl' + pid + ':' + m.mid,
+  };
+}
+
+// ---------- the list of sources ----------
 function SourcesView() {
   const el = h('div.view');
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   el.appendChild(scroller);
   scroller.appendChild(h('div.row-title.catalog-title', { text: t('Minhas fontes') }));
-  const body = h('div.md-list', { 'data-group': '', 'data-vertical': '' });
+  const body = h('div.flat-list', { 'data-group': '', 'data-vertical': '' });
   scroller.appendChild(body);
+  const row = (text, sub, onSelect, tag) => h('div.stream', { focusable: true, onSelect: onSelect }, [h('div.s-main', null, [text, sub ? h('small', { text: ' ' + sub }) : null]), tag ? h('span.s-tag', { text: tag }) : null]);
+  const section = (text) => body.appendChild(h('div.src-sec', { text: text }));
+
+  function addRepo() {
+    promptText(t('Endereço do repositório (repo.json)'), 'https://', '', (url) => {
+      const u = url.trim();
+      if (!/^https?:\/\//i.test(u)) return toast(t('Endereço inválido.'));
+      toast(t('Lendo o repositório...'));
+      pl.fetchRepo(u).then(
+        (r) => {
+          if (r.kind === 'harbor') {
+            pl.addRepo(u);
+            load();
+            return pickPlugins(u, r);
+          }
+          const why = {
+            tachiyomi: t('Este é um repositório Tachiyomi/Mihon (apps Android). Adicione-o no seu servidor Suwayomi e conecte o servidor aqui.'),
+            aidoku: t('Este é um repositório Aidoku (iPhone). O formato dele não roda na TV.'),
+            mangayomi: t('Este é um repositório Mangayomi. Ainda não roda na TV.'),
+          }[r.kind];
+          toast(why || t('Não reconheci este repositório.'), 8000);
+        },
+        () => toast(t('Não consegui abrir o repositório.'), 5000)
+      );
+    });
+  }
+
+  function pickPlugins(url, r) {
+    const have = pl.installed().map((p) => p.id);
+    menu(
+      r.name || t('Repositório'),
+      r.plugins.map((p) => ({ label: p.name, sub: [p.lang.toUpperCase(), 'v' + p.version, have.indexOf(p.id) >= 0 ? t('instalado') : '', p.nsfw ? '18+' : ''].filter(Boolean).join(' · '), value: p, checked: have.indexOf(p.id) >= 0 })),
+      {
+        empty: t('Nenhum plugin neste repositório.'),
+        onPick: (p) => {
+          toast(t('Instalando {name}...', { name: p.name }));
+          pl.install(url, p).then(
+            () => {
+              toast(t('{name} instalado.', { name: p.name }));
+              load();
+            },
+            () => toast(t('Não consegui instalar {name}.', { name: p.name }), 5000)
+          );
+        },
+      }
+    );
+  }
+
+  function pluginMenu(p) {
+    menu(p.name, [
+      { label: t('Abrir'), value: 'open' },
+      { label: t('Atualizar'), value: 'update' },
+      { label: t('Remover'), value: 'remove' },
+    ], {
+      onPick: (v) => {
+        if (v === 'open') router.push(SourceGrid(pluginApi(p.id, p.name)));
+        else if (v === 'update')
+          pl.fetchRepo(p.repoUrl)
+            .then((r) => {
+              const man = r.plugins.find((x) => x.id === p.id);
+              if (!man) throw new Error('gone');
+              return pl.install(p.repoUrl, man);
+            })
+            .then(
+              () => (toast(t('{name} atualizado.', { name: p.name })), load()),
+              () => toast(t('Não consegui atualizar.'))
+            );
+        else if (v === 'remove') confirmDialog(t('Remover {name}?', { name: p.name }), t('Remover'), () => (pl.uninstall(p.id), load()));
+      },
+    });
+  }
 
   function load() {
     clear(body);
-    body.appendChild(h('div.stream', { focusable: true, 'data-autofocus': '', onSelect: () => connectServer(load) }, [h('div.s-main', { text: '🔌 ' + (sw.enabled() ? sw.base() : t('Conectar servidor Suwayomi')) })]));
-    if (!sw.enabled()) {
-      body.appendChild(h('div.modal-text', { text: t('Suwayomi é um servidor gratuito que você instala no PC ou NAS. Você escolhe as fontes nele; este app não traz nenhuma.') }));
-      return;
-    }
-    const sp = spinnerLine(t('Carregando...'));
-    body.appendChild(sp);
-    sw.sources().then(
-      (list) => {
-        if (sp.parentNode) body.removeChild(sp);
-        if (!list.length) body.appendChild(h('div.modal-text', { text: t('Nenhuma fonte instalada no servidor.') }));
-        list.forEach((s) =>
-          body.appendChild(h('div.stream', { focusable: true, onSelect: () => router.push(SourceGrid(s)) }, [h('div.s-main', { text: s.name }), h('span.s-tag', { text: s.lang.toUpperCase() })]))
-        );
-        const first = body.querySelectorAll('.stream')[1];
-        if (first) nav.focus(first);
-      },
-      () => {
-        if (sp.parentNode) body.removeChild(sp);
-        body.appendChild(h('div.modal-text', { text: t('Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.') }));
-      }
+    // Plugins (Harbor repositories)
+    section(t('Plugins (repositórios no formato do Harbor)'));
+    body.appendChild(row('＋ ' + t('Adicionar repositório'), t('cole o link do repo.json'), addRepo));
+    pl.installed().forEach((p) => body.appendChild(row(p.name, 'v' + p.version, () => router.push(SourceGrid(pluginApi(p.id, p.name))), (p.lang || '').toUpperCase())));
+    pl.installed().length &&
+      body.appendChild(row('⚙ ' + t('Gerenciar plugins'), '', () =>
+        menu(t('Plugins'), pl.installed().map((p) => ({ label: p.name, sub: 'v' + p.version, value: p })), { onPick: pluginMenu })
+      ));
+    pl.repos().forEach((u) =>
+      body.appendChild(
+        row('📦 ' + u.replace(/^https?:\/\//, ''), '', () =>
+          menu(t('Repositório'), [{ label: t('Ver plugins'), value: 'list' }, { label: t('Remover repositório'), value: 'rm' }], {
+            onPick: (v) => {
+              if (v === 'rm') return pl.removeRepo(u), load();
+              toast(t('Lendo o repositório...'));
+              pl.fetchRepo(u).then((r) => pickPlugins(u, r), () => toast(t('Não consegui abrir o repositório.')));
+            },
+          })
+        )
+      )
     );
+    // Suwayomi
+    section(t('Servidor Suwayomi (extensões Tachiyomi/Mihon)'));
+    body.appendChild(row('🔌 ' + (sw.enabled() ? sw.base() : t('Conectar servidor Suwayomi')), '', () => connectServer(load)));
+    if (sw.enabled()) {
+      const sp = spinnerLine(t('Carregando...'));
+      body.appendChild(sp);
+      sw.sources().then(
+        (list) => {
+          if (sp.parentNode) body.removeChild(sp);
+          list.forEach((s) => body.appendChild(row(s.name, '', () => router.push(SourceGrid(suwayomiApi(s))), s.lang.toUpperCase())));
+        },
+        () => {
+          if (sp.parentNode) body.removeChild(sp);
+          body.appendChild(h('div.modal-text', { text: t('Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.') }));
+        }
+      );
+    }
+    const first = body.querySelector('.stream');
+    if (first) nav.focus(first);
   }
   load();
   return { el: el };
 }
 
-function SourceGrid(src) {
+// ---------- a source: Popular / Latest / Search ----------
+function SourceGrid(api) {
   const el = h('div.view');
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   el.appendChild(scroller);
@@ -82,7 +238,7 @@ function SourceGrid(src) {
   let more = null;
   const gridEl = h('div.grid');
   const bar = h('div.details-buttons', { 'data-group': '' });
-  scroller.appendChild(h('div.row-title.catalog-title', { text: src.name }));
+  scroller.appendChild(h('div.row-title.catalog-title', { text: api.name }));
   scroller.appendChild(bar);
   scroller.appendChild(gridEl);
 
@@ -94,7 +250,7 @@ function SourceGrid(src) {
     next();
   }
   bar.appendChild(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => reload('popular') }, t('Populares')));
-  if (src.latest) bar.appendChild(h('div.btn', { focusable: true, onSelect: () => reload('latest') }, t('Recentes')));
+  if (api.latest) bar.appendChild(h('div.btn', { focusable: true, onSelect: () => reload('latest') }, t('Recentes')));
   bar.appendChild(h('div.btn', { focusable: true, onSelect: () => promptText(t('Buscar mangá'), '', '', (q) => reload('search', q)) }, [h('span.ico', { text: '🔍' }), t('Buscar mangá')]));
 
   function next() {
@@ -102,11 +258,11 @@ function SourceGrid(src) {
     const sp = spinnerLine(t('Carregando...'));
     gridEl.appendChild(sp);
     const my = kind + query;
-    sw.browse(src.id, kind, ++page, query).then(
+    api.browse(kind, ++page, query).then(
       (r) => {
         if (my !== kind + query) return;
         if (sp.parentNode) gridEl.removeChild(sp);
-        r.items.forEach((m) => gridEl.appendChild(card(m, { onSelect: () => router.push(SourceDetails(m)) })));
+        r.items.forEach((m) => gridEl.appendChild(card(m, { onSelect: () => router.push(SourceDetails(m, api)) })));
         if (!r.items.length && page === 1) gridEl.appendChild(h('div.modal-text', { text: t('Nada por aqui.') }));
         if (r.more) {
           more = h('div.card.see-all', { focusable: true, onSelect: () => next() }, [h('div.poster-wrap', null, h('div.see-all-label', null, [h('b', { text: '+' }), t('Carregar mais')])), h('div.name', { text: '' })]);
@@ -114,9 +270,9 @@ function SourceGrid(src) {
         }
         loadVisibleImages(el, 400);
       },
-      () => {
+      (e) => {
         if (sp.parentNode) gridEl.removeChild(sp);
-        toast(t('Não foi possível carregar agora.'));
+        toast(t('Não foi possível carregar agora.') + (e && e.message ? ' (' + e.message + ')' : ''), 5000);
       }
     );
   }
@@ -125,10 +281,12 @@ function SourceGrid(src) {
 }
 
 export function openSourceManga(m) {
-  router.push(SourceDetails(m));
+  const api = m.plId ? pluginApi(m.plId, m.plName || '') : suwayomiApi({ id: '', name: '', latest: false });
+  router.push(SourceDetails(m, api));
 }
 
-function SourceDetails(m) {
+// ---------- a title: info + chapters ----------
+function SourceDetails(m, api) {
   const el = h('div.view.md-view');
   const info = h('div.md-info');
   const listEl = h('div.md-list', { 'data-scroll-y': '', 'data-pad-y': '120', 'data-group': '', 'data-vertical': '' });
@@ -137,7 +295,7 @@ function SourceDetails(m) {
   let chapters = [];
   let chunk = 0;
   let alive = true;
-  const key = 'sw' + m.swId;
+  const key = api.key(m);
   const status = h('div.loading-line', { text: t('Procurando capítulos...') });
   const progress = () => (store.get('readProgress', {}) || {})[key] || null;
   const idxOf = () => {
@@ -146,7 +304,7 @@ function SourceDetails(m) {
   };
   function read(i, page) {
     if (!chapters.length) return toast(t('Nenhum capítulo encontrado.'));
-    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: true, pagesFn: sw.pages, poster: m.poster, kind: 'sw', ref: m });
+    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: true, pagesFn: api.pagesFn, poster: m.poster, kind: api.kind, ref: m });
   }
   function renderInfo() {
     clear(info);
@@ -156,12 +314,12 @@ function SourceDetails(m) {
     const text = h('div.md-text');
     text.appendChild(h('div.md-title', { text: m.name }));
     text.appendChild(h('div.md-meta', { text: [m.author, m.status, chapters.length ? t('{n} capítulos', { n: chapters.length }) : ''].filter(Boolean).join('  ·  ') }));
-    text.appendChild(h('div.md-desc', { text: m.description }));
+    text.appendChild(h('div.md-desc', { text: m.description || '' }));
     const idx = idxOf();
     text.appendChild(
       h('div.details-buttons', { 'data-group': '' }, [
         h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, progress().page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]),
-        h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'sw', m), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
+        h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, api.kind, m), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
       ])
     );
     info.appendChild(text);
@@ -180,7 +338,7 @@ function SourceDetails(m) {
       const here = p && p.chapterId === c.id;
       listEl.appendChild(
         h('div.stream', { focusable: true, onSelect: () => read(i, here ? p.page : 0) }, [
-          h('div.s-main', { text: (c.chapter !== null ? t('Cap. {n}', { n: c.chapter }) : t('Especial')) + (c.title ? ' · ' + c.title : '') }),
+          h('div.s-main', { text: (c.chapter !== null && c.chapter !== undefined ? t('Cap. {n}', { n: c.chapter }) : t('Especial')) + (c.title ? ' · ' + c.title : '') }),
           c.scanlator ? h('span.s-tag', { text: c.scanlator }) : null,
           here ? h('span.s-tag.ok', { text: t('Parou aqui') }) : null,
         ])
@@ -190,7 +348,18 @@ function SourceDetails(m) {
   }
   renderInfo();
   renderList();
-  sw.chapters(m.swId).then(
+  if (api.detail && !m.description)
+    api.detail(m).then(
+      (d) => {
+        if (!alive || !d) return;
+        m.description = d.description || m.description;
+        m.author = d.author || m.author;
+        m.status = d.status || m.status;
+        renderInfo();
+      },
+      () => {}
+    );
+  api.chapters(m).then(
     (cs) => {
       if (!alive) return;
       chapters = cs;
@@ -200,7 +369,7 @@ function SourceDetails(m) {
       renderInfo();
       renderList();
     },
-    () => alive && (status.textContent = t('Não encontrei capítulos deste título agora.'))
+    (e) => alive && (status.textContent = t('Não encontrei capítulos deste título agora.') + (e && e.message ? ' (' + e.message + ')' : ''))
   );
   return {
     el: el,

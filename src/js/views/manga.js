@@ -122,7 +122,7 @@ export function MangaView() {
   el.appendChild(scroller);
 
   // "Continue reading" and "Favorites": from your own reading, every source.
-  const openBy = (kind, ref) => (kind === 'sw' ? openSourceManga(ref) : openMangaDetails(Object.assign({ id: 'anilist:' + ref.anilist, type: 'manga', media: {} }, ref)));
+  const openBy = (kind, ref) => (kind === 'sw' || kind === 'pl' ? openSourceManga(ref) : openMangaDetails(Object.assign({ id: 'anilist:' + ref.anilist, type: 'manga', media: {} }, ref)));
   function drawShelves() {
     clear(shelves);
     const mk = (title, list) => {

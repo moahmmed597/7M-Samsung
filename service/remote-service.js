@@ -154,6 +154,69 @@ function readBody(req, cb, limit) {
   req.on('end', function () { cb(data); });
 }
 
+// ---- Web requests of manga plugins (see /api/phttp) ----
+var BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
+var SKIP_HEADERS = { host: 1, 'content-length': 1, connection: 1, 'accept-encoding': 1, 'transfer-encoding': 1 };
+function pluginFetch(target, o, hops, done) {
+  var mod = target.protocol === 'http:' ? require('http') : require('https');
+  var headers = { 'User-Agent': BROWSER_UA, Accept: '*/*', 'Accept-Encoding': 'gzip, deflate' };
+  var src = o.headers && typeof o.headers === 'object' ? o.headers : {};
+  Object.keys(src).forEach(function (k) {
+    if (!SKIP_HEADERS[k.toLowerCase()]) headers[k] = String(src[k]);
+  });
+  var method = String(o.method || 'GET').toUpperCase();
+  var body = typeof o.body === 'string' ? o.body : null;
+  if (body !== null) headers['Content-Length'] = Buffer.byteLength(body);
+  var finished = false;
+  var finish = function (err, out) {
+    if (finished) return;
+    finished = true;
+    done(err, out);
+  };
+  var r = mod.request({ method: method, hostname: target.hostname, port: target.port || (target.protocol === 'http:' ? 80 : 443), path: target.path, headers: headers, timeout: Math.min(Number(o.timeoutMs) || 20000, 40000) }, function (resp) {
+    var loc = resp.headers.location;
+    if (resp.statusCode >= 300 && resp.statusCode < 400 && loc && o.redirect !== 'manual' && hops < 6) {
+      resp.resume();
+      var next = require('url').parse(require('url').resolve(target.protocol + '//' + target.host + target.path, loc));
+      // 303 (and 301/302 after a POST) continue as GET, like a browser
+      var o2 = o;
+      if (resp.statusCode === 303 || ((resp.statusCode === 301 || resp.statusCode === 302) && method === 'POST')) o2 = { headers: o.headers, method: 'GET', responseType: o.responseType, timeoutMs: o.timeoutMs };
+      return pluginFetch(next, o2, hops + 1, finish);
+    }
+    var chunks = [];
+    var size = 0;
+    resp.on('data', function (c) {
+      size += c.length;
+      if (size > 15728640) {
+        r.abort();
+        return finish(new Error('too big'));
+      }
+      chunks.push(c);
+    });
+    resp.on('end', function () {
+      var buf = Buffer.concat(chunks);
+      var enc = String(resp.headers['content-encoding'] || '').toLowerCase();
+      try {
+        if (enc === 'gzip') buf = require('zlib').gunzipSync(buf);
+        else if (enc === 'deflate') buf = require('zlib').inflateSync(buf);
+      } catch (e) {}
+      var h = {};
+      Object.keys(resp.headers).forEach(function (k) { h[k] = String(resp.headers[k]); });
+      finish(null, {
+        status: resp.statusCode,
+        ok: resp.statusCode >= 200 && resp.statusCode < 300,
+        headers: h,
+        body: o.responseType === 'base64' ? buf.toString('base64') : buf.toString('utf8'),
+        url: target.protocol + '//' + target.host + target.path
+      });
+    });
+  });
+  r.on('error', function (e) { finish(e); });
+  r.on('timeout', function () { r.abort(); finish(new Error('timeout')); });
+  if (body !== null) r.write(body);
+  r.end();
+}
+
 var page = null;
 function remotePage() {
   if (page === null) {
@@ -257,6 +320,45 @@ function handle(req, res) {
     };
     if (isPost) return readBody(req, function (body) { run(typeof body === 'string' ? body : JSON.stringify(body)); });
     return run('');
+  }
+  // ---- Manga plugins (Harbor format) ----
+  // A plugin runs in a sandboxed worker in the app; its web requests come here because the sites refuse
+  // the app's origin. Local only (the app on this TV). Any http(s) site, GET or POST, the plugin's
+  // headers (Referer, Cookie, User-Agent...), redirects followed, 15 MB at most.
+  if (url.pathname === '/api/phttp' && req.method === 'POST') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    return readBody(req, function (raw) {
+      var o;
+      try { o = JSON.parse(raw || '{}'); } catch (e) { return send(res, 400, { error: 'bad json' }); }
+      var u = require('url').parse(String(o.url || ''));
+      if ((u.protocol !== 'https:' && u.protocol !== 'http:') || !u.hostname) return send(res, 400, { error: 'bad url' });
+      pluginFetch(u, o, 0, function (err, out) {
+        if (err) return send(res, 502, { error: String(err.message || err) });
+        send(res, 200, out);
+      });
+    }, 2097152);
+  }
+  // Chapter pages and covers that need the plugin's Referer: the image is fetched here and passed on.
+  if (url.pathname === '/api/pimg') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    var iu = require('url').parse(String(q.u || ''));
+    if ((iu.protocol !== 'https:' && iu.protocol !== 'http:') || !iu.hostname) return send(res, 400, { error: 'bad url' });
+    var ih = { 'User-Agent': String(q.ua || BROWSER_UA), Accept: 'image/*,*/*;q=0.8' };
+    if (q.r) ih.Referer = String(q.r);
+    var pipeImg = function (target, hops) {
+      var mod = target.protocol === 'http:' ? require('http') : require('https');
+      var r = mod.get({ hostname: target.hostname, port: target.port || (target.protocol === 'http:' ? 80 : 443), path: target.path, headers: ih, timeout: 20000 }, function (resp) {
+        if (resp.statusCode >= 300 && resp.statusCode < 400 && resp.headers.location && hops < 5) {
+          resp.resume();
+          return pipeImg(require('url').parse(require('url').resolve(target.protocol + '//' + target.host + target.path, resp.headers.location)), hops + 1);
+        }
+        res.writeHead(resp.statusCode || 502, { 'Content-Type': resp.headers['content-type'] || 'image/jpeg', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'max-age=86400' });
+        resp.pipe(res);
+      });
+      r.on('error', function () { send(res, 502, { error: 'upstream failed' }); });
+      r.on('timeout', function () { r.abort(); });
+    };
+    return pipeImg(iu, 0);
   }
   // SubDL subtitles come as ZIP files (often Windows-1256 Arabic): download, unzip the .srt
   // (the one for ?ep=S01E02 when there are several) and return it as UTF-8 text.
