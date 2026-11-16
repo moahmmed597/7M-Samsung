@@ -11,6 +11,8 @@ import { t } from '../lib/i18n.js';
 import { openReader } from './reader.js';
 import { openAnime } from './anime.js';
 import { chapterToEpisode, animeMeta } from '../lib/animeLink.js';
+import * as pl from '../api/plugins.js';
+import { searchPlugin } from './sources.js';
 import * as shelf from '../lib/mangaLib.js';
 
 const CHUNK = 50;
@@ -208,14 +210,34 @@ function MangaDetailsView(m) {
           focusIdx = idx;
         }
         chunk = idx >= 0 ? Math.floor(idx / CHUNK) : 0;
-        if (!cs.length) status.textContent = t('Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.');
+        if (!cs.length) status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
         renderInfo();
         renderList(false);
+        if (!cs.length) offerPlugins();
       })
       .catch(() => {
         if (!alive) return;
-        status.textContent = t('Não encontrei capítulos deste título agora.');
+        status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
+        offerPlugins();
       });
+  }
+
+  // Search the title in the plugins you installed (My sources).
+  function offerPlugins() {
+    const q = (media.title && (media.title.english || media.title.romaji)) || m.name;
+    const plugins = pl.installed();
+    if (!plugins.length) {
+      listEl().appendChild(h('div.modal-text', { text: t('Adicione fontes em Mangá → Minhas fontes para ler outros títulos.') }));
+      return;
+    }
+    plugins.forEach((p) =>
+      listEl().appendChild(
+        h('div.stream', { focusable: true, onSelect: () => searchPlugin(p.id, p.name, q) }, [h('div.s-main', { text: '🔎 ' + t('Buscar em {name}', { name: p.name }) }), h('span.s-tag', { text: (p.lang || '').toUpperCase() })])
+      )
+    );
+  }
+  function listEl() {
+    return list;
   }
 
   renderInfo();

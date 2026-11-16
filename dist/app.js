@@ -5043,6 +5043,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "{n} plugins instalados de {name}.": "{n} plugins installed from {name}.",
+    "O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).": "MangaDex has no chapters of this title (many licensed series aren't there).",
+    "Adicione fontes em Mangá → Minhas fontes para ler outros títulos.": "Add sources in Manga → My sources to read other titles.",
+    "Buscar em {name}": "Search in {name}",
+    "Conta IPTV adicionada. Abra TV ao vivo.": "IPTV account added. Open Live TV.",
+    "Não consegui entrar no IPTV. Confira host, usuário e senha.": "Couldn't sign in to the IPTV. Check host, username and password.",
     "TV ao vivo": "Live TV",
     "OK: assistir  ·  🟢 Verde: favorito": "OK: watch  ·  🟢 Green: favourite",
     "Adicionar fonte": "Add a source",
@@ -5415,6 +5421,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "{n} plugins instalados de {name}.": "تم تثبيت {n} إضافة من {name}.",
+    "O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).": "MangaDex ما فيه فصول لهذا العمل (أغلب السلاسل المرخّصة ما تكون فيه).",
+    "Adicione fontes em Mangá → Minhas fontes para ler outros títulos.": "أضف مصادر من مانجا ← مصادري عشان تقرأ أعمال ثانية.",
+    "Buscar em {name}": "ابحث في {name}",
+    "Conta IPTV adicionada. Abra TV ao vivo.": "تمت إضافة حساب IPTV. افتح البث المباشر.",
+    "Não consegui entrar no IPTV. Confira host, usuário e senha.": "ما قدرت أدخل الـIPTV. تأكد من الهوست واسم المستخدم وكلمة السر.",
     "TV ao vivo": "بث مباشر",
     "OK: assistir  ·  🟢 Verde: favorito": "OK: مشاهدة  ·  🟢 الأخضر: مفضلة",
     "Adicionar fonte": "أضف مصدر",
@@ -14820,6 +14832,500 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/api/plugins.js
+  var SVC = "http://127.0.0.1:" + PORT;
+  var REPOS = "mangaRepos";
+  var PLUGINS = "mangaPlugins";
+  var repos = function repos() {
+    return get(REPOS, []) || [];
+  };
+  var installed = function installed() {
+    return get(PLUGINS, []) || [];
+  };
+  function saveInstalled(list2) {
+    set(PLUGINS, list2);
+  }
+  function addRepo(url2) {
+    var r = repos().filter(function (x) {
+      return x !== url2;
+    });
+    r.push(url2);
+    set(REPOS, r);
+  }
+  function removeRepo(url2) {
+    set(REPOS, repos().filter(function (x) {
+      return x !== url2;
+    }));
+  }
+  function uninstall(id) {
+    saveInstalled(installed().filter(function (p) {
+      return p.id !== id;
+    }));
+    stop2(id);
+  }
+  function httpRaw(url2, opts) {
+    var o = opts || {};
+    return request("POST", SVC + "/api/phttp", {
+      url: url2,
+      method: o.method,
+      headers: o.headers,
+      body: o.body,
+      responseType: o.responseType,
+      timeoutMs: o.timeoutMs,
+      redirect: o.redirect
+    }, {
+      timeout: (o.timeoutMs || 2e4) + 5e3,
+      quiet: true
+    });
+  }
+  function getText2(url2) {
+    return httpRaw(url2, {}).then(function (r) {
+      if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "?"));
+      return r.body;
+    });
+  }
+  function imageUrl(url2, referer) {
+    if (!url2) return "";
+    return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "");
+  }
+  function classify(parsed) {
+    if (parsed && Array.isArray(parsed.plugins)) return "harbor";
+    var arr = Array.isArray(parsed) ? parsed : parsed && (parsed.sources || parsed.mangayomiSources);
+    if (!Array.isArray(arr) || !arr.length) return "unknown";
+    if (arr.some(function (e) {
+      return e && typeof e.apk === "string";
+    })) return "tachiyomi";
+    if (arr.some(function (e) {
+      return e && (e.sourceCodeUrl || e.pkgPath);
+    })) return "mangayomi";
+    if (arr.some(function (e) {
+      return e && (e.file || e.downloadURL) && /\.aix/i.test(e.file || e.downloadURL || "");
+    })) return "aidoku";
+    if (parsed && parsed.info && Array.isArray(parsed.sources)) return "aidoku";
+    return "unknown";
+  }
+  function fetchRepo(url2) {
+    return getText2(url2).then(function (text) {
+      var parsed = null;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        throw new Error("not json");
+      }
+      var kind = classify(parsed);
+      if (kind !== "harbor") return {
+        kind: kind,
+        name: parsed && parsed.name || "",
+        plugins: []
+      };
+      var plugins = parsed.plugins.filter(function (p) {
+        return p && typeof p.id === "string" && typeof p.name === "string" && typeof p.entry === "string";
+      }).map(function (p) {
+        return {
+          id: p.id,
+          name: p.name,
+          version: String(p.version || "0"),
+          lang: String(p.lang || ""),
+          nsfw: p.nsfw === true,
+          icon: typeof p.icon === "string" ? p.icon : "",
+          entry: p.entry
+        };
+      });
+      return {
+        kind: kind,
+        name: String(parsed.name || ""),
+        plugins: plugins
+      };
+    });
+  }
+  function resolveUrl(base3, rel) {
+    if (/^https?:\/\//i.test(rel)) return rel;
+    return base3.replace(/[^/]*$/, "") + rel.replace(/^\.\//, "");
+  }
+  function install2(repoUrl, man) {
+    return getText2(resolveUrl(repoUrl, man.entry)).then(function (source) {
+      if (source.length > 2 * 1024 * 1024) throw new Error("too big");
+      var list2 = installed().filter(function (p) {
+        return p.id !== man.id;
+      });
+      list2.push({
+        id: man.id,
+        name: man.name,
+        version: man.version,
+        lang: man.lang,
+        nsfw: man.nsfw,
+        icon: man.icon,
+        repoUrl: repoUrl,
+        entry: man.entry,
+        source: source
+      });
+      saveInstalled(list2);
+      stop2(man.id);
+      return man;
+    });
+  }
+  var DROP = {
+    script: 1,
+    style: 1,
+    noscript: 1,
+    template: 1,
+    iframe: 1,
+    object: 1,
+    embed: 1,
+    link: 1,
+    meta: 1
+  };
+  function serialize(el, depth, budget) {
+    var a = {};
+    for (var i = 0; i < el.attributes.length; i++) a[el.attributes[i].name] = el.attributes[i].value;
+    var c = [];
+    if (depth < 200) {
+      var kids2 = el.childNodes;
+      for (var _i3 = 0; _i3 < kids2.length && budget.n < 6e4; _i3++) {
+        var k = kids2[_i3];
+        if (k.nodeType === 1) {
+          if (DROP[k.tagName.toLowerCase()]) continue;
+          budget.n++;
+          c.push(serialize(k, depth + 1, budget));
+        } else if (k.nodeType === 3 && k.nodeValue && k.nodeValue.trim()) {
+          budget.n++;
+          c.push({
+            x: k.nodeValue
+          });
+        }
+      }
+    }
+    return {
+      t: el.tagName.toLowerCase(),
+      a: a,
+      x: "",
+      c: c
+    };
+  }
+  function parseHtml(html) {
+    var doc = new DOMParser().parseFromString(String(html || ""), "text/html");
+    return doc.body ? serialize(doc.body, 0, {
+      n: 0
+    }) : {
+      t: "body",
+      a: {},
+      x: "",
+      c: []
+    };
+  }
+  var PRELUDE = String.raw(_templateObject || (_templateObject = _taggedTemplateLiteral(["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/s*>s*/g, \" > \").trim().split(/s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  function parseHtml(html) { return bridge(\"parse\", { html: String(html) }).then(function (tree) { return new HDocument(tree); }); }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"], ["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/\\s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/\\s*>\\s*/g, \" > \").trim().split(/\\s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/\\s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/\\s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  function parseHtml(html) { return bridge(\"parse\", { html: String(html) }).then(function (tree) { return new HDocument(tree); }); }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"])));
+  var EPILOGUE = String.raw(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n      ;return (typeof plugin !== \"undefined\") ? plugin : undefined;\n    })(harbor);\n    if (!provider) provider = ret;\n    if (!provider || typeof provider !== \"object\") throw new Error(\"plugin registered no provider\");\n    safePost({ type: \"ready\", meta: { id: String(provider.id), name: String(provider.name) } });\n  } catch (err) {\n    safePost({ type: \"initError\", error: String(err && err.message ? err.message : err) });\n  }\n})();\n"])));
+  var workers = {};
+  var order = [];
+  function stop2(id) {
+    var w = workers[id];
+    if (w) {
+      try {
+        w.worker.terminate();
+      } catch (e) {}
+      if (w.url) URL.revokeObjectURL(w.url);
+      delete workers[id];
+    }
+    order = order.filter(function (x) {
+      return x !== id;
+    });
+  }
+  function start2(p) {
+    var blob = new Blob([PRELUDE, p.source, EPILOGUE], {
+      type: "text/javascript"
+    });
+    var url2 = URL.createObjectURL(blob);
+    var worker = new Worker(url2);
+    var w = {
+      worker: worker,
+      url: url2,
+      calls: {},
+      seq: 0,
+      origin: "",
+      ready: null
+    };
+    w.ready = new Promise(function (resolve2, reject) {
+      var timer = setTimeout(function () {
+        return reject(new Error("plugin did not start"));
+      }, 15e3);
+      w.onReady = function (ok, err) {
+        clearTimeout(timer);
+        if (ok) resolve2();else reject(new Error(err || "plugin failed"));
+      };
+    });
+    worker.onmessage = function (e) {
+      var m = e.data || {};
+      if (m.type === "ready") return w.onReady(true);
+      if (m.type === "initError") return w.onReady(false, m.error);
+      if (m.type === "result" || m.type === "error") {
+        var c = w.calls[m.id];
+        if (!c) return;
+        delete w.calls[m.id];
+        clearTimeout(c.timer);
+        return m.type === "result" ? c.resolve(m.value) : c.reject(new Error(m.error));
+      }
+      if (m.type === "http") {
+        var u = String(m.payload && m.payload.url || "");
+        var o = m.payload && m.payload.opts || {};
+        if (!/^https?:\/\//i.test(u)) return worker.postMessage({
+          type: "bridgeResult",
+          id: m.id,
+          ok: false,
+          error: "bad url"
+        });
+        var mm = /^(https?:\/\/[^/]+)/i.exec(u);
+        if (mm) w.origin = mm[1] + "/";
+        httpRaw(u, o).then(function (r) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: true,
+            value: r
+          });
+        }, function (err) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: false,
+            error: String(err && err.message || err)
+          });
+        });
+        return;
+      }
+      if (m.type === "parse") {
+        var tree = null;
+        try {
+          tree = parseHtml(m.payload && m.payload.html);
+        } catch (err) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: false,
+            error: "parse failed"
+          });
+        }
+        return worker.postMessage({
+          type: "bridgeResult",
+          id: m.id,
+          ok: true,
+          value: tree
+        });
+      }
+    };
+    worker.onerror = function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      w.onReady(false, e && e.message || "worker error");
+    };
+    workers[p.id] = w;
+    order.push(p.id);
+    while (order.length > 2) stop2(order[0]);
+    return w;
+  }
+  function call3(id, method, args, timeout) {
+    var p = installed().find(function (x) {
+      return x.id === id;
+    });
+    if (!p) return Promise.reject(new Error("not installed"));
+    var w = workers[id] || start2(p);
+    order = order.filter(function (x) {
+      return x !== id;
+    }).concat([id]);
+    return w.ready.then(function () {
+      return new Promise(function (resolve2, reject) {
+        var cid = "c" + ++w.seq;
+        w.calls[cid] = {
+          resolve: resolve2,
+          reject: reject,
+          timer: setTimeout(function () {
+            return delete w.calls[cid], reject(new Error("timeout"));
+          }, timeout || 25e3)
+        };
+        w.worker.postMessage({
+          type: "call",
+          id: cid,
+          method: method,
+          args: args || []
+        });
+      });
+    });
+  }
+  function refererOf(id) {
+    var w = workers[id];
+    return w && w.origin || "";
+  }
+  var str = function str(v) {
+    return typeof v === "string" ? v : void 0;
+  };
+  function toSummary(o) {
+    if (!o || _typeof(o) !== "object" || !str(o.id) || !str(o.title)) return null;
+    return {
+      id: o.id,
+      title: o.title,
+      cover: /^https?:\/\//i.test(o.cover || "") ? o.cover : "",
+      description: str(o.description) || "",
+      status: str(o.status) || "",
+      author: str(o.author) || "",
+      year: typeof o.year === "number" ? o.year : null
+    };
+  }
+  function popular(id, offset) {
+    return call3(id, "popular", [offset || 0, void 0], 25e3).then(function (v) {
+      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
+    });
+  }
+  function search2(id, query, offset) {
+    return call3(id, "search", [query, offset || 0, void 0], 25e3).then(function (v) {
+      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
+    });
+  }
+  function _detail(id, mangaId) {
+    return call3(id, "detail", [mangaId], 25e3).then(toSummary);
+  }
+  function chapters2(id, mangaId) {
+    return call3(id, "chapters", [mangaId], 3e4).then(function (v) {
+      return (Array.isArray(v) ? v : []).filter(function (c) {
+        return c && str(c.id);
+      }).slice(0, 5e3).map(function (c) {
+        return {
+          id: c.id,
+          chapter: str(c.chapter) || null,
+          title: str(c.title) || "",
+          lang: str(c.language) || "",
+          pages: typeof c.pages === "number" ? c.pages : 0,
+          scanlator: str(c.group) || ""
+        };
+      });
+    });
+  }
+  function pages2(id, chapterId) {
+    return call3(id, "pageUrls", [chapterId], 35e3).then(function (v) {
+      var ref = refererOf(id);
+      return (Array.isArray(v) ? v : []).map(function (x) {
+        var u = typeof x === "string" ? x : x && (x.url || x.imageUrl || x.src || x.img || x.image);
+        if (!/^https?:\/\//i.test(u || "")) return null;
+        var h2 = x && _typeof(x) === "object" && x.headers ? x.headers : {};
+        var r = h2.Referer || h2.referer || ref;
+        return imageUrl(String(u).trim(), r);
+      }).filter(Boolean);
+    });
+  }
+
+  // src/js/api/suwayomi.js
+  var base = function base() {
+    return String(settings().suwayomiUrl || "").replace(/\/+$/, "");
+  };
+  var enabled2 = function enabled2() {
+    return !!base();
+  };
+  var digits = function digits(x) {
+    return /^\d+$/.test(String(x));
+  };
+  function gql(query, variables) {
+    return postJSON(base() + "/api/graphql", {
+      query: query,
+      variables: variables || {}
+    }, {
+      timeout: 4e4,
+      quiet: true
+    }).then(function (r) {
+      if (r && r.errors && r.errors.length && !r.data) throw new Error(String(r.errors[0].message || "server"));
+      if (!r || !r.data) throw new Error("server");
+      return r.data;
+    });
+  }
+  function img(path) {
+    if (!path) return "";
+    return /^https?:/i.test(path) ? path : base() + path;
+  }
+  function ping() {
+    return gql("query { aboutServer { name version } }").then(function (d) {
+      return d.aboutServer;
+    });
+  }
+  function sources() {
+    return gql("query { sources { nodes { id name lang iconUrl supportsLatest isNsfw isLocal } } }").then(function (d) {
+      return (d.sources && d.sources.nodes || []).filter(function (s) {
+        return s && s.id != null && digits(s.id) && (!s.isNsfw || settings().suwayomiNsfw === true);
+      }).map(function (s) {
+        return {
+          id: String(s.id),
+          name: String(s.name || s.id),
+          lang: String(s.lang || ""),
+          latest: !!s.supportsLatest,
+          local: !!s.isLocal
+        };
+      });
+    });
+  }
+  var KIND = {
+    popular: "POPULAR",
+    latest: "LATEST",
+    search: "SEARCH"
+  };
+  function toMeta(m) {
+    return {
+      id: "sw:" + m.id,
+      swId: String(m.id),
+      type: "manga",
+      name: m.title || "",
+      poster: base() + "/api/v1/manga/" + m.id + "/thumbnail",
+      description: m.description || "",
+      author: m.author || m.artist || "",
+      status: m.status || ""
+    };
+  }
+  function browse2(sourceId, kind, page3, query) {
+    if (!digits(sourceId)) return Promise.resolve({
+      items: [],
+      more: false
+    });
+    var q2 = 'mutation($page: Int!, $query: String) { fetchSourceManga(input: { source: "' + sourceId + '", type: ' + KIND[kind] + ", page: $page, query: $query }) { hasNextPage mangas { id title author artist status description } } }";
+    return gql(q2, {
+      page: page3 || 1,
+      query: query || null
+    }).then(function (d) {
+      var p = d.fetchSourceManga || {};
+      return {
+        items: (p.mangas || []).map(toMeta),
+        more: !!p.hasNextPage
+      };
+    });
+  }
+  function chapters3(mangaId) {
+    if (!digits(mangaId)) return Promise.resolve([]);
+    var map = function map(nodes) {
+      return (nodes || []).filter(function (c) {
+        return c && c.id != null;
+      }).map(function (c) {
+        return {
+          id: String(c.id),
+          chapter: c.chapterNumber >= 0 ? c.chapterNumber : null,
+          title: c.name || "",
+          lang: "",
+          pages: c.pageCount > 0 ? c.pageCount : 0,
+          scanlator: c.scanlator || ""
+        };
+      }).sort(function (a, b) {
+        return (a.chapter === null ? 1e9 : a.chapter) - (b.chapter === null ? 1e9 : b.chapter);
+      });
+    };
+    return gql("query { chapters(condition: { mangaId: " + mangaId + " }) { nodes { id name chapterNumber scanlator pageCount } } }").then(function (d) {
+      var cached2 = d.chapters && d.chapters.nodes;
+      if (cached2 && cached2.length) return map(cached2);
+      return gql("mutation { fetchChapters(input: { mangaId: " + mangaId + " }) { chapters { id name chapterNumber scanlator pageCount } } }").then(function (x) {
+        return map(x.fetchChapters && x.fetchChapters.chapters);
+      });
+    });
+  }
+  function pages3(chapterId) {
+    if (!digits(chapterId)) return Promise.resolve([]);
+    return gql("mutation { fetchChapterPages(input: { chapterId: " + chapterId + " }) { pages } }").then(function (d) {
+      return (d.fetchChapterPages && d.fetchChapterPages.pages || []).filter(function (p) {
+        return typeof p === "string" && p;
+      }).map(img);
+    });
+  }
+
   // src/js/lib/mangaLib.js
   var FAVS = "mangaFavs";
   var favs = function favs() {
@@ -14869,8 +15375,599 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }).slice(0, limit || 20);
   }
 
-  // src/js/views/mangaDetails.js
+  // src/js/views/sources.js
   var CHUNK = 50;
+  function openSources() {
+    push(SourcesView());
+  }
+  function connectServer(done) {
+    promptText(t("Endereço do servidor Suwayomi"), base() || "http://", "http://192.168.1.20:4567", function (url2) {
+      var u = url2.trim().replace(/\/+$/, "");
+      if (!/^https?:\/\//i.test(u)) u = "http://" + u;
+      if (/\.json(\?|$)|raw\.githubusercontent\.com|cdn\.jsdelivr\.net|\/repo(\.json)?$/i.test(u)) {
+        if (/\.json(\?|$)/i.test(base())) saveSettings({
+          suwayomiUrl: ""
+        });
+        return addRepoUrl(u, done);
+      }
+      saveSettings({
+        suwayomiUrl: u
+      });
+      ping().then(function () {
+        toast(t("Servidor conectado."));
+        if (done) done();
+      }, function () {
+        toast(t("Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado."), 6e3);
+        if (done) done();
+      });
+    });
+  }
+  function addRepoUrl(u, done) {
+    toast(t("Lendo o repositório..."));
+    return fetchRepo(u).then(function (r) {
+      if (r.kind !== "harbor") {
+        toast(t("Não reconheci este repositório."), 6e3);
+        return done && done();
+      }
+      addRepo(u);
+      return Promise.all(r.plugins.map(function (p) {
+        return install2(u, p).then(function () {
+          return 1;
+        }, function () {
+          return 0;
+        });
+      })).then(function (ok) {
+        var n = ok.reduce(function (a, b) {
+          return a + b;
+        }, 0);
+        toast(t("{n} plugins instalados de {name}.", {
+          n: n,
+          name: r.name || t("Repositório")
+        }), 5e3);
+        if (done) done();
+      });
+    }, function () {
+      toast(t("Não consegui abrir o repositório."), 5e3);
+      if (done) done();
+    });
+  }
+  function suwayomiApi(src) {
+    return {
+      name: src.name,
+      latest: src.latest,
+      kind: "sw",
+      browse: function browse(k, page3, q2) {
+        return browse2(src.id, k, page3, q2);
+      },
+      chapters: function chapters(m) {
+        return chapters3(m.swId);
+      },
+      pagesFn: pages3,
+      key: function key(m) {
+        return "sw" + m.swId;
+      }
+    };
+  }
+  var numOf = function numOf(c) {
+    var n = parseFloat(c.chapter);
+    return isNaN(n) ? null : n;
+  };
+  function pluginApi(pid, name) {
+    var offset = 0;
+    var toMeta2 = function toMeta2(it) {
+      return {
+        id: "pl:" + pid + ":" + it.id,
+        plId: pid,
+        plName: name,
+        mid: it.id,
+        type: "manga",
+        name: it.title,
+        poster: it.cover ? imageUrl(it.cover, refererOf(pid)) : "",
+        description: it.description,
+        author: it.author,
+        status: it.status
+      };
+    };
+    return {
+      name: name,
+      latest: false,
+      kind: "pl",
+      browse: function browse(k, page3, q2) {
+        if (page3 === 1) offset = 0;
+        var p = k === "search" ? search2(pid, q2, offset) : popular(pid, offset);
+        return p.then(function (items3) {
+          offset += items3.length;
+          return {
+            items: items3.map(toMeta2),
+            more: items3.length > 0
+          };
+        });
+      },
+      detail: function detail(m) {
+        return _detail(pid, m.mid);
+      },
+      chapters: function chapters(m) {
+        return chapters2(pid, m.mid).then(function (cs) {
+          var numbered = cs.filter(function (c) {
+            return numOf(c) !== null;
+          }).length;
+          if (numbered >= cs.length * 0.6) cs.sort(function (a, b) {
+            return (numOf(a) === null ? 1e9 : numOf(a)) - (numOf(b) === null ? 1e9 : numOf(b));
+          });
+          return cs;
+        });
+      },
+      pagesFn: function pagesFn(cid) {
+        return pages2(pid, cid);
+      },
+      key: function key(m) {
+        return "pl" + pid + ":" + m.mid;
+      }
+    };
+  }
+  function SourcesView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    el.appendChild(scroller);
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: t("Minhas fontes")
+    }));
+    var body = h("div.flat-list", {
+      "data-group": "",
+      "data-vertical": ""
+    });
+    scroller.appendChild(body);
+    var row2 = function row2(text, sub, onSelect, tag) {
+      return h("div.stream", {
+        focusable: true,
+        onSelect: onSelect
+      }, [h("div.s-main", null, [text, sub ? h("small", {
+        text: " " + sub
+      }) : null]), tag ? h("span.s-tag", {
+        text: tag
+      }) : null]);
+    };
+    var section = function section(text) {
+      return body.appendChild(h("div.src-sec", {
+        text: text
+      }));
+    };
+    function addRepo2() {
+      promptText(t("Endereço do repositório (repo.json)"), "https://", "", function (url2) {
+        var u = url2.trim();
+        if (!/^https?:\/\//i.test(u)) return toast(t("Endereço inválido."));
+        toast(t("Lendo o repositório..."));
+        fetchRepo(u).then(function (r) {
+          if (r.kind === "harbor") {
+            addRepo(u);
+            load7();
+            return pickPlugins(u, r);
+          }
+          var why = {
+            tachiyomi: t("Este é um repositório Tachiyomi/Mihon (apps Android). Adicione-o no seu servidor Suwayomi e conecte o servidor aqui."),
+            aidoku: t("Este é um repositório Aidoku (iPhone). O formato dele não roda na TV."),
+            mangayomi: t("Este é um repositório Mangayomi. Ainda não roda na TV.")
+          }[r.kind];
+          toast(why || t("Não reconheci este repositório."), 8e3);
+        }, function () {
+          return toast(t("Não consegui abrir o repositório."), 5e3);
+        });
+      });
+    }
+    function pickPlugins(url2, r) {
+      var have = installed().map(function (p) {
+        return p.id;
+      });
+      menu(r.name || t("Repositório"), r.plugins.map(function (p) {
+        return {
+          label: p.name,
+          sub: [p.lang.toUpperCase(), "v" + p.version, have.indexOf(p.id) >= 0 ? t("instalado") : "", p.nsfw ? "18+" : ""].filter(Boolean).join(" · "),
+          value: p,
+          checked: have.indexOf(p.id) >= 0
+        };
+      }), {
+        empty: t("Nenhum plugin neste repositório."),
+        onPick: function onPick(p) {
+          toast(t("Instalando {name}...", {
+            name: p.name
+          }));
+          install2(url2, p).then(function () {
+            toast(t("{name} instalado.", {
+              name: p.name
+            }));
+            load7();
+          }, function () {
+            return toast(t("Não consegui instalar {name}.", {
+              name: p.name
+            }), 5e3);
+          });
+        }
+      });
+    }
+    function pluginMenu(p) {
+      menu(p.name, [{
+        label: t("Abrir"),
+        value: "open"
+      }, {
+        label: t("Atualizar"),
+        value: "update"
+      }, {
+        label: t("Remover"),
+        value: "remove"
+      }], {
+        onPick: function onPick(v) {
+          if (v === "open") push(SourceGrid(pluginApi(p.id, p.name)));else if (v === "update") fetchRepo(p.repoUrl).then(function (r) {
+            var man = r.plugins.find(function (x) {
+              return x.id === p.id;
+            });
+            if (!man) throw new Error("gone");
+            return install2(p.repoUrl, man);
+          }).then(function () {
+            return toast(t("{name} atualizado.", {
+              name: p.name
+            })), load7();
+          }, function () {
+            return toast(t("Não consegui atualizar."));
+          });else if (v === "remove") confirmDialog(t("Remover {name}?", {
+            name: p.name
+          }), t("Remover"), function () {
+            return uninstall(p.id), load7();
+          });
+        }
+      });
+    }
+    function load7() {
+      clear(body);
+      section(t("Plugins (repositórios no formato do Harbor)"));
+      body.appendChild(row2("＋ " + t("Adicionar repositório"), t("cole o link do repo.json"), addRepo2));
+      installed().forEach(function (p) {
+        return body.appendChild(row2(p.name, "v" + p.version, function () {
+          return push(SourceGrid(pluginApi(p.id, p.name)));
+        }, (p.lang || "").toUpperCase()));
+      });
+      installed().length && body.appendChild(row2("⚙ " + t("Gerenciar plugins"), "", function () {
+        return menu(t("Plugins"), installed().map(function (p) {
+          return {
+            label: p.name,
+            sub: "v" + p.version,
+            value: p
+          };
+        }), {
+          onPick: pluginMenu
+        });
+      }));
+      repos().forEach(function (u) {
+        return body.appendChild(row2("📦 " + u.replace(/^https?:\/\//, ""), "", function () {
+          return menu(t("Repositório"), [{
+            label: t("Ver plugins"),
+            value: "list"
+          }, {
+            label: t("Remover repositório"),
+            value: "rm"
+          }], {
+            onPick: function onPick(v) {
+              if (v === "rm") return removeRepo(u), load7();
+              toast(t("Lendo o repositório..."));
+              fetchRepo(u).then(function (r) {
+                return pickPlugins(u, r);
+              }, function () {
+                return toast(t("Não consegui abrir o repositório."));
+              });
+            }
+          });
+        }));
+      });
+      section(t("Servidor Suwayomi (extensões Tachiyomi/Mihon)"));
+      body.appendChild(row2("🔌 " + (enabled2() ? base() : t("Conectar servidor Suwayomi")), "", function () {
+        return connectServer(load7);
+      }));
+      if (enabled2()) {
+        var sp = spinnerLine(t("Carregando..."));
+        body.appendChild(sp);
+        sources().then(function (list2) {
+          if (sp.parentNode) body.removeChild(sp);
+          list2.forEach(function (s) {
+            return body.appendChild(row2(s.name, "", function () {
+              return push(SourceGrid(suwayomiApi(s)));
+            }, s.lang.toUpperCase()));
+          });
+        }, function () {
+          if (sp.parentNode) body.removeChild(sp);
+          body.appendChild(h("div.modal-text", {
+            text: t("Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.")
+          }));
+        });
+      }
+      var first = body.querySelector(".stream");
+      if (first) focus(first);
+    }
+    load7();
+    return {
+      el: el
+    };
+  }
+  function searchPlugin(pid, name, query) {
+    push(SourceGrid(pluginApi(pid, name), query));
+  }
+  function SourceGrid(api2, startQuery) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    el.appendChild(scroller);
+    var kind = "popular";
+    var query = "";
+    var page3 = 0;
+    var more = null;
+    var gridEl = h("div.grid");
+    var bar = h("div.details-buttons", {
+      "data-group": ""
+    });
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: api2.name
+    }));
+    scroller.appendChild(bar);
+    scroller.appendChild(gridEl);
+    function reload(k, q2) {
+      kind = k;
+      query = q2 || "";
+      page3 = 0;
+      clear(gridEl);
+      next();
+    }
+    if (startQuery) {
+      kind = "search";
+      query = startQuery;
+    }
+    bar.appendChild(h("div.btn.primary", {
+      focusable: true,
+      "data-autofocus": "",
+      onSelect: function onSelect() {
+        return reload("popular");
+      }
+    }, t("Populares")));
+    if (api2.latest) bar.appendChild(h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return reload("latest");
+      }
+    }, t("Recentes")));
+    bar.appendChild(h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return promptText(t("Buscar mangá"), "", "", function (q2) {
+          return reload("search", q2);
+        });
+      }
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar mangá")]));
+    function next() {
+      if (more && more.parentNode) gridEl.removeChild(more);
+      var sp = spinnerLine(t("Carregando..."));
+      gridEl.appendChild(sp);
+      var my = kind + query;
+      api2.browse(kind, ++page3, query).then(function (r) {
+        if (my !== kind + query) return;
+        if (sp.parentNode) gridEl.removeChild(sp);
+        r.items.forEach(function (m) {
+          return gridEl.appendChild(card(m, {
+            onSelect: function onSelect() {
+              return push(SourceDetails(m, api2));
+            }
+          }));
+        });
+        if (!r.items.length && page3 === 1) gridEl.appendChild(h("div.modal-text", {
+          text: t("Nada por aqui.")
+        }));
+        if (r.more) {
+          more = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return next();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          gridEl.appendChild(more);
+        }
+        loadVisibleImages(el, 400);
+      }, function (e) {
+        if (sp.parentNode) gridEl.removeChild(sp);
+        toast(t("Não foi possível carregar agora.") + (e && e.message ? " (" + e.message + ")" : ""), 5e3);
+      });
+    }
+    next();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      onScroll: function onScroll() {
+        return loadVisibleImages(el, 400);
+      }
+    };
+  }
+  function openSourceManga(m) {
+    var api2 = m.plId ? pluginApi(m.plId, m.plName || "") : suwayomiApi({
+      id: "",
+      name: "",
+      latest: false
+    });
+    push(SourceDetails(m, api2));
+  }
+  function SourceDetails(m, api2) {
+    var el = h("div.view.md-view");
+    var info2 = h("div.md-info");
+    var listEl = h("div.md-list", {
+      "data-scroll-y": "",
+      "data-pad-y": "120",
+      "data-group": "",
+      "data-vertical": ""
+    });
+    el.appendChild(info2);
+    el.appendChild(listEl);
+    var chapters4 = [];
+    var chunk = 0;
+    var alive = true;
+    var key3 = api2.key(m);
+    var status2 = h("div.loading-line", {
+      text: t("Procurando capítulos...")
+    });
+    var progress2 = function progress2() {
+      return (get("readProgress", {}) || {})[key3] || null;
+    };
+    var idxOf = function idxOf() {
+      var p = progress2();
+      return p ? chapters4.findIndex(function (c) {
+        return c.id === p.chapterId;
+      }) : -1;
+    };
+    function read(i, page3) {
+      if (!chapters4.length) return toast(t("Nenhum capítulo encontrado."));
+      openReader({
+        key: key3,
+        title: m.name,
+        chapters: chapters4,
+        index: Math.max(0, i),
+        startPage: page3 || 0,
+        rtl: true,
+        pagesFn: api2.pagesFn,
+        poster: m.poster,
+        kind: api2.kind,
+        ref: m
+      });
+    }
+    function renderInfo() {
+      clear(info2);
+      var c = h("img.md-cover", {
+        alt: ""
+      });
+      c.setAttribute("data-lazy", m.poster || "");
+      info2.appendChild(c);
+      var text = h("div.md-text");
+      text.appendChild(h("div.md-title", {
+        text: m.name
+      }));
+      text.appendChild(h("div.md-meta", {
+        text: [m.author, m.status, chapters4.length ? t("{n} capítulos", {
+          n: chapters4.length
+        }) : ""].filter(Boolean).join("  ·  ")
+      }));
+      text.appendChild(h("div.md-desc", {
+        text: m.description || ""
+      }));
+      var idx = idxOf();
+      text.appendChild(h("div.details-buttons", {
+        "data-group": ""
+      }, [h("div.btn.primary", {
+        focusable: true,
+        "data-autofocus": "",
+        onSelect: function onSelect() {
+          return idx >= 0 ? read(idx, progress2().page) : read(0, 0);
+        }
+      }, [h("span.ico", {
+        text: "📖"
+      }), idx >= 0 ? t("Continuar: cap. {n}", {
+        n: chapters4[idx].chapter
+      }) : t("Ler")]), h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return toggleFav(key3, api2.kind, m), renderInfo();
+        }
+      }, [h("span.ico", {
+        text: isFav(key3) ? "♥" : "♡"
+      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")])]));
+      info2.appendChild(text);
+      loadVisibleImages(info2);
+    }
+    function renderList() {
+      clear(listEl);
+      if (!chapters4.length) return listEl.appendChild(status2);
+      var start4 = chunk * CHUNK;
+      var end = Math.min(chapters4.length, start4 + CHUNK);
+      var p = progress2();
+      var jump = function jump(label, to) {
+        return h("div.stream.md-nav", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return chunk = to, renderList();
+          }
+        }, [h("div.s-main", {
+          text: label
+        })]);
+      };
+      if (chunk > 0) listEl.appendChild(jump("◀ " + t("Capítulos {a}–{b}", {
+        a: (chunk - 1) * CHUNK + 1,
+        b: chunk * CHUNK
+      }), chunk - 1));
+      var _loop8 = function _loop8(i) {
+        var c = chapters4[i];
+        var here = p && p.chapterId === c.id;
+        listEl.appendChild(h("div.stream", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return read(i, here ? p.page : 0);
+          }
+        }, [h("div.s-main", {
+          text: (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
+            n: c.chapter
+          }) : t("Especial")) + (c.title ? " · " + c.title : "")
+        }), c.scanlator ? h("span.s-tag", {
+          text: c.scanlator
+        }) : null, here ? h("span.s-tag.ok", {
+          text: t("Parou aqui")
+        }) : null]));
+      };
+      for (var i = start4; i < end; i++) {
+        _loop8(i);
+      }
+      if (end < chapters4.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
+        a: end + 1,
+        b: Math.min(chapters4.length, end + CHUNK)
+      }) + " ▶", chunk + 1));
+    }
+    renderInfo();
+    renderList();
+    if (api2.detail && !m.description) api2.detail(m).then(function (d) {
+      if (!alive || !d) return;
+      m.description = d.description || m.description;
+      m.author = d.author || m.author;
+      m.status = d.status || m.status;
+      renderInfo();
+    }, function () {});
+    api2.chapters(m).then(function (cs) {
+      if (!alive) return;
+      chapters4 = cs;
+      var i = idxOf();
+      chunk = i >= 0 ? Math.floor(i / CHUNK) : 0;
+      if (!cs.length) status2.textContent = t("Nenhum capítulo encontrado.");
+      renderInfo();
+      renderList();
+    }, function (e) {
+      return alive && (status2.textContent = t("Não encontrei capítulos deste título agora.") + (e && e.message ? " (" + e.message + ")" : ""));
+    });
+    return {
+      el: el,
+      onShow: function onShow() {
+        if (chapters4.length) {
+          renderInfo();
+          renderList();
+        }
+        loadVisibleImages(el);
+      },
+      destroy: function destroy() {
+        return alive = false;
+      }
+    };
+  }
+
+  // src/js/views/mangaDetails.js
+  var CHUNK2 = 50;
   function openMangaDetails(m) {
     push(MangaDetailsView(m));
   }
@@ -15070,8 +16167,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         list2.appendChild(status2);
         return;
       }
-      var start4 = chunk * CHUNK;
-      var end = Math.min(chapters4.length, start4 + CHUNK);
+      var start4 = chunk * CHUNK2;
+      var end = Math.min(chapters4.length, start4 + CHUNK2);
       var p = progress2();
       var nav2 = function nav2(label, to) {
         return h("div.stream.md-nav", {
@@ -15084,10 +16181,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         })]);
       };
       if (chunk > 0) list2.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
-        a: (chunk - 1) * CHUNK + 1,
-        b: chunk * CHUNK
+        a: (chunk - 1) * CHUNK2 + 1,
+        b: chunk * CHUNK2
       }), chunk - 1));
-      var _loop8 = function _loop8(i) {
+      var _loop9 = function _loop9(i) {
         var c = chapters4[i];
         var read2 = p && p.chapterId === c.id;
         var title = (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
@@ -15111,11 +16208,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }) : null]));
       };
       for (var i = start4; i < end; i++) {
-        _loop8(i);
+        _loop9(i);
       }
       if (end < chapters4.length) list2.appendChild(nav2(t("Capítulos {a}–{b}", {
         a: end + 1,
-        b: Math.min(chapters4.length, end + CHUNK)
+        b: Math.min(chapters4.length, end + CHUNK2)
       }) + " ▶", chunk + 1));
       if (focusFirst2) {
         var first = list2.querySelector(".stream");
@@ -15141,14 +16238,43 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (idx < 0) idx = cs.length - 1;
           focusIdx = idx;
         }
-        chunk = idx >= 0 ? Math.floor(idx / CHUNK) : 0;
-        if (!cs.length) status2.textContent = t("Nenhum capítulo disponível neste idioma. Mude o idioma no botão do globo.");
+        chunk = idx >= 0 ? Math.floor(idx / CHUNK2) : 0;
+        if (!cs.length) status2.textContent = t("O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).");
         renderInfo();
         renderList(false);
+        if (!cs.length) offerPlugins();
       }).catch(function () {
         if (!alive) return;
-        status2.textContent = t("Não encontrei capítulos deste título agora.");
+        status2.textContent = t("O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).");
+        offerPlugins();
       });
+    }
+    function offerPlugins() {
+      var q2 = media2.title && (media2.title.english || media2.title.romaji) || m.name;
+      var plugins = installed();
+      if (!plugins.length) {
+        listEl().appendChild(h("div.modal-text", {
+          text: t("Adicione fontes em Mangá → Minhas fontes para ler outros títulos.")
+        }));
+        return;
+      }
+      plugins.forEach(function (p) {
+        return listEl().appendChild(h("div.stream", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return searchPlugin(p.id, p.name, q2);
+          }
+        }, [h("div.s-main", {
+          text: "🔎 " + t("Buscar em {name}", {
+            name: p.name
+          })
+        }), h("span.s-tag", {
+          text: (p.lang || "").toUpperCase()
+        })]));
+      });
+    }
+    function listEl() {
+      return list2;
     }
     renderInfo();
     loadChapters();
@@ -17239,1053 +18365,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       el: el,
       onShow: function onShow() {
         return render();
-      }
-    };
-  }
-
-  // src/js/api/suwayomi.js
-  var base = function base() {
-    return String(settings().suwayomiUrl || "").replace(/\/+$/, "");
-  };
-  var enabled2 = function enabled2() {
-    return !!base();
-  };
-  var digits = function digits(x) {
-    return /^\d+$/.test(String(x));
-  };
-  function gql(query, variables) {
-    return postJSON(base() + "/api/graphql", {
-      query: query,
-      variables: variables || {}
-    }, {
-      timeout: 4e4,
-      quiet: true
-    }).then(function (r) {
-      if (r && r.errors && r.errors.length && !r.data) throw new Error(String(r.errors[0].message || "server"));
-      if (!r || !r.data) throw new Error("server");
-      return r.data;
-    });
-  }
-  function img(path) {
-    if (!path) return "";
-    return /^https?:/i.test(path) ? path : base() + path;
-  }
-  function ping() {
-    return gql("query { aboutServer { name version } }").then(function (d) {
-      return d.aboutServer;
-    });
-  }
-  function sources() {
-    return gql("query { sources { nodes { id name lang iconUrl supportsLatest isNsfw isLocal } } }").then(function (d) {
-      return (d.sources && d.sources.nodes || []).filter(function (s) {
-        return s && s.id != null && digits(s.id) && (!s.isNsfw || settings().suwayomiNsfw === true);
-      }).map(function (s) {
-        return {
-          id: String(s.id),
-          name: String(s.name || s.id),
-          lang: String(s.lang || ""),
-          latest: !!s.supportsLatest,
-          local: !!s.isLocal
-        };
-      });
-    });
-  }
-  var KIND = {
-    popular: "POPULAR",
-    latest: "LATEST",
-    search: "SEARCH"
-  };
-  function toMeta(m) {
-    return {
-      id: "sw:" + m.id,
-      swId: String(m.id),
-      type: "manga",
-      name: m.title || "",
-      poster: base() + "/api/v1/manga/" + m.id + "/thumbnail",
-      description: m.description || "",
-      author: m.author || m.artist || "",
-      status: m.status || ""
-    };
-  }
-  function browse2(sourceId, kind, page3, query) {
-    if (!digits(sourceId)) return Promise.resolve({
-      items: [],
-      more: false
-    });
-    var q2 = 'mutation($page: Int!, $query: String) { fetchSourceManga(input: { source: "' + sourceId + '", type: ' + KIND[kind] + ", page: $page, query: $query }) { hasNextPage mangas { id title author artist status description } } }";
-    return gql(q2, {
-      page: page3 || 1,
-      query: query || null
-    }).then(function (d) {
-      var p = d.fetchSourceManga || {};
-      return {
-        items: (p.mangas || []).map(toMeta),
-        more: !!p.hasNextPage
-      };
-    });
-  }
-  function chapters2(mangaId) {
-    if (!digits(mangaId)) return Promise.resolve([]);
-    var map = function map(nodes) {
-      return (nodes || []).filter(function (c) {
-        return c && c.id != null;
-      }).map(function (c) {
-        return {
-          id: String(c.id),
-          chapter: c.chapterNumber >= 0 ? c.chapterNumber : null,
-          title: c.name || "",
-          lang: "",
-          pages: c.pageCount > 0 ? c.pageCount : 0,
-          scanlator: c.scanlator || ""
-        };
-      }).sort(function (a, b) {
-        return (a.chapter === null ? 1e9 : a.chapter) - (b.chapter === null ? 1e9 : b.chapter);
-      });
-    };
-    return gql("query { chapters(condition: { mangaId: " + mangaId + " }) { nodes { id name chapterNumber scanlator pageCount } } }").then(function (d) {
-      var cached2 = d.chapters && d.chapters.nodes;
-      if (cached2 && cached2.length) return map(cached2);
-      return gql("mutation { fetchChapters(input: { mangaId: " + mangaId + " }) { chapters { id name chapterNumber scanlator pageCount } } }").then(function (x) {
-        return map(x.fetchChapters && x.fetchChapters.chapters);
-      });
-    });
-  }
-  function pages2(chapterId) {
-    if (!digits(chapterId)) return Promise.resolve([]);
-    return gql("mutation { fetchChapterPages(input: { chapterId: " + chapterId + " }) { pages } }").then(function (d) {
-      return (d.fetchChapterPages && d.fetchChapterPages.pages || []).filter(function (p) {
-        return typeof p === "string" && p;
-      }).map(img);
-    });
-  }
-
-  // src/js/api/plugins.js
-  var SVC = "http://127.0.0.1:" + PORT;
-  var REPOS = "mangaRepos";
-  var PLUGINS = "mangaPlugins";
-  var repos = function repos() {
-    return get(REPOS, []) || [];
-  };
-  var installed = function installed() {
-    return get(PLUGINS, []) || [];
-  };
-  function saveInstalled(list2) {
-    set(PLUGINS, list2);
-  }
-  function addRepo(url2) {
-    var r = repos().filter(function (x) {
-      return x !== url2;
-    });
-    r.push(url2);
-    set(REPOS, r);
-  }
-  function removeRepo(url2) {
-    set(REPOS, repos().filter(function (x) {
-      return x !== url2;
-    }));
-  }
-  function uninstall(id) {
-    saveInstalled(installed().filter(function (p) {
-      return p.id !== id;
-    }));
-    stop2(id);
-  }
-  function httpRaw(url2, opts) {
-    var o = opts || {};
-    return request("POST", SVC + "/api/phttp", {
-      url: url2,
-      method: o.method,
-      headers: o.headers,
-      body: o.body,
-      responseType: o.responseType,
-      timeoutMs: o.timeoutMs,
-      redirect: o.redirect
-    }, {
-      timeout: (o.timeoutMs || 2e4) + 5e3,
-      quiet: true
-    });
-  }
-  function getText2(url2) {
-    return httpRaw(url2, {}).then(function (r) {
-      if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "?"));
-      return r.body;
-    });
-  }
-  function imageUrl(url2, referer) {
-    if (!url2) return "";
-    return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "");
-  }
-  function classify(parsed) {
-    if (parsed && Array.isArray(parsed.plugins)) return "harbor";
-    var arr = Array.isArray(parsed) ? parsed : parsed && (parsed.sources || parsed.mangayomiSources);
-    if (!Array.isArray(arr) || !arr.length) return "unknown";
-    if (arr.some(function (e) {
-      return e && typeof e.apk === "string";
-    })) return "tachiyomi";
-    if (arr.some(function (e) {
-      return e && (e.sourceCodeUrl || e.pkgPath);
-    })) return "mangayomi";
-    if (arr.some(function (e) {
-      return e && (e.file || e.downloadURL) && /\.aix/i.test(e.file || e.downloadURL || "");
-    })) return "aidoku";
-    if (parsed && parsed.info && Array.isArray(parsed.sources)) return "aidoku";
-    return "unknown";
-  }
-  function fetchRepo(url2) {
-    return getText2(url2).then(function (text) {
-      var parsed = null;
-      try {
-        parsed = JSON.parse(text);
-      } catch (e) {
-        throw new Error("not json");
-      }
-      var kind = classify(parsed);
-      if (kind !== "harbor") return {
-        kind: kind,
-        name: parsed && parsed.name || "",
-        plugins: []
-      };
-      var plugins = parsed.plugins.filter(function (p) {
-        return p && typeof p.id === "string" && typeof p.name === "string" && typeof p.entry === "string";
-      }).map(function (p) {
-        return {
-          id: p.id,
-          name: p.name,
-          version: String(p.version || "0"),
-          lang: String(p.lang || ""),
-          nsfw: p.nsfw === true,
-          icon: typeof p.icon === "string" ? p.icon : "",
-          entry: p.entry
-        };
-      });
-      return {
-        kind: kind,
-        name: String(parsed.name || ""),
-        plugins: plugins
-      };
-    });
-  }
-  function resolveUrl(base3, rel) {
-    if (/^https?:\/\//i.test(rel)) return rel;
-    return base3.replace(/[^/]*$/, "") + rel.replace(/^\.\//, "");
-  }
-  function install2(repoUrl, man) {
-    return getText2(resolveUrl(repoUrl, man.entry)).then(function (source) {
-      if (source.length > 2 * 1024 * 1024) throw new Error("too big");
-      var list2 = installed().filter(function (p) {
-        return p.id !== man.id;
-      });
-      list2.push({
-        id: man.id,
-        name: man.name,
-        version: man.version,
-        lang: man.lang,
-        nsfw: man.nsfw,
-        icon: man.icon,
-        repoUrl: repoUrl,
-        entry: man.entry,
-        source: source
-      });
-      saveInstalled(list2);
-      stop2(man.id);
-      return man;
-    });
-  }
-  var DROP = {
-    script: 1,
-    style: 1,
-    noscript: 1,
-    template: 1,
-    iframe: 1,
-    object: 1,
-    embed: 1,
-    link: 1,
-    meta: 1
-  };
-  function serialize(el, depth, budget) {
-    var a = {};
-    for (var i = 0; i < el.attributes.length; i++) a[el.attributes[i].name] = el.attributes[i].value;
-    var c = [];
-    if (depth < 200) {
-      var kids2 = el.childNodes;
-      for (var _i3 = 0; _i3 < kids2.length && budget.n < 6e4; _i3++) {
-        var k = kids2[_i3];
-        if (k.nodeType === 1) {
-          if (DROP[k.tagName.toLowerCase()]) continue;
-          budget.n++;
-          c.push(serialize(k, depth + 1, budget));
-        } else if (k.nodeType === 3 && k.nodeValue && k.nodeValue.trim()) {
-          budget.n++;
-          c.push({
-            x: k.nodeValue
-          });
-        }
-      }
-    }
-    return {
-      t: el.tagName.toLowerCase(),
-      a: a,
-      x: "",
-      c: c
-    };
-  }
-  function parseHtml(html) {
-    var doc = new DOMParser().parseFromString(String(html || ""), "text/html");
-    return doc.body ? serialize(doc.body, 0, {
-      n: 0
-    }) : {
-      t: "body",
-      a: {},
-      x: "",
-      c: []
-    };
-  }
-  var PRELUDE = String.raw(_templateObject || (_templateObject = _taggedTemplateLiteral(["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/s*>s*/g, \" > \").trim().split(/s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  function parseHtml(html) { return bridge(\"parse\", { html: String(html) }).then(function (tree) { return new HDocument(tree); }); }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"], ["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/\\s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/\\s*>\\s*/g, \" > \").trim().split(/\\s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/\\s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/\\s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  function parseHtml(html) { return bridge(\"parse\", { html: String(html) }).then(function (tree) { return new HDocument(tree); }); }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"])));
-  var EPILOGUE = String.raw(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n      ;return (typeof plugin !== \"undefined\") ? plugin : undefined;\n    })(harbor);\n    if (!provider) provider = ret;\n    if (!provider || typeof provider !== \"object\") throw new Error(\"plugin registered no provider\");\n    safePost({ type: \"ready\", meta: { id: String(provider.id), name: String(provider.name) } });\n  } catch (err) {\n    safePost({ type: \"initError\", error: String(err && err.message ? err.message : err) });\n  }\n})();\n"])));
-  var workers = {};
-  var order = [];
-  function stop2(id) {
-    var w = workers[id];
-    if (w) {
-      try {
-        w.worker.terminate();
-      } catch (e) {}
-      if (w.url) URL.revokeObjectURL(w.url);
-      delete workers[id];
-    }
-    order = order.filter(function (x) {
-      return x !== id;
-    });
-  }
-  function start2(p) {
-    var blob = new Blob([PRELUDE, p.source, EPILOGUE], {
-      type: "text/javascript"
-    });
-    var url2 = URL.createObjectURL(blob);
-    var worker = new Worker(url2);
-    var w = {
-      worker: worker,
-      url: url2,
-      calls: {},
-      seq: 0,
-      origin: "",
-      ready: null
-    };
-    w.ready = new Promise(function (resolve2, reject) {
-      var timer = setTimeout(function () {
-        return reject(new Error("plugin did not start"));
-      }, 15e3);
-      w.onReady = function (ok, err) {
-        clearTimeout(timer);
-        if (ok) resolve2();else reject(new Error(err || "plugin failed"));
-      };
-    });
-    worker.onmessage = function (e) {
-      var m = e.data || {};
-      if (m.type === "ready") return w.onReady(true);
-      if (m.type === "initError") return w.onReady(false, m.error);
-      if (m.type === "result" || m.type === "error") {
-        var c = w.calls[m.id];
-        if (!c) return;
-        delete w.calls[m.id];
-        clearTimeout(c.timer);
-        return m.type === "result" ? c.resolve(m.value) : c.reject(new Error(m.error));
-      }
-      if (m.type === "http") {
-        var u = String(m.payload && m.payload.url || "");
-        var o = m.payload && m.payload.opts || {};
-        if (!/^https?:\/\//i.test(u)) return worker.postMessage({
-          type: "bridgeResult",
-          id: m.id,
-          ok: false,
-          error: "bad url"
-        });
-        var mm = /^(https?:\/\/[^/]+)/i.exec(u);
-        if (mm) w.origin = mm[1] + "/";
-        httpRaw(u, o).then(function (r) {
-          return worker.postMessage({
-            type: "bridgeResult",
-            id: m.id,
-            ok: true,
-            value: r
-          });
-        }, function (err) {
-          return worker.postMessage({
-            type: "bridgeResult",
-            id: m.id,
-            ok: false,
-            error: String(err && err.message || err)
-          });
-        });
-        return;
-      }
-      if (m.type === "parse") {
-        var tree = null;
-        try {
-          tree = parseHtml(m.payload && m.payload.html);
-        } catch (err) {
-          return worker.postMessage({
-            type: "bridgeResult",
-            id: m.id,
-            ok: false,
-            error: "parse failed"
-          });
-        }
-        return worker.postMessage({
-          type: "bridgeResult",
-          id: m.id,
-          ok: true,
-          value: tree
-        });
-      }
-    };
-    worker.onerror = function (e) {
-      if (e && e.preventDefault) e.preventDefault();
-      w.onReady(false, e && e.message || "worker error");
-    };
-    workers[p.id] = w;
-    order.push(p.id);
-    while (order.length > 2) stop2(order[0]);
-    return w;
-  }
-  function call3(id, method, args, timeout) {
-    var p = installed().find(function (x) {
-      return x.id === id;
-    });
-    if (!p) return Promise.reject(new Error("not installed"));
-    var w = workers[id] || start2(p);
-    order = order.filter(function (x) {
-      return x !== id;
-    }).concat([id]);
-    return w.ready.then(function () {
-      return new Promise(function (resolve2, reject) {
-        var cid = "c" + ++w.seq;
-        w.calls[cid] = {
-          resolve: resolve2,
-          reject: reject,
-          timer: setTimeout(function () {
-            return delete w.calls[cid], reject(new Error("timeout"));
-          }, timeout || 25e3)
-        };
-        w.worker.postMessage({
-          type: "call",
-          id: cid,
-          method: method,
-          args: args || []
-        });
-      });
-    });
-  }
-  function refererOf(id) {
-    var w = workers[id];
-    return w && w.origin || "";
-  }
-  var str = function str(v) {
-    return typeof v === "string" ? v : void 0;
-  };
-  function toSummary(o) {
-    if (!o || _typeof(o) !== "object" || !str(o.id) || !str(o.title)) return null;
-    return {
-      id: o.id,
-      title: o.title,
-      cover: /^https?:\/\//i.test(o.cover || "") ? o.cover : "",
-      description: str(o.description) || "",
-      status: str(o.status) || "",
-      author: str(o.author) || "",
-      year: typeof o.year === "number" ? o.year : null
-    };
-  }
-  function popular(id, offset) {
-    return call3(id, "popular", [offset || 0, void 0], 25e3).then(function (v) {
-      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
-    });
-  }
-  function search2(id, query, offset) {
-    return call3(id, "search", [query, offset || 0, void 0], 25e3).then(function (v) {
-      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
-    });
-  }
-  function _detail(id, mangaId) {
-    return call3(id, "detail", [mangaId], 25e3).then(toSummary);
-  }
-  function chapters3(id, mangaId) {
-    return call3(id, "chapters", [mangaId], 3e4).then(function (v) {
-      return (Array.isArray(v) ? v : []).filter(function (c) {
-        return c && str(c.id);
-      }).slice(0, 5e3).map(function (c) {
-        return {
-          id: c.id,
-          chapter: str(c.chapter) || null,
-          title: str(c.title) || "",
-          lang: str(c.language) || "",
-          pages: typeof c.pages === "number" ? c.pages : 0,
-          scanlator: str(c.group) || ""
-        };
-      });
-    });
-  }
-  function pages3(id, chapterId) {
-    return call3(id, "pageUrls", [chapterId], 35e3).then(function (v) {
-      var ref = refererOf(id);
-      return (Array.isArray(v) ? v : []).map(function (x) {
-        var u = typeof x === "string" ? x : x && (x.url || x.imageUrl || x.src || x.img || x.image);
-        if (!/^https?:\/\//i.test(u || "")) return null;
-        var h2 = x && _typeof(x) === "object" && x.headers ? x.headers : {};
-        var r = h2.Referer || h2.referer || ref;
-        return imageUrl(String(u).trim(), r);
-      }).filter(Boolean);
-    });
-  }
-
-  // src/js/views/sources.js
-  var CHUNK2 = 50;
-  function openSources() {
-    push(SourcesView());
-  }
-  function connectServer(done) {
-    promptText(t("Endereço do servidor Suwayomi"), base() || "http://", "http://192.168.1.20:4567", function (url2) {
-      var u = url2.trim().replace(/\/+$/, "");
-      if (!/^https?:\/\//i.test(u)) u = "http://" + u;
-      if (/\.json(\?|$)/i.test(u)) {
-        toast(t('Isso é um repositório, não um servidor. Use "Adicionar repositório".'), 6e3);
-        return done && done();
-      }
-      saveSettings({
-        suwayomiUrl: u
-      });
-      ping().then(function () {
-        toast(t("Servidor conectado."));
-        if (done) done();
-      }, function () {
-        toast(t("Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado."), 6e3);
-        if (done) done();
-      });
-    });
-  }
-  function suwayomiApi(src) {
-    return {
-      name: src.name,
-      latest: src.latest,
-      kind: "sw",
-      browse: function browse(k, page3, q2) {
-        return browse2(src.id, k, page3, q2);
-      },
-      chapters: function chapters(m) {
-        return chapters2(m.swId);
-      },
-      pagesFn: pages2,
-      key: function key(m) {
-        return "sw" + m.swId;
-      }
-    };
-  }
-  var numOf = function numOf(c) {
-    var n = parseFloat(c.chapter);
-    return isNaN(n) ? null : n;
-  };
-  function pluginApi(pid, name) {
-    var offset = 0;
-    var toMeta2 = function toMeta2(it) {
-      return {
-        id: "pl:" + pid + ":" + it.id,
-        plId: pid,
-        plName: name,
-        mid: it.id,
-        type: "manga",
-        name: it.title,
-        poster: it.cover ? imageUrl(it.cover, refererOf(pid)) : "",
-        description: it.description,
-        author: it.author,
-        status: it.status
-      };
-    };
-    return {
-      name: name,
-      latest: false,
-      kind: "pl",
-      browse: function browse(k, page3, q2) {
-        if (page3 === 1) offset = 0;
-        var p = k === "search" ? search2(pid, q2, offset) : popular(pid, offset);
-        return p.then(function (items3) {
-          offset += items3.length;
-          return {
-            items: items3.map(toMeta2),
-            more: items3.length > 0
-          };
-        });
-      },
-      detail: function detail(m) {
-        return _detail(pid, m.mid);
-      },
-      chapters: function chapters(m) {
-        return chapters3(pid, m.mid).then(function (cs) {
-          var numbered = cs.filter(function (c) {
-            return numOf(c) !== null;
-          }).length;
-          if (numbered >= cs.length * 0.6) cs.sort(function (a, b) {
-            return (numOf(a) === null ? 1e9 : numOf(a)) - (numOf(b) === null ? 1e9 : numOf(b));
-          });
-          return cs;
-        });
-      },
-      pagesFn: function pagesFn(cid) {
-        return pages3(pid, cid);
-      },
-      key: function key(m) {
-        return "pl" + pid + ":" + m.mid;
-      }
-    };
-  }
-  function SourcesView() {
-    var el = h("div.view");
-    var scroller = h("div.scroll-y", {
-      "data-scroll-y": ""
-    });
-    el.appendChild(scroller);
-    scroller.appendChild(h("div.row-title.catalog-title", {
-      text: t("Minhas fontes")
-    }));
-    var body = h("div.flat-list", {
-      "data-group": "",
-      "data-vertical": ""
-    });
-    scroller.appendChild(body);
-    var row2 = function row2(text, sub, onSelect, tag) {
-      return h("div.stream", {
-        focusable: true,
-        onSelect: onSelect
-      }, [h("div.s-main", null, [text, sub ? h("small", {
-        text: " " + sub
-      }) : null]), tag ? h("span.s-tag", {
-        text: tag
-      }) : null]);
-    };
-    var section = function section(text) {
-      return body.appendChild(h("div.src-sec", {
-        text: text
-      }));
-    };
-    function addRepo2() {
-      promptText(t("Endereço do repositório (repo.json)"), "https://", "", function (url2) {
-        var u = url2.trim();
-        if (!/^https?:\/\//i.test(u)) return toast(t("Endereço inválido."));
-        toast(t("Lendo o repositório..."));
-        fetchRepo(u).then(function (r) {
-          if (r.kind === "harbor") {
-            addRepo(u);
-            load7();
-            return pickPlugins(u, r);
-          }
-          var why = {
-            tachiyomi: t("Este é um repositório Tachiyomi/Mihon (apps Android). Adicione-o no seu servidor Suwayomi e conecte o servidor aqui."),
-            aidoku: t("Este é um repositório Aidoku (iPhone). O formato dele não roda na TV."),
-            mangayomi: t("Este é um repositório Mangayomi. Ainda não roda na TV.")
-          }[r.kind];
-          toast(why || t("Não reconheci este repositório."), 8e3);
-        }, function () {
-          return toast(t("Não consegui abrir o repositório."), 5e3);
-        });
-      });
-    }
-    function pickPlugins(url2, r) {
-      var have = installed().map(function (p) {
-        return p.id;
-      });
-      menu(r.name || t("Repositório"), r.plugins.map(function (p) {
-        return {
-          label: p.name,
-          sub: [p.lang.toUpperCase(), "v" + p.version, have.indexOf(p.id) >= 0 ? t("instalado") : "", p.nsfw ? "18+" : ""].filter(Boolean).join(" · "),
-          value: p,
-          checked: have.indexOf(p.id) >= 0
-        };
-      }), {
-        empty: t("Nenhum plugin neste repositório."),
-        onPick: function onPick(p) {
-          toast(t("Instalando {name}...", {
-            name: p.name
-          }));
-          install2(url2, p).then(function () {
-            toast(t("{name} instalado.", {
-              name: p.name
-            }));
-            load7();
-          }, function () {
-            return toast(t("Não consegui instalar {name}.", {
-              name: p.name
-            }), 5e3);
-          });
-        }
-      });
-    }
-    function pluginMenu(p) {
-      menu(p.name, [{
-        label: t("Abrir"),
-        value: "open"
-      }, {
-        label: t("Atualizar"),
-        value: "update"
-      }, {
-        label: t("Remover"),
-        value: "remove"
-      }], {
-        onPick: function onPick(v) {
-          if (v === "open") push(SourceGrid(pluginApi(p.id, p.name)));else if (v === "update") fetchRepo(p.repoUrl).then(function (r) {
-            var man = r.plugins.find(function (x) {
-              return x.id === p.id;
-            });
-            if (!man) throw new Error("gone");
-            return install2(p.repoUrl, man);
-          }).then(function () {
-            return toast(t("{name} atualizado.", {
-              name: p.name
-            })), load7();
-          }, function () {
-            return toast(t("Não consegui atualizar."));
-          });else if (v === "remove") confirmDialog(t("Remover {name}?", {
-            name: p.name
-          }), t("Remover"), function () {
-            return uninstall(p.id), load7();
-          });
-        }
-      });
-    }
-    function load7() {
-      clear(body);
-      section(t("Plugins (repositórios no formato do Harbor)"));
-      body.appendChild(row2("＋ " + t("Adicionar repositório"), t("cole o link do repo.json"), addRepo2));
-      installed().forEach(function (p) {
-        return body.appendChild(row2(p.name, "v" + p.version, function () {
-          return push(SourceGrid(pluginApi(p.id, p.name)));
-        }, (p.lang || "").toUpperCase()));
-      });
-      installed().length && body.appendChild(row2("⚙ " + t("Gerenciar plugins"), "", function () {
-        return menu(t("Plugins"), installed().map(function (p) {
-          return {
-            label: p.name,
-            sub: "v" + p.version,
-            value: p
-          };
-        }), {
-          onPick: pluginMenu
-        });
-      }));
-      repos().forEach(function (u) {
-        return body.appendChild(row2("📦 " + u.replace(/^https?:\/\//, ""), "", function () {
-          return menu(t("Repositório"), [{
-            label: t("Ver plugins"),
-            value: "list"
-          }, {
-            label: t("Remover repositório"),
-            value: "rm"
-          }], {
-            onPick: function onPick(v) {
-              if (v === "rm") return removeRepo(u), load7();
-              toast(t("Lendo o repositório..."));
-              fetchRepo(u).then(function (r) {
-                return pickPlugins(u, r);
-              }, function () {
-                return toast(t("Não consegui abrir o repositório."));
-              });
-            }
-          });
-        }));
-      });
-      section(t("Servidor Suwayomi (extensões Tachiyomi/Mihon)"));
-      body.appendChild(row2("🔌 " + (enabled2() ? base() : t("Conectar servidor Suwayomi")), "", function () {
-        return connectServer(load7);
-      }));
-      if (enabled2()) {
-        var sp = spinnerLine(t("Carregando..."));
-        body.appendChild(sp);
-        sources().then(function (list2) {
-          if (sp.parentNode) body.removeChild(sp);
-          list2.forEach(function (s) {
-            return body.appendChild(row2(s.name, "", function () {
-              return push(SourceGrid(suwayomiApi(s)));
-            }, s.lang.toUpperCase()));
-          });
-        }, function () {
-          if (sp.parentNode) body.removeChild(sp);
-          body.appendChild(h("div.modal-text", {
-            text: t("Não consegui falar com o servidor. Confira o endereço e se o CORS está ligado.")
-          }));
-        });
-      }
-      var first = body.querySelector(".stream");
-      if (first) focus(first);
-    }
-    load7();
-    return {
-      el: el
-    };
-  }
-  function SourceGrid(api2) {
-    var el = h("div.view");
-    var scroller = h("div.scroll-y", {
-      "data-scroll-y": ""
-    });
-    el.appendChild(scroller);
-    var kind = "popular";
-    var query = "";
-    var page3 = 0;
-    var more = null;
-    var gridEl = h("div.grid");
-    var bar = h("div.details-buttons", {
-      "data-group": ""
-    });
-    scroller.appendChild(h("div.row-title.catalog-title", {
-      text: api2.name
-    }));
-    scroller.appendChild(bar);
-    scroller.appendChild(gridEl);
-    function reload(k, q2) {
-      kind = k;
-      query = q2 || "";
-      page3 = 0;
-      clear(gridEl);
-      next();
-    }
-    bar.appendChild(h("div.btn.primary", {
-      focusable: true,
-      "data-autofocus": "",
-      onSelect: function onSelect() {
-        return reload("popular");
-      }
-    }, t("Populares")));
-    if (api2.latest) bar.appendChild(h("div.btn", {
-      focusable: true,
-      onSelect: function onSelect() {
-        return reload("latest");
-      }
-    }, t("Recentes")));
-    bar.appendChild(h("div.btn", {
-      focusable: true,
-      onSelect: function onSelect() {
-        return promptText(t("Buscar mangá"), "", "", function (q2) {
-          return reload("search", q2);
-        });
-      }
-    }, [h("span.ico", {
-      text: "🔍"
-    }), t("Buscar mangá")]));
-    function next() {
-      if (more && more.parentNode) gridEl.removeChild(more);
-      var sp = spinnerLine(t("Carregando..."));
-      gridEl.appendChild(sp);
-      var my = kind + query;
-      api2.browse(kind, ++page3, query).then(function (r) {
-        if (my !== kind + query) return;
-        if (sp.parentNode) gridEl.removeChild(sp);
-        r.items.forEach(function (m) {
-          return gridEl.appendChild(card(m, {
-            onSelect: function onSelect() {
-              return push(SourceDetails(m, api2));
-            }
-          }));
-        });
-        if (!r.items.length && page3 === 1) gridEl.appendChild(h("div.modal-text", {
-          text: t("Nada por aqui.")
-        }));
-        if (r.more) {
-          more = h("div.card.see-all", {
-            focusable: true,
-            onSelect: function onSelect() {
-              return next();
-            }
-          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
-            text: "+"
-          }), t("Carregar mais")])), h("div.name", {
-            text: ""
-          })]);
-          gridEl.appendChild(more);
-        }
-        loadVisibleImages(el, 400);
-      }, function (e) {
-        if (sp.parentNode) gridEl.removeChild(sp);
-        toast(t("Não foi possível carregar agora.") + (e && e.message ? " (" + e.message + ")" : ""), 5e3);
-      });
-    }
-    next();
-    return {
-      el: el,
-      onShow: function onShow() {
-        return loadVisibleImages(el, 400);
-      },
-      onScroll: function onScroll() {
-        return loadVisibleImages(el, 400);
-      }
-    };
-  }
-  function openSourceManga(m) {
-    var api2 = m.plId ? pluginApi(m.plId, m.plName || "") : suwayomiApi({
-      id: "",
-      name: "",
-      latest: false
-    });
-    push(SourceDetails(m, api2));
-  }
-  function SourceDetails(m, api2) {
-    var el = h("div.view.md-view");
-    var info2 = h("div.md-info");
-    var listEl = h("div.md-list", {
-      "data-scroll-y": "",
-      "data-pad-y": "120",
-      "data-group": "",
-      "data-vertical": ""
-    });
-    el.appendChild(info2);
-    el.appendChild(listEl);
-    var chapters4 = [];
-    var chunk = 0;
-    var alive = true;
-    var key3 = api2.key(m);
-    var status2 = h("div.loading-line", {
-      text: t("Procurando capítulos...")
-    });
-    var progress2 = function progress2() {
-      return (get("readProgress", {}) || {})[key3] || null;
-    };
-    var idxOf = function idxOf() {
-      var p = progress2();
-      return p ? chapters4.findIndex(function (c) {
-        return c.id === p.chapterId;
-      }) : -1;
-    };
-    function read(i, page3) {
-      if (!chapters4.length) return toast(t("Nenhum capítulo encontrado."));
-      openReader({
-        key: key3,
-        title: m.name,
-        chapters: chapters4,
-        index: Math.max(0, i),
-        startPage: page3 || 0,
-        rtl: true,
-        pagesFn: api2.pagesFn,
-        poster: m.poster,
-        kind: api2.kind,
-        ref: m
-      });
-    }
-    function renderInfo() {
-      clear(info2);
-      var c = h("img.md-cover", {
-        alt: ""
-      });
-      c.setAttribute("data-lazy", m.poster || "");
-      info2.appendChild(c);
-      var text = h("div.md-text");
-      text.appendChild(h("div.md-title", {
-        text: m.name
-      }));
-      text.appendChild(h("div.md-meta", {
-        text: [m.author, m.status, chapters4.length ? t("{n} capítulos", {
-          n: chapters4.length
-        }) : ""].filter(Boolean).join("  ·  ")
-      }));
-      text.appendChild(h("div.md-desc", {
-        text: m.description || ""
-      }));
-      var idx = idxOf();
-      text.appendChild(h("div.details-buttons", {
-        "data-group": ""
-      }, [h("div.btn.primary", {
-        focusable: true,
-        "data-autofocus": "",
-        onSelect: function onSelect() {
-          return idx >= 0 ? read(idx, progress2().page) : read(0, 0);
-        }
-      }, [h("span.ico", {
-        text: "📖"
-      }), idx >= 0 ? t("Continuar: cap. {n}", {
-        n: chapters4[idx].chapter
-      }) : t("Ler")]), h("div.btn", {
-        focusable: true,
-        onSelect: function onSelect() {
-          return toggleFav(key3, api2.kind, m), renderInfo();
-        }
-      }, [h("span.ico", {
-        text: isFav(key3) ? "♥" : "♡"
-      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")])]));
-      info2.appendChild(text);
-      loadVisibleImages(info2);
-    }
-    function renderList() {
-      clear(listEl);
-      if (!chapters4.length) return listEl.appendChild(status2);
-      var start4 = chunk * CHUNK2;
-      var end = Math.min(chapters4.length, start4 + CHUNK2);
-      var p = progress2();
-      var jump = function jump(label, to) {
-        return h("div.stream.md-nav", {
-          focusable: true,
-          onSelect: function onSelect() {
-            return chunk = to, renderList();
-          }
-        }, [h("div.s-main", {
-          text: label
-        })]);
-      };
-      if (chunk > 0) listEl.appendChild(jump("◀ " + t("Capítulos {a}–{b}", {
-        a: (chunk - 1) * CHUNK2 + 1,
-        b: chunk * CHUNK2
-      }), chunk - 1));
-      var _loop9 = function _loop9(i) {
-        var c = chapters4[i];
-        var here = p && p.chapterId === c.id;
-        listEl.appendChild(h("div.stream", {
-          focusable: true,
-          onSelect: function onSelect() {
-            return read(i, here ? p.page : 0);
-          }
-        }, [h("div.s-main", {
-          text: (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
-            n: c.chapter
-          }) : t("Especial")) + (c.title ? " · " + c.title : "")
-        }), c.scanlator ? h("span.s-tag", {
-          text: c.scanlator
-        }) : null, here ? h("span.s-tag.ok", {
-          text: t("Parou aqui")
-        }) : null]));
-      };
-      for (var i = start4; i < end; i++) {
-        _loop9(i);
-      }
-      if (end < chapters4.length) listEl.appendChild(jump(t("Capítulos {a}–{b}", {
-        a: end + 1,
-        b: Math.min(chapters4.length, end + CHUNK2)
-      }) + " ▶", chunk + 1));
-    }
-    renderInfo();
-    renderList();
-    if (api2.detail && !m.description) api2.detail(m).then(function (d) {
-      if (!alive || !d) return;
-      m.description = d.description || m.description;
-      m.author = d.author || m.author;
-      m.status = d.status || m.status;
-      renderInfo();
-    }, function () {});
-    api2.chapters(m).then(function (cs) {
-      if (!alive) return;
-      chapters4 = cs;
-      var i = idxOf();
-      chunk = i >= 0 ? Math.floor(i / CHUNK2) : 0;
-      if (!cs.length) status2.textContent = t("Nenhum capítulo encontrado.");
-      renderInfo();
-      renderList();
-    }, function (e) {
-      return alive && (status2.textContent = t("Não encontrei capítulos deste título agora.") + (e && e.message ? " (" + e.message + ")" : ""));
-    });
-    return {
-      el: el,
-      onShow: function onShow() {
-        if (chapters4.length) {
-          renderInfo();
-          renderList();
-        }
-        loadVisibleImages(el);
-      },
-      destroy: function destroy() {
-        return alive = false;
       }
     };
   }
@@ -21217,7 +21296,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T17:47:20.667Z";
+  var BUILD = "2026-11-16T17:55:26.679Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -24333,6 +24412,31 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       } : {});
     });
     onKeys(function (keys2) {
+      if (keys2.iptvHost && keys2.iptvUser && keys2.iptvPass) {
+        var host = keys2.iptvHost.replace(/\/+$/, "");
+        var src = {
+          id: "x" + Date.now(),
+          type: "xtream",
+          url: host,
+          user: keys2.iptvUser,
+          pass: keys2.iptvPass,
+          name: host.replace(/^https?:\/\//, "").split(/[:/]/)[0],
+          format: "m3u8"
+        };
+        checkXtream(src).then(function (info2) {
+          if (info2 && info2.username) src.name += " · " + info2.username;
+          saveSource(src);
+          dropTab("live");
+          toast(t("Conta IPTV adicionada. Abra TV ao vivo."), 6e3);
+        }, function () {
+          return toast(t("Não consegui entrar no IPTV. Confira host, usuário e senha."), 7e3);
+        });
+      }
+      if (keys2.mangaRepo) addRepoUrl(keys2.mangaRepo);
+      ["iptvHost", "iptvUser", "iptvPass", "mangaRepo"].forEach(function (k) {
+        return delete keys2[k];
+      });
+      if (!Object.keys(keys2).length) return;
       saveSettings(keys2);
       dropTab("settings");
       toast(t("Chaves recebidas do celular: {n}", {

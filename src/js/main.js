@@ -4,6 +4,8 @@ import { CollectionsView } from './views/collections.js';
 import { MangaView } from './views/manga.js';
 import { DiscoverView } from './views/discover.js';
 import { LiveView } from './views/live.js';
+import * as iptv from './api/iptv.js';
+import { addRepoUrl } from './views/sources.js';
 import { MoviesView, SeriesView } from './views/typeTab.js';
 import { AnimeView } from './views/anime.js';
 import { log } from './lib/log.js';
@@ -68,6 +70,23 @@ function boot() {
   // Keys pasted on the phone's setup page: saved on this TV only. With new Trakt/Simkl keys and no
   // account linked yet, the link screen opens right away (scan its QR, sign in, done).
   phone.onKeys((keys) => {
+    // IPTV account and manga repository from the phone: added as sources, not kept as settings.
+    if (keys.iptvHost && keys.iptvUser && keys.iptvPass) {
+      const host = keys.iptvHost.replace(/\/+$/, '');
+      const src = { id: 'x' + Date.now(), type: 'xtream', url: host, user: keys.iptvUser, pass: keys.iptvPass, name: host.replace(/^https?:\/\//, '').split(/[:/]/)[0], format: 'm3u8' };
+      iptv.checkXtream(src).then(
+        (info) => {
+          if (info && info.username) src.name += ' · ' + info.username;
+          iptv.saveSource(src);
+          router.dropTab('live');
+          toast(t('Conta IPTV adicionada. Abra TV ao vivo.'), 6000);
+        },
+        () => toast(t('Não consegui entrar no IPTV. Confira host, usuário e senha.'), 7000)
+      );
+    }
+    if (keys.mangaRepo) addRepoUrl(keys.mangaRepo);
+    ['iptvHost', 'iptvUser', 'iptvPass', 'mangaRepo'].forEach((k) => delete keys[k]);
+    if (!Object.keys(keys).length) return;
     store.saveSettings(keys);
     router.dropTab('settings');
     toast(t('Chaves recebidas do celular: {n}', { n: Object.keys(keys).length }), 5000);

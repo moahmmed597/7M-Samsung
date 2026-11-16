@@ -25,9 +25,10 @@ export function connectServer(done) {
   promptText(t('Endereço do servidor Suwayomi'), sw.base() || 'http://', 'http://192.168.1.20:4567', (url) => {
     let u = url.trim().replace(/\/+$/, '');
     if (!/^https?:\/\//i.test(u)) u = 'http://' + u;
-    if (/\.json(\?|$)/i.test(u)) {
-      toast(t('Isso é um repositório, não um servidor. Use "Adicionar repositório".'), 6000);
-      return done && done();
+    // A repository link pasted here (raw.githubusercontent / jsDelivr / *.json): add it as a repository.
+    if (/\.json(\?|$)|raw\.githubusercontent\.com|cdn\.jsdelivr\.net|\/repo(\.json)?$/i.test(u)) {
+      if (/\.json(\?|$)/i.test(sw.base())) store.saveSettings({ suwayomiUrl: '' });
+      return addRepoUrl(u, done);
     }
     store.saveSettings({ suwayomiUrl: u });
     sw.ping().then(
@@ -41,6 +42,30 @@ export function connectServer(done) {
       }
     );
   });
+}
+
+// Adds a plugin repository by its link (also used by the phone setup page).
+export function addRepoUrl(u, done) {
+  toast(t('Lendo o repositório...'));
+  return pl.fetchRepo(u).then(
+    (r) => {
+      if (r.kind !== 'harbor') {
+        toast(t('Não reconheci este repositório.'), 6000);
+        return done && done();
+      }
+      pl.addRepo(u);
+      // Install every plugin of the repository (they are small); you can remove any later.
+      return Promise.all(r.plugins.map((p) => pl.install(u, p).then(() => 1, () => 0))).then((ok) => {
+        const n = ok.reduce((a, b) => a + b, 0);
+        toast(t('{n} plugins instalados de {name}.', { n: n, name: r.name || t('Repositório') }), 5000);
+        if (done) done();
+      });
+    },
+    () => {
+      toast(t('Não consegui abrir o repositório.'), 5000);
+      if (done) done();
+    }
+  );
 }
 
 // ---------- adapters: one per kind of source ----------
@@ -228,7 +253,11 @@ function SourcesView() {
 }
 
 // ---------- a source: Popular / Latest / Search ----------
-function SourceGrid(api) {
+export function searchPlugin(pid, name, query) {
+  router.push(SourceGrid(pluginApi(pid, name), query));
+}
+
+function SourceGrid(api, startQuery) {
   const el = h('div.view');
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   el.appendChild(scroller);
@@ -248,6 +277,10 @@ function SourceGrid(api) {
     page = 0;
     clear(gridEl);
     next();
+  }
+  if (startQuery) {
+    kind = 'search';
+    query = startQuery;
   }
   bar.appendChild(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => reload('popular') }, t('Populares')));
   if (api.latest) bar.appendChild(h('div.btn', { focusable: true, onSelect: () => reload('latest') }, t('Recentes')));

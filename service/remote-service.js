@@ -441,6 +441,15 @@ function handle(req, res) {
           var v = typeof data[k] === 'string' ? data[k].trim() : '';
           if (v && v.length <= 200 && /^[\w.\-:]+$/.test(v)) { keys[k] = v; n++; }
         });
+        // Links (IPTV server, manga repository) and IPTV login: other characters allowed.
+        ['iptvHost', 'mangaRepo'].forEach(function (k) {
+          var v = typeof data[k] === 'string' ? data[k].trim() : '';
+          if (v && v.length <= 500 && /^https?:\/\/[^\s"'<>]+$/i.test(v)) { keys[k] = v; n++; }
+        });
+        ['iptvUser', 'iptvPass'].forEach(function (k) {
+          var v = typeof data[k] === 'string' ? data[k].trim() : '';
+          if (v && v.length <= 200 && !/[\s"'<>]/.test(v)) { keys[k] = v; n++; }
+        });
       } catch (e) {
         return send(res, 400, { ok: false });
       }
