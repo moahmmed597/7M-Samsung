@@ -152,6 +152,8 @@ export function topbar(activeId, onTab) {
   setTimeout(() => {
     const sc = anchor.closest ? anchor.closest('.scroll-y') || anchor.parentNode : anchor.parentNode;
     if (sc && sc.classList) sc.classList.add('with-side');
+    const v = anchor.closest ? anchor.closest('.view') : null;
+    if (v) v.classList.add('has-side');
   }, 0);
   return anchor;
 }

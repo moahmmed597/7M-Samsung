@@ -273,6 +273,7 @@ export const AR = {
   'Não foi possível baixar a legenda.': 'تعذّر تنزيل الترجمة.',
   'Lendo as faixas do arquivo...': 'جارٍ قراءة مسارات الملف...',
   'Faixa {n}': 'المسار {n}',
+  'Grafite (escuro)': "جرافيت (داكن)",
   '{n}% assistido': "تمت مشاهدة {n}%",
   'A seguir': "التالي",
   'Favoritar': "أضف للمفضلة",
