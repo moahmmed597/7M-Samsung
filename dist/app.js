@@ -15647,8 +15647,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         fetchRepo(u).then(function (r) {
           if (r.kind === "harbor") {
             addRepo(u);
-            load7();
-            return pickPlugins(u, r);
+            return Promise.all(r.plugins.map(function (p) {
+              return install2(u, p).then(function () {
+                return 1;
+              }, function () {
+                return 0;
+              });
+            })).then(function (ok) {
+              toast(t("{n} plugins instalados de {name}.", {
+                n: ok.reduce(function (x, y) {
+                  return x + y;
+                }, 0),
+                name: r.name || t("Repositório")
+              }), 5e3);
+              load7();
+            });
           }
           var why = {
             tachiyomi: t("Este é um repositório Tachiyomi/Mihon (apps Android). Adicione-o no seu servidor Suwayomi e conecte o servidor aqui."),
@@ -21414,7 +21427,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T18:08:00.116Z";
+  var BUILD = "2026-11-16T18:17:58.233Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

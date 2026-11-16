@@ -145,9 +145,12 @@ function SourcesView() {
       pl.fetchRepo(u).then(
         (r) => {
           if (r.kind === 'harbor') {
+            // Install every plugin of the repository at once (the old way asked one at a time).
             pl.addRepo(u);
-            load();
-            return pickPlugins(u, r);
+            return Promise.all(r.plugins.map((p) => pl.install(u, p).then(() => 1, () => 0))).then((ok) => {
+              toast(t('{n} plugins instalados de {name}.', { n: ok.reduce((x, y) => x + y, 0), name: r.name || t('Repositório') }), 5000);
+              load();
+            });
           }
           const why = {
             tachiyomi: t('Este é um repositório Tachiyomi/Mihon (apps Android). Adicione-o no seu servidor Suwayomi e conecte o servidor aqui.'),
