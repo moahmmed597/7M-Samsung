@@ -777,3 +777,8 @@ body.oled .view { background: #000; }
 .sidebar:not(.open) .profile-chip span { display: none; }
 .sidebar { z-index: 200; }
 .top-clock { z-index: 201; }
+
+.form-box { width: 980px; max-width: 980px; }
+.form-row { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-bottom: 12px; }
+.form-row .label { width: 260px; -webkit-flex: none; flex: none; font-size: 22px; font-weight: 700; }
+.form-row .input { -webkit-flex: 1; flex: 1; }

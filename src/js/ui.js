@@ -96,6 +96,44 @@ export function promptText(title, value, placeholder, onSubmit) {
   }
 }
 
+// Several text boxes in one window (e.g. IPTV server, username, password) and a confirm button.
+// OK on a box opens the TV keyboard; Done keeps the text and moves to the next box.
+// fields: [{ key, label, value, placeholder }]; onSubmit({ key: text, ... })
+export function formDialog(title, fields, okLabel, onSubmit) {
+  const inputs = {};
+  const rows = fields.map((f) => {
+    const input = h('input.input', { type: 'text', value: f.value || '', placeholder: f.placeholder || '' });
+    inputs[f.key] = input;
+    const row = h('div.set-row.form-row', { focusable: true, onSelect: () => nav.select(input) }, [h('div.label', { text: f.label }), input]);
+    input.__submit = () => {
+      // next box (or the button) after Done
+      const all = [].slice.call(box.querySelectorAll('[data-focus]'));
+      const next = all[all.indexOf(row) + 1];
+      setTimeout(() => next && nav.focus(next), 150);
+    };
+    return row;
+  });
+  const ok = h('div.btn.primary', {
+    focusable: true,
+    text: okLabel || 'OK',
+    onSelect: () => {
+      const out = {};
+      Object.keys(inputs).forEach((k) => (out[k] = String(inputs[k].value || '').trim()));
+      close();
+      onSubmit(out);
+    },
+  });
+  const box = h('div.modal-box.center.form-box', null, [h('h3', { text: title }), h('div.form-rows', { 'data-group': '', 'data-vertical': '' }, rows), h('div.modal-actions', { 'data-group': '' }, [ok, h('div.btn', { focusable: true, text: t('Cancelar'), onSelect: () => close() })])]);
+  const modal = h('div.modal', null, box);
+  document.getElementById('app').appendChild(modal);
+  const layer = nav.pushLayer(modal, { onBack: () => close() });
+  nav.focusFirst(modal);
+  function close() {
+    nav.popLayer(layer);
+    if (modal.parentNode) modal.parentNode.removeChild(modal);
+  }
+}
+
 // Barra superior com as abas principais.
 export const TABS = [
   { id: 'home', label: 'Início' },

@@ -5043,6 +5043,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Servidor (Host)": "Server (Host)",
+    "Preencha servidor, usuário e senha.": "Fill in server, username and password.",
     "O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.": "The TV service is still the old one. Hold the remote's Power button until the TV restarts, then open the app again.",
     "{n} plugins instalados de {name}.": "{n} plugins installed from {name}.",
     "O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).": "MangaDex has no chapters of this title (many licensed series aren't there).",
@@ -5422,6 +5424,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Servidor (Host)": "السيرفر (Host)",
+    "Preencha servidor, usuário e senha.": "عبّ السيرفر واسم المستخدم وكلمة السر.",
     "O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.": "خدمة التلفزيون لسه القديمة. اضغط مطوّل على زر الباور في الريموت لين يعيد التلفزيون التشغيل، وبعدها افتح التطبيق.",
     "{n} plugins instalados de {name}.": "تم تثبيت {n} إضافة من {name}.",
     "O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).": "MangaDex ما فيه فصول لهذا العمل (أغلب السلاسل المرخّصة ما تكون فيه).",
@@ -7302,6 +7306,71 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     setTimeout(function () {
       return select(input);
     }, 50);
+    function close() {
+      popLayer(layer);
+      if (modal.parentNode) modal.parentNode.removeChild(modal);
+    }
+  }
+  function formDialog(title, fields, okLabel, onSubmit) {
+    var inputs = {};
+    var rows2 = fields.map(function (f) {
+      var input = h("input.input", {
+        type: "text",
+        value: f.value || "",
+        placeholder: f.placeholder || ""
+      });
+      inputs[f.key] = input;
+      var row2 = h("div.set-row.form-row", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return select(input);
+        }
+      }, [h("div.label", {
+        text: f.label
+      }), input]);
+      input.__submit = function () {
+        var all2 = [].slice.call(box.querySelectorAll("[data-focus]"));
+        var next = all2[all2.indexOf(row2) + 1];
+        setTimeout(function () {
+          return next && focus(next);
+        }, 150);
+      };
+      return row2;
+    });
+    var ok = h("div.btn.primary", {
+      focusable: true,
+      text: okLabel || "OK",
+      onSelect: function onSelect() {
+        var out = {};
+        Object.keys(inputs).forEach(function (k) {
+          return out[k] = String(inputs[k].value || "").trim();
+        });
+        close();
+        onSubmit(out);
+      }
+    });
+    var box = h("div.modal-box.center.form-box", null, [h("h3", {
+      text: title
+    }), h("div.form-rows", {
+      "data-group": "",
+      "data-vertical": ""
+    }, rows2), h("div.modal-actions", {
+      "data-group": ""
+    }, [ok, h("div.btn", {
+      focusable: true,
+      text: t("Cancelar"),
+      onSelect: function onSelect() {
+        return close();
+      }
+    })])]);
+    var modal = h("div.modal", null, box);
+    document.getElementById("app").appendChild(modal);
+    var layer = pushLayer(modal, {
+      onBack: function onBack() {
+        return close();
+      }
+    });
+    focusFirst(modal);
     function close() {
       popLayer(layer);
       if (modal.parentNode) modal.parentNode.removeChild(modal);
@@ -19290,32 +19359,42 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function addXtream() {
-      promptText(t("Servidor (ex.: http://exemplo.com:8080)"), "http://", "", function (url2) {
-        var u = url2.trim().replace(/\/+$/, "");
+      formDialog(t("Conta Xtream Codes"), [{
+        key: "url",
+        label: t("Servidor (Host)"),
+        value: "http://",
+        placeholder: "http://example.com:80"
+      }, {
+        key: "user",
+        label: t("Usuário"),
+        value: ""
+      }, {
+        key: "pass",
+        label: t("Senha"),
+        value: ""
+      }], t("Entrar"), function (v) {
+        var u = (v.url || "").replace(/\/+$/, "");
         if (!/^https?:\/\//i.test(u)) u = "http://" + u;
-        promptText(t("Usuário"), "", "", function (user2) {
-          return promptText(t("Senha"), "", "", function (pass) {
-            var s = {
-              id: "x" + Date.now(),
-              type: "xtream",
-              url: u,
-              user: user2.trim(),
-              pass: pass.trim(),
-              name: u.replace(/^https?:\/\//, "").split(/[:/]/)[0],
-              format: "m3u8"
-            };
-            toast(t("Entrando..."));
-            checkXtream(s).then(function (info2) {
-              if (info2 && info2.username) s.name = s.name + " · " + info2.username;
-              saveSource(s);
-              src = s;
-              cat = "fav";
-              render();
-              toast(t("Conta adicionada."));
-            }, function () {
-              return toast(t("Não consegui entrar. Confira servidor, usuário e senha."), 6e3);
-            });
-          });
+        if (!v.user || !v.pass || u === "http://") return toast(t("Preencha servidor, usuário e senha."), 5e3);
+        var s = {
+          id: "x" + Date.now(),
+          type: "xtream",
+          url: u,
+          user: v.user,
+          pass: v.pass,
+          name: u.replace(/^https?:\/\//, "").split(/[:/]/)[0],
+          format: "m3u8"
+        };
+        toast(t("Entrando..."));
+        checkXtream(s).then(function (info2) {
+          if (info2 && info2.username) s.name = s.name + " · " + info2.username;
+          saveSource(s);
+          src = s;
+          cat = "fav";
+          render();
+          toast(t("Conta adicionada."));
+        }, function () {
+          return toast(t("Não consegui entrar. Confira servidor, usuário e senha."), 6e3);
         });
       });
     }
@@ -21335,7 +21414,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T18:04:10.955Z";
+  var BUILD = "2026-11-16T18:08:00.116Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

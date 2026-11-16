@@ -5,7 +5,7 @@ import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
 import { KEY } from '../lib/nav.js';
 import * as iptv from '../api/iptv.js';
-import { topbar, toast, promptText, menu, confirmDialog, timeHM, spinnerLine } from '../ui.js';
+import { topbar, toast, promptText, menu, confirmDialog, timeHM, spinnerLine, formDialog } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { openPlayer } from './player.js';
@@ -64,27 +64,33 @@ export function LiveView() {
   }
 
   function addXtream() {
-    promptText(t('Servidor (ex.: http://exemplo.com:8080)'), 'http://', '', (url) => {
-      let u = url.trim().replace(/\/+$/, '');
-      if (!/^https?:\/\//i.test(u)) u = 'http://' + u;
-      promptText(t('Usuário'), '', '', (user) =>
-        promptText(t('Senha'), '', '', (pass) => {
-          const s = { id: 'x' + Date.now(), type: 'xtream', url: u, user: user.trim(), pass: pass.trim(), name: u.replace(/^https?:\/\//, '').split(/[:/]/)[0], format: 'm3u8' };
-          toast(t('Entrando...'));
-          iptv.checkXtream(s).then(
-            (info) => {
-              if (info && info.username) s.name = s.name + ' · ' + info.username;
-              iptv.saveSource(s);
-              src = s;
-              cat = 'fav';
-              render();
-              toast(t('Conta adicionada.'));
-            },
-            () => toast(t('Não consegui entrar. Confira servidor, usuário e senha.'), 6000)
-          );
-        })
-      );
-    });
+    formDialog(
+      t('Conta Xtream Codes'),
+      [
+        { key: 'url', label: t('Servidor (Host)'), value: 'http://', placeholder: 'http://example.com:80' },
+        { key: 'user', label: t('Usuário'), value: '' },
+        { key: 'pass', label: t('Senha'), value: '' },
+      ],
+      t('Entrar'),
+      (v) => {
+        let u = (v.url || '').replace(/\/+$/, '');
+        if (!/^https?:\/\//i.test(u)) u = 'http://' + u;
+        if (!v.user || !v.pass || u === 'http://') return toast(t('Preencha servidor, usuário e senha.'), 5000);
+        const s = { id: 'x' + Date.now(), type: 'xtream', url: u, user: v.user, pass: v.pass, name: u.replace(/^https?:\/\//, '').split(/[:/]/)[0], format: 'm3u8' };
+        toast(t('Entrando...'));
+        iptv.checkXtream(s).then(
+          (info) => {
+            if (info && info.username) s.name = s.name + ' · ' + info.username;
+            iptv.saveSource(s);
+            src = s;
+            cat = 'fav';
+            render();
+            toast(t('Conta adicionada.'));
+          },
+          () => toast(t('Não consegui entrar. Confira servidor, usuário e senha.'), 6000)
+        );
+      }
+    );
   }
 
   function addM3u() {
