@@ -8,7 +8,6 @@ import { card, spinnerLine, toast, promptText } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { openReader } from './reader.js';
-import * as shelf from '../lib/mangaLib.js';
 
 const CHUNK = 50;
 
@@ -40,7 +39,7 @@ function SourcesView() {
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   el.appendChild(scroller);
   scroller.appendChild(h('div.row-title.catalog-title', { text: t('Minhas fontes') }));
-  const body = h('div.flat-list', { 'data-group': '', 'data-vertical': '' });
+  const body = h('div.md-list', { 'data-group': '', 'data-vertical': '' });
   scroller.appendChild(body);
 
   function load() {
@@ -124,10 +123,6 @@ function SourceGrid(src) {
   return { el: el, onShow: () => loadVisibleImages(el, 400), onScroll: () => loadVisibleImages(el, 400) };
 }
 
-export function openSourceManga(m) {
-  router.push(SourceDetails(m));
-}
-
 function SourceDetails(m) {
   const el = h('div.view.md-view');
   const info = h('div.md-info');
@@ -146,7 +141,7 @@ function SourceDetails(m) {
   };
   function read(i, page) {
     if (!chapters.length) return toast(t('Nenhum capítulo encontrado.'));
-    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: true, pagesFn: sw.pages, poster: m.poster, kind: 'sw', ref: m });
+    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: true, pagesFn: sw.pages });
   }
   function renderInfo() {
     clear(info);
@@ -161,7 +156,6 @@ function SourceDetails(m) {
     text.appendChild(
       h('div.details-buttons', { 'data-group': '' }, [
         h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, progress().page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]),
-        h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'sw', m), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
       ])
     );
     info.appendChild(text);

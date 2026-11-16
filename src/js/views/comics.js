@@ -9,7 +9,6 @@ import { topbar, card, spinnerLine, toast, promptText } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { openReader } from './reader.js';
-import * as shelf from '../lib/mangaLib.js';
 
 const MD = 'https://api.mangadex.org/';
 const enc = encodeURIComponent;
@@ -103,10 +102,6 @@ function ComicGrid(title, query, host) {
   return { el: el, onShow: () => loadVisibleImages(el, 400), destroy: () => {} };
 }
 
-export function openComic(m) {
-  router.push(ComicDetails(m));
-}
-
 function ComicDetails(m) {
   const el = h('div.view.md-view');
   const info = h('div.md-info');
@@ -125,7 +120,7 @@ function ComicDetails(m) {
   };
   function read(i, page) {
     if (!chapters.length) return toast(t('Nenhum capítulo encontrado.'));
-    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: false, poster: m.poster, kind: 'md', ref: m });
+    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: false });
   }
   function renderInfo() {
     clear(info);
@@ -140,7 +135,6 @@ function ComicDetails(m) {
     text.appendChild(
       h('div.details-buttons', { 'data-group': '' }, [
         h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, progress().page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]),
-        h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'md', m), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
       ])
     );
     info.appendChild(text);

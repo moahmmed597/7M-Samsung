@@ -183,7 +183,6 @@ export function HomeView() {
             image: bg,
             title: it.name + (ep ? ' · ' + ep : ''),
             progress: s.duration ? s.timeOffset / s.duration : 0,
-            overlay: { ep: ep, title: it.name, chip: s.duration && s.timeOffset / s.duration >= 0.03 ? t('{n}% assistido', { n: Math.round((s.timeOffset / s.duration) * 100) }) : t('A seguir') },
             onSelect: () => openDetails(it.type, it._id, { videoId: s.video_id, autoStreams: true }),
           }
         )
@@ -378,18 +377,12 @@ function buildRow(entry, parent) {
           if (row.parentNode) parent.removeChild(row);
           return;
         }
-        // The add-on's "Popular" list is shown as a Top 10 with big numerals (idea from Harbor).
-        const top10 = !entry.fetch && entry.catalog && entry.catalog.id === 'top';
-        metas.slice(0, top10 ? 10 : ROW_LIMIT).forEach((m, i) => {
-          const c = card(m, {
-            onSelect: () => openDetails(m.type || entry.catalog.type, m.id),
-          });
-          if (top10) {
-            c.classList.add('top10');
-            const pw = c.querySelector('.poster-wrap');
-            if (pw) pw.appendChild(h('div.rank', { text: String(i + 1) }));
-          }
-          track.appendChild(c);
+        metas.slice(0, ROW_LIMIT).forEach((m) => {
+          track.appendChild(
+            card(m, {
+              onSelect: () => openDetails(m.type || entry.catalog.type, m.id),
+            })
+          );
         });
         // "See all" at the end of the row when the catalog has more than the row shows.
         if (!entry.fetch && (metas.length > ROW_LIMIT || canPage(entry))) {

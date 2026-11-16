@@ -81,7 +81,7 @@ function ReaderView(opts) {
   function save() {
     if (!opts.key || !chapter()) return;
     const all = store.get('readProgress', {}) || {};
-    all[opts.key] = { chapterId: chapter().id, chapter: chapter().chapter, page: pi, title: opts.title, poster: opts.poster, kind: opts.kind, ref: opts.ref, at: Date.now() };
+    all[opts.key] = { chapterId: chapter().id, chapter: chapter().chapter, page: pi };
     const keys = Object.keys(all);
     if (keys.length > 200) delete all[keys[0]];
     store.set('readProgress', all);
