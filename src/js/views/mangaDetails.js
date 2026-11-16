@@ -8,7 +8,7 @@ import * as md from '../api/mangadex.js';
 import { toast, menu } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
-import { openReader } from './reader.js';
+import { openReader, readingModeMenu, readingModeLabel } from './reader.js';
 import { openAnime } from './anime.js';
 import { chapterToEpisode, animeMeta } from '../lib/animeLink.js';
 import * as pl from '../api/plugins.js';
@@ -192,6 +192,7 @@ function MangaDetailsView(m) {
           }),
       }, [h('span.ico', { text: '🌐' }), t(langSet.label)])
     );
+    btns.push(h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]));
     text.appendChild(h('div.details-buttons', { 'data-group': '' }, btns));
     info.appendChild(text);
     loadVisibleImages(info);

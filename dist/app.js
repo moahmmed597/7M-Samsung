@@ -14246,6 +14246,59 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function openReader(opts) {
     push(ReaderView(opts));
   }
+  var MODE_NAMES = {
+    fit: "Uma página",
+    double: "Duas páginas",
+    width: "Ajustar à largura"
+  };
+  var MODE_ICONS = {
+    fit: "📄",
+    double: "📖",
+    width: "📜"
+  };
+  function readingMode() {
+    var m = settings().readerMode;
+    return MODE_NAMES[m] ? m : "fit";
+  }
+  function readingModeLabel() {
+    var m = readingMode();
+    return {
+      icon: MODE_ICONS[m],
+      text: t(MODE_NAMES[m])
+    };
+  }
+  function readingModeMenu(_onPick, withZoomHint) {
+    var cur = readingMode();
+    var items3 = [{
+      label: t("Uma página"),
+      sub: t("A página inteira na tela"),
+      value: "fit",
+      checked: cur === "fit"
+    }, {
+      label: t("Duas páginas"),
+      sub: t("Lado a lado, como um livro aberto"),
+      value: "double",
+      checked: cur === "double"
+    }, {
+      label: t("Ajustar à largura"),
+      sub: t("Para webtoons: role com as setas"),
+      value: "width",
+      checked: cur === "width"
+    }];
+    if (withZoomHint) items3.push({
+      label: "🔍 " + t("OK 2x ou CH +/−: zoom"),
+      value: ""
+    });
+    menu(t("Modo de leitura"), items3, {
+      onPick: function onPick(v) {
+        if (!v || v === cur) return;
+        saveSettings({
+          readerMode: v
+        });
+        if (_onPick) _onPick(v);
+      }
+    });
+  }
   function ReaderView(opts) {
     var ci = opts.index;
     var pages4 = [];
@@ -14450,11 +14503,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         showPage("bottom");
       } else chapterStep(-1);
     }
-    var MODE_NAMES = {
-      fit: "Uma página",
-      double: "Duas páginas",
-      width: "Ajustar à largura"
-    };
     function setMode(m) {
       mode = m;
       saveSettings({
@@ -14465,29 +14513,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       toast(t(MODE_NAMES[m]));
     }
     function modeMenu() {
-      menu(t("Modo de leitura"), [{
-        label: t("Uma página"),
-        sub: t("A página inteira na tela"),
-        value: "fit",
-        checked: mode === "fit"
-      }, {
-        label: t("Duas páginas"),
-        sub: t("Lado a lado, como um livro aberto"),
-        value: "double",
-        checked: mode === "double"
-      }, {
-        label: t("Ajustar à largura"),
-        sub: t("Para webtoons: role com as setas"),
-        value: "width",
-        checked: mode === "width"
-      }, {
-        label: "🔍 " + t("OK 2x ou CH +/−: zoom"),
-        value: ""
-      }], {
-        onPick: function onPick(v) {
-          return v && v !== mode && setMode(v);
-        }
-      });
+      readingModeMenu(setMode, true);
     }
     function zoomStep(to) {
       var z0 = size();
@@ -16441,7 +16467,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       }, [h("span.ico", {
         text: isFav(key3) ? "♥" : "♡"
-      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")])]));
+      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")]), h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return readingModeMenu(function () {
+            return renderInfo();
+          });
+        }
+      }, [h("span.ico", {
+        text: readingModeLabel().icon
+      }), readingModeLabel().text])]));
       info2.appendChild(text);
       loadVisibleImages(info2);
     }
@@ -16760,6 +16795,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: "🌐"
       }), t(langSet.label)]));
+      btns.push(h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return readingModeMenu(function () {
+            return renderInfo();
+          });
+        }
+      }, [h("span.ico", {
+        text: readingModeLabel().icon
+      }), readingModeLabel().text]));
       text.appendChild(h("div.details-buttons", {
         "data-group": ""
       }, btns));
@@ -22174,7 +22219,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T20:09:26.662Z";
+  var BUILD = "2026-11-16T20:14:02.021Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

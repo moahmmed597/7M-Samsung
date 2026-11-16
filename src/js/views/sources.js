@@ -12,7 +12,7 @@ import * as store from '../lib/store.js';
 import { card, spinnerLine, toast, promptText, menu, confirmDialog } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
-import { openReader } from './reader.js';
+import { openReader, readingModeMenu, readingModeLabel } from './reader.js';
 import * as shelf from '../lib/mangaLib.js';
 import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
 
@@ -446,6 +446,7 @@ function SourceDetails(m, api) {
       h('div.details-buttons', { 'data-group': '' }, [
         h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, progress().page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]),
         h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, api.kind, m), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
+        h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]),
       ])
     );
     info.appendChild(text);

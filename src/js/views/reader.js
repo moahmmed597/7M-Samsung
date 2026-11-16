@@ -25,6 +25,34 @@ export function openReader(opts) {
   router.push(ReaderView(opts));
 }
 
+// The reading mode (also offered on the title page): one page, two pages, fit to width.
+const MODE_NAMES = { fit: 'Uma página', double: 'Duas páginas', width: 'Ajustar à largura' };
+const MODE_ICONS = { fit: '📄', double: '📖', width: '📜' };
+export function readingMode() {
+  const m = store.settings().readerMode;
+  return MODE_NAMES[m] ? m : 'fit';
+}
+export function readingModeLabel() {
+  const m = readingMode();
+  return { icon: MODE_ICONS[m], text: t(MODE_NAMES[m]) };
+}
+export function readingModeMenu(onPick, withZoomHint) {
+  const cur = readingMode();
+  const items = [
+    { label: t('Uma página'), sub: t('A página inteira na tela'), value: 'fit', checked: cur === 'fit' },
+    { label: t('Duas páginas'), sub: t('Lado a lado, como um livro aberto'), value: 'double', checked: cur === 'double' },
+    { label: t('Ajustar à largura'), sub: t('Para webtoons: role com as setas'), value: 'width', checked: cur === 'width' },
+  ];
+  if (withZoomHint) items.push({ label: '🔍 ' + t('OK 2x ou CH +/−: zoom'), value: '' });
+  menu(t('Modo de leitura'), items, {
+    onPick: (v) => {
+      if (!v || v === cur) return;
+      store.saveSettings({ readerMode: v });
+      if (onPick) onPick(v);
+    },
+  });
+}
+
 function ReaderView(opts) {
   let ci = opts.index;
   let pages = [];
@@ -207,7 +235,6 @@ function ReaderView(opts) {
     } else chapterStep(-1);
   }
 
-  const MODE_NAMES = { fit: 'Uma página', double: 'Duas páginas', width: 'Ajustar à largura' };
   function setMode(m) {
     mode = m;
     store.saveSettings({ readerMode: m });
@@ -216,16 +243,7 @@ function ReaderView(opts) {
     toast(t(MODE_NAMES[m]));
   }
   function modeMenu() {
-    menu(
-      t('Modo de leitura'),
-      [
-        { label: t('Uma página'), sub: t('A página inteira na tela'), value: 'fit', checked: mode === 'fit' },
-        { label: t('Duas páginas'), sub: t('Lado a lado, como um livro aberto'), value: 'double', checked: mode === 'double' },
-        { label: t('Ajustar à largura'), sub: t('Para webtoons: role com as setas'), value: 'width', checked: mode === 'width' },
-        { label: '🔍 ' + t('OK 2x ou CH +/−: zoom'), value: '' },
-      ],
-      { onPick: (v) => v && v !== mode && setMode(v) }
-    );
+    readingModeMenu(setMode, true);
   }
 
   // to: the zoom step to go to (default: the next one, back to 100% after the last).
