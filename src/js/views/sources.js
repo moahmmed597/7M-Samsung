@@ -343,10 +343,22 @@ function SourcesView(kind) {
                 return step(t('Lista'), () => pl.popular(p.id, 0).then((items) => (line(items.length > 0, t('Lista') + ': ' + items.length + secs(st2)), items)), 45000).then((items) => {
                   if (!items || !items.length) return;
                   const st3 = t0();
-                  return step(t('Capítulos'), () => pl.chapters(p.id, items[0].id).then((cs) => (line(cs.length > 0, t('Capítulos de') + ' "' + items[0].title + '": ' + cs.length + secs(st3)), cs)), 45000).then((cs) => {
-                    if (!cs || !cs.length) return;
+                  // Books: an audiobook may have no text chapters, only tracks (🎧).
+                  const audio = kind === 'books' && pl.audioTracks;
+                  let tracks = null;
+                  const getTracks = () => (tracks = tracks || pl.audioTracks(p.id, items[0].id).catch(() => []));
+                  return step(t('Capítulos'), () => pl.chapters(p.id, items[0].id).then((cs) => (audio && !cs.length ? getTracks().then((tr) => (tr.length ? line(null, t('Sem texto, só áudio') + ' ("' + items[0].title + '")') : line(false, t('Capítulos de') + ' "' + items[0].title + '": 0' + secs(st3)), cs)) : (line(cs.length > 0, t('Capítulos de') + ' "' + items[0].title + '": ' + cs.length + secs(st3)), cs))), 45000).then((cs) => {
                     const st4 = t0();
-                    return step(t('Páginas'), () => pl.pages(p.id, cs[0].id).then((pg) => line(pg.length > 0, t('Páginas do capítulo') + ': ' + pg.length + secs(st4))), 45000);
+                    const pages = cs && cs.length ? step(t('Páginas'), () => pl.pages(p.id, cs[0].id).then((pg) => line(pg.length > 0, t('Páginas do capítulo') + ': ' + pg.length + secs(st4))), 45000) : Promise.resolve();
+                    if (!audio) return pages;
+                    return pages.then(() => {
+                      const st5 = t0();
+                      return step(t('Áudio'), () => getTracks().then((tr) => {
+                        if (!tr.length) return line(null, t('Sem áudio (só leitura)'));
+                        line(true, t('Faixas de áudio') + ': ' + tr.length + secs(st5));
+                        return playable(tr[0].url).then((d) => line(d != null, d != null ? t('O áudio toca neste aparelho ({d})', { d: Math.round(d / 60) + ' min' }) : t('O áudio não abriu: {u}', { u: String(tr[0].url).slice(0, 80) })));
+                      }), 45000);
+                    });
                   });
                 });
               });
@@ -355,6 +367,27 @@ function SourcesView(kind) {
         )
       )
       .then(() => line(null, t('Fim do teste.')));
+  }
+
+  // Opens the first track in a real <audio> (as the player will): its length in seconds, or null.
+  function playable(url) {
+    return new Promise((res) => {
+      const a = document.createElement('audio');
+      a.preload = 'metadata';
+      const done = (v) => {
+        clearTimeout(tm);
+        a.onloadedmetadata = a.onerror = null;
+        a.removeAttribute('src');
+        try {
+          a.load();
+        } catch (e) {}
+        res(v);
+      };
+      const tm = setTimeout(() => done(null), 15000);
+      a.onloadedmetadata = () => done(isFinite(a.duration) ? a.duration : 0);
+      a.onerror = () => done(null);
+      a.src = url;
+    });
   }
 
   function load() {

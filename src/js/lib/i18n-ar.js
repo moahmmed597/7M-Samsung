@@ -1235,4 +1235,9 @@ export const AR = {
   "Teclas do controle": "أزرار الريموت",
   "Ligado a esta história": "مرتبط بنفس القصة",
   "Ligado ({n})": "مرتبط ({n})",
+  "Sem texto, só áudio": "صوتي فقط بدون نص",
+  "Sem áudio (só leitura)": "بدون صوت (قراءة فقط)",
+  "Faixas de áudio": "المقاطع الصوتية",
+  "O áudio toca neste aparelho ({d})": "الصوت يشتغل على هذا الجهاز ({d})",
+  "O áudio não abriu: {u}": "الصوت ما اشتغل: {u}",
 };

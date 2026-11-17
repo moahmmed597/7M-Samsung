@@ -1235,4 +1235,9 @@ export const EN = {
   "Teclas do controle": "Remote keys",
   "Ligado a esta história": "Linked to this story",
   "Ligado ({n})": "Linked ({n})",
+  "Sem texto, só áudio": "Audio only, no text",
+  "Sem áudio (só leitura)": "No audio (reading only)",
+  "Faixas de áudio": "Audio tracks",
+  "O áudio toca neste aparelho ({d})": "The audio plays on this device ({d})",
+  "O áudio não abriu: {u}": "The audio did not open: {u}",
 };
