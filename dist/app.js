@@ -5043,6 +5043,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "O anime ainda não chegou neste capítulo (vai até o cap. {c}). Abrindo o último: episódio {n}.": "The anime hasn't reached this chapter yet (it goes up to ch. {c}). Opening the latest: episode {n}.",
     "Adicione sua chave do ComicVine em Ajustes → Chaves.": "Add your ComicVine key in Settings → Keys.",
     "Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).": "Comics use the ComicVine catalog. Get a free key at comicvine.gamespot.com/api and put it in Settings → Keys (or on the phone page).",
     "Para ler, adicione suas fontes em Minhas fontes.": "To read, add your sources in My sources.",
@@ -5483,6 +5484,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "O anime ainda não chegou neste capítulo (vai até o cap. {c}). Abrindo o último: episódio {n}.": "الأنمي ما وصل لهذا الفصل للحين (واصل لين الفصل {c}). بفتح لك آخر حلقة: {n}.",
     "Adicione sua chave do ComicVine em Ajustes → Chaves.": "أضف مفتاح ComicVine من الإعدادات ← المفاتيح.",
     "Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).": "الكوميكس تستخدم كتالوج ComicVine. خذ مفتاح مجاني من comicvine.gamespot.com/api وحطه في الإعدادات ← المفاتيح (أو من صفحة الجوال).",
     "Para ler, adicione suas fontes em Minhas fontes.": "عشان تقرأ، أضف مصادرك من مصادري.",
@@ -6289,7 +6291,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var cr = cur.getBoundingClientRect();
     var cc = center(cr);
     var tol = 8;
-    var best = null;
+    var best2 = null;
     var bestScore = Infinity;
     for (var i = 0; i < list2.length; i++) {
       var el = list2[i];
@@ -6318,10 +6320,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var score = primary + secondary * 2.5;
       if (score < bestScore) {
         bestScore = score;
-        best = el;
+        best2 = el;
       }
     }
-    return best;
+    return best2;
   }
   function overlap(a1, a2, b1, b2) {
     return Math.min(a2, b2) - Math.max(a1, b1) > 4;
@@ -6426,11 +6428,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var all2 = candidates(layer.root).filter(function (e) {
       return e !== cur;
     });
-    var best = pick(all2, cur, dir);
-    if (!best) return false;
-    var bg = best.closest("[data-group]");
-    if (bg && bg !== group && bg.__last && bg.contains(bg.__last) && isVisible(bg.__last)) best = bg.__last;
-    focus(best);
+    var best2 = pick(all2, cur, dir);
+    if (!best2) return false;
+    var bg = best2.closest("[data-group]");
+    if (bg && bg !== group && bg.__last && bg.contains(bg.__last) && isVisible(bg.__last)) best2 = bg.__last;
+    focus(best2);
     return true;
   }
   function select(el) {
@@ -10188,12 +10190,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var bySeason = season ? same.filter(function (e) {
               return Number(e.season) === Number(season);
             }) : same;
-            var best = [];
+            var best2 = [];
             (bySeason.length ? bySeason : same).forEach(function (e) {
               var segs = fromAnimeSkipTimestamps(e.timestamps, e.baseDuration);
-              if (segs.length > best.length) best = segs;
+              if (segs.length > best2.length) best2 = segs;
             });
-            return best;
+            return best2;
           });
         });
       });
@@ -13327,7 +13329,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return n;
       }
       var seen = {};
-      var best = 0;
+      var best2 = 0;
       var bestN = -1;
       cand.forEach(function (c) {
         var s = Math.round(c / 0.05) * 0.05;
@@ -13335,15 +13337,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (seen[key4]) return;
         seen[key4] = 1;
         var n = matches(s);
-        if (n > bestN || n === bestN && Math.abs(s) < Math.abs(best)) {
+        if (n > bestN || n === bestN && Math.abs(s) < Math.abs(best2)) {
           bestN = n;
-          best = s;
+          best2 = s;
         }
       });
       var second = 0;
       Object.keys(seen).forEach(function (key4) {
         var s = +key4;
-        if (Math.abs(s - best) < 1) return;
+        if (Math.abs(s - best2) < 1) return;
         var n = matches(s);
         if (n > second) second = n;
       });
@@ -13351,14 +13353,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var cnt = 0;
       var k = 0;
       for (var _i2 = 0; _i2 < R.length; _i2++) {
-        var want = R[_i2] - best;
+        var want = R[_i2] - best2;
         while (k < Tw.length && Tw[k] < want - TOL) k++;
         if (k < Tw.length && Math.abs(Tw[k] - want) <= TOL) {
           sum += R[_i2] - Tw[k];
           cnt++;
         }
       }
-      var shift = cnt ? sum / cnt : best;
+      var shift = cnt ? sum / cnt : best2;
       var frac2 = bestN / R.length;
       var ok = bestN >= 6 && frac2 >= 0.45 && bestN >= second * 1.6 + 2;
       return {
@@ -13462,15 +13464,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var ok = rs.filter(function (r) {
             return r && r.score > 0;
           });
-          var best = null;
+          var best2 = null;
           ok.forEach(function (r) {
             var agree = ok.filter(function (o) {
               return Math.abs(o.shift - r.shift) <= 0.3;
             }).length;
-            if ((agree >= 2 || r.score >= 0.8) && (!best || r.score > best.score)) best = r;
+            if ((agree >= 2 || r.score >= 0.8) && (!best2 || r.score > best2.score)) best2 = r;
           });
-          if (!best) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5e3);
-          applySync(best, t("outras legendas"));
+          if (!best2) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5e3);
+          applySync(best2, t("outras legendas"));
         });
       }
     }
@@ -14056,6 +14058,700 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/api/plugins.js
+  var SVC = "http://127.0.0.1:" + PORT;
+  var REPOS = "mangaRepos";
+  var PLUGINS = "mangaPlugins";
+  var repos = function repos() {
+    return get(REPOS, []) || [];
+  };
+  var installed = function installed() {
+    return get(PLUGINS, []) || [];
+  };
+  function saveInstalled(list2) {
+    set(PLUGINS, list2);
+  }
+  function addRepo(url2) {
+    var r = repos().filter(function (x) {
+      return x !== url2;
+    });
+    r.push(url2);
+    set(REPOS, r);
+  }
+  function removeRepo(url2) {
+    set(REPOS, repos().filter(function (x) {
+      return x !== url2;
+    }));
+  }
+  function uninstall(id) {
+    saveInstalled(installed().filter(function (p) {
+      return p.id !== id;
+    }));
+    stop2(id);
+  }
+  function httpRaw(url2, opts) {
+    var o = opts || {};
+    return request("POST", SVC + "/api/phttp", {
+      url: url2,
+      method: o.method,
+      headers: o.headers,
+      body: o.body,
+      responseType: o.responseType,
+      timeoutMs: o.timeoutMs,
+      redirect: o.redirect
+    }, {
+      timeout: (o.timeoutMs || 2e4) + 5e3,
+      quiet: true
+    }).catch(function () {
+      return direct(url2, o);
+    });
+  }
+  function serviceOnly(url2) {
+    return request("POST", SVC + "/api/phttp", {
+      url: url2
+    }, {
+      timeout: 2e4,
+      quiet: true
+    }).catch(function (e) {
+      throw new Error(e && e.status === 404 ? "old TV service (no /api/phttp)" : e && e.message || "service");
+    });
+  }
+  function direct(url2, o) {
+    return new Promise(function (resolve2, reject) {
+      var x = new XMLHttpRequest();
+      x.open(o.method || "GET", url2, true);
+      x.timeout = o.timeoutMs || 2e4;
+      x.onload = function () {
+        return resolve2({
+          status: x.status,
+          ok: x.status >= 200 && x.status < 300,
+          headers: {
+            "content-type": x.getResponseHeader("content-type") || ""
+          },
+          body: x.responseText,
+          url: url2
+        });
+      };
+      x.onerror = x.ontimeout = function () {
+        return reject(new Error(serviceVersion() && serviceVersion() < 2 ? "old TV service: restart the TV" : "network"));
+      };
+      x.send(typeof o.body === "string" ? o.body : null);
+    });
+  }
+  function getText2(url2) {
+    return httpRaw(url2, {}).then(function (r) {
+      if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "?"));
+      return r.body;
+    });
+  }
+  function imageUrl(url2, referer) {
+    if (!url2) return "";
+    return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "");
+  }
+  function classify(parsed) {
+    if (parsed && Array.isArray(parsed.plugins)) return "harbor";
+    var arr = Array.isArray(parsed) ? parsed : parsed && (parsed.sources || parsed.mangayomiSources);
+    if (!Array.isArray(arr) || !arr.length) return "unknown";
+    if (arr.some(function (e) {
+      return e && typeof e.apk === "string";
+    })) return "tachiyomi";
+    if (arr.some(function (e) {
+      return e && (e.sourceCodeUrl || e.pkgPath);
+    })) return "mangayomi";
+    if (arr.some(function (e) {
+      return e && (e.file || e.downloadURL) && /\.aix/i.test(e.file || e.downloadURL || "");
+    })) return "aidoku";
+    if (parsed && parsed.info && Array.isArray(parsed.sources)) return "aidoku";
+    return "unknown";
+  }
+  function fetchRepo(url2) {
+    return getText2(url2).then(function (text) {
+      var parsed = null;
+      try {
+        parsed = JSON.parse(text);
+      } catch (e) {
+        throw new Error("not json");
+      }
+      var kind = classify(parsed);
+      if (kind !== "harbor") return {
+        kind: kind,
+        name: parsed && parsed.name || "",
+        plugins: []
+      };
+      var plugins = parsed.plugins.filter(function (p) {
+        return p && typeof p.id === "string" && typeof p.name === "string" && typeof p.entry === "string";
+      }).map(function (p) {
+        return {
+          id: p.id,
+          name: p.name,
+          version: String(p.version || "0"),
+          lang: String(p.lang || ""),
+          nsfw: p.nsfw === true,
+          icon: typeof p.icon === "string" ? p.icon : "",
+          entry: p.entry
+        };
+      });
+      return {
+        kind: kind,
+        name: String(parsed.name || ""),
+        plugins: plugins
+      };
+    });
+  }
+  function resolveUrl(base3, rel) {
+    if (/^https?:\/\//i.test(rel)) return rel;
+    return base3.replace(/[^/]*$/, "") + rel.replace(/^\.\//, "");
+  }
+  function install2(repoUrl, man) {
+    return getText2(resolveUrl(repoUrl, man.entry)).then(function (source) {
+      if (source.length > 2 * 1024 * 1024) throw new Error("too big");
+      var list2 = installed().filter(function (p) {
+        return p.id !== man.id;
+      });
+      list2.push({
+        id: man.id,
+        name: man.name,
+        version: man.version,
+        lang: man.lang,
+        nsfw: man.nsfw,
+        icon: man.icon,
+        repoUrl: repoUrl,
+        entry: man.entry,
+        source: source
+      });
+      saveInstalled(list2);
+      stop2(man.id);
+      return man;
+    });
+  }
+  var DROP = {
+    script: 1,
+    style: 1,
+    noscript: 1,
+    template: 1,
+    iframe: 1,
+    object: 1,
+    embed: 1,
+    link: 1,
+    meta: 1
+  };
+  function serialize(el, depth, budget) {
+    var a = {};
+    for (var i = 0; i < el.attributes.length; i++) a[el.attributes[i].name] = el.attributes[i].value;
+    var c = [];
+    if (depth < 200) {
+      var kids2 = el.childNodes;
+      for (var _i3 = 0; _i3 < kids2.length && budget.n < 6e4; _i3++) {
+        var k = kids2[_i3];
+        if (k.nodeType === 1) {
+          if (DROP[k.tagName.toLowerCase()]) continue;
+          budget.n++;
+          c.push(serialize(k, depth + 1, budget));
+        } else if (k.nodeType === 3 && k.nodeValue && k.nodeValue.trim()) {
+          budget.n++;
+          c.push({
+            x: k.nodeValue
+          });
+        }
+      }
+    }
+    return {
+      t: el.tagName.toLowerCase(),
+      a: a,
+      x: "",
+      c: c
+    };
+  }
+  function parseHtml(html) {
+    var doc = new DOMParser().parseFromString(String(html || ""), "text/html");
+    return doc.body ? serialize(doc.body, 0, {
+      n: 0
+    }) : {
+      t: "body",
+      a: {},
+      x: "",
+      c: []
+    };
+  }
+  var PRELUDE = String.raw(_templateObject || (_templateObject = _taggedTemplateLiteral(["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/s*>s*/g, \" > \").trim().split(/s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  // HTML parser inside the sandbox, so harbor.parseHtml() works both ways plugins use it:\n  // right away (doc.querySelectorAll(...)) and with await. Tolerant, like a browser for normal pages.\n  var VOID = { area: 1, base: 1, br: 1, col: 1, embed: 1, hr: 1, img: 1, input: 1, link: 1, meta: 1, source: 1, track: 1, wbr: 1 };\n  var RAW = { script: 1, style: 1, textarea: 1, title: 1 };\n  var DROP = { script: 1, style: 1, noscript: 1, template: 1 };\n  var ENT = { amp: \"&\", lt: \"<\", gt: \">\", quot: '\"', apos: \"'\", nbsp: \"\xA0\", hellip: \"\u2026\", mdash: \"\u2014\", ndash: \"\u2013\", rsquo: \"\u2019\", lsquo: \"\u2018\", rdquo: \"\u201D\", ldquo: \"\u201C\", copy: \"\xA9\" };\n  function decode(t) {\n    return t.indexOf(\"&\") < 0 ? t : t.replace(/&(#x[0-9a-f]+|#d+|[a-z]+);/gi, function (m, e) {\n      if (e.charAt(0) === \"#\") {\n        var n = e.charAt(1) === \"x\" || e.charAt(1) === \"X\" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);\n        return isFinite(n) ? String.fromCodePoint ? String.fromCodePoint(n) : String.fromCharCode(n) : m;\n      }\n      var v = ENT[e.toLowerCase()];\n      return v === undefined ? m : v;\n    });\n  }\n  function syncParse(html) {\n    html = String(html || \"\");\n    var root = { t: \"body\", a: {}, x: \"\", c: [] };\n    var stack = [root];\n    var i = 0, n = html.length, count = 0;\n    var top = function () { return stack[stack.length - 1]; };\n    while (i < n && count < 80000) {\n      var lt = html.indexOf(\"<\", i);\n      if (lt < 0) lt = n;\n      if (lt > i) {\n        var txt = html.slice(i, lt);\n        top().c.push({ x: txt.trim() ? decode(txt) : \" \" }); count++;\n      }\n      if (lt >= n) break;\n      if (html.substr(lt, 4) === \"<!--\") { var ce = html.indexOf(\"-->\", lt + 4); i = ce < 0 ? n : ce + 3; continue; }\n      if (html.charAt(lt + 1) === \"!\" || html.charAt(lt + 1) === \"?\") { var de = html.indexOf(\">\", lt); i = de < 0 ? n : de + 1; continue; }\n      if (html.charAt(lt + 1) === \"/\") {\n        var ge = html.indexOf(\">\", lt);\n        var name = html.slice(lt + 2, ge < 0 ? n : ge).trim().toLowerCase();\n        for (var k = stack.length - 1; k > 0; k--) if (stack[k].t === name) { stack.length = k; break; }\n        i = ge < 0 ? n : ge + 1;\n        continue;\n      }\n      var m = /^<([a-zA-Z][a-zA-Z0-9:-]*)/.exec(html.slice(lt, lt + 64));\n      if (!m) { top().c.push({ x: \"<\" }); i = lt + 1; continue; }\n      var tag = m[1].toLowerCase();\n      var j = lt + m[0].length, attrs = {}, selfClose = false;\n      while (j < n) {\n        while (j < n && /s/.test(html.charAt(j))) j++;\n        var ch = html.charAt(j);\n        if (ch === \">\") { j++; break; }\n        if (ch === \"/\" && html.charAt(j + 1) === \">\") { selfClose = true; j += 2; break; }\n        var am = /^[^s=>/]+/.exec(html.slice(j, j + 256));\n        if (!am) { j++; continue; }\n        var an = am[0].toLowerCase(); j += am[0].length;\n        while (j < n && /s/.test(html.charAt(j))) j++;\n        var av = \"\";\n        if (html.charAt(j) === \"=\") {\n          j++;\n          while (j < n && /s/.test(html.charAt(j))) j++;\n          var q = html.charAt(j);\n          if (q === '\"' || q === \"'\") { var qe = html.indexOf(q, j + 1); av = html.slice(j + 1, qe < 0 ? n : qe); j = qe < 0 ? n : qe + 1; }\n          else { var um = /^[^s>]*/.exec(html.slice(j, j + 2048)); av = um[0]; j += av.length; }\n        }\n        if (!(an in attrs)) attrs[an] = decode(av);\n      }\n      i = j;\n      if (RAW[tag]) {\n        var re = html.toLowerCase().indexOf(\"</\" + tag, i);\n        var body = html.slice(i, re < 0 ? n : re);\n        i = re < 0 ? n : html.indexOf(\">\", re) + 1 || n;\n        if (!DROP[tag]) { var el0 = { t: tag, a: attrs, x: \"\", c: body.trim() ? [{ x: decode(body) }] : [] }; top().c.push(el0); count++; }\n        continue;\n      }\n      if ((tag === \"li\" || tag === \"option\" || tag === \"p\" || tag === \"tr\" || tag === \"td\" || tag === \"th\") && top().t === tag) stack.pop();\n      var el = { t: tag, a: attrs, x: \"\", c: [] };\n      if (!DROP[tag]) { top().c.push(el); count++; }\n      if (!VOID[tag] && !selfClose) stack.push(el);\n    }\n    return root;\n  }\n  // Works without await; awaiting it gives the same document.\n  function parseHtml(html) {\n    var doc = new HDocument(syncParse(html));\n    var ready = new HDocument(null);\n    ready._root = doc._root;\n    Object.defineProperty(doc, \"then\", { value: function (ok) { return Promise.resolve(ready).then(ok); }, enumerable: false });\n    return doc;\n  }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"], ["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/\\s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/\\s*>\\s*/g, \" > \").trim().split(/\\s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/\\s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/\\s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  // HTML parser inside the sandbox, so harbor.parseHtml() works both ways plugins use it:\n  // right away (doc.querySelectorAll(...)) and with await. Tolerant, like a browser for normal pages.\n  var VOID = { area: 1, base: 1, br: 1, col: 1, embed: 1, hr: 1, img: 1, input: 1, link: 1, meta: 1, source: 1, track: 1, wbr: 1 };\n  var RAW = { script: 1, style: 1, textarea: 1, title: 1 };\n  var DROP = { script: 1, style: 1, noscript: 1, template: 1 };\n  var ENT = { amp: \"&\", lt: \"<\", gt: \">\", quot: '\"', apos: \"'\", nbsp: \"\xA0\", hellip: \"\u2026\", mdash: \"\u2014\", ndash: \"\u2013\", rsquo: \"\u2019\", lsquo: \"\u2018\", rdquo: \"\u201D\", ldquo: \"\u201C\", copy: \"\xA9\" };\n  function decode(t) {\n    return t.indexOf(\"&\") < 0 ? t : t.replace(/&(#x[0-9a-f]+|#\\d+|[a-z]+);/gi, function (m, e) {\n      if (e.charAt(0) === \"#\") {\n        var n = e.charAt(1) === \"x\" || e.charAt(1) === \"X\" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);\n        return isFinite(n) ? String.fromCodePoint ? String.fromCodePoint(n) : String.fromCharCode(n) : m;\n      }\n      var v = ENT[e.toLowerCase()];\n      return v === undefined ? m : v;\n    });\n  }\n  function syncParse(html) {\n    html = String(html || \"\");\n    var root = { t: \"body\", a: {}, x: \"\", c: [] };\n    var stack = [root];\n    var i = 0, n = html.length, count = 0;\n    var top = function () { return stack[stack.length - 1]; };\n    while (i < n && count < 80000) {\n      var lt = html.indexOf(\"<\", i);\n      if (lt < 0) lt = n;\n      if (lt > i) {\n        var txt = html.slice(i, lt);\n        top().c.push({ x: txt.trim() ? decode(txt) : \" \" }); count++;\n      }\n      if (lt >= n) break;\n      if (html.substr(lt, 4) === \"<!--\") { var ce = html.indexOf(\"-->\", lt + 4); i = ce < 0 ? n : ce + 3; continue; }\n      if (html.charAt(lt + 1) === \"!\" || html.charAt(lt + 1) === \"?\") { var de = html.indexOf(\">\", lt); i = de < 0 ? n : de + 1; continue; }\n      if (html.charAt(lt + 1) === \"/\") {\n        var ge = html.indexOf(\">\", lt);\n        var name = html.slice(lt + 2, ge < 0 ? n : ge).trim().toLowerCase();\n        for (var k = stack.length - 1; k > 0; k--) if (stack[k].t === name) { stack.length = k; break; }\n        i = ge < 0 ? n : ge + 1;\n        continue;\n      }\n      var m = /^<([a-zA-Z][a-zA-Z0-9:-]*)/.exec(html.slice(lt, lt + 64));\n      if (!m) { top().c.push({ x: \"<\" }); i = lt + 1; continue; }\n      var tag = m[1].toLowerCase();\n      var j = lt + m[0].length, attrs = {}, selfClose = false;\n      while (j < n) {\n        while (j < n && /\\s/.test(html.charAt(j))) j++;\n        var ch = html.charAt(j);\n        if (ch === \">\") { j++; break; }\n        if (ch === \"/\" && html.charAt(j + 1) === \">\") { selfClose = true; j += 2; break; }\n        var am = /^[^\\s=>\\/]+/.exec(html.slice(j, j + 256));\n        if (!am) { j++; continue; }\n        var an = am[0].toLowerCase(); j += am[0].length;\n        while (j < n && /\\s/.test(html.charAt(j))) j++;\n        var av = \"\";\n        if (html.charAt(j) === \"=\") {\n          j++;\n          while (j < n && /\\s/.test(html.charAt(j))) j++;\n          var q = html.charAt(j);\n          if (q === '\"' || q === \"'\") { var qe = html.indexOf(q, j + 1); av = html.slice(j + 1, qe < 0 ? n : qe); j = qe < 0 ? n : qe + 1; }\n          else { var um = /^[^\\s>]*/.exec(html.slice(j, j + 2048)); av = um[0]; j += av.length; }\n        }\n        if (!(an in attrs)) attrs[an] = decode(av);\n      }\n      i = j;\n      if (RAW[tag]) {\n        var re = html.toLowerCase().indexOf(\"</\" + tag, i);\n        var body = html.slice(i, re < 0 ? n : re);\n        i = re < 0 ? n : html.indexOf(\">\", re) + 1 || n;\n        if (!DROP[tag]) { var el0 = { t: tag, a: attrs, x: \"\", c: body.trim() ? [{ x: decode(body) }] : [] }; top().c.push(el0); count++; }\n        continue;\n      }\n      if ((tag === \"li\" || tag === \"option\" || tag === \"p\" || tag === \"tr\" || tag === \"td\" || tag === \"th\") && top().t === tag) stack.pop();\n      var el = { t: tag, a: attrs, x: \"\", c: [] };\n      if (!DROP[tag]) { top().c.push(el); count++; }\n      if (!VOID[tag] && !selfClose) stack.push(el);\n    }\n    return root;\n  }\n  // Works without await; awaiting it gives the same document.\n  function parseHtml(html) {\n    var doc = new HDocument(syncParse(html));\n    var ready = new HDocument(null);\n    ready._root = doc._root;\n    Object.defineProperty(doc, \"then\", { value: function (ok) { return Promise.resolve(ready).then(ok); }, enumerable: false });\n    return doc;\n  }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"])));
+  var EPILOGUE = String.raw(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n      ;return (typeof plugin !== \"undefined\") ? plugin : undefined;\n    })(harbor);\n    if (!provider) provider = ret;\n    if (!provider || typeof provider !== \"object\") throw new Error(\"plugin registered no provider\");\n    safePost({ type: \"ready\", meta: { id: String(provider.id), name: String(provider.name) } });\n  } catch (err) {\n    safePost({ type: \"initError\", error: String(err && err.message ? err.message : err) });\n  }\n})();\n"])));
+  var workers = {};
+  var order = [];
+  function stop2(id) {
+    var w = workers[id];
+    if (w) {
+      try {
+        w.worker.terminate();
+      } catch (e) {}
+      Object.keys(w.calls || {}).forEach(function (cid) {
+        clearTimeout(w.calls[cid].timer);
+        w.calls[cid].reject(new Error("stopped"));
+      });
+      w.calls = {};
+      if (w.url) URL.revokeObjectURL(w.url);
+      delete workers[id];
+    }
+    order = order.filter(function (x) {
+      return x !== id;
+    });
+  }
+  function start2(p) {
+    var blob = new Blob([PRELUDE, p.source, EPILOGUE], {
+      type: "text/javascript"
+    });
+    var url2 = URL.createObjectURL(blob);
+    var worker = new Worker(url2);
+    var w = {
+      worker: worker,
+      url: url2,
+      calls: {},
+      seq: 0,
+      origin: "",
+      ready: null
+    };
+    w.ready = new Promise(function (resolve2, reject) {
+      var timer = setTimeout(function () {
+        return reject(new Error("plugin did not start"));
+      }, 15e3);
+      w.onReady = function (ok, err) {
+        clearTimeout(timer);
+        if (ok) resolve2();else reject(new Error(err || "plugin failed"));
+      };
+    });
+    worker.onmessage = function (e) {
+      var m = e.data || {};
+      if (m.type === "ready") return w.onReady(true);
+      if (m.type === "initError") return w.onReady(false, m.error);
+      if (m.type === "result" || m.type === "error") {
+        var c = w.calls[m.id];
+        if (!c) return;
+        delete w.calls[m.id];
+        clearTimeout(c.timer);
+        return m.type === "result" ? c.resolve(m.value) : c.reject(new Error(m.error));
+      }
+      if (m.type === "http") {
+        var u = String(m.payload && m.payload.url || "");
+        var o = m.payload && m.payload.opts || {};
+        if (!/^https?:\/\//i.test(u)) return worker.postMessage({
+          type: "bridgeResult",
+          id: m.id,
+          ok: false,
+          error: "bad url"
+        });
+        var mm = /^(https?:\/\/[^/]+)/i.exec(u);
+        if (mm) w.origin = mm[1] + "/";
+        httpRaw(u, o).then(function (r) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: true,
+            value: r
+          });
+        }, function (err) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: false,
+            error: String(err && err.message || err)
+          });
+        });
+        return;
+      }
+      if (m.type === "parse") {
+        var tree = null;
+        try {
+          tree = parseHtml(m.payload && m.payload.html);
+        } catch (err) {
+          return worker.postMessage({
+            type: "bridgeResult",
+            id: m.id,
+            ok: false,
+            error: "parse failed"
+          });
+        }
+        return worker.postMessage({
+          type: "bridgeResult",
+          id: m.id,
+          ok: true,
+          value: tree
+        });
+      }
+    };
+    worker.onerror = function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      w.onReady(false, e && e.message || "worker error");
+    };
+    workers[p.id] = w;
+    order.push(p.id);
+    while (order.length > 3) stop2(order[0]);
+    return w;
+  }
+  function ready(id) {
+    var p = installed().find(function (x) {
+      return x.id === id;
+    });
+    if (!p) return Promise.reject(new Error("not installed"));
+    try {
+      return (workers[id] || start2(p)).ready;
+    } catch (e) {
+      return Promise.reject(new Error("worker: " + (e && e.message || e)));
+    }
+  }
+  function workerCheck() {
+    return new Promise(function (resolve2, reject) {
+      var url2 = "";
+      try {
+        url2 = URL.createObjectURL(new Blob(['postMessage("ok")'], {
+          type: "text/javascript"
+        }));
+        var w = new Worker(url2);
+        var timer = setTimeout(function () {
+          return reject(new Error("no answer"));
+        }, 5e3);
+        w.onmessage = function () {
+          return clearTimeout(timer), w.terminate(), URL.revokeObjectURL(url2), resolve2();
+        };
+        w.onerror = function (e) {
+          return clearTimeout(timer), reject(new Error(e && e.message || "blocked"));
+        };
+      } catch (e) {
+        reject(new Error((e && e.name ? e.name + ": " : "") + (e && e.message || e)));
+      }
+    });
+  }
+  function call3(id, method, args, timeout) {
+    var p = installed().find(function (x) {
+      return x.id === id;
+    });
+    if (!p) return Promise.reject(new Error("not installed"));
+    var w;
+    try {
+      w = workers[id] || start2(p);
+    } catch (e) {
+      return Promise.reject(new Error("worker: " + (e && e.message || e)));
+    }
+    order = order.filter(function (x) {
+      return x !== id;
+    }).concat([id]);
+    return w.ready.then(function () {
+      return new Promise(function (resolve2, reject) {
+        var cid = "c" + ++w.seq;
+        w.calls[cid] = {
+          resolve: resolve2,
+          reject: reject,
+          timer: setTimeout(function () {
+            return delete w.calls[cid], reject(new Error("timeout"));
+          }, timeout || 25e3)
+        };
+        w.worker.postMessage({
+          type: "call",
+          id: cid,
+          method: method,
+          args: args || []
+        });
+      });
+    });
+  }
+  function refererOf(id) {
+    var w = workers[id];
+    return w && w.origin || "";
+  }
+  var str = function str(v) {
+    return typeof v === "string" ? v : void 0;
+  };
+  function toSummary(o) {
+    if (!o || _typeof(o) !== "object" || !str(o.id) || !str(o.title)) return null;
+    return {
+      id: o.id,
+      title: o.title,
+      cover: /^https?:\/\//i.test(o.cover || "") ? o.cover : "",
+      description: str(o.description) || "",
+      status: str(o.status) || "",
+      author: str(o.author) || "",
+      year: typeof o.year === "number" ? o.year : null
+    };
+  }
+  function popular(id, offset) {
+    return call3(id, "popular", [offset || 0, void 0], 25e3).then(function (v) {
+      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
+    });
+  }
+  function search2(id, query, offset) {
+    return call3(id, "search", [query, offset || 0, void 0], 25e3).then(function (v) {
+      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
+    });
+  }
+  function _detail(id, mangaId) {
+    return call3(id, "detail", [mangaId], 25e3).then(toSummary);
+  }
+  function cleanTitle(title, num) {
+    if (!title || !num) return title || "";
+    var rest = title.replace(/^\s*(ch(apter)?\.?|الفصل|فصل)?\s*/i, "");
+    if (rest.indexOf(num) !== 0) return title;
+    return rest.slice(num.length).replace(/^[\s\-–—:.·|]+/, "").replace(/[.\s]+$/, "");
+  }
+  function _chapters(id, mangaId) {
+    return call3(id, "chapters", [mangaId], 3e4).then(function (v) {
+      return (Array.isArray(v) ? v : []).filter(function (c) {
+        return c && str(c.id);
+      }).slice(0, 5e3).map(function (c) {
+        return {
+          id: c.id,
+          chapter: str(c.chapter) || null,
+          title: cleanTitle(str(c.title), str(c.chapter)),
+          lang: str(c.language) || "",
+          pages: typeof c.pages === "number" ? c.pages : 0,
+          scanlator: str(c.group) || ""
+        };
+      });
+    });
+  }
+  function pages(id, chapterId) {
+    return call3(id, "pageUrls", [chapterId], 35e3).then(function (v) {
+      var ref = refererOf(id);
+      return (Array.isArray(v) ? v : []).map(function (x) {
+        var u = typeof x === "string" ? x : x && (x.url || x.imageUrl || x.src || x.img || x.image);
+        if (!/^https?:\/\//i.test(u || "")) return null;
+        var h2 = x && _typeof(x) === "object" && x.headers ? x.headers : {};
+        var r = h2.Referer || h2.referer || ref;
+        return imageUrl(String(u).trim(), r);
+      }).filter(Boolean);
+    });
+  }
+
+  // src/js/lib/titles.js
+  function norm(x) {
+    return String(x || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\(\s*\d{4}[^)]*\)/g, " ").replace(/[×✕]/g, "x").replace(/[^a-z0-9؀-ۿ]+/g, " ").replace(/\b(the|a|an)\b/g, " ").replace(/\s+/g, " ").trim();
+  }
+  function likeness(a, b) {
+    var x = norm(a);
+    var y = norm(b);
+    if (!x || !y) return 0;
+    if (x === y) return 1;
+    var A = x.split(" ");
+    var B = y.split(" ");
+    var inB = A.filter(function (w) {
+      return B.indexOf(w) >= 0;
+    }).length;
+    return 0.9 * inB / (A.length + B.length - inB);
+  }
+
+  // src/js/lib/episodeMap.js
+  var A2M = "https://anime2manga.net/series-data.js";
+  var MEG = "https://mangaepisodeguide.com/data/";
+  var WEEK = 7 * 864e5;
+  function getText3(url2) {
+    return httpRaw(url2, {
+      timeoutMs: 25e3
+    }).then(function (r) {
+      if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "?"));
+      return r.body || "";
+    });
+  }
+  function jsonAt(text, from) {
+    var start4 = text.indexOf("{", from);
+    if (start4 < 0) return null;
+    var depth = 0;
+    var inStr = false;
+    for (var i = start4; i < text.length; i++) {
+      var c = text.charAt(i);
+      if (inStr) {
+        if (c === "\\") i++;else if (c === '"') inStr = false;
+      } else if (c === '"') inStr = true;else if (c === "{") depth++;else if (c === "}" && --depth === 0) return JSON.parse(text.slice(start4, i + 1));
+    }
+    return null;
+  }
+  var nums = function nums(list2) {
+    return (list2 || []).map(function (x) {
+      return parseFloat(String(x).replace(/[^\d.]/g, ""));
+    }).filter(function (n) {
+      return isFinite(n);
+    });
+  };
+  function toRows(list2) {
+    var last2 = 0;
+    return list2.map(function (e) {
+      var ch = e[1];
+      if (e[2] || !ch.length) return [e[0], 0, 0, 1];
+      var ahead = ch.filter(function (n) {
+        return n >= last2;
+      });
+      var first = ahead.length ? Math.min.apply(null, ahead) : Math.min.apply(null, ch);
+      var end = Math.max.apply(null, ch);
+      last2 = Math.max(last2, end);
+      return [e[0], first, end, 0];
+    });
+  }
+  function rangeOf(x) {
+    var m = /(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)/.exec(String(x));
+    if (m) return [+m[1], +m[2]];
+    return nums([x]);
+  }
+  function exactTables() {
+    var c = get("epmapExact", null);
+    if (c && c.at > Date.now() - WEEK) return Promise.resolve(c.t);
+    return getText3(A2M).then(function (js) {
+      var all2 = jsonAt(js, js.indexOf("SERIES")) || {};
+      var t2 = {};
+      Object.keys(all2).forEach(function (k) {
+        var s = all2[k] || {};
+        var rows2 = toRows((s.EPISODES || []).map(function (e) {
+          return [+e.episode, nums(e.chapters), e.filler];
+        }));
+        if (rows2.length && s.name) t2[s.name] = rows2;
+      });
+      set("epmapExact", {
+        at: Date.now(),
+        t: t2
+      });
+      return t2;
+    });
+  }
+  function arcIndex() {
+    var c = get("epmapArcIdx", null);
+    if (c && c.at > Date.now() - WEEK) return Promise.resolve(c.list);
+    return getText3(MEG + "_index.json").then(function (txt) {
+      var list2 = (JSON.parse(txt) || []).filter(function (x) {
+        return x && x.id && x.name && (x.type === "arc" || x.type === "episode");
+      }).map(function (x) {
+        return {
+          id: x.id,
+          name: x.name,
+          type: x.type
+        };
+      });
+      set("epmapArcIdx", {
+        at: Date.now(),
+        list: list2
+      });
+      return list2;
+    });
+  }
+  function arcs(id, type) {
+    var all2 = get("epmapArcs2", {}) || {};
+    if (all2[id] && all2[id].at > Date.now() - WEEK) return Promise.resolve(all2[id].d);
+    return getText3(MEG + encodeURIComponent(id) + ".json").then(function (txt) {
+      var j = JSON.parse(txt) || {};
+      var data = (j.data || []).filter(function (r) {
+        return Array.isArray(r);
+      });
+      var d = type === "episode" ? {
+        kind: "exact",
+        rows: toRows(data.filter(function (r) {
+          return r.length >= 3;
+        }).map(function (r) {
+          return [+r[0], rangeOf(r[2]), r[3] ? 1 : 0];
+        }))
+      } : {
+        kind: "arc",
+        rows: data.filter(function (r) {
+          return r.length >= 5;
+        }).map(function (r) {
+          return [+r[1] || 0, +r[2] || 0, +r[3] || 0, +r[4] || 0, r[5] ? 1 : 0];
+        })
+      };
+      all2[id] = {
+        at: Date.now(),
+        d: d
+      };
+      var keys2 = Object.keys(all2);
+      if (keys2.length > 30) delete all2[keys2[0]];
+      set("epmapArcs2", all2);
+      return d;
+    });
+  }
+  function best(names2, candidates2, getName) {
+    var hit = null;
+    var score = 0;
+    candidates2.forEach(function (c) {
+      var s = Math.max.apply(null, names2.map(function (n) {
+        return likeness(n, getName(c));
+      }));
+      if (s > score) {
+        score = s;
+        hit = c;
+      }
+    });
+    return score >= 0.85 ? hit : null;
+  }
+  function tableFor(names2) {
+    var list2 = (names2 || []).filter(Boolean);
+    if (!list2.length) return Promise.resolve(null);
+    return exactTables().catch(function () {
+      return {};
+    }).then(function (t2) {
+      var name = best(list2, Object.keys(t2), function (x) {
+        return x;
+      });
+      if (name) return {
+        kind: "exact",
+        rows: t2[name]
+      };
+      return arcIndex().then(function (idx) {
+        var s = best(list2, idx, function (x) {
+          return x.name;
+        });
+        return s ? arcs(s.id, s.type).then(function (d) {
+          return d.rows.length ? d : null;
+        }) : null;
+      }).catch(function () {
+        return null;
+      });
+    });
+  }
+  function chapterOf(table, ep) {
+    if (!table) return null;
+    if (table.kind === "exact") {
+      var rows2 = table.rows;
+      var i = rows2.findIndex(function (r) {
+        return r[0] === ep;
+      });
+      if (i < 0) return null;
+      for (var k = i; k >= 0; k--) if (!rows2[k][3]) return k === i ? rows2[k][1] : rows2[k][2];
+      return 1;
+    }
+    var a = table.rows.find(function (r) {
+      return ep >= r[2] && ep < r[2] + r[3];
+    });
+    if (!a) return null;
+    if (a[4]) {
+      var prev = table.rows.filter(function (r) {
+        return !r[4] && r[2] < a[2];
+      }).pop();
+      return prev ? prev[0] + prev[1] - 1 : 1;
+    }
+    return Math.round(a[0] + (ep - a[2]) / Math.max(1, a[3]) * a[1]);
+  }
+  function lastAdapted(table) {
+    if (!table) return null;
+    if (table.kind === "exact") {
+      var r = table.rows.filter(function (x) {
+        return !x[3];
+      }).pop();
+      return r ? [r[0], r[2]] : null;
+    }
+    var a = table.rows.filter(function (x) {
+      return !x[4];
+    }).pop();
+    return a ? [a[2] + a[3] - 1, a[0] + a[1] - 1] : null;
+  }
+  function episodeOf(table, ch) {
+    if (!table) return null;
+    if (table.kind === "exact") {
+      var r = table.rows.find(function (x) {
+        return !x[3] && ch >= x[1] && ch <= x[2];
+      }) || table.rows.find(function (x) {
+        return !x[3] && x[1] >= ch;
+      });
+      return r ? r[0] : null;
+    }
+    var a = table.rows.find(function (r) {
+      return !r[4] && ch >= r[0] && ch < r[0] + r[1];
+    });
+    if (!a) return null;
+    return Math.max(a[2], Math.round(a[2] + (ch - a[0]) / Math.max(1, a[1]) * a[3]));
+  }
+
   // src/js/lib/animeLink.js
   var API4 = "https://graphql.anilist.co";
   var ARM3 = "https://arm.haglund.dev/api/v2/ids?source=";
@@ -14097,6 +14793,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   };
   var isTV = function isTV(n) {
     return n.format === "TV" || n.format === "TV_SHORT" || n.format === "ONA";
+  };
+  var namesOf = function namesOf(nodes) {
+    var out = [];
+    nodes.forEach(function (n) {
+      if (!n || !n.title) return;
+      out.push(n.title.english, n.title.romaji);
+      (n.synonyms || []).forEach(function (x) {
+        return out.push(x);
+      });
+    });
+    return out.filter(Boolean).slice(0, 12);
   };
   function anilistIdOf(stremioId) {
     var s = String(stremioId || "");
@@ -14157,11 +14864,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         var ep = before + Math.max(1, episode || 1);
         var per = manga.chapters && total ? manga.chapters / total : FALLBACK_CH_PER_EP;
-        return {
+        var guess = {
           manga: manga,
           chapter: Math.max(1, Math.round(ep * per)),
           approx: true
         };
+        var viaTable = function viaTable(names2, n) {
+          return tableFor(names2).then(function (tb) {
+            var ch = chapterOf(tb, n);
+            return ch ? {
+              manga: manga,
+              chapter: ch,
+              approx: tb.kind !== "exact"
+            } : null;
+          });
+        };
+        return (cur.id !== seasons[0].id ? viaTable(namesOf([cur]), Math.max(1, episode || 1)) : Promise.resolve(null)).then(function (r) {
+          return r || viaTable(namesOf([seasons[0], manga]), ep);
+        }).then(function (r) {
+          return r || guess;
+        }).catch(function () {
+          return guess;
+        });
       });
     });
   }
@@ -14174,17 +14898,48 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return a + (s.episodes || 0);
         }, 0);
         var per = manga.chapters && total ? manga.chapters / total : FALLBACK_CH_PER_EP;
-        var ep = Math.max(1, Math.round((chapter || 1) / per));
-        for (var i = 0; i < seasons.length; i++) {
-          var n = seasons[i].episodes || 0;
-          if (ep <= n || i === seasons.length - 1) return {
-            anime: seasons[i],
-            episode: Math.min(ep, n || ep),
-            approx: true
-          };
-          ep -= n;
-        }
-        return null;
+        var place = function place(abs, approx) {
+          var ep = abs;
+          for (var i = 0; i < seasons.length; i++) {
+            var n = seasons[i].episodes || 0;
+            if (ep <= n || i === seasons.length - 1) return {
+              anime: seasons[i],
+              episode: Math.max(1, Math.min(ep, n || ep)),
+              approx: approx
+            };
+            ep -= n;
+          }
+          return null;
+        };
+        var guess = place(Math.max(1, Math.round((chapter || 1) / per)), true);
+        var ch = Math.floor(chapter || 1);
+        var _later = function later(i) {
+          if (i >= seasons.length) return Promise.resolve(null);
+          return tableFor(namesOf([seasons[i]])).then(function (tb) {
+            var e = episodeOf(tb, ch);
+            return e ? {
+              anime: seasons[i],
+              episode: e,
+              approx: tb.kind !== "exact"
+            } : _later(i + 1);
+          });
+        };
+        return tableFor(namesOf([seasons[0], manga])).then(function (tb) {
+          var abs = episodeOf(tb, ch);
+          if (abs) return place(abs, tb.kind !== "exact");
+          return _later(1).then(function (r) {
+            if (r) return r;
+            var last2 = lastAdapted(tb);
+            return last2 && ch > last2[1] ? Object.assign(place(last2[0], false), {
+              ahead: true,
+              lastChapter: last2[1]
+            }) : null;
+          });
+        }).then(function (r) {
+          return r || guess;
+        }).catch(function () {
+          return guess;
+        });
       });
     });
   }
@@ -14216,7 +14971,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   var idCache = {};
-  var norm = function norm(x) {
+  var norm2 = function norm2(x) {
     return String(x || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
   };
   function names(m) {
@@ -14229,12 +14984,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return out.push(o[k]);
       });
     });
-    return out.map(norm).filter(Boolean);
+    return out.map(norm2).filter(Boolean);
   }
   function find2(anilistId, titles) {
     if (idCache[anilistId]) return idCache[anilistId];
     var list2 = (titles || []).filter(Boolean);
-    var wanted = list2.map(norm);
+    var wanted = list2.map(norm2);
     var fallback = null;
     var _tryTitle = function tryTitle(i) {
       if (i >= list2.length) return Promise.resolve(fallback);
@@ -14264,7 +15019,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     return p;
   }
-  function chapters(mangaId, langs) {
+  function chapters2(mangaId, langs) {
     var q2 = (langs || ["en"]).map(function (l) {
       return "&translatedLanguage%5B%5D=" + l;
     }).join("");
@@ -14295,7 +15050,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return out;
     });
   }
-  function pages(chapterId) {
+  function pages2(chapterId) {
     return md("at-home/server/" + chapterId).then(function (r) {
       var c = r && r.chapter;
       if (!c || !r.baseUrl) throw new Error("MangaDex");
@@ -14543,7 +15298,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       pages4 = [];
       img3.removeAttribute("src");
       say(t("Carregando..."));
-      (opts.pagesFn || pages)(chapter().id).then(function (list2) {
+      (opts.pagesFn || pages2)(chapter().id).then(function (list2) {
         if (my !== token || !alive) return;
         if (!list2.length) return say(t("Este capítulo não tem páginas."));
         pages4 = list2;
@@ -15229,467 +15984,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
-  // src/js/api/plugins.js
-  var SVC = "http://127.0.0.1:" + PORT;
-  var REPOS = "mangaRepos";
-  var PLUGINS = "mangaPlugins";
-  var repos = function repos() {
-    return get(REPOS, []) || [];
-  };
-  var installed = function installed() {
-    return get(PLUGINS, []) || [];
-  };
-  function saveInstalled(list2) {
-    set(PLUGINS, list2);
-  }
-  function addRepo(url2) {
-    var r = repos().filter(function (x) {
-      return x !== url2;
-    });
-    r.push(url2);
-    set(REPOS, r);
-  }
-  function removeRepo(url2) {
-    set(REPOS, repos().filter(function (x) {
-      return x !== url2;
-    }));
-  }
-  function uninstall(id) {
-    saveInstalled(installed().filter(function (p) {
-      return p.id !== id;
-    }));
-    stop2(id);
-  }
-  function httpRaw(url2, opts) {
-    var o = opts || {};
-    return request("POST", SVC + "/api/phttp", {
-      url: url2,
-      method: o.method,
-      headers: o.headers,
-      body: o.body,
-      responseType: o.responseType,
-      timeoutMs: o.timeoutMs,
-      redirect: o.redirect
-    }, {
-      timeout: (o.timeoutMs || 2e4) + 5e3,
-      quiet: true
-    }).catch(function () {
-      return direct(url2, o);
-    });
-  }
-  function serviceOnly(url2) {
-    return request("POST", SVC + "/api/phttp", {
-      url: url2
-    }, {
-      timeout: 2e4,
-      quiet: true
-    }).catch(function (e) {
-      throw new Error(e && e.status === 404 ? "old TV service (no /api/phttp)" : e && e.message || "service");
-    });
-  }
-  function direct(url2, o) {
-    return new Promise(function (resolve2, reject) {
-      var x = new XMLHttpRequest();
-      x.open(o.method || "GET", url2, true);
-      x.timeout = o.timeoutMs || 2e4;
-      x.onload = function () {
-        return resolve2({
-          status: x.status,
-          ok: x.status >= 200 && x.status < 300,
-          headers: {
-            "content-type": x.getResponseHeader("content-type") || ""
-          },
-          body: x.responseText,
-          url: url2
-        });
-      };
-      x.onerror = x.ontimeout = function () {
-        return reject(new Error(serviceVersion() && serviceVersion() < 2 ? "old TV service: restart the TV" : "network"));
-      };
-      x.send(typeof o.body === "string" ? o.body : null);
-    });
-  }
-  function getText2(url2) {
-    return httpRaw(url2, {}).then(function (r) {
-      if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "?"));
-      return r.body;
-    });
-  }
-  function imageUrl(url2, referer) {
-    if (!url2) return "";
-    return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "");
-  }
-  function classify(parsed) {
-    if (parsed && Array.isArray(parsed.plugins)) return "harbor";
-    var arr = Array.isArray(parsed) ? parsed : parsed && (parsed.sources || parsed.mangayomiSources);
-    if (!Array.isArray(arr) || !arr.length) return "unknown";
-    if (arr.some(function (e) {
-      return e && typeof e.apk === "string";
-    })) return "tachiyomi";
-    if (arr.some(function (e) {
-      return e && (e.sourceCodeUrl || e.pkgPath);
-    })) return "mangayomi";
-    if (arr.some(function (e) {
-      return e && (e.file || e.downloadURL) && /\.aix/i.test(e.file || e.downloadURL || "");
-    })) return "aidoku";
-    if (parsed && parsed.info && Array.isArray(parsed.sources)) return "aidoku";
-    return "unknown";
-  }
-  function fetchRepo(url2) {
-    return getText2(url2).then(function (text) {
-      var parsed = null;
-      try {
-        parsed = JSON.parse(text);
-      } catch (e) {
-        throw new Error("not json");
-      }
-      var kind = classify(parsed);
-      if (kind !== "harbor") return {
-        kind: kind,
-        name: parsed && parsed.name || "",
-        plugins: []
-      };
-      var plugins = parsed.plugins.filter(function (p) {
-        return p && typeof p.id === "string" && typeof p.name === "string" && typeof p.entry === "string";
-      }).map(function (p) {
-        return {
-          id: p.id,
-          name: p.name,
-          version: String(p.version || "0"),
-          lang: String(p.lang || ""),
-          nsfw: p.nsfw === true,
-          icon: typeof p.icon === "string" ? p.icon : "",
-          entry: p.entry
-        };
-      });
-      return {
-        kind: kind,
-        name: String(parsed.name || ""),
-        plugins: plugins
-      };
-    });
-  }
-  function resolveUrl(base3, rel) {
-    if (/^https?:\/\//i.test(rel)) return rel;
-    return base3.replace(/[^/]*$/, "") + rel.replace(/^\.\//, "");
-  }
-  function install2(repoUrl, man) {
-    return getText2(resolveUrl(repoUrl, man.entry)).then(function (source) {
-      if (source.length > 2 * 1024 * 1024) throw new Error("too big");
-      var list2 = installed().filter(function (p) {
-        return p.id !== man.id;
-      });
-      list2.push({
-        id: man.id,
-        name: man.name,
-        version: man.version,
-        lang: man.lang,
-        nsfw: man.nsfw,
-        icon: man.icon,
-        repoUrl: repoUrl,
-        entry: man.entry,
-        source: source
-      });
-      saveInstalled(list2);
-      stop2(man.id);
-      return man;
-    });
-  }
-  var DROP = {
-    script: 1,
-    style: 1,
-    noscript: 1,
-    template: 1,
-    iframe: 1,
-    object: 1,
-    embed: 1,
-    link: 1,
-    meta: 1
-  };
-  function serialize(el, depth, budget) {
-    var a = {};
-    for (var i = 0; i < el.attributes.length; i++) a[el.attributes[i].name] = el.attributes[i].value;
-    var c = [];
-    if (depth < 200) {
-      var kids2 = el.childNodes;
-      for (var _i3 = 0; _i3 < kids2.length && budget.n < 6e4; _i3++) {
-        var k = kids2[_i3];
-        if (k.nodeType === 1) {
-          if (DROP[k.tagName.toLowerCase()]) continue;
-          budget.n++;
-          c.push(serialize(k, depth + 1, budget));
-        } else if (k.nodeType === 3 && k.nodeValue && k.nodeValue.trim()) {
-          budget.n++;
-          c.push({
-            x: k.nodeValue
-          });
-        }
-      }
-    }
-    return {
-      t: el.tagName.toLowerCase(),
-      a: a,
-      x: "",
-      c: c
-    };
-  }
-  function parseHtml(html) {
-    var doc = new DOMParser().parseFromString(String(html || ""), "text/html");
-    return doc.body ? serialize(doc.body, 0, {
-      n: 0
-    }) : {
-      t: "body",
-      a: {},
-      x: "",
-      c: []
-    };
-  }
-  var PRELUDE = String.raw(_templateObject || (_templateObject = _taggedTemplateLiteral(["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/s*>s*/g, \" > \").trim().split(/s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  // HTML parser inside the sandbox, so harbor.parseHtml() works both ways plugins use it:\n  // right away (doc.querySelectorAll(...)) and with await. Tolerant, like a browser for normal pages.\n  var VOID = { area: 1, base: 1, br: 1, col: 1, embed: 1, hr: 1, img: 1, input: 1, link: 1, meta: 1, source: 1, track: 1, wbr: 1 };\n  var RAW = { script: 1, style: 1, textarea: 1, title: 1 };\n  var DROP = { script: 1, style: 1, noscript: 1, template: 1 };\n  var ENT = { amp: \"&\", lt: \"<\", gt: \">\", quot: '\"', apos: \"'\", nbsp: \"\xA0\", hellip: \"\u2026\", mdash: \"\u2014\", ndash: \"\u2013\", rsquo: \"\u2019\", lsquo: \"\u2018\", rdquo: \"\u201D\", ldquo: \"\u201C\", copy: \"\xA9\" };\n  function decode(t) {\n    return t.indexOf(\"&\") < 0 ? t : t.replace(/&(#x[0-9a-f]+|#d+|[a-z]+);/gi, function (m, e) {\n      if (e.charAt(0) === \"#\") {\n        var n = e.charAt(1) === \"x\" || e.charAt(1) === \"X\" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);\n        return isFinite(n) ? String.fromCodePoint ? String.fromCodePoint(n) : String.fromCharCode(n) : m;\n      }\n      var v = ENT[e.toLowerCase()];\n      return v === undefined ? m : v;\n    });\n  }\n  function syncParse(html) {\n    html = String(html || \"\");\n    var root = { t: \"body\", a: {}, x: \"\", c: [] };\n    var stack = [root];\n    var i = 0, n = html.length, count = 0;\n    var top = function () { return stack[stack.length - 1]; };\n    while (i < n && count < 80000) {\n      var lt = html.indexOf(\"<\", i);\n      if (lt < 0) lt = n;\n      if (lt > i) {\n        var txt = html.slice(i, lt);\n        top().c.push({ x: txt.trim() ? decode(txt) : \" \" }); count++;\n      }\n      if (lt >= n) break;\n      if (html.substr(lt, 4) === \"<!--\") { var ce = html.indexOf(\"-->\", lt + 4); i = ce < 0 ? n : ce + 3; continue; }\n      if (html.charAt(lt + 1) === \"!\" || html.charAt(lt + 1) === \"?\") { var de = html.indexOf(\">\", lt); i = de < 0 ? n : de + 1; continue; }\n      if (html.charAt(lt + 1) === \"/\") {\n        var ge = html.indexOf(\">\", lt);\n        var name = html.slice(lt + 2, ge < 0 ? n : ge).trim().toLowerCase();\n        for (var k = stack.length - 1; k > 0; k--) if (stack[k].t === name) { stack.length = k; break; }\n        i = ge < 0 ? n : ge + 1;\n        continue;\n      }\n      var m = /^<([a-zA-Z][a-zA-Z0-9:-]*)/.exec(html.slice(lt, lt + 64));\n      if (!m) { top().c.push({ x: \"<\" }); i = lt + 1; continue; }\n      var tag = m[1].toLowerCase();\n      var j = lt + m[0].length, attrs = {}, selfClose = false;\n      while (j < n) {\n        while (j < n && /s/.test(html.charAt(j))) j++;\n        var ch = html.charAt(j);\n        if (ch === \">\") { j++; break; }\n        if (ch === \"/\" && html.charAt(j + 1) === \">\") { selfClose = true; j += 2; break; }\n        var am = /^[^s=>/]+/.exec(html.slice(j, j + 256));\n        if (!am) { j++; continue; }\n        var an = am[0].toLowerCase(); j += am[0].length;\n        while (j < n && /s/.test(html.charAt(j))) j++;\n        var av = \"\";\n        if (html.charAt(j) === \"=\") {\n          j++;\n          while (j < n && /s/.test(html.charAt(j))) j++;\n          var q = html.charAt(j);\n          if (q === '\"' || q === \"'\") { var qe = html.indexOf(q, j + 1); av = html.slice(j + 1, qe < 0 ? n : qe); j = qe < 0 ? n : qe + 1; }\n          else { var um = /^[^s>]*/.exec(html.slice(j, j + 2048)); av = um[0]; j += av.length; }\n        }\n        if (!(an in attrs)) attrs[an] = decode(av);\n      }\n      i = j;\n      if (RAW[tag]) {\n        var re = html.toLowerCase().indexOf(\"</\" + tag, i);\n        var body = html.slice(i, re < 0 ? n : re);\n        i = re < 0 ? n : html.indexOf(\">\", re) + 1 || n;\n        if (!DROP[tag]) { var el0 = { t: tag, a: attrs, x: \"\", c: body.trim() ? [{ x: decode(body) }] : [] }; top().c.push(el0); count++; }\n        continue;\n      }\n      if ((tag === \"li\" || tag === \"option\" || tag === \"p\" || tag === \"tr\" || tag === \"td\" || tag === \"th\") && top().t === tag) stack.pop();\n      var el = { t: tag, a: attrs, x: \"\", c: [] };\n      if (!DROP[tag]) { top().c.push(el); count++; }\n      if (!VOID[tag] && !selfClose) stack.push(el);\n    }\n    return root;\n  }\n  // Works without await; awaiting it gives the same document.\n  function parseHtml(html) {\n    var doc = new HDocument(syncParse(html));\n    var ready = new HDocument(null);\n    ready._root = doc._root;\n    Object.defineProperty(doc, \"then\", { value: function (ok) { return Promise.resolve(ready).then(ok); }, enumerable: false });\n    return doc;\n  }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"], ["(function () {\n  \"use strict\";\n  var post = self.postMessage.bind(self);\n  var pending = Object.create(null);\n  var seq = 0;\n  var provider = null;\n  var BLOCKED = [\"fetch\", \"XMLHttpRequest\", \"WebSocket\", \"EventSource\", \"importScripts\", \"indexedDB\", \"caches\", \"Worker\", \"SharedWorker\", \"BroadcastChannel\", \"Notification\", \"navigator\", \"Request\", \"Response\", \"MessageChannel\"];\n  function safePost(m) { try { post(m); return true; } catch (e) { return false; } }\n  function bridge(kind, payload) {\n    var id = \"b\" + (++seq);\n    return new Promise(function (resolve, reject) { pending[id] = { resolve: resolve, reject: reject }; safePost({ type: kind, id: id, payload: payload }); });\n  }\n  function normOpts(opts) {\n    opts = opts && typeof opts === \"object\" ? opts : {};\n    var headers = {}, src = opts.headers;\n    if (src && typeof src === \"object\") for (var k in src) if (Object.prototype.hasOwnProperty.call(src, k)) headers[String(k)] = String(src[k]);\n    var rt = opts.responseType; if (rt !== \"json\" && rt !== \"base64\") rt = \"text\";\n    return { method: opts.method ? String(opts.method) : \"GET\", headers: headers, body: typeof opts.body === \"string\" ? opts.body : undefined, responseType: rt, redirect: opts.redirect === \"manual\" ? \"manual\" : undefined, timeoutMs: typeof opts.timeoutMs === \"number\" ? opts.timeoutMs : undefined };\n  }\n  function httpCall(url, opts) {\n    var norm = normOpts(opts);\n    return bridge(\"http\", { url: String(url), opts: norm }).then(function (res) {\n      if (norm.responseType === \"json\") { try { return JSON.parse(res.body); } catch (e) { return null; } }\n      return res;\n    });\n  }\n  function isEl(n) { return n != null && typeof n === \"object\" && typeof n.t === \"string\"; }\n  function children(n) { return isEl(n) && Array.isArray(n.c) ? n.c : []; }\n  function classList(n) { var c = n.a && n.a[\"class\"]; return c ? String(c).split(/\\s+/).filter(Boolean) : []; }\n  function collectText(n) { if (!isEl(n)) return typeof n.x === \"string\" ? n.x : \"\"; var k = children(n), s = \"\"; for (var i = 0; i < k.length; i++) s += collectText(k[i]); return s; }\n  function descendants(n, out) { var k = children(n); for (var i = 0; i < k.length; i++) if (isEl(k[i])) { out.push(k[i]); descendants(k[i], out); } return out; }\n  function elementChildren(n) { var k = children(n), out = []; for (var i = 0; i < k.length; i++) if (isEl(k[i])) out.push(k[i]); return out; }\n  function parseAttr(inner) {\n    var ops = [\"*=\", \"^=\", \"$=\", \"~=\", \"=\"];\n    for (var k = 0; k < ops.length; k++) { var idx = inner.indexOf(ops[k]); if (idx >= 0) return { name: inner.slice(0, idx).trim().toLowerCase(), op: ops[k], value: inner.slice(idx + ops[k].length).trim().replace(/^[\"']|[\"']$/g, \"\") }; }\n    return { name: inner.trim().toLowerCase(), op: null, value: null };\n  }\n  function parseCompound(sel) {\n    var out = { tag: null, id: null, classes: [], attrs: [] }, i = 0, word = /[A-Za-z0-9_-]/;\n    while (i < sel.length) {\n      var ch = sel.charAt(i);\n      if (ch === \"*\") { i++; continue; }\n      if (ch === \"#\") { i++; var id = \"\"; while (i < sel.length && word.test(sel.charAt(i))) id += sel.charAt(i++); if (id) out.id = id; continue; }\n      if (ch === \".\") { i++; var cl = \"\"; while (i < sel.length && word.test(sel.charAt(i))) cl += sel.charAt(i++); if (cl) out.classes.push(cl); continue; }\n      if (ch === \"[\") { var end = sel.indexOf(\"]\", i); if (end < 0) break; out.attrs.push(parseAttr(sel.slice(i + 1, end))); i = end + 1; continue; }\n      if (word.test(ch)) { var t = \"\"; while (i < sel.length && word.test(sel.charAt(i))) t += sel.charAt(i++); out.tag = t.toLowerCase(); continue; }\n      i++;\n    }\n    return out;\n  }\n  function parseGroup(g) {\n    var toks = g.replace(/\\s*>\\s*/g, \" > \").trim().split(/\\s+/).filter(Boolean), steps = [], comb = \"descendant\";\n    for (var i = 0; i < toks.length; i++) { if (toks[i] === \">\") { comb = \"child\"; continue; } steps.push({ sel: parseCompound(toks[i]), combinator: comb }); comb = \"descendant\"; }\n    return steps;\n  }\n  function matchesSimple(n, s) {\n    if (!isEl(n)) return false;\n    if (s.tag && s.tag !== \"*\" && n.t.toLowerCase() !== s.tag) return false;\n    if (s.id && (n.a ? n.a.id : undefined) !== s.id) return false;\n    if (s.classes.length) { var cls = classList(n); for (var i = 0; i < s.classes.length; i++) if (cls.indexOf(s.classes[i]) < 0) return false; }\n    for (var j = 0; j < s.attrs.length; j++) {\n      var a = s.attrs[j], av = n.a ? n.a[a.name] : undefined;\n      if (av == null) return false; av = String(av);\n      if (a.op === null) continue;\n      if (a.op === \"=\" && av !== a.value) return false;\n      if (a.op === \"*=\" && av.indexOf(a.value) < 0) return false;\n      if (a.op === \"^=\" && av.slice(0, a.value.length) !== a.value) return false;\n      if (a.op === \"$=\" && av.slice(av.length - a.value.length) !== a.value) return false;\n      if (a.op === \"~=\" && av.split(/\\s+/).indexOf(a.value) < 0) return false;\n    }\n    return true;\n  }\n  function dedupe(arr) { var out = []; for (var i = 0; i < arr.length; i++) if (out.indexOf(arr[i]) < 0) out.push(arr[i]); return out; }\n  function matchSteps(root, steps) {\n    var cur = [root];\n    for (var s = 0; s < steps.length; s++) {\n      var st = steps[s], next = [];\n      for (var c = 0; c < cur.length; c++) { var pool = st.combinator === \"child\" ? elementChildren(cur[c]) : descendants(cur[c], []); for (var p = 0; p < pool.length; p++) if (matchesSimple(pool[p], st.sel)) next.push(pool[p]); }\n      cur = dedupe(next); if (!cur.length) break;\n    }\n    return cur;\n  }\n  function runQuery(root, selector, first) {\n    var groups = String(selector).split(\",\"), results = [];\n    for (var g = 0; g < groups.length; g++) { var gr = groups[g].trim(); if (!gr) continue; var steps = parseGroup(gr); if (!steps.length) continue; var m = matchSteps(root, steps); for (var k = 0; k < m.length; k++) results.push(m[k]); if (first && results.length) break; }\n    results = dedupe(results);\n    return first ? results.slice(0, 1) : results;\n  }\n  function HElement(n) { this._node = n; }\n  HElement.prototype.text = function () { return collectText(this._node).replace(/\\s+/g, \" \").trim(); };\n  HElement.prototype.attr = function (name) { var v = this._node.a ? this._node.a[String(name)] : undefined; return v == null ? null : String(v); };\n  HElement.prototype.getAttribute = HElement.prototype.attr;\n  HElement.prototype.querySelector = function (sel) { var r = runQuery(this._node, sel, true); return r.length ? new HElement(r[0]) : null; };\n  HElement.prototype.querySelectorAll = function (sel) { return runQuery(this._node, sel, false).map(function (n) { return new HElement(n); }); };\n  function HDocument(tree) { this._root = { t: \"#document\", a: {}, x: \"\", c: tree ? [tree] : [] }; }\n  HDocument.prototype.querySelector = HElement.prototype.querySelector;\n  HDocument.prototype.querySelectorAll = HElement.prototype.querySelectorAll;\n  Object.defineProperty(HDocument.prototype, \"_node\", { get: function () { return this._root; } });\n  // HTML parser inside the sandbox, so harbor.parseHtml() works both ways plugins use it:\n  // right away (doc.querySelectorAll(...)) and with await. Tolerant, like a browser for normal pages.\n  var VOID = { area: 1, base: 1, br: 1, col: 1, embed: 1, hr: 1, img: 1, input: 1, link: 1, meta: 1, source: 1, track: 1, wbr: 1 };\n  var RAW = { script: 1, style: 1, textarea: 1, title: 1 };\n  var DROP = { script: 1, style: 1, noscript: 1, template: 1 };\n  var ENT = { amp: \"&\", lt: \"<\", gt: \">\", quot: '\"', apos: \"'\", nbsp: \"\xA0\", hellip: \"\u2026\", mdash: \"\u2014\", ndash: \"\u2013\", rsquo: \"\u2019\", lsquo: \"\u2018\", rdquo: \"\u201D\", ldquo: \"\u201C\", copy: \"\xA9\" };\n  function decode(t) {\n    return t.indexOf(\"&\") < 0 ? t : t.replace(/&(#x[0-9a-f]+|#\\d+|[a-z]+);/gi, function (m, e) {\n      if (e.charAt(0) === \"#\") {\n        var n = e.charAt(1) === \"x\" || e.charAt(1) === \"X\" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);\n        return isFinite(n) ? String.fromCodePoint ? String.fromCodePoint(n) : String.fromCharCode(n) : m;\n      }\n      var v = ENT[e.toLowerCase()];\n      return v === undefined ? m : v;\n    });\n  }\n  function syncParse(html) {\n    html = String(html || \"\");\n    var root = { t: \"body\", a: {}, x: \"\", c: [] };\n    var stack = [root];\n    var i = 0, n = html.length, count = 0;\n    var top = function () { return stack[stack.length - 1]; };\n    while (i < n && count < 80000) {\n      var lt = html.indexOf(\"<\", i);\n      if (lt < 0) lt = n;\n      if (lt > i) {\n        var txt = html.slice(i, lt);\n        top().c.push({ x: txt.trim() ? decode(txt) : \" \" }); count++;\n      }\n      if (lt >= n) break;\n      if (html.substr(lt, 4) === \"<!--\") { var ce = html.indexOf(\"-->\", lt + 4); i = ce < 0 ? n : ce + 3; continue; }\n      if (html.charAt(lt + 1) === \"!\" || html.charAt(lt + 1) === \"?\") { var de = html.indexOf(\">\", lt); i = de < 0 ? n : de + 1; continue; }\n      if (html.charAt(lt + 1) === \"/\") {\n        var ge = html.indexOf(\">\", lt);\n        var name = html.slice(lt + 2, ge < 0 ? n : ge).trim().toLowerCase();\n        for (var k = stack.length - 1; k > 0; k--) if (stack[k].t === name) { stack.length = k; break; }\n        i = ge < 0 ? n : ge + 1;\n        continue;\n      }\n      var m = /^<([a-zA-Z][a-zA-Z0-9:-]*)/.exec(html.slice(lt, lt + 64));\n      if (!m) { top().c.push({ x: \"<\" }); i = lt + 1; continue; }\n      var tag = m[1].toLowerCase();\n      var j = lt + m[0].length, attrs = {}, selfClose = false;\n      while (j < n) {\n        while (j < n && /\\s/.test(html.charAt(j))) j++;\n        var ch = html.charAt(j);\n        if (ch === \">\") { j++; break; }\n        if (ch === \"/\" && html.charAt(j + 1) === \">\") { selfClose = true; j += 2; break; }\n        var am = /^[^\\s=>\\/]+/.exec(html.slice(j, j + 256));\n        if (!am) { j++; continue; }\n        var an = am[0].toLowerCase(); j += am[0].length;\n        while (j < n && /\\s/.test(html.charAt(j))) j++;\n        var av = \"\";\n        if (html.charAt(j) === \"=\") {\n          j++;\n          while (j < n && /\\s/.test(html.charAt(j))) j++;\n          var q = html.charAt(j);\n          if (q === '\"' || q === \"'\") { var qe = html.indexOf(q, j + 1); av = html.slice(j + 1, qe < 0 ? n : qe); j = qe < 0 ? n : qe + 1; }\n          else { var um = /^[^\\s>]*/.exec(html.slice(j, j + 2048)); av = um[0]; j += av.length; }\n        }\n        if (!(an in attrs)) attrs[an] = decode(av);\n      }\n      i = j;\n      if (RAW[tag]) {\n        var re = html.toLowerCase().indexOf(\"</\" + tag, i);\n        var body = html.slice(i, re < 0 ? n : re);\n        i = re < 0 ? n : html.indexOf(\">\", re) + 1 || n;\n        if (!DROP[tag]) { var el0 = { t: tag, a: attrs, x: \"\", c: body.trim() ? [{ x: decode(body) }] : [] }; top().c.push(el0); count++; }\n        continue;\n      }\n      if ((tag === \"li\" || tag === \"option\" || tag === \"p\" || tag === \"tr\" || tag === \"td\" || tag === \"th\") && top().t === tag) stack.pop();\n      var el = { t: tag, a: attrs, x: \"\", c: [] };\n      if (!DROP[tag]) { top().c.push(el); count++; }\n      if (!VOID[tag] && !selfClose) stack.push(el);\n    }\n    return root;\n  }\n  // Works without await; awaiting it gives the same document.\n  function parseHtml(html) {\n    var doc = new HDocument(syncParse(html));\n    var ready = new HDocument(null);\n    ready._root = doc._root;\n    Object.defineProperty(doc, \"then\", { value: function (ok) { return Promise.resolve(ready).then(ok); }, enumerable: false });\n    return doc;\n  }\n  function log() { var a = []; for (var i = 0; i < arguments.length; i++) { try { a.push(String(arguments[i])); } catch (e) { a.push(\"?\"); } } safePost({ type: \"log\", args: a }); }\n  function register(p) { provider = p; }\n  var harbor = { http: httpCall, parseHtml: parseHtml, register: register, log: log };\n  self.onmessage = function (e) {\n    var m = e.data;\n    if (!m || typeof m !== \"object\") return;\n    if (m.type === \"call\") {\n      var fn = provider ? provider[m.method] : null;\n      if (typeof fn !== \"function\") return safePost({ type: \"error\", id: m.id, error: \"no method: \" + m.method });\n      Promise.resolve().then(function () { return fn.apply(provider, Array.isArray(m.args) ? m.args : []); })\n        .then(function (v) { if (!safePost({ type: \"result\", id: m.id, value: v })) safePost({ type: \"error\", id: m.id, error: \"unserializable result\" }); })\n        .catch(function (err) { safePost({ type: \"error\", id: m.id, error: String(err && err.message ? err.message : err) }); });\n      return;\n    }\n    if (m.type === \"bridgeResult\") { var p = pending[m.id]; if (!p) return; delete pending[m.id]; if (m.ok) p.resolve(m.value); else p.reject(new Error(String(m.error || \"bridge error\"))); }\n  };\n  for (var bi = 0; bi < BLOCKED.length; bi++) { try { self[BLOCKED[bi]] = undefined; } catch (e) {} }\n  try {\n    var ret = (function (harbor, self, globalThis, window, fetch, XMLHttpRequest, WebSocket, EventSource, importScripts, indexedDB, caches, Worker, SharedWorker, BroadcastChannel, MessageChannel, postMessage, close, navigator, location, document, Request, Response) {\n      \"use strict\";\n"])));
-  var EPILOGUE = String.raw(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n      ;return (typeof plugin !== \"undefined\") ? plugin : undefined;\n    })(harbor);\n    if (!provider) provider = ret;\n    if (!provider || typeof provider !== \"object\") throw new Error(\"plugin registered no provider\");\n    safePost({ type: \"ready\", meta: { id: String(provider.id), name: String(provider.name) } });\n  } catch (err) {\n    safePost({ type: \"initError\", error: String(err && err.message ? err.message : err) });\n  }\n})();\n"])));
-  var workers = {};
-  var order = [];
-  function stop2(id) {
-    var w = workers[id];
-    if (w) {
-      try {
-        w.worker.terminate();
-      } catch (e) {}
-      Object.keys(w.calls || {}).forEach(function (cid) {
-        clearTimeout(w.calls[cid].timer);
-        w.calls[cid].reject(new Error("stopped"));
-      });
-      w.calls = {};
-      if (w.url) URL.revokeObjectURL(w.url);
-      delete workers[id];
-    }
-    order = order.filter(function (x) {
-      return x !== id;
-    });
-  }
-  function start2(p) {
-    var blob = new Blob([PRELUDE, p.source, EPILOGUE], {
-      type: "text/javascript"
-    });
-    var url2 = URL.createObjectURL(blob);
-    var worker = new Worker(url2);
-    var w = {
-      worker: worker,
-      url: url2,
-      calls: {},
-      seq: 0,
-      origin: "",
-      ready: null
-    };
-    w.ready = new Promise(function (resolve2, reject) {
-      var timer = setTimeout(function () {
-        return reject(new Error("plugin did not start"));
-      }, 15e3);
-      w.onReady = function (ok, err) {
-        clearTimeout(timer);
-        if (ok) resolve2();else reject(new Error(err || "plugin failed"));
-      };
-    });
-    worker.onmessage = function (e) {
-      var m = e.data || {};
-      if (m.type === "ready") return w.onReady(true);
-      if (m.type === "initError") return w.onReady(false, m.error);
-      if (m.type === "result" || m.type === "error") {
-        var c = w.calls[m.id];
-        if (!c) return;
-        delete w.calls[m.id];
-        clearTimeout(c.timer);
-        return m.type === "result" ? c.resolve(m.value) : c.reject(new Error(m.error));
-      }
-      if (m.type === "http") {
-        var u = String(m.payload && m.payload.url || "");
-        var o = m.payload && m.payload.opts || {};
-        if (!/^https?:\/\//i.test(u)) return worker.postMessage({
-          type: "bridgeResult",
-          id: m.id,
-          ok: false,
-          error: "bad url"
-        });
-        var mm = /^(https?:\/\/[^/]+)/i.exec(u);
-        if (mm) w.origin = mm[1] + "/";
-        httpRaw(u, o).then(function (r) {
-          return worker.postMessage({
-            type: "bridgeResult",
-            id: m.id,
-            ok: true,
-            value: r
-          });
-        }, function (err) {
-          return worker.postMessage({
-            type: "bridgeResult",
-            id: m.id,
-            ok: false,
-            error: String(err && err.message || err)
-          });
-        });
-        return;
-      }
-      if (m.type === "parse") {
-        var tree = null;
-        try {
-          tree = parseHtml(m.payload && m.payload.html);
-        } catch (err) {
-          return worker.postMessage({
-            type: "bridgeResult",
-            id: m.id,
-            ok: false,
-            error: "parse failed"
-          });
-        }
-        return worker.postMessage({
-          type: "bridgeResult",
-          id: m.id,
-          ok: true,
-          value: tree
-        });
-      }
-    };
-    worker.onerror = function (e) {
-      if (e && e.preventDefault) e.preventDefault();
-      w.onReady(false, e && e.message || "worker error");
-    };
-    workers[p.id] = w;
-    order.push(p.id);
-    while (order.length > 3) stop2(order[0]);
-    return w;
-  }
-  function ready(id) {
-    var p = installed().find(function (x) {
-      return x.id === id;
-    });
-    if (!p) return Promise.reject(new Error("not installed"));
-    try {
-      return (workers[id] || start2(p)).ready;
-    } catch (e) {
-      return Promise.reject(new Error("worker: " + (e && e.message || e)));
-    }
-  }
-  function workerCheck() {
-    return new Promise(function (resolve2, reject) {
-      var url2 = "";
-      try {
-        url2 = URL.createObjectURL(new Blob(['postMessage("ok")'], {
-          type: "text/javascript"
-        }));
-        var w = new Worker(url2);
-        var timer = setTimeout(function () {
-          return reject(new Error("no answer"));
-        }, 5e3);
-        w.onmessage = function () {
-          return clearTimeout(timer), w.terminate(), URL.revokeObjectURL(url2), resolve2();
-        };
-        w.onerror = function (e) {
-          return clearTimeout(timer), reject(new Error(e && e.message || "blocked"));
-        };
-      } catch (e) {
-        reject(new Error((e && e.name ? e.name + ": " : "") + (e && e.message || e)));
-      }
-    });
-  }
-  function call3(id, method, args, timeout) {
-    var p = installed().find(function (x) {
-      return x.id === id;
-    });
-    if (!p) return Promise.reject(new Error("not installed"));
-    var w;
-    try {
-      w = workers[id] || start2(p);
-    } catch (e) {
-      return Promise.reject(new Error("worker: " + (e && e.message || e)));
-    }
-    order = order.filter(function (x) {
-      return x !== id;
-    }).concat([id]);
-    return w.ready.then(function () {
-      return new Promise(function (resolve2, reject) {
-        var cid = "c" + ++w.seq;
-        w.calls[cid] = {
-          resolve: resolve2,
-          reject: reject,
-          timer: setTimeout(function () {
-            return delete w.calls[cid], reject(new Error("timeout"));
-          }, timeout || 25e3)
-        };
-        w.worker.postMessage({
-          type: "call",
-          id: cid,
-          method: method,
-          args: args || []
-        });
-      });
-    });
-  }
-  function refererOf(id) {
-    var w = workers[id];
-    return w && w.origin || "";
-  }
-  var str = function str(v) {
-    return typeof v === "string" ? v : void 0;
-  };
-  function toSummary(o) {
-    if (!o || _typeof(o) !== "object" || !str(o.id) || !str(o.title)) return null;
-    return {
-      id: o.id,
-      title: o.title,
-      cover: /^https?:\/\//i.test(o.cover || "") ? o.cover : "",
-      description: str(o.description) || "",
-      status: str(o.status) || "",
-      author: str(o.author) || "",
-      year: typeof o.year === "number" ? o.year : null
-    };
-  }
-  function popular(id, offset) {
-    return call3(id, "popular", [offset || 0, void 0], 25e3).then(function (v) {
-      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
-    });
-  }
-  function search2(id, query, offset) {
-    return call3(id, "search", [query, offset || 0, void 0], 25e3).then(function (v) {
-      return Array.isArray(v) ? v.map(toSummary).filter(Boolean) : [];
-    });
-  }
-  function _detail(id, mangaId) {
-    return call3(id, "detail", [mangaId], 25e3).then(toSummary);
-  }
-  function cleanTitle(title, num) {
-    if (!title || !num) return title || "";
-    var rest = title.replace(/^\s*(ch(apter)?\.?|الفصل|فصل)?\s*/i, "");
-    if (rest.indexOf(num) !== 0) return title;
-    return rest.slice(num.length).replace(/^[\s\-–—:.·|]+/, "").replace(/[.\s]+$/, "");
-  }
-  function chapters2(id, mangaId) {
-    return call3(id, "chapters", [mangaId], 3e4).then(function (v) {
-      return (Array.isArray(v) ? v : []).filter(function (c) {
-        return c && str(c.id);
-      }).slice(0, 5e3).map(function (c) {
-        return {
-          id: c.id,
-          chapter: str(c.chapter) || null,
-          title: cleanTitle(str(c.title), str(c.chapter)),
-          lang: str(c.language) || "",
-          pages: typeof c.pages === "number" ? c.pages : 0,
-          scanlator: str(c.group) || ""
-        };
-      });
-    });
-  }
-  function pages2(id, chapterId) {
-    return call3(id, "pageUrls", [chapterId], 35e3).then(function (v) {
-      var ref = refererOf(id);
-      return (Array.isArray(v) ? v : []).map(function (x) {
-        var u = typeof x === "string" ? x : x && (x.url || x.imageUrl || x.src || x.img || x.image);
-        if (!/^https?:\/\//i.test(u || "")) return null;
-        var h2 = x && _typeof(x) === "object" && x.headers ? x.headers : {};
-        var r = h2.Referer || h2.referer || ref;
-        return imageUrl(String(u).trim(), r);
-      }).filter(Boolean);
-    });
-  }
-
   // src/js/api/suwayomi.js
   var base = function base() {
     return String(settings().suwayomiUrl || "").replace(/\/+$/, "");
@@ -15861,7 +16155,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function findChapter(chapters4, text) {
     var n = parseFloat(String(text).replace(",", ".").replace(/[^\d.]/g, ""));
     if (!isFinite(n)) return -1;
-    var best = -1;
+    var best2 = -1;
     var gap = Infinity;
     chapters4.forEach(function (c, i) {
       var v = parseFloat(c.chapter);
@@ -15869,10 +16163,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var d = v >= n ? v - n : (n - v) * 1e3;
       if (d < gap) {
         gap = d;
-        best = i;
+        best2 = i;
       }
     });
-    return best;
+    return best2;
   }
   function chapterSearchRow(chapters4, show3) {
     return h("div.stream.md-nav.md-jump", {
@@ -16005,7 +16299,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return _detail(pid, m.mid);
       },
       chapters: function chapters(m) {
-        return chapters2(pid, m.mid).then(function (cs) {
+        return _chapters(pid, m.mid).then(function (cs) {
           var numbered = cs.filter(function (c) {
             return numOf(c) !== null;
           }).length;
@@ -16016,7 +16310,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       },
       pagesFn: function pagesFn(cid) {
-        return pages2(pid, cid);
+        return pages(pid, cid);
       },
       key: function key(m) {
         return "pl" + pid + ":" + m.mid;
@@ -16250,14 +16544,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                 if (!items3 || !items3.length) return;
                 var st3 = t0();
                 return step(t("Capítulos"), function () {
-                  return chapters2(p.id, items3[0].id).then(function (cs) {
+                  return _chapters(p.id, items3[0].id).then(function (cs) {
                     return line(cs.length > 0, t("Capítulos de") + ' "' + items3[0].title + '": ' + cs.length + secs(st3)), cs;
                   });
                 }, 45e3).then(function (cs) {
                   if (!cs || !cs.length) return;
                   var st4 = t0();
                   return step(t("Páginas"), function () {
-                    return pages2(p.id, cs[0].id).then(function (pg) {
+                    return pages(p.id, cs[0].id).then(function (pg) {
                       return line(pg.length > 0, t("Páginas do capítulo") + ": " + pg.length + secs(st4));
                     });
                   }, 45e3);
@@ -16643,12 +16937,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
   // src/js/views/mangaDetails.js
   var CHUNK2 = 50;
-  function norm2(x) {
+  function norm3(x) {
     return String(x || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9؀-ۿ]+/g, " ").replace(/\b(the|a|an)\b/g, " ").replace(/\s+/g, " ").trim();
   }
-  function likeness(a, b) {
-    var x = norm2(a);
-    var y = norm2(b);
+  function likeness2(a, b) {
+    var x = norm3(a);
+    var y = norm3(b);
     if (!x || !y) return 0;
     if (x === y) return 1;
     var A = x.split(" ");
@@ -16758,7 +17052,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         // Korean and Chinese comics read top to bottom, left to right; Japanese manga right to left.
         rtl: media2.countryOfOrigin === "JP" || !media2.countryOfOrigin,
         pagesFn: source ? function (cid) {
-          return pages2(source.pid, cid);
+          return pages(source.pid, cid);
         } : void 0
       });
     }
@@ -16817,9 +17111,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var cur = idx >= 0 ? parseFloat(chapters4[idx].chapter) : m.focusChapter || 1;
           chapterToEpisode(m.anilist, cur).then(function (r) {
             if (!r) return openAnime(animeMeta(anime));
-            toast(t("Episódio {n} (aproximado)", {
+            toast(r.ahead ? t("O anime ainda não chegou neste capítulo (vai até o cap. {c}). Abrindo o último: episódio {n}.", {
+              c: r.lastChapter,
               n: r.episode
-            }));
+            }) : r.approx ? t("Episódio {n} (aproximado)", {
+              n: r.episode
+            }) : t("Episódio {n}", {
+              n: r.episode
+            }), 6e3);
             openAnime(Object.assign(animeMeta(r.anime), {
               episode: r.episode
             }));
@@ -16998,7 +17297,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var out = [];
       [media2.title && media2.title.english, media2.title && media2.title.romaji, m.name].concat(media2.synonyms || []).forEach(function (x) {
         if (x && !out.some(function (y) {
-          return norm2(y) === norm2(x);
+          return norm3(y) === norm3(x);
         }) && out.length < 4) out.push(x);
       });
       return out;
@@ -17009,26 +17308,26 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (!alive || qi >= Math.min(qs.length, 2)) return Promise.resolve(null);
         var q2 = qs[qi++];
         return search2(p.id, q2, 0).then(function (items3) {
-          var best = null;
+          var best2 = null;
           var score = 0;
           (items3 || []).slice(0, 40).forEach(function (it) {
             var s2 = Math.max.apply(null, qs.map(function (n) {
-              return likeness(n, it.title);
+              return likeness2(n, it.title);
             }));
             if (s2 > score) {
               score = s2;
-              best = it;
+              best2 = it;
             }
           });
-          if (!best || score < 0.85) return next();
+          if (!best2 || score < 0.85) return next();
           return pluginApi(p.id, p.name).chapters({
-            mid: best.id
+            mid: best2.id
           }).then(function (cs) {
             return cs.length ? {
               pid: p.id,
               name: p.name,
-              mid: best.id,
-              title: best.title,
+              mid: best2.id,
+              title: best2.title,
               count: cs.length,
               cs: cs
             } : next();
@@ -17091,13 +17390,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return offerPlugins();
         }
         if (picked) return;
-        var best = all2[0];
-        saveLink(m.anilist, linkOf2(best));
-        if (!source || source.pid !== best.pid) {
-          showSource(linkOf2(best), best.cs);
+        var best2 = all2[0];
+        saveLink(m.anilist, linkOf2(best2));
+        if (!source || source.pid !== best2.pid) {
+          showSource(linkOf2(best2), best2.cs);
           toast(t("{name}: {n} capítulos", {
-            name: best.name,
-            n: best.count
+            name: best2.name,
+            n: best2.count
           }), 5e3);
         }
         if (all2.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
@@ -17117,7 +17416,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           label: hit.name,
           sub: t("{n} capítulos", {
             n: hit.count
-          }) + (norm2(hit.title) !== norm2(m.name) ? "  ·  " + hit.title : ""),
+          }) + (norm3(hit.title) !== norm3(m.name) ? "  ·  " + hit.title : ""),
           value: hit,
           checked: !!source && source.pid === hit.pid
         };
@@ -17174,7 +17473,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       status2.textContent = t("Procurando capítulos...");
       list2.appendChild(status2);
       find2(m.anilist, [media2.title && media2.title.english, media2.title && media2.title.romaji, m.name]).then(function (id) {
-        return id ? chapters(id, langSet.langs) : [];
+        return id ? chapters2(id, langSet.langs) : [];
       }).then(function (cs) {
         if (!alive) return;
         mdCount = cs.length;
@@ -17400,21 +17699,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/lib/sourceFind.js
-  function norm3(x) {
-    return String(x || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\(\s*\d{4}[^)]*\)/g, " ").replace(/[^a-z0-9؀-ۿ]+/g, " ").replace(/\b(the|a|an)\b/g, " ").replace(/\s+/g, " ").trim();
-  }
-  function likeness2(a, b) {
-    var x = norm3(a);
-    var y = norm3(b);
-    if (!x || !y) return 0;
-    if (x === y) return 1;
-    var A = x.split(" ");
-    var B = y.split(" ");
-    var inB = A.filter(function (w) {
-      return B.indexOf(w) >= 0;
-    }).length;
-    return 0.9 * inB / (A.length + B.length - inB);
-  }
   function scanSources(names2, onHit, opts) {
     var o = opts || {};
     var plugins = installed();
@@ -17427,27 +17711,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (o.alive && !o.alive() || qi >= Math.min(names2.length, 2)) return Promise.resolve(null);
         var q2 = names2[qi++];
         return search2(p.id, q2, 0).then(function (items3) {
-          var best = null;
+          var best2 = null;
           var score = 0;
           (items3 || []).slice(0, 40).forEach(function (it) {
             var s = Math.max.apply(null, names2.map(function (n) {
-              return likeness2(n, it.title);
+              return likeness(n, it.title);
             }));
             if (o.year && String(it.title).indexOf(String(o.year)) >= 0) s += 0.05;
             if (s > score) {
               score = s;
-              best = it;
+              best2 = it;
             }
           });
-          if (!best || score < min) return next();
+          if (!best2 || score < min) return next();
           return pluginApi(p.id, p.name).chapters({
-            mid: best.id
+            mid: best2.id
           }).then(function (cs) {
             return cs.length ? {
               pid: p.id,
               name: p.name,
-              mid: best.id,
-              title: best.title,
+              mid: best2.id,
+              title: best2.title,
               count: cs.length,
               cs: cs
             } : next();
@@ -17494,22 +17778,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function heroOf(m) {
     var chars = m.characters || [];
-    var title = norm3(m.title);
+    var title = norm(m.title);
     var inTitle = chars.find(function (c) {
-      return title.indexOf(norm3(c)) >= 0;
+      return title.indexOf(norm(c)) >= 0;
     });
     if (inTitle) return inTitle;
     return String(m.title || "").replace(/\(.*?\)/g, "").replace(/^(the\s+)?(all-new|all new|amazing|spectacular|uncanny|ultimate|superior|savage|mighty|astonishing|incredible|sensational|new|original)\s+/i, "").replace(/[:\-–].*$/, "").replace(/\s+(vol(ume)?\.?\s*\d+|\d+)$/i, "").trim();
   }
   function moviesOf(hero) {
     if (!hero || !hasTmdb()) return Promise.resolve([]);
-    var n = norm3(hero);
+    var n = norm(hero);
     return tmdbGet("search/multi", {
       query: hero,
       include_adult: false
     }).then(function (r) {
       return (r && r.results || []).filter(function (x) {
-        return (x.media_type === "movie" || x.media_type === "tv") && x.poster_path && norm3(x.title || x.name).indexOf(n) >= 0;
+        return (x.media_type === "movie" || x.media_type === "tv") && x.poster_path && norm(x.title || x.name).indexOf(n) >= 0;
       }).sort(function (a, b) {
         return (b.popularity || 0) - (a.popularity || 0);
       }).slice(0, 20);
@@ -17589,7 +17873,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         rtl: false,
         // western comics read left to right
         pagesFn: source ? function (cid) {
-          return pages2(source.pid, cid);
+          return pages(source.pid, cid);
         } : void 0
       });
     }
@@ -17745,7 +18029,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var out = [];
       [m.title, m.name].forEach(function (x) {
         return x && !out.some(function (y) {
-          return norm3(y) === norm3(x);
+          return norm(y) === norm(x);
         }) && out.push(x);
       });
       return out;
@@ -17796,7 +18080,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         status2.textContent = t("Carregando capítulos de {name}...", {
           name: ln.name
         });
-        return chapters2(ln.pid, ln.mid).then(function (cs) {
+        return _chapters(ln.pid, ln.mid).then(function (cs) {
           if (!_alive) return;
           if (!cs.length) throw new Error("empty");
           showSource(ln, sortIssues(cs));
@@ -17827,9 +18111,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (!_alive) return;
         if (!all2.length) return noSources(t("Não encontrei este título nas suas fontes."));
         if (picked) return;
-        var best = all2[0];
-        saveLink2(m.cvId, linkOf(best));
-        if (!source || source.pid !== best.pid) showSource(linkOf(best), sortIssues(best.cs));
+        var best2 = all2[0];
+        saveLink2(m.cvId, linkOf(best2));
+        if (!source || source.pid !== best2.pid) showSource(linkOf(best2), sortIssues(best2.cs));
         if (all2.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
           n: all2.length
         }), 5e3);
@@ -17847,7 +18131,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           label: hit.name,
           sub: t("{n} edições", {
             n: hit.count
-          }) + (norm3(hit.title) !== norm3(m.title) ? "  ·  " + hit.title : ""),
+          }) + (norm(hit.title) !== norm(m.title) ? "  ·  " + hit.title : ""),
           value: hit,
           checked: !!source && source.pid === hit.pid
         };
@@ -18367,7 +18651,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (!r) return toast(t("Não achei o mangá deste anime."));
         var mm = mangaMeta(r.manga);
         mm.focusChapter = r.chapter;
-        toast(t("Capítulo {n} (aproximado)", {
+        toast(r.approx ? t("Capítulo {n} (aproximado)", {
+          n: r.chapter
+        }) : t("Capítulo {n}", {
           n: r.chapter
         }));
         openMangaDetails(mm);
@@ -19009,11 +19295,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var debridPending = groups.some(function (g) {
           return addonRank(g.addon) === 0 && !g.done;
         });
-        var best = list3[0];
-        var clean = best && !needsServer(best) && !streamBadges(best).some(function (b) {
+        var best2 = list3[0];
+        var clean = best2 && !needsServer(best2) && !streamBadges(best2).some(function (b) {
           return b.warn;
         });
-        if (!best) {
+        if (!best2) {
           if (pendingCount <= 0 || timedOut) {
             stopSmart();
             if (pendingCount <= 0) toast(t("Escolha inteligente: nenhuma fonte que a TV toque. Escolha na lista."), 5e3);
@@ -19022,7 +19308,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         if (pendingCount > 0 && !timedOut && (debridPending || !clean)) return;
         stopSmart();
-        play(video, best, all2, list3.slice(1, 1 + SMART_FALLBACKS));
+        play(video, best2, all2, list3.slice(1, 1 + SMART_FALLBACKS));
       }
       function status2() {
         if (smartActive) {
@@ -23355,7 +23641,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T06:59:17.790Z";
+  var BUILD = "2026-11-17T07:04:55.070Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

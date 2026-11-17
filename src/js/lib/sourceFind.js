@@ -3,30 +3,8 @@
 import * as pl from '../api/plugins.js';
 import { pluginApi } from '../views/sources.js';
 
-// Titles compared loosely: case, accents, punctuation, years in brackets and "the/a" don't matter.
-export function norm(x) {
-  return String(x || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .replace(/\(\s*\d{4}[^)]*\)/g, ' ')
-    .replace(/[^a-z0-9؀-ۿ]+/g, ' ')
-    .replace(/\b(the|a|an)\b/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-// 1 = same title; less when words differ.
-export function likeness(a, b) {
-  const x = norm(a);
-  const y = norm(b);
-  if (!x || !y) return 0;
-  if (x === y) return 1;
-  const A = x.split(' ');
-  const B = y.split(' ');
-  const inB = A.filter((w) => B.indexOf(w) >= 0).length;
-  return (0.9 * inB) / (A.length + B.length - inB);
-}
+import { norm, likeness } from './titles.js';
+export { norm, likeness };
 
 // names: the titles to try (first two are searched); year: prefer results that carry it.
 // onHit(hit) for each source that has it; resolves with all hits, most chapters first.

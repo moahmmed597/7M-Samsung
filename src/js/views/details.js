@@ -106,7 +106,7 @@ function DetailsView(type, id, opts) {
         if (!r) return toast(t('Não achei o mangá deste anime.'));
         const mm = animeLink.mangaMeta(r.manga);
         mm.focusChapter = r.chapter;
-        toast(t('Capítulo {n} (aproximado)', { n: r.chapter }));
+        toast(r.approx ? t('Capítulo {n} (aproximado)', { n: r.chapter }) : t('Capítulo {n}', { n: r.chapter }));
         openMangaDetails(mm);
       })
       .catch(() => toast(t('Não achei o mangá deste anime.')));

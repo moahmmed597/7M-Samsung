@@ -162,7 +162,14 @@ function MangaDetailsView(m) {
             chapterToEpisode(m.anilist, cur)
               .then((r) => {
                 if (!r) return openAnime(animeMeta(anime));
-                toast(t('Episódio {n} (aproximado)', { n: r.episode }));
+                toast(
+                  r.ahead
+                    ? t('O anime ainda não chegou neste capítulo (vai até o cap. {c}). Abrindo o último: episódio {n}.', { c: r.lastChapter, n: r.episode })
+                    : r.approx
+                      ? t('Episódio {n} (aproximado)', { n: r.episode })
+                      : t('Episódio {n}', { n: r.episode }),
+                  6000
+                );
                 openAnime(Object.assign(animeMeta(r.anime), { episode: r.episode }));
               })
               .catch(() => openAnime(animeMeta(anime)));

@@ -273,6 +273,7 @@ export const AR = {
   'Não foi possível baixar a legenda.': 'تعذّر تنزيل الترجمة.',
   'Lendo as faixas do arquivo...': 'جارٍ قراءة مسارات الملف...',
   'Faixa {n}': 'المسار {n}',
+  "O anime ainda não chegou neste capítulo (vai até o cap. {c}). Abrindo o último: episódio {n}.": "الأنمي ما وصل لهذا الفصل للحين (واصل لين الفصل {c}). بفتح لك آخر حلقة: {n}.",
   "Adicione sua chave do ComicVine em Ajustes → Chaves.": "أضف مفتاح ComicVine من الإعدادات ← المفاتيح.",
   "Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).": "الكوميكس تستخدم كتالوج ComicVine. خذ مفتاح مجاني من comicvine.gamespot.com/api وحطه في الإعدادات ← المفاتيح (أو من صفحة الجوال).",
   "Para ler, adicione suas fontes em Minhas fontes.": "عشان تقرأ، أضف مصادرك من مصادري.",

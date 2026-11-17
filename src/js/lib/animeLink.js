@@ -1,7 +1,8 @@
 // Link between an anime and the manga it comes from (AniList relations + arm.haglund.dev ids).
-// There is no public table "episode N = chapter M", so the jump is an ESTIMATE: the chapters of the
-// manga are spread over the episodes of the anime seasons in order (filler and recaps shift it).
+// The jump uses real tables when the series is in them (lib/episodeMap.js: episode by episode, or arc
+// by arc); otherwise it is an ESTIMATE: the chapters are spread over the episodes of the seasons.
 import { postJSON, getJSON } from './http.js';
+import * as epmap from './episodeMap.js';
 
 const API = 'https://graphql.anilist.co';
 const ARM = 'https://arm.haglund.dev/api/v2/ids?source=';
@@ -30,6 +31,16 @@ const mainManga = (m) =>
     .map((e) => e.node)
     .sort((a, b) => (b.popularity || 0) - (a.popularity || 0))[0];
 const isTV = (n) => n.format === 'TV' || n.format === 'TV_SHORT' || n.format === 'ONA';
+// Every name of the franchise (first season and the manga), to find it in the tables.
+const namesOf = (nodes) => {
+  const out = [];
+  nodes.forEach((n) => {
+    if (!n || !n.title) return;
+    out.push(n.title.english, n.title.romaji);
+    (n.synonyms || []).forEach((x) => out.push(x));
+  });
+  return out.filter(Boolean).slice(0, 12);
+};
 
 // Stremio id (kitsu:N, tt…, mal:N, anilist:N) → AniList anime id.
 export function anilistIdOf(stremioId) {
@@ -85,7 +96,17 @@ export function episodeToChapter(animeId, episode) {
       });
       const ep = before + Math.max(1, episode || 1);
       const per = manga.chapters && total ? manga.chapters / total : FALLBACK_CH_PER_EP;
-      return { manga: manga, chapter: Math.max(1, Math.round(ep * per)), approx: true };
+      const guess = { manga: manga, chapter: Math.max(1, Math.round(ep * per)), approx: true };
+      const viaTable = (names, n) =>
+        epmap.tableFor(names).then((tb) => {
+          const ch = epmap.chapterOf(tb, n);
+          return ch ? { manga: manga, chapter: ch, approx: tb.kind !== 'exact' } : null;
+        });
+      // This season's own list (Naruto Shippuden counts from 1), then the franchise's (all seasons).
+      return (cur.id !== seasons[0].id ? viaTable(namesOf([cur]), Math.max(1, episode || 1)) : Promise.resolve(null))
+        .then((r) => r || viaTable(namesOf([seasons[0], manga]), ep))
+        .then((r) => r || guess)
+        .catch(() => guess);
     });
   });
 }
@@ -98,13 +119,40 @@ export function chapterToEpisode(mangaId, chapter) {
     return seasonsOf(first.id).then((seasons) => {
       const total = seasons.reduce((a, s) => a + (s.episodes || 0), 0);
       const per = manga.chapters && total ? manga.chapters / total : FALLBACK_CH_PER_EP;
-      let ep = Math.max(1, Math.round((chapter || 1) / per));
-      for (let i = 0; i < seasons.length; i++) {
-        const n = seasons[i].episodes || 0;
-        if (ep <= n || i === seasons.length - 1) return { anime: seasons[i], episode: Math.min(ep, n || ep), approx: true };
-        ep -= n;
-      }
-      return null;
+      // Episode counted across seasons → the season it falls in and its number there.
+      const place = (abs, approx) => {
+        let ep = abs;
+        for (let i = 0; i < seasons.length; i++) {
+          const n = seasons[i].episodes || 0;
+          if (ep <= n || i === seasons.length - 1) return { anime: seasons[i], episode: Math.max(1, Math.min(ep, n || ep)), approx: approx };
+          ep -= n;
+        }
+        return null;
+      };
+      const guess = place(Math.max(1, Math.round((chapter || 1) / per)), true);
+      const ch = Math.floor(chapter || 1);
+      // The franchise's list (all seasons); past its end, a later season with its own list (Shippuden).
+      const later = (i) => {
+        if (i >= seasons.length) return Promise.resolve(null);
+        return epmap.tableFor(namesOf([seasons[i]])).then((tb) => {
+          const e = epmap.episodeOf(tb, ch);
+          return e ? { anime: seasons[i], episode: e, approx: tb.kind !== 'exact' } : later(i + 1);
+        });
+      };
+      return epmap
+        .tableFor(namesOf([seasons[0], manga]))
+        .then((tb) => {
+          const abs = epmap.episodeOf(tb, ch);
+          if (abs) return place(abs, tb.kind !== 'exact');
+          return later(1).then((r) => {
+            if (r) return r;
+            // Past what the anime has adapted: its latest episode, and say so.
+            const last = epmap.lastAdapted(tb);
+            return last && ch > last[1] ? Object.assign(place(last[0], false), { ahead: true, lastChapter: last[1] }) : null;
+          });
+        })
+        .then((r) => r || guess)
+        .catch(() => guess);
     });
   });
 }

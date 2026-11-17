@@ -273,6 +273,7 @@ export const EN = {
   'Não foi possível baixar a legenda.': "Couldn't download the subtitle.",
   'Lendo as faixas do arquivo...': "Reading the file's tracks...",
   'Faixa {n}': 'Track {n}',
+  "O anime ainda não chegou neste capítulo (vai até o cap. {c}). Abrindo o último: episódio {n}.": "The anime hasn't reached this chapter yet (it goes up to ch. {c}). Opening the latest: episode {n}.",
   "Adicione sua chave do ComicVine em Ajustes → Chaves.": "Add your ComicVine key in Settings → Keys.",
   "Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).": "Comics use the ComicVine catalog. Get a free key at comicvine.gamespot.com/api and put it in Settings → Keys (or on the phone page).",
   "Para ler, adicione suas fontes em Minhas fontes.": "To read, add your sources in My sources.",
