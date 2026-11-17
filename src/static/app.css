@@ -879,3 +879,15 @@ body .card.anime-tile.publisher .poster-wrap { width: 440px; height: 248px; }
 /* Profile pictures picker: one heading per kind */
 .av-sec { display: block; margin: 18px 0 12px 4px; font-size: 24px; font-weight: 700; color: rgba(255,255,255,0.85); }
 .av-sec:first-of-type { margin-top: 6px; }
+/* Comics publishers: the same size as the other tiles, the wordmark scaled to fit */
+body .card.anime-tile.publisher { width: 300px; }
+body .card.anime-tile.publisher .poster-wrap { width: 300px; height: 169px; }
+.pub-mark.m-marvel { font-size: 86px; letter-spacing: -3px; }
+.pub-mark.m-dc { width: 112px; height: 112px; line-height: 112px; font-size: 56px; letter-spacing: -4px; }
+.pub-mark.m-image { font-size: 62px; }
+.pub-mark.m-darkhorse { font-size: 40px; letter-spacing: 5px; width: 210px; }
+.pub-mark.m-vertigo { font-size: 40px; letter-spacing: 9px; }
+.pub-mark.m-idw { font-size: 80px; letter-spacing: -3px; }
+.pub-mark.m-boom { font-size: 64px; letter-spacing: -2px; }
+.pub-mark.m-dynamite { font-size: 42px; letter-spacing: 1px; }
+.pub-mark.m-valiant { font-size: 46px; letter-spacing: 3px; }

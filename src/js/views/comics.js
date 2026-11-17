@@ -57,7 +57,9 @@ function artFor(cacheKey, count, get, onEach) {
   }
   return Promise.all([lane(), lane()]).then(() => changed && store.set(cacheKey, { at: Date.now(), urls: urls }));
 }
-const seriesArt = (name) => cv.searchVolumes(name, 0).then((r) => (r.items[0] ? r.items[0].art || r.items[0].poster : ''));
+// The tile's own size (ComicVine's wide images are full size: heavy for a TV).
+const small = (u) => (u ? 'https://wsrv.nl/?url=' + encodeURIComponent(u) + '&w=300&h=169&fit=cover&a=top&output=jpg&q=72' : '');
+const seriesArt = (name) => cv.searchVolumes(name, 0).then((r) => (r.items[0] ? small(r.items[0].art || r.items[0].poster) : ''));
 
 function heroTiles(parent, title, names, cacheKey) {
   const row = tileRow(parent, title, names.map((x) => ({ label: x, open: () => router.push(ComicGridView(x)) })), 'discover');
@@ -170,11 +172,11 @@ export function ComicsView() {
       w.appendChild(h('div.pub-mark.m-' + p.mark.cls, { text: p.mark.text }));
     });
     seriesRow(ROWS[0]);
-    heroTiles(rows, t('Heróis da Marvel'), MARVEL, 'comicArtMarvel');
+    heroTiles(rows, t('Heróis da Marvel'), MARVEL, 'comicArtMarvel2');
     seriesRow(ROWS[1]);
-    heroTiles(rows, t('Heróis da DC'), DC, 'comicArtDC');
+    heroTiles(rows, t('Heróis da DC'), DC, 'comicArtDC2');
     seriesRow(ROWS[2]);
-    heroTiles(rows, t('Independentes'), INDIE, 'comicArtIndie');
+    heroTiles(rows, t('Independentes'), INDIE, 'comicArtIndie2');
     ROWS.slice(3).forEach(seriesRow);
     setTimeout(loadNearby, 50);
   }

@@ -12,6 +12,7 @@ import * as router from '../router.js';
 import { openDetails } from './details.js';
 import { t, current } from '../lib/i18n.js';
 import { FRANCHISES, CATS, catOf, franchisesOf, findFranchise } from '../data/franchises.js';
+import { withLive, refresh } from '../data/franchiseLive.js';
 
 export const POSTER = (imdb) => 'https://images.metahub.space/poster/small/' + imdb + '/img';
 const ORDER_KEY = 'franchiseOrder';
@@ -46,7 +47,7 @@ function favEntries() {
   return favs()
     .map((x) => {
       const f = findFranchise(x.id);
-      if (f) return { f: f };
+      if (f) return { f: withLive(f) };
       const m = /^tmdb:(\d+)$/.exec(x.id);
       return m ? { f: { id: x.id, name: x.name, ar: x.name, items: [[x.poster]] }, tmdbId: Number(m[1]) } : null;
     })
@@ -222,11 +223,17 @@ function ordered(f, order) {
   if (order !== 'chrono' || !f.chrono) return f.items.slice();
   const byId = {};
   f.items.forEach((it) => (byId[it[0]] = it));
-  return f.chrono.map((id) => byId[id]).filter(Boolean);
+  const inChrono = {};
+  f.chrono.forEach((id) => (inChrono[id] = 1));
+  // Titles added after the story order was written go at the end.
+  return f.chrono.map((id) => byId[id]).filter(Boolean).concat(f.items.filter((it) => !inChrono[it[0]]));
 }
 
 export function openFranchise(f) {
-  router.push(FranchiseView(f));
+  const view = FranchiseView(withLive(f));
+  router.push(view);
+  // Newer titles from TMDB (checked every few days): the page updates when they arrive.
+  refresh(f).then((f2) => view.__update(f2));
 }
 
 export function openTmdbCollection(id) {
@@ -263,7 +270,8 @@ function normalize(s) {
 // ---------- Tab: every collection ----------
 // Laid out like the Anime tab: rows you scroll sideways with wide picture tiles. At the top what is
 // yours (sagas you are in the middle of, favourites, your own collections), then each category.
-const BACKDROP = (imdb) => 'https://images.metahub.space/background/medium/' + imdb + '/img';
+// The backdrop at the tile's own size (a full-size one is ~400 KB; this is ~25 KB).
+const BACKDROP = (imdb) => 'https://wsrv.nl/?url=' + encodeURIComponent('https://images.metahub.space/background/medium/' + imdb + '/img') + '&w=420&h=236&fit=cover&output=jpg&q=72';
 
 // A wide tile: the backdrop of a film of the saga, its name, how many titles and how far you got.
 function collTile(o) {
@@ -383,7 +391,8 @@ export function CollectionsView() {
     lastSig = sig();
     clear(rows);
     // Sagas you are in the middle of: the next film is one tap away.
-    const going = FRANCHISES.map((f) => ({ f: f, done: watchedCount(f) }))
+    const ALL = FRANCHISES.map(withLive);
+    const going = ALL.map((f) => ({ f: f, done: watchedCount(f) }))
       .filter((x) => x.done > 0 && x.done < x.f.items.length)
       .sort((a, b) => b.done / b.f.items.length - a.done / a.f.items.length)
       .slice(0, 20);
@@ -409,7 +418,7 @@ export function CollectionsView() {
     );
     addRow(t('Minhas coleções'), '', mine);
     CATS.forEach((c) => {
-      const list = FRANCHISES.filter((f) => catOf(f) === c.id);
+      const list = ALL.filter((f) => catOf(f) === c.id);
       addRow(t(c.label), t('{n} coleções', { n: list.length }), list.map((f) => franchiseTile(f)));
     });
     loadVisibleImages(el, 400);
@@ -632,5 +641,10 @@ function FranchiseView(f) {
   return {
     el: el,
     onShow: () => render(),
+    __update: (f2) => {
+      if (!f2 || f2.items.length === f.items.length) return;
+      f = f2;
+      render(true);
+    },
   };
 }

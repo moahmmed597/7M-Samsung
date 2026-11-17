@@ -1966,7 +1966,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var nativeIterator = IterablePrototype[ITERATOR] || IterablePrototype["@@iterator"] || DEFAULT && IterablePrototype[DEFAULT];
         var defaultIterator = !BUGGY_SAFARI_ITERATORS && nativeIterator || getIterationMethod(DEFAULT);
         var anyNativeIterator = NAME === "Array" ? IterablePrototype.entries || nativeIterator : nativeIterator;
-        var CurrentIteratorPrototype, methods, KEY4;
+        var CurrentIteratorPrototype, methods, KEY5;
         if (anyNativeIterator) {
           CurrentIteratorPrototype = getPrototypeOf(anyNativeIterator.call(new Iterable()));
           if (CurrentIteratorPrototype !== Object.prototype && CurrentIteratorPrototype.next) {
@@ -1997,9 +1997,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             keys: IS_SET ? defaultIterator : getIterationMethod(KEYS),
             entries: getIterationMethod(ENTRIES)
           };
-          if (FORCED) for (KEY4 in methods) {
-            if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY4 in IterablePrototype)) {
-              defineBuiltIn(IterablePrototype, KEY4, methods[KEY4]);
+          if (FORCED) for (KEY5 in methods) {
+            if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY5 in IterablePrototype)) {
+              defineBuiltIn(IterablePrototype, KEY5, methods[KEY5]);
             }
           } else $({
             target: NAME,
@@ -6245,11 +6245,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         el.src = url2;
         return;
       }
-      kitsuSmall(kitsu).then(function (small) {
+      kitsuSmall(kitsu).then(function (small2) {
         if (!el.__on) return;
-        if (small) {
-          el.setAttribute("data-lazy", small);
-          el.src = small;
+        if (small2) {
+          el.setAttribute("data-lazy", small2);
+          el.src = small2;
         } else if (el.onerror) el.onerror();
       });
     } else if (!on && el.__on) {
@@ -18433,9 +18433,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
+  var small = function small(u) {
+    return u ? "https://wsrv.nl/?url=" + encodeURIComponent(u) + "&w=300&h=169&fit=cover&a=top&output=jpg&q=72" : "";
+  };
   var seriesArt = function seriesArt(name) {
     return searchVolumes(name, 0).then(function (r) {
-      return r.items[0] ? r.items[0].art || r.items[0].poster : "";
+      return r.items[0] ? small(r.items[0].art || r.items[0].poster) : "";
     });
   };
   function heroTiles(parent, title, names2, cacheKey) {
@@ -18634,11 +18637,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       });
       seriesRow(ROWS[0]);
-      heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel");
+      heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel2");
       seriesRow(ROWS[1]);
-      heroTiles(rows2, t("Heróis da DC"), DC, "comicArtDC");
+      heroTiles(rows2, t("Heróis da DC"), DC, "comicArtDC2");
       seriesRow(ROWS[2]);
-      heroTiles(rows2, t("Independentes"), INDIE, "comicArtIndie");
+      heroTiles(rows2, t("Independentes"), INDIE, "comicArtIndie2");
       ROWS.slice(3).forEach(seriesRow);
       setTimeout(loadNearby, 50);
     }
@@ -20120,6 +20123,123 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return "movies";
   }
 
+  // src/js/data/franchiseLive.js
+  var KEY3 = "franchiseLive";
+  var FRESH = 3 * 864e5;
+  var MCU_KEYWORD = "180547";
+  function cache7() {
+    return get(KEY3, {}) || {};
+  }
+  function withLive(f) {
+    var c = cache7()[f.id];
+    if (!c || !c.items || !c.items.length) return f;
+    var have = {};
+    f.items.forEach(function (it) {
+      return have[it[0]] = 1;
+    });
+    var extra = c.items.filter(function (it) {
+      return !have[it[0]];
+    });
+    return extra.length ? Object.assign({}, f, {
+      items: f.items.concat(extra)
+    }) : f;
+  }
+  var yearOf = function yearOf(d) {
+    return parseInt(String(d || "").slice(0, 4), 10) || 0;
+  };
+  var lastYear = function lastYear(f) {
+    return f.items.reduce(function (m, it) {
+      return Math.max(m, it[2] || 0);
+    }, 0);
+  };
+  function mcu(f) {
+    var from = lastYear(f) + "-01-01";
+    var pick2 = function pick2(r, type) {
+      return (r && r.results || []).filter(function (x) {
+        return type === "tv" ? x.first_air_date : x.release_date;
+      }).map(function (x) {
+        return {
+          id: x.id,
+          type: type,
+          title: x.title || x.name,
+          date: type === "tv" ? x.first_air_date : x.release_date
+        };
+      });
+    };
+    return Promise.all([tmdbGet("discover/movie", {
+      with_keywords: MCU_KEYWORD,
+      sort_by: "primary_release_date.asc",
+      "primary_release_date.gte": from,
+      language: "en-US"
+    }).then(function (r) {
+      return pick2(r, "movie");
+    }), tmdbGet("discover/tv", {
+      with_keywords: MCU_KEYWORD,
+      sort_by: "first_air_date.asc",
+      "first_air_date.gte": from,
+      language: "en-US"
+    }).then(function (r) {
+      return pick2(r, "tv");
+    })]).then(function (lists) {
+      var all2 = lists[0].concat(lists[1]).sort(function (a, b) {
+        return String(a.date).localeCompare(String(b.date));
+      });
+      return Promise.all(all2.map(function (x) {
+        return tmdbImdb(x.type, x.id).catch(function () {
+          return null;
+        });
+      })).then(function (ids2) {
+        return all2.map(function (x, i) {
+          return ids2[i] ? x.type === "tv" ? [ids2[i], x.title, yearOf(x.date), "s"] : [ids2[i], x.title, yearOf(x.date)] : null;
+        }).filter(Boolean);
+      });
+    });
+  }
+  function collection(f) {
+    var name = f.name.replace(/\b(saga|collection|franchise|films?|movies?)\b/gi, "").trim();
+    return searchCollections(name).then(function (list2) {
+      var best2 = null;
+      var score = 0;
+      list2.forEach(function (c) {
+        var s = likeness(name, String(c.name).replace(/\b(collection|coleção)\b/gi, ""));
+        if (s > score) {
+          score = s;
+          best2 = c;
+        }
+      });
+      if (!best2 || score < 0.85) return [];
+      return tmdbCollection(best2.id).then(function (c) {
+        return c.items;
+      });
+    });
+  }
+  function refresh(f) {
+    if (!hasTmdb() || /^tmdb:/.test(f.id)) return Promise.resolve(f);
+    var c = cache7()[f.id];
+    if (c && c.at > Date.now() - FRESH) return Promise.resolve(withLive(f));
+    var series = f.items.some(function (it) {
+      return it[3] === "s";
+    });
+    var job = f.id === "mcu" ? mcu(f) : series ? Promise.resolve([]) : collection(f);
+    return job.then(function (items3) {
+      var have = {};
+      f.items.forEach(function (it) {
+        return have[it[0]] = 1;
+      });
+      var all2 = cache7();
+      all2[f.id] = {
+        at: Date.now(),
+        items: (items3 || []).filter(function (it) {
+          return !have[it[0]];
+        })
+      };
+      set(KEY3, all2);
+      return withLive(f);
+    }).catch(function () {
+      return withLive(f);
+    });
+  }
+
   // src/js/views/collections.js
   var POSTER = function POSTER(imdb) {
     return "https://images.metahub.space/poster/small/" + imdb + "/img";
@@ -20156,7 +20276,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return favs2().map(function (x) {
       var f = findFranchise(x.id);
       if (f) return {
-        f: f
+        f: withLive(f)
       };
       var m = /^tmdb:(\d+)$/.exec(x.id);
       return m ? {
@@ -20401,12 +20521,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     f.items.forEach(function (it) {
       return byId[it[0]] = it;
     });
+    var inChrono = {};
+    f.chrono.forEach(function (id) {
+      return inChrono[id] = 1;
+    });
     return f.chrono.map(function (id) {
       return byId[id];
-    }).filter(Boolean);
+    }).filter(Boolean).concat(f.items.filter(function (it) {
+      return !inChrono[it[0]];
+    }));
   }
   function openFranchise(f) {
-    push(FranchiseView(f));
+    var view = FranchiseView(withLive(f));
+    push(view);
+    refresh(f).then(function (f2) {
+      return view.__update(f2);
+    });
   }
   function openTmdbCollection(id) {
     toast(t("Carregando coleção..."), 2500);
@@ -20421,7 +20551,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return String(s || "").toLowerCase().replace(/collection|coleção|سلسلة|[^a-z0-9]/g, "");
   }
   var BACKDROP = function BACKDROP(imdb) {
-    return "https://images.metahub.space/background/medium/" + imdb + "/img";
+    return "https://wsrv.nl/?url=" + encodeURIComponent("https://images.metahub.space/background/medium/" + imdb + "/img") + "&w=420&h=236&fit=cover&output=jpg&q=72";
   };
   function collTile(o) {
     var art = h("div.ct-art");
@@ -20593,7 +20723,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function render() {
       lastSig = sig();
       clear(rows2);
-      var going = FRANCHISES.map(function (f) {
+      var ALL = FRANCHISES.map(withLive);
+      var going = ALL.map(function (f) {
         return {
           f: f,
           done: watchedCount(f)
@@ -20635,7 +20766,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       })])]));
       addRow(t("Minhas coleções"), "", mine);
       CATS2.forEach(function (c) {
-        var list2 = FRANCHISES.filter(function (f) {
+        var list2 = ALL.filter(function (f) {
           return catOf(f) === c.id;
         });
         addRow(t(c.label), t("{n} coleções", {
@@ -20844,6 +20975,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       el: el,
       onShow: function onShow() {
         return render();
+      },
+      __update: function __update(f2) {
+        if (!f2 || f2.items.length === f.items.length) return;
+        f = f2;
+        render(true);
       }
     };
   }
@@ -20857,10 +20993,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     SUMMER: "0701",
     FALL: "1001"
   };
-  var cache7 = {};
+  var cache8 = {};
   function anilist2(query) {
-    if (!cache7[query]) {
-      cache7[query] = postJSON(API7, {
+    if (!cache8[query]) {
+      cache8[query] = postJSON(API7, {
         query: query
       }, {
         timeout: 15e3,
@@ -20868,11 +21004,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).then(function (r) {
         return r && r.data;
       }).catch(function (e) {
-        delete cache7[query];
+        delete cache8[query];
         throw e;
       });
     }
-    return cache7[query];
+    return cache8[query];
   }
   function toMetas2(list2) {
     return (list2 || []).map(function (m) {
@@ -21454,25 +21590,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/iptv.js
-  var KEY3 = "iptvSources";
+  var KEY4 = "iptvSources";
   var FAVS2 = "iptvFavs";
   var sources2 = function sources2() {
-    return get(KEY3, []) || [];
+    return get(KEY4, []) || [];
   };
   function saveSource(src) {
     var all2 = sources2().filter(function (x) {
       return x.id !== src.id;
     });
     all2.push(src);
-    set(KEY3, all2);
+    set(KEY4, all2);
     set("iptvActive", src.id);
   }
   function removeSource(id) {
-    set(KEY3, sources2().filter(function (x) {
+    set(KEY4, sources2().filter(function (x) {
       return x.id !== id;
     }));
     if (get("iptvActive", "") === id) set("iptvActive", "");
-    delete cache8[id];
+    delete cache9[id];
   }
   function active2() {
     var all2 = sources2();
@@ -21536,9 +21672,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return r.user_info;
     });
   }
-  var cache8 = {};
+  var cache9 = {};
   function categories(s) {
-    var c = cache8[s.id] = cache8[s.id] || {
+    var c = cache9[s.id] = cache9[s.id] || {
       byCat: {}
     };
     if (c.cats) return Promise.resolve(c.cats);
@@ -21558,7 +21694,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function channels(s, catId) {
-    var c = cache8[s.id] = cache8[s.id] || {
+    var c = cache9[s.id] = cache9[s.id] || {
       byCat: {}
     };
     if (c.byCat[catId]) return Promise.resolve(c.byCat[catId]);
@@ -21584,13 +21720,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function loaded(s) {
-    var c = cache8[s.id];
+    var c = cache9[s.id];
     return c ? Object.keys(c.byCat).map(function (k) {
       return c.byCat[k];
     }) : [];
   }
   function loadM3u(s) {
-    var c = cache8[s.id] = cache8[s.id] || {
+    var c = cache9[s.id] = cache9[s.id] || {
       byCat: {}
     };
     if (c.cats) return Promise.resolve();
@@ -22192,8 +22328,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         alt: ""
       });
       var size = shape === "landscape" ? "&w=400&h=225&fit=cover" : shape === "square" ? "&w=260&h=260&fit=contain&cbg=f2f0f8" : "&w=230&h=345&fit=cover";
-      var small = "https://wsrv.nl/?url=" + encodeURIComponent(f.c) + size + "&output=jpg&q=80";
-      im.setAttribute("data-lazy", small);
+      var small2 = "https://wsrv.nl/?url=" + encodeURIComponent(f.c) + size + "&output=jpg&q=80";
+      im.setAttribute("data-lazy", small2);
       var triedFull = false;
       im.onerror = function () {
         if (!triedFull) {
@@ -23829,7 +23965,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T07:47:24.265Z";
+  var BUILD = "2026-11-17T07:52:10.875Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
