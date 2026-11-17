@@ -1240,4 +1240,8 @@ export const EN = {
   "Faixas de áudio": "Audio tracks",
   "O áudio toca neste aparelho ({d})": "The audio plays on this device ({d})",
   "O áudio não abriu: {u}": "The audio did not open: {u}",
+  "Livros famosos": "Famous books",
+  "Viraram filmes e séries": "Made into films and series",
+  "Clássicos que todo mundo conhece": "Classics everyone knows",
+  "Mistério e suspense famosos": "Famous mystery and thrillers",
 };

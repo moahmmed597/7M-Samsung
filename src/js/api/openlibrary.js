@@ -51,6 +51,20 @@ export function subject(name, page) {
   }));
 }
 
+// One well-known book by name + author: the work with the most editions (the real book, not a study
+// guide or a box set), shown under the usual English name even when Open Library keeps the original one.
+export function famous(name, author) {
+  const fields = 'key,title,author_name,cover_i,first_publish_year,edition_count';
+  return get('/search.json?q=' + encodeURIComponent(name + ' ' + (author || '')) + '&limit=8&fields=' + fields).then((j) => {
+    const docs = ((j && j.docs) || []).filter((d) => d.cover_i && !/box(ed)? set|collection|colou?ring|guide|summary|a-z/i.test(d.title || ''));
+    const best = docs.sort((a, b) => (b.edition_count || 0) - (a.edition_count || 0))[0];
+    if (!best) return null;
+    const m = toMeta(best);
+    m.name = m.title = name;
+    return m;
+  });
+}
+
 // Search by title or author (lang: 'ara' for Arabic books, optional).
 export function search(q, page, lang) {
   const fields = 'key,title,author_name,cover_i,first_publish_year';

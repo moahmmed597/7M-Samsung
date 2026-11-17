@@ -29,6 +29,62 @@ const GENRES = [
 ];
 const MONTH = 30 * 864e5;
 
+// The books everyone knows, first in the tab: [name, author]. Covers and Open Library ids are looked up
+// once and kept for a month.
+const FAMOUS = [
+  ['🔥', 'Livros famosos', [
+    ['A Game of Thrones', 'George R. R. Martin'], ['The Last Wish', 'Andrzej Sapkowski'], ["Harry Potter and the Philosopher's Stone", 'J. K. Rowling'],
+    ['The Fellowship of the Ring', 'J. R. R. Tolkien'], ['The Hobbit', 'J. R. R. Tolkien'], ['Dune', 'Frank Herbert'], ['The Hunger Games', 'Suzanne Collins'],
+    ['The Name of the Wind', 'Patrick Rothfuss'], ['The Way of Kings', 'Brandon Sanderson'], ['Mistborn', 'Brandon Sanderson'], ['The Eye of the World', 'Robert Jordan'],
+    ['Fourth Wing', 'Rebecca Yarros'], ['A Court of Thorns and Roses', 'Sarah J. Maas'], ['The Lightning Thief', 'Rick Riordan'], ['Shadow and Bone', 'Leigh Bardugo'],
+    ['The Lion, the Witch and the Wardrobe', 'C. S. Lewis'], ['Eragon', 'Christopher Paolini'], ['The Alchemist', 'Paulo Coelho'], ['The Da Vinci Code', 'Dan Brown'],
+  ]],
+  ['🎬', 'Viraram filmes e séries', [
+    ['The Godfather', 'Mario Puzo'], ['Jurassic Park', 'Michael Crichton'], ['The Shining', 'Stephen King'], ['It', 'Stephen King'], ['The Martian', 'Andy Weir'],
+    ['Gone Girl', 'Gillian Flynn'], ['The Silence of the Lambs', 'Thomas Harris'], ['Fight Club', 'Chuck Palahniuk'], ['Shogun', 'James Clavell'],
+    ['The Three-Body Problem', 'Liu Cixin'], ['Leviathan Wakes', 'James S. A. Corey'], ["The Handmaid's Tale", 'Margaret Atwood'], ['Outlander', 'Diana Gabaldon'],
+    ['The Lord of the Rings', 'J. R. R. Tolkien'], ['Twilight', 'Stephenie Meyer'], ['The Maze Runner', 'James Dashner'], ['Ready Player One', 'Ernest Cline'],
+  ]],
+  ['🏛', 'Clássicos que todo mundo conhece', [
+    ['Nineteen Eighty-Four', 'George Orwell'], ['To Kill a Mockingbird', 'Harper Lee'], ['Pride and Prejudice', 'Jane Austen'], ['The Great Gatsby', 'F. Scott Fitzgerald'],
+    ['Crime and Punishment', 'Fyodor Dostoevsky'], ['One Hundred Years of Solitude', 'Gabriel García Márquez'], ['Les Misérables', 'Victor Hugo'],
+    ['The Count of Monte Cristo', 'Alexandre Dumas'], ['Don Quixote', 'Miguel de Cervantes'], ['The Little Prince', 'Antoine de Saint-Exupéry'], ['Animal Farm', 'George Orwell'],
+    ['Frankenstein', 'Mary Shelley'], ['Dracula', 'Bram Stoker'], ['Moby-Dick', 'Herman Melville'], ['War and Peace', 'Leo Tolstoy'], ['The Old Man and the Sea', 'Ernest Hemingway'],
+  ]],
+  ['🕵', 'Mistério e suspense famosos', [
+    ['The Girl with the Dragon Tattoo', 'Stieg Larsson'], ['And Then There Were None', 'Agatha Christie'], ['Murder on the Orient Express', 'Agatha Christie'],
+    ['The Silent Patient', 'Alex Michaelides'], ['Angels & Demons', 'Dan Brown'], ['The Girl on the Train', 'Paula Hawkins'], ['A Study in Scarlet', 'Arthur Conan Doyle'],
+    ['The Hound of the Baskervilles', 'Arthur Conan Doyle'], ['Big Little Lies', 'Liane Moriarty'], ['The Firm', 'John Grisham'], ['Rebecca', 'Daphne du Maurier'],
+  ]],
+];
+
+function famousList(list) {
+  const all = store.get('bookFamous1', {}) || {};
+  const fresh = (x) => all[x[0]] && all[x[0]].at > Date.now() - MONTH;
+  const out = new Array(list.length);
+  let i = 0;
+  const lane = () => {
+    if (i >= list.length) return Promise.resolve();
+    const k = i++;
+    const x = list[k];
+    if (fresh(x)) {
+      out[k] = all[x[0]].m;
+      return lane();
+    }
+    return ol
+      .famous(x[0], x[1])
+      .then((m) => {
+        out[k] = m;
+        all[x[0]] = { at: Date.now(), m: m };
+      }, () => {})
+      .then(lane);
+  };
+  return Promise.all([lane(), lane(), lane(), lane()]).then(() => {
+    store.set('bookFamous1', all);
+    return out.filter(Boolean);
+  });
+}
+
 // One cover per genre tile (the top book of that subject), kept for a month.
 function genreArt(row) {
   const cached = store.get('bookGenreArt', null);
@@ -141,7 +197,8 @@ export function BooksView() {
       }
     });
   }
-  // Your sources first (all readable), then the Open Library catalog.
+  // The famous books first, then your sources (all readable), then the rest of the catalog.
+  FAMOUS.forEach((f) => pending.push(posterRow(rows, f[0] + ' ' + t(f[1]), () => famousList(f[2]))));
   sourceRows(rows, 'books').forEach((r) => pending.push(r));
   if (pending.length) rows.appendChild(h('div.row-title.src-rows-title', { text: t('Catálogo') }));
   pending.push(posterRow(rows, t('Em alta hoje'), () => ol.trending('daily')));

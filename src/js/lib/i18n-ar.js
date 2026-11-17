@@ -1240,4 +1240,8 @@ export const AR = {
   "Faixas de áudio": "المقاطع الصوتية",
   "O áudio toca neste aparelho ({d})": "الصوت يشتغل على هذا الجهاز ({d})",
   "O áudio não abriu: {u}": "الصوت ما اشتغل: {u}",
+  "Livros famosos": "كتب مشهورة",
+  "Viraram filmes e séries": "صارت أفلام ومسلسلات",
+  "Clássicos que todo mundo conhece": "كلاسيكيات يعرفها الكل",
+  "Mistério e suspense famosos": "غموض وإثارة مشهورة",
 };
