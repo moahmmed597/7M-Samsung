@@ -7450,7 +7450,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text: t("Adicionar perfil")
     })]));
     var el = h("div.view.profile-picker", null, [h("div.boot-logo", {
-      html: "Stremio <b>7M</b>"
+      html: "Stremio&nbsp;<b>7M</b>"
     }), h("h1", {
       text: t("Quem está assistindo?")
     }), h("div.profile-row", {
@@ -24218,7 +24218,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T08:41:37.450Z";
+  var BUILD = "2026-11-17T08:46:40.711Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
