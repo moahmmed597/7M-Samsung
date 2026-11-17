@@ -450,6 +450,8 @@ function buildHero() {
   // ---------- Ambient mode (Settings → Appearance): the trailer plays behind the banner ----------
   let ambientTimer = null;
   let ambientOn = false;
+  // YouTube refuses to play inside this app on some TVs (error 153): after an error we stop trying.
+  let ambientBroken = false;
   function stopAmbient() {
     clearTimeout(ambientTimer);
     ambientTimer = null;
@@ -457,13 +459,14 @@ function buildHero() {
       ambientOn = false;
       ambient.classList.remove('show');
       const f = ambient.firstChild;
+      if (f && f.__off) f.__off();
       if (f) f.src = 'about:blank';
       clear(ambient);
     }
   }
   function queueAmbient() {
     stopAmbient();
-    if (!store.settings().ambientMode || paused) return;
+    if (!store.settings().ambientMode || paused || ambientBroken) return;
     const it = items[index];
     ambientTimer = setTimeout(() => {
       if (paused || items[index] !== it || el.getBoundingClientRect().bottom < 200) return;
@@ -474,8 +477,33 @@ function buildHero() {
           clearTimeout(timer); // no rotation while the trailer plays
           ambientOn = true;
           const frame = h('iframe', { tabindex: '-1', allow: 'autoplay; encrypted-media', referrerpolicy: 'origin' });
-          frame.onload = () => setTimeout(() => ambientOn && ambient.classList.add('show'), 1500);
-          frame.src = 'https://www.youtube-nocookie.com/embed/' + list[0] + '?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5';
+          // Never takes the remote's keys; shown only once YouTube says it is really playing.
+          frame.setAttribute('inert', '');
+          frame.style.pointerEvents = 'none';
+          frame.onload = () => {
+            try {
+              frame.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 'ambient' }), '*');
+            } catch (e) {}
+          };
+          const onMsg = (e) => {
+            if (!ambientOn || !frame.contentWindow || e.source !== frame.contentWindow) return;
+            let d = null;
+            try {
+              d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+            } catch (er) {}
+            if (!d) return;
+            const state = d.event === 'onStateChange' ? d.info : d.info && d.info.playerState;
+            if (state === 1) ambient.classList.add('show');
+            if (d.event === 'onError') {
+              ambientBroken = true;
+              window.removeEventListener('message', onMsg);
+              stopAmbient();
+              schedule();
+            }
+          };
+          window.addEventListener('message', onMsg);
+          frame.__off = () => window.removeEventListener('message', onMsg);
+          frame.src = 'https://www.youtube-nocookie.com/embed/' + list[0] + '?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5&enablejsapi=1';
           ambient.appendChild(frame);
           // A minute and a half, then back to the rotating pictures.
           ambientTimer = setTimeout(() => {

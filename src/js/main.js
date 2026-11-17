@@ -153,6 +153,25 @@ function boot() {
 }
 
 // Carrega o perfil escolhido: conta, biblioteca, addons e a tela inicial.
+// An embedded page (YouTube trailer) that takes the focus would swallow every key of the remote and
+// the app would look frozen: the focus comes straight back to the app.
+function guardFocus() {
+  const back = () => {
+    const a = document.activeElement;
+    if (a && a.tagName === 'IFRAME') {
+      try {
+        a.blur();
+      } catch (e) {}
+      try {
+        window.focus();
+      } catch (e) {}
+    }
+  };
+  window.addEventListener('blur', () => setTimeout(back, 0));
+  setInterval(back, 2000);
+}
+guardFocus();
+
 function start() {
   // Plugins with a newer version in their repository update themselves (once a day, in the background).
   setTimeout(() => plugins.autoUpdate(), 20000);

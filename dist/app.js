@@ -13983,6 +13983,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var hint = h("div.trailer-hint", {
       text: title + "  ·  " + t("Voltar fecha o trailer")
     });
+    frame.setAttribute("inert", "");
     el.appendChild(frame);
     el.appendChild(hint);
     el.appendChild(h("div.trailer-focus", {
@@ -23482,6 +23483,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var bgToken = 0;
     var ambientTimer = null;
     var ambientOn = false;
+    var ambientBroken = false;
     function stopAmbient() {
       clearTimeout(ambientTimer);
       ambientTimer = null;
@@ -23489,13 +23491,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         ambientOn = false;
         ambient.classList.remove("show");
         var f = ambient.firstChild;
+        if (f && f.__off) f.__off();
         if (f) f.src = "about:blank";
         clear(ambient);
       }
     }
     function queueAmbient() {
       stopAmbient();
-      if (!settings().ambientMode || paused) return;
+      if (!settings().ambientMode || paused || ambientBroken) return;
       var it = items3[index2];
       ambientTimer = setTimeout(function () {
         if (paused || items3[index2] !== it || el.getBoundingClientRect().bottom < 200) return;
@@ -23511,12 +23514,37 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             allow: "autoplay; encrypted-media",
             referrerpolicy: "origin"
           });
+          frame.setAttribute("inert", "");
+          frame.style.pointerEvents = "none";
           frame.onload = function () {
-            return setTimeout(function () {
-              return ambientOn && ambient.classList.add("show");
-            }, 1500);
+            try {
+              frame.contentWindow.postMessage(JSON.stringify({
+                event: "listening",
+                id: "ambient"
+              }), "*");
+            } catch (e) {}
           };
-          frame.src = "https://www.youtube-nocookie.com/embed/" + list2[0] + "?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5";
+          var _onMsg = function onMsg(e) {
+            if (!ambientOn || !frame.contentWindow || e.source !== frame.contentWindow) return;
+            var d = null;
+            try {
+              d = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+            } catch (er) {}
+            if (!d) return;
+            var state = d.event === "onStateChange" ? d.info : d.info && d.info.playerState;
+            if (state === 1) ambient.classList.add("show");
+            if (d.event === "onError") {
+              ambientBroken = true;
+              window.removeEventListener("message", _onMsg);
+              stopAmbient();
+              schedule();
+            }
+          };
+          window.addEventListener("message", _onMsg);
+          frame.__off = function () {
+            return window.removeEventListener("message", _onMsg);
+          };
+          frame.src = "https://www.youtube-nocookie.com/embed/" + list2[0] + "?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5&enablejsapi=1";
           ambient.appendChild(frame);
           ambientTimer = setTimeout(function () {
             stopAmbient();
@@ -24016,7 +24044,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T08:13:30.219Z";
+  var BUILD = "2026-11-17T08:18:13.128Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -27262,6 +27290,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (!document.hidden) check();
     });
   }
+  function guardFocus() {
+    var back2 = function back2() {
+      var a = document.activeElement;
+      if (a && a.tagName === "IFRAME") {
+        try {
+          a.blur();
+        } catch (e) {}
+        try {
+          window.focus();
+        } catch (e) {}
+      }
+    };
+    window.addEventListener("blur", function () {
+      return setTimeout(back2, 0);
+    });
+    setInterval(back2, 2e3);
+  }
+  guardFocus();
   function start3() {
     setTimeout(function () {
       return autoUpdate();

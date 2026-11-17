@@ -23,6 +23,7 @@ function TrailerView(ids, title) {
   const el = h('div.view.trailer');
   const frame = h('iframe.trailer-frame', { tabindex: '-1', allow: 'autoplay; encrypted-media', allowfullscreen: '', referrerpolicy: 'origin' });
   const hint = h('div.trailer-hint', { text: title + '  ·  ' + t('Voltar fecha o trailer') });
+  frame.setAttribute('inert', '');
   el.appendChild(frame);
   el.appendChild(hint);
   // The focus target the router lands on: keeps key events in the app, not in the iframe.
