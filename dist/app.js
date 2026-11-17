@@ -27,12 +27,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         _step;
       try {
         var _loop = function _loop() {
-          var key3 = _step.value;
-          if (!__hasOwnProp.call(to, key3) && key3 !== except) __defProp(to, key3, {
+          var key4 = _step.value;
+          if (!__hasOwnProp.call(to, key4) && key4 !== except) __defProp(to, key4, {
             get: function get() {
-              return from[key3];
+              return from[key4];
             },
-            enumerable: !(desc = __getOwnPropDesc(from, key3)) || desc.enumerable
+            enumerable: !(desc = __getOwnPropDesc(from, key4)) || desc.enumerable
           });
         };
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -475,15 +475,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var globalThis2 = require_global_this();
       var defineProperty = Object.defineProperty;
-      module.exports = function (key3, value) {
+      module.exports = function (key4, value) {
         try {
-          defineProperty(globalThis2, key3, {
+          defineProperty(globalThis2, key4, {
             value: value,
             configurable: true,
             writable: true
           });
         } catch (error) {
-          globalThis2[key3] = value;
+          globalThis2[key4] = value;
         }
         return value;
       };
@@ -517,8 +517,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var store = require_shared_store();
       var create2 = Object.create || Object;
-      module.exports = function (key3, value) {
-        return store[key3] || (store[key3] = value || create2(null));
+      module.exports = function (key4, value) {
+        return store[key4] || (store[key4] = value || create2(null));
       };
     }
   });
@@ -544,8 +544,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var uncurryThis = require_function_uncurry_this();
       var toObject = require_to_object();
       var hasOwnProperty = uncurryThis({}.hasOwnProperty);
-      module.exports = Object.hasOwn || function hasOwn(it, key3) {
-        return hasOwnProperty(toObject(it), key3);
+      module.exports = Object.hasOwn || function hasOwn(it, key4) {
+        return hasOwnProperty(toObject(it), key4);
       };
     }
   });
@@ -559,8 +559,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var id = 0;
       var postfix = Math.random();
       var toString = uncurryThis(1.1.toString);
-      module.exports = function (key3) {
-        return "Symbol(" + (key3 === void 0 ? "" : key3) + ")_" + toString(++id + postfix, 36);
+      module.exports = function (key4) {
+        return "Symbol(" + (key4 === void 0 ? "" : key4) + ")_" + toString(++id + postfix, 36);
       };
     }
   });
@@ -625,8 +625,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var toPrimitive = require_to_primitive();
       var isSymbol = require_is_symbol();
       module.exports = function (argument) {
-        var key3 = toPrimitive(argument, "string");
-        return isSymbol(key3) ? key3 : key3 + "";
+        var key4 = toPrimitive(argument, "string");
+        return isSymbol(key4) ? key4 : key4 + "";
       };
     }
   });
@@ -774,10 +774,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var DESCRIPTORS = require_descriptors();
       var definePropertyModule = require_object_define_property();
       var createPropertyDescriptor = require_create_property_descriptor();
-      module.exports = DESCRIPTORS ? function (object, key3, value) {
-        return definePropertyModule.f(object, key3, createPropertyDescriptor(1, value));
-      } : function (object, key3, value) {
-        object[key3] = value;
+      module.exports = DESCRIPTORS ? function (object, key4, value) {
+        return definePropertyModule.f(object, key4, createPropertyDescriptor(1, value));
+      } : function (object, key4, value) {
+        object[key4] = value;
         return object;
       };
     }
@@ -841,8 +841,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var shared = require_shared();
       var uid = require_uid();
       var keys2 = shared("keys");
-      module.exports = function (key3) {
-        return keys2[key3] || (keys2[key3] = uid(key3));
+      module.exports = function (key4) {
+        return keys2[key4] || (keys2[key4] = uid(key4));
       };
     }
   });
@@ -873,15 +873,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var TypeError2 = globalThis2.TypeError;
       var WeakMap = globalThis2.WeakMap;
       var set2;
-      var get3;
+      var get4;
       var has;
       var enforce = function enforce(it) {
-        return has(it) ? get3(it) : set2(it, {});
+        return has(it) ? get4(it) : set2(it, {});
       };
       var getterFor = function getterFor(TYPE) {
         return function (it) {
           var state;
-          if (!isObject(it) || (state = get3(it)).type !== TYPE) {
+          if (!isObject(it) || (state = get4(it)).type !== TYPE) {
             throw new TypeError2("Incompatible receiver, " + TYPE + " required");
           }
           return state;
@@ -898,7 +898,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           store.set(it, metadata);
           return metadata;
         };
-        get3 = function get3(it) {
+        get4 = function get4(it) {
           return store.get(it) || {};
         };
         has = function has(it) {
@@ -913,7 +913,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           createNonEnumerableProperty(it, STATE, metadata);
           return metadata;
         };
-        get3 = function get3(it) {
+        get4 = function get4(it) {
           return hasOwn(it, STATE) ? it[STATE] : {};
         };
         has = function has(it) {
@@ -924,7 +924,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var STATE;
       module.exports = {
         set: set2,
-        get: get3,
+        get: get4,
         has: has,
         enforce: enforce,
         getterFor: getterFor
@@ -1003,18 +1003,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var definePropertyModule = require_object_define_property();
       var makeBuiltIn = require_make_built_in();
       var defineGlobalProperty = require_define_global_property();
-      module.exports = function (O, key3, value, options) {
+      module.exports = function (O, key4, value, options) {
         if (!options) options = {};
         var simple = options.enumerable;
-        var name = options.name !== void 0 ? options.name : key3;
+        var name = options.name !== void 0 ? options.name : key4;
         if (isCallable(value)) makeBuiltIn(value, name, options);
         if (options.global) {
-          if (simple) O[key3] = value;else defineGlobalProperty(key3, value);
+          if (simple) O[key4] = value;else defineGlobalProperty(key4, value);
         } else {
           try {
-            if (!options.unsafe) delete O[key3];else if (O[key3]) simple = true;
+            if (!options.unsafe) delete O[key4];else if (O[key4]) simple = true;
           } catch (error) {}
-          if (simple) O[key3] = value;else definePropertyModule.f(O, key3, {
+          if (simple) O[key4] = value;else definePropertyModule.f(O, key4, {
             value: value,
             enumerable: false,
             configurable: !options.nonConfigurable,
@@ -1144,10 +1144,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var O = toIndexedObject(object);
         var i = 0;
         var result = [];
-        var key3;
-        for (key3 in O) !hasOwn(hiddenKeys, key3) && hasOwn(O, key3) && push2(result, key3);
-        while (names2.length > i) if (hasOwn(O, key3 = names2[i++])) {
-          ~indexOf(result, key3) || push2(result, key3);
+        var key4;
+        for (key4 in O) !hasOwn(hiddenKeys, key4) && hasOwn(O, key4) && push2(result, key4);
+        while (names2.length > i) if (hasOwn(O, key4 = names2[i++])) {
+          ~indexOf(result, key4) || push2(result, key4);
         }
         return result;
       };
@@ -1219,9 +1219,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var defineProperty = definePropertyModule.f;
         var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
         for (var i = 0; i < keys2.length; i++) {
-          var key3 = keys2[i];
-          if (!hasOwn(target, key3) && !(exceptions && hasOwn(exceptions, key3))) {
-            defineProperty(target, key3, getOwnPropertyDescriptor(source, key3));
+          var key4 = keys2[i];
+          if (!hasOwn(target, key4) && !(exceptions && hasOwn(exceptions, key4))) {
+            defineProperty(target, key4, getOwnPropertyDescriptor(source, key4));
           }
         }
       };
@@ -1266,7 +1266,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var TARGET = options.target;
         var GLOBAL = options.global;
         var STATIC = options.stat;
-        var FORCED, target, key3, targetProperty, sourceProperty, descriptor;
+        var FORCED, target, key4, targetProperty, sourceProperty, descriptor;
         if (GLOBAL) {
           target = globalThis2;
         } else if (STATIC) {
@@ -1274,13 +1274,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         } else {
           target = globalThis2[TARGET] && globalThis2[TARGET].prototype;
         }
-        if (target) for (key3 in source) {
-          sourceProperty = source[key3];
+        if (target) for (key4 in source) {
+          sourceProperty = source[key4];
           if (options.dontCallGetSet) {
-            descriptor = getOwnPropertyDescriptor(target, key3);
+            descriptor = getOwnPropertyDescriptor(target, key4);
             targetProperty = descriptor && descriptor.value;
-          } else targetProperty = target[key3];
-          FORCED = isForced(GLOBAL ? key3 : TARGET + (STATIC ? "." : "#") + key3, options.forced);
+          } else targetProperty = target[key4];
+          FORCED = isForced(GLOBAL ? key4 : TARGET + (STATIC ? "." : "#") + key4, options.forced);
           if (!FORCED && targetProperty !== void 0) {
             if (_typeof(sourceProperty) == _typeof(targetProperty)) continue;
             copyConstructorProperties(sourceProperty, targetProperty);
@@ -1288,7 +1288,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           if (options.sham || targetProperty && targetProperty.sham) {
             createNonEnumerableProperty(sourceProperty, "sham", true);
           }
-          defineBuiltIn(target, key3, sourceProperty, options);
+          defineBuiltIn(target, key4, sourceProperty, options);
         }
       };
     }
@@ -1358,10 +1358,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var keys2 = getOwnPropertySymbols ? concat(objectKeys(S), getOwnPropertySymbols(S)) : objectKeys(S);
           var length = keys2.length;
           var j = 0;
-          var key3;
+          var key4;
           while (length > j) {
-            key3 = keys2[j++];
-            if (!DESCRIPTORS || call5(propertyIsEnumerable, S, key3)) T[key3] = S[key3];
+            key4 = keys2[j++];
+            if (!DESCRIPTORS || call5(propertyIsEnumerable, S, key4)) T[key4] = S[key4];
           }
         }
         return T;
@@ -1474,11 +1474,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var length = keys2.length;
           var i = 0;
           var result = [];
-          var key3;
+          var key4;
           while (length > i) {
-            key3 = keys2[i++];
-            if (!DESCRIPTORS || (IE_WORKAROUND ? key3 in O : propertyIsEnumerable(O, key3))) {
-              push2(result, TO_ENTRIES ? [key3, O[key3]] : O[key3]);
+            key4 = keys2[i++];
+            if (!DESCRIPTORS || (IE_WORKAROUND ? key4 in O : propertyIsEnumerable(O, key4))) {
+              push2(result, TO_ENTRIES ? [key4, O[key4]] : O[key4]);
             }
           }
           return result;
@@ -1580,9 +1580,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var CORRECT_ARGUMENTS = classofRaw(/* @__PURE__ */function () {
         return arguments;
       }()) === "Arguments";
-      var tryGet = function tryGet(it, key3) {
+      var tryGet = function tryGet(it, key4) {
         try {
-          return it[key3];
+          return it[key4];
         } catch (error) {}
       };
       module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
@@ -1657,8 +1657,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var keys2 = objectKeys(Properties);
         var length = keys2.length;
         var index2 = 0;
-        var key3;
-        while (length > index2) definePropertyModule.f(O, key3 = keys2[index2++], props[key3]);
+        var key4;
+        while (length > index2) definePropertyModule.f(O, key4 = keys2[index2++], props[key4]);
         return O;
       };
     }
@@ -1843,9 +1843,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
       var uncurryThis = require_function_uncurry_this();
       var aCallable = require_a_callable();
-      module.exports = function (object, key3, method) {
+      module.exports = function (object, key4, method) {
         try {
-          return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key3)[method]));
+          return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key4)[method]));
         } catch (error) {}
       };
     }
@@ -2214,8 +2214,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var DESCRIPTORS = require_descriptors();
       var definePropertyModule = require_object_define_property();
       var createPropertyDescriptor = require_create_property_descriptor();
-      module.exports = function (object, key3, value) {
-        if (DESCRIPTORS) definePropertyModule.f(object, key3, createPropertyDescriptor(0, value));else object[key3] = value;
+      module.exports = function (object, key4, value) {
+        if (DESCRIPTORS) definePropertyModule.f(object, key4, createPropertyDescriptor(0, value));else object[key4] = value;
       };
     }
   });
@@ -2597,8 +2597,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           value: create2(null)
         });
       }
-      module.exports = function (key3) {
-        ArrayPrototype[UNSCOPABLES][key3] = true;
+      module.exports = function (key4) {
+        ArrayPrototype[UNSCOPABLES][key4] = true;
       };
     }
   });
@@ -3575,24 +3575,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             cellSize = cellSize || 2;
             margin = typeof margin == "undefined" ? cellSize * 4 : margin;
             var size = _this.getModuleCount() * cellSize + margin * 2;
-            var img2 = "";
-            img2 += "<img";
-            img2 += ' src="';
-            img2 += _this.createDataURL(cellSize, margin);
-            img2 += '"';
-            img2 += ' width="';
-            img2 += size;
-            img2 += '"';
-            img2 += ' height="';
-            img2 += size;
-            img2 += '"';
+            var img3 = "";
+            img3 += "<img";
+            img3 += ' src="';
+            img3 += _this.createDataURL(cellSize, margin);
+            img3 += '"';
+            img3 += ' width="';
+            img3 += size;
+            img3 += '"';
+            img3 += ' height="';
+            img3 += size;
+            img3 += '"';
             if (alt) {
-              img2 += ' alt="';
-              img2 += escapeXml(alt);
-              img2 += '"';
+              img3 += ' alt="';
+              img3 += escapeXml(alt);
+              img3 += '"';
             }
-            img2 += "/>";
-            return img2;
+            img3 += "/>";
+            return img3;
           };
           var escapeXml = function escapeXml(s) {
             var escaped = "";
@@ -4607,21 +4607,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             var _map = {};
             var _size = 0;
             var _this2 = {};
-            _this2.add = function (key3) {
-              if (_this2.contains(key3)) {
-                throw "dup key:" + key3;
+            _this2.add = function (key4) {
+              if (_this2.contains(key4)) {
+                throw "dup key:" + key4;
               }
-              _map[key3] = _size;
+              _map[key4] = _size;
               _size += 1;
             };
             _this2.size = function () {
               return _size;
             };
-            _this2.indexOf = function (key3) {
-              return _map[key3];
+            _this2.indexOf = function (key4) {
+              return _map[key4];
             };
-            _this2.contains = function (key3) {
-              return typeof _map[key3] != "undefined";
+            _this2.contains = function (key4) {
+              return typeof _map[key4] != "undefined";
             };
             return _this2;
           };
@@ -5043,6 +5043,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Adicione sua chave do ComicVine em Ajustes → Chaves.": "Add your ComicVine key in Settings → Keys.",
+    "Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).": "Comics use the ComicVine catalog. Get a free key at comicvine.gamespot.com/api and put it in Settings → Keys (or on the phone page).",
+    "Para ler, adicione suas fontes em Minhas fontes.": "To read, add your sources in My sources.",
+    "Novas edições da semana": "New issues this week",
+    "Editoras": "Publishers",
+    "Heróis da Marvel": "Marvel heroes",
+    "Heróis da DC": "DC heroes",
+    "Independentes": "Independent",
+    "O ComicVine recusou a chave. Confira em Ajustes → Chaves.": "ComicVine refused the key. Check it in Settings → Keys.",
+    "Procurando edições...": "Looking for issues...",
+    "Nenhuma edição encontrada.": "No issues found.",
+    "{n} edições": "{n} issues",
+    "Continuar: #{n}": "Continue: #{n}",
+    "Filmes e séries ({n})": "Movies & shows ({n})",
+    "Série": "Show",
+    "Filme": "Movie",
+    "Edições {a}–{b}": "Issues {a}–{b}",
+    "Fonte das edições": "Issues source",
+    "Chave ComicVine": "ComicVine key",
+    "Catálogo da aba Quadrinhos: capas, edições e personagens (grátis em comicvine.gamespot.com/api)": "Catalog of the Comics tab: covers, issues and characters (free at comicvine.gamespot.com/api)",
+    "Ler os quadrinhos": "Read the comics",
     "Uma página": "One page",
     "Duas páginas": "Two pages",
     "Modo de leitura": "Reading mode",
@@ -5462,6 +5483,27 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Adicione sua chave do ComicVine em Ajustes → Chaves.": "أضف مفتاح ComicVine من الإعدادات ← المفاتيح.",
+    "Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).": "الكوميكس تستخدم كتالوج ComicVine. خذ مفتاح مجاني من comicvine.gamespot.com/api وحطه في الإعدادات ← المفاتيح (أو من صفحة الجوال).",
+    "Para ler, adicione suas fontes em Minhas fontes.": "عشان تقرأ، أضف مصادرك من مصادري.",
+    "Novas edições da semana": "إصدارات الأسبوع",
+    "Editoras": "دور النشر",
+    "Heróis da Marvel": "أبطال مارفل",
+    "Heróis da DC": "أبطال دي سي",
+    "Independentes": "مستقلة",
+    "O ComicVine recusou a chave. Confira em Ajustes → Chaves.": "ComicVine رفض المفتاح. تأكد منه في الإعدادات ← المفاتيح.",
+    "Procurando edições...": "جاري البحث عن الأعداد...",
+    "Nenhuma edição encontrada.": "ما لقيت أعداد.",
+    "{n} edições": "{n} عدد",
+    "Continuar: #{n}": "كمّل: #{n}",
+    "Filmes e séries ({n})": "أفلام ومسلسلات ({n})",
+    "Série": "مسلسل",
+    "Filme": "فيلم",
+    "Edições {a}–{b}": "الأعداد {a}–{b}",
+    "Fonte das edições": "مصدر الأعداد",
+    "Chave ComicVine": "مفتاح ComicVine",
+    "Catálogo da aba Quadrinhos: capas, edições e personagens (grátis em comicvine.gamespot.com/api)": "كتالوج تبويب الكوميكس: الأغلفة والأعداد والشخصيات (مجاني من comicvine.gamespot.com/api)",
+    "Ler os quadrinhos": "اقرأ الكوميكس",
     "Uma página": "صفحة واحدة",
     "Duas páginas": "صفحتين",
     "Modo de leitura": "طريقة القراءة",
@@ -6011,8 +6053,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (!url2) return url2;
     return String(url2).replace(/(images\.metahub\.space\/poster\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w185/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?posters\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2").replace(/(static\.tvmaze\.com\/uploads\/images\/)(original_untouched|large_landscape|medium_landscape)\//, "$1medium_portrait/").replace(/(kitsu\.app\/anime\/poster_images\/\d+\/)(original|large|medium)\.(jpg|jpeg|png)/, "$1small.jpg");
   }
-  function ratedPoster(id, key3) {
-    var k = String(key3 || "").trim();
+  function ratedPoster(id, key4) {
+    var k = String(key4 || "").trim();
     var m = String(id || "").match(/^tt\d+/);
     if (!k || !m || !/^[\w-]+$/.test(k)) return null;
     return "https://api.ratingposterdb.com/" + k + "/imdb/poster-default/" + m[0] + ".jpg?fallback=true";
@@ -6072,9 +6114,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
   }
   function kitsuSmall(info2) {
-    var key3 = info2.id + ":" + info2.kind;
-    if (!kitsuCache[key3]) {
-      kitsuCache[key3] = new Promise(function (resolve2) {
+    var key4 = info2.id + ":" + info2.kind;
+    if (!kitsuCache[key4]) {
+      kitsuCache[key4] = new Promise(function (resolve2) {
         (batch[info2.id] = batch[info2.id] || []).push({
           kind: info2.kind,
           resolve: resolve2
@@ -6082,7 +6124,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (!batchTimer) batchTimer = setTimeout(flush2, 60);
       });
     }
-    return kitsuCache[key3];
+    return kitsuCache[key4];
   }
 
   // src/js/lib/dom.js
@@ -6094,12 +6136,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (p[0] === ".") el.classList.add(p.slice(1));else if (p[0] === "#") el.id = p.slice(1);
     }
     if (props) {
-      for (var key3 in props) {
-        var val = props[key3];
+      for (var key4 in props) {
+        var val = props[key4];
         if (val === void 0 || val === null || val === false) continue;
-        if (key3 === "text") el.textContent = val;else if (key3 === "html") el.innerHTML = val;else if (key3 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key3 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key3 === "onSelect") el.__select = val;else if (key3 === "onFocus") el.__focus = val;else if (key3 === "focusable") el.setAttribute("data-focus", "");else if (key3 === "cls") String(val).split(" ").forEach(function (c) {
+        if (key4 === "text") el.textContent = val;else if (key4 === "html") el.innerHTML = val;else if (key4 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key4 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key4 === "onSelect") el.__select = val;else if (key4 === "onFocus") el.__focus = val;else if (key4 === "focusable") el.setAttribute("data-focus", "");else if (key4 === "cls") String(val).split(" ").forEach(function (c) {
           return c && el.classList.add(c);
-        });else el.setAttribute(key3, val === true ? "" : val);
+        });else el.setAttribute(key4, val === true ? "" : val);
       }
     }
     append(el, children);
@@ -6509,22 +6551,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
   // src/js/lib/store.js
   var PREFIX = "kai.";
-  function rawGet(key3, fallback) {
+  function rawGet(key4, fallback) {
     try {
-      var raw = window.localStorage.getItem(PREFIX + key3);
+      var raw = window.localStorage.getItem(PREFIX + key4);
       return raw === null ? fallback : JSON.parse(raw);
     } catch (e) {
       return fallback;
     }
   }
-  function rawSet(key3, value) {
+  function rawSet(key4, value) {
     try {
-      if (value === void 0 || value === null) window.localStorage.removeItem(PREFIX + key3);else window.localStorage.setItem(PREFIX + key3, JSON.stringify(value));
+      if (value === void 0 || value === null) window.localStorage.removeItem(PREFIX + key4);else window.localStorage.setItem(PREFIX + key4, JSON.stringify(value));
     } catch (e) {}
   }
   var COLORS = ["#7b5bf5", "#e5508c", "#2bb6a3", "#f0a030", "#3d8bfd", "#e55353", "#8bc34a", "#9e9e9e"];
-  function profileKey(id, key3) {
-    return "p." + id + "." + key3;
+  function profileKey(id, key4) {
+    return "p." + id + "." + key4;
   }
   function ensureProfiles() {
     var list2 = rawGet("profiles", null);
@@ -6605,16 +6647,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (rawGet("activeProfile", null) === id) rawSet("activeProfile", list2[0].id);
     return true;
   }
-  function getFor(profileId, key3, fallback) {
-    return rawGet(profileKey(profileId, key3), fallback);
+  function getFor(profileId, key4, fallback) {
+    return rawGet(profileKey(profileId, key4), fallback);
   }
-  function get(key3, fallback) {
-    return rawGet(profileKey(activeProfile().id, key3), fallback);
+  function get(key4, fallback) {
+    return rawGet(profileKey(activeProfile().id, key4), fallback);
   }
-  function set(key3, value) {
-    rawSet(profileKey(activeProfile().id, key3), value);
+  function set(key4, value) {
+    rawSet(profileKey(activeProfile().id, key4), value);
   }
-  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont", "clock24", "omdbKey", "region", "mangaLangs", "readerMode", "suwayomiUrl", "suwayomiNsfw"];
+  var DEVICE_KEYS = ["serverUrl", "tmdbKey", "mdblistKey", "smoothScroll", "perfMode", "devlogUrl", "lastUpdateCheck", "askProfile", "oledProtection", "wizardDone", "language", "traktClientId", "traktClientSecret", "simklClientId", "playerEngine", "animeSkipClientId", "animeSkip", "librarySource", "progressSource", "debridEnabled", "debridProvider", "realDebridKey", "torboxKey", "premiumizeKey", "mediaServer", "mediaServerEnabled", "mediaServerDeviceId", "rpdbKey", "parentalGuide", "subdlKey", "screensaver", "realDebridAuth", "appFont", "clock24", "omdbKey", "comicvineKey", "region", "mangaLangs", "readerMode", "suwayomiUrl", "suwayomiNsfw"];
   var DEFAULT_SETTINGS = {
     // TV
     serverUrl: "",
@@ -6812,14 +6854,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function logout() {
-    var key3 = authKey();
+    var key4 = authKey();
     auth = null;
     set("auth", null);
     set("addons", null);
     setLibrary([]);
-    if (key3) call("logout", {
+    if (key4) call("logout", {
       type: "Logout",
-      authKey: key3
+      authKey: key4
     }).catch(function () {});
   }
   function getAddonCollection() {
@@ -7037,10 +7079,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/views/profiles.js
   var SESSION_PICKED = "kai.profilePicked";
   var SESSION_NEW = "kai.newProfile";
-  function session(key3, value) {
+  function session(key4, value) {
     try {
-      if (value === void 0) return window.sessionStorage.getItem(key3);
-      if (value === null) window.sessionStorage.removeItem(key3);else window.sessionStorage.setItem(key3, value);
+      if (value === void 0) return window.sessionStorage.getItem(key4);
+      if (value === null) window.sessionStorage.removeItem(key4);else window.sessionStorage.setItem(key4, value);
     } catch (e) {}
     return null;
   }
@@ -7471,6 +7513,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "manga",
     label: "Mangás"
   }, {
+    id: "comics",
+    label: "Quadrinhos"
+  }, {
     id: "live",
     label: "TV ao vivo"
   }, {
@@ -7503,6 +7548,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     movies: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m440.16,0H71.841C32.228,0-.002,32.229-.002,71.842v368.319c0,39.613,32.229,71.839,71.842,71.839h368.319c39.613,0,71.842-32.226,71.842-71.839V71.842C512.002,32.229,479.773,0,440.16,0ZM38.453,275.226h58.694v79.92h-58.694v-79.92Zm337.946-38.448h-240.798V38.448h240.798v198.33Zm-279.252,0h-58.694v-79.948h58.694v79.948Zm38.454,38.448h240.798v198.327h-240.798v-198.327Zm279.252,0h58.694v79.92h-58.694v-79.92Zm0-38.448v-79.948h58.694v79.948h-58.694Zm58.694-164.936v46.54h-58.694V38.448h25.306c18.411,0,33.388,14.98,33.388,33.395ZM71.841,38.448h25.306v79.934h-58.694v-46.54c0-18.414,14.977-33.395,33.388-33.395Zm-33.388,401.714v-46.568h58.694v79.959h-25.306c-18.411,0-33.388-14.981-33.388-33.391Zm401.707,33.391h-25.306v-79.959h58.694v46.568c0,18.411-14.977,33.391-33.388,33.391Z" fill="currentColor" stroke-width="0"/></svg>',
     series: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m471.328,118.426h-166.209l92.113-85.068c7.796-7.202,8.284-19.363,1.082-27.166-7.202-7.796-19.36-8.288-27.169-1.078l-115.161,106.354L140.822,5.115c-7.803-7.206-19.96-6.71-27.169,1.078-7.203,7.802-6.714,19.964,1.082,27.166l92.113,85.068H40.672C18.249,118.426.005,136.666.005,159.09v279.821c0,22.424,18.243,40.663,40.667,40.663h.142l-1.713,9.914c-1.808,10.462,5.207,20.41,15.668,22.218,1.11.188,2.212.283,3.294.283,9.184,0,17.308-6.599,18.92-15.954l2.843-16.46h352.345l2.843,16.46c1.612,9.355,9.736,15.954,18.92,15.954,1.082,0,2.185-.094,3.294-.283,10.462-1.808,17.476-11.756,15.668-22.218l-1.713-9.914h.142c22.424,0,40.667-18.24,40.667-40.663V159.09c0-22.424-18.243-40.664-40.667-40.664Zm2.212,320.485c0,1.221-.991,2.216-2.212,2.216H40.672c-1.221,0-2.212-.994-2.212-2.216V159.09c0-1.221.991-2.216,2.212-2.216h430.656c1.221,0,2.212.995,2.212,2.216v279.821Z" fill="currentColor" stroke-width="0"/></svg>',
     anime: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m256.002,490.854c-131.559,0-223.44-76.272-223.44-185.478,0-17.88,2.491-36.116,7.412-54.31-9.46-20.015-16.753-40.945-21.711-62.343-14.778-63.752-6.309-118.662,3.399-153.501,2.753-9.875,12.782-15.884,22.769-13.588,44.142,10.008,85.977,27.099,124.34,50.806,7.433,4.592,14.834,9.512,22.092,14.691,42.54-14.579,87.732-14.593,130.279,0,7.255-5.171,14.656-10.098,22.095-14.691,38.36-23.707,80.195-40.806,124.34-50.806,9.997-2.289,20.015,3.713,22.769,13.588,9.708,34.839,18.177,89.749,3.399,153.501-4.959,21.383-12.251,42.32-21.711,62.343,4.92,18.187,7.408,36.423,7.408,54.31,0,109.206-91.881,185.478-223.437,185.478ZM54.301,63.787c-6.131,29.953-9.191,70.508,1.417,116.255,4.84,20.881,12.224,41.266,21.949,60.612,2.226,4.425,2.655,9.54,1.2,14.272-5.213,16.994-7.858,33.966-7.858,50.451,0,86.566,76.074,147.025,184.993,147.025s184.99-60.458,184.99-147.025c0-16.491-2.645-33.464-7.855-50.451-1.455-4.732-1.026-9.847,1.2-14.272,9.729-19.353,17.112-39.745,21.949-60.612,10.608-45.747,7.548-86.301,1.417-116.255-33.248,9.331-64.879,23.205-94.257,41.357-9.394,5.806-18.721,12.185-27.731,18.969-5.37,4.041-12.464,4.99-18.71,2.484-39.752-15.933-82.271-15.926-122.009,0-6.246,2.512-13.337,1.556-18.71-2.484-9.02-6.79-18.348-13.169-27.727-18.969-29.378-18.152-61.01-32.026-94.257-41.357Z" fill="currentColor" stroke-width="0"/><path d="m53.791,479.416c-4.965,0-9.931-1.919-13.693-5.737-7.453-7.558-7.363-19.729.199-27.183,12.272-12.094,25.459-23.435,39.187-33.708,12.778-9.575,26.307-18.431,40.202-26.331,9.219-5.248,20.961-2.024,26.209,7.216,5.248,9.226,2.017,20.965-7.213,26.213-12.496,7.098-24.66,15.067-36.154,23.679-12.349,9.24-24.206,19.436-35.243,30.316-3.744,3.692-8.619,5.534-13.494,5.534Z" fill="currentColor" stroke-width="0"/><path d="m19.242,395.215c-7.087,0-13.902-3.936-17.252-10.72-4.7-9.519-.792-21.048,8.731-25.745,13.79-6.804,27.964-13.232,42.125-19.094,8.528-3.531,17.248-6.937,25.916-10.126,9.966-3.692,21.013,1.445,24.677,11.404,3.667,9.966-1.438,21.013-11.404,24.677-8.19,3.015-16.428,6.232-24.485,9.568-13.382,5.541-26.775,11.613-39.815,18.047-2.732,1.347-5.635,1.989-8.493,1.989Z" fill="currentColor" stroke-width="0"/><path d="m458.212,479.416c-4.875,0-9.75-1.842-13.494-5.534-11.03-10.873-22.887-21.069-35.24-30.316-11.512-8.619-23.676-16.589-36.161-23.679-9.23-5.248-12.461-16.98-7.216-26.213,5.241-9.233,16.969-12.464,26.213-7.216,13.885,7.893,27.41,16.749,40.209,26.331,13.731,10.28,26.918,21.621,39.183,33.708,7.562,7.453,7.652,19.625.199,27.183-3.762,3.817-8.727,5.737-13.693,5.737Z" fill="currentColor" stroke-width="0"/><path d="m492.758,395.215c-2.858,0-5.761-.642-8.497-1.989-13.012-6.428-26.408-12.499-39.811-18.047-8.022-3.322-16.257-6.539-24.485-9.568-9.962-3.664-15.067-14.719-11.4-24.677,3.667-9.959,14.712-15.088,24.681-11.404,8.706,3.203,17.423,6.609,25.913,10.126,14.181,5.869,28.355,12.297,42.125,19.094,9.519,4.704,13.427,16.226,8.727,25.745-3.35,6.783-10.165,10.72-17.252,10.72Z" fill="currentColor" stroke-width="0"/><path d="m159.63,300.19c-10.618,0-19.223-8.612-19.223-19.227v-19.108c0-10.615,8.605-19.227,19.223-19.227s19.223,8.612,19.223,19.227v19.108c0,10.615-8.605,19.227-19.223,19.227Z" fill="currentColor" stroke-width="0"/><path d="m352.349,300.19c-10.618,0-19.223-8.612-19.223-19.227v-19.108c0-10.615,8.605-19.227,19.223-19.227s19.223,8.612,19.223,19.227v19.108c0,10.615-8.605,19.227-19.223,19.227Z" fill="currentColor" stroke-width="0"/></svg>',
+    // lucide book-open (ISC)
+    comics: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>',
     manga: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m256.502.34C115.8.34,1.326,114.778,1.326,255.439c0,41.02,9.891,81.483,28.676,117.582L2.309,458.595c-4.642,14.338-.997,29.958,9.515,40.762,7.758,7.988,18.255,12.303,29.045,12.303,3.813,0,7.66-.544,11.438-1.652l89.987-26.355c39.187,19.677,83.128,28.878,127.445,26.62,132.22-6.698,238.454-115.7,241.849-248.149,1.777-69.438-23.908-135.036-72.324-184.706C390.82,27.712,325.912.34,256.502.34Zm216.693,260.794c-2.879,112.515-93.102,205.101-205.394,210.789-40.003,1.994-79.559-6.873-114.32-25.741-4.454-2.418-9.696-2.969-14.554-1.554l-97.41,28.529c-.39.111-1.261.355-2.168-.564-.906-.934-.627-1.806-.502-2.175l30.223-93.402c1.652-5.109,1.087-10.678-1.547-15.349-18.186-32.203-27.791-68.936-27.791-106.227,0-119.485,97.243-216.693,216.769-216.693,58.969,0,114.111,23.253,155.263,65.472,41.125,42.191,62.942,97.919,61.429,156.916Z" fill="currentColor" stroke-width="0"/><path d="m227.039,125.75c-10.435-1.736-20.305,5.465-21.977,15.941l-20.13,126.323c-1.673,10.47,5.465,20.312,15.941,21.978,1.018.167,2.035.244,3.039.244,9.277,0,17.433-6.733,18.938-16.185l20.13-126.323c1.673-10.469-5.465-20.311-15.941-21.977Z" fill="currentColor" stroke-width="0"/><path d="m196.397,324.417l-1.966-.313c-10.462-1.736-20.318,5.464-21.984,15.934-1.673,10.469,5.465,20.311,15.934,21.984l1.966.314c1.025.167,2.042.244,3.046.244,9.271,0,17.433-6.733,18.938-16.178,1.673-10.47-5.465-20.312-15.934-21.984Z" fill="currentColor" stroke-width="0"/><path d="m324.602,141.294c-10.469-1.715-20.312,5.464-21.977,15.941l-20.13,126.33c-1.673,10.469,5.465,20.312,15.941,21.978,1.018.167,2.035.244,3.039.244,9.277,0,17.433-6.733,18.938-16.185l20.13-126.33c1.673-10.469-5.465-20.312-15.941-21.977Z" fill="currentColor" stroke-width="0"/><path d="m293.905,339.954l-1.959-.307c-10.476-1.68-20.304,5.521-21.936,15.997-1.645,10.476,5.521,20.297,15.997,21.936l1.959.307c1.004.16,2.007.237,2.99.237,9.298,0,17.468-6.761,18.945-16.234,1.645-10.476-5.521-20.297-15.997-21.936Z" fill="currentColor" stroke-width="0"/></svg>',
     collections: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m471.055,181.997H40.945C18.55,181.997.33,200.217.33,222.612v248.457c0,22.396,18.22,40.616,40.616,40.616h430.109c22.396,0,40.616-18.22,40.616-40.616v-248.457c0-22.396-18.22-40.616-40.616-40.616Zm2.209,289.072c0,1.22-.99,2.209-2.209,2.209H40.945c-1.22,0-2.209-.99-2.209-2.209v-248.457c0-1.22.99-2.209,2.209-2.209h430.109c1.22,0,2.209.99,2.209,2.209v248.457Z" fill="currentColor" stroke-width="0"/><path d="m27.869,110.147c0,10.602,8.601,19.204,19.203,19.204h417.897c10.602,0,19.203-8.602,19.203-19.204s-8.602-19.203-19.203-19.203H47.072c-10.602,0-19.203,8.602-19.203,19.203Z" fill="currentColor" stroke-width="0"/><path d="m395.023,38.722c10.602,0,19.203-8.602,19.203-19.203S405.625.315,395.023.315H117.012c-10.602,0-19.203,8.602-19.203,19.204s8.601,19.203,19.203,19.203h278.01Z" fill="currentColor" stroke-width="0"/></svg>',
     search: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m404.866,377.706c33.832-39.978,54.268-91.636,54.268-147.983C459.133,103.232,356.216.315,229.727.315S.32,103.232.32,229.722s102.917,229.406,229.407,229.406c56.347,0,108.005-20.435,147.982-54.267l101.192,101.198c3.75,3.75,8.664,5.625,13.578,5.625s9.828-1.875,13.578-5.625c7.493-7.5,7.5-19.656,0-27.156l-101.191-101.198Zm-175.139,43.017c-105.321,0-191-85.679-191-191S124.405,38.722,229.727,38.722s191,85.679,191,191-85.679,191-191,191Z" fill="currentColor" stroke-width="0"/></svg>',
@@ -7634,17 +7681,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function card(item2, opts) {
     var o = opts || {};
     var wrap = h("div.poster-wrap");
-    var plain2 = o.wide ? smallBackground(o.image || item2.background || item2.poster) : smallPoster(item2.poster);
+    var plain3 = o.wide ? smallBackground(o.image || item2.background || item2.poster) : smallPoster(item2.poster);
     var rated = o.wide ? null : ratedPoster(item2.id || item2.imdb_id, settings().rpdbKey);
-    var src = rated || plain2;
+    var src = rated || plain3;
     if (src) {
       var im = h("img", {
         alt: ""
       });
       im.setAttribute("data-lazy", src);
       im.onerror = function () {
-        if (rated && plain2 && im.src.indexOf(plain2) < 0) {
-          im.src = plain2;
+        if (rated && plain3 && im.src.indexOf(plain3) < 0) {
+          im.src = plain3;
           return;
         }
         if (o.fallback && im.src.indexOf(o.fallback) < 0) {
@@ -7825,7 +7872,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     request2(BASE + "/api/info", 3e3).then(function (r) {
       if (r) last = r.last || 0;
       svcVersion = r && r.version || 1;
-      if (svcVersion < 3) {
+      if (svcVersion < 4) {
         request2(BASE + "/api/exit", 3e3).then(function () {
           return setTimeout(startService, 1500);
         }, function () {});
@@ -7841,7 +7888,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function info() {
-    var get3 = function get3() {
+    var get4 = function get4() {
       return request2(BASE + "/api/info", 4e3).then(function (r) {
         return r && r.ip ? {
           ip: r.ip,
@@ -7853,10 +7900,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return null;
       });
     };
-    return get3().then(function (i) {
+    return get4().then(function (i) {
       return i || !startService() ? i : new Promise(function (r) {
         return setTimeout(r, 5e3);
-      }).then(get3);
+      }).then(get4);
     });
   }
   function qrImage(text, size) {
@@ -8070,23 +8117,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }));
   }
   var RD = "https://api.real-debrid.com/rest/1.0/";
-  function rd(key3, method, path, body) {
+  function rd(key4, method, path, body) {
     return request(method, RD + path, body, {
       form: true,
       timeout: 2e4,
       headers: {
-        Authorization: "Bearer " + key3
+        Authorization: "Bearer " + key4
       }
     });
   }
-  function realDebrid(key3, mag, hint) {
-    return rd(key3, "POST", "torrents/addMagnet", {
+  function realDebrid(key4, mag, hint) {
+    return rd(key4, "POST", "torrents/addMagnet", {
       magnet: mag
     }).then(function (added) {
       var id = added && added.id;
       if (!id) throw new Error("Real-Debrid: addMagnet");
       var info2 = function info2() {
-        return rd(key3, "GET", "torrents/info/" + encodeURIComponent(id));
+        return rd(key4, "GET", "torrents/info/" + encodeURIComponent(id));
       };
       return info2().then(function (tor) {
         var files2 = (tor.files || []).map(function (f) {
@@ -8098,7 +8145,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         var file = pickFile(files2, hint);
         if (!file) throw new Error("Real-Debrid: no files");
-        return rd(key3, "POST", "torrents/selectFiles/" + encodeURIComponent(id), {
+        return rd(key4, "POST", "torrents/selectFiles/" + encodeURIComponent(id), {
           files: String(file.id)
         });
       }).then(function poll2(_, n) {
@@ -8106,7 +8153,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return info2().then(function (tor) {
           if (tor.status === "downloaded" && tor.links && tor.links.length) return tor.links[0];
           if (n >= 3 || /error|dead|virus|magnet_error/.test(tor.status)) {
-            rd(key3, "DELETE", "torrents/delete/" + encodeURIComponent(id)).catch(function () {});
+            rd(key4, "DELETE", "torrents/delete/" + encodeURIComponent(id)).catch(function () {});
             throw notCached("Real-Debrid");
           }
           return wait(1500).then(function () {
@@ -8114,7 +8161,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
         });
       }).then(function (link) {
-        return rd(key3, "POST", "unrestrict/link", {
+        return rd(key4, "POST", "unrestrict/link", {
           link: link
         });
       }).then(function (r) {
@@ -8124,9 +8171,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   var TB = "https://api.torbox.app/v1/api/";
-  function torbox(key3, mag, hint) {
+  function torbox(key4, mag, hint) {
     var auth2 = {
-      Authorization: "Bearer " + key3
+      Authorization: "Bearer " + key4
     };
     return request("POST", TB + "torrents/createtorrent", {
       magnet: mag,
@@ -8161,7 +8208,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         var file = pickFile(files2, hint);
         if (!file) throw new Error("TorBox: no files");
-        return getJSON(TB + "torrents/requestdl?token=" + encodeURIComponent(key3) + "&torrent_id=" + encodeURIComponent(id) + "&file_id=" + encodeURIComponent(file.id), {
+        return getJSON(TB + "torrents/requestdl?token=" + encodeURIComponent(key4) + "&torrent_id=" + encodeURIComponent(id) + "&file_id=" + encodeURIComponent(file.id), {
           timeout: 15e3
         }).then(function (d) {
           if (!d || !d.data) throw new Error("TorBox: requestdl");
@@ -8170,10 +8217,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
-  function premiumize(key3, mag, hint) {
+  function premiumize(key4, mag, hint) {
     return request("POST", "https://www.premiumize.me/api/transfer/directdl", {
       src: mag,
-      apikey: key3
+      apikey: key4
     }, {
       form: true,
       timeout: 25e3
@@ -8209,11 +8256,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       throw e;
     });
   }
-  function testKey(id, key3) {
+  function testKey(id, key4) {
     if (id === "realdebrid") return request("GET", RD + "user", null, {
       timeout: 15e3,
       headers: {
-        Authorization: "Bearer " + key3
+        Authorization: "Bearer " + key4
       }
     }).then(function (u) {
       return u && u.username || "OK";
@@ -8221,12 +8268,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (id === "torbox") return getJSON(TB + "user/me", {
       timeout: 15e3,
       headers: {
-        Authorization: "Bearer " + key3
+        Authorization: "Bearer " + key4
       }
     }).then(function (u) {
       return u && u.data && u.data.email ? u.data.email : "OK";
     });
-    return getJSON("https://www.premiumize.me/api/account/info?apikey=" + encodeURIComponent(key3), {
+    return getJSON("https://www.premiumize.me/api/account/info?apikey=" + encodeURIComponent(key4), {
       timeout: 15e3
     }).then(function (u) {
       if (!u || u.status !== "success") throw new Error(t("Chave inválida"));
@@ -8650,9 +8697,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return (settings().tmdbKey || "").trim();
   }
   function awards(imdb) {
-    var key3 = String(settings().omdbKey || "").trim();
-    if (!key3 || !/^tt\d+$/.test(imdb || "")) return Promise.resolve(null);
-    return cachedJSON("https://www.omdbapi.com/?i=" + imdb + "&apikey=" + encodeURIComponent(key3), 24 * 36e5, {
+    var key4 = String(settings().omdbKey || "").trim();
+    if (!key4 || !/^tt\d+$/.test(imdb || "")) return Promise.resolve(null);
+    return cachedJSON("https://www.omdbapi.com/?i=" + imdb + "&apikey=" + encodeURIComponent(key4), 24 * 36e5, {
       quiet: true
     }).then(function (r) {
       var a = r && r.Awards;
@@ -8803,10 +8850,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var credits = (p.combined_credits && p.combined_credits.cast || []).concat((p.combined_credits && p.combined_credits.crew || []).filter(function (c) {
           return c.job === "Director";
         })).filter(function (c) {
-          var key3 = c.media_type + c.id;
-          if (!c.poster_path || seen[key3] || c.media_type !== "movie" && c.media_type !== "tv") return false;
+          var key4 = c.media_type + c.id;
+          if (!c.poster_path || seen[key4] || c.media_type !== "movie" && c.media_type !== "tv") return false;
           if (c.media_type === "tv" && /^(Self|Himself|Herself|Host)/i.test(c.character || "")) return false;
-          seen[key3] = true;
+          seen[key4] = true;
           return true;
         }).sort(function (a, b) {
           return (b.popularity || 0) - (a.popularity || 0);
@@ -8851,6 +8898,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
+  var COMIC_KEYWORDS = {
+    9717: 1,
+    180547: 1,
+    229266: 1,
+    9715: 1
+  };
+  function comicHero(imdb) {
+    return tmdbFind(imdb).then(function (f) {
+      if (!f) return "";
+      return tmdb(f.type + "/" + f.id, {
+        append_to_response: "keywords",
+        language: "en-US"
+      }).then(function (d) {
+        var kw = d.keywords && (d.keywords.keywords || d.keywords.results) || [];
+        if (!kw.some(function (k) {
+          return COMIC_KEYWORDS[k.id];
+        })) return "";
+        var coll = d.belongs_to_collection && d.belongs_to_collection.name;
+        var base3 = (coll ? coll.replace(/\s*(\(.*\)|collection|saga|series)\s*$/i, "") : d.title || d.name || "").split(":")[0];
+        return base3.replace(/^the\s+(amazing\s+)?/i, "").replace(/\s+\d+$/, "").trim();
+      });
+    });
+  }
   function tmdbGet(path, params) {
     if (!tmdbKey()) return Promise.reject(new Error("no TMDB key"));
     return tmdb(path, Object.assign({
@@ -8879,11 +8949,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function mdblist(meta) {
-    var key3 = (settings().mdblistKey || "").trim();
+    var key4 = (settings().mdblistKey || "").trim();
     var imdb = imdbOf(meta.id);
-    if (!key3 || !imdb) return Promise.resolve([]);
+    if (!key4 || !imdb) return Promise.resolve([]);
     var type = meta.type === "series" ? "show" : "movie";
-    return getJSONViaProxy("https://api.mdblist.com/imdb/" + type + "/" + imdb + "?apikey=" + encodeURIComponent(key3), {
+    return getJSONViaProxy("https://api.mdblist.com/imdb/" + type + "/" + imdb + "?apikey=" + encodeURIComponent(key4), {
       timeout: 12e3
     }).then(function (d) {
       var out = [];
@@ -10044,7 +10114,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var s = settings();
     return s.animeSkip === false ? "" : (s.animeSkipClientId || "").trim();
   }
-  function animeSkipQuery(query, key3) {
+  function animeSkipQuery(query, key4) {
     var body = {
       query: query
     };
@@ -10052,7 +10122,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       timeout: 1e4,
       quiet: true,
       headers: {
-        "X-Client-ID": key3
+        "X-Client-ID": key4
       }
     };
     return postJSON(ANIMESKIP, body, opts).catch(function (e) {
@@ -10092,10 +10162,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return out;
   }
   var showCache = {};
-  function animeSkipSegments(anilist3, season, episode, key3) {
+  function animeSkipSegments(anilist3, season, episode, key4) {
     if (!anilist3 || !episode) return Promise.resolve([]);
     var ck = String(anilist3);
-    if (!showCache[ck]) showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key3).then(function (r) {
+    if (!showCache[ck]) showCache[ck] = animeSkipQuery('{ findShowsByExternalId(service: ANILIST, serviceId: "' + ck + '") { id } }', key4).then(function (r) {
       return (r && r.data && r.data.findShowsByExternalId || []).map(function (x) {
         return String(x.id);
       }).filter(function (x) {
@@ -10110,7 +10180,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       ids2.forEach(function (id) {
         chain = chain.then(function (found) {
           if (found.length) return found;
-          return animeSkipQuery('{ findEpisodesByShowId(showId: "' + id + '") { season number baseDuration timestamps { at type { name } } } }', key3).then(function (r) {
+          return animeSkipQuery('{ findEpisodesByShowId(showId: "' + id + '") { season number baseDuration timestamps { at type { name } } } }', key4).then(function (r) {
             var eps = r && r.data && r.data.findEpisodesByShowId || [];
             var same = eps.filter(function (e) {
               return Number(e.number) === Number(episode);
@@ -10177,8 +10247,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   var malCache = {};
   function idsFromAnime(a) {
-    var key3 = a.source + ":" + a.id;
-    if (!malCache[key3]) malCache[key3] = getJSON(ARM2 + "ids?source=" + a.source + "&id=" + a.id, {
+    var key4 = a.source + ":" + a.id;
+    if (!malCache[key4]) malCache[key4] = getJSON(ARM2 + "ids?source=" + a.source + "&id=" + a.id, {
       quiet: true
     }).then(function (r) {
       return {
@@ -10191,11 +10261,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         anilist: a.source === "anilist" ? parseInt(a.id, 10) : null
       };
     });
-    return malCache[key3];
+    return malCache[key4];
   }
   function idsFromImdb(imdb, season) {
-    var key3 = imdb + ":" + season;
-    if (!malCache[key3]) malCache[key3] = getJSON(ARM2 + "imdb?id=" + imdb, {
+    var key4 = imdb + ":" + season;
+    if (!malCache[key4]) malCache[key4] = getJSON(ARM2 + "imdb?id=" + imdb, {
       quiet: true
     }).then(function (list2) {
       var arr = Array.isArray(list2) ? list2 : [];
@@ -10212,7 +10282,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         anilist: null
       };
     });
-    return malCache[key3];
+    return malCache[key4];
   }
   function isAnime(meta) {
     var g = (meta.genres || meta.genre || []).map(function (x) {
@@ -10242,8 +10312,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       if (!idsPromise || !ep) return [];
       return idsPromise.then(function (ids2) {
-        var key3 = animeSkipKey();
-        var fromAs = key3 && ids2.anilist ? animeSkipSegments(ids2.anilist, seasonForSkip, ep, key3).catch(function () {
+        var key4 = animeSkipKey();
+        var fromAs = key4 && ids2.anilist ? animeSkipSegments(ids2.anilist, seasonForSkip, ep, key4).catch(function () {
           return [];
         }) : Promise.resolve([]);
         return fromAs.then(function (found) {
@@ -10885,8 +10955,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var a = account(provider);
     return !!(a && a.invalid);
   }
-  function useFor(key3, p) {
-    var v = settings()[key3];
+  function useFor(key4, p) {
+    var v = settings()[key4];
     return v !== "trakt" && v !== "simkl" ? true : v === p;
   }
   function connected() {
@@ -11152,10 +11222,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       playing = null;
       return;
     }
-    var key3 = JSON.stringify(body);
-    if (playing && playing.key !== key3 && playing.lastAction !== "stop") scrobble("pause", playing.progress || 0);
-    if (!playing || playing.key !== key3) playing = {
-      key: key3,
+    var key4 = JSON.stringify(body);
+    if (playing && playing.key !== key4 && playing.lastAction !== "stop") scrobble("pause", playing.progress || 0);
+    if (!playing || playing.key !== key4) playing = {
+      key: key4,
       body: body,
       progress: fraction
     };
@@ -13261,9 +13331,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var bestN = -1;
       cand.forEach(function (c) {
         var s = Math.round(c / 0.05) * 0.05;
-        var key3 = s.toFixed(2);
-        if (seen[key3]) return;
-        seen[key3] = 1;
+        var key4 = s.toFixed(2);
+        if (seen[key4]) return;
+        seen[key4] = 1;
         var n = matches(s);
         if (n > bestN || n === bestN && Math.abs(s) < Math.abs(best)) {
           bestN = n;
@@ -13271,8 +13341,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       });
       var second = 0;
-      Object.keys(seen).forEach(function (key3) {
-        var s = +key3;
+      Object.keys(seen).forEach(function (key4) {
+        var s = +key4;
         if (Math.abs(s - best) < 1) return;
         var n = matches(s);
         if (n > second) second = n;
@@ -13372,11 +13442,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return (x.id || x.url) !== mine && x.url;
         });
         if (!others.length) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5e3);
-        var rank = function rank(x) {
+        var rank2 = function rank2(x) {
           return /^(en|eng)$/i.test(x.lang) ? 0 : 1;
         };
         var pick2 = others.sort(function (a, b) {
-          return rank(a) - rank(b);
+          return rank2(a) - rank2(b);
         }).slice(0, 4);
         say(t("Comparando com {n} legendas...", {
           n: pick2.length
@@ -14217,9 +14287,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var nb = parseFloat(b.chapter);
         return (isNaN(na) ? 1e9 : na) - (isNaN(nb) ? 1e9 : nb) || langs.indexOf(a.lang) - langs.indexOf(b.lang);
       }).forEach(function (c) {
-        var key3 = c.chapter === null || c.chapter === void 0 ? c.id : String(c.chapter);
-        if (seen[key3]) return;
-        seen[key3] = true;
+        var key4 = c.chapter === null || c.chapter === void 0 ? c.id : String(c.chapter);
+        if (seen[key4]) return;
+        seen[key4] = true;
         out.push(c);
       });
       return out;
@@ -14322,7 +14392,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var token = 0;
     var alive = true;
     var retried = false;
-    var img2 = h("img.rd-img", {
+    var img3 = h("img.rd-img", {
       alt: ""
     });
     var img22 = h("img.rd-img", {
@@ -14331,7 +14401,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     img22.style.display = "none";
     var hud = h("div.rd-hud");
     var msg = h("div.rd-msg");
-    var el = h("div.view.reader", null, [img2, img22, hud, msg]);
+    var el = h("div.view.reader", null, [img3, img22, hud, msg]);
     var chapter = function chapter() {
       return opts.chapters[ci];
     };
@@ -14369,13 +14439,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         im.style.webkitTransform = im.style.transform = "translate(" + Math.round(x) + "px," + Math.round(py) + "px)";
       };
       if (!two) {
-        place(img2, px, z.w);
+        place(img3, px, z.w);
         img22.style.display = "none";
         return;
       }
       var w1 = z.w * f1;
       var w2 = z.w - w1;
-      place(img2, opts.rtl ? px + w2 : px, w1);
+      place(img3, opts.rtl ? px + w2 : px, w1);
       place(img22, opts.rtl ? px : px + w1, w2);
       img22.style.display = "";
     }
@@ -14406,18 +14476,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (!pages4.length) return;
       retried = false;
       var my = ++token;
-      img2.style.visibility = "hidden";
+      img3.style.visibility = "hidden";
       img22.style.visibility = "hidden";
       img22.onload = img22.onerror = null;
-      var wide = function wide(im) {
+      var wide2 = function wide2(im) {
         return (im.naturalWidth || 1) > (im.naturalHeight || 1) * 1.1;
       };
       var done = function done(both) {
         if (my !== token || !alive) return;
         two = both;
         var a = {
-          w: img2.naturalWidth || 1,
-          h: img2.naturalHeight || 1
+          w: img3.naturalWidth || 1,
+          h: img3.naturalHeight || 1
         };
         if (both) {
           var bw = (img22.naturalWidth || 1) * a.h / (img22.naturalHeight || 1);
@@ -14428,7 +14498,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           f1 = a.w / nat.w;
         } else nat = a;
         layout(anchor);
-        img2.style.visibility = "";
+        img3.style.visibility = "";
         img22.style.visibility = "";
         say("");
         showHud();
@@ -14444,34 +14514,34 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           pre2.src = pages4[next + 1];
         }
       };
-      img2.onload = function () {
+      img3.onload = function () {
         if (my !== token || !alive) return;
-        if (mode !== "double" || pi + 1 >= pages4.length || wide(img2)) return done(false);
+        if (mode !== "double" || pi + 1 >= pages4.length || wide2(img3)) return done(false);
         img22.onload = function () {
-          return done(!wide(img22));
+          return done(!wide2(img22));
         };
         img22.onerror = function () {
           return done(false);
         };
         img22.src = pages4[pi + 1];
       };
-      img2.onerror = function () {
+      img3.onerror = function () {
         if (my !== token || !alive) return;
         if (!retried) {
           retried = true;
-          img2.src = pages4[pi] + (pages4[pi].indexOf("?") < 0 ? "?r=1" : "&r=1");
+          img3.src = pages4[pi] + (pages4[pi].indexOf("?") < 0 ? "?r=1" : "&r=1");
           return;
         }
         say(t("Não foi possível carregar esta página. Aperte para o lado para continuar."));
       };
       say(t("Carregando..."));
-      img2.src = pages4[pi];
+      img3.src = pages4[pi];
     }
     function loadChapter(i, start4) {
       var my = ++token;
       ci = i;
       pages4 = [];
-      img2.removeAttribute("src");
+      img3.removeAttribute("src");
       say(t("Carregando..."));
       (opts.pagesFn || pages)(chapter().id).then(function (list2) {
         if (my !== token || !alive) return;
@@ -14618,8 +14688,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         clearTimeout(okTimer);
         pre = null;
         pre2 = null;
-        img2.onload = img2.onerror = img22.onload = img22.onerror = null;
-        img2.removeAttribute("src");
+        img3.onload = img3.onerror = img22.onload = img22.onerror = null;
+        img3.removeAttribute("src");
         img22.removeAttribute("src");
       }
     };
@@ -15741,18 +15811,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var favs = function favs() {
     return get(FAVS, []) || [];
   };
-  var isFav = function isFav(key3) {
+  var isFav = function isFav(key4) {
     return favs().some(function (f) {
-      return f.key === key3;
+      return f.key === key4;
     });
   };
-  function toggleFav(key3, kind, ref) {
+  function toggleFav(key4, kind, ref) {
     var all2 = favs();
     var i = all2.findIndex(function (f) {
-      return f.key === key3;
+      return f.key === key4;
     });
     if (i >= 0) all2.splice(i, 1);else all2.unshift({
-      key: key3,
+      key: key4,
       kind: kind,
       ref: {
         anilist: ref.anilist,
@@ -15761,6 +15831,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         plId: ref.plId,
         plName: ref.plName,
         mid: ref.mid,
+        cvId: ref.cvId,
+        title: ref.title,
         name: ref.name,
         poster: ref.poster,
         description: ref.description,
@@ -15900,7 +15972,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   };
   function pluginApi(pid, name) {
     var offset = 0;
-    var toMeta2 = function toMeta2(it) {
+    var toMeta3 = function toMeta3(it) {
       return {
         id: "pl:" + pid + ":" + it.id,
         plId: pid,
@@ -15924,7 +15996,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return p.then(function (items3) {
           offset += items3.length;
           return {
-            items: items3.map(toMeta2),
+            items: items3.map(toMeta3),
             more: items3.length > 0
           };
         });
@@ -16400,12 +16472,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var chapters4 = [];
     var chunk = 0;
     var alive = true;
-    var key3 = api2.key(m);
+    var key4 = api2.key(m);
     var status2 = h("div.loading-line", {
       text: t("Procurando capítulos...")
     });
     var progress2 = function progress2() {
-      return (get("readProgress", {}) || {})[key3] || null;
+      return (get("readProgress", {}) || {})[key4] || null;
     };
     var idxOf = function idxOf() {
       var p = progress2();
@@ -16416,7 +16488,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function read(i, page3) {
       if (!chapters4.length) return toast(t("Nenhum capítulo encontrado."));
       openReader({
-        key: key3,
+        key: key4,
         title: m.name,
         chapters: chapters4,
         index: Math.max(0, i),
@@ -16463,11 +16535,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }) : t("Ler")]), h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
-          return toggleFav(key3, api2.kind, m), renderInfo();
+          return toggleFav(key4, api2.kind, m), renderInfo();
         }
       }, [h("span.ico", {
-        text: isFav(key3) ? "♥" : "♡"
-      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")]), h("div.btn", {
+        text: isFav(key4) ? "♥" : "♡"
+      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]), h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
           return readingModeMenu(function () {
@@ -16631,7 +16703,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }];
   function MangaDetailsView(m) {
     var media2 = m.media || {};
-    var key3 = "al" + m.anilist;
+    var key4 = "al" + m.anilist;
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
     var list2 = h("div.md-list", {
@@ -16655,7 +16727,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text: t("Procurando capítulos...")
     });
     var progress2 = function progress2() {
-      return (get("readProgress", {}) || {})[key3] || null;
+      return (get("readProgress", {}) || {})[key4] || null;
     };
     function indexOfProgress() {
       var p = progress2();
@@ -16671,7 +16743,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function read(index2, page3) {
       if (!chapters4.length) return toast(t("Nenhum capítulo encontrado."));
       openReader({
-        key: key3,
+        key: key4,
         title: m.name,
         chapters: chapters4,
         index: Math.max(0, index2),
@@ -16761,12 +16833,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
-          toggleFav(key3, "al", m);
+          toggleFav(key4, "al", m);
           renderInfo();
         }
       }, [h("span.ico", {
-        text: isFav(key3) ? "♥" : "♡"
-      }), isFav(key3) ? t("Nos favoritos") : t("Favoritar")]));
+        text: isFav(key4) ? "♥" : "♡"
+      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]));
       if (installed().length) btns.push(h("div.btn", {
         focusable: true,
         onSelect: pickSource
@@ -16991,7 +17063,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       return scanning;
     }
-    var linkOf = function linkOf(hit) {
+    var linkOf2 = function linkOf2(hit) {
       return {
         pid: hit.pid,
         name: hit.name,
@@ -17009,7 +17081,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       status2.textContent = t("Procurando nas suas fontes...");
       scan3(function (hit) {
-        if (!source && !picked) showSource(linkOf(hit), hit.cs);
+        if (!source && !picked) showSource(linkOf2(hit), hit.cs);
       }).then(function (all2) {
         if (!alive) return;
         if (!all2.length) {
@@ -17020,9 +17092,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         if (picked) return;
         var best = all2[0];
-        saveLink(m.anilist, linkOf(best));
+        saveLink(m.anilist, linkOf2(best));
         if (!source || source.pid !== best.pid) {
-          showSource(linkOf(best), best.cs);
+          showSource(linkOf2(best), best.cs);
           toast(t("{name}: {n} capítulos", {
             name: best.name,
             n: best.count
@@ -17073,10 +17145,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             return loadChaptersMd(false);
           }
           if (v === "manual") return manualSearch();
-          saveLink(m.anilist, Object.assign(linkOf(v), {
+          saveLink(m.anilist, Object.assign(linkOf2(v), {
             manual: true
           }));
-          showSource(linkOf(v), v.cs);
+          showSource(linkOf2(v), v.cs);
         }
       });
     }
@@ -17173,6 +17245,1051 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/api/comicvine.js
+  var API6 = "https://comicvine.gamespot.com/api/";
+  var VOL_FIELDS = "id,name,image,publisher,start_year,count_of_issues,deck";
+  var key2 = function key2() {
+    return String(settings().comicvineKey || "").trim();
+  };
+  var hasKey = function hasKey() {
+    return !!key2();
+  };
+  var cache6 = {};
+  function get2(path, params) {
+    if (!key2()) return Promise.reject(new Error("no ComicVine key"));
+    var q2 = Object.assign({
+      api_key: key2(),
+      format: "json"
+    }, params || {});
+    var url2 = API6 + path + "?" + Object.keys(q2).map(function (k) {
+      return k + "=" + encodeURIComponent(q2[k]);
+    }).join("&");
+    if (cache6[url2]) return cache6[url2];
+    var p = httpRaw(url2, {
+      timeoutMs: 2e4
+    }).then(function (r) {
+      var j = null;
+      try {
+        j = JSON.parse(r && r.body || "");
+      } catch (e) {}
+      if (!j) throw new Error("HTTP " + (r ? r.status : "?"));
+      if (j.status_code !== 1) throw new Error(j.status_code === 100 ? "bad key" : j.error || "ComicVine");
+      return j;
+    });
+    cache6[url2] = p;
+    p.catch(function () {
+      return delete cache6[url2];
+    });
+    return p;
+  }
+  var img2 = function img2(i) {
+    return i && (i.medium_url || i.small_url || i.original_url || i.super_url) || "";
+  };
+  var wide = function wide(i) {
+    return i && (i.screen_large_url || i.super_url || i.original_url || i.medium_url) || "";
+  };
+  function toMeta2(v) {
+    return {
+      id: "cv:" + v.id,
+      cvId: v.id,
+      type: "comic",
+      title: v.name || "",
+      name: (v.name || "") + (v.start_year ? " (" + v.start_year + ")" : ""),
+      year: v.start_year ? parseInt(v.start_year, 10) || null : null,
+      poster: img2(v.image),
+      art: wide(v.image),
+      publisher: v.publisher && v.publisher.name || "",
+      issues: v.count_of_issues || 0,
+      deck: v.deck || ""
+    };
+  }
+  var MAJOR = {
+    Marvel: 3,
+    DC: 3,
+    "DC Comics": 3,
+    Image: 2,
+    "Dark Horse Comics": 2,
+    "IDW Publishing": 1,
+    "BOOM! Studios": 1,
+    Vertigo: 2,
+    "Dynamite Entertainment": 1,
+    "Valiant": 1
+  };
+  function rank(list2) {
+    return list2.filter(function (v) {
+      return v && v.count_of_issues > 0 && v.image;
+    }).sort(function (a, b) {
+      return (MAJOR[(b.publisher || {}).name] || 0) - (MAJOR[(a.publisher || {}).name] || 0) || b.count_of_issues - a.count_of_issues;
+    });
+  }
+  function searchVolumes(query, pageNo) {
+    return get2("volumes/", {
+      filter: "name:" + query,
+      sort: "count_of_issues:desc",
+      limit: 100,
+      offset: (pageNo || 0) * 100,
+      field_list: VOL_FIELDS
+    }).then(function (j) {
+      return {
+        items: rank(j.results || []).map(toMeta2),
+        more: (j.offset || 0) + (j.number_of_page_results || 0) < (j.number_of_total_results || 0)
+      };
+    });
+  }
+  function volume(id) {
+    return get2("volume/4050-" + id + "/", {
+      field_list: VOL_FIELDS + ",description,characters"
+    }).then(function (j) {
+      var v = j.results || {};
+      var m = toMeta2(v);
+      m.description = v.description || v.deck || "";
+      m.characters = (v.characters || []).slice().sort(function (a, b) {
+        return (b.count || 0) - (a.count || 0);
+      }).map(function (c) {
+        return c.name;
+      });
+      return m;
+    });
+  }
+  function newThisWeek(days) {
+    var d = function d(n) {
+      return new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+    };
+    return get2("issues/", {
+      filter: "store_date:" + d(days || 7) + "|" + d(-1),
+      sort: "store_date:desc",
+      limit: 100,
+      field_list: "id,issue_number,image,volume,store_date"
+    }).then(function (j) {
+      var seen = {};
+      var out = [];
+      (j.results || []).forEach(function (i) {
+        var v = i.volume || {};
+        if (!v.id || seen[v.id] || !i.image) return;
+        seen[v.id] = 1;
+        out.push({
+          id: "cv:" + v.id,
+          cvId: v.id,
+          type: "comic",
+          title: v.name || "",
+          name: (v.name || "") + " #" + (i.issue_number || ""),
+          poster: img2(i.image),
+          art: wide(i.image)
+        });
+      });
+      return out;
+    });
+  }
+  function publisherLogo(name) {
+    return get2("publishers/", {
+      filter: "name:" + name,
+      field_list: "id,name,image",
+      limit: 20
+    }).then(function (j) {
+      var list2 = (j.results || []).filter(function (p2) {
+        return p2.image;
+      });
+      var low = String(name).toLowerCase();
+      var p = list2.find(function (x) {
+        return String(x.name).toLowerCase() === low;
+      }) || list2.sort(function (a, b) {
+        return String(a.name).length - String(b.name).length;
+      })[0];
+      return p ? p.image.original_url || p.image.super_url || p.image.medium_url || "" : "";
+    });
+  }
+
+  // src/js/lib/sourceFind.js
+  function norm3(x) {
+    return String(x || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\(\s*\d{4}[^)]*\)/g, " ").replace(/[^a-z0-9؀-ۿ]+/g, " ").replace(/\b(the|a|an)\b/g, " ").replace(/\s+/g, " ").trim();
+  }
+  function likeness2(a, b) {
+    var x = norm3(a);
+    var y = norm3(b);
+    if (!x || !y) return 0;
+    if (x === y) return 1;
+    var A = x.split(" ");
+    var B = y.split(" ");
+    var inB = A.filter(function (w) {
+      return B.indexOf(w) >= 0;
+    }).length;
+    return 0.9 * inB / (A.length + B.length - inB);
+  }
+  function scanSources(names2, onHit, opts) {
+    var o = opts || {};
+    var plugins = installed();
+    var min = o.min || 0.85;
+    var i = 0;
+    var hits = [];
+    function findIn(p) {
+      var qi = 0;
+      function next() {
+        if (o.alive && !o.alive() || qi >= Math.min(names2.length, 2)) return Promise.resolve(null);
+        var q2 = names2[qi++];
+        return search2(p.id, q2, 0).then(function (items3) {
+          var best = null;
+          var score = 0;
+          (items3 || []).slice(0, 40).forEach(function (it) {
+            var s = Math.max.apply(null, names2.map(function (n) {
+              return likeness2(n, it.title);
+            }));
+            if (o.year && String(it.title).indexOf(String(o.year)) >= 0) s += 0.05;
+            if (s > score) {
+              score = s;
+              best = it;
+            }
+          });
+          if (!best || score < min) return next();
+          return pluginApi(p.id, p.name).chapters({
+            mid: best.id
+          }).then(function (cs) {
+            return cs.length ? {
+              pid: p.id,
+              name: p.name,
+              mid: best.id,
+              title: best.title,
+              count: cs.length,
+              cs: cs
+            } : next();
+          }, next);
+        }, function () {
+          return next();
+        });
+      }
+      return next();
+    }
+    function lane() {
+      if (o.alive && !o.alive() || i >= plugins.length) return Promise.resolve();
+      var p = plugins[i++];
+      return findIn(p).then(function (hit) {
+        if (hit) {
+          hits.push(hit);
+          if (onHit) onHit(hit);
+        }
+      }, function () {}).then(lane);
+    }
+    return Promise.all([lane(), lane()]).then(function () {
+      return hits.sort(function (a, b) {
+        return b.count - a.count;
+      });
+    });
+  }
+  var linkOf = function linkOf(hit) {
+    return {
+      pid: hit.pid,
+      name: hit.name,
+      mid: hit.mid,
+      title: hit.title,
+      count: hit.count
+    };
+  };
+
+  // src/js/views/comicDetails.js
+  var CHUNK3 = 50;
+  function openComicDetails(m) {
+    push(ComicDetailsView(m));
+  }
+  function plain2(text) {
+    return String(text || "").replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>/gi, "\n").replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/\n{3,}/g, "\n\n").trim();
+  }
+  function heroOf(m) {
+    var chars = m.characters || [];
+    var title = norm3(m.title);
+    var inTitle = chars.find(function (c) {
+      return title.indexOf(norm3(c)) >= 0;
+    });
+    if (inTitle) return inTitle;
+    return String(m.title || "").replace(/\(.*?\)/g, "").replace(/^(the\s+)?(all-new|all new|amazing|spectacular|uncanny|ultimate|superior|savage|mighty|astonishing|incredible|sensational|new|original)\s+/i, "").replace(/[:\-–].*$/, "").replace(/\s+(vol(ume)?\.?\s*\d+|\d+)$/i, "").trim();
+  }
+  function moviesOf(hero) {
+    if (!hero || !hasTmdb()) return Promise.resolve([]);
+    var n = norm3(hero);
+    return tmdbGet("search/multi", {
+      query: hero,
+      include_adult: false
+    }).then(function (r) {
+      return (r && r.results || []).filter(function (x) {
+        return (x.media_type === "movie" || x.media_type === "tv") && x.poster_path && norm3(x.title || x.name).indexOf(n) >= 0;
+      }).sort(function (a, b) {
+        return (b.popularity || 0) - (a.popularity || 0);
+      }).slice(0, 20);
+    });
+  }
+  function openTmdb(x) {
+    var type = x.media_type === "tv" ? "tv" : "movie";
+    tmdbImdb(type, x.id).then(function (imdb) {
+      return imdb ? openDetails(type === "tv" ? "series" : "movie", imdb) : toast(t("Não encontrei este título."));
+    }).catch(function () {
+      return toast(t("Não encontrei este título."));
+    });
+  }
+  function links2() {
+    return get("comicLinks", {}) || {};
+  }
+  function saveLink2(id, v) {
+    var all2 = links2();
+    if (v) all2[id] = v;else delete all2[id];
+    set("comicLinks", all2);
+  }
+  function ComicDetailsView(m0) {
+    var m = Object.assign({}, m0);
+    var key4 = "cv" + m.cvId;
+    var el = h("div.view.md-view");
+    var info2 = h("div.md-info");
+    var list2 = h("div.md-list", {
+      "data-scroll-y": "",
+      "data-pad-y": "120",
+      "data-group": "",
+      "data-vertical": ""
+    });
+    el.appendChild(info2);
+    el.appendChild(list2);
+    var chapters4 = [];
+    var chunk = 0;
+    var _alive = true;
+    var source = null;
+    var found = null;
+    var scanning = null;
+    var picked = false;
+    var movies = null;
+    var status2 = h("div.loading-line", {
+      text: t("Procurando edições...")
+    });
+    var progress2 = function progress2() {
+      return (get("readProgress", {}) || {})[key4] || null;
+    };
+    function indexOfProgress() {
+      var p = progress2();
+      if (!p) return -1;
+      var i = chapters4.findIndex(function (c) {
+        return c.id === p.chapterId;
+      });
+      if (i >= 0 || p.chapter == null) return i;
+      return chapters4.findIndex(function (c) {
+        return c.chapter != null && parseFloat(c.chapter) === parseFloat(p.chapter);
+      });
+    }
+    function read(index2, page3) {
+      if (!chapters4.length) return toast(t("Nenhuma edição encontrada."));
+      openReader({
+        key: key4,
+        title: m.name,
+        chapters: chapters4,
+        index: Math.max(0, index2),
+        startPage: page3 || 0,
+        poster: m.poster,
+        kind: "cv",
+        ref: {
+          cvId: m.cvId,
+          name: m.name,
+          title: m.title,
+          poster: m.poster,
+          year: m.year
+        },
+        rtl: false,
+        // western comics read left to right
+        pagesFn: source ? function (cid) {
+          return pages2(source.pid, cid);
+        } : void 0
+      });
+    }
+    function renderInfo() {
+      clear(info2);
+      var cover = h("img.md-cover", {
+        alt: ""
+      });
+      cover.setAttribute("data-lazy", m.poster || "");
+      info2.appendChild(cover);
+      var text = h("div.md-text");
+      text.appendChild(h("div.md-title", {
+        text: m.name
+      }));
+      var bits = [m.publisher, m.issues ? t("{n} edições", {
+        n: m.issues
+      }) : "", (m.characters || []).slice(0, 3).join(", ")];
+      text.appendChild(h("div.md-meta", {
+        text: bits.filter(Boolean).join("  ·  ")
+      }));
+      text.appendChild(h("div.md-desc", {
+        text: plain2(m.description || m.deck)
+      }));
+      var p = progress2();
+      var idx = indexOfProgress();
+      var btns = [h("div.btn.primary", {
+        focusable: true,
+        "data-autofocus": "",
+        onSelect: function onSelect() {
+          return idx >= 0 ? read(idx, p.page) : read(0, 0);
+        }
+      }, [h("span.ico", {
+        text: "📖"
+      }), idx >= 0 ? t("Continuar: #{n}", {
+        n: chapters4[idx].chapter
+      }) : t("Ler")])];
+      if (movies && movies.length) btns.push(h("div.btn", {
+        focusable: true,
+        onSelect: moviesMenu
+      }, [h("span.ico", {
+        text: "🎬"
+      }), t("Filmes e séries ({n})", {
+        n: movies.length
+      })]));
+      btns.push(h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return toggleFav(key4, "cv", m), renderInfo();
+        }
+      }, [h("span.ico", {
+        text: isFav(key4) ? "♥" : "♡"
+      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]));
+      if (installed().length) btns.push(h("div.btn", {
+        focusable: true,
+        onSelect: pickSource
+      }, [h("span.ico", {
+        text: "📚"
+      }), source ? source.name : t("Fonte")]));
+      btns.push(h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return readingModeMenu(function () {
+            return renderInfo();
+          });
+        }
+      }, [h("span.ico", {
+        text: readingModeLabel().icon
+      }), readingModeLabel().text]));
+      text.appendChild(h("div.details-buttons", {
+        "data-group": ""
+      }, btns));
+      info2.appendChild(text);
+      loadVisibleImages(info2);
+    }
+    function moviesMenu() {
+      menu(t("Filmes e séries"), movies.map(function (x) {
+        return {
+          label: x.title || x.name,
+          sub: ((x.release_date || x.first_air_date || "").slice(0, 4) + "  ·  " + (x.media_type === "tv" ? t("Série") : t("Filme"))).trim(),
+          value: x
+        };
+      }), {
+        onPick: openTmdb
+      });
+    }
+    function renderList(focusFirst2) {
+      clear(list2);
+      if (!chapters4.length) {
+        list2.appendChild(status2);
+        return;
+      }
+      var start4 = chunk * CHUNK3;
+      var end = Math.min(chapters4.length, start4 + CHUNK3);
+      var p = progress2();
+      var nav2 = function nav2(label, to) {
+        return h("div.stream.md-nav", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return chunk = to, renderList(true);
+          }
+        }, [h("div.s-main", {
+          text: label
+        })]);
+      };
+      if (chapters4.length > 8) list2.appendChild(chapterSearchRow(function () {
+        return chapters4;
+      }, function (i) {
+        chunk = Math.floor(i / CHUNK3);
+        renderList(false);
+        focusChapter(list2, i);
+      }));
+      if (chunk > 0) list2.appendChild(nav2("◀ " + t("Edições {a}–{b}", {
+        a: (chunk - 1) * CHUNK3 + 1,
+        b: chunk * CHUNK3
+      }), chunk - 1));
+      var _loop1 = function _loop1(i) {
+        var c = chapters4[i];
+        var here = p && p.chapterId === c.id;
+        var label = (c.chapter !== null && c.chapter !== void 0 ? "#" + c.chapter : t("Especial")) + (c.title ? " · " + c.title : "");
+        list2.appendChild(h("div.stream", {
+          focusable: true,
+          "data-ci": String(i),
+          onSelect: function onSelect() {
+            return read(i, here ? p.page : 0);
+          }
+        }, [h("div.s-main", {
+          text: label
+        }), here ? h("span.s-tag.ok", {
+          text: t("Parou aqui")
+        }) : null]));
+      };
+      for (var i = start4; i < end; i++) {
+        _loop1(i);
+      }
+      if (end < chapters4.length) list2.appendChild(nav2(t("Edições {a}–{b}", {
+        a: end + 1,
+        b: Math.min(chapters4.length, end + CHUNK3)
+      }) + " ▶", chunk + 1));
+      if (focusFirst2) {
+        var first = list2.querySelector(".stream");
+        if (first) focus(first);
+      }
+    }
+    function showSource(ln, cs) {
+      source = ln;
+      chapters4 = cs;
+      var idx = indexOfProgress();
+      chunk = idx >= 0 ? Math.floor(idx / CHUNK3) : 0;
+      renderInfo();
+      renderList(false);
+    }
+    var names2 = function names2() {
+      var out = [];
+      [m.title, m.name].forEach(function (x) {
+        return x && !out.some(function (y) {
+          return norm3(y) === norm3(x);
+        }) && out.push(x);
+      });
+      return out;
+    };
+    function scan3(onHit) {
+      if (!scanning) scanning = scanSources(names2(), onHit, {
+        alive: function alive() {
+          return _alive;
+        },
+        year: m.year,
+        min: 0.8
+      }).then(function (all2) {
+        found = all2;
+        return all2;
+      });
+      return scanning;
+    }
+    function noSources(text) {
+      status2.textContent = text;
+      renderInfo();
+      renderList(false);
+      list2.appendChild(h("div.stream", {
+        focusable: true,
+        onSelect: openSources
+      }, [h("div.s-main", {
+        text: "📚 " + t("Minhas fontes")
+      })]));
+      installed().forEach(function (p) {
+        return list2.appendChild(h("div.stream", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return searchPlugin(p.id, p.name, m.title);
+          }
+        }, [h("div.s-main", {
+          text: "🔎 " + t("Buscar em {name}", {
+            name: p.name
+          })
+        })]));
+      });
+    }
+    function loadIssues() {
+      chapters4 = [];
+      clear(list2);
+      list2.appendChild(status2);
+      if (!installed().length) return noSources(t("Para ler, adicione suas fontes em Minhas fontes."));
+      var ln = links2()[m.cvId];
+      if (ln) {
+        status2.textContent = t("Carregando capítulos de {name}...", {
+          name: ln.name
+        });
+        return chapters2(ln.pid, ln.mid).then(function (cs) {
+          if (!_alive) return;
+          if (!cs.length) throw new Error("empty");
+          showSource(ln, sortIssues(cs));
+        }).catch(function () {
+          if (!_alive) return;
+          saveLink2(m.cvId, null);
+          autoFind();
+        });
+      }
+      autoFind();
+    }
+    function sortIssues(cs) {
+      var num = function num(c) {
+        return isFinite(parseFloat(c.chapter)) ? parseFloat(c.chapter) : null;
+      };
+      if (cs.filter(function (c) {
+        return num(c) !== null;
+      }).length >= cs.length * 0.6) cs.sort(function (a, b) {
+        return (num(a) === null ? 1e9 : num(a)) - (num(b) === null ? 1e9 : num(b));
+      });
+      return cs;
+    }
+    function autoFind() {
+      status2.textContent = t("Procurando nas suas fontes...");
+      scan3(function (hit) {
+        if (!source && !picked) showSource(linkOf(hit), sortIssues(hit.cs));
+      }).then(function (all2) {
+        if (!_alive) return;
+        if (!all2.length) return noSources(t("Não encontrei este título nas suas fontes."));
+        if (picked) return;
+        var best = all2[0];
+        saveLink2(m.cvId, linkOf(best));
+        if (!source || source.pid !== best.pid) showSource(linkOf(best), sortIssues(best.cs));
+        if (all2.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
+          n: all2.length
+        }), 5e3);
+      });
+    }
+    function pickSource() {
+      if (!found) {
+        toast(t("Procurando nas suas fontes..."), 4e3);
+        return scan3().then(function () {
+          return _alive && pickSource();
+        });
+      }
+      var items3 = found.map(function (hit) {
+        return {
+          label: hit.name,
+          sub: t("{n} edições", {
+            n: hit.count
+          }) + (norm3(hit.title) !== norm3(m.title) ? "  ·  " + hit.title : ""),
+          value: hit,
+          checked: !!source && source.pid === hit.pid
+        };
+      });
+      items3.push({
+        label: "🔎 " + t("Buscar manualmente"),
+        sub: t("Procure com outro nome numa fonte"),
+        value: "manual"
+      });
+      menu(t("Fonte das edições"), items3, {
+        onPick: function onPick(v) {
+          picked = true;
+          if (v === "manual") return menu(t("Buscar manualmente"), installed().map(function (p) {
+            return {
+              label: t("Buscar em {name}", {
+                name: p.name
+              }),
+              value: p
+            };
+          }), {
+            onPick: function onPick(p) {
+              return searchPlugin(p.id, p.name, m.title);
+            }
+          });
+          saveLink2(m.cvId, Object.assign(linkOf(v), {
+            manual: true
+          }));
+          showSource(linkOf(v), sortIssues(v.cs));
+        }
+      });
+    }
+    renderInfo();
+    loadIssues();
+    volume(m.cvId).then(function (v) {
+      if (!_alive) return;
+      Object.assign(m, {
+        description: v.description,
+        characters: v.characters,
+        publisher: v.publisher || m.publisher,
+        issues: v.issues || m.issues,
+        poster: m.poster || v.poster
+      });
+      renderInfo();
+      return moviesOf(heroOf(m));
+    }).catch(function () {
+      return moviesOf(heroOf(m));
+    }).then(function (list22) {
+      if (!_alive || !list22) return;
+      movies = list22;
+      renderInfo();
+    }).catch(function () {});
+    return {
+      el: el,
+      onShow: function onShow() {
+        if (chapters4.length) {
+          renderInfo();
+          renderList(false);
+        }
+        loadVisibleImages(el);
+      },
+      destroy: function destroy() {
+        _alive = false;
+      }
+    };
+  }
+
+  // src/js/views/comics.js
+  var MARVEL = ["Spider-Man", "X-Men", "Avengers", "Iron Man", "Deadpool", "Wolverine", "Venom", "Hulk", "Thor", "Captain America", "Black Panther", "Daredevil", "Fantastic Four", "Guardians of the Galaxy", "Doctor Strange", "Moon Knight", "Punisher", "Silver Surfer"];
+  var DC = ["Batman", "Superman", "Wonder Woman", "Joker", "Flash", "Green Lantern", "Justice League", "Aquaman", "Harley Quinn", "Teen Titans", "Nightwing", "Catwoman", "Green Arrow", "Shazam"];
+  var INDIE = ["Invincible", "The Walking Dead", "Spawn", "Saga", "Hellboy", "Teenage Mutant Ninja Turtles", "The Boys", "Sandman", "Watchmen", "Sin City", "Umbrella Academy", "Locke & Key"];
+  var PUBLISHERS = [{
+    name: "Marvel",
+    match: "Marvel",
+    series: MARVEL
+  }, {
+    name: "DC Comics",
+    match: "DC Comics",
+    series: DC
+  }, {
+    name: "Image",
+    match: "Image",
+    series: ["Invincible", "The Walking Dead", "Spawn", "Saga", "Paper Girls", "Chew", "Monstress", "Deadly Class"]
+  }, {
+    name: "Dark Horse Comics",
+    match: "Dark Horse",
+    series: ["Hellboy", "Sin City", "Umbrella Academy", "Usagi Yojimbo", "B.P.R.D.", "Black Hammer"]
+  }, {
+    name: "Vertigo",
+    match: "Vertigo",
+    series: ["Sandman", "Fables", "Preacher", "Y: The Last Man", "Hellblazer", "Transmetropolitan", "100 Bullets"]
+  }, {
+    name: "IDW Publishing",
+    match: "IDW",
+    series: ["Teenage Mutant Ninja Turtles", "Transformers", "G.I. Joe", "Locke & Key", "Star Trek"]
+  }, {
+    name: "BOOM! Studios",
+    match: "BOOM",
+    series: ["Something is Killing the Children", "Power Rangers", "Lumberjanes", "Once & Future"]
+  }, {
+    name: "Dynamite Entertainment",
+    match: "Dynamite",
+    series: ["The Boys", "Red Sonja", "Vampirella", "The Shadow"]
+  }, {
+    name: "Valiant",
+    match: "Valiant",
+    series: ["X-O Manowar", "Bloodshot", "Harbinger", "Shadowman"]
+  }];
+  var ROWS = ["Spider-Man", "Batman", "X-Men", "Superman", "Avengers", "The Walking Dead"];
+  var MONTH = 30 * 864e5;
+  function artFor(cacheKey, count, get4, onEach) {
+    var cached2 = get(cacheKey, null);
+    var urls = cached2 && cached2.at > Date.now() - MONTH && cached2.urls ? cached2.urls.slice() : [];
+    var i = 0;
+    var changed = false;
+    function lane() {
+      while (i < count && urls[i]) {
+        onEach(i, urls[i]);
+        i++;
+      }
+      if (i >= count) return Promise.resolve();
+      var k = i++;
+      return get4(k).then(function (u) {
+        if (u) {
+          urls[k] = u;
+          changed = true;
+          onEach(k, u);
+        }
+      }, function () {}).then(lane);
+    }
+    return Promise.all([lane(), lane()]).then(function () {
+      return changed && set(cacheKey, {
+        at: Date.now(),
+        urls: urls
+      });
+    });
+  }
+  var seriesArt = function seriesArt(name) {
+    return searchVolumes(name, 0).then(function (r) {
+      return r.items[0] ? r.items[0].art || r.items[0].poster : "";
+    });
+  };
+  function heroTiles(parent, title, names2, cacheKey) {
+    var row2 = tileRow(parent, title, names2.map(function (x) {
+      return {
+        label: x,
+        open: function open() {
+          return push(ComicGridView(x));
+        }
+      };
+    }), "discover");
+    var art = [];
+    artFor(cacheKey, names2.length, function (i) {
+      return seriesArt(names2[i]);
+    }, function (i, u) {
+      art[i] = u;
+      setTileArt(row2, art);
+    });
+    return row2;
+  }
+  function posterRow2(parent, title, load7, onMore) {
+    var row2 = h("div.row", {
+      "data-anchor": "30"
+    });
+    var track = h("div.row-track.pending", {
+      "data-scroll-x": "",
+      "data-group": ""
+    }, spinnerLine(t("Carregando...")));
+    row2.appendChild(h("div.row-title", {
+      text: title
+    }));
+    row2.appendChild(track);
+    parent.appendChild(row2);
+    return {
+      row: row2,
+      started: false,
+      load: function load() {
+        return load7().then(function (items3) {
+          clear(track);
+          track.classList.remove("pending");
+          if (!items3.length) return row2.parentNode && parent.removeChild(row2);
+          items3.slice(0, 20).forEach(function (m) {
+            return track.appendChild(card(m, {
+              onSelect: function onSelect() {
+                return openComicDetails(m);
+              }
+            }));
+          });
+          if (onMore) track.appendChild(h("div.card.see-all", {
+            focusable: true,
+            onSelect: onMore
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "→"
+          }), t("Ver tudo")])), h("div.name", {
+            text: ""
+          })]));
+          loadVisibleImages(row2);
+        }).catch(function () {
+          return row2.parentNode && parent.removeChild(row2);
+        });
+      }
+    };
+  }
+  function ComicsView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar("comics", goTab);
+    var rows2 = h("div.rows");
+    scroller.appendChild(bar);
+    scroller.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [h("div.btn", {
+      focusable: true,
+      onSelect: search3
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar quadrinhos")]), h("div.btn", {
+      focusable: true,
+      onSelect: openSources
+    }, [h("span.ico", {
+      text: "📚"
+    }), t("Minhas fontes")])]));
+    var shelves = h("div");
+    scroller.appendChild(shelves);
+    scroller.appendChild(rows2);
+    el.appendChild(scroller);
+    function search3() {
+      if (!hasKey()) return toast(t("Adicione sua chave do ComicVine em Ajustes → Chaves."), 6e3);
+      promptText(t("Buscar quadrinhos"), "", "Batman, Spider-Man...", function (q2) {
+        return q2.trim() && push(ComicGridView(q2.trim()));
+      });
+    }
+    function drawShelves() {
+      clear(shelves);
+      var mk = function mk(title, list2) {
+        if (!list2.length) return;
+        var track = h("div.row-track", {
+          "data-scroll-x": "",
+          "data-group": ""
+        });
+        list2.forEach(function (x) {
+          return track.appendChild(card({
+            id: x.key,
+            name: x.name,
+            poster: x.poster
+          }, {
+            onSelect: function onSelect() {
+              return x.ref.cvId ? openComicDetails(Object.assign({
+                id: "cv:" + x.ref.cvId,
+                type: "comic"
+              }, x.ref)) : openSourceManga(x.ref);
+            }
+          }));
+        });
+        shelves.appendChild(h("div.row", {
+          "data-anchor": "30"
+        }, [h("div.row-title", {
+          text: title
+        }), track]));
+        loadVisibleImages(track);
+      };
+      mk(t("Continuar lendo"), continueList(40).filter(function (p) {
+        return p.kind === "cv";
+      }).slice(0, 15).map(function (p) {
+        return {
+          key: p.key,
+          ref: p.ref,
+          name: (p.title || "") + " · #" + p.chapter,
+          poster: p.poster
+        };
+      }));
+      mk(t("Favoritos"), favs().filter(function (f) {
+        return f.kind === "cv";
+      }).map(function (f) {
+        return {
+          key: f.key,
+          ref: f.ref,
+          name: f.ref.name,
+          poster: f.ref.poster
+        };
+      }));
+    }
+    drawShelves();
+    var pending2 = [];
+    function loadNearby() {
+      var top2 = scroller.scrollTop + (window.innerHeight || 1080) * 2;
+      pending2.forEach(function (r) {
+        if (!r.started && r.row.offsetTop < top2) {
+          r.started = true;
+          r.load();
+        }
+      });
+    }
+    var add = function add(title, load7, onMore) {
+      return pending2.push(posterRow2(rows2, title, load7, onMore));
+    };
+    var seriesRow = function seriesRow(x) {
+      return add(x, function () {
+        return searchVolumes(x, 0).then(function (r) {
+          return r.items;
+        });
+      }, function () {
+        return push(ComicGridView(x));
+      });
+    };
+    if (!hasKey()) {
+      rows2.appendChild(h("div.flat-list", null, [h("div.modal-text", {
+        text: t("Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).")
+      }), h("div.modal-text", {
+        text: t("Para ler, adicione suas fontes em Minhas fontes.")
+      })]));
+    } else {
+      add(t("Novas edições da semana"), function () {
+        return newThisWeek(7);
+      });
+      var pubRow = tileRow(rows2, t("Editoras"), PUBLISHERS.map(function (p) {
+        return {
+          label: p.name,
+          open: function open() {
+            return push(ComicGridView(p.name, p));
+          }
+        };
+      }), "publisher");
+      var logos = [];
+      artFor("comicPublisherLogos", PUBLISHERS.length, function (i) {
+        return publisherLogo(PUBLISHERS[i].name);
+      }, function (i, u) {
+        logos[i] = u;
+        setTileArt(pubRow, logos);
+      });
+      seriesRow(ROWS[0]);
+      heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel");
+      seriesRow(ROWS[1]);
+      heroTiles(rows2, t("Heróis da DC"), DC, "comicArtDC");
+      seriesRow(ROWS[2]);
+      heroTiles(rows2, t("Independentes"), INDIE, "comicArtIndie");
+      ROWS.slice(3).forEach(seriesRow);
+      setTimeout(loadNearby, 50);
+    }
+    return {
+      el: el,
+      onShow: function onShow() {
+        drawShelves();
+        loadNearby();
+        loadVisibleImages(el);
+      },
+      onScroll: function onScroll() {
+        return loadNearby();
+      },
+      destroy: function destroy() {
+        return bar.__destroy && bar.__destroy();
+      }
+    };
+  }
+  function ComicGridView(title, pub) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var gridEl = h("div.grid");
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: title
+    }));
+    scroller.appendChild(gridEl);
+    el.appendChild(scroller);
+    var n = 0;
+    var more = null;
+    var alive = true;
+    var seen = {};
+    var pageOf = function pageOf(k) {
+      return pub ? searchVolumes(pub.series[k], 0).then(function (r) {
+        return {
+          items: r.items.filter(function (m) {
+            return String(m.publisher).indexOf(pub.match) >= 0;
+          }).slice(0, 12),
+          more: k + 1 < pub.series.length
+        };
+      }) : searchVolumes(title, k);
+    };
+    function next() {
+      if (!alive) return;
+      if (more && more.parentNode) gridEl.removeChild(more);
+      if (!gridEl.querySelector(".loading-line")) gridEl.appendChild(spinnerLine(t("Carregando...")));
+      var first = n === 0;
+      pageOf(n++).then(function (r) {
+        if (!alive) return;
+        var sp = gridEl.querySelector(".loading-line");
+        if (sp && !(pub && r.more)) gridEl.removeChild(sp);
+        r.items.forEach(function (m) {
+          if (seen[m.id]) return;
+          seen[m.id] = true;
+          gridEl.insertBefore(card(m, {
+            onSelect: function onSelect() {
+              return openComicDetails(m);
+            }
+          }), gridEl.querySelector(".loading-line"));
+        });
+        loadVisibleImages(el, 400);
+        if (!current2() || first) {
+          var c = gridEl.querySelector(".card");
+          if (c) focus(c);
+        }
+        if (pub && r.more) return next();
+        if (!gridEl.querySelector(".card")) gridEl.appendChild(h("div.modal-text", {
+          text: t("Nada por aqui.")
+        }));
+        if (r.more) {
+          more = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return next();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          gridEl.appendChild(more);
+        }
+      }).catch(function (e) {
+        var sp = gridEl.querySelector(".loading-line");
+        if (sp) gridEl.removeChild(sp);
+        toast(e && e.message === "bad key" ? t("O ComicVine recusou a chave. Confira em Ajustes → Chaves.") : t("Não foi possível carregar agora."), 6e3);
+      });
+    }
+    next();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      destroy: function destroy() {
+        alive = false;
+      }
+    };
+  }
+  function openComicsFor(query) {
+    if (!hasKey()) return toast(t("Adicione sua chave do ComicVine em Ajustes → Chaves."), 6e3);
+    push(ComicGridView(query));
+  }
+
   // src/js/views/details.js
   function openDetails(type, id, opts) {
     push(DetailsView(type, id, opts || {}));
@@ -17223,6 +18340,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var season = null;
     var streamsVideo = null;
     var alive = true;
+    var comicHero2 = "";
     var watchBtn = null;
     var libBtn = null;
     var tmdbInfo = null;
@@ -17400,9 +18518,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: "📖"
       }), t("Ler o mangá")]) : null;
+      var comicBtn = h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return openComicsFor(comicHero2);
+        }
+      }, [h("span.ico", {
+        text: "🦸"
+      }), t("Ler os quadrinhos")]);
+      comicBtn.style.display = "none";
       info2.appendChild(h("div.details-buttons", {
         "data-group": ""
-      }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, collBtn, libBtn]));
+      }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, comicBtn, collBtn, libBtn]));
+      if (hasKey() && !isAnime(meta)) comicHero(meta.imdb_id || (/^tt\d+/.exec(meta.id) || [])[0]).then(function (hero) {
+        if (!alive || !hero) return;
+        comicHero2 = hero;
+        comicBtn.style.display = "";
+      }).catch(function () {});
       loadExtras({
         logo: logo2,
         title: title,
@@ -17668,10 +18800,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     var PACK_RE = /(collection|cole[cç][aã]o|complete\s*(series|saga|collection|pack)|\bsaga\b|anthology|trilogy|quadrilogy|filmography|\b(19|20)\d{2}\s*[-–]\s*(19|20)\d{2}\b|\bMCU\b|all\s+seasons)/i;
     function sizeInfo(text) {
-      var norm3 = String(text || "").replace(/[٠-٩]/g, function (d) {
+      var norm4 = String(text || "").replace(/[٠-٩]/g, function (d) {
         return String(d.charCodeAt(0) - 1632);
       }).replace(/٫/g, ".").replace(/٬/g, "");
-      var m = norm3.match(/(\d+(?:[.,]\d{1,3})?)\s*(TB|GB|MB)\b/i);
+      var m = norm4.match(/(\d+(?:[.,]\d{1,3})?)\s*(TB|GB|MB)\b/i);
       if (!m) return null;
       var v = parseFloat(m[1].replace(",", "."));
       var unit = m[2].toUpperCase();
@@ -19124,14 +20256,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           title: next[1]
         })));
       }
-      var chip = function chip(key3, label, active3, onSelect) {
+      var chip = function chip(key4, label, active3, onSelect) {
         var c = h("div.chip", {
           focusable: true,
           cls: active3 ? "active" : "",
           text: label,
           onSelect: onSelect
         });
-        c.__key = key3;
+        c.__key = key4;
         return c;
       };
       if (f.id === "mcu") {
@@ -19245,7 +20377,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/views/manga.js
-  var API6 = "https://graphql.anilist.co";
+  var API7 = "https://graphql.anilist.co";
   var FIELDS2 = "id format status chapters volumes countryOfOrigin averageScore genres description(asHtml: false) startDate { year } title { romaji english native } synonyms coverImage { large }";
   var SEASON_START = {
     WINTER: "0101",
@@ -19253,10 +20385,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     SUMMER: "0701",
     FALL: "1001"
   };
-  var cache6 = {};
+  var cache7 = {};
   function anilist2(query) {
-    if (!cache6[query]) {
-      cache6[query] = postJSON(API6, {
+    if (!cache7[query]) {
+      cache7[query] = postJSON(API7, {
         query: query
       }, {
         timeout: 15e3,
@@ -19264,11 +20396,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).then(function (r) {
         return r && r.data;
       }).catch(function (e) {
-        delete cache6[query];
+        delete cache7[query];
         throw e;
       });
     }
-    return cache6[query];
+    return cache7[query];
   }
   function toMetas2(list2) {
     return (list2 || []).map(function (m) {
@@ -19374,7 +20506,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     SUMMER: "Verão",
     FALL: "Outono"
   };
-  function posterRow2(parent, title, args, onMore) {
+  function posterRow3(parent, title, args, onMore) {
     var row2 = h("div.row", {
       "data-anchor": "30"
     });
@@ -19469,7 +20601,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }), track]));
         loadVisibleImages(track);
       };
-      mk(t("Continuar lendo"), continueList(15).map(function (p) {
+      mk(t("Continuar lendo"), continueList(40).filter(function (p) {
+        return p.kind !== "cv";
+      }).slice(0, 15).map(function (p) {
         return {
           key: p.key,
           kind: p.kind,
@@ -19480,7 +20614,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           poster: p.poster
         };
       }));
-      mk(t("Favoritos"), favs().map(function (f) {
+      mk(t("Favoritos"), favs().filter(function (f) {
+        return f.kind !== "cv";
+      }).map(function (f) {
         return {
           key: f.key,
           kind: f.kind,
@@ -19496,7 +20632,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop1 = function _loop1() {
+      var _loop10 = function _loop10() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -19510,7 +20646,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret5;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret5 = _loop1();
+        _ret5 = _loop10();
         if (_ret5 === 0) continue;
         if (_ret5 === 1) break;
       }
@@ -19520,7 +20656,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     var s = seasonNow2();
     var add = function add(title, args) {
-      return pending2.push(posterRow2(rows2, title, args, function () {
+      return pending2.push(posterRow3(rows2, title, args, function () {
         return grid(title, args);
       }));
     };
@@ -19862,7 +20998,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return x.id !== id;
     }));
     if (get("iptvActive", "") === id) set("iptvActive", "");
-    delete cache7[id];
+    delete cache8[id];
   }
   function active2() {
     var all2 = sources2();
@@ -19901,7 +21037,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return c.src === srcId;
     });
   };
-  function get2(url2, json) {
+  function get3(url2, json) {
     return httpRaw(url2, {
       timeoutMs: 3e4
     }).then(function (r) {
@@ -19921,19 +21057,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return base2(s) + "/player_api.php?username=" + encodeURIComponent(s.user) + "&password=" + encodeURIComponent(s.pass) + (action ? "&action=" + action : "") + (extra || "");
   };
   function checkXtream(s) {
-    return get2(api(s, ""), true).then(function (r) {
+    return get3(api(s, ""), true).then(function (r) {
       if (!r || !r.user_info || String(r.user_info.auth) !== "1") throw new Error("login");
       return r.user_info;
     });
   }
-  var cache7 = {};
+  var cache8 = {};
   function categories(s) {
-    var c = cache7[s.id] = cache7[s.id] || {
+    var c = cache8[s.id] = cache8[s.id] || {
       byCat: {}
     };
     if (c.cats) return Promise.resolve(c.cats);
     if (s.type === "xtream") {
-      return get2(api(s, "get_live_categories"), true).then(function (list2) {
+      return get3(api(s, "get_live_categories"), true).then(function (list2) {
         c.cats = (Array.isArray(list2) ? list2 : []).map(function (x) {
           return {
             id: String(x.category_id),
@@ -19948,12 +21084,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function channels(s, catId) {
-    var c = cache7[s.id] = cache7[s.id] || {
+    var c = cache8[s.id] = cache8[s.id] || {
       byCat: {}
     };
     if (c.byCat[catId]) return Promise.resolve(c.byCat[catId]);
     if (s.type === "xtream") {
-      return get2(api(s, "get_live_streams", "&category_id=" + encodeURIComponent(catId)), true).then(function (list2) {
+      return get3(api(s, "get_live_streams", "&category_id=" + encodeURIComponent(catId)), true).then(function (list2) {
         var out = (Array.isArray(list2) ? list2 : []).map(function (x) {
           return {
             id: String(x.stream_id),
@@ -19974,23 +21110,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function loaded(s) {
-    var c = cache7[s.id];
+    var c = cache8[s.id];
     return c ? Object.keys(c.byCat).map(function (k) {
       return c.byCat[k];
     }) : [];
   }
   function loadM3u(s) {
-    var c = cache7[s.id] = cache7[s.id] || {
+    var c = cache8[s.id] = cache8[s.id] || {
       byCat: {}
     };
     if (c.cats) return Promise.resolve();
-    return get2(s.url, false).then(function (text) {
+    return get3(s.url, false).then(function (text) {
       var cats = [];
       var seen = {};
       var lines = String(text || "").split(/\r?\n/);
       var info2 = null;
       var n = 0;
-      var _loop10 = function _loop10() {
+      var _loop11 = function _loop11() {
         var l = lines[i].trim();
         if (!l) return 1; // continue
         if (l.indexOf("#EXTINF") === 0) {
@@ -20029,7 +21165,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       };
       for (var i = 0; i < lines.length && n < 3e4; i++) {
-        if (_loop10()) continue;
+        if (_loop11()) continue;
       }
       c.cats = cats;
     });
@@ -20040,7 +21176,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var k = s.id + "|" + ch.id;
     var hit = epgCache[k];
     if (hit && Date.now() - hit.at < 10 * 6e4) return Promise.resolve(hit.list);
-    return get2(api(s, "get_short_epg", "&stream_id=" + encodeURIComponent(ch.id) + "&limit=2"), true).then(function (r) {
+    return get3(api(s, "get_short_epg", "&stream_id=" + encodeURIComponent(ch.id) + "&limit=2"), true).then(function (r) {
       var list2 = (r && r.epg_listings || []).map(function (e) {
         return {
           title: b64(e.title),
@@ -20227,12 +21363,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         drawGrid();
       });
     }
-    function chip(label, key3) {
+    function chip(label, key4) {
       return h("div.chip", {
         focusable: true,
-        cls: key3 === cat ? "primary-chip" : "",
+        cls: key4 === cat ? "primary-chip" : "",
         onSelect: function onSelect() {
-          return cat = key3, drawChips(), drawGrid();
+          return cat = key4, drawChips(), drawGrid();
         }
       }, label);
     }
@@ -20462,11 +21598,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function sortList(items3, sort2) {
     var s = String(sort2 || "");
-    var key3 = s.split(".")[0];
+    var key4 = s.split(".")[0];
     var desc = /desc$/.test(s);
-    if (!key3 || key3 === "original_order" || key3 === "rank") return items3;
+    if (!key4 || key4 === "original_order" || key4 === "rank") return items3;
     return items3.slice().sort(function (a, b) {
-      return ((a.__s[key3] || 0) - (b.__s[key3] || 0)) * (desc ? -1 : 1);
+      return ((a.__s[key4] || 0) - (b.__s[key4] || 0)) * (desc ? -1 : 1);
     });
   }
   function fetchSource(src, page3) {
@@ -20732,7 +21868,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function run3() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop11 = function _loop11() {
+      var _loop12 = function _loop12() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (!p.row.parentNode) {
@@ -20754,7 +21890,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret6;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret6 = _loop11();
+        _ret6 = _loop12();
         if (_ret6 === 0) continue;
         if (_ret6 === 1) break;
       }
@@ -21002,7 +22138,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/lib/homeRows.js
-  function key2(entry) {
+  function key3(entry) {
     return (entry.addon.transportUrl || entry.addon.manifest.id || "") + "|" + entry.catalog.type + "|" + entry.catalog.id;
   }
   function prefs() {
@@ -21021,7 +22157,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function isHidden(entry) {
-    return prefs().hidden.indexOf(key2(entry)) >= 0;
+    return prefs().hidden.indexOf(key3(entry)) >= 0;
   }
   function sort(entries) {
     var order2 = prefs().order;
@@ -21029,7 +22165,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return {
         e: e,
         i: i,
-        o: order2.indexOf(key2(e))
+        o: order2.indexOf(key3(e))
       };
     }).sort(function (a, b) {
       return (a.o < 0 ? 1e6 + a.i : a.o) - (b.o < 0 ? 1e6 + b.i : b.o);
@@ -21040,19 +22176,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function visible(entries) {
     var hidden = prefs().hidden;
     return sort(entries).filter(function (e) {
-      return hidden.indexOf(key2(e)) < 0;
+      return hidden.indexOf(key3(e)) < 0;
     });
   }
   function toggleHidden(entry) {
     var p = prefs();
-    var k = key2(entry);
+    var k = key3(entry);
     var i = p.hidden.indexOf(k);
     if (i >= 0) p.hidden.splice(i, 1);else p.hidden.push(k);
     save(p);
   }
   function move2(entries, entry, delta) {
-    var list2 = sort(entries).map(key2);
-    var k = key2(entry);
+    var list2 = sort(entries).map(key3);
+    var k = key3(entry);
     var i = list2.indexOf(k);
     var j = i + delta;
     if (i < 0 || j < 0 || j >= list2.length) return;
@@ -21069,24 +22205,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/mdblistRows.js
-  var API7 = "https://api.mdblist.com/";
+  var API8 = "https://api.mdblist.com/";
   var POSTER2 = function POSTER2(imdb) {
     return "https://images.metahub.space/poster/medium/" + imdb + "/img";
   };
   function apiKey() {
     return (settings().mdblistKey || "").trim();
   }
-  function hasKey() {
+  function hasKey2() {
     return !!apiKey();
   }
   function call4(path) {
     var sep = path.indexOf("?") >= 0 ? "&" : "?";
-    return getJSONViaProxy(API7 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
+    return getJSONViaProxy(API8 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
       timeout: 15e3
     });
   }
   function myLists() {
-    if (!hasKey()) return Promise.resolve([]);
+    if (!hasKey2()) return Promise.resolve([]);
     return call4("lists/user").then(function (r) {
       return (Array.isArray(r) ? r : []).map(function (l) {
         return {
@@ -21112,7 +22248,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function rows() {
-    return hasKey() ? settings().mdblistRows || [] : [];
+    return hasKey2() ? settings().mdblistRows || [] : [];
   }
   function setRows(list2) {
     saveSettings({
@@ -21427,7 +22563,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop12 = function _loop12() {
+      var _loop13 = function _loop13() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -21445,7 +22581,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret7;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret7 = _loop12();
+        _ret7 = _loop13();
         if (_ret7 === 0) continue;
         if (_ret7 === 1) break;
       }
@@ -21875,7 +23011,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop13 = function _loop13() {
+      var _loop14 = function _loop14() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -21893,7 +23029,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret8;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret8 = _loop13();
+        _ret8 = _loop14();
         if (_ret8 === 0) continue;
         if (_ret8 === 1) break;
       }
@@ -22219,7 +23355,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-16T20:14:02.021Z";
+  var BUILD = "2026-11-17T06:59:17.790Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -23010,16 +24146,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     var page3 = "c-account";
     var focusContent = false;
-    function keyInput(title, sub, key3, placeholder) {
+    function keyInput(title, sub, key4, placeholder) {
       var s = settings();
       var input = h("input.input", {
         type: "text",
-        value: s[key3] || "",
+        value: s[key4] || "",
         placeholder: placeholder
       });
       input.__submit = function (v) {
         var patch = {};
-        patch[key3] = v.trim();
+        patch[key4] = v.trim();
         saveSettings(patch);
         toast(v.trim() ? t("Chave salva") : t("Chave removida"));
         render();
@@ -23091,7 +24227,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       return box;
     }
-    function keyQr(key3, name) {
+    function keyQr(key4, name) {
       info().then(function (i) {
         var url2 = setupUrl(i);
         if (!url2) return toast(t("O serviço da TV não está rodando. Feche o app e abra de novo."), 5e3);
@@ -23106,7 +24242,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var box = h("div.modal-box.center.qr-modal", null, [h("h3", {
           text: name
         }), h("img.phone-qr", {
-          src: qrImage(url2 + "&only=" + key3, 320),
+          src: qrImage(url2 + "&only=" + key4, 320),
           alt: ""
         }), h("div.modal-text", {
           text: t("Aponte a câmera: abra a página da chave, copie, cole e envie.")
@@ -23120,7 +24256,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         focusFirst(modal);
         var watch = setInterval(function () {
-          return (settings()[key3] || "").trim() && done();
+          return (settings()[key4] || "").trim() && done();
         }, 1500);
         function done() {
           clearInterval(watch);
@@ -23130,11 +24266,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       });
     }
-    function phoneKeyRow(key3, name) {
+    function phoneKeyRow(key4, name) {
       return row2("📱 " + t("{name} pelo celular", {
         name: name
       }), t("QR que abre direto a página da chave"), "", function () {
-        return keyQr(key3, name);
+        return keyQr(key4, name);
       });
     }
     function accountCard(p) {
@@ -23215,9 +24351,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         id: "simkl",
         label: "Simkl"
       }];
-      var srcRow = function srcRow(title, sub, key3) {
+      var srcRow = function srcRow(title, sub, key4) {
         var cur = SRC.find(function (x) {
-          return x.id === s[key3];
+          return x.id === s[key4];
         }) || SRC[0];
         body.appendChild(row2(title, sub, cur.label, function () {
           return menu(title, SRC.map(function (x) {
@@ -23229,7 +24365,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }), {
             onPick: function onPick(v) {
               var patch = {};
-              patch[key3] = v;
+              patch[key4] = v;
               saveSettings(patch);
               render();
             }
@@ -23435,7 +24571,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       body.appendChild(h("div.set-section", {
         text: t("Listas do MDBList")
       }));
-      if (!hasKey()) {
+      if (!hasKey2()) {
         body.appendChild(h("div.hint", {
           style: {
             padding: "0 4px 10px"
@@ -23750,7 +24886,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return g.id === page3;
       });
       pageHeader(t(GROUP.label));
-      var choose = function choose(title, sub, list2, key3, value, label) {
+      var choose = function choose(title, sub, list2, key4, value, label) {
         return body.appendChild(row2(title, sub, t(String(label)), function () {
           return menu(title, list2.map(function (x) {
             return {
@@ -23761,7 +24897,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }), {
             onPick: function onPick(v) {
               var patch = {};
-              patch[key3] = v;
+              patch[key4] = v;
               saveSettings(patch);
               render();
             }
@@ -24120,13 +25256,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             backgroundColor: curTheme.main
           }
         })));
-        var lookChoose = function lookChoose(title, sub, list2, key3, dflt) {
+        var lookChoose = function lookChoose(title, sub, list2, key4, dflt) {
           var cur = list2.find(function (x) {
-            return x.id === s[key3];
+            return x.id === s[key4];
           }) || list2.find(function (x) {
             return x.id === dflt;
           });
-          choose(title, sub, list2, key3, cur.id, cur.label);
+          choose(title, sub, list2, key4, cur.id, cur.label);
         };
         var bg = s.bgStyle || (s.oled ? "oled" : "default");
         body.appendChild(row2(t("Fundo"), t("Escuro, preto puro ou com brilho da cor"), t((BACKGROUNDS.find(function (x) {
@@ -24496,15 +25632,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         body.appendChild(h("div.set-section", {
           text: t("Metadados extras (opcional)")
         }));
-        var keyRow = function keyRow(title, sub, key3, placeholder) {
+        var keyRow = function keyRow(title, sub, key4, placeholder) {
           var input = h("input.input", {
             type: "text",
-            value: s[key3] || "",
+            value: s[key4] || "",
             placeholder: placeholder
           });
           input.__submit = function (v) {
             var patch = {};
-            patch[key3] = v.trim();
+            patch[key4] = v.trim();
             saveSettings(patch);
             toast(v.trim() ? t("Chave salva") : t("Chave removida"));
             render();
@@ -24526,6 +25662,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         body.appendChild(phoneKeyRow("rpdbKey", "RPDB"));
         keyRow(t("Chave OMDb"), t("Prêmios (Oscar, Emmy...) na página do título (grátis em omdbapi.com)"), "omdbKey", "API key");
         body.appendChild(phoneKeyRow("omdbKey", "OMDb"));
+        keyRow(t("Chave ComicVine"), t("Catálogo da aba Quadrinhos: capas, edições e personagens (grátis em comicvine.gamespot.com/api)"), "comicvineKey", "API key");
+        body.appendChild(phoneKeyRow("comicvineKey", "ComicVine"));
         body.appendChild(row2(t("Guia para os pais"), t("Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)"), "", function () {
           saveSettings({
             parentalGuide: !settings().parentalGuide
@@ -24798,9 +25936,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       lists[0].concat(lists[1]).forEach(function (e) {
         var show3 = e.show || e._embedded && e._embedded.show;
         if (!show3 || !show3.externals || !show3.externals.imdb || NOT_SERIES.test(show3.type || "")) return;
-        var key3 = show3.id + ":" + e.season + ":" + e.number;
-        if (seen[key3]) return;
-        seen[key3] = true;
+        var key4 = show3.id + ":" + e.season + ":" + e.number;
+        if (seen[key4]) return;
+        seen[key4] = true;
         var network = show3.webChannel && show3.webChannel.name || show3.network && show3.network.name || "";
         var at = e.airstamp ? Date.parse(e.airstamp) : 0;
         out.push({
@@ -24892,7 +26030,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop14 = function _loop14() {
+      var _loop15 = function _loop15() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -24908,7 +26046,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop14();
+        _loop15();
       }
       days.__last = days.children[current3 + 1];
     }
@@ -25231,21 +26369,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       slideTimer = setInterval(shift, 6e4);
       return;
     }
-    var img2 = h("div.ss-bg");
+    var img3 = h("div.ss-bg");
     var title = h("div.ss-title");
     var clock = h("div.ss-clock");
-    overlay = h("div.screensaver", null, [img2, h("div.ss-shade"), h("div.ss-info", null, [clock, title])]);
+    overlay = h("div.screensaver", null, [img3, h("div.ss-shade"), h("div.ss-info", null, [clock, title])]);
     document.body.appendChild(overlay);
     var next = function next() {
       clock.textContent = timeHM(/* @__PURE__ */new Date());
       var it = items2.length ? items2[index++ % items2.length] : null;
       if (it) {
-        img2.classList.remove("show");
+        img3.classList.remove("show");
         setTimeout(function () {
           if (!overlay) return;
-          img2.style.backgroundImage = 'url("' + it.background + '")';
+          img3.style.backgroundImage = 'url("' + it.background + '")';
           title.textContent = it.name || "";
-          img2.classList.add("show");
+          img3.classList.add("show");
         }, 900);
       }
     };
@@ -25402,6 +26540,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     registerTab("collections", CollectionsView);
     registerTab("anime", AnimeView);
     registerTab("manga", MangaView);
+    registerTab("comics", ComicsView);
     registerTab("discover", DiscoverView);
     registerTab("live", LiveView);
     registerTab("movies", MoviesView);

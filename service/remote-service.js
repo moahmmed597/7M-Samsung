@@ -8,7 +8,7 @@ var http = require('http');
 var os = require('os');
 
 // Bump when the service changes: a running copy compares it with the newest one on GitHub.
-var SERVICE_VERSION = 3;
+var SERVICE_VERSION = 4;
 var PORT = 8095;
 var HOLD_MS = 25000; // long-poll hold time
 var KEEP = 50; // events kept for late pollers
@@ -440,7 +440,7 @@ function handle(req, res) {
   if (url.pathname === '/api/keys' && req.method === 'POST') {
     if (q.pin !== PIN) return send(res, 401, { ok: false });
     return readBody(req, function (body) {
-      var allowed = ['traktClientId', 'traktClientSecret', 'simklClientId', 'tmdbKey', 'mdblistKey', 'rpdbKey', 'omdbKey', 'subdlKey', 'animeSkipClientId', 'realDebridKey', 'torboxKey', 'premiumizeKey'];
+      var allowed = ['traktClientId', 'traktClientSecret', 'simklClientId', 'tmdbKey', 'mdblistKey', 'rpdbKey', 'omdbKey', 'comicvineKey', 'subdlKey', 'animeSkipClientId', 'realDebridKey', 'torboxKey', 'premiumizeKey'];
       var keys = {};
       var n = 0;
       try {

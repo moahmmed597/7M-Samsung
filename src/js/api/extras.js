@@ -186,6 +186,22 @@ export function searchPeople(query) {
   );
 }
 
+// Films and shows based on a comic (TMDB keyword "based on comic"): the hero's name to look for in
+// the Comics tab (the collection name without "Collection", else the title before ":"), or ''.
+const COMIC_KEYWORDS = { 9717: 1, 180547: 1, 229266: 1, 9715: 1 };
+export function comicHero(imdb) {
+  return tmdbFind(imdb).then((f) => {
+    if (!f) return '';
+    return tmdb(f.type + '/' + f.id, { append_to_response: 'keywords', language: 'en-US' }).then((d) => {
+      const kw = (d.keywords && (d.keywords.keywords || d.keywords.results)) || [];
+      if (!kw.some((k) => COMIC_KEYWORDS[k.id])) return '';
+      const coll = d.belongs_to_collection && d.belongs_to_collection.name;
+      const base = (coll ? coll.replace(/\s*(\(.*\)|collection|saga|series)\s*$/i, '') : d.title || d.name || '').split(':')[0];
+      return base.replace(/^the\s+(amazing\s+)?/i, '').replace(/\s+\d+$/, '').trim();
+    });
+  });
+}
+
 // Any TMDB v3 path (for the imported Nuvio collections); rejects without a key.
 export function tmdbGet(path, params) {
   if (!tmdbKey()) return Promise.reject(new Error('no TMDB key'));

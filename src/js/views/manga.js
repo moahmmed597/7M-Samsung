@@ -159,8 +159,8 @@ export function MangaView() {
       shelves.appendChild(h('div.row', { 'data-anchor': '30' }, [h('div.row-title', { text: title }), track]));
       loadVisibleImages(track);
     };
-    mk(t('Continuar lendo'), shelf.continueList(15).map((p) => ({ key: p.key, kind: p.kind, ref: p.ref, name: (p.title || '') + ' · ' + t('Cap. {n}', { n: p.chapter }), poster: p.poster })));
-    mk(t('Favoritos'), shelf.favs().map((f) => ({ key: f.key, kind: f.kind, ref: f.ref, name: f.ref.name, poster: f.ref.poster })));
+    mk(t('Continuar lendo'), shelf.continueList(40).filter((p) => p.kind !== 'cv').slice(0, 15).map((p) => ({ key: p.key, kind: p.kind, ref: p.ref, name: (p.title || '') + ' · ' + t('Cap. {n}', { n: p.chapter }), poster: p.poster })));
+    mk(t('Favoritos'), shelf.favs().filter((f) => f.kind !== 'cv').map((f) => ({ key: f.key, kind: f.kind, ref: f.ref, name: f.ref.name, poster: f.ref.poster })));
   }
   drawShelves();
 

@@ -22,6 +22,8 @@ import * as debrid from '../api/debrid.js';
 import { streamBadgeSettings } from '../lib/badges.js';
 import * as animeLink from '../lib/animeLink.js';
 import { openMangaDetails } from './mangaDetails.js';
+import { openComicsFor } from './comics.js';
+import * as cv from '../api/comicvine.js';
 
 export function openDetails(type, id, opts) {
   router.push(DetailsView(type, id, opts || {}));
@@ -79,6 +81,7 @@ function DetailsView(type, id, opts) {
   let season = null;
   let streamsVideo = null;
   let alive = true;
+  let comicHero = '';
   let watchBtn = null;
   let libBtn = null;
   let tmdbInfo = null;
@@ -195,7 +198,19 @@ function DetailsView(type, id, opts) {
     info.appendChild(desc);
     info.appendChild(castLine);
     const mangaBtn = isAnime(meta) ? h('div.btn', { focusable: true, onSelect: openMangaFromEpisode }, [h('span.ico', { text: '📖' }), t('Ler o mangá')]) : null;
-    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, collBtn, libBtn]));
+    const comicBtn = h('div.btn', { focusable: true, onSelect: () => openComicsFor(comicHero) }, [h('span.ico', { text: '🦸' }), t('Ler os quadrinhos')]);
+    comicBtn.style.display = 'none';
+    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, comicBtn, collBtn, libBtn]));
+    // Based on a comic (TMDB keyword)? Offer the comics of the same hero.
+    if (cv.hasKey() && !isAnime(meta))
+      extras
+        .comicHero(meta.imdb_id || (/^tt\d+/.exec(meta.id) || [])[0])
+        .then((hero) => {
+          if (!alive || !hero) return;
+          comicHero = hero;
+          comicBtn.style.display = '';
+        })
+        .catch(() => {});
     loadExtras({ logo: logo, title: title, desc: desc, castLine: castLine, ratingsEl: ratingsEl, provEl: provEl });
   }
 

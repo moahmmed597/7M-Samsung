@@ -2,6 +2,7 @@
 import './polyfills.js';
 import { CollectionsView } from './views/collections.js';
 import { MangaView } from './views/manga.js';
+import { ComicsView } from './views/comics.js';
 import { DiscoverView } from './views/discover.js';
 import { LiveView } from './views/live.js';
 import * as iptv from './api/iptv.js';
@@ -124,6 +125,7 @@ function boot() {
   router.registerTab('collections', CollectionsView);
   router.registerTab('anime', AnimeView);
   router.registerTab('manga', MangaView);
+  router.registerTab('comics', ComicsView);
   router.registerTab('discover', DiscoverView);
   router.registerTab('live', LiveView);
   router.registerTab('movies', MoviesView);

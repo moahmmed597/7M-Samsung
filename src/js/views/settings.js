@@ -1288,6 +1288,8 @@ export function SettingsView() {
       body.appendChild(phoneKeyRow('rpdbKey', 'RPDB'));
       keyRow(t('Chave OMDb'), t('Prêmios (Oscar, Emmy...) na página do título (grátis em omdbapi.com)'), 'omdbKey', 'API key');
       body.appendChild(phoneKeyRow('omdbKey', 'OMDb'));
+      keyRow(t('Chave ComicVine'), t('Catálogo da aba Quadrinhos: capas, edições e personagens (grátis em comicvine.gamespot.com/api)'), 'comicvineKey', 'API key');
+      body.appendChild(phoneKeyRow('comicvineKey', 'ComicVine'));
       body.appendChild(
         row(t('Guia para os pais'), t('Violência, palavrões e cenas fortes na página do título (IMDb via tiffara.com)'), '', () => {
           store.saveSettings({ parentalGuide: !store.settings().parentalGuide });

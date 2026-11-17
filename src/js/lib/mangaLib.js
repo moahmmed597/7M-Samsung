@@ -1,5 +1,5 @@
 // Your manga shelf: favorites, and "continue reading" built from the reader's saved places.
-// Works for every source (AniList/MangaDex manga 'al', comics 'md', Suwayomi 'sw').
+// Works for every source (AniList manga 'al', plugins 'pl', Suwayomi 'sw', ComicVine comics 'cv').
 import * as store from './store.js';
 
 const FAVS = 'mangaFavs';
@@ -11,7 +11,7 @@ export function toggleFav(key, kind, ref) {
   const all = favs();
   const i = all.findIndex((f) => f.key === key);
   if (i >= 0) all.splice(i, 1);
-  else all.unshift({ key: key, kind: kind, ref: { anilist: ref.anilist, mdId: ref.mdId, swId: ref.swId, plId: ref.plId, plName: ref.plName, mid: ref.mid, name: ref.name, poster: ref.poster, description: ref.description, author: ref.author, status: ref.status, year: ref.year } });
+  else all.unshift({ key: key, kind: kind, ref: { anilist: ref.anilist, mdId: ref.mdId, swId: ref.swId, plId: ref.plId, plName: ref.plName, mid: ref.mid, cvId: ref.cvId, title: ref.title, name: ref.name, poster: ref.poster, description: ref.description, author: ref.author, status: ref.status, year: ref.year } });
   store.set(FAVS, all.slice(0, 200));
   return i < 0;
 }
