@@ -42,6 +42,13 @@ export function removeRepoAll(url, kind) {
   removeRepo(url, kind);
   return gone.length;
 }
+// Empties a tab: every plugin and every repository of Manga (or Comics). Returns how many plugins went.
+export function removeAll(kind) {
+  const gone = installed(kind);
+  gone.forEach((p) => uninstall(p.id));
+  repos(kind).forEach((u) => removeRepo(u, kind));
+  return gone.length;
+}
 // Moves a whole repository (and its plugins) to the other tab.
 export function moveRepo(url, from, to) {
   installed(from)

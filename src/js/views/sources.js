@@ -334,6 +334,16 @@ function SourcesView(kind) {
           pl.updateAll(kind, true).then((n) => (toast(t('{n} plugins atualizados.', { n: n }), 4000), load()));
         })
       );
+    if (pl.installed(kind).length || pl.repos(kind).length)
+      body.appendChild(
+        row('🗑 ' + t('Remover todos'), t('todos os plugins e repositórios desta aba'), () =>
+          confirmDialog(t('Remover os {n} plugins e todos os repositórios?', { n: pl.installed(kind).length }), t('Remover'), () => {
+            const n = pl.removeAll(kind);
+            toast(t('{n} plugins removidos.', { n: n }), 4000);
+            load();
+          })
+        )
+      );
     pl.installed(kind).length && body.appendChild(row('🩺 ' + t('Testar plugins'), t('mostra onde falha'), diagnose));
     pl.installed(kind).length &&
       body.appendChild(row('⚙ ' + t('Gerenciar plugins'), '', () =>
