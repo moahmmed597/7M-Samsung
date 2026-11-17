@@ -18,19 +18,20 @@ import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
 
 const CHUNK = 50;
 
-export function openSources() {
-  router.push(SourcesView());
+// kind: 'manga' (default) or 'comics': each tab has its own sources.
+export function openSources(kind) {
+  router.push(SourcesView(kind === 'comics' ? 'comics' : 'manga'));
 }
 
 // Ask for the server address ("http://192.168.1.20:4567"), check it, save it.
-export function connectServer(done) {
+export function connectServer(done, kind) {
   promptText(t('Endereço do servidor Suwayomi'), sw.base() || 'http://', 'http://192.168.1.20:4567', (url) => {
     let u = url.trim().replace(/\/+$/, '');
     if (!/^https?:\/\//i.test(u)) u = 'http://' + u;
     // A repository link pasted here (raw.githubusercontent / jsDelivr / *.json): add it as a repository.
     if (/\.json(\?|$)|raw\.githubusercontent\.com|cdn\.jsdelivr\.net|\/repo(\.json)?$/i.test(u)) {
       if (/\.json(\?|$)/i.test(sw.base())) store.saveSettings({ suwayomiUrl: '' });
-      return addRepoUrl(u, done);
+      return addRepoUrl(u, done, kind);
     }
     store.saveSettings({ suwayomiUrl: u });
     sw.ping().then(
@@ -47,7 +48,7 @@ export function connectServer(done) {
 }
 
 // Adds a plugin repository by its link (also used by the phone setup page).
-export function addRepoUrl(u, done) {
+export function addRepoUrl(u, done, kind) {
   toast(t('Lendo o repositório...'));
   return pl.fetchRepo(u).then(
     (r) => {
@@ -55,9 +56,9 @@ export function addRepoUrl(u, done) {
         toast(t('Não reconheci este repositório.'), 6000);
         return done && done();
       }
-      pl.addRepo(u);
+      pl.addRepo(u, kind);
       // Install every plugin of the repository (they are small); you can remove any later.
-      return Promise.all(r.plugins.map((p) => pl.install(u, p).then(() => 1, () => 0))).then((ok) => {
+      return Promise.all(r.plugins.map((p) => pl.install(u, p, kind || 'manga').then(() => 1, () => 0))).then((ok) => {
         const n = ok.reduce((a, b) => a + b, 0);
         toast(t('{n} plugins instalados de {name}.', { n: n, name: r.name || t('Repositório') }), 5000);
         if (done) done();
@@ -146,11 +147,11 @@ export function sourceIcon(p) {
 }
 
 // ---------- the list of sources ----------
-function SourcesView() {
+function SourcesView(kind) {
   const el = h('div.view');
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   el.appendChild(scroller);
-  scroller.appendChild(h('div.row-title.catalog-title', { text: t('Minhas fontes') }));
+  scroller.appendChild(h('div.row-title.catalog-title', { text: kind === 'comics' ? t('Minhas fontes de quadrinhos') : t('Minhas fontes de mangá') }));
   const body = h('div.flat-list', { 'data-group': '', 'data-vertical': '' });
   scroller.appendChild(body);
   const row = (text, sub, onSelect, tag) => h('div.stream', { focusable: true, onSelect: onSelect }, [h('div.s-main', null, [text, sub ? h('small', { text: ' ' + sub }) : null]), tag ? h('span.s-tag', { text: tag }) : null]);
@@ -165,8 +166,8 @@ function SourcesView() {
         (r) => {
           if (r.kind === 'harbor') {
             // Install every plugin of the repository at once (the old way asked one at a time).
-            pl.addRepo(u);
-            return Promise.all(r.plugins.map((p) => pl.install(u, p).then(() => 1, () => 0))).then((ok) => {
+            pl.addRepo(u, kind);
+            return Promise.all(r.plugins.map((p) => pl.install(u, p, kind).then(() => 1, () => 0))).then((ok) => {
               toast(t('{n} plugins instalados de {name}.', { n: ok.reduce((x, y) => x + y, 0), name: r.name || t('Repositório') }), 5000);
               load();
             });
@@ -184,7 +185,7 @@ function SourcesView() {
   }
 
   function pickPlugins(url, r) {
-    const have = pl.installed().map((p) => p.id);
+    const have = pl.installed(kind).map((p) => p.id);
     menu(
       r.name || t('Repositório'),
       r.plugins.map((p) => ({ label: p.name, sub: [p.lang.toUpperCase(), 'v' + p.version, have.indexOf(p.id) >= 0 ? t('instalado') : '', p.nsfw ? '18+' : ''].filter(Boolean).join(' · '), value: p, checked: have.indexOf(p.id) >= 0 })),
@@ -192,7 +193,7 @@ function SourcesView() {
         empty: t('Nenhum plugin neste repositório.'),
         onPick: (p) => {
           toast(t('Instalando {name}...', { name: p.name }));
-          pl.install(url, p).then(
+          pl.install(url, p, kind).then(
             () => {
               toast(t('{name} instalado.', { name: p.name }));
               load();
@@ -205,13 +206,20 @@ function SourcesView() {
   }
 
   function pluginMenu(p) {
+    const other = kind === 'comics' ? 'manga' : 'comics';
     menu(p.name, [
       { label: t('Abrir'), value: 'open' },
       { label: t('Atualizar'), value: 'update' },
+      { label: other === 'comics' ? t('Mover para Quadrinhos') : t('Mover para Mangá'), value: 'move' },
       { label: t('Remover'), value: 'remove' },
     ], {
       onPick: (v) => {
         if (v === 'open') router.push(SourceGrid(pluginApi(p.id, p.name)));
+        else if (v === 'move') {
+          pl.setKind(p.id, other);
+          toast(other === 'comics' ? t('{name} agora está em Quadrinhos.', { name: p.name }) : t('{name} agora está em Mangá.', { name: p.name }));
+          load();
+        }
         else if (v === 'update')
           pl.fetchRepo(p.repoUrl)
             .then((r) => {
@@ -266,7 +274,7 @@ function SourcesView() {
     step(t('Pedido pela TV'), () => pl.serviceOnly('https://raw.githubusercontent.com/github/gitignore/main/README.md').then((r) => (line(r && r.ok, t('Pedido pela TV') + ': HTTP ' + (r ? r.status : '?')), r)), 20000)
       .then(() => step('Worker', () => pl.workerCheck().then(() => line(true, t('Plugins podem rodar nesta TV'))), 8000))
       .then(() =>
-        pl.installed().reduce(
+        pl.installed(kind).reduce(
           (chain, p) =>
             chain.then(() => {
               line(null, t('Plugin') + ': ' + p.name);
@@ -298,22 +306,22 @@ function SourcesView() {
     if (serviceVersion() && serviceVersion() < 2)
       body.appendChild(h('div.modal-text', { text: t('O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.') }));
     body.appendChild(row('＋ ' + t('Adicionar repositório'), t('cole o link do repo.json'), addRepo));
-    pl.installed().forEach((p) => {
+    pl.installed(kind).forEach((p) => {
       const r = row(p.name, 'v' + p.version, () => router.push(SourceGrid(pluginApi(p.id, p.name))), (p.lang || '').toUpperCase());
       r.insertBefore(sourceIcon(p), r.firstChild);
       body.appendChild(r);
     });
-    pl.installed().length && body.appendChild(row('🩺 ' + t('Testar plugins'), t('mostra onde falha'), diagnose));
-    pl.installed().length &&
+    pl.installed(kind).length && body.appendChild(row('🩺 ' + t('Testar plugins'), t('mostra onde falha'), diagnose));
+    pl.installed(kind).length &&
       body.appendChild(row('⚙ ' + t('Gerenciar plugins'), '', () =>
-        menu(t('Plugins'), pl.installed().map((p) => ({ label: p.name, sub: 'v' + p.version, value: p })), { onPick: pluginMenu })
+        menu(t('Plugins'), pl.installed(kind).map((p) => ({ label: p.name, sub: 'v' + p.version, value: p })), { onPick: pluginMenu })
       ));
-    pl.repos().forEach((u) =>
+    pl.repos(kind).forEach((u) =>
       body.appendChild(
         row('📦 ' + u.replace(/^https?:\/\//, ''), '', () =>
           menu(t('Repositório'), [{ label: t('Ver plugins'), value: 'list' }, { label: t('Remover repositório'), value: 'rm' }], {
             onPick: (v) => {
-              if (v === 'rm') return pl.removeRepo(u), load();
+              if (v === 'rm') return pl.removeRepo(u, kind), load();
               toast(t('Lendo o repositório...'));
               pl.fetchRepo(u).then((r) => pickPlugins(u, r), () => toast(t('Não consegui abrir o repositório.')));
             },
@@ -323,7 +331,7 @@ function SourcesView() {
     );
     // Suwayomi
     section(t('Servidor Suwayomi (extensões Tachiyomi/Mihon)'));
-    body.appendChild(row('🔌 ' + (sw.enabled() ? sw.base() : t('Conectar servidor Suwayomi')), '', () => connectServer(load)));
+    body.appendChild(row('🔌 ' + (sw.enabled() ? sw.base() : t('Conectar servidor Suwayomi')), '', () => connectServer(load, kind)));
     if (sw.enabled()) {
       const sp = spinnerLine(t('Carregando...'));
       body.appendChild(sp);

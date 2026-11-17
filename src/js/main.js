@@ -90,7 +90,7 @@ function boot() {
         () => toast(t('Não consegui entrar no IPTV. Confira host, usuário e senha.'), 7000)
       );
     }
-    if (keys.mangaRepo) addRepoUrl(keys.mangaRepo);
+    if (keys.mangaRepo) addRepoUrl(keys.mangaRepo, null, 'manga');
     ['iptvHost', 'iptvUser', 'iptvPass', 'mangaRepo'].forEach((k) => delete keys[k]);
     if (!Object.keys(keys).length) return;
     store.saveSettings(keys);

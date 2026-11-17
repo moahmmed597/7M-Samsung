@@ -148,7 +148,7 @@ function ComicDetailsView(m0) {
         shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar'),
       ])
     );
-    if (pl.installed().length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : t('Fonte')]));
+    if (pl.installed('comics').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : t('Fonte')]));
     btns.push(h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]));
     text.appendChild(h('div.details-buttons', { 'data-group': '' }, btns));
     info.appendChild(text);
@@ -217,7 +217,7 @@ function ComicDetailsView(m0) {
 
   function scan(onHit) {
     if (!scanning)
-      scanning = scanSources(names(), onHit, { alive: () => alive, year: m.year, min: 0.8 }).then((all) => {
+      scanning = scanSources(names(), onHit, { alive: () => alive, year: m.year, min: 0.8, kind: 'comics' }).then((all) => {
         found = all;
         return all;
       });
@@ -228,8 +228,8 @@ function ComicDetailsView(m0) {
     status.textContent = text;
     renderInfo();
     renderList(false);
-    list.appendChild(h('div.stream', { focusable: true, onSelect: openSources }, [h('div.s-main', { text: '📚 ' + t('Minhas fontes') })]));
-    pl.installed().forEach((p) =>
+    list.appendChild(h('div.stream', { focusable: true, onSelect: () => openSources('comics') }, [h('div.s-main', { text: '📚 ' + t('Minhas fontes') })]));
+    pl.installed('comics').forEach((p) =>
       list.appendChild(h('div.stream', { focusable: true, onSelect: () => searchPlugin(p.id, p.name, m.title) }, [h('div.s-main', { text: '🔎 ' + t('Buscar em {name}', { name: p.name }) })]))
     );
   }
@@ -238,7 +238,7 @@ function ComicDetailsView(m0) {
     chapters = [];
     clear(list);
     list.appendChild(status);
-    if (!pl.installed().length) return noSources(t('Para ler, adicione suas fontes em Minhas fontes.'));
+    if (!pl.installed('comics').length) return noSources(t('Para ler, adicione suas fontes em Minhas fontes.'));
     const ln = links()[m.cvId];
     if (ln) {
       status.textContent = t('Carregando capítulos de {name}...', { name: ln.name });
@@ -296,7 +296,7 @@ function ComicDetailsView(m0) {
       onPick: (v) => {
         picked = true;
         if (v === 'manual')
-          return menu(t('Buscar manualmente'), pl.installed().map((p) => ({ label: t('Buscar em {name}', { name: p.name }), value: p })), {
+          return menu(t('Buscar manualmente'), pl.installed('comics').map((p) => ({ label: t('Buscar em {name}', { name: p.name }), value: p })), {
             onPick: (p) => searchPlugin(p.id, p.name, m.title),
           });
         saveLink(m.cvId, Object.assign(linkOf(v), { manual: true }));

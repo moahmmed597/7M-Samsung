@@ -261,60 +261,93 @@ function normalize(s) {
 }
 
 // ---------- Tab: every collection ----------
+// Laid out like the Anime tab: rows you scroll sideways with wide picture tiles. At the top what is
+// yours (sagas you are in the middle of, favourites, your own collections), then each category.
+const BACKDROP = (imdb) => 'https://images.metahub.space/background/medium/' + imdb + '/img';
+
+// A wide tile: the backdrop of a film of the saga, its name, how many titles and how far you got.
+function collTile(o) {
+  const art = h('div.ct-art');
+  const im = h('img', { alt: '' });
+  im.setAttribute('data-lazy', o.art);
+  im.onerror = () => {
+    if (o.fallback && im.src !== o.fallback) im.src = o.fallback;
+    else im.style.display = 'none';
+  };
+  art.appendChild(im);
+  art.appendChild(h('div.ct-shade'));
+  if (o.star) art.appendChild(h('div.ct-star', { text: '★' }));
+  art.appendChild(h('div.ct-name', { text: o.name }));
+  art.appendChild(h('div.ct-sub', { text: o.sub || '' }));
+  if (o.progress) {
+    const bar = h('div.ct-bar');
+    bar.style.width = Math.round(Math.min(1, o.progress) * 100) + '%';
+    art.appendChild(bar);
+  }
+  return h('div.card.coll-tile', { focusable: true, onSelect: o.onSelect }, [art]);
+}
+
+// The film whose backdrop stands for the saga: the most famous is usually the first one.
+function artOf(f) {
+  const it = f.items.find((x) => /^tt\d+/.test(x[0])) || f.items[0];
+  return it ? it[0] : '';
+}
+
+function franchiseTile(f, tmdbId) {
+  const done = tmdbId ? 0 : watchedCount(f);
+  const id = artOf(f);
+  const isUrl = /^https?:/.test(id);
+  return collTile({
+    name: displayName(f),
+    art: isUrl ? id : BACKDROP(id),
+    fallback: isUrl ? '' : POSTER(id),
+    sub: tmdbId ? t('Coleção do TMDB') : done ? t('Assistidos: {done} de {n}', { done: done, n: f.items.length }) : t('{n} títulos', { n: f.items.length }),
+    progress: done ? done / f.items.length : 0,
+    star: isFav(f.id),
+    onSelect: () => (tmdbId ? openTmdbCollection(tmdbId) : openFranchise(f)),
+  });
+}
+
 export function CollectionsView() {
   const el = h('div.view');
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   const bar = topbar('collections', router.goTab);
-  const searchBox = h('div.search-box');
+  const head = h('div.coll-head');
   const results = h('div');
-  const filterBox = h('div.filters', { 'data-group': '' });
-  const mineBox = h('div');
-  const favBox = h('div');
-  const grid = h('div');
+  const rows = h('div.rows');
   scroller.appendChild(bar);
-  scroller.appendChild(searchBox);
+  scroller.appendChild(head);
   scroller.appendChild(results);
-  scroller.appendChild(filterBox);
-  scroller.appendChild(mineBox);
-  scroller.appendChild(favBox);
-  scroller.appendChild(grid);
+  scroller.appendChild(rows);
   el.appendChild(scroller);
 
-  let activeCat = 'all';
-  const CAT_TABS = [
-    { id: 'all', label: 'Todos' },
-    { id: 'heroes', label: 'Super-heróis e Grandes Sagas' },
-    { id: 'movies', label: 'Filmes' },
-    { id: 'series', label: 'Séries' },
-    { id: 'cartoon', label: 'Desenhos animados' },
-    { id: 'anime', label: 'Animes' },
-    { id: 'mine', label: 'Minhas coleções' },
-  ];
+  function addRow(title, count, tiles) {
+    if (!tiles.length) return;
+    const track = h('div.row-track.coll-track', { 'data-scroll-x': '', 'data-group': '' }, tiles);
+    rows.appendChild(h('div.row', { 'data-anchor': '30' }, [h('div.row-title', null, [title, count ? h('small', { text: count }) : null]), track]));
+  }
 
-  function renderCategoryChips() {
-    clear(filterBox);
-    CAT_TABS.forEach((tab) => {
-      filterBox.appendChild(
-        h('div.chip', {
-          focusable: true,
-          cls: tab.id === activeCat ? 'active' : '',
-          text: t(tab.label),
-          onSelect: () => {
-            activeCat = tab.id;
-            renderCategoryChips();
-            renderGrid();
-          },
-        })
-      );
+  function newCollectionPrompt() {
+    promptText(t('Nome da nova coleção'), '', t('Ex.: Para ver no fim de semana'), (name) => {
+      const c = newCollection(name);
+      router.push(MyCollectionView(c.id));
     });
   }
 
-  if (extras.hasTmdb()) {
-    const input = h('input.input', { type: 'text', placeholder: t('Buscar outra coleção (ex.: Shrek, Rambo, Saw)...'), focusable: true });
-    input.__submit = (q) => search(q);
-    searchBox.appendChild(input);
-  } else {
-    searchBox.appendChild(h('div.hint', { text: t('Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes.') }));
+  function drawHead() {
+    clear(head);
+    head.appendChild(h('div.row-title.catalog-title', { text: t('Coleções') }));
+    head.appendChild(
+      h('div.details-buttons', { 'data-group': '' }, [
+        h('div.btn', { focusable: true, onSelect: searchPrompt }, [h('span.ico', { text: '🔍' }), t('Buscar coleção')]),
+        h('div.btn', { focusable: true, onSelect: newCollectionPrompt }, [h('span.ico', { text: '＋' }), t('Nova coleção')]),
+      ])
+    );
+  }
+
+  function searchPrompt() {
+    if (!extras.hasTmdb()) return toast(t('Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes.'), 6000);
+    promptText(t('Buscar coleção'), '', t('Ex.: Shrek, Rambo, Saw'), (q) => search(q));
   }
 
   let token = 0;
@@ -329,15 +362,13 @@ export function CollectionsView() {
       .then((list) => {
         if (my !== token) return;
         clear(results);
-        if (!list.length) {
-          results.appendChild(h('div.hint', { text: t('Nenhuma coleção encontrada.') }));
-          return;
-        }
-        results.appendChild(h('div.row-title', { text: t('Resultados') }));
+        if (!list.length) return results.appendChild(h('div.hint', { text: t('Nenhuma coleção encontrada.') }));
         const track = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
         list.forEach((c) => track.appendChild(card({ name: c.name, poster: c.poster }, { onSelect: () => openTmdbCollection(c.id) })));
-        results.appendChild(h('div.row', null, track));
+        results.appendChild(h('div.row', { 'data-anchor': '30' }, [h('div.row-title', { text: t('Resultados para "{q}"', { q: query }) }), track]));
         loadVisibleImages(el, 400);
+        const first = track.querySelector('.card');
+        if (first) nav.focus(first);
       })
       .catch(() => {
         if (my !== token) return;
@@ -346,87 +377,55 @@ export function CollectionsView() {
       });
   }
 
-  function franchiseCard(f, tmdbId) {
-    const done = tmdbId ? 0 : watchedCount(f);
-    return card(
-      { name: displayName(f), poster: POSTER(f.items[0][0]) },
-      {
-        badge: tmdbId ? '★' : (isFav(f.id) ? '★ ' : '') + (done ? done + '/' + f.items.length : String(f.items.length)),
-        progress: done ? done / f.items.length : 0,
-        onSelect: () => (tmdbId ? openTmdbCollection(tmdbId) : openFranchise(f)),
-      }
-    );
-  }
-
-  function renderMine() {
-    clear(mineBox);
-    mineBox.appendChild(h('div.row-title', { text: t('Minhas coleções') }));
-    const g = h('div.grid.fav-grid');
-    myCollections().forEach((c) => {
-      const first = c.items[0];
-      g.appendChild(
-        card(
-          { name: c.name, poster: first ? first.poster || POSTER(first.id) : '' },
-          { badge: String(c.items.length), onSelect: () => router.push(MyCollectionView(c.id)) }
-        )
-      );
-    });
-    g.appendChild(
-      h('div.card.see-all', {
-        focusable: true,
-        onSelect: () =>
-          promptText(t('Nome da nova coleção'), '', t('Ex.: Para ver no fim de semana'), (name) => {
-            const c = newCollection(name);
-            renderMine();
-            router.push(MyCollectionView(c.id));
-          }),
-      }, [h('div.poster-wrap', null, h('div.see-all-label', null, [h('b', { text: '+' }), t('Nova coleção')])), h('div.name', { text: '' })])
-    );
-    mineBox.appendChild(g);
-  }
-
-  function renderGrid() {
-    clear(mineBox);
-    clear(favBox);
-    clear(grid);
-    const showMine = activeCat === 'all' || activeCat === 'mine';
-    if (showMine) {
-      renderMine();
-      const pinned = favEntries();
-      if (pinned.length) {
-        favBox.appendChild(h('div.row-title', { text: '★ ' + t('Favoritas') }));
-        const fg = h('div.grid.fav-grid');
-        pinned.forEach((e) => fg.appendChild(franchiseCard(e.f, e.tmdbId)));
-        favBox.appendChild(fg);
-      }
-    }
-    if (activeCat === 'mine') {
-      loadVisibleImages(el, 400);
-      return;
-    }
+  const sig = () => JSON.stringify([FRANCHISES.map(watchedCount), favs(), myCollections().map((c) => [c.id, c.name, c.items.length])]);
+  let lastSig = '';
+  function render() {
+    lastSig = sig();
+    clear(rows);
+    // Sagas you are in the middle of: the next film is one tap away.
+    const going = FRANCHISES.map((f) => ({ f: f, done: watchedCount(f) }))
+      .filter((x) => x.done > 0 && x.done < x.f.items.length)
+      .sort((a, b) => b.done / b.f.items.length - a.done / a.f.items.length)
+      .slice(0, 20);
+    addRow(t('Continue a saga'), '', going.map((x) => franchiseTile(x.f)));
     const pinned = favEntries();
-    const pinnedIds = pinned.map((e) => e.f.id);
-    const catsToShow = activeCat === 'all' ? CATS : CATS.filter((c) => c.id === activeCat);
-    catsToShow.forEach((c) => {
-      const list = FRANCHISES.filter((f) => (activeCat !== 'all' || pinnedIds.indexOf(f.id) < 0) && catOf(f) === c.id);
-      if (!list.length) return;
-      grid.appendChild(h('div.row-title.cat-title', { text: t(c.label) }));
-      const g = h('div.grid');
-      list.forEach((f) => g.appendChild(franchiseCard(f)));
-      grid.appendChild(g);
+    addRow('★ ' + t('Favoritas'), '', pinned.map((e) => franchiseTile(e.f, e.tmdbId)));
+    // Your own collections, and a tile to make a new one.
+    const mine = myCollections().map((c) => {
+      const first = c.items[0];
+      const id = first ? first.id : '';
+      return collTile({
+        name: c.name,
+        art: /^tt\d+/.test(id) ? BACKDROP(id) : (first && first.poster) || '',
+        fallback: first ? first.poster || POSTER(id) : '',
+        sub: t('{n} títulos', { n: c.items.length }) + '  ·  ' + t('Coleção sua'),
+        onSelect: () => router.push(MyCollectionView(c.id)),
+      });
+    });
+    mine.push(
+      h('div.card.coll-tile.coll-new', { focusable: true, onSelect: newCollectionPrompt }, [
+        h('div.ct-art', null, [h('div.ct-plus', { text: '+' }), h('div.ct-name', { text: t('Nova coleção') })]),
+      ])
+    );
+    addRow(t('Minhas coleções'), '', mine);
+    CATS.forEach((c) => {
+      const list = FRANCHISES.filter((f) => catOf(f) === c.id);
+      addRow(t(c.label), t('{n} coleções', { n: list.length }), list.map((f) => franchiseTile(f)));
     });
     loadVisibleImages(el, 400);
   }
 
-  renderCategoryChips();
-  renderGrid();
+  drawHead();
+  render();
 
   return {
     el: el,
     onShow: () => {
-      renderCategoryChips();
-      renderGrid();
+      // Back from a collection: redraw only when something changed (keeps your place otherwise).
+      if (sig() !== lastSig) render();
+      loadVisibleImages(el, 400);
     },
+    onScroll: () => loadVisibleImages(el, 400),
     destroy: () => bar.__destroy && bar.__destroy(),
   };
 }

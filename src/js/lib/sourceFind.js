@@ -11,7 +11,7 @@ export { norm, likeness };
 // hit: { pid, name, mid, title, count, cs }
 export function scanSources(names, onHit, opts) {
   const o = opts || {};
-  const plugins = pl.installed();
+  const plugins = pl.installed(o.kind || 'manga');
   const min = o.min || 0.85;
   let i = 0;
   const hits = [];

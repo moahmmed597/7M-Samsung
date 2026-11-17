@@ -185,7 +185,7 @@ function MangaDetailsView(m) {
         },
       }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );
-    if (pl.installed().length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : 'MangaDex']));
+    if (pl.installed('manga').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : 'MangaDex']));
     if (!source) btns.push(
       h('div.btn', {
         focusable: true,
@@ -253,7 +253,7 @@ function MangaDetailsView(m) {
   function loadChapters() {
     const ln = links()[m.anilist];
     if (ln && ln.md) return loadChaptersMd(false);
-    if (ln && pl.installed().some((p) => p.id === ln.pid)) return useSource(ln, true);
+    if (ln && pl.installed('manga').some((p) => p.id === ln.pid)) return useSource(ln, true);
     loadChaptersMd(true);
   }
 
@@ -330,7 +330,7 @@ function MangaDetailsView(m) {
   // Look in all your sources, two at a time; onHit gets each source that has the title.
   function scan(onHit) {
     if (scanning) return scanning;
-    const plugins = pl.installed();
+    const plugins = pl.installed('manga');
     const qs = names();
     const hits = [];
     let i = 0;
@@ -357,7 +357,7 @@ function MangaDetailsView(m) {
   // MangaDex has no chapters (licensed titles like One Piece): look in all your sources.
   // The first one found opens right away; when the search ends, the one with the most chapters wins.
   function autoFind() {
-    if (!pl.installed().length) {
+    if (!pl.installed('manga').length) {
       status.textContent = t('O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).');
       renderInfo();
       renderList(false);
@@ -414,7 +414,7 @@ function MangaDetailsView(m) {
   }
   function manualSearch() {
     const q = names()[0] || m.name;
-    menu(t('Buscar manualmente'), pl.installed().map((p) => ({ label: t('Buscar em {name}', { name: p.name }), value: p })), {
+    menu(t('Buscar manualmente'), pl.installed('manga').map((p) => ({ label: t('Buscar em {name}', { name: p.name }), value: p })), {
       onPick: (p) => searchPlugin(p.id, p.name, q),
     });
   }
@@ -457,7 +457,7 @@ function MangaDetailsView(m) {
   // Search the title in the plugins you installed (My sources).
   function offerPlugins() {
     const q = names()[0] || m.name;
-    const plugins = pl.installed();
+    const plugins = pl.installed('manga');
     if (!plugins.length) {
       list.appendChild(h('div.modal-text', { text: t('Adicione fontes em Mangá → Minhas fontes para ler outros títulos.') }));
       return;

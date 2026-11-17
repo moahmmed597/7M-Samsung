@@ -142,7 +142,7 @@ export function MangaView() {
   const rows = h('div.rows');
   scroller.appendChild(bar);
   // Sources of your own Suwayomi server (the app ships none).
-  scroller.appendChild(h('div.details-buttons', { 'data-group': '' }, [h('div.btn', { focusable: true, onSelect: openSources }, [h('span.ico', { text: '📚' }), t('Minhas fontes')])]));
+  scroller.appendChild(h('div.details-buttons', { 'data-group': '' }, [h('div.btn', { focusable: true, onSelect: () => openSources('manga') }, [h('span.ico', { text: '📚' }), t('Minhas fontes')])]));
   const shelves = h('div');
   scroller.appendChild(shelves);
   scroller.appendChild(rows);

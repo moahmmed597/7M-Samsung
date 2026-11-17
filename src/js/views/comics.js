@@ -107,7 +107,7 @@ export function ComicsView() {
   scroller.appendChild(
     h('div.details-buttons', { 'data-group': '' }, [
       h('div.btn', { focusable: true, onSelect: search }, [h('span.ico', { text: '🔍' }), t('Buscar quadrinhos')]),
-      h('div.btn', { focusable: true, onSelect: openSources }, [h('span.ico', { text: '📚' }), t('Minhas fontes')]),
+      h('div.btn', { focusable: true, onSelect: () => openSources('comics') }, [h('span.ico', { text: '📚' }), t('Minhas fontes')]),
     ])
   );
   const shelves = h('div');

@@ -10,22 +10,34 @@ import { PORT, serviceVersion } from '../lib/phone.js';
 import * as store from '../lib/store.js';
 
 const SVC = 'http://127.0.0.1:' + PORT;
-const REPOS = 'mangaRepos';
+const REPOS = { manga: 'mangaRepos', comics: 'comicRepos' };
 const PLUGINS = 'mangaPlugins';
 
 // ---------- storage ----------
-export const repos = () => store.get(REPOS, []) || [];
-export const installed = () => store.get(PLUGINS, []) || [];
+// Manga and Comics keep their own sources: each plugin carries kind 'manga' (also the old ones) or 'comics'.
+export const kindOf = (p) => (p && p.kind === 'comics' ? 'comics' : 'manga');
+export const repos = (kind) => store.get(REPOS[kind === 'comics' ? 'comics' : 'manga'], []) || [];
+// Every plugin (to run one by its id), or only one kind's.
+export const installed = (kind) => {
+  const all = store.get(PLUGINS, []) || [];
+  return kind ? all.filter((p) => kindOf(p) === kind) : all;
+};
 function saveInstalled(list) {
   store.set(PLUGINS, list);
 }
-export function addRepo(url) {
-  const r = repos().filter((x) => x !== url);
+export function addRepo(url, kind) {
+  const key = REPOS[kind === 'comics' ? 'comics' : 'manga'];
+  const r = (store.get(key, []) || []).filter((x) => x !== url);
   r.push(url);
-  store.set(REPOS, r);
+  store.set(key, r);
 }
-export function removeRepo(url) {
-  store.set(REPOS, repos().filter((x) => x !== url));
+export function removeRepo(url, kind) {
+  const key = REPOS[kind === 'comics' ? 'comics' : 'manga'];
+  store.set(key, (store.get(key, []) || []).filter((x) => x !== url));
+}
+// Moves a plugin to the other tab.
+export function setKind(id, kind) {
+  saveInstalled(installed().map((p) => (p.id === id ? Object.assign({}, p, { kind: kind === 'comics' ? 'comics' : 'manga' }) : p)));
 }
 export function uninstall(id) {
   saveInstalled(installed().filter((p) => p.id !== id));
@@ -108,11 +120,13 @@ function resolveUrl(base, rel) {
   return base.replace(/[^/]*$/, '') + rel.replace(/^\.\//, '');
 }
 
-export function install(repoUrl, man) {
+// kind: 'manga' or 'comics' (an update keeps the plugin where it is).
+export function install(repoUrl, man, kind) {
   return getText(resolveUrl(repoUrl, man.entry)).then((source) => {
     if (source.length > 2 * 1024 * 1024) throw new Error('too big');
+    const old = installed().find((p) => p.id === man.id);
     const list = installed().filter((p) => p.id !== man.id);
-    list.push({ id: man.id, name: man.name, version: man.version, lang: man.lang, nsfw: man.nsfw, icon: man.icon, repoUrl: repoUrl, entry: man.entry, source: source });
+    list.push({ id: man.id, name: man.name, version: man.version, lang: man.lang, nsfw: man.nsfw, icon: man.icon, repoUrl: repoUrl, entry: man.entry, source: source, kind: kind || kindOf(old) });
     saveInstalled(list);
     stop(man.id);
     return man;

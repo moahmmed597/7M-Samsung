@@ -5043,6 +5043,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Continue a saga": "Continue the saga",
+    "Buscar coleção": "Search collections",
+    "Ex.: Shrek, Rambo, Saw": "E.g. Shrek, Rambo, Saw",
+    'Resultados para "{q}"': 'Results for "{q}"',
+    "{n} coleções": "{n} collections",
+    "Coleção do TMDB": "TMDB collection",
+    "Minhas fontes de quadrinhos": "My comics sources",
+    "Minhas fontes de mangá": "My manga sources",
+    "Mover para Quadrinhos": "Move to Comics",
+    "Mover para Mangá": "Move to Manga",
+    "{name} agora está em Quadrinhos.": "{name} is now in Comics.",
+    "{name} agora está em Mangá.": "{name} is now in Manga.",
     "Azul-marinho (principal)": "Navy blue (main)",
     "Fundo azul-escuro com destaques azuis": "Dark blue background with blue highlights",
     "Preto": "Black",
@@ -5501,6 +5513,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Continue a saga": "كمّل السلسلة",
+    "Buscar coleção": "ابحث عن سلسلة",
+    "Ex.: Shrek, Rambo, Saw": "مثال: Shrek، Rambo، Saw",
+    'Resultados para "{q}"': 'نتائج "{q}"',
+    "{n} coleções": "{n} سلسلة",
+    "Coleção do TMDB": "سلسلة من TMDB",
+    "Minhas fontes de quadrinhos": "مصادر الكوميكس",
+    "Minhas fontes de mangá": "مصادر المانجا",
+    "Mover para Quadrinhos": "انقله للكوميكس",
+    "Mover para Mangá": "انقله للمانجا",
+    "{name} agora está em Quadrinhos.": "{name} صار في الكوميكس.",
+    "{name} agora está em Mangá.": "{name} صار في المانجا.",
     "Azul-marinho (principal)": "أزرق كحلي (الأساسي)",
     "Fundo azul-escuro com destaques azuis": "خلفية زرقاء غامقة مع لمسات زرقاء",
     "Preto": "أسود",
@@ -14068,27 +14092,45 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
   // src/js/api/plugins.js
   var SVC = "http://127.0.0.1:" + PORT;
-  var REPOS = "mangaRepos";
-  var PLUGINS = "mangaPlugins";
-  var repos = function repos() {
-    return get(REPOS, []) || [];
+  var REPOS = {
+    manga: "mangaRepos",
+    comics: "comicRepos"
   };
-  var installed = function installed() {
-    return get(PLUGINS, []) || [];
+  var PLUGINS = "mangaPlugins";
+  var kindOf = function kindOf(p) {
+    return p && p.kind === "comics" ? "comics" : "manga";
+  };
+  var repos = function repos(kind) {
+    return get(REPOS[kind === "comics" ? "comics" : "manga"], []) || [];
+  };
+  var installed = function installed(kind) {
+    var all2 = get(PLUGINS, []) || [];
+    return kind ? all2.filter(function (p) {
+      return kindOf(p) === kind;
+    }) : all2;
   };
   function saveInstalled(list2) {
     set(PLUGINS, list2);
   }
-  function addRepo(url2) {
-    var r = repos().filter(function (x) {
+  function addRepo(url2, kind) {
+    var key4 = REPOS[kind === "comics" ? "comics" : "manga"];
+    var r = (get(key4, []) || []).filter(function (x) {
       return x !== url2;
     });
     r.push(url2);
-    set(REPOS, r);
+    set(key4, r);
   }
-  function removeRepo(url2) {
-    set(REPOS, repos().filter(function (x) {
+  function removeRepo(url2, kind) {
+    var key4 = REPOS[kind === "comics" ? "comics" : "manga"];
+    set(key4, (get(key4, []) || []).filter(function (x) {
       return x !== url2;
+    }));
+  }
+  function setKind(id, kind) {
+    saveInstalled(installed().map(function (p) {
+      return p.id === id ? Object.assign({}, p, {
+        kind: kind === "comics" ? "comics" : "manga"
+      }) : p;
     }));
   }
   function uninstall(id) {
@@ -14210,9 +14252,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (/^https?:\/\//i.test(rel)) return rel;
     return base3.replace(/[^/]*$/, "") + rel.replace(/^\.\//, "");
   }
-  function install2(repoUrl, man) {
+  function install2(repoUrl, man, kind) {
     return getText2(resolveUrl(repoUrl, man.entry)).then(function (source) {
       if (source.length > 2 * 1024 * 1024) throw new Error("too big");
+      var old = installed().find(function (p) {
+        return p.id === man.id;
+      });
       var list2 = installed().filter(function (p) {
         return p.id !== man.id;
       });
@@ -14225,7 +14270,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         icon: man.icon,
         repoUrl: repoUrl,
         entry: man.entry,
-        source: source
+        source: source,
+        kind: kind || kindOf(old)
       });
       saveInstalled(list2);
       stop2(man.id);
@@ -16197,10 +16243,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 
   // src/js/views/sources.js
   var CHUNK = 50;
-  function openSources() {
-    push(SourcesView());
+  function openSources(kind) {
+    push(SourcesView(kind === "comics" ? "comics" : "manga"));
   }
-  function connectServer(done) {
+  function connectServer(done, kind) {
     promptText(t("Endereço do servidor Suwayomi"), base() || "http://", "http://192.168.1.20:4567", function (url2) {
       var u = url2.trim().replace(/\/+$/, "");
       if (!/^https?:\/\//i.test(u)) u = "http://" + u;
@@ -16208,7 +16254,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (/\.json(\?|$)/i.test(base())) saveSettings({
           suwayomiUrl: ""
         });
-        return addRepoUrl(u, done);
+        return addRepoUrl(u, done, kind);
       }
       saveSettings({
         suwayomiUrl: u
@@ -16222,16 +16268,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
-  function addRepoUrl(u, done) {
+  function addRepoUrl(u, done, kind) {
     toast(t("Lendo o repositório..."));
     return fetchRepo(u).then(function (r) {
       if (r.kind !== "harbor") {
         toast(t("Não reconheci este repositório."), 6e3);
         return done && done();
       }
-      addRepo(u);
+      addRepo(u, kind);
       return Promise.all(r.plugins.map(function (p) {
-        return install2(u, p).then(function () {
+        return install2(u, p, kind || "manga").then(function () {
           return 1;
         }, function () {
           return 0;
@@ -16349,14 +16395,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     return box;
   }
-  function SourcesView() {
+  function SourcesView(kind) {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
       "data-scroll-y": ""
     });
     el.appendChild(scroller);
     scroller.appendChild(h("div.row-title.catalog-title", {
-      text: t("Minhas fontes")
+      text: kind === "comics" ? t("Minhas fontes de quadrinhos") : t("Minhas fontes de mangá")
     }));
     var body = h("div.flat-list", {
       "data-group": "",
@@ -16385,9 +16431,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         toast(t("Lendo o repositório..."));
         fetchRepo(u).then(function (r) {
           if (r.kind === "harbor") {
-            addRepo(u);
+            addRepo(u, kind);
             return Promise.all(r.plugins.map(function (p) {
-              return install2(u, p).then(function () {
+              return install2(u, p, kind).then(function () {
                 return 1;
               }, function () {
                 return 0;
@@ -16414,7 +16460,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function pickPlugins(url2, r) {
-      var have = installed().map(function (p) {
+      var have = installed(kind).map(function (p) {
         return p.id;
       });
       menu(r.name || t("Repositório"), r.plugins.map(function (p) {
@@ -16430,7 +16476,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           toast(t("Instalando {name}...", {
             name: p.name
           }));
-          install2(url2, p).then(function () {
+          install2(url2, p, kind).then(function () {
             toast(t("{name} instalado.", {
               name: p.name
             }));
@@ -16444,6 +16490,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function pluginMenu(p) {
+      var other = kind === "comics" ? "manga" : "comics";
       menu(p.name, [{
         label: t("Abrir"),
         value: "open"
@@ -16451,11 +16498,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         label: t("Atualizar"),
         value: "update"
       }, {
+        label: other === "comics" ? t("Mover para Quadrinhos") : t("Mover para Mangá"),
+        value: "move"
+      }, {
         label: t("Remover"),
         value: "remove"
       }], {
         onPick: function onPick(v) {
-          if (v === "open") push(SourceGrid(pluginApi(p.id, p.name)));else if (v === "update") fetchRepo(p.repoUrl).then(function (r) {
+          if (v === "open") push(SourceGrid(pluginApi(p.id, p.name)));else if (v === "move") {
+            setKind(p.id, other);
+            toast(other === "comics" ? t("{name} agora está em Quadrinhos.", {
+              name: p.name
+            }) : t("{name} agora está em Mangá.", {
+              name: p.name
+            }));
+            load7();
+          } else if (v === "update") fetchRepo(p.repoUrl).then(function (r) {
             var man = r.plugins.find(function (x) {
               return x.id === p.id;
             });
@@ -16533,7 +16591,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
         }, 8e3);
       }).then(function () {
-        return installed().reduce(function (chain, p) {
+        return installed(kind).reduce(function (chain, p) {
           return chain.then(function () {
             line(null, t("Plugin") + ": " + p.name);
             var st = t0();
@@ -16579,16 +16637,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: t("O serviço da TV ainda é o antigo. Desligue a TV segurando o botão Power do controle até reiniciar, e abra o app de novo.")
       }));
       body.appendChild(row2("＋ " + t("Adicionar repositório"), t("cole o link do repo.json"), addRepo2));
-      installed().forEach(function (p) {
+      installed(kind).forEach(function (p) {
         var r = row2(p.name, "v" + p.version, function () {
           return push(SourceGrid(pluginApi(p.id, p.name)));
         }, (p.lang || "").toUpperCase());
         r.insertBefore(sourceIcon(p), r.firstChild);
         body.appendChild(r);
       });
-      installed().length && body.appendChild(row2("🩺 " + t("Testar plugins"), t("mostra onde falha"), diagnose));
-      installed().length && body.appendChild(row2("⚙ " + t("Gerenciar plugins"), "", function () {
-        return menu(t("Plugins"), installed().map(function (p) {
+      installed(kind).length && body.appendChild(row2("🩺 " + t("Testar plugins"), t("mostra onde falha"), diagnose));
+      installed(kind).length && body.appendChild(row2("⚙ " + t("Gerenciar plugins"), "", function () {
+        return menu(t("Plugins"), installed(kind).map(function (p) {
           return {
             label: p.name,
             sub: "v" + p.version,
@@ -16598,7 +16656,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           onPick: pluginMenu
         });
       }));
-      repos().forEach(function (u) {
+      repos(kind).forEach(function (u) {
         return body.appendChild(row2("📦 " + u.replace(/^https?:\/\//, ""), "", function () {
           return menu(t("Repositório"), [{
             label: t("Ver plugins"),
@@ -16608,7 +16666,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             value: "rm"
           }], {
             onPick: function onPick(v) {
-              if (v === "rm") return removeRepo(u), load7();
+              if (v === "rm") return removeRepo(u, kind), load7();
               toast(t("Lendo o repositório..."));
               fetchRepo(u).then(function (r) {
                 return pickPlugins(u, r);
@@ -16621,7 +16679,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       section(t("Servidor Suwayomi (extensões Tachiyomi/Mihon)"));
       body.appendChild(row2("🔌 " + (enabled2() ? base() : t("Conectar servidor Suwayomi")), "", function () {
-        return connectServer(load7);
+        return connectServer(load7, kind);
       }));
       if (enabled2()) {
         var sp = spinnerLine(t("Carregando..."));
@@ -17146,7 +17204,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: isFav(key4) ? "♥" : "♡"
       }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]));
-      if (installed().length) btns.push(h("div.btn", {
+      if (installed("manga").length) btns.push(h("div.btn", {
         focusable: true,
         onSelect: pickSource
       }, [h("span.ico", {
@@ -17263,7 +17321,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadChapters() {
       var ln = links()[m.anilist];
       if (ln && ln.md) return loadChaptersMd(false);
-      if (ln && installed().some(function (p) {
+      if (ln && installed("manga").some(function (p) {
         return p.id === ln.pid;
       })) return useSource(ln, true);
       loadChaptersMd(true);
@@ -17348,7 +17406,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function scan3(onHit) {
       if (scanning) return scanning;
-      var plugins = installed();
+      var plugins = installed("manga");
       var qs = names2();
       var hits = [];
       var i = 0;
@@ -17380,7 +17438,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
     };
     function autoFind() {
-      if (!installed().length) {
+      if (!installed("manga").length) {
         status2.textContent = t("O MangaDex não tem capítulos deste título (muitas séries licenciadas não ficam lá).");
         renderInfo();
         renderList(false);
@@ -17461,7 +17519,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function manualSearch() {
       var q2 = names2()[0] || m.name;
-      menu(t("Buscar manualmente"), installed().map(function (p) {
+      menu(t("Buscar manualmente"), installed("manga").map(function (p) {
         return {
           label: t("Buscar em {name}", {
             name: p.name
@@ -17508,7 +17566,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function offerPlugins() {
       var q2 = names2()[0] || m.name;
-      var plugins = installed();
+      var plugins = installed("manga");
       if (!plugins.length) {
         list2.appendChild(h("div.modal-text", {
           text: t("Adicione fontes em Mangá → Minhas fontes para ler outros títulos.")
@@ -17709,7 +17767,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/lib/sourceFind.js
   function scanSources(names2, onHit, opts) {
     var o = opts || {};
-    var plugins = installed();
+    var plugins = installed(o.kind || "manga");
     var min = o.min || 0.85;
     var i = 0;
     var hits = [];
@@ -17934,7 +17992,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: isFav(key4) ? "♥" : "♡"
       }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]));
-      if (installed().length) btns.push(h("div.btn", {
+      if (installed("comics").length) btns.push(h("div.btn", {
         focusable: true,
         onSelect: pickSource
       }, [h("span.ico", {
@@ -18048,7 +18106,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return _alive;
         },
         year: m.year,
-        min: 0.8
+        min: 0.8,
+        kind: "comics"
       }).then(function (all2) {
         found = all2;
         return all2;
@@ -18061,11 +18120,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       renderList(false);
       list2.appendChild(h("div.stream", {
         focusable: true,
-        onSelect: openSources
+        onSelect: function onSelect() {
+          return openSources("comics");
+        }
       }, [h("div.s-main", {
         text: "📚 " + t("Minhas fontes")
       })]));
-      installed().forEach(function (p) {
+      installed("comics").forEach(function (p) {
         return list2.appendChild(h("div.stream", {
           focusable: true,
           onSelect: function onSelect() {
@@ -18082,7 +18143,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       chapters4 = [];
       clear(list2);
       list2.appendChild(status2);
-      if (!installed().length) return noSources(t("Para ler, adicione suas fontes em Minhas fontes."));
+      if (!installed("comics").length) return noSources(t("Para ler, adicione suas fontes em Minhas fontes."));
       var ln = links2()[m.cvId];
       if (ln) {
         status2.textContent = t("Carregando capítulos de {name}...", {
@@ -18152,7 +18213,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       menu(t("Fonte das edições"), items3, {
         onPick: function onPick(v) {
           picked = true;
-          if (v === "manual") return menu(t("Buscar manualmente"), installed().map(function (p) {
+          if (v === "manual") return menu(t("Buscar manualmente"), installed("comics").map(function (p) {
             return {
               label: t("Buscar em {name}", {
                 name: p.name
@@ -18359,7 +18420,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text: "🔍"
     }), t("Buscar quadrinhos")]), h("div.btn", {
       focusable: true,
-      onSelect: openSources
+      onSelect: function onSelect() {
+        return openSources("comics");
+      }
     }, [h("span.ico", {
       text: "📚"
     }), t("Minhas fontes")])]));
@@ -20258,80 +20321,122 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function normalize2(s) {
     return String(s || "").toLowerCase().replace(/collection|coleção|سلسلة|[^a-z0-9]/g, "");
   }
+  var BACKDROP = function BACKDROP(imdb) {
+    return "https://images.metahub.space/background/medium/" + imdb + "/img";
+  };
+  function collTile(o) {
+    var art = h("div.ct-art");
+    var im = h("img", {
+      alt: ""
+    });
+    im.setAttribute("data-lazy", o.art);
+    im.onerror = function () {
+      if (o.fallback && im.src !== o.fallback) im.src = o.fallback;else im.style.display = "none";
+    };
+    art.appendChild(im);
+    art.appendChild(h("div.ct-shade"));
+    if (o.star) art.appendChild(h("div.ct-star", {
+      text: "★"
+    }));
+    art.appendChild(h("div.ct-name", {
+      text: o.name
+    }));
+    art.appendChild(h("div.ct-sub", {
+      text: o.sub || ""
+    }));
+    if (o.progress) {
+      var bar = h("div.ct-bar");
+      bar.style.width = Math.round(Math.min(1, o.progress) * 100) + "%";
+      art.appendChild(bar);
+    }
+    return h("div.card.coll-tile", {
+      focusable: true,
+      onSelect: o.onSelect
+    }, [art]);
+  }
+  function artOf(f) {
+    var it = f.items.find(function (x) {
+      return /^tt\d+/.test(x[0]);
+    }) || f.items[0];
+    return it ? it[0] : "";
+  }
+  function franchiseTile(f, tmdbId) {
+    var done = tmdbId ? 0 : watchedCount(f);
+    var id = artOf(f);
+    var isUrl = /^https?:/.test(id);
+    return collTile({
+      name: displayName(f),
+      art: isUrl ? id : BACKDROP(id),
+      fallback: isUrl ? "" : POSTER(id),
+      sub: tmdbId ? t("Coleção do TMDB") : done ? t("Assistidos: {done} de {n}", {
+        done: done,
+        n: f.items.length
+      }) : t("{n} títulos", {
+        n: f.items.length
+      }),
+      progress: done ? done / f.items.length : 0,
+      star: isFav2(f.id),
+      onSelect: function onSelect() {
+        return tmdbId ? openTmdbCollection(tmdbId) : openFranchise(f);
+      }
+    });
+  }
   function CollectionsView() {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
       "data-scroll-y": ""
     });
     var bar = topbar("collections", goTab);
-    var searchBox = h("div.search-box");
+    var head = h("div.coll-head");
     var results = h("div");
-    var filterBox = h("div.filters", {
-      "data-group": ""
-    });
-    var mineBox = h("div");
-    var favBox = h("div");
-    var grid = h("div");
+    var rows2 = h("div.rows");
     scroller.appendChild(bar);
-    scroller.appendChild(searchBox);
+    scroller.appendChild(head);
     scroller.appendChild(results);
-    scroller.appendChild(filterBox);
-    scroller.appendChild(mineBox);
-    scroller.appendChild(favBox);
-    scroller.appendChild(grid);
+    scroller.appendChild(rows2);
     el.appendChild(scroller);
-    var activeCat = "all";
-    var CAT_TABS = [{
-      id: "all",
-      label: "Todos"
-    }, {
-      id: "heroes",
-      label: "Super-heróis e Grandes Sagas"
-    }, {
-      id: "movies",
-      label: "Filmes"
-    }, {
-      id: "series",
-      label: "Séries"
-    }, {
-      id: "cartoon",
-      label: "Desenhos animados"
-    }, {
-      id: "anime",
-      label: "Animes"
-    }, {
-      id: "mine",
-      label: "Minhas coleções"
-    }];
-    function renderCategoryChips() {
-      clear(filterBox);
-      CAT_TABS.forEach(function (tab) {
-        filterBox.appendChild(h("div.chip", {
-          focusable: true,
-          cls: tab.id === activeCat ? "active" : "",
-          text: t(tab.label),
-          onSelect: function onSelect() {
-            activeCat = tab.id;
-            renderCategoryChips();
-            renderGrid();
-          }
-        }));
+    function addRow(title, count, tiles) {
+      if (!tiles.length) return;
+      var track = h("div.row-track.coll-track", {
+        "data-scroll-x": "",
+        "data-group": ""
+      }, tiles);
+      rows2.appendChild(h("div.row", {
+        "data-anchor": "30"
+      }, [h("div.row-title", null, [title, count ? h("small", {
+        text: count
+      }) : null]), track]));
+    }
+    function newCollectionPrompt() {
+      promptText(t("Nome da nova coleção"), "", t("Ex.: Para ver no fim de semana"), function (name) {
+        var c = newCollection(name);
+        push(MyCollectionView(c.id));
       });
     }
-    if (hasTmdb()) {
-      var input = h("input.input", {
-        type: "text",
-        placeholder: t("Buscar outra coleção (ex.: Shrek, Rambo, Saw)..."),
-        focusable: true
-      });
-      input.__submit = function (q2) {
-        return search3(q2);
-      };
-      searchBox.appendChild(input);
-    } else {
-      searchBox.appendChild(h("div.hint", {
-        text: t("Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes.")
+    function drawHead() {
+      clear(head);
+      head.appendChild(h("div.row-title.catalog-title", {
+        text: t("Coleções")
       }));
+      head.appendChild(h("div.details-buttons", {
+        "data-group": ""
+      }, [h("div.btn", {
+        focusable: true,
+        onSelect: searchPrompt
+      }, [h("span.ico", {
+        text: "🔍"
+      }), t("Buscar coleção")]), h("div.btn", {
+        focusable: true,
+        onSelect: newCollectionPrompt
+      }, [h("span.ico", {
+        text: "＋"
+      }), t("Nova coleção")])]));
+    }
+    function searchPrompt() {
+      if (!hasTmdb()) return toast(t("Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes."), 6e3);
+      promptText(t("Buscar coleção"), "", t("Ex.: Shrek, Rambo, Saw"), function (q2) {
+        return search3(q2);
+      });
     }
     var token = 0;
     function search3(q2) {
@@ -20345,14 +20450,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       searchCollections(query).then(function (list2) {
         if (my !== token) return;
         clear(results);
-        if (!list2.length) {
-          results.appendChild(h("div.hint", {
-            text: t("Nenhuma coleção encontrada.")
-          }));
-          return;
-        }
-        results.appendChild(h("div.row-title", {
-          text: t("Resultados")
+        if (!list2.length) return results.appendChild(h("div.hint", {
+          text: t("Nenhuma coleção encontrada.")
         }));
         var track = h("div.row-track", {
           "data-scroll-x": "",
@@ -20368,8 +20467,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }
           }));
         });
-        results.appendChild(h("div.row", null, track));
+        results.appendChild(h("div.row", {
+          "data-anchor": "30"
+        }, [h("div.row-title", {
+          text: t('Resultados para "{q}"', {
+            q: query
+          })
+        }), track]));
         loadVisibleImages(el, 400);
+        var first = track.querySelector(".card");
+        if (first) focus(first);
       }).catch(function () {
         if (my !== token) return;
         clear(results);
@@ -20378,106 +20485,78 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       });
     }
-    function franchiseCard(f, tmdbId) {
-      var done = tmdbId ? 0 : watchedCount(f);
-      return card({
-        name: displayName(f),
-        poster: POSTER(f.items[0][0])
-      }, {
-        badge: tmdbId ? "★" : (isFav2(f.id) ? "★ " : "") + (done ? done + "/" + f.items.length : String(f.items.length)),
-        progress: done ? done / f.items.length : 0,
-        onSelect: function onSelect() {
-          return tmdbId ? openTmdbCollection(tmdbId) : openFranchise(f);
-        }
-      });
-    }
-    function renderMine() {
-      clear(mineBox);
-      mineBox.appendChild(h("div.row-title", {
-        text: t("Minhas coleções")
+    var sig = function sig() {
+      return JSON.stringify([FRANCHISES.map(watchedCount), favs2(), myCollections().map(function (c) {
+        return [c.id, c.name, c.items.length];
+      })]);
+    };
+    var lastSig = "";
+    function render() {
+      lastSig = sig();
+      clear(rows2);
+      var going = FRANCHISES.map(function (f) {
+        return {
+          f: f,
+          done: watchedCount(f)
+        };
+      }).filter(function (x) {
+        return x.done > 0 && x.done < x.f.items.length;
+      }).sort(function (a, b) {
+        return b.done / b.f.items.length - a.done / a.f.items.length;
+      }).slice(0, 20);
+      addRow(t("Continue a saga"), "", going.map(function (x) {
+        return franchiseTile(x.f);
       }));
-      var g = h("div.grid.fav-grid");
-      myCollections().forEach(function (c) {
+      var pinned = favEntries();
+      addRow("★ " + t("Favoritas"), "", pinned.map(function (e) {
+        return franchiseTile(e.f, e.tmdbId);
+      }));
+      var mine = myCollections().map(function (c) {
         var first = c.items[0];
-        g.appendChild(card({
+        var id = first ? first.id : "";
+        return collTile({
           name: c.name,
-          poster: first ? first.poster || POSTER(first.id) : ""
-        }, {
-          badge: String(c.items.length),
+          art: /^tt\d+/.test(id) ? BACKDROP(id) : first && first.poster || "",
+          fallback: first ? first.poster || POSTER(id) : "",
+          sub: t("{n} títulos", {
+            n: c.items.length
+          }) + "  ·  " + t("Coleção sua"),
           onSelect: function onSelect() {
             return push(MyCollectionView(c.id));
           }
-        }));
+        });
       });
-      g.appendChild(h("div.card.see-all", {
+      mine.push(h("div.card.coll-tile.coll-new", {
         focusable: true,
-        onSelect: function onSelect() {
-          return promptText(t("Nome da nova coleção"), "", t("Ex.: Para ver no fim de semana"), function (name) {
-            var c = newCollection(name);
-            renderMine();
-            push(MyCollectionView(c.id));
-          });
-        }
-      }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+        onSelect: newCollectionPrompt
+      }, [h("div.ct-art", null, [h("div.ct-plus", {
         text: "+"
-      }), t("Nova coleção")])), h("div.name", {
-        text: ""
-      })]));
-      mineBox.appendChild(g);
-    }
-    function renderGrid() {
-      clear(mineBox);
-      clear(favBox);
-      clear(grid);
-      var showMine = activeCat === "all" || activeCat === "mine";
-      if (showMine) {
-        renderMine();
-        var pinned2 = favEntries();
-        if (pinned2.length) {
-          favBox.appendChild(h("div.row-title", {
-            text: "★ " + t("Favoritas")
-          }));
-          var fg = h("div.grid.fav-grid");
-          pinned2.forEach(function (e) {
-            return fg.appendChild(franchiseCard(e.f, e.tmdbId));
-          });
-          favBox.appendChild(fg);
-        }
-      }
-      if (activeCat === "mine") {
-        loadVisibleImages(el, 400);
-        return;
-      }
-      var pinned = favEntries();
-      var pinnedIds = pinned.map(function (e) {
-        return e.f.id;
-      });
-      var catsToShow = activeCat === "all" ? CATS2 : CATS2.filter(function (c) {
-        return c.id === activeCat;
-      });
-      catsToShow.forEach(function (c) {
+      }), h("div.ct-name", {
+        text: t("Nova coleção")
+      })])]));
+      addRow(t("Minhas coleções"), "", mine);
+      CATS2.forEach(function (c) {
         var list2 = FRANCHISES.filter(function (f) {
-          return (activeCat !== "all" || pinnedIds.indexOf(f.id) < 0) && catOf(f) === c.id;
+          return catOf(f) === c.id;
         });
-        if (!list2.length) return;
-        grid.appendChild(h("div.row-title.cat-title", {
-          text: t(c.label)
+        addRow(t(c.label), t("{n} coleções", {
+          n: list2.length
+        }), list2.map(function (f) {
+          return franchiseTile(f);
         }));
-        var g = h("div.grid");
-        list2.forEach(function (f) {
-          return g.appendChild(franchiseCard(f));
-        });
-        grid.appendChild(g);
       });
       loadVisibleImages(el, 400);
     }
-    renderCategoryChips();
-    renderGrid();
+    drawHead();
+    render();
     return {
       el: el,
       onShow: function onShow() {
-        renderCategoryChips();
-        renderGrid();
+        if (sig() !== lastSig) render();
+        loadVisibleImages(el, 400);
+      },
+      onScroll: function onScroll() {
+        return loadVisibleImages(el, 400);
       },
       destroy: function destroy() {
         return bar.__destroy && bar.__destroy();
@@ -20854,7 +20933,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "data-group": ""
     }, [h("div.btn", {
       focusable: true,
-      onSelect: openSources
+      onSelect: function onSelect() {
+        return openSources("manga");
+      }
     }, [h("span.ico", {
       text: "📚"
     }), t("Minhas fontes")])]));
@@ -23649,7 +23730,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T07:23:32.782Z";
+  var BUILD = "2026-11-17T07:29:09.415Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -26832,7 +26913,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return toast(t("Não consegui entrar no IPTV. Confira host, usuário e senha."), 7e3);
         });
       }
-      if (keys2.mangaRepo) addRepoUrl(keys2.mangaRepo);
+      if (keys2.mangaRepo) addRepoUrl(keys2.mangaRepo, null, "manga");
       ["iptvHost", "iptvUser", "iptvPass", "mangaRepo"].forEach(function (k) {
         return delete keys2[k];
       });
