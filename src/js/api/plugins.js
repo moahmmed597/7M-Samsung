@@ -10,13 +10,15 @@ import { PORT, serviceVersion } from '../lib/phone.js';
 import * as store from '../lib/store.js';
 
 const SVC = 'http://127.0.0.1:' + PORT;
-const REPOS = { manga: 'mangaRepos', comics: 'comicRepos' };
+const REPOS = { manga: 'mangaRepos', comics: 'comicRepos', books: 'bookRepos' };
+export const KINDS = ['manga', 'comics', 'books'];
+const kindKey = (k) => (k === 'comics' || k === 'books' ? k : 'manga');
 const PLUGINS = 'mangaPlugins';
 
 // ---------- storage ----------
-// Manga and Comics keep their own sources: each plugin carries kind 'manga' (also the old ones) or 'comics'.
-export const kindOf = (p) => (p && p.kind === 'comics' ? 'comics' : 'manga');
-export const repos = (kind) => store.get(REPOS[kind === 'comics' ? 'comics' : 'manga'], []) || [];
+// Manga, Comics and Books keep their own sources: each plugin carries its kind ('manga' for the old ones).
+export const kindOf = (p) => kindKey(p && p.kind);
+export const repos = (kind) => store.get(REPOS[kindKey(kind)], []) || [];
 // Every plugin (to run one by its id), or only one kind's.
 export const installed = (kind) => {
   const all = store.get(PLUGINS, []) || [];
@@ -26,13 +28,13 @@ function saveInstalled(list) {
   store.set(PLUGINS, list);
 }
 export function addRepo(url, kind) {
-  const key = REPOS[kind === 'comics' ? 'comics' : 'manga'];
+  const key = REPOS[kindKey(kind)];
   const r = (store.get(key, []) || []).filter((x) => x !== url);
   r.push(url);
   store.set(key, r);
 }
 export function removeRepo(url, kind) {
-  const key = REPOS[kind === 'comics' ? 'comics' : 'manga'];
+  const key = REPOS[kindKey(kind)];
   store.set(key, (store.get(key, []) || []).filter((x) => x !== url));
 }
 // Removes a repository and every plugin installed from it (in that tab). Returns how many plugins went.
@@ -59,7 +61,7 @@ export function moveRepo(url, from, to) {
 }
 // Moves a plugin to the other tab.
 export function setKind(id, kind) {
-  saveInstalled(installed().map((p) => (p.id === id ? Object.assign({}, p, { kind: kind === 'comics' ? 'comics' : 'manga' }) : p)));
+  saveInstalled(installed().map((p) => (p.id === id ? Object.assign({}, p, { kind: kindKey(kind) }) : p)));
 }
 export function uninstall(id) {
   saveInstalled(installed().filter((p) => p.id !== id));
@@ -104,6 +106,7 @@ function getText(url) {
 // Image through the TV service with the Referer the site expects (hotlink protection).
 export function imageUrl(url, referer) {
   if (!url) return '';
+  if (/^data:image\//i.test(url)) return url; // a page drawn by the plugin itself (book text as SVG)
   return SVC + '/api/pimg?u=' + encodeURIComponent(url) + (referer ? '&r=' + encodeURIComponent(referer) : '');
 }
 
@@ -566,7 +569,7 @@ export function pages(id, chapterId) {
     return (Array.isArray(v) ? v : [])
       .map((x) => {
         const u = typeof x === 'string' ? x : x && (x.url || x.imageUrl || x.src || x.img || x.image);
-        if (!/^https?:\/\//i.test(u || '')) return null;
+        if (!/^https?:\/\//i.test(u || '') && !/^data:image\//i.test(u || '')) return null;
         const h = x && typeof x === 'object' && x.headers ? x.headers : {};
         const r = h.Referer || h.referer || ref;
         return imageUrl(String(u).trim(), r);

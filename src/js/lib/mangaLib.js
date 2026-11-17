@@ -11,7 +11,7 @@ export function toggleFav(key, kind, ref) {
   const all = favs();
   const i = all.findIndex((f) => f.key === key);
   if (i >= 0) all.splice(i, 1);
-  else all.unshift({ key: key, kind: kind, ref: { anilist: ref.anilist, mdId: ref.mdId, swId: ref.swId, plId: ref.plId, plName: ref.plName, mid: ref.mid, cvId: ref.cvId, title: ref.title, tab: ref.tab, name: ref.name, poster: ref.poster, description: ref.description, author: ref.author, status: ref.status, year: ref.year } });
+  else all.unshift({ key: key, kind: kind, ref: { anilist: ref.anilist, mdId: ref.mdId, swId: ref.swId, plId: ref.plId, plName: ref.plName, mid: ref.mid, cvId: ref.cvId, olKey: ref.olKey, title: ref.title, tab: ref.tab, name: ref.name, poster: ref.poster, description: ref.description, author: ref.author, status: ref.status, year: ref.year } });
   store.set(FAVS, all.slice(0, 200));
   return i < 0;
 }
@@ -24,9 +24,10 @@ export function tabOf(entry) {
   if (entry.kind === 'pl' && ref.plId) {
     const all = store.get('mangaPlugins', []) || [];
     const p = all.find((x) => x.id === ref.plId);
-    if (p) return p.kind === 'comics' ? 'comics' : 'manga';
+    if (p) return p.kind === 'comics' || p.kind === 'books' ? p.kind : 'manga';
   }
-  return ref.tab === 'comics' ? 'comics' : 'manga';
+  if (entry.kind === 'ol') return 'books';
+  return ref.tab === 'comics' || ref.tab === 'books' ? ref.tab : 'manga';
 }
 // Takes a title off "Continue reading".
 export function forget(key) {

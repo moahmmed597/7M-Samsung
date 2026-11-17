@@ -873,15 +873,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var TypeError2 = globalThis2.TypeError;
       var WeakMap = globalThis2.WeakMap;
       var set2;
-      var get4;
+      var get5;
       var has;
       var enforce = function enforce(it) {
-        return has(it) ? get4(it) : set2(it, {});
+        return has(it) ? get5(it) : set2(it, {});
       };
       var getterFor = function getterFor(TYPE) {
         return function (it) {
           var state;
-          if (!isObject(it) || (state = get4(it)).type !== TYPE) {
+          if (!isObject(it) || (state = get5(it)).type !== TYPE) {
             throw new TypeError2("Incompatible receiver, " + TYPE + " required");
           }
           return state;
@@ -898,7 +898,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           store.set(it, metadata);
           return metadata;
         };
-        get4 = function get4(it) {
+        get5 = function get5(it) {
           return store.get(it) || {};
         };
         has = function has(it) {
@@ -913,7 +913,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           createNonEnumerableProperty(it, STATE, metadata);
           return metadata;
         };
-        get4 = function get4(it) {
+        get5 = function get5(it) {
           return hasOwn(it, STATE) ? it[STATE] : {};
         };
         has = function has(it) {
@@ -924,7 +924,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var STATE;
       module.exports = {
         set: set2,
-        get: get4,
+        get: get5,
         has: has,
         enforce: enforce,
         getterFor: getterFor
@@ -2897,9 +2897,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         startsWith: function startsWith(searchString) {
           var that = toString(requireObjectCoercible(this));
           notARegExp(searchString);
-          var search3 = toString(searchString);
+          var search4 = toString(searchString);
           var index2 = toLength(min(arguments.length > 1 ? arguments[1] : void 0, that.length));
-          return stringSlice(that, index2, index2 + search3.length) === search3;
+          return stringSlice(that, index2, index2 + search4.length) === search4;
         }
       });
     }
@@ -2945,11 +2945,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         endsWith: function endsWith(searchString) {
           var that = toString(requireObjectCoercible(this));
           notARegExp(searchString);
-          var search3 = toString(searchString);
+          var search4 = toString(searchString);
           var endPosition = arguments.length > 1 ? arguments[1] : void 0;
           var len = that.length;
           var end = endPosition === void 0 ? len : min(toLength(endPosition), len);
-          return slice(that, end - search3.length, end) === search3;
+          return slice(that, end - search4.length, end) === search4;
         }
       });
     }
@@ -5043,6 +5043,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Título ou autor": "Title or author",
+    "História": "History",
+    "Biografias": "Biographies",
+    "Autoajuda": "Self-help",
+    "Filosofia": "Philosophy",
+    "Jovem adulto": "Young adult",
+    "Clássicos": "Classics",
+    "Em alta na semana": "Trending this week",
+    "Livros em árabe": "Books in Arabic",
+    "Para ler, adicione suas fontes de livros em Minhas fontes.": "To read, add your book sources in My sources.",
+    "Minhas fontes de livros": "My book sources",
+    "Mover para {tab}": "Move to {tab}",
+    "{name} agora está em {tab}.": "{name} is now in {tab}.",
+    "Mover tudo para {tab}": "Move all to {tab}",
+    "Movido para {tab}.": "Moved to {tab}.",
+    "Mangá": "Manga",
     "Das suas fontes": "From your sources",
     "Catálogo": "Catalog",
     "Tirar de Continuar assistindo": "Remove from Continue watching",
@@ -5556,6 +5572,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Título ou autor": "العنوان أو المؤلف",
+    "História": "تاريخ",
+    "Biografias": "سير ذاتية",
+    "Autoajuda": "تطوير الذات",
+    "Filosofia": "فلسفة",
+    "Jovem adulto": "يافعين",
+    "Clássicos": "كلاسيكيات",
+    "Em alta na semana": "الرائج هالأسبوع",
+    "Livros em árabe": "كتب بالعربي",
+    "Para ler, adicione suas fontes de livros em Minhas fontes.": "عشان تقرأ، أضف مصادر الكتب من مصادري.",
+    "Minhas fontes de livros": "مصادر الكتب",
+    "Mover para {tab}": "انقله لـ{tab}",
+    "{name} agora está em {tab}.": "{name} صار في {tab}.",
+    "Mover tudo para {tab}": "انقل الكل لـ{tab}",
+    "Movido para {tab}.": "انتقل لـ{tab}.",
+    "Mangá": "مانجا",
     "Das suas fontes": "من مصادرك",
     "Catálogo": "الكتالوج",
     "Tirar de Continuar assistindo": "شيله من كمّل المشاهدة",
@@ -7745,6 +7777,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "comics",
     label: "Quadrinhos"
   }, {
+    id: "books",
+    label: "Livros"
+  }, {
     id: "live",
     label: "TV ao vivo"
   }, {
@@ -7777,6 +7812,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     movies: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m440.16,0H71.841C32.228,0-.002,32.229-.002,71.842v368.319c0,39.613,32.229,71.839,71.842,71.839h368.319c39.613,0,71.842-32.226,71.842-71.839V71.842C512.002,32.229,479.773,0,440.16,0ZM38.453,275.226h58.694v79.92h-58.694v-79.92Zm337.946-38.448h-240.798V38.448h240.798v198.33Zm-279.252,0h-58.694v-79.948h58.694v79.948Zm38.454,38.448h240.798v198.327h-240.798v-198.327Zm279.252,0h58.694v79.92h-58.694v-79.92Zm0-38.448v-79.948h58.694v79.948h-58.694Zm58.694-164.936v46.54h-58.694V38.448h25.306c18.411,0,33.388,14.98,33.388,33.395ZM71.841,38.448h25.306v79.934h-58.694v-46.54c0-18.414,14.977-33.395,33.388-33.395Zm-33.388,401.714v-46.568h58.694v79.959h-25.306c-18.411,0-33.388-14.981-33.388-33.391Zm401.707,33.391h-25.306v-79.959h58.694v46.568c0,18.411-14.977,33.391-33.388,33.391Z" fill="currentColor" stroke-width="0"/></svg>',
     series: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m471.328,118.426h-166.209l92.113-85.068c7.796-7.202,8.284-19.363,1.082-27.166-7.202-7.796-19.36-8.288-27.169-1.078l-115.161,106.354L140.822,5.115c-7.803-7.206-19.96-6.71-27.169,1.078-7.203,7.802-6.714,19.964,1.082,27.166l92.113,85.068H40.672C18.249,118.426.005,136.666.005,159.09v279.821c0,22.424,18.243,40.663,40.667,40.663h.142l-1.713,9.914c-1.808,10.462,5.207,20.41,15.668,22.218,1.11.188,2.212.283,3.294.283,9.184,0,17.308-6.599,18.92-15.954l2.843-16.46h352.345l2.843,16.46c1.612,9.355,9.736,15.954,18.92,15.954,1.082,0,2.185-.094,3.294-.283,10.462-1.808,17.476-11.756,15.668-22.218l-1.713-9.914h.142c22.424,0,40.667-18.24,40.667-40.663V159.09c0-22.424-18.243-40.664-40.667-40.664Zm2.212,320.485c0,1.221-.991,2.216-2.212,2.216H40.672c-1.221,0-2.212-.994-2.212-2.216V159.09c0-1.221.991-2.216,2.212-2.216h430.656c1.221,0,2.212.995,2.212,2.216v279.821Z" fill="currentColor" stroke-width="0"/></svg>',
     anime: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" viewBox="0 0 512 512"><path d="m256.002,490.854c-131.559,0-223.44-76.272-223.44-185.478,0-17.88,2.491-36.116,7.412-54.31-9.46-20.015-16.753-40.945-21.711-62.343-14.778-63.752-6.309-118.662,3.399-153.501,2.753-9.875,12.782-15.884,22.769-13.588,44.142,10.008,85.977,27.099,124.34,50.806,7.433,4.592,14.834,9.512,22.092,14.691,42.54-14.579,87.732-14.593,130.279,0,7.255-5.171,14.656-10.098,22.095-14.691,38.36-23.707,80.195-40.806,124.34-50.806,9.997-2.289,20.015,3.713,22.769,13.588,9.708,34.839,18.177,89.749,3.399,153.501-4.959,21.383-12.251,42.32-21.711,62.343,4.92,18.187,7.408,36.423,7.408,54.31,0,109.206-91.881,185.478-223.437,185.478ZM54.301,63.787c-6.131,29.953-9.191,70.508,1.417,116.255,4.84,20.881,12.224,41.266,21.949,60.612,2.226,4.425,2.655,9.54,1.2,14.272-5.213,16.994-7.858,33.966-7.858,50.451,0,86.566,76.074,147.025,184.993,147.025s184.99-60.458,184.99-147.025c0-16.491-2.645-33.464-7.855-50.451-1.455-4.732-1.026-9.847,1.2-14.272,9.729-19.353,17.112-39.745,21.949-60.612,10.608-45.747,7.548-86.301,1.417-116.255-33.248,9.331-64.879,23.205-94.257,41.357-9.394,5.806-18.721,12.185-27.731,18.969-5.37,4.041-12.464,4.99-18.71,2.484-39.752-15.933-82.271-15.926-122.009,0-6.246,2.512-13.337,1.556-18.71-2.484-9.02-6.79-18.348-13.169-27.727-18.969-29.378-18.152-61.01-32.026-94.257-41.357Z" fill="currentColor" stroke-width="0"/><path d="m53.791,479.416c-4.965,0-9.931-1.919-13.693-5.737-7.453-7.558-7.363-19.729.199-27.183,12.272-12.094,25.459-23.435,39.187-33.708,12.778-9.575,26.307-18.431,40.202-26.331,9.219-5.248,20.961-2.024,26.209,7.216,5.248,9.226,2.017,20.965-7.213,26.213-12.496,7.098-24.66,15.067-36.154,23.679-12.349,9.24-24.206,19.436-35.243,30.316-3.744,3.692-8.619,5.534-13.494,5.534Z" fill="currentColor" stroke-width="0"/><path d="m19.242,395.215c-7.087,0-13.902-3.936-17.252-10.72-4.7-9.519-.792-21.048,8.731-25.745,13.79-6.804,27.964-13.232,42.125-19.094,8.528-3.531,17.248-6.937,25.916-10.126,9.966-3.692,21.013,1.445,24.677,11.404,3.667,9.966-1.438,21.013-11.404,24.677-8.19,3.015-16.428,6.232-24.485,9.568-13.382,5.541-26.775,11.613-39.815,18.047-2.732,1.347-5.635,1.989-8.493,1.989Z" fill="currentColor" stroke-width="0"/><path d="m458.212,479.416c-4.875,0-9.75-1.842-13.494-5.534-11.03-10.873-22.887-21.069-35.24-30.316-11.512-8.619-23.676-16.589-36.161-23.679-9.23-5.248-12.461-16.98-7.216-26.213,5.241-9.233,16.969-12.464,26.213-7.216,13.885,7.893,27.41,16.749,40.209,26.331,13.731,10.28,26.918,21.621,39.183,33.708,7.562,7.453,7.652,19.625.199,27.183-3.762,3.817-8.727,5.737-13.693,5.737Z" fill="currentColor" stroke-width="0"/><path d="m492.758,395.215c-2.858,0-5.761-.642-8.497-1.989-13.012-6.428-26.408-12.499-39.811-18.047-8.022-3.322-16.257-6.539-24.485-9.568-9.962-3.664-15.067-14.719-11.4-24.677,3.667-9.959,14.712-15.088,24.681-11.404,8.706,3.203,17.423,6.609,25.913,10.126,14.181,5.869,28.355,12.297,42.125,19.094,9.519,4.704,13.427,16.226,8.727,25.745-3.35,6.783-10.165,10.72-17.252,10.72Z" fill="currentColor" stroke-width="0"/><path d="m159.63,300.19c-10.618,0-19.223-8.612-19.223-19.227v-19.108c0-10.615,8.605-19.227,19.223-19.227s19.223,8.612,19.223,19.227v19.108c0,10.615-8.605,19.227-19.223,19.227Z" fill="currentColor" stroke-width="0"/><path d="m352.349,300.19c-10.618,0-19.223-8.612-19.223-19.227v-19.108c0-10.615,8.605-19.227,19.223-19.227s19.223,8.612,19.223,19.227v19.108c0,10.615-8.605,19.227-19.223,19.227Z" fill="currentColor" stroke-width="0"/></svg>',
+    // lucide book (ISC): books
+    books: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><path d="M8 7h8"/><path d="M8 11h6"/></svg>',
     // lucide zap (ISC): comics = superheroes
     comics: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>',
     // lucide book-open-text (ISC), same style as Comics
@@ -8122,7 +8159,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function info() {
-    var get4 = function get4() {
+    var get5 = function get5() {
       return request2(BASE + "/api/info", 4e3).then(function (r) {
         return r && r.ip ? {
           ip: r.ip,
@@ -8134,10 +8171,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return null;
       });
     };
-    return get4().then(function (i) {
+    return get5().then(function (i) {
       return i || !startService() ? i : new Promise(function (r) {
         return setTimeout(r, 5e3);
-      }).then(get4);
+      }).then(get5);
     });
   }
   function qrImage(text, size) {
@@ -14263,14 +14300,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var SVC = "http://127.0.0.1:" + PORT;
   var REPOS = {
     manga: "mangaRepos",
-    comics: "comicRepos"
+    comics: "comicRepos",
+    books: "bookRepos"
+  };
+  var KINDS3 = ["manga", "comics", "books"];
+  var kindKey = function kindKey(k) {
+    return k === "comics" || k === "books" ? k : "manga";
   };
   var PLUGINS = "mangaPlugins";
   var kindOf = function kindOf(p) {
-    return p && p.kind === "comics" ? "comics" : "manga";
+    return kindKey(p && p.kind);
   };
   var repos = function repos(kind) {
-    return get(REPOS[kind === "comics" ? "comics" : "manga"], []) || [];
+    return get(REPOS[kindKey(kind)], []) || [];
   };
   var installed = function installed(kind) {
     var all2 = get(PLUGINS, []) || [];
@@ -14282,7 +14324,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     set(PLUGINS, list2);
   }
   function addRepo(url2, kind) {
-    var key4 = REPOS[kind === "comics" ? "comics" : "manga"];
+    var key4 = REPOS[kindKey(kind)];
     var r = (get(key4, []) || []).filter(function (x) {
       return x !== url2;
     });
@@ -14290,7 +14332,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     set(key4, r);
   }
   function removeRepo(url2, kind) {
-    var key4 = REPOS[kind === "comics" ? "comics" : "manga"];
+    var key4 = REPOS[kindKey(kind)];
     set(key4, (get(key4, []) || []).filter(function (x) {
       return x !== url2;
     }));
@@ -14327,7 +14369,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function setKind(id, kind) {
     saveInstalled(installed().map(function (p) {
       return p.id === id ? Object.assign({}, p, {
-        kind: kind === "comics" ? "comics" : "manga"
+        kind: kindKey(kind)
       }) : p;
     }));
   }
@@ -14394,6 +14436,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function imageUrl(url2, referer) {
     if (!url2) return "";
+    if (/^data:image\//i.test(url2)) return url2;
     return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "");
   }
   function classify(parsed) {
@@ -14763,7 +14806,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var ref = refererOf(id);
       return (Array.isArray(v) ? v : []).map(function (x) {
         var u = typeof x === "string" ? x : x && (x.url || x.imageUrl || x.src || x.img || x.image);
-        if (!/^https?:\/\//i.test(u || "")) return null;
+        if (!/^https?:\/\//i.test(u || "") && !/^data:image\//i.test(u || "")) return null;
         var h2 = x && _typeof(x) === "object" && x.headers ? x.headers : {};
         var r = h2.Referer || h2.referer || ref;
         return imageUrl(String(u).trim(), r);
@@ -16541,6 +16584,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         plName: ref.plName,
         mid: ref.mid,
         cvId: ref.cvId,
+        olKey: ref.olKey,
         title: ref.title,
         tab: ref.tab,
         name: ref.name,
@@ -16563,9 +16607,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var p = all2.find(function (x) {
         return x.id === ref.plId;
       });
-      if (p) return p.kind === "comics" ? "comics" : "manga";
+      if (p) return p.kind === "comics" || p.kind === "books" ? p.kind : "manga";
     }
-    return ref.tab === "comics" ? "comics" : "manga";
+    if (entry.kind === "ol") return "books";
+    return ref.tab === "comics" || ref.tab === "books" ? ref.tab : "manga";
   }
   function forget(key4) {
     var all2 = get("readProgress", {}) || {};
@@ -16624,7 +16669,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/views/sources.js
   var CHUNK = 50;
   function openSources(kind) {
-    push(SourcesView(kind === "comics" ? "comics" : "manga"));
+    push(SourcesView(kind === "comics" || kind === "books" ? kind : "manga"));
   }
   function connectServer(done, kind) {
     promptText(t("Endereço do servidor Suwayomi"), base() || "http://", "http://192.168.1.20:4567", function (url2) {
@@ -16700,7 +16745,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   };
   function pluginApi(pid, name) {
     var offset = 0;
-    var toMeta3 = function toMeta3(it) {
+    var toMeta4 = function toMeta4(it) {
       return {
         id: "pl:" + pid + ":" + it.id,
         plId: pid,
@@ -16721,15 +16766,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       name: name,
       latest: false,
       kind: "pl",
-      // Manga or Comics: decides the words on the screen ("Search comics").
+      // Manga, Comics or Books: decides the words on the screen ("Search comics").
       tab: kindOf(p0),
+      lang: p0 && p0.lang || "",
       browse: function browse(k, page3, q2) {
         if (page3 === 1) offset = 0;
         var p = k === "search" ? search2(pid, q2, offset) : popular(pid, offset);
         return p.then(function (items3) {
           offset += items3.length;
           return {
-            items: items3.map(toMeta3),
+            items: items3.map(toMeta4),
             more: items3.length > 0
           };
         });
@@ -16835,6 +16881,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
     });
   }
+  function tabName(k) {
+    return k === "comics" ? t("Quadrinhos") : k === "books" ? t("Livros") : t("Mangá");
+  }
   function SourcesView(kind) {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
@@ -16842,7 +16891,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     el.appendChild(scroller);
     scroller.appendChild(h("div.row-title.catalog-title", {
-      text: kind === "comics" ? t("Minhas fontes de quadrinhos") : t("Minhas fontes de mangá")
+      text: kind === "comics" ? t("Minhas fontes de quadrinhos") : kind === "books" ? t("Minhas fontes de livros") : t("Minhas fontes de mangá")
     }));
     var body = h("div.flat-list", {
       "data-group": "",
@@ -16930,27 +16979,33 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function pluginMenu(p) {
-      var other = kind === "comics" ? "manga" : "comics";
+      var moves = KINDS3.filter(function (k) {
+        return k !== kind;
+      }).map(function (k) {
+        return {
+          label: t("Mover para {tab}", {
+            tab: tabName(k)
+          }),
+          value: "move:" + k
+        };
+      });
       menu(p.name, [{
         label: t("Abrir"),
         value: "open"
       }, {
         label: t("Atualizar"),
         value: "update"
-      }, {
-        label: other === "comics" ? t("Mover para Quadrinhos") : t("Mover para Mangá"),
-        value: "move"
-      }, {
+      }].concat(moves, [{
         label: t("Remover"),
         value: "remove"
-      }], {
+      }]), {
         onPick: function onPick(v) {
-          if (v === "open") push(SourceGrid(pluginApi(p.id, p.name)));else if (v === "move") {
-            setKind(p.id, other);
-            toast(other === "comics" ? t("{name} agora está em Quadrinhos.", {
-              name: p.name
-            }) : t("{name} agora está em Mangá.", {
-              name: p.name
+          if (v === "open") push(SourceGrid(pluginApi(p.id, p.name)));else if (/^move:/.test(v)) {
+            var to = v.slice(5);
+            setKind(p.id, to);
+            toast(t("{name} agora está em {tab}.", {
+              name: p.name,
+              tab: tabName(to)
             }));
             load7();
           } else if (v === "update") fetchRepo(p.repoUrl).then(function (r) {
@@ -17127,22 +17182,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var mine = installed(kind).filter(function (p) {
           return p.repoUrl === u;
         });
-        var other = kind === "comics" ? "manga" : "comics";
+        var moves = KINDS3.filter(function (k) {
+          return k !== kind;
+        }).map(function (k) {
+          return {
+            label: t("Mover tudo para {tab}", {
+              tab: tabName(k)
+            }),
+            sub: t("O repositório e os plugins dele"),
+            value: "move:" + k
+          };
+        });
         body.appendChild(row2("📦 " + u.replace(/^https?:\/\//, ""), mine.length ? t("{n} plugins", {
           n: mine.length
         }) : "", function () {
           return menu(t("Repositório"), [{
             label: t("Ver plugins"),
             value: "list"
-          }, {
-            label: other === "comics" ? t("Mover tudo para Quadrinhos") : t("Mover tudo para Mangá"),
-            sub: t("O repositório e os plugins dele"),
-            value: "move"
-          }, {
+          }].concat(moves, [{
             label: "🗑 " + t("Remover repositório e plugins"),
             sub: t("Apaga tudo o que veio dele"),
             value: "rm"
-          }], {
+          }]), {
             onPick: function onPick(v) {
               if (v === "rm") return confirmDialog(t("Remover o repositório e os {n} plugins dele?", {
                 n: mine.length
@@ -17153,9 +17214,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                 }), 4e3);
                 load7();
               });
-              if (v === "move") {
-                moveRepo(u, kind, other);
-                toast(other === "comics" ? t("Movido para Quadrinhos.") : t("Movido para Mangá."), 4e3);
+              if (/^move:/.test(v)) {
+                var to = v.slice(5);
+                moveRepo(u, kind, to);
+                toast(t("Movido para {tab}.", {
+                  tab: tabName(to)
+                }), 4e3);
                 return load7();
               }
               toast(t("Lendo o repositório..."));
@@ -17243,7 +17307,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return reload("latest");
       }
     }, t("Recentes")));
-    var searchLabel = api2.tab === "comics" ? t("Buscar quadrinhos") : t("Buscar mangá");
+    var searchLabel = api2.tab === "comics" ? t("Buscar quadrinhos") : api2.tab === "books" ? t("Buscar livros") : t("Buscar mangá");
     bar.appendChild(h("div.btn", {
       focusable: true,
       onSelect: function onSelect() {
@@ -17345,7 +17409,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         chapters: chapters4,
         index: Math.max(0, i),
         startPage: page3 || 0,
-        rtl: api2.tab !== "comics",
+        rtl: api2.tab === "books" ? /^ar/i.test(api2.lang || "") : api2.tab !== "comics",
         pagesFn: api2.pagesFn,
         poster: m.poster,
         kind: api2.kind,
@@ -18851,7 +18915,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }];
   var ROWS = ["Spider-Man", "Batman", "X-Men", "Superman", "Avengers", "The Walking Dead"];
   var MONTH = 30 * 864e5;
-  function artFor(cacheKey, count, get4, onEach) {
+  function artFor(cacheKey, count, get5, onEach) {
     var cached2 = get(cacheKey, null);
     var urls = cached2 && cached2.at > Date.now() - MONTH && cached2.urls ? cached2.urls.slice() : [];
     var i = 0;
@@ -18863,7 +18927,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       if (i >= count) return Promise.resolve();
       var k = i++;
-      return get4(k).then(function (u) {
+      return get5(k).then(function (u) {
         if (u) {
           urls[k] = u;
           changed = true;
@@ -18956,7 +19020,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "data-group": ""
     }, [h("div.btn", {
       focusable: true,
-      onSelect: search3
+      onSelect: search4
     }, [h("span.ico", {
       text: "🔍"
     }), t("Buscar quadrinhos")]), h("div.btn", {
@@ -18971,7 +19035,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(shelves);
     scroller.appendChild(rows2);
     el.appendChild(scroller);
-    function search3() {
+    function search4() {
       if (!hasKey()) return toast(t("Adicione sua chave do ComicVine em Ajustes → Chaves."), 6e3);
       promptText(t("Buscar quadrinhos"), "", "Batman, Spider-Man...", function (q2) {
         return q2.trim() && push(ComicGridView(q2.trim()));
@@ -21131,11 +21195,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function searchPrompt() {
       if (!hasTmdb()) return toast(t("Com uma chave TMDB em Ajustes, dá para buscar qualquer outra coleção de filmes."), 6e3);
       promptText(t("Buscar coleção"), "", t("Ex.: Shrek, Rambo, Saw"), function (q2) {
-        return search3(q2);
+        return search4(q2);
       });
     }
     var token = 0;
-    function search3(q2) {
+    function search4(q2) {
       var query = (q2 || "").trim();
       clear(results);
       if (query.length < 2) return;
@@ -21379,11 +21443,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return isSeriesItem(it);
       });
       if (hasMovies && hasSeries) {
-        var KINDS3 = [["all", t("Todos")], ["movies", t("Só filmes")], ["series", t("Só séries")]];
-        btn("type", t("Mostrar") + ": " + KINDS3.find(function (x) {
+        var KINDS4 = [["all", t("Todos")], ["movies", t("Só filmes")], ["series", t("Só séries")]];
+        btn("type", t("Mostrar") + ": " + KINDS4.find(function (x) {
           return x[0] === mediaFilter;
         })[1] + " ▾", function () {
-          return choose("type", t("Mostrar"), KINDS3, mediaFilter, function (v) {
+          return choose("type", t("Mostrar"), KINDS4, mediaFilter, function (v) {
             return mediaFilter = v;
           });
         }, mediaFilter !== "all");
@@ -21906,9 +21970,725 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/api/openlibrary.js
+  var API8 = "https://openlibrary.org";
+  var COVER = function COVER(id, size) {
+    return "https://covers.openlibrary.org/b/id/" + id + "-" + (size || "M") + ".jpg";
+  };
+  var cache9 = {};
+  function get3(path) {
+    var url2 = API8 + path;
+    if (cache9[url2]) return cache9[url2];
+    var p = httpRaw(url2, {
+      timeoutMs: 2e4
+    }).then(function (r) {
+      if (!r || !r.ok) throw new Error("HTTP " + (r ? r.status : "?"));
+      return JSON.parse(r.body || "null");
+    });
+    cache9[url2] = p;
+    p.catch(function () {
+      return delete cache9[url2];
+    });
+    return p;
+  }
+  function toMeta3(w) {
+    var key4 = String(w.key || "").replace(/^\/works\//, "");
+    var cover = w.cover_i || w.cover_id;
+    var author = w.author_name && w.author_name[0] || w.authors && w.authors[0] && w.authors[0].name || "";
+    return {
+      id: "ol:" + key4,
+      olKey: key4,
+      type: "book",
+      name: w.title || "",
+      title: w.title || "",
+      author: author,
+      year: w.first_publish_year || null,
+      poster: cover ? COVER(cover, "M") : ""
+    };
+  }
+  var withCovers = function withCovers(list2) {
+    return list2.filter(function (m) {
+      return m.poster;
+    });
+  };
+  function trending(period) {
+    return get3("/trending/" + (period || "daily") + ".json?limit=40").then(function (j) {
+      return withCovers((j && j.works || []).map(toMeta3));
+    });
+  }
+  function subject(name, page3) {
+    return get3("/subjects/" + encodeURIComponent(name) + ".json?limit=40&offset=" + (page3 || 0) * 40).then(function (j) {
+      return {
+        items: withCovers((j && j.works || []).map(toMeta3)),
+        more: !!(j && j.work_count > ((page3 || 0) + 1) * 40)
+      };
+    });
+  }
+  function search3(q2, page3, lang3) {
+    var fields = "key,title,author_name,cover_i,first_publish_year";
+    return get3("/search.json?q=" + encodeURIComponent(q2) + (lang3 ? "&language=" + lang3 : "") + "&limit=40&page=" + ((page3 || 0) + 1) + "&fields=" + fields).then(function (j) {
+      return {
+        items: withCovers((j && j.docs || []).map(toMeta3)),
+        more: !!(j && j.numFound > ((page3 || 0) + 1) * 40)
+      };
+    });
+  }
+  function work(key4) {
+    return get3("/works/" + key4 + ".json").then(function (w) {
+      var d = w && w.description;
+      return {
+        description: typeof d === "string" ? d : d && d.value || "",
+        subjects: (w && w.subjects || []).slice(0, 5),
+        cover: w && w.covers && w.covers[0] > 0 ? COVER(w.covers[0], "L") : ""
+      };
+    });
+  }
+
+  // src/js/views/books.js
+  var GENRES2 = [["fantasy", "Fantasia"], ["science_fiction", "Ficção científica"], ["mystery", "Mistério"], ["thriller", "Suspense"], ["romance", "Romance"], ["horror", "Terror"], ["history", "História"], ["biography", "Biografias"], ["self-help", "Autoajuda"], ["philosophy", "Filosofia"], ["young_adult_fiction", "Jovem adulto"], ["classics", "Clássicos"]];
+  var MONTH2 = 30 * 864e5;
+  function genreArt(row2) {
+    var cached2 = get("bookGenreArt", null);
+    var urls = cached2 && cached2.at > Date.now() - MONTH2 && cached2.urls ? cached2.urls.slice() : [];
+    var i = 0;
+    var changed = false;
+    var _lane = function lane() {
+      while (i < GENRES2.length && urls[i]) i++;
+      if (i >= GENRES2.length) return Promise.resolve();
+      var k = i++;
+      return subject(GENRES2[k][0], 0).then(function (r) {
+        var b = r.items[0];
+        if (b && b.poster) {
+          urls[k] = b.poster.replace("-M.jpg", "-L.jpg");
+          changed = true;
+          setTileArt(row2, urls);
+        }
+      }, function () {}).then(_lane);
+    };
+    setTileArt(row2, urls);
+    Promise.all([_lane(), _lane()]).then(function () {
+      return changed && set("bookGenreArt", {
+        at: Date.now(),
+        urls: urls
+      });
+    });
+  }
+  function posterRow4(parent, title, load7, onMore) {
+    var row2 = h("div.row", {
+      "data-anchor": "30"
+    });
+    var track = h("div.row-track.pending", {
+      "data-scroll-x": "",
+      "data-group": ""
+    }, spinnerLine(t("Carregando...")));
+    row2.appendChild(h("div.row-title", {
+      text: title
+    }));
+    row2.appendChild(track);
+    parent.appendChild(row2);
+    return {
+      row: row2,
+      started: false,
+      load: function load() {
+        return load7().then(function (items3) {
+          clear(track);
+          track.classList.remove("pending");
+          if (!items3.length) return row2.parentNode && parent.removeChild(row2);
+          items3.slice(0, 20).forEach(function (m) {
+            return track.appendChild(card(m, {
+              onSelect: function onSelect() {
+                return openBookDetails(m);
+              }
+            }));
+          });
+          if (onMore) track.appendChild(h("div.card.see-all", {
+            focusable: true,
+            onSelect: onMore
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "→"
+          }), t("Ver tudo")])), h("div.name", {
+            text: ""
+          })]));
+          loadVisibleImages(row2);
+        }).catch(function () {
+          return row2.parentNode && parent.removeChild(row2);
+        });
+      }
+    };
+  }
+  function BooksView() {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar("books", goTab);
+    var rows2 = h("div.rows");
+    scroller.appendChild(bar);
+    scroller.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [h("div.btn", {
+      focusable: true,
+      onSelect: search4
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar livros")]), h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return openSources("books");
+      }
+    }, [h("span.ico", {
+      text: "📚"
+    }), t("Minhas fontes")])]));
+    var shelves = h("div");
+    scroller.appendChild(shelves);
+    scroller.appendChild(rows2);
+    el.appendChild(scroller);
+    function search4() {
+      promptText(t("Buscar livros"), "", t("Título ou autor"), function (q2) {
+        return q2.trim() && push(BookGridView("🔍 " + q2.trim(), function (n) {
+          return search3(q2.trim(), n);
+        }));
+      });
+    }
+    function drawShelves() {
+      clear(shelves);
+      var mk = function mk(title, list2) {
+        if (!list2.length) return;
+        var track = h("div.row-track", {
+          "data-scroll-x": "",
+          "data-group": ""
+        });
+        list2.forEach(function (x) {
+          var open2 = function open2() {
+            return x.ref.olKey ? openBookDetails(Object.assign({
+              id: "ol:" + x.ref.olKey,
+              type: "book"
+            }, x.ref)) : openSourceManga(x.ref);
+          };
+          var c = card({
+            id: x.key,
+            name: x.name,
+            poster: x.poster
+          }, {
+            onSelect: open2
+          });
+          if (x.cont) c.__long = holdMenu(x.name, open2, function () {
+            return forget(x.key), toast(t("Tirado de Continuar lendo.")), drawShelves();
+          }, t("Tirar de Continuar lendo"));
+          track.appendChild(c);
+        });
+        shelves.appendChild(h("div.row", {
+          "data-anchor": "30"
+        }, [h("div.row-title", {
+          text: title
+        }), track]));
+        loadVisibleImages(track);
+      };
+      mk(t("Continuar lendo"), continueList(60).filter(function (p) {
+        return tabOf2(p) === "books";
+      }).slice(0, 15).map(function (p) {
+        return {
+          cont: true,
+          key: p.key,
+          ref: p.ref,
+          name: (p.title || "") + " · " + t("Cap. {n}", {
+            n: p.chapter
+          }),
+          poster: p.poster
+        };
+      }));
+      mk(t("Favoritos"), favs().filter(function (f) {
+        return tabOf2(f) === "books";
+      }).map(function (f) {
+        return {
+          key: f.key,
+          ref: f.ref,
+          name: f.ref.name,
+          poster: f.ref.poster
+        };
+      }));
+    }
+    drawShelves();
+    var pending2 = [];
+    function loadNearby() {
+      var top2 = scroller.scrollTop + (window.innerHeight || 1080) * 2;
+      pending2.forEach(function (r) {
+        if (!r.started && r.row.offsetTop < top2) {
+          r.started = true;
+          r.load();
+        }
+      });
+    }
+    sourceRows(rows2, "books").forEach(function (r) {
+      return pending2.push(r);
+    });
+    if (pending2.length) rows2.appendChild(h("div.row-title.src-rows-title", {
+      text: t("Catálogo")
+    }));
+    pending2.push(posterRow4(rows2, t("Em alta hoje"), function () {
+      return trending("daily");
+    }));
+    var genreRow = tileRow(rows2, t("Gêneros"), GENRES2.map(function (g) {
+      return {
+        label: t(g[1]),
+        open: function open() {
+          return push(BookGridView(t(g[1]), function (n) {
+            return subject(g[0], n);
+          }));
+        }
+      };
+    }), "discover");
+    genreArt(genreRow);
+    pending2.push(posterRow4(rows2, t("Em alta na semana"), function () {
+      return trending("weekly");
+    }));
+    pending2.push(posterRow4(rows2, t("Livros em árabe"), function () {
+      return search3("language:ara", 0).then(function (r) {
+        return r.items;
+      });
+    }, function () {
+      return push(BookGridView(t("Livros em árabe"), function (n) {
+        return search3("language:ara", n);
+      }));
+    }));
+    [["fantasy", "Fantasia"], ["mystery", "Mistério"], ["science_fiction", "Ficção científica"]].forEach(function (g) {
+      return pending2.push(posterRow4(rows2, t(g[1]), function () {
+        return subject(g[0], 0).then(function (r) {
+          return r.items;
+        });
+      }, function () {
+        return push(BookGridView(t(g[1]), function (n) {
+          return subject(g[0], n);
+        }));
+      }));
+    });
+    setTimeout(loadNearby, 50);
+    return {
+      el: el,
+      onShow: function onShow() {
+        drawShelves();
+        loadNearby();
+        loadVisibleImages(el);
+      },
+      onScroll: function onScroll() {
+        return loadNearby();
+      },
+      destroy: function destroy() {
+        return bar.__destroy && bar.__destroy();
+      }
+    };
+  }
+  function BookGridView(title, pageOf) {
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var gridEl = h("div.grid");
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: title
+    }));
+    scroller.appendChild(gridEl);
+    el.appendChild(scroller);
+    var n = 0;
+    var more = null;
+    var seen = {};
+    function next() {
+      if (more && more.parentNode) gridEl.removeChild(more);
+      gridEl.appendChild(spinnerLine(t("Carregando...")));
+      pageOf(n++).then(function (r) {
+        var sp = gridEl.querySelector(".loading-line");
+        if (sp) gridEl.removeChild(sp);
+        r.items.forEach(function (m) {
+          if (seen[m.id]) return;
+          seen[m.id] = true;
+          gridEl.appendChild(card(m, {
+            onSelect: function onSelect() {
+              return openBookDetails(m);
+            }
+          }));
+        });
+        if (!gridEl.querySelector(".card")) gridEl.appendChild(h("div.modal-text", {
+          text: t("Nada por aqui.")
+        }));
+        if (r.more) {
+          more = h("div.card.see-all", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return next();
+            }
+          }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+            text: "+"
+          }), t("Carregar mais")])), h("div.name", {
+            text: ""
+          })]);
+          gridEl.appendChild(more);
+        }
+        loadVisibleImages(el, 400);
+        if (n === 1) {
+          var first = gridEl.querySelector(".card");
+          if (first) focus(first);
+        }
+      }).catch(function () {
+        var sp = gridEl.querySelector(".loading-line");
+        if (sp) gridEl.removeChild(sp);
+        toast(t("Não foi possível carregar agora."));
+      });
+    }
+    next();
+    return {
+      el: el,
+      onShow: function onShow() {
+        return loadVisibleImages(el, 400);
+      },
+      onScroll: function onScroll() {
+        return loadVisibleImages(el, 400);
+      }
+    };
+  }
+  var CHUNK4 = 50;
+  function links3() {
+    return get("bookLinks", {}) || {};
+  }
+  function saveLink3(id, v) {
+    var all2 = links3();
+    if (v) all2[id] = v;else delete all2[id];
+    set("bookLinks", all2);
+  }
+  function openBookDetails(m) {
+    push(BookDetailsView(m));
+  }
+  function BookDetailsView(m0) {
+    var m = Object.assign({}, m0);
+    var key4 = "ol" + m.olKey;
+    var el = h("div.view.md-view");
+    var info2 = h("div.md-info");
+    var list2 = h("div.md-list", {
+      "data-scroll-y": "",
+      "data-pad-y": "120",
+      "data-group": "",
+      "data-vertical": ""
+    });
+    el.appendChild(info2);
+    el.appendChild(list2);
+    var chapters4 = [];
+    var chunk = 0;
+    var _alive2 = true;
+    var source = null;
+    var found = null;
+    var scanning = null;
+    var picked = false;
+    var status2 = h("div.loading-line", {
+      text: t("Procurando nas suas fontes...")
+    });
+    var progress2 = function progress2() {
+      return (get("readProgress", {}) || {})[key4] || null;
+    };
+    var langOf = function langOf(pid) {
+      return (installed().find(function (p) {
+        return p.id === pid;
+      }) || {}).lang || "";
+    };
+    function indexOfProgress() {
+      var p = progress2();
+      if (!p) return -1;
+      var i = chapters4.findIndex(function (c) {
+        return c.id === p.chapterId;
+      });
+      if (i >= 0 || p.chapter == null) return i;
+      return chapters4.findIndex(function (c) {
+        return c.chapter != null && String(c.chapter) === String(p.chapter);
+      });
+    }
+    function read(index2, page3) {
+      if (!chapters4.length) return toast(t("Nenhum capítulo encontrado."));
+      openReader({
+        key: key4,
+        title: m.name,
+        chapters: chapters4,
+        index: Math.max(0, index2),
+        startPage: page3 || 0,
+        poster: m.poster,
+        kind: "ol",
+        ref: {
+          olKey: m.olKey,
+          name: m.name,
+          title: m.title,
+          poster: m.poster,
+          author: m.author,
+          tab: "books"
+        },
+        rtl: source ? /^ar/i.test(langOf(source.pid)) : false,
+        pagesFn: source ? function (cid) {
+          return pages(source.pid, cid);
+        } : void 0
+      });
+    }
+    function renderInfo() {
+      clear(info2);
+      var cover = h("img.md-cover", {
+        alt: ""
+      });
+      cover.setAttribute("data-lazy", m.cover || m.poster || "");
+      info2.appendChild(cover);
+      var text = h("div.md-text");
+      text.appendChild(h("div.md-title", {
+        text: m.name
+      }));
+      text.appendChild(h("div.md-meta", {
+        text: [m.author, m.year, (m.subjects || []).slice(0, 3).join(", ")].filter(Boolean).join("  ·  ")
+      }));
+      text.appendChild(h("div.md-desc", {
+        text: String(m.description || "").replace(/\[\d+\]|\(\[source\][^)]*\)/g, "").trim()
+      }));
+      var p = progress2();
+      var idx = indexOfProgress();
+      var btns = [h("div.btn.primary", {
+        focusable: true,
+        "data-autofocus": "",
+        onSelect: function onSelect() {
+          return idx >= 0 ? read(idx, p.page) : read(0, 0);
+        }
+      }, [h("span.ico", {
+        text: "📖"
+      }), idx >= 0 ? t("Continuar: cap. {n}", {
+        n: chapters4[idx].chapter
+      }) : t("Ler")]), h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return toggleFav(key4, "ol", Object.assign({}, m, {
+            tab: "books"
+          })), renderInfo();
+        }
+      }, [h("span.ico", {
+        text: isFav(key4) ? "♥" : "♡"
+      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")])];
+      if (installed("books").length) btns.push(h("div.btn", {
+        focusable: true,
+        onSelect: pickSource
+      }, [h("span.ico", {
+        text: "📚"
+      }), source ? source.name : t("Fonte")]));
+      btns.push(h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return readingModeMenu(function () {
+            return renderInfo();
+          });
+        }
+      }, [h("span.ico", {
+        text: readingModeLabel().icon
+      }), readingModeLabel().text]));
+      text.appendChild(h("div.details-buttons", {
+        "data-group": ""
+      }, btns));
+      info2.appendChild(text);
+      loadVisibleImages(info2);
+    }
+    function renderList() {
+      clear(list2);
+      if (!chapters4.length) return list2.appendChild(status2);
+      var start4 = chunk * CHUNK4;
+      var end = Math.min(chapters4.length, start4 + CHUNK4);
+      var p = progress2();
+      var nav2 = function nav2(label, to) {
+        return h("div.stream.md-nav", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return chunk = to, renderList();
+          }
+        }, [h("div.s-main", {
+          text: label
+        })]);
+      };
+      if (chapters4.length > 8) list2.appendChild(chapterSearchRow(function () {
+        return chapters4;
+      }, function (i) {
+        return chunk = Math.floor(i / CHUNK4), renderList(), focusChapter(list2, i);
+      }));
+      if (chunk > 0) list2.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
+        a: (chunk - 1) * CHUNK4 + 1,
+        b: chunk * CHUNK4
+      }), chunk - 1));
+      var _loop11 = function _loop11(i) {
+        var c = chapters4[i];
+        var here = p && p.chapterId === c.id;
+        list2.appendChild(h("div.stream", {
+          focusable: true,
+          "data-ci": String(i),
+          onSelect: function onSelect() {
+            return read(i, here ? p.page : 0);
+          }
+        }, [h("div.s-main", {
+          text: (c.chapter != null ? t("Cap. {n}", {
+            n: c.chapter
+          }) : "") + (c.title ? (c.chapter != null ? " · " : "") + c.title : "")
+        }), here ? h("span.s-tag.ok", {
+          text: t("Parou aqui")
+        }) : null]));
+      };
+      for (var i = start4; i < end; i++) {
+        _loop11(i);
+      }
+      if (end < chapters4.length) list2.appendChild(nav2(t("Capítulos {a}–{b}", {
+        a: end + 1,
+        b: Math.min(chapters4.length, end + CHUNK4)
+      }) + " ▶", chunk + 1));
+    }
+    function showSource(ln, cs) {
+      source = ln;
+      chapters4 = cs;
+      var idx = indexOfProgress();
+      chunk = idx >= 0 ? Math.floor(idx / CHUNK4) : 0;
+      renderInfo();
+      renderList();
+    }
+    function noSources(text) {
+      status2.textContent = text;
+      renderInfo();
+      renderList();
+      list2.appendChild(h("div.stream", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return openSources("books");
+        }
+      }, [h("div.s-main", {
+        text: "📚 " + t("Minhas fontes")
+      })]));
+      installed("books").forEach(function (p) {
+        return list2.appendChild(h("div.stream", {
+          focusable: true,
+          onSelect: function onSelect() {
+            return searchPlugin(p.id, p.name, m.title);
+          }
+        }, [h("div.s-main", {
+          text: "🔎 " + t("Buscar em {name}", {
+            name: p.name
+          })
+        })]));
+      });
+    }
+    function scan3(onHit) {
+      if (!scanning) scanning = scanSources([m.title], onHit, {
+        alive: function alive() {
+          return _alive2;
+        },
+        min: 0.8,
+        kind: "books"
+      }).then(function (all2) {
+        found = all2;
+        return all2;
+      });
+      return scanning;
+    }
+    function load7() {
+      if (!installed("books").length) return noSources(t("Para ler, adicione suas fontes de livros em Minhas fontes."));
+      var ln = links3()[m.olKey];
+      if (ln) {
+        status2.textContent = t("Carregando capítulos de {name}...", {
+          name: ln.name
+        });
+        return _chapters(ln.pid, ln.mid).then(function (cs) {
+          if (!_alive2) return;
+          if (!cs.length) throw new Error("empty");
+          showSource(ln, cs);
+        }).catch(function () {
+          if (!_alive2) return;
+          saveLink3(m.olKey, null);
+          autoFind();
+        });
+      }
+      autoFind();
+    }
+    function autoFind() {
+      status2.textContent = t("Procurando nas suas fontes...");
+      renderList();
+      scan3(function (hit) {
+        if (!source && !picked) showSource(linkOf(hit), hit.cs);
+      }).then(function (all2) {
+        if (!_alive2) return;
+        if (!all2.length) return noSources(t("Não encontrei este título nas suas fontes."));
+        if (picked) return;
+        var best2 = all2[0];
+        saveLink3(m.olKey, linkOf(best2));
+        if (!source || source.pid !== best2.pid) showSource(linkOf(best2), best2.cs);
+        if (all2.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
+          n: all2.length
+        }), 5e3);
+      });
+    }
+    function pickSource() {
+      if (!found) {
+        toast(t("Procurando nas suas fontes..."), 4e3);
+        return scan3().then(function () {
+          return _alive2 && pickSource();
+        });
+      }
+      var items3 = found.map(function (hit) {
+        return {
+          label: hit.name,
+          sub: t("{n} capítulos", {
+            n: hit.count
+          }) + (norm(hit.title) !== norm(m.title) ? "  ·  " + hit.title : ""),
+          value: hit,
+          checked: !!source && source.pid === hit.pid
+        };
+      });
+      items3.push({
+        label: "🔎 " + t("Buscar manualmente"),
+        sub: t("Procure com outro nome numa fonte"),
+        value: "manual"
+      });
+      menu(t("Fonte dos capítulos"), items3, {
+        onPick: function onPick(v) {
+          picked = true;
+          if (v === "manual") return menu(t("Buscar manualmente"), installed("books").map(function (p) {
+            return {
+              label: t("Buscar em {name}", {
+                name: p.name
+              }),
+              value: p
+            };
+          }), {
+            onPick: function onPick(p) {
+              return searchPlugin(p.id, p.name, m.title);
+            }
+          });
+          saveLink3(m.olKey, Object.assign(linkOf(v), {
+            manual: true
+          }));
+          showSource(linkOf(v), v.cs);
+        }
+      });
+    }
+    renderInfo();
+    load7();
+    work(m.olKey).then(function (w) {
+      if (!_alive2) return;
+      Object.assign(m, {
+        description: w.description,
+        subjects: w.subjects,
+        cover: w.cover || ""
+      });
+      renderInfo();
+    }).catch(function () {});
+    return {
+      el: el,
+      onShow: function onShow() {
+        if (chapters4.length) {
+          renderInfo();
+          renderList();
+        }
+        loadVisibleImages(el);
+      },
+      destroy: function destroy() {
+        _alive2 = false;
+      }
+    };
+  }
+
   // src/js/views/discover.js
   var IMG = "https://image.tmdb.org/t/p/w185";
-  var GENRES2 = {
+  var GENRES3 = {
     28: "Ação",
     12: "Aventura",
     16: "Animação",
@@ -22053,11 +22833,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return counts[g] = (counts[g] || 0) + 1;
         });
       });
-      var ids2 = Object.keys(GENRES2);
+      var ids2 = Object.keys(GENRES3);
       var top2 = seeded(ids2, 2);
       top2.forEach(function (gid) {
         return pending2.push(row(rows2, t("Joias escondidas: {genre}", {
-          genre: t(GENRES2[gid])
+          genre: t(GENRES3[gid])
         }), function () {
           return tmdbGet("discover/movie", {
             with_genres: gid,
@@ -22117,7 +22897,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return x.id !== id;
     }));
     if (get("iptvActive", "") === id) set("iptvActive", "");
-    delete cache9[id];
+    delete cache10[id];
   }
   function active2() {
     var all2 = sources2();
@@ -22156,7 +22936,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return c.src === srcId;
     });
   };
-  function get3(url2, json) {
+  function get4(url2, json) {
     return httpRaw(url2, {
       timeoutMs: 3e4
     }).then(function (r) {
@@ -22176,19 +22956,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return base2(s) + "/player_api.php?username=" + encodeURIComponent(s.user) + "&password=" + encodeURIComponent(s.pass) + (action ? "&action=" + action : "") + (extra || "");
   };
   function checkXtream(s) {
-    return get3(api(s, ""), true).then(function (r) {
+    return get4(api(s, ""), true).then(function (r) {
       if (!r || !r.user_info || String(r.user_info.auth) !== "1") throw new Error("login");
       return r.user_info;
     });
   }
-  var cache9 = {};
+  var cache10 = {};
   function categories(s) {
-    var c = cache9[s.id] = cache9[s.id] || {
+    var c = cache10[s.id] = cache10[s.id] || {
       byCat: {}
     };
     if (c.cats) return Promise.resolve(c.cats);
     if (s.type === "xtream") {
-      return get3(api(s, "get_live_categories"), true).then(function (list2) {
+      return get4(api(s, "get_live_categories"), true).then(function (list2) {
         c.cats = (Array.isArray(list2) ? list2 : []).map(function (x) {
           return {
             id: String(x.category_id),
@@ -22203,12 +22983,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function channels(s, catId) {
-    var c = cache9[s.id] = cache9[s.id] || {
+    var c = cache10[s.id] = cache10[s.id] || {
       byCat: {}
     };
     if (c.byCat[catId]) return Promise.resolve(c.byCat[catId]);
     if (s.type === "xtream") {
-      return get3(api(s, "get_live_streams", "&category_id=" + encodeURIComponent(catId)), true).then(function (list2) {
+      return get4(api(s, "get_live_streams", "&category_id=" + encodeURIComponent(catId)), true).then(function (list2) {
         var out = (Array.isArray(list2) ? list2 : []).map(function (x) {
           return {
             id: String(x.stream_id),
@@ -22229,23 +23009,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function loaded(s) {
-    var c = cache9[s.id];
+    var c = cache10[s.id];
     return c ? Object.keys(c.byCat).map(function (k) {
       return c.byCat[k];
     }) : [];
   }
   function loadM3u(s) {
-    var c = cache9[s.id] = cache9[s.id] || {
+    var c = cache10[s.id] = cache10[s.id] || {
       byCat: {}
     };
     if (c.cats) return Promise.resolve();
-    return get3(s.url, false).then(function (text) {
+    return get4(s.url, false).then(function (text) {
       var cats = [];
       var seen = {};
       var lines = String(text || "").split(/\r?\n/);
       var info2 = null;
       var n = 0;
-      var _loop11 = function _loop11() {
+      var _loop12 = function _loop12() {
         var l = lines[i].trim();
         if (!l) return 1; // continue
         if (l.indexOf("#EXTINF") === 0) {
@@ -22284,7 +23064,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       };
       for (var i = 0; i < lines.length && n < 3e4; i++) {
-        if (_loop11()) continue;
+        if (_loop12()) continue;
       }
       c.cats = cats;
     });
@@ -22295,7 +23075,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var k = s.id + "|" + ch.id;
     var hit = epgCache[k];
     if (hit && Date.now() - hit.at < 10 * 6e4) return Promise.resolve(hit.list);
-    return get3(api(s, "get_short_epg", "&stream_id=" + encodeURIComponent(ch.id) + "&limit=2"), true).then(function (r) {
+    return get4(api(s, "get_short_epg", "&stream_id=" + encodeURIComponent(ch.id) + "&limit=2"), true).then(function (r) {
       var list2 = (r && r.epg_listings || []).map(function (e) {
         return {
           title: b64(e.title),
@@ -22364,7 +23144,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: "📡"
       }), src ? src.name : t("Adicionar fonte")]), src ? h("div.btn", {
         focusable: true,
-        onSelect: search3
+        onSelect: search4
       }, [h("span.ico", {
         text: "🔍"
       }), t("Buscar canal")]) : null]));
@@ -22474,7 +23254,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         render();
       });
     }
-    function search3() {
+    function search4() {
       promptText(t("Buscar canal"), "", "", function (q2) {
         var needle = q2.trim().toLowerCase();
         if (!needle) return;
@@ -22987,7 +23767,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function run3() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop12 = function _loop12() {
+      var _loop13 = function _loop13() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (!p.row.parentNode) {
@@ -23009,7 +23789,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret6;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret6 = _loop12();
+        _ret6 = _loop13();
         if (_ret6 === 0) continue;
         if (_ret6 === 1) break;
       }
@@ -23324,7 +24104,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/mdblistRows.js
-  var API8 = "https://api.mdblist.com/";
+  var API9 = "https://api.mdblist.com/";
   var POSTER2 = function POSTER2(imdb) {
     return "https://images.metahub.space/poster/medium/" + imdb + "/img";
   };
@@ -23336,7 +24116,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function call4(path) {
     var sep = path.indexOf("?") >= 0 ? "&" : "?";
-    return getJSONViaProxy(API8 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
+    return getJSONViaProxy(API9 + path + sep + "apikey=" + encodeURIComponent(apiKey()), {
       timeout: 15e3
     });
   }
@@ -23636,7 +24416,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop13 = function _loop13() {
+      var _loop14 = function _loop14() {
           var p = pending2[i];
           if (p.state !== "idle") return 0; // continue
           if (!p.row.parentNode) {
@@ -23654,7 +24434,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret7;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret7 = _loop13();
+        _ret7 = _loop14();
         if (_ret7 === 0) continue;
         if (_ret7 === 1) break;
       }
@@ -24283,7 +25063,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNearby() {
       if (el.offsetParent === null) return;
       var limit = window.innerHeight * 2.2;
-      var _loop14 = function _loop14() {
+      var _loop15 = function _loop15() {
           var p = pending2[i];
           if (p.state) return 0; // continue
           if (p.row.getBoundingClientRect().top > limit) return 1; // break
@@ -24301,7 +25081,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         _ret8;
       for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret8 = _loop14();
+        _ret8 = _loop15();
         if (_ret8 === 0) continue;
         if (_ret8 === 1) break;
       }
@@ -24457,7 +25237,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T12:13:05.731Z";
+  var BUILD = "2026-11-17T14:30:32.351Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -27172,7 +27952,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderDays() {
       clear(days);
-      var _loop15 = function _loop15() {
+      var _loop16 = function _loop16() {
         var off = o;
         var d = dayStart(off);
         days.appendChild(h("div.chip", {
@@ -27188,7 +27968,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       };
       for (var o = -1; o <= 6; o++) {
-        _loop15();
+        _loop16();
       }
       days.__last = days.children[current3 + 1];
     }
@@ -27683,6 +28463,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     registerTab("anime", AnimeView);
     registerTab("manga", MangaView);
     registerTab("comics", ComicsView);
+    registerTab("books", BooksView);
     registerTab("discover", DiscoverView);
     registerTab("live", LiveView);
     registerTab("movies", MoviesView);

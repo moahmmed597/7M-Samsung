@@ -20,7 +20,7 @@ const CHUNK = 50;
 
 // kind: 'manga' (default) or 'comics': each tab has its own sources.
 export function openSources(kind) {
-  router.push(SourcesView(kind === 'comics' ? 'comics' : 'manga'));
+  router.push(SourcesView(kind === 'comics' || kind === 'books' ? kind : 'manga'));
 }
 
 // Ask for the server address ("http://192.168.1.20:4567"), check it, save it.
@@ -108,8 +108,9 @@ export function pluginApi(pid, name) {
     name: name,
     latest: false,
     kind: 'pl',
-    // Manga or Comics: decides the words on the screen ("Search comics").
+    // Manga, Comics or Books: decides the words on the screen ("Search comics").
     tab: pl.kindOf(p0),
+    lang: (p0 && p0.lang) || '',
     browse: (k, page, q) => {
       if (page === 1) offset = 0;
       const p = k === 'search' ? pl.search(pid, q, offset) : pl.popular(pid, offset);
@@ -187,12 +188,17 @@ export function sourceRows(parent, kind) {
   });
 }
 
+// The name of a tab, for the move menus.
+function tabName(k) {
+  return k === 'comics' ? t('Quadrinhos') : k === 'books' ? t('Livros') : t('Mangá');
+}
+
 // ---------- the list of sources ----------
 function SourcesView(kind) {
   const el = h('div.view');
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   el.appendChild(scroller);
-  scroller.appendChild(h('div.row-title.catalog-title', { text: kind === 'comics' ? t('Minhas fontes de quadrinhos') : t('Minhas fontes de mangá') }));
+  scroller.appendChild(h('div.row-title.catalog-title', { text: kind === 'comics' ? t('Minhas fontes de quadrinhos') : kind === 'books' ? t('Minhas fontes de livros') : t('Minhas fontes de mangá') }));
   const body = h('div.flat-list', { 'data-group': '', 'data-vertical': '' });
   scroller.appendChild(body);
   const row = (text, sub, onSelect, tag) => h('div.stream', { focusable: true, onSelect: onSelect }, [h('div.s-main', null, [text, sub ? h('small', { text: ' ' + sub }) : null]), tag ? h('span.s-tag', { text: tag }) : null]);
@@ -247,18 +253,14 @@ function SourcesView(kind) {
   }
 
   function pluginMenu(p) {
-    const other = kind === 'comics' ? 'manga' : 'comics';
-    menu(p.name, [
-      { label: t('Abrir'), value: 'open' },
-      { label: t('Atualizar'), value: 'update' },
-      { label: other === 'comics' ? t('Mover para Quadrinhos') : t('Mover para Mangá'), value: 'move' },
-      { label: t('Remover'), value: 'remove' },
-    ], {
+    const moves = pl.KINDS.filter((k) => k !== kind).map((k) => ({ label: t('Mover para {tab}', { tab: tabName(k) }), value: 'move:' + k }));
+    menu(p.name, [{ label: t('Abrir'), value: 'open' }, { label: t('Atualizar'), value: 'update' }].concat(moves, [{ label: t('Remover'), value: 'remove' }]), {
       onPick: (v) => {
         if (v === 'open') router.push(SourceGrid(pluginApi(p.id, p.name)));
-        else if (v === 'move') {
-          pl.setKind(p.id, other);
-          toast(other === 'comics' ? t('{name} agora está em Quadrinhos.', { name: p.name }) : t('{name} agora está em Mangá.', { name: p.name }));
+        else if (/^move:/.test(v)) {
+          const to = v.slice(5);
+          pl.setKind(p.id, to);
+          toast(t('{name} agora está em {tab}.', { name: p.name, tab: tabName(to) }));
           load();
         }
         else if (v === 'update')
@@ -389,14 +391,10 @@ function SourcesView(kind) {
       ));
     pl.repos(kind).forEach((u) => {
       const mine = pl.installed(kind).filter((p) => p.repoUrl === u);
-      const other = kind === 'comics' ? 'manga' : 'comics';
+      const moves = pl.KINDS.filter((k) => k !== kind).map((k) => ({ label: t('Mover tudo para {tab}', { tab: tabName(k) }), sub: t('O repositório e os plugins dele'), value: 'move:' + k }));
       body.appendChild(
         row('📦 ' + u.replace(/^https?:\/\//, ''), mine.length ? t('{n} plugins', { n: mine.length }) : '', () =>
-          menu(t('Repositório'), [
-            { label: t('Ver plugins'), value: 'list' },
-            { label: other === 'comics' ? t('Mover tudo para Quadrinhos') : t('Mover tudo para Mangá'), sub: t('O repositório e os plugins dele'), value: 'move' },
-            { label: '🗑 ' + t('Remover repositório e plugins'), sub: t('Apaga tudo o que veio dele'), value: 'rm' },
-          ], {
+          menu(t('Repositório'), [{ label: t('Ver plugins'), value: 'list' }].concat(moves, [{ label: '🗑 ' + t('Remover repositório e plugins'), sub: t('Apaga tudo o que veio dele'), value: 'rm' }]), {
             onPick: (v) => {
               if (v === 'rm')
                 return confirmDialog(t('Remover o repositório e os {n} plugins dele?', { n: mine.length }), t('Remover'), () => {
@@ -404,9 +402,10 @@ function SourcesView(kind) {
                   toast(t('Repositório removido com {n} plugins.', { n: n }), 4000);
                   load();
                 });
-              if (v === 'move') {
-                pl.moveRepo(u, kind, other);
-                toast(other === 'comics' ? t('Movido para Quadrinhos.') : t('Movido para Mangá.'), 4000);
+              if (/^move:/.test(v)) {
+                const to = v.slice(5);
+                pl.moveRepo(u, kind, to);
+                toast(t('Movido para {tab}.', { tab: tabName(to) }), 4000);
                 return load();
               }
               toast(t('Lendo o repositório...'));
@@ -472,7 +471,7 @@ function SourceGrid(api, startQuery) {
   }
   bar.appendChild(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => reload('popular') }, t('Populares')));
   if (api.latest) bar.appendChild(h('div.btn', { focusable: true, onSelect: () => reload('latest') }, t('Recentes')));
-  const searchLabel = api.tab === 'comics' ? t('Buscar quadrinhos') : t('Buscar mangá');
+  const searchLabel = api.tab === 'comics' ? t('Buscar quadrinhos') : api.tab === 'books' ? t('Buscar livros') : t('Buscar mangá');
   bar.appendChild(h('div.btn', { focusable: true, onSelect: () => promptText(searchLabel, '', '', (q) => reload('search', q)) }, [h('span.ico', { text: '🔍' }), searchLabel]));
 
   function next() {
@@ -526,7 +525,7 @@ function SourceDetails(m, api) {
   };
   function read(i, page) {
     if (!chapters.length) return toast(t('Nenhum capítulo encontrado.'));
-    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: api.tab !== 'comics', pagesFn: api.pagesFn, poster: m.poster, kind: api.kind, ref: Object.assign({}, m, { tab: api.tab }) });
+    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: api.tab === 'books' ? /^ar/i.test(api.lang || '') : api.tab !== 'comics', pagesFn: api.pagesFn, poster: m.poster, kind: api.kind, ref: Object.assign({}, m, { tab: api.tab }) });
   }
   function renderInfo() {
     clear(info);
