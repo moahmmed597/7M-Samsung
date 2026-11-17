@@ -6,6 +6,7 @@ import { topbar, card, spinnerLine } from '../ui.js';
 import * as router from '../router.js';
 import { openDetails } from './details.js';
 import { t } from '../lib/i18n.js';
+import * as watched from '../lib/watched.js';
 
 const FILTERS = [
   { id: 'all', label: 'Tudo' },

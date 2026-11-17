@@ -29183,8 +29183,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return;
       }
       items3.forEach(function (it) {
-        var prog = it.state && it.state.duration && it.state.timeOffset ? it.state.timeOffset / it.state.duration : watched.progress(it._id) || 0;
-        var isDone = prog >= 0.95 || watched.isWatched(it._id);
+        var prog = it.state && it.state.duration && it.state.timeOffset ? it.state.timeOffset / it.state.duration : progress(it._id) || 0;
+        var isDone = prog >= 0.95 || isWatched(it._id);
         grid.appendChild(card({
           name: it.name,
           poster: it.poster
@@ -29218,7 +29218,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T23:23:07.914Z";
+  var BUILD = "2026-11-17T23:29:32.439Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
