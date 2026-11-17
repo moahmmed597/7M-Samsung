@@ -159,12 +159,22 @@ export function ComicsView() {
     );
   } else {
     add(t('Novas edições da semana'), () => cv.newThisWeek(7));
-    // Publishers: their logos, like the studios in the Anime tab.
+    // Publishers: the art of their best-known series fills the tile, their logo sits big in the middle.
     const pubRow = tileRow(rows, t('Editoras'), PUBLISHERS.map((p) => ({ label: p.name, open: () => router.push(ComicGridView(p.name, p)) })), 'publisher');
-    const logos = [];
+    const pubArt = [];
+    artFor('comicPublisherArt', PUBLISHERS.length, (i) => seriesArt(PUBLISHERS[i].series[0]), (i, u) => {
+      pubArt[i] = u;
+      setTileArt(pubRow, pubArt);
+    });
+    const wraps = pubRow.querySelectorAll('.poster-wrap');
     artFor('comicPublisherLogos', PUBLISHERS.length, (i) => cv.publisherLogo(PUBLISHERS[i].name), (i, u) => {
-      logos[i] = u;
-      setTileArt(pubRow, logos);
+      const w = wraps[i];
+      if (!w || w.querySelector('.pub-logo')) return;
+      const im = h('img.pub-logo', { alt: '' });
+      im.onload = () => w.classList.add('has-logo');
+      im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
+      im.src = u;
+      w.appendChild(im);
     });
     seriesRow(ROWS[0]);
     heroTiles(rows, t('Heróis da Marvel'), MARVEL, 'comicArtMarvel');

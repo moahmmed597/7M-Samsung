@@ -843,3 +843,13 @@ body.no-motion *, body.no-motion *:before, body.no-motion *:after { -webkit-anim
 .coll-new .ct-plus { position: absolute; left: 0; right: 0; top: 46px; text-align: center; font-size: 64px; font-weight: 300; color: rgba(255,255,255,0.8); }
 [dir="rtl"] .coll-tile .ct-star { right: auto; left: 14px; }
 body .row-track .card.coll-tile { width: 420px !important; margin-right: 26px !important; }
+
+/* Comics publishers: the series art fills the tile, the logo big in the middle */
+.anime-tile.publisher .poster-wrap { background: #141a2b; }
+.anime-tile.publisher .tile-art { object-fit: cover; padding: 0; }
+.anime-tile.publisher .poster-wrap:after { content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 2; background: rgba(8,10,20,0.45); }
+.anime-tile.publisher .pub-logo { position: absolute; left: 50%; top: 50%; z-index: 5; max-width: 66%; max-height: 62%; border-radius: 10px; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); box-shadow: 0 6px 24px rgba(0,0,0,0.6); }
+.anime-tile.publisher .poster-wrap.has-logo .tile-label { display: none !important; }
+.anime-tile.publisher .poster-wrap:not(.has-logo) .tile-label { display: block !important; z-index: 6; }
+body .card.anime-tile.publisher { width: 440px; }
+body .card.anime-tile.publisher .poster-wrap { width: 440px; height: 248px; }

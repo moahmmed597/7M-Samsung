@@ -18527,12 +18527,30 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
         };
       }), "publisher");
-      var logos = [];
+      var pubArt = [];
+      artFor("comicPublisherArt", PUBLISHERS.length, function (i) {
+        return seriesArt(PUBLISHERS[i].series[0]);
+      }, function (i, u) {
+        pubArt[i] = u;
+        setTileArt(pubRow, pubArt);
+      });
+      var wraps = pubRow.querySelectorAll(".poster-wrap");
       artFor("comicPublisherLogos", PUBLISHERS.length, function (i) {
         return publisherLogo(PUBLISHERS[i].name);
       }, function (i, u) {
-        logos[i] = u;
-        setTileArt(pubRow, logos);
+        var w = wraps[i];
+        if (!w || w.querySelector(".pub-logo")) return;
+        var im = h("img.pub-logo", {
+          alt: ""
+        });
+        im.onload = function () {
+          return w.classList.add("has-logo");
+        };
+        im.onerror = function () {
+          return im.parentNode && im.parentNode.removeChild(im);
+        };
+        im.src = u;
+        w.appendChild(im);
       });
       seriesRow(ROWS[0]);
       heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel");
@@ -23730,7 +23748,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T07:29:09.415Z";
+  var BUILD = "2026-11-17T07:32:30.455Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
