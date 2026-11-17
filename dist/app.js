@@ -5043,6 +5043,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Tirar de Continuar assistindo": "Remove from Continue watching",
+    "Tirado de Continuar assistindo.": "Removed from Continue watching.",
+    "Segure OK para tirar da lista": "Hold OK to remove from the list",
+    "Tirar de Continuar lendo": "Remove from Continue reading",
+    "Tirado de Continuar lendo.": "Removed from Continue reading.",
     "Remover todos": "Remove all",
     "todos os plugins e repositórios desta aba": "every plugin and repository in this tab",
     "Remover os {n} plugins e todos os repositórios?": "Remove the {n} plugins and all repositories?",
@@ -5549,6 +5554,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Tirar de Continuar assistindo": "شيله من كمّل المشاهدة",
+    "Tirado de Continuar assistindo.": "انشال من كمّل المشاهدة.",
+    "Segure OK para tirar da lista": "اضغط OK مطوّل عشان تشيله",
+    "Tirar de Continuar lendo": "شيله من كمّل القراءة",
+    "Tirado de Continuar lendo.": "انشال من كمّل القراءة.",
     "Remover todos": "احذف الكل",
     "todos os plugins e repositórios desta aba": "كل الإضافات والمستودعات في هذا التبويب",
     "Remover os {n} plugins e todos os repositórios?": "تحذف {n} إضافة وكل المستودعات؟",
@@ -6597,6 +6607,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function onScroll(fn) {
     scrollHook = fn;
   }
+  var hold = null;
+  function onKeyUp(e) {
+    if (e.keyCode !== KEY.ENTER || !hold) return;
+    clearTimeout(hold.timer);
+    var h0 = hold;
+    hold = null;
+    if (!h0.fired && current2() === h0.el) select(h0.el);
+  }
   function onKeyDown(e) {
     var layer = top();
     if (!layer) return;
@@ -6636,8 +6654,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         move("down");
         break;
       case KEY.ENTER:
-        select();
-        break;
+        {
+          var cur = layer.current;
+          if (cur && cur.__long) {
+            if (e.repeat || hold) break;
+            var h1 = {
+              el: cur,
+              fired: false,
+              timer: 0
+            };
+            h1.timer = setTimeout(function () {
+              h1.fired = true;
+              cur.__long(cur);
+            }, 650);
+            hold = h1;
+            break;
+          }
+          select();
+          break;
+        }
       case KEY.BACK:
       case KEY.ESC:
       case KEY.BACKSPACE:
@@ -6677,6 +6712,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function install() {
     document.addEventListener("keydown", onKeyDown, true);
+    document.addEventListener("keyup", onKeyUp, true);
     document.addEventListener("mouseover", onMouseOver);
     document.addEventListener("click", onClick);
     document.addEventListener("mousewheel", onWheel);
@@ -7197,6 +7233,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     if (changed.length) putLibraryItems(changed);
     return changed.length > 0;
+  }
+  function dismissContinue(id) {
+    var existing = libraryItem(id);
+    if (!existing) return Promise.resolve();
+    var item2 = clone(existing);
+    item2.state.timeOffset = 0;
+    item2.state.lastWatched = nowIso();
+    item2._mtime = nowIso();
+    return putLibraryItems([item2]);
   }
   function continueWatching() {
     return cachedLibrary().filter(function (it) {
@@ -15691,6 +15736,115 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/views/continueRow.js
+  var isAnimeId = function isAnimeId(id) {
+    return /^(kitsu|mal|anilist):/.test(String(id || ""));
+  };
+  function tabOf(it) {
+    if (isAnimeId(it._id)) return "anime";
+    return it.type === "movie" ? "movie" : "series";
+  }
+  function sortContinue(list2) {
+    var mode = settings().cwSort;
+    var frac = function frac(it) {
+      return it.state && it.state.duration ? it.state.timeOffset / it.state.duration : 0;
+    };
+    if (mode === "progress") return list2.slice().sort(function (a, b) {
+      return frac(b) - frac(a);
+    });
+    if (mode === "name") return list2.slice().sort(function (a, b) {
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+    return list2;
+  }
+  function episodeLabel(videoId, metaId) {
+    if (!videoId || videoId === metaId) return "";
+    var m = String(videoId).match(/:(\d+):(\d+)$/);
+    return m ? epLabel(m[1], m[2]) : "";
+  }
+  function holdMenu(title, onOpen2, onRemove, removeLabel) {
+    return function () {
+      return menu(title, [{
+        label: "▶ " + t("Abrir"),
+        value: "open"
+      }, {
+        label: "✕ " + (removeLabel || t("Tirar de Continuar assistindo")),
+        value: "rm"
+      }], {
+        onPick: function onPick(v) {
+          return v === "open" ? onOpen2() : onRemove();
+        }
+      });
+    };
+  }
+  function ContinueRow(only) {
+    var row2 = h("div.row", {
+      "data-anchor": "30"
+    });
+    function render() {
+      clear(row2);
+      var items3 = sortContinue(continueWatching()).filter(function (it) {
+        return !only || tabOf(it) === only;
+      }).slice(0, 20);
+      if (!items3.length) {
+        row2.style.display = "none";
+        return;
+      }
+      row2.style.display = "";
+      row2.appendChild(h("div.row-title", null, [t("Continuar assistindo"), h("small", {
+        text: t("Segure OK para tirar da lista")
+      })]));
+      var track = h("div.row-track", {
+        "data-scroll-x": "",
+        "data-group": ""
+      });
+      items3.forEach(function (it) {
+        var s = it.state;
+        var ep = episodeLabel(s.video_id, it._id);
+        var bg = /^tt\d+/.test(it._id) ? background(it._id) : it.poster;
+        var se = /^(tt\d+):(\d+):(\d+)$/.exec(s.video_id || "");
+        var still = se ? "https://episodes.metahub.space/" + se[1] + "/" + se[2] + "/" + se[3] + "/w300.jpg" : null;
+        var open2 = function open2() {
+          return openDetails(it.type, it._id, {
+            videoId: s.video_id,
+            autoStreams: true
+          });
+        };
+        var c = card({
+          name: it.name,
+          poster: it.poster
+        }, {
+          wide: true,
+          image: still || bg,
+          fallback: still ? bg : null,
+          title: it.name + (ep ? " · " + ep : ""),
+          progress: s.duration ? s.timeOffset / s.duration : 0,
+          overlay: {
+            ep: ep,
+            title: it.name,
+            chip: s.duration && s.timeOffset / s.duration >= 0.03 ? t("{n}% assistido", {
+              n: Math.round(s.timeOffset / s.duration * 100)
+            }) : t("A seguir")
+          },
+          onSelect: open2
+        });
+        c.__long = holdMenu(it.name, open2, function () {
+          dismissContinue(it._id);
+          toast(t("Tirado de Continuar assistindo."));
+          render();
+        });
+        track.appendChild(c);
+      });
+      row2.appendChild(track);
+      loadVisibleImages(row2);
+    }
+    render();
+    return {
+      el: row2,
+      render: render
+    };
+  }
+
   // src/js/views/anime.js
   var API5 = "https://graphql.anilist.co";
   var ARM4 = "https://arm.haglund.dev/api/v2/ids?source=anilist&id=";
@@ -16017,6 +16171,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }, [h("span.ico", {
       text: "🔍"
     }), t("Buscar animes")])]));
+    var cw = ContinueRow("anime");
+    scroller.appendChild(cw.el);
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var pending2 = [];
@@ -16170,6 +16326,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       onShow: function onShow() {
+        cw.render();
         loadNearby();
         loadVisibleImages(el);
       },
@@ -16381,6 +16538,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         mid: ref.mid,
         cvId: ref.cvId,
         title: ref.title,
+        tab: ref.tab,
         name: ref.name,
         poster: ref.poster,
         description: ref.description,
@@ -16391,6 +16549,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     set(FAVS, all2.slice(0, 200));
     return i < 0;
+  }
+  function tabOf2(entry) {
+    if (!entry) return "manga";
+    if (entry.kind === "cv") return "comics";
+    var ref = entry.ref || {};
+    if (entry.kind === "pl" && ref.plId) {
+      var all2 = get("mangaPlugins", []) || [];
+      var p = all2.find(function (x) {
+        return x.id === ref.plId;
+      });
+      if (p) return p.kind === "comics" ? "comics" : "manga";
+    }
+    return ref.tab === "comics" ? "comics" : "manga";
+  }
+  function forget(key4) {
+    var all2 = get("readProgress", {}) || {};
+    delete all2[key4];
+    set("readProgress", all2);
   }
   function continueList(limit) {
     var all2 = get("readProgress", {}) || {};
@@ -17110,11 +17286,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         chapters: chapters4,
         index: Math.max(0, i),
         startPage: page3 || 0,
-        rtl: true,
+        rtl: api2.tab !== "comics",
         pagesFn: api2.pagesFn,
         poster: m.poster,
         kind: api2.kind,
-        ref: m
+        ref: Object.assign({}, m, {
+          tab: api2.tab
+        })
       });
     }
     function renderInfo() {
@@ -18749,18 +18927,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           "data-group": ""
         });
         list2.forEach(function (x) {
-          return track.appendChild(card({
+          var open2 = function open2() {
+            return x.ref.cvId ? openComicDetails(Object.assign({
+              id: "cv:" + x.ref.cvId,
+              type: "comic"
+            }, x.ref)) : openSourceManga(x.ref);
+          };
+          var c = card({
             id: x.key,
             name: x.name,
             poster: x.poster
           }, {
-            onSelect: function onSelect() {
-              return x.ref.cvId ? openComicDetails(Object.assign({
-                id: "cv:" + x.ref.cvId,
-                type: "comic"
-              }, x.ref)) : openSourceManga(x.ref);
-            }
-          }));
+            onSelect: open2
+          });
+          if (x.cont) c.__long = holdMenu(x.name, open2, function () {
+            return forget(x.key), toast(t("Tirado de Continuar lendo.")), drawShelves();
+          }, t("Tirar de Continuar lendo"));
+          track.appendChild(c);
         });
         shelves.appendChild(h("div.row", {
           "data-anchor": "30"
@@ -18769,10 +18952,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }), track]));
         loadVisibleImages(track);
       };
-      mk(t("Continuar lendo"), continueList(40).filter(function (p) {
-        return p.kind === "cv";
+      mk(t("Continuar lendo"), continueList(60).filter(function (p) {
+        return tabOf2(p) === "comics";
       }).slice(0, 15).map(function (p) {
         return {
+          cont: true,
           key: p.key,
           ref: p.ref,
           name: (p.title || "") + " · #" + p.chapter,
@@ -18780,7 +18964,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         };
       }));
       mk(t("Favoritos"), favs().filter(function (f) {
-        return f.kind === "cv";
+        return tabOf2(f) === "comics";
       }).map(function (f) {
         return {
           key: f.key,
@@ -21440,7 +21624,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           "data-group": ""
         });
         list2.forEach(function (x) {
-          return track.appendChild(card({
+          var c = card({
             id: x.key,
             name: x.name,
             poster: x.poster
@@ -21448,7 +21632,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             onSelect: function onSelect() {
               return openBy(x.kind, x.ref);
             }
-          }));
+          });
+          if (x.cont) c.__long = holdMenu(x.name, function () {
+            return openBy(x.kind, x.ref);
+          }, function () {
+            return forget(x.key), toast(t("Tirado de Continuar lendo.")), drawShelves();
+          }, t("Tirar de Continuar lendo"));
+          track.appendChild(c);
         });
         shelves.appendChild(h("div.row", {
           "data-anchor": "30"
@@ -21457,10 +21647,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }), track]));
         loadVisibleImages(track);
       };
-      mk(t("Continuar lendo"), continueList(40).filter(function (p) {
-        return p.kind !== "cv";
+      mk(t("Continuar lendo"), continueList(60).filter(function (p) {
+        return tabOf2(p) === "manga";
       }).slice(0, 15).map(function (p) {
         return {
+          cont: true,
           key: p.key,
           kind: p.kind,
           ref: p.ref,
@@ -21471,7 +21662,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         };
       }));
       mk(t("Favoritos"), favs().filter(function (f) {
-        return f.kind !== "cv";
+        return tabOf2(f) === "manga";
       }).map(function (f) {
         return {
           key: f.key,
@@ -23165,9 +23356,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     var bar = topbar("home", goTab);
     var heroUi = buildHero();
-    var cwRow = h("div.row", {
-      "data-anchor": "30"
-    });
+    var cw = ContinueRow(null);
+    var cwRow = cw.el;
     var sagasRow = h("div.row", {
       "data-anchor": "30"
     });
@@ -23278,7 +23468,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           id: it._id,
           video: it.state.video_id,
           name: it.name,
-          sub: episodeLabel(it.state.video_id, it._id),
+          sub: episodeLabel2(it.state.video_id, it._id),
           poster: it.poster,
           progress: it.state.duration ? Math.round(it.state.timeOffset / it.state.duration * 100) / 100 : 0
         };
@@ -23317,52 +23507,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function renderContinue() {
-      clear(cwRow);
-      var items3 = sortContinue(continueWatching()).slice(0, 20);
-      if (!items3.length) {
-        cwRow.style.display = "none";
-        return;
-      }
-      cwRow.style.display = "";
-      cwRow.appendChild(h("div.row-title", {
-        text: t("Continuar assistindo")
-      }));
-      var track = h("div.row-track", {
-        "data-scroll-x": "",
-        "data-group": ""
-      });
-      items3.forEach(function (it) {
-        var s = it.state;
-        var ep = episodeLabel(s.video_id, it._id);
-        var bg = /^tt\d+/.test(it._id) ? background(it._id) : it.poster;
-        var se = /^(tt\d+):(\d+):(\d+)$/.exec(s.video_id || "");
-        var still = se ? "https://episodes.metahub.space/" + se[1] + "/" + se[2] + "/" + se[3] + "/w300.jpg" : null;
-        track.appendChild(card({
-          name: it.name,
-          poster: it.poster
-        }, {
-          wide: true,
-          image: still || bg,
-          fallback: still ? bg : null,
-          title: it.name + (ep ? " · " + ep : ""),
-          progress: s.duration ? s.timeOffset / s.duration : 0,
-          overlay: {
-            ep: ep,
-            title: it.name,
-            chip: s.duration && s.timeOffset / s.duration >= 0.03 ? t("{n}% assistido", {
-              n: Math.round(s.timeOffset / s.duration * 100)
-            }) : t("A seguir")
-          },
-          onSelect: function onSelect() {
-            return openDetails(it.type, it._id, {
-              videoId: s.video_id,
-              autoStreams: true
-            });
-          }
-        }));
-      });
-      cwRow.appendChild(track);
-      loadVisibleImages(cwRow);
+      cw.render();
     }
     function renderSagas() {
       clear(sagasRow);
@@ -23554,20 +23699,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "name",
     label: "Nome (A–Z)"
   }];
-  function sortContinue(list2) {
-    var mode = settings().cwSort;
-    var frac = function frac(it) {
-      return it.state && it.state.duration ? it.state.timeOffset / it.state.duration : 0;
-    };
-    if (mode === "progress") return list2.slice().sort(function (a, b) {
-      return frac(b) - frac(a);
-    });
-    if (mode === "name") return list2.slice().sort(function (a, b) {
-      return String(a.name || "").localeCompare(String(b.name || ""));
-    });
-    return list2;
-  }
-  function episodeLabel(videoId, metaId) {
+  function episodeLabel2(videoId, metaId) {
     if (!videoId || videoId === metaId) return "";
     var m = String(videoId).match(/:(\d+):(\d+)$/);
     return m ? epLabel(m[1], m[2]) : "";
@@ -24070,6 +24202,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }, [h("span.ico", {
       text: "🔍"
     }), type === "movie" ? t("Buscar filmes") : t("Buscar séries")])]));
+    var cw = ContinueRow(type === "movie" ? "movie" : "series");
+    scroller.appendChild(cw.el);
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var pending2 = [];
@@ -24135,6 +24269,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       onShow: function onShow() {
+        cw.render();
         if (!loaded2) render();
         loadNearby();
         loadVisibleImages(el);
@@ -24250,7 +24385,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T11:58:19.418Z";
+  var BUILD = "2026-11-17T12:02:14.492Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

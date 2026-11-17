@@ -20,6 +20,7 @@ import { trailerIds } from './trailer.js';
 import * as nc from '../api/nuvioCollections.js';
 import * as extras from '../api/extras.js';
 import { collectionRows } from './nuvioHome.js';
+import { ContinueRow } from './continueRow.js';
 import { FRANCHISES } from '../data/franchises.js';
 import { watchedCount, displayName, openFranchise, POSTER } from './collections.js';
 import * as watched from '../lib/watched.js';
@@ -31,7 +32,8 @@ export function HomeView() {
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
   const bar = topbar('home', router.goTab);
   const heroUi = buildHero();
-  const cwRow = h('div.row', { 'data-anchor': '30' });
+  const cw = ContinueRow(null);
+  const cwRow = cw.el;
   const sagasRow = h('div.row', { 'data-anchor': '30' });
   const neRow = h('div.row', { 'data-anchor': '30' });
   const rows = h('div.rows');
@@ -162,39 +164,7 @@ export function HomeView() {
   }
 
   function renderContinue() {
-    clear(cwRow);
-    const items = sortContinue(stremio.continueWatching()).slice(0, 20);
-    if (!items.length) {
-      cwRow.style.display = 'none';
-      return;
-    }
-    cwRow.style.display = '';
-    cwRow.appendChild(h('div.row-title', { text: t('Continuar assistindo') }));
-    const track = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
-    items.forEach((it) => {
-      const s = it.state;
-      const ep = episodeLabel(s.video_id, it._id);
-      const bg = /^tt\d+/.test(it._id) ? hero.background(it._id) : it.poster;
-      // The episode's own picture (TMDB still, 300 px wide) when it's a series; the show's art otherwise.
-      const se = /^(tt\d+):(\d+):(\d+)$/.exec(s.video_id || '');
-      const still = se ? 'https://episodes.metahub.space/' + se[1] + '/' + se[2] + '/' + se[3] + '/w300.jpg' : null;
-      track.appendChild(
-        card(
-          { name: it.name, poster: it.poster },
-          {
-            wide: true,
-            image: still || bg,
-            fallback: still ? bg : null,
-            title: it.name + (ep ? ' · ' + ep : ''),
-            progress: s.duration ? s.timeOffset / s.duration : 0,
-            overlay: { ep: ep, title: it.name, chip: s.duration && s.timeOffset / s.duration >= 0.03 ? t('{n}% assistido', { n: Math.round((s.timeOffset / s.duration) * 100) }) : t('A seguir') },
-            onSelect: () => openDetails(it.type, it._id, { videoId: s.video_id, autoStreams: true }),
-          }
-        )
-      );
-    });
-    cwRow.appendChild(track);
-    loadVisibleImages(cwRow);
+    cw.render();
   }
 
   function renderSagas() {

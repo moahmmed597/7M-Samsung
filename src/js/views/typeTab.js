@@ -10,6 +10,7 @@ import * as nc from '../api/nuvioCollections.js';
 import { collectionRows } from './nuvioHome.js';
 import { buildRow } from './home.js';
 import { SearchView } from './search.js';
+import { ContinueRow } from './continueRow.js';
 
 // Collection groups shown in each tab (names as in collections/home.json).
 export const MOVIE_GROUPS = ['Film Collections', 'Legendary Directors', 'Actors', 'Studios', 'By Decade', 'Awards', 'International Cinema', 'Documentaries'];
@@ -30,6 +31,8 @@ function TypeView(type) {
       h('div.btn', { focusable: true, onSelect: () => router.push(SearchView(type)) }, [h('span.ico', { text: '🔍' }), type === 'movie' ? t('Buscar filmes') : t('Buscar séries')]),
     ])
   );
+  const cw = ContinueRow(type === 'movie' ? 'movie' : 'series');
+  scroller.appendChild(cw.el);
   scroller.appendChild(rows);
   el.appendChild(scroller);
 
@@ -85,6 +88,7 @@ function TypeView(type) {
   return {
     el: el,
     onShow: () => {
+      cw.render();
       if (!loaded) render();
       loadNearby();
       loadVisibleImages(el);

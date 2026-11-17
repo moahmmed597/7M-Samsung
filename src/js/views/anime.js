@@ -9,6 +9,7 @@ import { topbar, card, spinnerLine, toast, promptText } from '../ui.js';
 import * as router from '../router.js';
 import * as addons from '../api/addons.js';
 import { openDetails } from './details.js';
+import { ContinueRow } from './continueRow.js';
 import { t } from '../lib/i18n.js';
 
 const API = 'https://graphql.anilist.co';
@@ -272,6 +273,8 @@ export function AnimeView() {
       }, [h('span.ico', { text: '🔍' }), t('Buscar animes')]),
     ])
   );
+  const cw = ContinueRow('anime');
+  scroller.appendChild(cw.el);
   scroller.appendChild(rows);
   el.appendChild(scroller);
 
@@ -342,6 +345,7 @@ export function AnimeView() {
   return {
     el: el,
     onShow: () => {
+      cw.render();
       loadNearby();
       loadVisibleImages(el);
     },

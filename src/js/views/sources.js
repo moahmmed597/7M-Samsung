@@ -488,7 +488,7 @@ function SourceDetails(m, api) {
   };
   function read(i, page) {
     if (!chapters.length) return toast(t('Nenhum capítulo encontrado.'));
-    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: true, pagesFn: api.pagesFn, poster: m.poster, kind: api.kind, ref: m });
+    openReader({ key: key, title: m.name, chapters: chapters, index: Math.max(0, i), startPage: page || 0, rtl: api.tab !== 'comics', pagesFn: api.pagesFn, poster: m.poster, kind: api.kind, ref: Object.assign({}, m, { tab: api.tab }) });
   }
   function renderInfo() {
     clear(info);

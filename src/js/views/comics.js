@@ -13,6 +13,7 @@ import { tileRow, setTileArt } from './anime.js';
 import { openComicDetails } from './comicDetails.js';
 import { openSources, openSourceManga } from './sources.js';
 import * as shelf from '../lib/mangaLib.js';
+import { holdMenu } from './continueRow.js';
 
 const MARVEL = ['Spider-Man', 'X-Men', 'Avengers', 'Iron Man', 'Deadpool', 'Wolverine', 'Venom', 'Hulk', 'Thor', 'Captain America', 'Black Panther', 'Daredevil', 'Fantastic Four', 'Guardians of the Galaxy', 'Doctor Strange', 'Moon Knight', 'Punisher', 'Silver Surfer'];
 const DC = ['Batman', 'Superman', 'Wonder Woman', 'Joker', 'Flash', 'Green Lantern', 'Justice League', 'Aquaman', 'Harley Quinn', 'Teen Titans', 'Nightwing', 'Catwoman', 'Green Arrow', 'Shazam'];
@@ -127,14 +128,17 @@ export function ComicsView() {
     const mk = (title, list) => {
       if (!list.length) return;
       const track = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
-      list.forEach((x) =>
-        track.appendChild(card({ id: x.key, name: x.name, poster: x.poster }, { onSelect: () => (x.ref.cvId ? openComicDetails(Object.assign({ id: 'cv:' + x.ref.cvId, type: 'comic' }, x.ref)) : openSourceManga(x.ref)) }))
-      );
+      list.forEach((x) => {
+        const open = () => (x.ref.cvId ? openComicDetails(Object.assign({ id: 'cv:' + x.ref.cvId, type: 'comic' }, x.ref)) : openSourceManga(x.ref));
+        const c = card({ id: x.key, name: x.name, poster: x.poster }, { onSelect: open });
+        if (x.cont) c.__long = holdMenu(x.name, open, () => (shelf.forget(x.key), toast(t('Tirado de Continuar lendo.')), drawShelves()), t('Tirar de Continuar lendo'));
+        track.appendChild(c);
+      });
       shelves.appendChild(h('div.row', { 'data-anchor': '30' }, [h('div.row-title', { text: title }), track]));
       loadVisibleImages(track);
     };
-    mk(t('Continuar lendo'), shelf.continueList(40).filter((p) => p.kind === 'cv').slice(0, 15).map((p) => ({ key: p.key, ref: p.ref, name: (p.title || '') + ' · #' + p.chapter, poster: p.poster })));
-    mk(t('Favoritos'), shelf.favs().filter((f) => f.kind === 'cv').map((f) => ({ key: f.key, ref: f.ref, name: f.ref.name, poster: f.ref.poster })));
+    mk(t('Continuar lendo'), shelf.continueList(60).filter((p) => shelf.tabOf(p) === 'comics').slice(0, 15).map((p) => ({ cont: true, key: p.key, ref: p.ref, name: (p.title || '') + ' · #' + p.chapter, poster: p.poster })));
+    mk(t('Favoritos'), shelf.favs().filter((f) => shelf.tabOf(f) === 'comics').map((f) => ({ key: f.key, ref: f.ref, name: f.ref.name, poster: f.ref.poster })));
   }
   drawShelves();
 

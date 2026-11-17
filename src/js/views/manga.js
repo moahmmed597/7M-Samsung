@@ -6,6 +6,7 @@ import * as nav from '../lib/nav.js';
 import { postJSON } from '../lib/http.js';
 import * as store from '../lib/store.js';
 import { topbar, card, spinnerLine, toast, promptText } from '../ui.js';
+import { holdMenu } from './continueRow.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { tileRow, setTileArt, slug, SEASONS, SEASON_ART_URLS, SEASON_FALLBACK_URLS } from './anime.js';
@@ -167,12 +168,16 @@ export function MangaView() {
     const mk = (title, list) => {
       if (!list.length) return;
       const track = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
-      list.forEach((x) => track.appendChild(card({ id: x.key, name: x.name, poster: x.poster }, { onSelect: () => openBy(x.kind, x.ref) })));
+      list.forEach((x) => {
+        const c = card({ id: x.key, name: x.name, poster: x.poster }, { onSelect: () => openBy(x.kind, x.ref) });
+        if (x.cont) c.__long = holdMenu(x.name, () => openBy(x.kind, x.ref), () => (shelf.forget(x.key), toast(t('Tirado de Continuar lendo.')), drawShelves()), t('Tirar de Continuar lendo'));
+        track.appendChild(c);
+      });
       shelves.appendChild(h('div.row', { 'data-anchor': '30' }, [h('div.row-title', { text: title }), track]));
       loadVisibleImages(track);
     };
-    mk(t('Continuar lendo'), shelf.continueList(40).filter((p) => p.kind !== 'cv').slice(0, 15).map((p) => ({ key: p.key, kind: p.kind, ref: p.ref, name: (p.title || '') + ' · ' + t('Cap. {n}', { n: p.chapter }), poster: p.poster })));
-    mk(t('Favoritos'), shelf.favs().filter((f) => f.kind !== 'cv').map((f) => ({ key: f.key, kind: f.kind, ref: f.ref, name: f.ref.name, poster: f.ref.poster })));
+    mk(t('Continuar lendo'), shelf.continueList(60).filter((p) => shelf.tabOf(p) === 'manga').slice(0, 15).map((p) => ({ cont: true, key: p.key, kind: p.kind, ref: p.ref, name: (p.title || '') + ' · ' + t('Cap. {n}', { n: p.chapter }), poster: p.poster })));
+    mk(t('Favoritos'), shelf.favs().filter((f) => shelf.tabOf(f) === 'manga').map((f) => ({ key: f.key, kind: f.kind, ref: f.ref, name: f.ref.name, poster: f.ref.poster })));
   }
   drawShelves();
 

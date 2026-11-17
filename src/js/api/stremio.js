@@ -273,6 +273,18 @@ export function mergeExternalProgress(list) {
   return changed.length > 0;
 }
 
+// Takes a title off "Continue watching" (also on the Stremio account). The time is updated so an
+// older progress from Trakt doesn't bring it back.
+export function dismissContinue(id) {
+  const existing = libraryItem(id);
+  if (!existing) return Promise.resolve();
+  const item = clone(existing);
+  item.state.timeOffset = 0;
+  item.state.lastWatched = nowIso();
+  item._mtime = nowIso();
+  return putLibraryItems([item]);
+}
+
 export function continueWatching() {
   return cachedLibrary()
     .filter((it) => it.type !== 'other' && !/^live:/.test(it._id) && (!it.removed || it.temp) && it.state && it.state.timeOffset > 0)

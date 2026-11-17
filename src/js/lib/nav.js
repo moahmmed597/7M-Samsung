@@ -256,6 +256,16 @@ export function isPointerMode() {
   return pointerMode;
 }
 
+// Hold OK (≈0.65 s) on an element that has __long: its menu instead of the normal action.
+let hold = null;
+function onKeyUp(e) {
+  if (e.keyCode !== KEY.ENTER || !hold) return;
+  clearTimeout(hold.timer);
+  const h0 = hold;
+  hold = null;
+  if (!h0.fired && current() === h0.el) select(h0.el);
+}
+
 function onKeyDown(e) {
   const layer = top();
   if (!layer) return;
@@ -295,9 +305,21 @@ function onKeyDown(e) {
     case KEY.DOWN:
       move('down');
       break;
-    case KEY.ENTER:
+    case KEY.ENTER: {
+      const cur = layer.current;
+      if (cur && cur.__long) {
+        if (e.repeat || hold) break; // still held
+        const h1 = { el: cur, fired: false, timer: 0 };
+        h1.timer = setTimeout(() => {
+          h1.fired = true;
+          cur.__long(cur);
+        }, 650);
+        hold = h1;
+        break;
+      }
       select();
       break;
+    }
     case KEY.BACK:
     case KEY.ESC:
     case KEY.BACKSPACE:
@@ -337,6 +359,7 @@ function onWheel(e) {
 
 export function install() {
   document.addEventListener('keydown', onKeyDown, true);
+  document.addEventListener('keyup', onKeyUp, true);
   document.addEventListener('mouseover', onMouseOver);
   document.addEventListener('click', onClick);
   document.addEventListener('mousewheel', onWheel);
