@@ -149,6 +149,44 @@ export function sourceIcon(p) {
   return box;
 }
 
+// ---------- rows from your sources (Manga / Comics tabs) ----------
+// One row per source of that tab: its popular titles (all of them readable), loaded when the row comes
+// near the screen. Returns [{ row, load }]; load always resolves.
+export function sourceRows(parent, kind) {
+  const list = pl.installed(kind);
+  if (!list.length) return [];
+  parent.appendChild(h('div.row-title.src-rows-title', null, [t('Das suas fontes'), h('small', { text: t('{n} fontes', { n: list.length }) })]));
+  return list.map((p) => {
+    const api = pluginApi(p.id, p.name);
+    const row = h('div.row', { 'data-anchor': '30' });
+    const track = h('div.row-track.pending', { 'data-scroll-x': '', 'data-group': '' }, spinnerLine(t('Carregando...')));
+    row.appendChild(h('div.row-title', { text: p.name }));
+    row.appendChild(track);
+    parent.appendChild(row);
+    return {
+      row: row,
+      started: false,
+      load: () =>
+        api
+          .browse('popular', 1)
+          .then((r) => {
+            clear(track);
+            track.classList.remove('pending');
+            if (!r.items.length) return row.parentNode && row.parentNode.removeChild(row);
+            r.items.slice(0, 20).forEach((m) => track.appendChild(card(m, { onSelect: () => router.push(SourceDetails(m, api)) })));
+            track.appendChild(
+              h('div.card.see-all', { focusable: true, onSelect: () => router.push(SourceGrid(api)) }, [
+                h('div.poster-wrap', null, h('div.see-all-label', null, [h('b', { text: '→' }), t('Ver tudo')])),
+                h('div.name', { text: '' }),
+              ])
+            );
+            loadVisibleImages(row);
+          })
+          .catch(() => row.parentNode && row.parentNode.removeChild(row)),
+    };
+  });
+}
+
 // ---------- the list of sources ----------
 function SourcesView(kind) {
   const el = h('div.view');

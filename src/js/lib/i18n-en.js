@@ -273,6 +273,8 @@ export const EN = {
   'Não foi possível baixar a legenda.': "Couldn't download the subtitle.",
   'Lendo as faixas do arquivo...': "Reading the file's tracks...",
   'Faixa {n}': 'Track {n}',
+  "Das suas fontes": "From your sources",
+  "Catálogo": "Catalog",
   "Tirar de Continuar assistindo": "Remove from Continue watching",
   "Tirado de Continuar assistindo.": "Removed from Continue watching.",
   "Segure OK para tirar da lista": "Hold OK to remove from the list",

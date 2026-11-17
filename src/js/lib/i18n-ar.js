@@ -273,6 +273,8 @@ export const AR = {
   'Não foi possível baixar a legenda.': 'تعذّر تنزيل الترجمة.',
   'Lendo as faixas do arquivo...': 'جارٍ قراءة مسارات الملف...',
   'Faixa {n}': 'المسار {n}',
+  "Das suas fontes": "من مصادرك",
+  "Catálogo": "الكتالوج",
   "Tirar de Continuar assistindo": "شيله من كمّل المشاهدة",
   "Tirado de Continuar assistindo.": "انشال من كمّل المشاهدة.",
   "Segure OK para tirar da lista": "اضغط OK مطوّل عشان تشيله",

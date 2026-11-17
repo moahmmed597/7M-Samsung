@@ -11,7 +11,7 @@ import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { tileRow, setTileArt, slug, SEASONS, SEASON_ART_URLS, SEASON_FALLBACK_URLS } from './anime.js';
 import { openMangaDetails } from './mangaDetails.js';
-import { openSources, openSourceManga } from './sources.js';
+import { openSources, openSourceManga, sourceRows } from './sources.js';
 import * as shelf from '../lib/mangaLib.js';
 
 const API = 'https://graphql.anilist.co';
@@ -204,6 +204,9 @@ export function MangaView() {
   const s = seasonNow();
   const add = (title, args) => pending.push(posterRow(rows, title, args, () => grid(title, args)));
 
+  // What your own sources have comes first (all readable), then the AniList catalog.
+  sourceRows(rows, 'manga').forEach((r) => pending.push(r));
+  if (pending.length) rows.appendChild(h('div.row-title.src-rows-title', { text: t('Catálogo') }));
   add(t('Lançando agora'), 'status: RELEASING, sort: TRENDING_DESC');
   // Seasonal manga: what started in each season of this year (same cards as the anime tab).
   tileRow(

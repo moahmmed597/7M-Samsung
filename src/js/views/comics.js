@@ -11,7 +11,7 @@ import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { tileRow, setTileArt } from './anime.js';
 import { openComicDetails } from './comicDetails.js';
-import { openSources, openSourceManga } from './sources.js';
+import { openSources, openSourceManga, sourceRows } from './sources.js';
 import * as shelf from '../lib/mangaLib.js';
 import { holdMenu } from './continueRow.js';
 
@@ -155,7 +155,11 @@ export function ComicsView() {
   const add = (title, load, onMore) => pending.push(posterRow(rows, title, load, onMore));
   const seriesRow = (x) => add(x, () => cv.searchVolumes(x, 0).then((r) => r.items), () => router.push(ComicGridView(x)));
 
+  // Your sources first (all readable), then the ComicVine catalog.
+  sourceRows(rows, 'comics').forEach((r) => pending.push(r));
+  if (pending.length && cv.hasKey()) rows.appendChild(h('div.row-title.src-rows-title', { text: t('Catálogo') }));
   if (!cv.hasKey()) {
+    if (pending.length) setTimeout(loadNearby, 50);
     rows.appendChild(
       h('div.flat-list', null, [
         h('div.modal-text', { text: t('Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).') }),

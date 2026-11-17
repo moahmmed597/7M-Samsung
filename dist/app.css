@@ -904,3 +904,6 @@ body .card.anime-tile.publisher .poster-wrap { width: 300px; height: 169px; }
 body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000 18%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0.15)), linear-gradient(to top, #000, rgba(0,0,0,0) 60%); }
 /* Always a clear gap between Stremio and 7M */
 .boot-logo b { margin-left: 0.18em; }
+
+/* "From your sources" / "Catalog" headings in the Manga and Comics tabs */
+.src-rows-title { font-size: 34px; margin-top: 18px; opacity: 0.95; }
