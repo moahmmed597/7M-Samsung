@@ -17548,30 +17548,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     set(KEY3, a);
   }
 
-  // src/js/views/bookReader.js
-  var SIZES2 = [24, 28, 32, 36, 42];
-  var PAPERS = [{
-    id: "paper",
-    label: "Papel",
-    bg: "#f3ead6",
-    fg: "#2b2217"
-  }, {
-    id: "white",
-    label: "Branco",
-    bg: "#fbfaf7",
-    fg: "#1d1d1f"
-  }, {
-    id: "night",
-    label: "Noite",
-    bg: "#1d1c21",
-    fg: "#d9d3c7"
-  }];
+  // src/js/lib/paper.js
+  function svgOf(url2) {
+    var i = url2.indexOf(",");
+    return /;base64,/i.test(url2.slice(0, i + 1)) ? decodeURIComponent(escape(atob(url2.slice(i + 1)))) : decodeURIComponent(url2.slice(i + 1));
+  }
   function pageText(url2) {
     if (!/^data:image\/svg\+xml/i.test(url2 || "")) return null;
     var svg = "";
     try {
-      var i = url2.indexOf(",");
-      svg = /;base64,/i.test(url2.slice(0, i + 1)) ? decodeURIComponent(escape(atob(url2.slice(i + 1)))) : decodeURIComponent(url2.slice(i + 1));
+      svg = svgOf(url2);
     } catch (e) {
       return null;
     }
@@ -17589,51 +17575,65 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     box.innerHTML = html.replace(/<br\s*\/?>\s*<br\s*\/?>/gi, "\n\n").replace(/<\/p>/gi, "\n\n").replace(/<br\s*\/?>/gi, "\n");
     var text = (box.textContent || "").replace(/\r/g, "");
     var paras = text.split(/\n\s*\n/).map(function (p) {
-      return p.replace(/\s*\n\s*/g, " ").trim();
+      return p.replace(/\s*\n\s*/g, " ").replace(/\s+/g, " ").trim();
     }).filter(Boolean);
     return paras.length ? paras : null;
   }
-  function BookReaderView(opts, fallback) {
-    var ci = opts.index;
-    var page3 = 0;
-    var count = 1;
-    var token = 0;
-    var alive = true;
-    var startAt = opts.startPage || 0;
-    var s0 = settings();
-    var size = SIZES2.indexOf(s0.bookFont) >= 0 ? s0.bookFont : 32;
-    var paper = PAPERS.find(function (p) {
-      return p.id === s0.bookPaper;
-    }) || PAPERS[0];
-    var spread = s0.bookSpread !== false;
+  var ENDS = /[.!?؟…:;"”’»)\]*_\-–—]$/;
+  function mend(paras) {
+    var out = [];
+    paras.forEach(function (p) {
+      var prev = out[out.length - 1];
+      var goesOn = /^[a-z,;:)\]’”'"-]/.test(p) || /^[؀-ۿ]/.test(p) && prev && !ENDS.test(prev) && prev.length > 60;
+      if (prev && !ENDS.test(prev) && prev.length > 25 && goesOn) out[out.length - 1] = prev + " " + p;else out.push(p);
+    });
+    return out;
+  }
+  function chapterText(list3) {
+    var paras = [];
+    for (var k = 0; k < list3.length; k++) {
+      var p = pageText(list3[k]);
+      if (!p) return null;
+      p.forEach(function (x) {
+        return paras.push(x);
+      });
+    }
+    return paras.length ? mend(paras) : null;
+  }
+  var SENT = /[^.!?؟…]+(?:[.!?؟…]+["”’»)\]]*\s*|$)/g;
+  function Paper(o) {
+    var opts = Object.assign({
+      width: 1680,
+      height: 940,
+      spread: true,
+      size: 30
+    }, o || {});
     var flow = h("div.bk-flow");
     var sheet = h("div.bk-sheet", null, flow);
     var spine = h("div.bk-spine");
     var left = h("div.bk-num.l");
     var right = h("div.bk-num.r");
     var head = h("div.bk-head");
-    var ribbon = h("div.rd-ribbon");
-    ribbon.style.display = "none";
-    var book = h("div.bk-book", null, [sheet, spine, head, left, right, ribbon]);
-    var msg = h("div.rd-msg");
-    var el = h("div.view.reader.bk-view", null, [book, msg]);
-    var chapter = function chapter() {
-      return opts.chapters[ci];
-    };
-    function say(text) {
-      msg.textContent = text || "";
-      msg.style.display = text ? "" : "none";
-    }
+    var _ribbon = h("div.rd-ribbon");
+    _ribbon.style.display = "none";
+    var el = h("div.bk-book", null, [sheet, spine, head, left, right, _ribbon]);
+    var page3 = 0;
+    var count = 1;
+    var rtl = false;
+    var sents = [];
+    var total = 1;
+    var lit = null;
+    var step = 1;
     function geometry() {
-      var bw = spread ? 1680 : 1060;
-      var bh = 940;
-      book.style.width = bw + "px";
-      book.style.height = bh + "px";
-      book.classList.toggle("one", !spread);
-      var padX = 80;
-      var padY = 80;
+      var bw = opts.spread ? opts.width : Math.min(opts.width, Math.round(opts.height * 1.15));
+      var bh = opts.height;
+      el.style.width = bw + "px";
+      el.style.height = bh + "px";
+      el.classList.toggle("one", !opts.spread);
+      var padX = Math.round(bh * 0.085);
+      var padY = Math.round(bh * 0.09);
       var gap = 2 * padX;
-      var colW = spread ? (bw - 2 * padX - gap) / 2 : bw - 2 * padX;
+      var colW = opts.spread ? (bw - 2 * padX - gap) / 2 : bw - 2 * padX;
       sheet.style.left = padX + "px";
       sheet.style.top = padY + "px";
       sheet.style.width = bw - 2 * padX + "px";
@@ -17641,41 +17641,186 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       flow.style.height = bh - 2 * padY + "px";
       flow.style.webkitColumnWidth = flow.style.columnWidth = colW + "px";
       flow.style.webkitColumnGap = flow.style.columnGap = gap + "px";
-      return {
-        colStep: colW + gap,
-        per: spread ? 2 : 1
-      };
-    }
-    function paint() {
-      el.style.background = paper.id === "night" ? "#0b0b0e" : "#14110d";
-      book.style.background = paper.bg;
-      book.style.color = paper.fg;
-      book.classList.toggle("dark", paper.id === "night");
-      flow.style.fontSize = size + "px";
+      head.style.left = head.style.right = left.style.left = right.style.right = padX + "px";
+      step = colW + gap;
     }
     function measure() {
-      var g = geometry();
-      count = Math.max(1, Math.round(flow.scrollWidth / g.colStep));
-      return g;
+      geometry();
+      count = Math.max(1, Math.round(flow.scrollWidth / step));
     }
-    function show3() {
-      var g = measure();
-      page3 = Math.max(0, Math.min(page3 - page3 % g.per, count - 1));
-      var x = page3 * g.colStep * (opts.rtl ? -1 : 1);
+    function per() {
+      return opts.spread ? 2 : 1;
+    }
+    function show3(p) {
+      if (p != null) page3 = p;
+      measure();
+      page3 = Math.max(0, Math.min(page3 - page3 % per(), count - 1));
+      var x = page3 * step * (rtl ? -1 : 1);
       flow.style.webkitTransform = flow.style.transform = "translateX(" + -x + "px)";
-      var c = chapter();
-      head.textContent = (opts.title || "") + (c ? "  ·  " + (c.title || t("Cap. {n}", {
-        n: c.chapter != null ? c.chapter : ci + 1
-      })) : "");
       var a = page3 + 1;
       var b = page3 + 2 <= count ? page3 + 2 : "";
-      if (spread) {
-        left.textContent = opts.rtl ? b : a;
-        right.textContent = opts.rtl ? a : b;
+      if (opts.spread) {
+        left.textContent = rtl ? b : a;
+        right.textContent = rtl ? a : b;
       } else {
         left.textContent = "";
         right.textContent = a + " / " + count;
       }
+      return page3;
+    }
+    function pageOf(node) {
+      var f = flow.getBoundingClientRect();
+      var r = node.getBoundingClientRect();
+      var scale = f.width ? flow.offsetWidth / f.width : 1;
+      var off = rtl ? (f.right - r.right) * scale : (r.left - f.left) * scale;
+      return Math.max(0, Math.floor((off + 2) / step));
+    }
+    var api2 = {
+      el: el,
+      setPaper: function setPaper(p) {
+        el.style.background = p.bg;
+        el.style.color = p.fg;
+        el.classList.toggle("dark", p.id === "night");
+      },
+      setSize: function setSize(px) {
+        opts.size = px;
+        flow.style.fontSize = px + "px";
+      },
+      setSpread: function setSpread(on) {
+        opts.spread = !!on;
+      },
+      setHead: function setHead(text) {
+        head.textContent = text || "";
+      },
+      // paras: the chapter's paragraphs; title: shown above the first one.
+      setText: function setText(paras, title, isRtl) {
+        rtl = !!isRtl;
+        el.setAttribute("dir", rtl ? "rtl" : "ltr");
+        clear(flow);
+        sents = [];
+        lit = null;
+        var pos = 0;
+        if (title) flow.appendChild(h("h2.bk-title", {
+          text: title
+        }));
+        paras.forEach(function (p, i) {
+          var pe = h("p", {
+            cls: i === 0 ? "first" : ""
+          });
+          (p.match(SENT) || [p]).forEach(function (s) {
+            var se = h("span", {
+              text: s
+            });
+            pe.appendChild(se);
+            sents.push({
+              el: se,
+              start: pos,
+              end: pos + s.length
+            });
+            pos += s.length;
+          });
+          flow.appendChild(pe);
+        });
+        total = Math.max(1, pos);
+        page3 = 0;
+      },
+      show: show3,
+      get page() {
+        return page3;
+      },
+      get count() {
+        return count;
+      },
+      get per() {
+        return per();
+      },
+      share: function share() {
+        return count > 1 ? page3 / count : 0;
+      },
+      ribbon: function ribbon(color) {
+        _ribbon.style.display = color ? "" : "none";
+        if (color) _ribbon.style.background = color;
+      },
+      // Lights the sentence at this point of the chapter (0..1) and turns to its page; -1 clears.
+      follow: function follow(frac) {
+        if (!sents.length) return;
+        if (frac < 0) {
+          if (lit) lit.classList.remove("now");
+          lit = null;
+          return;
+        }
+        var at2 = Math.min(total - 1, Math.max(0, frac * total));
+        var lo = 0;
+        var hi = sents.length - 1;
+        while (lo < hi) {
+          var mid = lo + hi >> 1;
+          if (sents[mid].end <= at2) lo = mid + 1;else hi = mid;
+        }
+        var s = sents[lo].el;
+        if (s === lit) return;
+        if (lit) lit.classList.remove("now");
+        s.classList.add("now");
+        lit = s;
+        var p = pageOf(s);
+        if (p < page3 || p >= page3 + per()) show3(p - p % per());
+      }
+    };
+    return api2;
+  }
+
+  // src/js/views/bookReader.js
+  var SIZES2 = [24, 27, 30, 34, 38, 44];
+  var PAPERS = [{
+    id: "paper",
+    label: "Papel",
+    bg: "#f4ecda",
+    fg: "#2a2219"
+  }, {
+    id: "white",
+    label: "Branco",
+    bg: "#fbfaf6",
+    fg: "#1c1c1e"
+  }, {
+    id: "night",
+    label: "Noite",
+    bg: "#1e1d22",
+    fg: "#d8d2c6"
+  }];
+  var paperNow = function paperNow() {
+    return PAPERS.find(function (p) {
+      return p.id === settings().bookPaper;
+    }) || PAPERS[0];
+  };
+  function BookReaderView(opts, fallback) {
+    var ci = opts.index;
+    var token = 0;
+    var alive = true;
+    var s0 = settings();
+    var size = SIZES2.indexOf(s0.bookFont) >= 0 ? s0.bookFont : 30;
+    var paper = paperNow();
+    var spread = s0.bookSpread !== false;
+    var book = Paper({
+      width: 1720,
+      height: 960,
+      spread: spread,
+      size: size
+    });
+    var msg = h("div.rd-msg");
+    var el = h("div.view.reader.bk-view", null, [book.el, msg]);
+    var chapter = function chapter() {
+      return opts.chapters[ci];
+    };
+    function say(text) {
+      msg.textContent = text || "";
+      msg.style.display = text ? "" : "none";
+    }
+    function paint() {
+      el.style.background = paper.id === "night" ? "#0b0b0e" : "#16120d";
+      book.setPaper(paper);
+      book.setSize(size);
+    }
+    function show3(p) {
+      book.show(p);
       drawRibbon();
       save3();
     }
@@ -17685,7 +17830,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       all3[opts.key] = {
         chapterId: chapter().id,
         chapter: chapter().chapter,
-        page: page3,
+        page: book.page,
         title: opts.title,
         poster: opts.poster,
         kind: opts.kind,
@@ -17699,36 +17844,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadChapter(i, start4) {
       var my = ++token;
       ci = i;
-      clear(flow);
       say(t("Carregando..."));
       opts.pagesFn(chapter().id).then(function (list3) {
         if (my !== token || !alive) return;
         if (!list3.length) return say(t("Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚."));
-        var paras = [];
-        for (var k = 0; k < list3.length; k++) {
-          var p = pageText(list3[k]);
-          if (!p) return fallback();
-          p.forEach(function (x) {
-            return paras.push(x);
-          });
-        }
+        var paras = chapterText(list3);
+        if (!paras) return fallback();
         if (!opts.rtl && paras.some(function (x) {
           return /[؀-ۿ]/.test(x);
         })) opts.rtl = true;
-        book.setAttribute("dir", opts.rtl ? "rtl" : "ltr");
         var c = chapter();
-        if (c && c.title) flow.appendChild(h("h2.bk-title", {
-          text: c.title
-        }));
-        paras.forEach(function (x) {
-          return flow.appendChild(h("p", {
-            text: x
-          }));
-        });
+        book.setText(paras, c && c.title, opts.rtl);
+        book.setHead((opts.title || "") + (c ? "  ·  " + (c.title || t("Cap. {n}", {
+          n: c.chapter != null ? c.chapter : ci + 1
+        })) : ""));
         say("");
-        measure();
-        page3 = start4 === "last" ? count - 1 : Math.max(0, Math.min(start4 || 0, count - 1));
-        show3();
+        book.show(0);
+        show3(start4 === "last" ? book.count - 1 : Math.max(0, Math.min(start4 || 0, book.count - 1)));
       }).catch(function () {
         return alive && say(t("Não foi possível abrir este capítulo agora."));
       });
@@ -17739,43 +17871,40 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       loadChapter(n, d > 0 ? 0 : "last");
     }
     function turn(d) {
-      var per = spread ? 2 : 1;
+      var per = book.per;
       if (d > 0) {
-        if (page3 + per < count) {
-          page3 += per;
-          show3();
-        } else chapterStep(1);
-      } else if (page3 > 0) {
-        page3 = Math.max(0, page3 - per);
-        show3();
-      } else chapterStep(-1);
+        if (book.page + per < book.count) show3(book.page + per);else chapterStep(1);
+      } else if (book.page > 0) show3(Math.max(0, book.page - per));else chapterStep(-1);
+    }
+    function relayout(change) {
+      var share = book.share();
+      change();
+      paint();
+      book.show(0);
+      show3(Math.floor(share * book.count));
     }
     function setSize(d) {
       var i = Math.max(0, Math.min(SIZES2.length - 1, SIZES2.indexOf(size) + d));
       if (SIZES2[i] === size) return;
-      var share = count > 1 ? page3 / count : 0;
-      size = SIZES2[i];
-      saveSettings({
-        bookFont: size
+      relayout(function () {
+        size = SIZES2[i];
+        saveSettings({
+          bookFont: size
+        });
       });
-      paint();
-      measure();
-      page3 = Math.floor(share * count);
-      show3();
       toast(t("Texto: {n}", {
         n: size
       }));
     }
     function drawRibbon() {
       var c = chapter();
-      var b = opts.key && c ? at(opts.key, c.id, page3) : null;
-      ribbon.style.display = b ? "" : "none";
-      if (b) ribbon.style.background = hexOf(b.color);
+      var b = opts.key && c ? at(opts.key, c.id, book.page) : null;
+      book.ribbon(b ? hexOf(b.color) : null);
     }
     function markMenu() {
       var c = chapter();
       if (!opts.key || !c) return;
-      var cur = at(opts.key, c.id, page3);
+      var cur = at(opts.key, c.id, book.page);
       var items3 = COLORS3.map(function (x) {
         return {
           label: "● " + t(x.label),
@@ -17793,7 +17922,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             ci: ci,
             chapterId: c.id,
             chapter: c.chapter,
-            page: page3,
+            page: book.page,
             color: v
           });
           drawRibbon();
@@ -17821,16 +17950,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             return c.id === b.chapterId;
           });
           if (i < 0) i = Math.min(b.ci, opts.chapters.length - 1);
-          if (i === ci) {
-            page3 = b.page;
-            show3();
-          } else loadChapter(i, b.page);
+          if (i === ci) show3(b.page);else loadChapter(i, b.page);
         }
       });
     }
     function okMenu() {
       var c = chapter();
-      var cur = opts.key && c ? at(opts.key, c.id, page3) : null;
+      var cur = opts.key && c ? at(opts.key, c.id, book.page) : null;
       menu(t("Leitura"), [{
         label: "🔖 " + (cur ? t("Mudar a marcação desta página") : t("Marcar esta página")),
         value: "mark"
@@ -17876,21 +18002,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               });
               paint();
             }
-          });else if (v === "spread") {
+          });else if (v === "spread") relayout(function () {
             spread = !spread;
             saveSettings({
               bookSpread: spread
             });
-            var share = count > 1 ? page3 / count : 0;
-            measure();
-            page3 = Math.floor(share * count);
-            show3();
-          }
+            book.setSpread(spread);
+          });
         }
       });
     }
     paint();
-    loadChapter(ci, startAt);
+    loadChapter(ci, opts.startPage || 0);
     return {
       el: el,
       onKey: function onKey(e) {
@@ -19443,6 +19566,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       alt: ""
     });
     page3.style.display = "none";
+    var book = Paper({
+      width: 1680,
+      height: 680,
+      spread: true,
+      size: 26
+    });
+    book.el.classList.add("ls-paper");
+    book.setPaper(paperNow());
+    book.setSize(26);
+    book.el.style.display = "none";
+    var hasText = false;
+    var manualUntil = 0;
     var cover = h("img.ls-cover", {
       alt: ""
     });
@@ -19462,7 +19597,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text: t("OK: tocar/pausar · ◀ ▶ 30 s · ▲ ▼ capítulo · CH: página · Segure OK: menu")
     });
     var panel = h("div.ls-panel", null, [cover, h("div.ls-info", null, [titleEl, trackEl, bar, h("div.ls-row", null, [stateEl, timeEl, speedEl])])]);
-    var el = h("div.view.listen", null, [bg, page3, panel, hint, audio]);
+    var el = h("div.view.listen", null, [bg, page3, book.el, panel, hint, audio]);
     function save3() {
       if (!opts.key || !tracks2[ti]) return;
       var all3 = get(KEY_LISTEN, {}) || {};
@@ -19493,12 +19628,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       timeEl.textContent = fmt(audio.currentTime) + " / " + (d ? fmt(d) : "--:--");
       fill.style.width = d ? Math.min(100, audio.currentTime / d * 100) + "%" : "0%";
       stateEl.textContent = audio.paused ? "▶" : "⏸";
+      if (hasText && d && Date.now() > manualUntil) book.follow(audio.currentTime / d);
     }
     function loadPages() {
       var my = ++pageToken;
       pages4 = [];
       pi = 0;
       page3.style.display = "none";
+      book.el.style.display = "none";
+      hasText = false;
+      el.classList.remove("has-paper");
       if (!opts.pagesFn || !opts.chapters || !opts.chapters.length) return;
       var tr = tracks2[ti] || {};
       var c = tr.chapter != null ? opts.chapters.find(function (x) {
@@ -19508,6 +19647,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (!c) return;
       opts.pagesFn(c.id).then(function (list3) {
         if (my !== pageToken || !alive || !list3.length) return;
+        var paras = chapterText(list3);
+        if (paras) {
+          var rtl = !!opts.rtl || paras.some(function (x) {
+            return /[؀-ۿ]/.test(x);
+          });
+          book.setText(paras, c.title, rtl);
+          book.setHead((opts.title || "") + (c.title ? "  ·  " + c.title : ""));
+          book.el.style.display = "";
+          hasText = true;
+          el.classList.add("has-page", "has-paper");
+          book.show(0);
+          drawTime();
+          return;
+        }
         pages4 = list3;
         showPage();
       }).catch(function () {});
@@ -19708,6 +19861,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (k === KEY.RIGHT || k === KEY.FF) return seek(30), true;
         if (k === KEY.UP) return ti > 0 ? playTrack(ti - 1, 0) : toast(t("Este é o primeiro capítulo.")), true;
         if (k === KEY.DOWN) return ti + 1 < tracks2.length ? playTrack(ti + 1, 0) : toast(t("Este é o último capítulo.")), true;
+        if ((k === KEY.CH_UP || k === KEY.CH_DOWN) && hasText) {
+          manualUntil = Date.now() + 2e4;
+          book.show(Math.max(0, book.page + (k === KEY.CH_UP ? 1 : -1) * book.per));
+          return true;
+        }
         if (k === KEY.CH_UP || k === KEY.CH_DOWN) {
           if (!pages4.length) return true;
           var fwd = k === KEY.CH_UP !== !!opts.rtl ? 1 : -1;
@@ -29052,7 +29210,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T22:43:08.755Z";
+  var BUILD = "2026-11-17T23:12:21.852Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

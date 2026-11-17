@@ -993,3 +993,25 @@ body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000
 .bk-num { position: absolute; bottom: 30px; font-size: 18px; opacity: 0.6; font-family: Georgia, serif; }
 .bk-num.l { left: 80px; }
 .bk-num.r { right: 80px; }
+
+/* Book paper, refined: even word spacing (no stretched gaps), book indents, a large first letter,
+   a soft page edge, and the sentence being read aloud lit like a highlighter */
+.bk-flow { text-align: left; line-height: 1.62; letter-spacing: 0.005em; word-spacing: 0.02em; -webkit-hyphens: auto; hyphens: auto; }
+.bk-book[dir="rtl"] .bk-flow { text-align: right; line-height: 1.9; letter-spacing: 0; word-spacing: 0; }
+.bk-flow p { margin: 0; text-indent: 1.4em; orphans: 2; widows: 2; }
+.bk-flow p + p { margin-top: 0.18em; }
+.bk-flow p.first, .bk-flow h2 + p { text-indent: 0; }
+.bk-flow p.first > span:first-child::first-letter { float: left; font-size: 3.1em; line-height: 0.9; padding: 0.06em 0.08em 0 0; font-weight: 700; }
+.bk-book[dir="rtl"] .bk-flow p.first > span:first-child::first-letter { float: none; font-size: 1em; padding: 0; }
+.bk-flow h2.bk-title { font-size: 1.45em; letter-spacing: 0.04em; margin: 0.8em 0 1.2em; padding-bottom: 0.5em; border-bottom: 1px solid currentColor; border-bottom-color: rgba(0,0,0,0.12); }
+.bk-book.dark .bk-flow h2.bk-title { border-bottom-color: rgba(255,255,255,0.12); }
+.bk-book:after { content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05), inset 6px 0 18px -10px rgba(0,0,0,0.35), inset -6px 0 18px -10px rgba(0,0,0,0.35); }
+.bk-flow span.now { background: rgba(255, 196, 64, 0.38); box-shadow: 0 0 0 3px rgba(255, 196, 64, 0.38); border-radius: 4px; -webkit-transition: background .4s; transition: background .4s; }
+.bk-book.dark .bk-flow span.now { background: rgba(120, 160, 255, 0.30); box-shadow: 0 0 12px rgba(120, 160, 255, 0.35); }
+/* Listening with the book open: the paper on top, the player under it */
+.view.listen .bk-book.ls-paper { top: 30px; -webkit-transform: translateX(-50%); transform: translateX(-50%); }
+.view.listen.has-paper .ls-panel { left: 200px; right: 200px; bottom: 60px; padding: 18px 26px; }
+.view.listen.has-paper .ls-cover { width: 110px; height: 160px; margin-right: 26px; }
+.view.listen.has-paper .ls-title { font-size: 32px; }
+.view.listen.has-paper .ls-track { font-size: 22px; margin: 6px 0 12px; }
+.view.listen.has-paper .ls-hint { bottom: 16px; font-size: 18px; }

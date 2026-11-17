@@ -10,6 +10,8 @@ import * as store from '../lib/store.js';
 import * as bm from '../lib/bookmarks.js';
 import { toast, menu } from '../ui.js';
 import { t } from '../lib/i18n.js';
+import { Paper, chapterText } from '../lib/paper.js';
+import { paperNow } from './bookReader.js';
 
 const SPEEDS = [0.75, 1, 1.25, 1.5, 1.75, 2];
 const KEY_LISTEN = 'listenProgress';
@@ -59,6 +61,14 @@ function ListenView(opts) {
   if (opts.poster) bg.style.backgroundImage = 'url("' + opts.poster + '")';
   const page = h('img.ls-page', { alt: '' });
   page.style.display = 'none';
+  // Text books: the chapter on book paper, the sentence being read lit up (estimated from the time).
+  const book = Paper({ width: 1680, height: 680, spread: true, size: 26 });
+  book.el.classList.add('ls-paper');
+  book.setPaper(paperNow());
+  book.setSize(26);
+  book.el.style.display = 'none';
+  let hasText = false;
+  let manualUntil = 0; // you turned the page yourself: following waits a moment
   const cover = h('img.ls-cover', { alt: '' });
   if (opts.poster) cover.src = opts.poster;
   const titleEl = h('div.ls-title', { text: opts.title || '' });
@@ -70,7 +80,7 @@ function ListenView(opts) {
   const speedEl = h('div.ls-speed');
   const hint = h('div.ls-hint', { text: t('OK: tocar/pausar · ◀ ▶ 30 s · ▲ ▼ capítulo · CH: página · Segure OK: menu') });
   const panel = h('div.ls-panel', null, [cover, h('div.ls-info', null, [titleEl, trackEl, bar, h('div.ls-row', null, [stateEl, timeEl, speedEl])])]);
-  const el = h('div.view.listen', null, [bg, page, panel, hint, audio]);
+  const el = h('div.view.listen', null, [bg, page, book.el, panel, hint, audio]);
 
   function save() {
     if (!opts.key || !tracks[ti]) return;
@@ -92,6 +102,7 @@ function ListenView(opts) {
     timeEl.textContent = fmt(audio.currentTime) + ' / ' + (d ? fmt(d) : '--:--');
     fill.style.width = d ? Math.min(100, (audio.currentTime / d) * 100) + '%' : '0%';
     stateEl.textContent = audio.paused ? '▶' : '⏸';
+    if (hasText && d && Date.now() > manualUntil) book.follow(audio.currentTime / d);
   }
 
   // The page of the chapter you are hearing (when the source also has the text).
@@ -100,6 +111,9 @@ function ListenView(opts) {
     pages = [];
     pi = 0;
     page.style.display = 'none';
+    book.el.style.display = 'none';
+    hasText = false;
+    el.classList.remove('has-paper');
     if (!opts.pagesFn || !opts.chapters || !opts.chapters.length) return;
     const tr = tracks[ti] || {};
     let c = tr.chapter != null ? opts.chapters.find((x) => String(x.chapter) === String(tr.chapter)) : null;
@@ -109,6 +123,18 @@ function ListenView(opts) {
       .pagesFn(c.id)
       .then((list) => {
         if (my !== pageToken || !alive || !list.length) return;
+        const paras = chapterText(list);
+        if (paras) {
+          const rtl = !!opts.rtl || paras.some((x) => /[؀-ۿ]/.test(x));
+          book.setText(paras, c.title, rtl);
+          book.setHead((opts.title || '') + (c.title ? '  ·  ' + c.title : ''));
+          book.el.style.display = '';
+          hasText = true;
+          el.classList.add('has-page', 'has-paper');
+          book.show(0);
+          drawTime();
+          return;
+        }
         pages = list;
         showPage();
       })
@@ -258,6 +284,11 @@ function ListenView(opts) {
       if (k === KEY.RIGHT || k === KEY.FF) return seek(30), true;
       if (k === KEY.UP) return ti > 0 ? playTrack(ti - 1, 0) : toast(t('Este é o primeiro capítulo.')), true;
       if (k === KEY.DOWN) return ti + 1 < tracks.length ? playTrack(ti + 1, 0) : toast(t('Este é o último capítulo.')), true;
+      if ((k === KEY.CH_UP || k === KEY.CH_DOWN) && hasText) {
+        manualUntil = Date.now() + 20000;
+        book.show(Math.max(0, book.page + (k === KEY.CH_UP ? 1 : -1) * book.per));
+        return true;
+      }
       if (k === KEY.CH_UP || k === KEY.CH_DOWN) {
         if (!pages.length) return true;
         const fwd = (k === KEY.CH_UP) !== !!opts.rtl ? 1 : -1;
