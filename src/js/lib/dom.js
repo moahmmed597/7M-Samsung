@@ -61,7 +61,9 @@ export function lazyImg(url, cls) {
 function setOn(el, on) {
   if (on && !el.__on) {
     el.__on = true;
-    const url = el.getAttribute('data-lazy');
+    let url = el.getAttribute('data-lazy');
+    // MangaDex covers saved before the fix (through the service without the app's own name).
+    if (/\/api\/pimg\?u=https%3A%2F%2Fuploads\.mangadex\.org/.test(url) && url.indexOf('&ua=') < 0) url += '&ua=stremio-7m-tizen';
     const kitsu = kitsuInfo(url);
     if (!kitsu) {
       el.src = url;

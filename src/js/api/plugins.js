@@ -107,7 +107,9 @@ function getText(url) {
 export function imageUrl(url, referer) {
   if (!url) return '';
   if (/^data:image\//i.test(url)) return url; // a page drawn by the plugin itself (book text as SVG)
-  return SVC + '/api/pimg?u=' + encodeURIComponent(url) + (referer ? '&r=' + encodeURIComponent(referer) : '');
+  // MangaDex covers answer a browser name with a bot check page; its rules ask apps to send their own name.
+  const ua = /^https?:\/\/uploads\.mangadex\.org\//i.test(url) ? '&ua=' + encodeURIComponent('stremio-7m-tizen') : '';
+  return SVC + '/api/pimg?u=' + encodeURIComponent(url) + (referer ? '&r=' + encodeURIComponent(referer) : '') + ua;
 }
 
 // ---------- repositories ----------

@@ -204,10 +204,13 @@ export function MangaView() {
   const s = seasonNow();
   const add = (title, args) => pending.push(posterRow(rows, title, args, () => grid(title, args)));
 
-  // What your own sources have comes first (all readable), then the AniList catalog.
-  sourceRows(rows, 'manga').forEach((r) => pending.push(r));
-  if (pending.length) rows.appendChild(h('div.row-title.src-rows-title', { text: t('Catálogo') }));
+  // The famous manga first, then what your own sources have (all readable), then the rest of AniList.
+  add(t('Em alta agora'), 'sort: TRENDING_DESC');
+  add(t('Mais populares'), 'sort: POPULARITY_DESC');
   add(t('Lançando agora'), 'status: RELEASING, sort: TRENDING_DESC');
+  const before = pending.length;
+  sourceRows(rows, 'manga').forEach((r) => pending.push(r));
+  if (pending.length > before) rows.appendChild(h('div.row-title.src-rows-title', { text: t('Catálogo') }));
   // Seasonal manga: what started in each season of this year (same cards as the anime tab).
   tileRow(
     rows,
@@ -222,7 +225,6 @@ export function MangaView() {
     'genre'
   );
   const discoverRow = tileRow(rows, t('Descobrir'), DISCOVER.map((d) => ({ label: t(d.label), open: () => grid(t(d.label), d.args) })), 'discover');
-  add(t('Em alta agora'), 'sort: TRENDING_DESC');
   const formatsRow = tileRow(rows, t('Formatos'), FORMATS.map((f, i) => ({ label: t(f.label), open: () => grid(t(f.label), f.args) })), 'discover formats');
   tileArt().then((a) => {
     setTileArt(discoverRow, a.slice(0, DISCOVER.length));
@@ -240,7 +242,6 @@ export function MangaView() {
     TAGS.map((g) => ({ label: g[1] ? t(g[1]) : g[0], art: 'genre-' + slug(g[0]), open: () => grid(g[1] ? t(g[1]) : g[0], 'tag: ' + JSON.stringify(g[0]) + ', sort: POPULARITY_DESC') })),
     'discover'
   );
-  add(t('Mais populares'), 'sort: POPULARITY_DESC');
 
   return {
     el: el,

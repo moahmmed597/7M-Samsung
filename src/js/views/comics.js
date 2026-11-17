@@ -155,10 +155,15 @@ export function ComicsView() {
   const add = (title, load, onMore) => pending.push(posterRow(rows, title, load, onMore));
   const seriesRow = (x) => add(x, () => cv.searchVolumes(x, 0).then((r) => r.items), () => router.push(ComicGridView(x)));
 
-  // Your sources first (all readable), then the ComicVine catalog.
-  sourceRows(rows, 'comics').forEach((r) => pending.push(r));
-  if (pending.length && cv.hasKey()) rows.appendChild(h('div.row-title.src-rows-title', { text: t('Catálogo') }));
+  // The famous ones first (this week, publishers, Marvel and DC heroes), then your sources (all
+  // readable), then the rest of the ComicVine catalog.
+  const sources = () => {
+    const before = pending.length;
+    sourceRows(rows, 'comics').forEach((r) => pending.push(r));
+    return pending.length > before;
+  };
   if (!cv.hasKey()) {
+    sources();
     if (pending.length) setTimeout(loadNearby, 50);
     rows.appendChild(
       h('div.flat-list', null, [
@@ -190,13 +195,13 @@ export function ComicsView() {
       });
     setTimeout(fit, 0);
     setTimeout(fit, 1500);
-    seriesRow(ROWS[0]);
     heroTiles(rows, t('Heróis da Marvel'), MARVEL, 'comicArtMarvel3');
-    seriesRow(ROWS[1]);
     heroTiles(rows, t('Heróis da DC'), DC, 'comicArtDC3');
-    seriesRow(ROWS[2]);
+    seriesRow(ROWS[0]);
+    if (sources()) rows.appendChild(h('div.row-title.src-rows-title', { text: t('Catálogo') }));
+    seriesRow(ROWS[1]);
     heroTiles(rows, t('Independentes'), INDIE, 'comicArtIndie3');
-    ROWS.slice(3).forEach(seriesRow);
+    ROWS.slice(2).forEach(seriesRow);
     setTimeout(loadNearby, 50);
   }
 

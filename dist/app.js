@@ -6394,6 +6394,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (on && !el.__on) {
       el.__on = true;
       var url2 = el.getAttribute("data-lazy");
+      if (/\/api\/pimg\?u=https%3A%2F%2Fuploads\.mangadex\.org/.test(url2) && url2.indexOf("&ua=") < 0) url2 += "&ua=stremio-7m-tizen";
       var kitsu = kitsuInfo(url2);
       if (!kitsu) {
         el.src = url2;
@@ -14566,7 +14567,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function imageUrl(url2, referer) {
     if (!url2) return "";
     if (/^data:image\//i.test(url2)) return url2;
-    return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "");
+    var ua = /^https?:\/\/uploads\.mangadex\.org\//i.test(url2) ? "&ua=" + encodeURIComponent("stremio-7m-tizen") : "";
+    return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "") + ua;
   }
   function classify(parsed) {
     if (parsed && Array.isArray(parsed.plugins)) return "harbor";
@@ -21092,13 +21094,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return push(ComicGridView(x));
       });
     };
-    sourceRows(rows2, "comics").forEach(function (r) {
-      return pending2.push(r);
-    });
-    if (pending2.length && hasKey()) rows2.appendChild(h("div.row-title.src-rows-title", {
-      text: t("Catálogo")
-    }));
+    var sources3 = function sources3() {
+      var before = pending2.length;
+      sourceRows(rows2, "comics").forEach(function (r) {
+        return pending2.push(r);
+      });
+      return pending2.length > before;
+    };
     if (!hasKey()) {
+      sources3();
       if (pending2.length) setTimeout(loadNearby, 50);
       rows2.appendChild(h("div.flat-list", null, [h("div.modal-text", {
         text: t("Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).")
@@ -21139,13 +21143,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       };
       setTimeout(fit, 0);
       setTimeout(fit, 1500);
-      seriesRow(ROWS[0]);
       heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel3");
-      seriesRow(ROWS[1]);
       heroTiles(rows2, t("Heróis da DC"), DC, "comicArtDC3");
-      seriesRow(ROWS[2]);
+      seriesRow(ROWS[0]);
+      if (sources3()) rows2.appendChild(h("div.row-title.src-rows-title", {
+        text: t("Catálogo")
+      }));
+      seriesRow(ROWS[1]);
       heroTiles(rows2, t("Independentes"), INDIE, "comicArtIndie3");
-      ROWS.slice(3).forEach(seriesRow);
+      ROWS.slice(2).forEach(seriesRow);
       setTimeout(loadNearby, 50);
     }
     return {
@@ -23851,13 +23857,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return grid(title, args);
       }));
     };
+    add(t("Em alta agora"), "sort: TRENDING_DESC");
+    add(t("Mais populares"), "sort: POPULARITY_DESC");
+    add(t("Lançando agora"), "status: RELEASING, sort: TRENDING_DESC");
+    var before = pending2.length;
     sourceRows(rows2, "manga").forEach(function (r) {
       return pending2.push(r);
     });
-    if (pending2.length) rows2.appendChild(h("div.row-title.src-rows-title", {
+    if (pending2.length > before) rows2.appendChild(h("div.row-title.src-rows-title", {
       text: t("Catálogo")
     }));
-    add(t("Lançando agora"), "status: RELEASING, sort: TRENDING_DESC");
     tileRow(rows2, t("Mangá da temporada"), SEASONS.map(function (x) {
       return {
         label: t(SEASON_NAME[x]) + " " + s.year,
@@ -23877,7 +23886,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       };
     }), "discover");
-    add(t("Em alta agora"), "sort: TRENDING_DESC");
     var formatsRow = tileRow(rows2, t("Formatos"), FORMATS.map(function (f, i) {
       return {
         label: t(f.label),
@@ -23908,7 +23916,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       };
     }), "discover");
-    add(t("Mais populares"), "sort: POPULARITY_DESC");
     return {
       el: el,
       onShow: function onShow() {
@@ -26535,7 +26542,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T17:49:14.446Z";
+  var BUILD = "2026-11-17T20:55:35.124Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
