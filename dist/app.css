@@ -907,3 +907,26 @@ body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000
 
 /* "From your sources" / "Catalog" headings in the Manga and Comics tabs */
 .src-rows-title { font-size: 34px; margin-top: 18px; opacity: 0.95; }
+
+/* A bookmarked page: a coloured ribbon at the top right */
+.rd-ribbon { position: absolute; top: 0; right: 80px; width: 46px; height: 92px; z-index: 20; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%); box-shadow: 0 4px 14px rgba(0,0,0,0.5); }
+/* Audiobook player: the page you hear (or the cover) in front, a bar at the bottom */
+.view.listen { background: #05070d; }
+.view.listen:before { display: none; }
+.ls-bg { position: absolute; left: -40px; top: -40px; right: -40px; bottom: -40px; background-size: cover; background-position: center; opacity: 0.18; }
+.ls-page { position: absolute; left: 50%; top: 40px; height: 760px; max-width: 1400px; object-fit: contain; -webkit-transform: translateX(-50%); transform: translateX(-50%); border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+.ls-panel { position: absolute; left: 120px; right: 120px; bottom: 70px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 26px 32px; border-radius: 22px; background: rgba(14,18,32,0.92); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+.ls-cover { width: 150px; height: 220px; object-fit: cover; border-radius: 12px; margin-right: 34px; -webkit-flex: none; flex: none; background: #1b2233; }
+.view.listen:not(.has-page) .ls-panel { bottom: auto; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%); }
+.view.listen:not(.has-page) .ls-cover { width: 300px; height: 440px; }
+.ls-info { -webkit-flex: 1; flex: 1; min-width: 0; }
+.ls-title { font-size: 40px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ls-track { font-size: 26px; color: rgba(255,255,255,0.75); margin: 10px 0 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ls-bar { height: 10px; border-radius: 6px; background: rgba(255,255,255,0.15); overflow: hidden; }
+.ls-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ff468c, #5078ff); }
+.ls-row { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-top: 16px; font-size: 24px; color: rgba(255,255,255,0.85); }
+.ls-state { font-size: 30px; width: 50px; }
+.ls-time { -webkit-flex: 1; flex: 1; }
+.ls-speed { padding: 4px 14px; border-radius: 10px; background: rgba(255,255,255,0.12); }
+.ls-hint { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; font-size: 20px; color: rgba(255,255,255,0.5); }
+[dir="rtl"] .ls-cover { margin-right: 0; margin-left: 34px; }

@@ -1966,7 +1966,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var nativeIterator = IterablePrototype[ITERATOR] || IterablePrototype["@@iterator"] || DEFAULT && IterablePrototype[DEFAULT];
         var defaultIterator = !BUGGY_SAFARI_ITERATORS && nativeIterator || getIterationMethod(DEFAULT);
         var anyNativeIterator = NAME === "Array" ? IterablePrototype.entries || nativeIterator : nativeIterator;
-        var CurrentIteratorPrototype, methods, KEY5;
+        var CurrentIteratorPrototype, methods, KEY6;
         if (anyNativeIterator) {
           CurrentIteratorPrototype = getPrototypeOf(anyNativeIterator.call(new Iterable()));
           if (CurrentIteratorPrototype !== Object.prototype && CurrentIteratorPrototype.next) {
@@ -1997,9 +1997,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             keys: IS_SET ? defaultIterator : getIterationMethod(KEYS),
             entries: getIterationMethod(ENTRIES)
           };
-          if (FORCED) for (KEY5 in methods) {
-            if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY5 in IterablePrototype)) {
-              defineBuiltIn(IterablePrototype, KEY5, methods[KEY5]);
+          if (FORCED) for (KEY6 in methods) {
+            if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY6 in IterablePrototype)) {
+              defineBuiltIn(IterablePrototype, KEY6, methods[KEY6]);
             }
           } else $({
             target: NAME,
@@ -4166,16 +4166,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               throw "bad rs block @ typeNumber:" + typeNumber + "/errorCorrectionLevel:" + errorCorrectionLevel;
             }
             var length = rsBlock.length / 3;
-            var list2 = [];
+            var list3 = [];
             for (var i = 0; i < length; i += 1) {
               var count = rsBlock[i * 3 + 0];
               var totalCount = rsBlock[i * 3 + 1];
               var dataCount = rsBlock[i * 3 + 2];
               for (var j = 0; j < count; j += 1) {
-                list2.push(qrRSBlock(totalCount, dataCount));
+                list3.push(qrRSBlock(totalCount, dataCount));
               }
             }
-            return list2;
+            return list3;
           };
           return _this;
         }();
@@ -5043,6 +5043,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Ouvir": "Listen",
+    "Continuar ouvindo": "Continue listening",
+    "Continuar do cap. {n} (onde você ouviu)": "Continue from ch. {n} (where you listened)",
+    "Ouvir do cap. {n} (onde você leu)": "Listen from ch. {n} (where you read)",
+    "Do começo": "From the start",
+    "Continuar de onde parei": "Continue where I stopped",
+    "OK: tocar/pausar · ◀ ▶ 30 s · ▲ ▼ capítulo · CH: página · Segure OK: menu": "OK: play/pause · ◀ ▶ 30 s · ▲ ▼ chapter · CH: page · Hold OK: menu",
+    "Não consegui tocar este capítulo.": "Couldn't play this chapter.",
+    "Livro": "Book",
+    "Velocidade: {n}×": "Speed: {n}×",
+    "Velocidade": "Speed",
+    "Marcar este momento": "Bookmark this moment",
+    "Momento marcado.": "Moment bookmarked.",
+    "Nenhum momento marcado ainda.": "No bookmarked moments yet.",
+    "Tirar a marcação": "Remove the bookmark",
+    "Marcar esta página": "Bookmark this page",
+    "Página marcada.": "Page bookmarked.",
+    "Marcação tirada.": "Bookmark removed.",
+    "Nenhuma página marcada ainda.": "No bookmarked pages yet.",
+    "Minhas marcações": "My bookmarks",
+    "Página {n}": "Page {n}",
+    "Leitura": "Reading",
+    "Mudar a marcação desta página": "Change this page's bookmark",
     "Título ou autor": "Title or author",
     "História": "History",
     "Biografias": "Biographies",
@@ -5572,6 +5595,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Ouvir": "استماع",
+    "Continuar ouvindo": "كمّل الاستماع",
+    "Continuar do cap. {n} (onde você ouviu)": "كمّل من الفصل {n} (وين وقفت تسمع)",
+    "Ouvir do cap. {n} (onde você leu)": "اسمع من الفصل {n} (وين وقفت تقرأ)",
+    "Do começo": "من البداية",
+    "Continuar de onde parei": "كمّل من وين وقفت",
+    "OK: tocar/pausar · ◀ ▶ 30 s · ▲ ▼ capítulo · CH: página · Segure OK: menu": "OK: تشغيل/إيقاف · ◀ ▶ 30 ث · ▲ ▼ الفصل · CH: الصفحة · OK مطوّل: القائمة",
+    "Não consegui tocar este capítulo.": "ما قدرت أشغّل هالفصل.",
+    "Livro": "كتاب",
+    "Velocidade: {n}×": "السرعة: {n}×",
+    "Velocidade": "السرعة",
+    "Marcar este momento": "علّم هاللحظة",
+    "Momento marcado.": "تم تعليم اللحظة.",
+    "Nenhum momento marcado ainda.": "ما علّمت أي لحظة للحين.",
+    "Tirar a marcação": "شيل العلامة",
+    "Marcar esta página": "علّم هالصفحة",
+    "Página marcada.": "تم تعليم الصفحة.",
+    "Marcação tirada.": "انشالت العلامة.",
+    "Nenhuma página marcada ainda.": "ما علّمت أي صفحة للحين.",
+    "Minhas marcações": "علاماتي",
+    "Página {n}": "صفحة {n}",
+    "Leitura": "القراءة",
+    "Mudar a marcação desta página": "غيّر علامة هالصفحة",
     "Título ou autor": "العنوان أو المؤلف",
     "História": "تاريخ",
     "Biografias": "سير ذاتية",
@@ -6272,9 +6318,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return found[a.id] = a.attributes || {};
         });
         chunk.forEach(function (id) {
-          var at = found[id] || {};
-          var p = at.posterImage || {};
-          var c = at.coverImage || {};
+          var at2 = found[id] || {};
+          var p = at2.posterImage || {};
+          var c = at2.coverImage || {};
           waiting[id].forEach(function (w) {
             return w.resolve(w.kind === "cover" ? c.small || c.tiny || null : p.small || p.tiny || null);
           });
@@ -6463,14 +6509,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       y: (r.top + r.bottom) / 2
     };
   }
-  function pick(list2, cur, dir) {
+  function pick(list3, cur, dir) {
     var cr = cur.getBoundingClientRect();
     var cc = center(cr);
     var tol = 8;
     var best2 = null;
     var bestScore = Infinity;
-    for (var i = 0; i < list2.length; i++) {
-      var el = list2[i];
+    for (var i = 0; i < list3.length; i++) {
+      var el = list3[i];
       var r = el.getBoundingClientRect();
       var primary = void 0;
       var secondary = void 0;
@@ -6602,10 +6648,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       if (group.hasAttribute("data-trap")) return false;
     }
-    var all2 = candidates(layer.root).filter(function (e) {
+    var all3 = candidates(layer.root).filter(function (e) {
       return e !== cur;
     });
-    var best2 = pick(all2, cur, dir);
+    var best2 = pick(all3, cur, dir);
     if (!best2) return false;
     var bg = best2.closest("[data-group]");
     if (bg && bg !== group && bg.__last && bg.contains(bg.__last) && isVisible(bg.__last)) best2 = bg.__last;
@@ -6774,12 +6820,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return "p." + id + "." + key4;
   }
   function ensureProfiles() {
-    var list2 = rawGet("profiles", null);
-    if (list2 && list2.length) return list2;
+    var list3 = rawGet("profiles", null);
+    if (list3 && list3.length) return list3;
     var id = "p" + Date.now().toString(36);
     var oldAuth = rawGet("auth", null);
     var email = oldAuth && oldAuth.user && oldAuth.user.email;
-    list2 = [email ? {
+    list3 = [email ? {
       id: id,
       name: email.split("@")[0],
       color: COLORS[0]
@@ -6806,50 +6852,50 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       rawSet(profileKey(id, "settings"), prof);
       rawSet("settings", null);
     }
-    rawSet("profiles", list2);
+    rawSet("profiles", list3);
     rawSet("activeProfile", id);
-    return list2;
+    return list3;
   }
   function profiles() {
     return ensureProfiles();
   }
   function activeProfile() {
-    var list2 = ensureProfiles();
+    var list3 = ensureProfiles();
     var id = rawGet("activeProfile", null);
-    return list2.find(function (p) {
+    return list3.find(function (p) {
       return p.id === id;
-    }) || list2[0];
+    }) || list3[0];
   }
   function setActiveProfile(id) {
     rawSet("activeProfile", id);
   }
   function addProfile(name, color) {
-    var list2 = ensureProfiles();
+    var list3 = ensureProfiles();
     var p = {
       id: "p" + Date.now().toString(36),
-      name: name || "Perfil " + (list2.length + 1),
-      color: color || COLORS[list2.length % COLORS.length]
+      name: name || "Perfil " + (list3.length + 1),
+      color: color || COLORS[list3.length % COLORS.length]
     };
-    list2.push(p);
-    rawSet("profiles", list2);
+    list3.push(p);
+    rawSet("profiles", list3);
     return p;
   }
   function updateProfile(id, patch) {
-    var list2 = ensureProfiles().map(function (p) {
+    var list3 = ensureProfiles().map(function (p) {
       return p.id === id ? Object.assign({}, p, patch) : p;
     });
-    rawSet("profiles", list2);
+    rawSet("profiles", list3);
   }
   function removeProfile(id) {
-    var list2 = ensureProfiles().filter(function (p) {
+    var list3 = ensureProfiles().filter(function (p) {
       return p.id !== id;
     });
-    if (!list2.length) return false;
+    if (!list3.length) return false;
     ["auth", "addons", "library", "settings", "watched", "track.trakt", "track.simkl"].forEach(function (k) {
       return rawSet(profileKey(id, k), null);
     });
-    rawSet("profiles", list2);
-    if (rawGet("activeProfile", null) === id) rawSet("activeProfile", list2[0].id);
+    rawSet("profiles", list3);
+    if (rawGet("activeProfile", null) === id) rawSet("activeProfile", list3[0].id);
     return true;
   }
   function getFor(profileId, key4, fallback) {
@@ -7090,13 +7136,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         authKey: auth.authKey,
         update: true
       }).then(function (r) {
-        var list2 = r && r.addons || [];
-        if (list2.some(function (a) {
+        var list3 = r && r.addons || [];
+        if (list3.some(function (a) {
           return a.transportUrl === transportUrl || a.manifest && a.manifest.id === manifest.id;
         })) {
           throw new Error(t("Esse addon já está instalado"));
         }
-        var next = list2.concat([{
+        var next = list3.concat([{
           transportUrl: transportUrl,
           transportName: "http",
           manifest: manifest,
@@ -7127,15 +7173,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       ids: [],
       all: true
     }).then(function (items3) {
-      var list2 = Array.isArray(items3) ? items3 : [];
-      setLibrary(list2);
-      return list2;
+      var list3 = Array.isArray(items3) ? items3 : [];
+      setLibrary(list3);
+      return list3;
     });
   }
   var libMem = null;
   var libSaveTimer = null;
-  function setLibrary(list2) {
-    libMem = list2;
+  function setLibrary(list3) {
+    libMem = list3;
     clearTimeout(libSaveTimer);
     libSaveTimer = setTimeout(function () {
       var slim = (libMem || []).filter(function (it) {
@@ -7245,9 +7291,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     item2._mtime = nowIso();
     return putLibraryItems([item2]);
   }
-  function mergeExternalProgress(list2) {
+  function mergeExternalProgress(list3) {
     var changed = [];
-    (list2 || []).forEach(function (p) {
+    (list3 || []).forEach(function (p) {
       var existing = libraryItem(p.id);
       var localAt = existing && existing.state && existing.state.lastWatched;
       if (localAt && String(localAt) >= String(p.at || "")) return;
@@ -7507,9 +7553,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return settings().askProfile !== false || !!activeProfile().pin;
   }
   function showPicker(onPicked) {
-    var list2 = profiles();
+    var list3 = profiles();
     var active3 = activeProfile();
-    var cards = list2.map(function (p) {
+    var cards = list3.map(function (p) {
       return h("div.profile-card", {
         focusable: true,
         "data-autofocus": p.id === active3.id ? "" : null,
@@ -7547,7 +7593,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     focusFirst(el);
     function pick2(id) {
-      checkPin(list2.find(function (p) {
+      checkPin(list3.find(function (p) {
         return p.id === id;
       }), function () {
         return done(id);
@@ -7575,12 +7621,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function menu(title, options, opts) {
     var o = opts || {};
-    var list2 = h("div.modal-list", {
+    var list3 = h("div.modal-list", {
       "data-scroll-y": "",
       "data-pad-y": "80"
     });
     options.forEach(function (opt) {
-      list2.appendChild(h("div.opt", {
+      list3.appendChild(h("div.opt", {
         focusable: true,
         cls: opt.checked ? "checked" : "",
         "data-autofocus": opt.checked ? "" : null,
@@ -7593,14 +7639,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: opt.sub
       }) : null]));
     });
-    if (!options.length) list2.appendChild(h("div.modal-text", {
+    if (!options.length) list3.appendChild(h("div.modal-text", {
       text: o.empty || t("Nada por aqui.")
     }));
     var box = h("div.modal-box", {
       cls: o.center ? "center" : ""
     }, [h("h3", {
       text: title
-    }), list2]);
+    }), list3]);
     var modal = h("div.modal", null, box);
     document.getElementById("app").appendChild(modal);
     var layer = pushLayer(modal, {
@@ -7708,8 +7754,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: f.label
       }), input]);
       input.__submit = function () {
-        var all2 = [].slice.call(box.querySelectorAll("[data-focus]"));
-        var next = all2[all2.indexOf(row2) + 1];
+        var all3 = [].slice.call(box.querySelectorAll("[data-focus]"));
+        var next = all3[all3.indexOf(row2) + 1];
         setTimeout(function () {
           return next && focus(next);
         }, 150);
@@ -8298,8 +8344,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }).catch(function () {
           return null;
         });
-      })).then(function (list2) {
-        return list2.filter(Boolean);
+      })).then(function (list3) {
+        return list3.filter(Boolean);
       });
     }).catch(function () {
       return [];
@@ -8789,12 +8835,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     };
     if (sources3 && sources3.length) {
-      var all2 = ["dht:" + infoHash].concat(sources3.map(function (s) {
+      var all3 = ["dht:" + infoHash].concat(sources3.map(function (s) {
         return /^(tracker|dht):/.test(s) ? s : "tracker:" + s;
       }));
       body.peerSearch = {
-        sources: all2.filter(function (s, i) {
-          return all2.indexOf(s) === i;
+        sources: all3.filter(function (s, i) {
+          return all3.indexOf(s) === i;
         }),
         min: 40,
         max: 200
@@ -8926,8 +8972,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return getJSON(base3 + "tracks/" + encodeURIComponent(mediaUrl), {
       timeout: 2e4,
       quiet: true
-    }).then(function (list2) {
-      var arr = Array.isArray(list2) ? list2 : [];
+    }).then(function (list3) {
+      var arr = Array.isArray(list3) ? list3 : [];
       return {
         audio: arr.filter(function (tk) {
           return tk && tk.type === "audio";
@@ -9727,8 +9773,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var CINEMETA = "https://v3-cinemeta.strem.io/manifest.json";
   var OPENSUBTITLES = "https://opensubtitles-v3.strem.io/manifest.json";
   var addons = null;
-  function normalize(list2) {
-    return (list2 || []).filter(function (a) {
+  function normalize(list3) {
+    return (list3 || []).filter(function (a) {
       return a && a.transportUrl && a.manifest;
     }).filter(function (a) {
       return /^https?:/.test(a.transportUrl);
@@ -9752,16 +9798,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).catch(function () {
         return null;
       });
-    })).then(function (list2) {
-      return list2.filter(Boolean);
+    })).then(function (list3) {
+      return list3.filter(Boolean);
     });
   }
   function load(force) {
     if (addons && !force) return Promise.resolve(addons);
     if (isLoggedIn()) {
       var cached2 = cachedAddons();
-      var fresh = getAddonCollection().then(function (list2) {
-        return addons = normalize(list2);
+      var fresh = getAddonCollection().then(function (list3) {
+        return addons = normalize(list3);
       });
       if (cached2 && cached2.length && !force) {
         addons = normalize(cached2);
@@ -9775,8 +9821,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return addons;
       });
     }
-    return defaultAddons().then(function (list2) {
-      return addons = normalize(list2);
+    return defaultAddons().then(function (list3) {
+      return addons = normalize(list3);
     });
   }
   function list() {
@@ -9889,9 +9935,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function fetchStreams(type, id, onAddon) {
     var sources3 = withResource("stream", type, id);
     return Promise.all(sources3.map(function (a) {
-      return (a.virtualStreams ? a.virtualStreams(type, id).then(function (list2) {
+      return (a.virtualStreams ? a.virtualStreams(type, id).then(function (list3) {
         return {
-          streams: list2
+          streams: list3
         };
       }) : getJSON(url(a, "stream", type, id), {
         timeout: 3e4
@@ -9907,8 +9953,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (onAddon) onAddon(a, [], e);
         return [];
       });
-    })).then(function (all2) {
-      return all2.reduce(function (acc, x) {
+    })).then(function (all3) {
+      return all3.reduce(function (acc, x) {
         return acc.concat(x);
       }, []);
     });
@@ -9926,12 +9972,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }).catch(function () {
         return [];
-      }).then(function (list2) {
-        if (onAddon) onAddon(list2);
-        return list2;
+      }).then(function (list3) {
+        if (onAddon) onAddon(list3);
+        return list3;
       });
-    })).then(function (all2) {
-      return all2.reduce(function (acc, x) {
+    })).then(function (all3) {
+      return all3.reduce(function (acc, x) {
         return acc.concat(x);
       }, []);
     });
@@ -10000,8 +10046,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return Promise.all(["movie", "series"].map(function (t2) {
       return getJSONViaProxy(MDBLIST[t2], {
         timeout: 15e3
-      }).then(function (list2) {
-        return Promise.all((list2 || []).filter(function (x) {
+      }).then(function (list3) {
+        return Promise.all((list3 || []).filter(function (x) {
           return x.imdb_id;
         }).slice(0, 6).map(function (x) {
           return fetchMeta(t2, x.imdb_id).then(fromMeta).catch(function () {
@@ -10313,10 +10359,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     box: "none",
     strongbox: "none"
   };
-  function find(list2, id) {
-    return list2.find(function (x) {
+  function find(list3, id) {
+    return list3.find(function (x) {
       return x.id === id;
-    }) || list2[0];
+    }) || list3[0];
   }
   function apply(el, s) {
     var font = find(FONTS, s.subtitleFont);
@@ -10401,7 +10447,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return postJSON(fetchUrl(ANIMESKIP), body, opts);
     });
   }
-  function fromAnimeSkipTimestamps(list2, baseDuration) {
+  function fromAnimeSkipTimestamps(list3, baseDuration) {
     var map = {
       intro: "intro",
       "new intro": "intro",
@@ -10411,7 +10457,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       "new credits": "outro",
       "mixed credits": "outro"
     };
-    var sorted = (list2 || []).filter(function (x) {
+    var sorted = (list3 || []).filter(function (x) {
       return isFinite(x.at) && x.at >= 0;
     }).sort(function (a, b) {
       return a.at - b.at;
@@ -10538,8 +10584,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var key4 = imdb + ":" + season;
     if (!malCache[key4]) malCache[key4] = getJSON(ARM2 + "imdb?id=" + imdb, {
       quiet: true
-    }).then(function (list2) {
-      var arr = Array.isArray(list2) ? list2 : [];
+    }).then(function (list3) {
+      var arr = Array.isArray(list3) ? list3 : [];
       var hit = arr.find(function (x) {
         return (x.myanimelist || x.anilist) && (x["thetvdb-season"] === season || x["themoviedb-season"] === season);
       }) || (arr.length === 1 ? arr[0] : null);
@@ -10667,10 +10713,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var lastTimeEmit = 0;
     var generation = 0;
     function emit(type) {
-      var list2 = (listeners[type] || []).slice();
-      for (var i = 0; i < list2.length; i++) {
+      var list3 = (listeners[type] || []).slice();
+      for (var i = 0; i < list3.length; i++) {
         try {
-          list2[i].call(api2, {
+          list3[i].call(api2, {
             type: type,
             target: api2
           });
@@ -10900,21 +10946,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return {};
     }
     function trackInfo(type) {
-      var all2 = [];
+      var all3 = [];
       try {
-        all2 = AV.getTotalTrackInfo() || [];
+        all3 = AV.getTotalTrackInfo() || [];
       } catch (e) {
         return [];
       }
       var out = [];
-      for (var i = 0; i < all2.length; i++) {
-        if (all2[i].type !== type) continue;
-        var extra = parseExtra(all2[i].extra_info);
-        var rawLang = extra.language || extra.track_lang || extra.lang || extra.Language || all2[i].language || all2[i].lang || "";
-        var rawLabel = extra.track_name || extra.track_title || extra.title || extra.name || extra.label || extra.track_label || extra.description || extra.track_description || all2[i].track_name || all2[i].name || "";
-        var rawCodec = extra.fourCC || extra.codec || extra.sub_type || extra.subtitle_type || extra.track_type || all2[i].codec || "";
+      for (var i = 0; i < all3.length; i++) {
+        if (all3[i].type !== type) continue;
+        var extra = parseExtra(all3[i].extra_info);
+        var rawLang = extra.language || extra.track_lang || extra.lang || extra.Language || all3[i].language || all3[i].lang || "";
+        var rawLabel = extra.track_name || extra.track_title || extra.title || extra.name || extra.label || extra.track_label || extra.description || extra.track_description || all3[i].track_name || all3[i].name || "";
+        var rawCodec = extra.fourCC || extra.codec || extra.sub_type || extra.subtitle_type || extra.track_type || all3[i].codec || "";
         out.push({
-          index: all2[i].index,
+          index: all3[i].index,
           language: String(rawLang).trim(),
           label: String(rawLabel).trim(),
           channels: extra.channels ? Number(extra.channels) : 0,
@@ -11036,9 +11082,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       // Audio: list in file order, the playing one marked.
       audioTrackList: function audioTrackList() {
-        var list2 = trackInfo("AUDIO");
+        var list3 = trackInfo("AUDIO");
         var cur = pendingAudio !== null ? pendingAudio : currentIndex("AUDIO");
-        return list2.map(function (tr, i) {
+        return list3.map(function (tr, i) {
           return {
             language: tr.language,
             label: "",
@@ -11050,8 +11096,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       // position = place in audioTrackList()
       selectAudio: function selectAudio(position) {
-        var list2 = trackInfo("AUDIO");
-        var tr = list2[position];
+        var list3 = trackInfo("AUDIO");
+        var tr = list3[position];
         if (!tr) return false;
         if (readState() !== "PLAYING") {
           pendingAudio = tr.index;
@@ -11594,10 +11640,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     playbackSink = fn;
   }
   function pullTraktPlayback() {
-    return trakt("GET", "/sync/playback?extended=full").then(function (list2) {
+    return trakt("GET", "/sync/playback?extended=full").then(function (list3) {
       var out = [];
-      (list2 || []).forEach(function (p) {
-        var at = p.paused_at;
+      (list3 || []).forEach(function (p) {
+        var at2 = p.paused_at;
         var pct = Number(p.progress) || 0;
         if (pct < 1 || pct > 95) return;
         if (p.type === "movie" && p.movie && p.movie.ids && p.movie.ids.imdb) {
@@ -11608,7 +11654,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             name: p.movie.title,
             runtime: p.movie.runtime || 0,
             progress: pct / 100,
-            at: at
+            at: at2
           });
         } else if (p.type === "episode" && p.show && p.show.ids && p.show.ids.imdb && p.episode) {
           out.push({
@@ -11618,7 +11664,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             name: p.show.title,
             runtime: p.episode.runtime || p.show && p.show.runtime || 0,
             progress: pct / 100,
-            at: at
+            at: at2
           });
         }
       });
@@ -11641,8 +11687,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         type: "movie"
       },
       fetch: function fetch() {
-        return trakt("GET", "/sync/watchlist?sort=added,desc").then(function (list2) {
-          return (list2 || []).map(function (x) {
+        return trakt("GET", "/sync/watchlist?sort=added,desc").then(function (list3) {
+          return (list3 || []).map(function (x) {
             var m = x.movie || x.show;
             var imdb = m && m.ids && m.ids.imdb;
             return imdb ? {
@@ -12037,11 +12083,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return b.score - a.score || (a.scale === 1 ? -1 : b.scale === 1 ? 1 : 0);
     });
     var best2 = found[0];
-    var at = function at(f) {
+    var at2 = function at2(f) {
       return f.scale * 1800 + f.offset;
     };
     var rival = found.find(function (f) {
-      return Math.abs(at(f) - at(best2)) > 2;
+      return Math.abs(at2(f) - at2(best2)) > 2;
     });
     var second = rival ? rival.score : 0;
     var sure = best2.matched >= 20 && best2.score >= 0.45 && best2.score >= second + 0.15;
@@ -12430,16 +12476,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         addonSubs = (addonSubs || []).concat(stSubs);
       }
-      fetchSubtitles(meta.type, video.id, {}, function (list2) {
+      fetchSubtitles(meta.type, video.id, {}, function (list3) {
         if (!alive || forVideo !== video) return;
-        addonSubs = (addonSubs || []).concat(list2);
+        addonSubs = (addonSubs || []).concat(list3);
         autoPick();
       }).catch(function () {
         if (!addonSubs) addonSubs = [];
       });
-      if (key()) search(meta.type, video.id, meta, video).then(function (list2) {
-        if (!alive || forVideo !== video || !list2.length) return;
-        addonSubs = (addonSubs || []).concat(list2);
+      if (key()) search(meta.type, video.id, meta, video).then(function (list3) {
+        if (!alive || forVideo !== video || !list3.length) return;
+        addonSubs = (addonSubs || []).concat(list3);
         autoPick();
       });
     }
@@ -12454,11 +12500,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function rememberTrack(kind, lang3) {
       if (!opts.isSeries || settings2.rememberTracks === false || !lang3) return;
-      var all2 = get(TRACKS_KEY, {}) || {};
-      var ids2 = Object.keys(all2);
-      if (ids2.length > 200) delete all2[ids2[0]];
-      all2[meta.id] = Object.assign({}, all2[meta.id], _defineProperty({}, kind, String(lang3).toLowerCase()));
-      set(TRACKS_KEY, all2);
+      var all3 = get(TRACKS_KEY, {}) || {};
+      var ids2 = Object.keys(all3);
+      if (ids2.length > 200) delete all3[ids2[0]];
+      all3[meta.id] = Object.assign({}, all3[meta.id], _defineProperty({}, kind, String(lang3).toLowerCase()));
+      set(TRACKS_KEY, all3);
     }
     function autoPick() {
       var mem = rememberedTracks();
@@ -12620,12 +12666,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         quiet: true
       }).then(function (r) {
         if (!alive) return;
-        var list2 = (r && r.metas || []).filter(function (m) {
+        var list3 = (r && r.metas || []).filter(function (m) {
           return m.id !== meta.id && !isWatched(m.id);
         }).slice(0, 10);
-        if (!list2.length) return pop();
+        if (!list3.length) return pop();
         clear(postTrack);
-        list2.forEach(function (m) {
+        list3.forEach(function (m) {
           return postTrack.appendChild(card(m, {
             onSelect: function onSelect() {
               pop();
@@ -12713,14 +12759,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var chapterList = null;
     function chaptersMenu() {
       var forUrl = mediaUrl;
-      var open2 = function open2(list2) {
-        if (!list2.length) return toast(t("Este arquivo não tem capítulos."));
+      var open2 = function open2(list3) {
+        if (!list3.length) return toast(t("Este arquivo não tem capítulos."));
         var now = videoEl.currentTime || 0;
         var cur = 0;
-        list2.forEach(function (c, i) {
+        list3.forEach(function (c, i) {
           return c.start <= now + 0.5 && (cur = i);
         });
-        menu(t("Capítulos"), list2.map(function (c, i) {
+        menu(t("Capítulos"), list3.map(function (c, i) {
           return {
             label: c.title || t("Capítulo {n}", {
               n: i + 1
@@ -12731,20 +12777,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           };
         }), {
           onPick: function onPick(i) {
-            videoEl.currentTime = Math.max(0, list2[i].start);
+            videoEl.currentTime = Math.max(0, list3[i].start);
             showControls();
           }
         });
       };
       if (chapterList && chapterList.url === forUrl) return open2(chapterList.list);
       toast(t("Procurando capítulos..."));
-      load4(forUrl).then(function (list2) {
+      load4(forUrl).then(function (list3) {
         if (!alive || forUrl !== mediaUrl) return;
         chapterList = {
           url: forUrl,
-          list: list2
+          list: list3
         };
-        open2(list2);
+        open2(list3);
       });
     }
     function sendNowPlaying() {
@@ -12832,12 +12878,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return (get(SUB_DELAYS, {}) || {})[video.id] || 0;
     }
     function rememberDelay(v) {
-      var all2 = get(SUB_DELAYS, {}) || {};
-      delete all2[video.id];
-      if (v) all2[video.id] = v;
-      var keys2 = Object.keys(all2);
-      if (keys2.length > 200) delete all2[keys2[0]];
-      set(SUB_DELAYS, all2);
+      var all3 = get(SUB_DELAYS, {}) || {};
+      delete all3[video.id];
+      if (v) all3[video.id] = v;
+      var keys2 = Object.keys(all3);
+      if (keys2.length > 200) delete all3[keys2[0]];
+      set(SUB_DELAYS, all3);
     }
     function setSubDelay(v) {
       v = Math.round(Math.max(-30, Math.min(30, v)) * 100) / 100;
@@ -12893,8 +12939,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (segmentsLoaded || settings().skipMode === "off") return;
       segmentsLoaded = true;
       var forVideo = video;
-      getSegments(meta, video, videoEl.duration).then(function (list2) {
-        if (alive && forVideo === video) segments = list2;
+      getSegments(meta, video, videoEl.duration).then(function (list3) {
+        if (alive && forVideo === video) segments = list3;
       }).catch(function () {});
     }
     function segLabel(seg) {
@@ -13470,9 +13516,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function openAudioMenu() {
       var native = videoEl.audioTracks;
       var av = videoEl.isAVPlay ? videoEl.audioTrackList() : [];
-      var list2 = [];
+      var list3 = [];
       if (av.length) {
-        list2 = av.map(function (tr, i) {
+        list3 = av.map(function (tr, i) {
           var info2 = embedded && embedded.audio[i];
           return {
             label: trackName(info2 && info2.lang || tr.language, [info2 && info2.label, tr.label].filter(Boolean).join(" "), i) + (info2 && info2.label ? " · " + info2.label : tr.label ? " · " + tr.label : ""),
@@ -13485,14 +13531,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       } else if (native && native.length) {
         for (var i = 0; i < native.length; i++) {
-          list2.push({
+          list3.push({
             label: trackName(native[i].language, native[i].label, i) + (native[i].label ? " · " + native[i].label : ""),
             value: i,
             checked: native[i].enabled
           });
         }
       } else if (embedded && embedded.audio.length) {
-        list2 = embedded.audio.map(function (tr, i) {
+        list3 = embedded.audio.map(function (tr, i) {
           return {
             label: trackName(tr.lang, tr.label, i) + (tr.label ? " · " + tr.label : ""),
             sub: [tr.codec, tr.channels ? t("{n} canais", {
@@ -13503,7 +13549,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           };
         });
       }
-      menu(t("Áudio"), list2, {
+      menu(t("Áudio"), list3, {
         empty: isAvailable() || videoEl.isAVPlay ? t("Só uma faixa de áudio.") : t("Para listar as faixas, conecte o servidor do PC em Ajustes."),
         onPick: function onPick(i) {
           selectEmbeddedAudio(i);
@@ -13772,7 +13818,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function sourcesMenu() {
-      var list2 = (opts.streams || []).map(function (s, i) {
+      var list3 = (opts.streams || []).map(function (s, i) {
         return {
           label: ((s.name || s.addon || "") + "").replace(/\n/g, " "),
           sub: ((s.title || s.description || "") + "").replace(/\n/g, " · "),
@@ -13780,7 +13826,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           checked: s === stream
         };
       });
-      menu(t("Fontes"), list2, {
+      menu(t("Fontes"), list3, {
         onPick: function onPick(i) {
           var s = opts.streams[i];
           if (!s || s === stream) return;
@@ -13805,15 +13851,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var group = stream.behaviorHints && stream.behaviorHints.bingeGroup;
       showSpinner(true);
       message(t("Procurando o próximo episódio..."));
-      fetchStreams(meta.type, nv.id).then(function (list2) {
+      fetchStreams(meta.type, nv.id).then(function (list3) {
         if (!alive) return;
-        var match = group ? list2.find(function (s) {
+        var match = group ? list3.find(function (s) {
           return s.behaviorHints && s.behaviorHints.bingeGroup === group;
         }) : null;
         if (match && (!needsServer(match) || isAvailable())) {
           video = nv;
           stream = match;
-          opts.streams = list2;
+          opts.streams = list3;
           pendingStart = 0;
           triedTranscode = false;
           autoDone = {
@@ -14201,18 +14247,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }];
   var cache3 = {};
   function severity(cat) {
-    var list2 = (cat && cat.severityBreakdowns || []).map(function (x) {
+    var list3 = (cat && cat.severityBreakdowns || []).map(function (x) {
       return {
         level: String(x.severityLevel || "").toLowerCase(),
         votes: +x.voteCount || 0
       };
     });
-    var none = (list2.find(function (x) {
+    var none = (list3.find(function (x) {
       return x.level === "none";
     }) || {
       votes: 0
     }).votes;
-    var top2 = list2.filter(function (x) {
+    var top2 = list3.filter(function (x) {
       return x.level && x.level !== "none";
     }).sort(function (a, b) {
       return b.votes - a.votes;
@@ -14315,13 +14361,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return get(REPOS[kindKey(kind)], []) || [];
   };
   var installed = function installed(kind) {
-    var all2 = get(PLUGINS, []) || [];
-    return kind ? all2.filter(function (p) {
+    var all3 = get(PLUGINS, []) || [];
+    return kind ? all3.filter(function (p) {
       return kindOf(p) === kind;
-    }) : all2;
+    }) : all3;
   };
-  function saveInstalled(list2) {
-    set(PLUGINS, list2);
+  function saveInstalled(list3) {
+    set(PLUGINS, list3);
   }
   function addRepo(url2, kind) {
     var key4 = REPOS[kindKey(kind)];
@@ -14499,10 +14545,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var old = installed().find(function (p) {
         return p.id === man.id;
       });
-      var list2 = installed().filter(function (p) {
+      var list3 = installed().filter(function (p) {
         return p.id !== man.id;
       });
-      list2.push({
+      list3.push({
         id: man.id,
         name: man.name,
         version: man.version,
@@ -14514,7 +14560,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         source: source,
         kind: kind || kindOf(old)
       });
-      saveInstalled(list2);
+      saveInstalled(list3);
       stop2(man.id);
       return man;
     });
@@ -14813,10 +14859,33 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).filter(Boolean);
     });
   }
-  function updateAll(kind, all2) {
-    var list2 = installed(kind);
+  function audioTracks(id, bookId) {
+    return call3(id, "audioTracks", [bookId], 3e4).then(function (v) {
+      return (Array.isArray(v) ? v : []).map(function (x, i) {
+        return {
+          id: str(x && x.id) || String(i),
+          title: str(x && x.title) || "",
+          url: str(x && (x.url || x.streamUrl)) || "",
+          duration: typeof (x && x.duration) === "number" ? x.duration : parseDuration(x && x.duration),
+          chapter: x && x.chapter != null ? String(x.chapter) : null
+        };
+      }).filter(function (x) {
+        return /^https?:\/\//i.test(x.url);
+      });
+    }, function () {
+      return [];
+    });
+  }
+  function parseDuration(v) {
+    if (typeof v !== "string" || !/^\d+(:\d+){1,2}$/.test(v)) return 0;
+    return v.split(":").reduce(function (a, b) {
+      return a * 60 + +b;
+    }, 0);
+  }
+  function updateAll(kind, all3) {
+    var list3 = installed(kind);
     var byRepo = {};
-    list2.forEach(function (p) {
+    list3.forEach(function (p) {
       return p.repoUrl && (byRepo[p.repoUrl] = byRepo[p.repoUrl] || []).push(p);
     });
     return Promise.all(Object.keys(byRepo).map(function (url2) {
@@ -14825,7 +14894,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var man = (r.plugins || []).find(function (x) {
             return x.id === p.id;
           });
-          if (!man || !all2 && String(man.version) === String(p.version)) return 0;
+          if (!man || !all3 && String(man.version) === String(p.version)) return 0;
           return install2(url2, man).then(function () {
             return 1;
           }, function () {
@@ -14894,16 +14963,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     return null;
   }
-  var nums = function nums(list2) {
-    return (list2 || []).map(function (x) {
+  var nums = function nums(list3) {
+    return (list3 || []).map(function (x) {
       return parseFloat(String(x).replace(/[^\d.]/g, ""));
     }).filter(function (n) {
       return isFinite(n);
     });
   };
-  function toRows(list2) {
+  function toRows(list3) {
     var last2 = 0;
-    return list2.map(function (e) {
+    return list3.map(function (e) {
       var ch = e[1];
       if (e[2] || !ch.length) return [e[0], 0, 0, 1];
       var ahead = ch.filter(function (n) {
@@ -14924,10 +14993,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var c = get("epmapExact", null);
     if (c && c.at > Date.now() - WEEK) return Promise.resolve(c.t);
     return getText3(A2M).then(function (js) {
-      var all2 = jsonAt(js, js.indexOf("SERIES")) || {};
+      var all3 = jsonAt(js, js.indexOf("SERIES")) || {};
       var t2 = {};
-      Object.keys(all2).forEach(function (k) {
-        var s = all2[k] || {};
+      Object.keys(all3).forEach(function (k) {
+        var s = all3[k] || {};
         var rows2 = toRows((s.EPISODES || []).map(function (e) {
           return [+e.episode, nums(e.chapters), e.filler];
         }));
@@ -14944,7 +15013,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var c = get("epmapArcIdx", null);
     if (c && c.at > Date.now() - WEEK) return Promise.resolve(c.list);
     return getText3(MEG + "_index.json").then(function (txt) {
-      var list2 = (JSON.parse(txt) || []).filter(function (x) {
+      var list3 = (JSON.parse(txt) || []).filter(function (x) {
         return x && x.id && x.name && (x.type === "arc" || x.type === "episode");
       }).map(function (x) {
         return {
@@ -14955,14 +15024,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       set("epmapArcIdx", {
         at: Date.now(),
-        list: list2
+        list: list3
       });
-      return list2;
+      return list3;
     });
   }
   function arcs(id, type) {
-    var all2 = get("epmapArcs2", {}) || {};
-    if (all2[id] && all2[id].at > Date.now() - WEEK) return Promise.resolve(all2[id].d);
+    var all3 = get("epmapArcs2", {}) || {};
+    if (all3[id] && all3[id].at > Date.now() - WEEK) return Promise.resolve(all3[id].d);
     return getText3(MEG + encodeURIComponent(id) + ".json").then(function (txt) {
       var j = JSON.parse(txt) || {};
       var data = (j.data || []).filter(function (r) {
@@ -14983,13 +15052,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return [+r[1] || 0, +r[2] || 0, +r[3] || 0, +r[4] || 0, r[5] ? 1 : 0];
         })
       };
-      all2[id] = {
+      all3[id] = {
         at: Date.now(),
         d: d
       };
-      var keys2 = Object.keys(all2);
-      if (keys2.length > 30) delete all2[keys2[0]];
-      set("epmapArcs2", all2);
+      var keys2 = Object.keys(all3);
+      if (keys2.length > 30) delete all3[keys2[0]];
+      set("epmapArcs2", all3);
       return d;
     });
   }
@@ -15008,12 +15077,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return score >= 0.85 ? hit : null;
   }
   function tableFor(names2) {
-    var list2 = (names2 || []).filter(Boolean);
-    if (!list2.length) return Promise.resolve(null);
+    var list3 = (names2 || []).filter(Boolean);
+    if (!list3.length) return Promise.resolve(null);
     return exactTables().catch(function () {
       return {};
     }).then(function (t2) {
-      var name = best(list2, Object.keys(t2), function (x) {
+      var name = best(list3, Object.keys(t2), function (x) {
         return x;
       });
       if (name) return {
@@ -15021,7 +15090,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         rows: t2[name]
       };
       return arcIndex().then(function (idx) {
-        var s = best(list2, idx, function (x) {
+        var s = best(list3, idx, function (x) {
           return x.name;
         });
         return s ? arcs(s.id, s.type).then(function (d) {
@@ -15321,12 +15390,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function find2(anilistId, titles) {
     if (idCache[anilistId]) return idCache[anilistId];
-    var list2 = (titles || []).filter(Boolean);
-    var wanted = list2.map(norm2);
+    var list3 = (titles || []).filter(Boolean);
+    var wanted = list3.map(norm2);
     var fallback = null;
     var _tryTitle = function tryTitle(i) {
-      if (i >= list2.length) return Promise.resolve(fallback);
-      return md("manga?title=" + enc(list2[i]) + "&limit=10&order%5Brelevance%5D=desc").then(function (r) {
+      if (i >= list3.length) return Promise.resolve(fallback);
+      return md("manga?title=" + enc(list3[i]) + "&limit=10&order%5Brelevance%5D=desc").then(function (r) {
         var data = r && r.data || [];
         var hit = data.find(function (m) {
           return m.attributes && m.attributes.links && String(m.attributes.links.al) === String(anilistId);
@@ -15395,11 +15464,68 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/lib/bookmarks.js
+  var KEY3 = "bookmarks";
+  var COLORS3 = [{
+    id: "red",
+    hex: "#ef4444",
+    label: "Vermelho"
+  }, {
+    id: "yellow",
+    hex: "#facc15",
+    label: "Amarelo"
+  }, {
+    id: "green",
+    hex: "#22c55e",
+    label: "Verde"
+  }, {
+    id: "blue",
+    hex: "#3b82f6",
+    label: "Azul"
+  }];
+  var hexOf = function hexOf(id) {
+    return (COLORS3.find(function (c) {
+      return c.id === id;
+    }) || COLORS3[1]).hex;
+  };
+  var all2 = function all2() {
+    return get(KEY3, {}) || {};
+  };
+  function list2(key4) {
+    return (all2()[key4] || []).slice().sort(function (a, b) {
+      return a.ci - b.ci || (a.page || 0) - (b.page || 0) || (a.time || 0) - (b.time || 0);
+    });
+  }
+  function at(key4, chapterId, page3) {
+    return (all2()[key4] || []).find(function (b) {
+      return b.chapterId === chapterId && b.page === page3 && b.time == null;
+    }) || null;
+  }
+  function put(key4, mark) {
+    var a = all2();
+    var l = (a[key4] || []).filter(function (b) {
+      return !(b.chapterId === mark.chapterId && (mark.time == null ? b.page === mark.page && b.time == null : b.time != null && Math.abs(b.time - mark.time) < 2));
+    });
+    l.push(Object.assign({
+      at: Date.now()
+    }, mark));
+    a[key4] = l.slice(-200);
+    set(KEY3, a);
+  }
+  function remove(key4, mark) {
+    var a = all2();
+    a[key4] = (a[key4] || []).filter(function (b) {
+      return !(b.chapterId === mark.chapterId && b.page === mark.page && b.time === mark.time);
+    });
+    if (!a[key4].length) delete a[key4];
+    set(KEY3, a);
+  }
+
   // src/js/views/reader.js
   var W = 1920;
   var H = 1080;
   var PAN = 300;
-  var ZOOMS = [1, 1.5, 2, 3];
+  var ZOOMS = [1, 1.5, 2, 2.5, 3];
   var DOUBLE_MS = 450;
   function openReader(opts) {
     push(ReaderView(opts));
@@ -15489,7 +15615,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     img22.style.display = "none";
     var hud = h("div.rd-hud");
     var msg = h("div.rd-msg");
-    var el = h("div.view.reader", null, [img3, img22, hud, msg]);
+    var ribbon = h("div.rd-ribbon");
+    ribbon.style.display = "none";
+    var el = h("div.view.reader", null, [img3, img22, hud, msg, ribbon]);
     var chapter = function chapter() {
       return opts.chapters[ci];
     };
@@ -15545,8 +15673,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function save2() {
       if (!opts.key || !chapter()) return;
-      var all2 = get("readProgress", {}) || {};
-      all2[opts.key] = {
+      var all3 = get("readProgress", {}) || {};
+      all3[opts.key] = {
         chapterId: chapter().id,
         chapter: chapter().chapter,
         page: pi,
@@ -15556,9 +15684,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         ref: opts.ref,
         at: Date.now()
       };
-      var keys2 = Object.keys(all2);
-      if (keys2.length > 200) delete all2[keys2[0]];
-      set("readProgress", all2);
+      var keys2 = Object.keys(all3);
+      if (keys2.length > 200) delete all3[keys2[0]];
+      set("readProgress", all3);
     }
     function showPage(anchor) {
       if (!pages4.length) return;
@@ -15591,6 +15719,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         say("");
         showHud();
         save2();
+        drawRibbon();
         var next = pi + (both ? 2 : 1);
         pre = pre2 = null;
         if (next < pages4.length) {
@@ -15631,11 +15760,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       pages4 = [];
       img3.removeAttribute("src");
       say(t("Carregando..."));
-      (opts.pagesFn || pages2)(chapter().id).then(function (list2) {
+      (opts.pagesFn || pages2)(chapter().id).then(function (list3) {
         if (my !== token || !alive) return;
-        if (!list2.length) return say(t("Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚."));
-        pages4 = list2;
-        pi = start4 === "last" ? list2.length - 1 : Math.max(0, Math.min(start4 || 0, list2.length - 1));
+        if (!list3.length) return say(t("Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚."));
+        pages4 = list3;
+        pi = start4 === "last" ? list3.length - 1 : Math.max(0, Math.min(start4 || 0, list3.length - 1));
         showPage(start4 === "last" ? "bottom" : "top");
       }).catch(function () {
         return alive && say(t("Não foi possível abrir este capítulo agora."));
@@ -15670,8 +15799,98 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       showPage("top");
       toast(t(MODE_NAMES[m]));
     }
+    function drawRibbon() {
+      var c = chapter();
+      var b = opts.key && c ? at(opts.key, c.id, pi) : null;
+      ribbon.style.display = b ? "" : "none";
+      if (b) ribbon.style.background = hexOf(b.color);
+    }
+    function markMenu() {
+      var c = chapter();
+      if (!opts.key || !c) return;
+      var cur = at(opts.key, c.id, pi);
+      var items3 = COLORS3.map(function (x) {
+        return {
+          label: "● " + t(x.label),
+          value: x.id,
+          checked: !!cur && cur.color === x.id
+        };
+      });
+      if (cur) items3.push({
+        label: "✕ " + t("Tirar a marcação"),
+        value: ""
+      });
+      menu(t("Marcar esta página"), items3, {
+        onPick: function onPick(v) {
+          if (!v) remove(opts.key, cur);else put(opts.key, {
+            ci: ci,
+            chapterId: c.id,
+            chapter: c.chapter,
+            page: pi,
+            color: v
+          });
+          drawRibbon();
+          toast(v ? t("Página marcada.") : t("Marcação tirada."));
+        }
+      });
+    }
+    function marksMenu() {
+      var list3 = list2(opts.key).filter(function (b) {
+        return b.time == null;
+      });
+      if (!list3.length) return toast(t("Nenhuma página marcada ainda."));
+      menu(t("Minhas marcações"), list3.map(function (b) {
+        return {
+          label: "● " + t("Cap. {n}", {
+            n: b.chapter != null ? b.chapter : b.ci + 1
+          }) + " · " + t("Página {n}", {
+            n: b.page + 1
+          }),
+          sub: t(COLORS3.find(function (x) {
+            return x.id === b.color;
+          }) ? COLORS3.find(function (x) {
+            return x.id === b.color;
+          }).label : ""),
+          value: b
+        };
+      }), {
+        onPick: function onPick(b) {
+          var i = opts.chapters.findIndex(function (c) {
+            return c.id === b.chapterId;
+          });
+          if (i < 0) i = Math.min(b.ci, opts.chapters.length - 1);
+          zi = 0;
+          if (i === ci && pages4.length) {
+            pi = Math.max(0, Math.min(b.page, pages4.length - 1));
+            showPage("top");
+          } else loadChapter(i, b.page);
+        }
+      });
+    }
     function modeMenu() {
-      readingModeMenu(setMode, true);
+      var c = chapter();
+      var cur = opts.key && c ? at(opts.key, c.id, pi) : null;
+      var n = opts.key ? list2(opts.key).filter(function (b) {
+        return b.time == null;
+      }).length : 0;
+      menu(t("Leitura"), [{
+        label: "🔖 " + (cur ? t("Mudar a marcação desta página") : t("Marcar esta página")),
+        value: "mark"
+      }, {
+        label: "📑 " + t("Minhas marcações") + (n ? " (" + n + ")" : ""),
+        value: "marks"
+      }, {
+        label: "📄 " + t("Modo de leitura"),
+        sub: t(MODE_NAMES[mode] || "Uma página"),
+        value: "mode"
+      }, {
+        label: "🔍 " + t("OK 2x ou CH +/−: zoom"),
+        value: ""
+      }], {
+        onPick: function onPick(v) {
+          if (v === "mark") markMenu();else if (v === "marks") marksMenu();else if (v === "mode") readingModeMenu(setMode, false);
+        }
+      });
     }
     function zoomStep(to) {
       var z0 = size();
@@ -15791,18 +16010,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (isAnimeId(it._id)) return "anime";
     return it.type === "movie" ? "movie" : "series";
   }
-  function sortContinue(list2) {
+  function sortContinue(list3) {
     var mode = settings().cwSort;
     var frac = function frac(it) {
       return it.state && it.state.duration ? it.state.timeOffset / it.state.duration : 0;
     };
-    if (mode === "progress") return list2.slice().sort(function (a, b) {
+    if (mode === "progress") return list3.slice().sort(function (a, b) {
       return frac(b) - frac(a);
     });
-    if (mode === "name") return list2.slice().sort(function (a, b) {
+    if (mode === "name") return list3.slice().sort(function (a, b) {
       return String(a.name || "").localeCompare(String(b.name || ""));
     });
-    return list2;
+    return list3;
   }
   function episodeLabel(videoId, metaId) {
     if (!videoId || videoId === metaId) return "";
@@ -15957,8 +16176,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     cache5[query] = p;
     return p;
   }
-  function toMetas(list2) {
-    return (list2 || []).map(function (m) {
+  function toMetas(list3) {
+    return (list3 || []).map(function (m) {
       return {
         id: "anilist:" + m.id,
         anilist: m.id,
@@ -16257,8 +16476,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var add = function add(title, load7, onMore) {
       return pending2.push(posterRow(rows2, title, load7, onMore));
     };
-    var tiles = function tiles(title, list2, cls) {
-      var usable = list2.filter(function (x) {
+    var tiles = function tiles(title, list3, cls) {
+      var usable = list3.filter(function (x) {
         return x.src;
       });
       if (usable.length) tileRow(rows2, title, usable.map(function (x) {
@@ -16276,8 +16495,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       Suspense: "thriller",
       Mecha: "mecha"
     };
-    var malList = function malList(list2, cls, title, themes) {
-      return tiles(title, list2.map(function (g) {
+    var malList = function malList(list3, cls, title, themes) {
+      return tiles(title, list3.map(function (g) {
         return {
           label: g[1] ? t(g[1]) : g[0],
           art: "genre-" + (themes && g[0] === "Mecha" ? "real-robot" : GENRE_ART[g[0]] || slug(g[0])),
@@ -16569,11 +16788,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   };
   function toggleFav(key4, kind, ref) {
-    var all2 = favs();
-    var i = all2.findIndex(function (f) {
+    var all3 = favs();
+    var i = all3.findIndex(function (f) {
       return f.key === key4;
     });
-    if (i >= 0) all2.splice(i, 1);else all2.unshift({
+    if (i >= 0) all3.splice(i, 1);else all3.unshift({
       key: key4,
       kind: kind,
       ref: {
@@ -16595,7 +16814,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         year: ref.year
       }
     });
-    set(FAVS, all2.slice(0, 200));
+    set(FAVS, all3.slice(0, 200));
     return i < 0;
   }
   function tabOf2(entry) {
@@ -16603,8 +16822,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (entry.kind === "cv") return "comics";
     var ref = entry.ref || {};
     if (entry.kind === "pl" && ref.plId) {
-      var all2 = get("mangaPlugins", []) || [];
-      var p = all2.find(function (x) {
+      var all3 = get("mangaPlugins", []) || [];
+      var p = all3.find(function (x) {
         return x.id === ref.plId;
       });
       if (p) return p.kind === "comics" || p.kind === "books" ? p.kind : "manga";
@@ -16613,16 +16832,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return ref.tab === "comics" || ref.tab === "books" ? ref.tab : "manga";
   }
   function forget(key4) {
-    var all2 = get("readProgress", {}) || {};
-    delete all2[key4];
-    set("readProgress", all2);
+    var all3 = get("readProgress", {}) || {};
+    delete all3[key4];
+    set("readProgress", all3);
   }
   function continueList(limit) {
-    var all2 = get("readProgress", {}) || {};
-    return Object.keys(all2).map(function (k) {
+    var all3 = get("readProgress", {}) || {};
+    return Object.keys(all3).map(function (k) {
       return Object.assign({
         key: k
-      }, all2[k]);
+      }, all3[k]);
     }).filter(function (p) {
       return p.kind && p.ref && p.at;
     }).sort(function (a, b) {
@@ -16661,9 +16880,345 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text: "🔢 " + t("Ir para o capítulo...")
     })]);
   }
-  function focusChapter(list2, i) {
-    var row2 = list2.querySelector('[data-ci="' + i + '"]');
+  function focusChapter(list3, i) {
+    var row2 = list3.querySelector('[data-ci="' + i + '"]');
     if (row2) focus(row2);
+  }
+
+  // src/js/views/listen.js
+  var SPEEDS = [0.75, 1, 1.25, 1.5, 1.75, 2];
+  var KEY_LISTEN = "listenProgress";
+  function listenProgress(key4) {
+    return (get(KEY_LISTEN, {}) || {})[key4] || null;
+  }
+  function forgetListen(key4) {
+    var all3 = get(KEY_LISTEN, {}) || {};
+    delete all3[key4];
+    set(KEY_LISTEN, all3);
+  }
+  function listenList() {
+    var all3 = get(KEY_LISTEN, {}) || {};
+    return Object.keys(all3).map(function (k) {
+      return Object.assign({
+        key: k
+      }, all3[k]);
+    }).filter(function (p) {
+      return p.ref && p.at;
+    }).sort(function (a, b) {
+      return b.at - a.at;
+    });
+  }
+  var fmt = function fmt(s) {
+    s = Math.max(0, Math.floor(s || 0));
+    var hh = Math.floor(s / 3600);
+    var mm = Math.floor(s % 3600 / 60);
+    var ss = String(s % 60).padStart(2, "0");
+    return hh ? hh + ":" + String(mm).padStart(2, "0") + ":" + ss : mm + ":" + ss;
+  };
+  function openListen(opts) {
+    push(ListenView(opts));
+  }
+  function ListenView(opts) {
+    var tracks2 = opts.tracks || [];
+    var ti = Math.max(0, Math.min(opts.index || 0, tracks2.length - 1));
+    var speed = settings().listenSpeed || 1;
+    var alive = true;
+    var pages4 = [];
+    var pi = 0;
+    var pageToken = 0;
+    var audio = document.createElement("audio");
+    audio.preload = "auto";
+    var bg = h("div.ls-bg");
+    if (opts.poster) bg.style.backgroundImage = 'url("' + opts.poster + '")';
+    var page3 = h("img.ls-page", {
+      alt: ""
+    });
+    page3.style.display = "none";
+    var cover = h("img.ls-cover", {
+      alt: ""
+    });
+    if (opts.poster) cover.src = opts.poster;
+    var titleEl = h("div.ls-title", {
+      text: opts.title || ""
+    });
+    var trackEl = h("div.ls-track");
+    var fill = h("i");
+    var bar = h("div.ls-bar", null, fill);
+    var timeEl = h("div.ls-time");
+    var stateEl = h("div.ls-state", {
+      text: "▶"
+    });
+    var speedEl = h("div.ls-speed");
+    var hint = h("div.ls-hint", {
+      text: t("OK: tocar/pausar · ◀ ▶ 30 s · ▲ ▼ capítulo · CH: página · Segure OK: menu")
+    });
+    var panel = h("div.ls-panel", null, [cover, h("div.ls-info", null, [titleEl, trackEl, bar, h("div.ls-row", null, [stateEl, timeEl, speedEl])])]);
+    var el = h("div.view.listen", null, [bg, page3, panel, hint, audio]);
+    function save2() {
+      if (!opts.key || !tracks2[ti]) return;
+      var all3 = get(KEY_LISTEN, {}) || {};
+      all3[opts.key] = {
+        track: ti,
+        trackId: tracks2[ti].id,
+        chapter: tracks2[ti].chapter,
+        time: Math.floor(audio.currentTime || 0),
+        at: Date.now(),
+        title: opts.title,
+        poster: opts.poster,
+        ref: opts.ref
+      };
+      var keys2 = Object.keys(all3);
+      if (keys2.length > 200) delete all3[keys2[0]];
+      set(KEY_LISTEN, all3);
+    }
+    function drawInfo() {
+      var tr = tracks2[ti] || {};
+      trackEl.textContent = (tr.title || t("Faixa {n}", {
+        n: ti + 1
+      })) + "  ·  " + (ti + 1) + " / " + tracks2.length;
+      speedEl.textContent = speed + "×";
+      drawTime();
+    }
+    function drawTime() {
+      var d = audio.duration && isFinite(audio.duration) ? audio.duration : tracks2[ti] && tracks2[ti].duration || 0;
+      timeEl.textContent = fmt(audio.currentTime) + " / " + (d ? fmt(d) : "--:--");
+      fill.style.width = d ? Math.min(100, audio.currentTime / d * 100) + "%" : "0%";
+      stateEl.textContent = audio.paused ? "▶" : "⏸";
+    }
+    function loadPages() {
+      var my = ++pageToken;
+      pages4 = [];
+      pi = 0;
+      page3.style.display = "none";
+      if (!opts.pagesFn || !opts.chapters || !opts.chapters.length) return;
+      var tr = tracks2[ti] || {};
+      var c = tr.chapter != null ? opts.chapters.find(function (x) {
+        return String(x.chapter) === String(tr.chapter);
+      }) : null;
+      if (!c && opts.chapters.length === tracks2.length) c = opts.chapters[ti];
+      if (!c) return;
+      opts.pagesFn(c.id).then(function (list3) {
+        if (my !== pageToken || !alive || !list3.length) return;
+        pages4 = list3;
+        showPage();
+      }).catch(function () {});
+    }
+    function showPage() {
+      if (!pages4.length) return;
+      page3.src = pages4[pi];
+      page3.style.display = "";
+      el.classList.add("has-page");
+    }
+    function playTrack(i, at2) {
+      ti = Math.max(0, Math.min(i, tracks2.length - 1));
+      var tr = tracks2[ti];
+      if (!tr) return;
+      audio.src = tr.url;
+      audio.playbackRate = speed;
+      var start4 = at2 || 0;
+      var go = function go() {
+        if (start4) {
+          try {
+            audio.currentTime = start4;
+          } catch (e) {}
+        }
+        audio.playbackRate = speed;
+        var p = audio.play();
+        if (p && p.catch) p.catch(function () {});
+      };
+      audio.onloadedmetadata = go;
+      audio.load();
+      drawInfo();
+      loadPages();
+      save2();
+    }
+    audio.ontimeupdate = function () {
+      return alive && drawTime();
+    };
+    audio.onplay = audio.onpause = function () {
+      return alive && (drawTime(), save2());
+    };
+    audio.onended = function () {
+      if (!alive) return;
+      if (ti + 1 < tracks2.length) playTrack(ti + 1, 0);else {
+        toast(t("Fim do livro."));
+        save2();
+      }
+    };
+    audio.onerror = function () {
+      return alive && toast(t("Não consegui tocar este capítulo."), 5e3);
+    };
+    var saver = setInterval(function () {
+      return alive && !audio.paused && save2();
+    }, 5e3);
+    var onHide = function onHide() {
+      if (document.hidden && !audio.paused) audio.pause();
+    };
+    document.addEventListener("visibilitychange", onHide);
+    function seek(d) {
+      var dur = audio.duration && isFinite(audio.duration) ? audio.duration : 0;
+      var x = (audio.currentTime || 0) + d;
+      if (x < 0) x = 0;
+      if (dur && x > dur - 1) x = dur - 1;
+      try {
+        audio.currentTime = x;
+      } catch (e) {}
+      drawTime();
+    }
+    function toggle() {
+      if (audio.paused) {
+        var p = audio.play();
+        if (p && p.catch) p.catch(function () {});
+      } else audio.pause();
+    }
+    function openMenu() {
+      var n = opts.key ? list2(opts.key).filter(function (b) {
+        return b.time != null;
+      }).length : 0;
+      menu(opts.title || t("Livro"), [{
+        label: "⏩ " + t("Velocidade: {n}×", {
+          n: speed
+        }),
+        value: "speed"
+      }, {
+        label: "📃 " + t("Capítulos"),
+        sub: ti + 1 + " / " + tracks2.length,
+        value: "tracks"
+      }, {
+        label: "🔖 " + t("Marcar este momento"),
+        sub: fmt(audio.currentTime),
+        value: "mark"
+      }, {
+        label: "📑 " + t("Minhas marcações") + (n ? " (" + n + ")" : ""),
+        value: "marks"
+      }], {
+        onPick: function onPick(v) {
+          if (v === "speed") menu(t("Velocidade"), SPEEDS.map(function (x) {
+            return {
+              label: x + "×",
+              value: x,
+              checked: x === speed
+            };
+          }), {
+            onPick: function onPick(x) {
+              speed = x;
+              audio.playbackRate = x;
+              saveSettings({
+                listenSpeed: x
+              });
+              drawInfo();
+            }
+          });else if (v === "tracks") menu(t("Capítulos"), tracks2.map(function (tr, i) {
+            return {
+              label: tr.title || t("Faixa {n}", {
+                n: i + 1
+              }),
+              sub: tr.duration ? fmt(tr.duration) : "",
+              value: i,
+              checked: i === ti
+            };
+          }), {
+            onPick: function onPick(i) {
+              return playTrack(i, 0);
+            }
+          });else if (v === "mark") menu(t("Marcar este momento"), COLORS3.map(function (x) {
+            return {
+              label: "● " + t(x.label),
+              value: x.id
+            };
+          }), {
+            onPick: function onPick(c) {
+              put(opts.key, {
+                ci: ti,
+                chapterId: tracks2[ti].id,
+                chapter: tracks2[ti].title,
+                time: Math.floor(audio.currentTime || 0),
+                color: c
+              });
+              toast(t("Momento marcado."));
+            }
+          });else if (v === "marks") {
+            var list3 = list2(opts.key).filter(function (b) {
+              return b.time != null;
+            });
+            if (!list3.length) return toast(t("Nenhum momento marcado ainda."));
+            menu(t("Minhas marcações"), list3.map(function (b) {
+              return {
+                label: "● " + (b.chapter || t("Faixa {n}", {
+                  n: b.ci + 1
+                })) + " · " + fmt(b.time),
+                value: b
+              };
+            }), {
+              onPick: function onPick(b) {
+                var i = tracks2.findIndex(function (x) {
+                  return x.id === b.chapterId;
+                });
+                if (i === ti) {
+                  try {
+                    audio.currentTime = b.time;
+                  } catch (e) {}
+                } else playTrack(i >= 0 ? i : b.ci, b.time);
+              }
+            });
+          }
+        }
+      });
+    }
+    var hold2 = null;
+    var onKeyUp2 = function onKeyUp2(e) {
+      if (e.keyCode !== KEY.ENTER || !hold2) return;
+      clearTimeout(hold2.timer);
+      var fired = hold2.fired;
+      hold2 = null;
+      if (!fired) toggle();
+    };
+    document.addEventListener("keyup", onKeyUp2, true);
+    playTrack(ti, opts.startTime || 0);
+    return {
+      el: el,
+      onKey: function onKey(e) {
+        var k = e.keyCode;
+        if (k === KEY.ENTER) {
+          if (e.repeat || hold2) return true;
+          var h1 = {
+            fired: false,
+            timer: 0
+          };
+          h1.timer = setTimeout(function () {
+            h1.fired = true;
+            openMenu();
+          }, 650);
+          hold2 = h1;
+          return true;
+        }
+        if (k === KEY.PLAYPAUSE) return toggle(), true;
+        if (k === KEY.PLAY) return audio.play(), true;
+        if (k === KEY.PAUSE) return audio.pause(), true;
+        if (k === KEY.LEFT || k === KEY.RW) return seek(-30), true;
+        if (k === KEY.RIGHT || k === KEY.FF) return seek(30), true;
+        if (k === KEY.UP) return ti > 0 ? playTrack(ti - 1, 0) : toast(t("Este é o primeiro capítulo.")), true;
+        if (k === KEY.DOWN) return ti + 1 < tracks2.length ? playTrack(ti + 1, 0) : toast(t("Este é o último capítulo.")), true;
+        if (k === KEY.CH_UP || k === KEY.CH_DOWN) {
+          if (!pages4.length) return true;
+          var fwd = k === KEY.CH_UP !== !!opts.rtl ? 1 : -1;
+          pi = Math.max(0, Math.min(pages4.length - 1, pi + fwd));
+          showPage();
+          return true;
+        }
+        return false;
+      },
+      destroy: function destroy() {
+        alive = false;
+        save2();
+        clearInterval(saver);
+        document.removeEventListener("visibilitychange", onHide);
+        document.removeEventListener("keyup", onKeyUp2, true);
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+      }
+    };
   }
 
   // src/js/views/sources.js
@@ -16827,14 +17382,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return box;
   }
   function sourceRows(parent, kind) {
-    var list2 = installed(kind);
-    if (!list2.length) return [];
+    var list3 = installed(kind);
+    if (!list3.length) return [];
     parent.appendChild(h("div.row-title.src-rows-title", null, [t("Das suas fontes"), h("small", {
       text: t("{n} fontes", {
-        n: list2.length
+        n: list3.length
       })
     })]));
-    return list2.map(function (p) {
+    return list3.map(function (p) {
       var api2 = pluginApi(p.id, p.name);
       var row2 = h("div.row", {
         "data-anchor": "30"
@@ -17239,9 +17794,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (enabled2()) {
         var sp = spinnerLine(t("Carregando..."));
         body.appendChild(sp);
-        sources().then(function (list2) {
+        sources().then(function (list3) {
           if (sp.parentNode) body.removeChild(sp);
-          list2.forEach(function (s) {
+          list3.forEach(function (s) {
             return body.appendChild(row2(s.name, "", function () {
               return push(SourceGrid(suwayomiApi(s)));
             }, s.lang.toUpperCase()));
@@ -17389,6 +17944,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var chunk = 0;
     var alive = true;
     var key4 = api2.key(m);
+    var audio = [];
+    if (api2.tab === "books" && m.plId) audioTracks(m.plId, m.mid).then(function (tr) {
+      if (!alive || !tr.length) return;
+      audio = tr;
+      renderInfo();
+    });
     var status2 = h("div.loading-line", {
       text: t("Procurando capítulos...")
     });
@@ -17457,7 +18018,30 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       }, [h("span.ico", {
         text: isFav(key4) ? "♥" : "♡"
-      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]), h("div.btn", {
+      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]),
+      // Books with sound: 🎧 Listen (continues where you stopped).
+      audio.length ? h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          var lp = listenProgress(key4);
+          openListen({
+            key: key4,
+            title: m.name,
+            poster: m.poster,
+            tracks: audio,
+            index: lp ? Math.min(lp.track, audio.length - 1) : 0,
+            startTime: lp ? lp.time : 0,
+            ref: Object.assign({}, m, {
+              tab: api2.tab
+            }),
+            chapters: chapters4,
+            pagesFn: chapters4.length ? api2.pagesFn : null,
+            rtl: /^ar/i.test(api2.lang || "")
+          });
+        }
+      }, [h("span.ico", {
+        text: "🎧"
+      }), listenProgress(key4) ? t("Continuar ouvindo") : t("Ouvir")]) : null, h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
           return readingModeMenu(function () {
@@ -17580,9 +18164,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return get("mangaLinks2", {}) || {};
   }
   function saveLink(id, v) {
-    var all2 = links();
-    if (v) all2[id] = v;else delete all2[id];
-    set("mangaLinks2", all2);
+    var all3 = links();
+    if (v) all3[id] = v;else delete all3[id];
+    set("mangaLinks2", all3);
   }
   function openMangaDetails(m) {
     push(MangaDetailsView(m));
@@ -17624,14 +18208,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var key4 = "al" + m.anilist;
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
-    var list2 = h("div.md-list", {
+    var list3 = h("div.md-list", {
       "data-scroll-y": "",
       "data-pad-y": "120",
       "data-group": "",
       "data-vertical": ""
     });
     el.appendChild(info2);
-    el.appendChild(list2);
+    el.appendChild(list3);
     var chapters4 = [];
     var chunk = 0;
     var langSet = LANG_SETS.find(function (x) {
@@ -17807,9 +18391,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       loadVisibleImages(info2);
     }
     function renderList(focusFirst2) {
-      clear(list2);
+      clear(list3);
       if (!chapters4.length) {
-        list2.appendChild(status2);
+        list3.appendChild(status2);
         return;
       }
       var start4 = chunk * CHUNK2;
@@ -17825,14 +18409,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: label
         })]);
       };
-      if (chapters4.length > 8) list2.appendChild(chapterSearchRow(function () {
+      if (chapters4.length > 8) list3.appendChild(chapterSearchRow(function () {
         return chapters4;
       }, function (i) {
         chunk = Math.floor(i / CHUNK2);
         renderList(false);
-        focusChapter(list2, i);
+        focusChapter(list3, i);
       }));
-      if (chunk > 0) list2.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
+      if (chunk > 0) list3.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
         a: (chunk - 1) * CHUNK2 + 1,
         b: chunk * CHUNK2
       }), chunk - 1));
@@ -17842,7 +18426,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var title = (c.chapter !== null && c.chapter !== void 0 ? t("Cap. {n}", {
           n: c.chapter
         }) : t("Especial")) + (c.title ? " · " + c.title : "");
-        list2.appendChild(h("div.stream", {
+        list3.appendChild(h("div.stream", {
           focusable: true,
           "data-ci": String(i),
           onSelect: function onSelect() {
@@ -17863,12 +18447,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       for (var i = start4; i < end; i++) {
         _loop0(i);
       }
-      if (end < chapters4.length) list2.appendChild(nav2(t("Capítulos {a}–{b}", {
+      if (end < chapters4.length) list3.appendChild(nav2(t("Capítulos {a}–{b}", {
         a: end + 1,
         b: Math.min(chapters4.length, end + CHUNK2)
       }) + " ▶", chunk + 1));
       if (focusFirst2) {
-        var first = list2.querySelector(".stream");
+        var first = list3.querySelector(".stream");
         if (first) focus(first);
       }
     }
@@ -17894,11 +18478,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function useSource(ln, fallback) {
       chapters4 = [];
-      clear(list2);
+      clear(list3);
       status2.textContent = t("Carregando capítulos de {name}...", {
         name: ln.name
       });
-      list2.appendChild(status2);
+      list3.appendChild(status2);
       return pluginApi(ln.pid, ln.name).chapters({
         mid: ln.mid
       }).then(function (cs) {
@@ -18005,16 +18589,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       status2.textContent = t("Procurando nas suas fontes...");
       scan3(function (hit) {
         if (!source && !picked) showSource(linkOf2(hit), hit.cs);
-      }).then(function (all2) {
+      }).then(function (all3) {
         if (!alive) return;
-        if (!all2.length) {
+        if (!all3.length) {
           status2.textContent = t("Não encontrei este título nas suas fontes.");
           renderInfo();
           renderList(false);
           return offerPlugins();
         }
         if (picked) return;
-        var best2 = all2[0];
+        var best2 = all3[0];
         saveLink(m.anilist, linkOf2(best2));
         if (!source || source.pid !== best2.pid) {
           showSource(linkOf2(best2), best2.cs);
@@ -18023,8 +18607,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             n: best2.count
           }), 5e3);
         }
-        if (all2.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
-          n: all2.length
+        if (all3.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
+          n: all3.length
         }), 5e3);
       });
     }
@@ -18093,9 +18677,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadChaptersMd(thenSearch) {
       chapters4 = [];
       source = null;
-      clear(list2);
+      clear(list3);
       status2.textContent = t("Procurando capítulos...");
-      list2.appendChild(status2);
+      list3.appendChild(status2);
       find2(m.anilist, [media2.title && media2.title.english, media2.title && media2.title.romaji, m.name]).then(function (id) {
         return id ? chapters2(id, langSet.langs) : [];
       }).then(function (cs) {
@@ -18126,13 +18710,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var q2 = names2()[0] || m.name;
       var plugins = installed("manga");
       if (!plugins.length) {
-        list2.appendChild(h("div.modal-text", {
+        list3.appendChild(h("div.modal-text", {
           text: t("Adicione fontes em Mangá → Minhas fontes para ler outros títulos.")
         }));
         return;
       }
       plugins.forEach(function (p) {
-        return list2.appendChild(h("div.stream", {
+        return list3.appendChild(h("div.stream", {
           focusable: true,
           onSelect: function onSelect() {
             return searchPlugin(p.id, p.name, q2);
@@ -18238,8 +18822,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Dynamite Entertainment": 1,
     "Valiant": 1
   };
-  function rank(list2) {
-    return list2.filter(function (v) {
+  function rank(list3) {
+    return list3.filter(function (v) {
       return v && v.count_of_issues > 0 && v.image;
     }).sort(function (a, b) {
       return (MAJOR[(b.publisher || {}).name] || 0) - (MAJOR[(a.publisher || {}).name] || 0) || b.count_of_issues - a.count_of_issues;
@@ -18286,12 +18870,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       field_list: "id,issue_number,image,volume,store_date"
     }).then(function (j) {
       var seen = {};
-      var list2 = [];
+      var list3 = [];
       (j.results || []).forEach(function (i) {
         var v = i.volume || {};
         if (!v.id || seen[v.id] || !i.image) return;
         seen[v.id] = 1;
-        list2.push({
+        list3.push({
           id: "cv:" + v.id,
           cvId: v.id,
           type: "comic",
@@ -18301,9 +18885,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           art: wide(i.image)
         });
       });
-      if (!list2.length) return list2;
+      if (!list3.length) return list3;
       return get2("volumes/", {
-        filter: "id:" + list2.map(function (m) {
+        filter: "id:" + list3.map(function (m) {
           return m.cvId;
         }).join("|"),
         field_list: "id,publisher",
@@ -18313,11 +18897,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         (v.results || []).forEach(function (x) {
           return pub[x.id] = x.publisher && x.publisher.name || "";
         });
-        return list2.filter(function (m) {
+        return list3.filter(function (m) {
           return WESTERN.test(pub[m.cvId] || "");
         });
       }).catch(function () {
-        return list2.filter(function (m) {
+        return list3.filter(function (m) {
           return !/weekly|monthly|shonen|shōnen|jump|young|magazine|gekkan|comic beam|morning|afternoon|sunday|champion|gangan/i.test(m.title);
         });
       });
@@ -18353,14 +18937,26 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return pluginApi(p.id, p.name).chapters({
             mid: best2.id
           }).then(function (cs) {
-            return cs.length ? {
+            if (cs.length) return {
               pid: p.id,
               name: p.name,
               mid: best2.id,
               title: best2.title,
               count: cs.length,
               cs: cs
-            } : next();
+            };
+            if (o.kind !== "books") return next();
+            return audioTracks(p.id, best2.id).then(function (tr) {
+              return tr.length ? {
+                pid: p.id,
+                name: p.name,
+                mid: best2.id,
+                title: best2.title,
+                count: tr.length,
+                cs: [],
+                tracks: tr
+              } : next();
+            });
           }, next);
         }, function () {
           return next();
@@ -18437,23 +19033,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return get("comicLinks", {}) || {};
   }
   function saveLink2(id, v) {
-    var all2 = links2();
-    if (v) all2[id] = v;else delete all2[id];
-    set("comicLinks", all2);
+    var all3 = links2();
+    if (v) all3[id] = v;else delete all3[id];
+    set("comicLinks", all3);
   }
   function ComicDetailsView(m0) {
     var m = Object.assign({}, m0);
     var key4 = "cv" + m.cvId;
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
-    var list2 = h("div.md-list", {
+    var list3 = h("div.md-list", {
       "data-scroll-y": "",
       "data-pad-y": "120",
       "data-group": "",
       "data-vertical": ""
     });
     el.appendChild(info2);
-    el.appendChild(list2);
+    el.appendChild(list3);
     var chapters4 = [];
     var chunk = 0;
     var _alive = true;
@@ -18586,9 +19182,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function renderList(focusFirst2) {
-      clear(list2);
+      clear(list3);
       if (!chapters4.length) {
-        list2.appendChild(status2);
+        list3.appendChild(status2);
         return;
       }
       var start4 = chunk * CHUNK3;
@@ -18604,14 +19200,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: label
         })]);
       };
-      if (chapters4.length > 8) list2.appendChild(chapterSearchRow(function () {
+      if (chapters4.length > 8) list3.appendChild(chapterSearchRow(function () {
         return chapters4;
       }, function (i) {
         chunk = Math.floor(i / CHUNK3);
         renderList(false);
-        focusChapter(list2, i);
+        focusChapter(list3, i);
       }));
-      if (chunk > 0) list2.appendChild(nav2("◀ " + t("Edições {a}–{b}", {
+      if (chunk > 0) list3.appendChild(nav2("◀ " + t("Edições {a}–{b}", {
         a: (chunk - 1) * CHUNK3 + 1,
         b: chunk * CHUNK3
       }), chunk - 1));
@@ -18619,7 +19215,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var c = chapters4[i];
         var here = p && p.chapterId === c.id;
         var label = (c.chapter !== null && c.chapter !== void 0 ? "#" + c.chapter : t("Especial")) + (c.title ? " · " + c.title : "");
-        list2.appendChild(h("div.stream", {
+        list3.appendChild(h("div.stream", {
           focusable: true,
           "data-ci": String(i),
           onSelect: function onSelect() {
@@ -18634,12 +19230,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       for (var i = start4; i < end; i++) {
         _loop1(i);
       }
-      if (end < chapters4.length) list2.appendChild(nav2(t("Edições {a}–{b}", {
+      if (end < chapters4.length) list3.appendChild(nav2(t("Edições {a}–{b}", {
         a: end + 1,
         b: Math.min(chapters4.length, end + CHUNK3)
       }) + " ▶", chunk + 1));
       if (focusFirst2) {
-        var first = list2.querySelector(".stream");
+        var first = list3.querySelector(".stream");
         if (first) focus(first);
       }
     }
@@ -18668,9 +19264,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         year: m.year,
         min: 0.8,
         kind: "comics"
-      }).then(function (all2) {
-        found = all2;
-        return all2;
+      }).then(function (all3) {
+        found = all3;
+        return all3;
       });
       return scanning;
     }
@@ -18678,7 +19274,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       status2.textContent = text;
       renderInfo();
       renderList(false);
-      list2.appendChild(h("div.stream", {
+      list3.appendChild(h("div.stream", {
         focusable: true,
         onSelect: function onSelect() {
           return openSources("comics");
@@ -18687,7 +19283,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: "📚 " + t("Minhas fontes")
       })]));
       installed("comics").forEach(function (p) {
-        return list2.appendChild(h("div.stream", {
+        return list3.appendChild(h("div.stream", {
           focusable: true,
           onSelect: function onSelect() {
             return searchPlugin(p.id, p.name, m.title);
@@ -18701,8 +19297,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function loadIssues() {
       chapters4 = [];
-      clear(list2);
-      list2.appendChild(status2);
+      clear(list3);
+      list3.appendChild(status2);
       if (!installed("comics").length) return noSources(t("Para ler, adicione suas fontes em Minhas fontes."));
       var ln = links2()[m.cvId];
       if (ln) {
@@ -18736,15 +19332,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       status2.textContent = t("Procurando nas suas fontes...");
       scan3(function (hit) {
         if (!source && !picked) showSource(linkOf(hit), sortIssues(hit.cs));
-      }).then(function (all2) {
+      }).then(function (all3) {
         if (!_alive) return;
-        if (!all2.length) return noSources(t("Não encontrei este título nas suas fontes."));
+        if (!all3.length) return noSources(t("Não encontrei este título nas suas fontes."));
         if (picked) return;
-        var best2 = all2[0];
+        var best2 = all3[0];
         saveLink2(m.cvId, linkOf(best2));
         if (!source || source.pid !== best2.pid) showSource(linkOf(best2), sortIssues(best2.cs));
-        if (all2.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
-          n: all2.length
+        if (all3.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
+          n: all3.length
         }), 5e3);
       });
     }
@@ -19043,13 +19639,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function drawShelves() {
       clear(shelves);
-      var mk = function mk(title, list2) {
-        if (!list2.length) return;
+      var mk = function mk(title, list3) {
+        if (!list3.length) return;
         var track = h("div.row-track", {
           "data-scroll-x": "",
           "data-group": ""
         });
-        list2.forEach(function (x) {
+        list3.forEach(function (x) {
           var open2 = function open2() {
             return x.ref.cvId ? openComicDetails(Object.assign({
               id: "cv:" + x.ref.cvId,
@@ -19482,14 +20078,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var guideEl = h("div.details-guide");
         guideEl.style.display = "none";
         info2.appendChild(guideEl);
-        guide(meta.imdb_id || meta.id).then(function (list2) {
-          if (!list2.length) return;
+        guide(meta.imdb_id || meta.id).then(function (list3) {
+          if (!list3.length) return;
           var LV = {
             mild: t("Leve"),
             moderate: t("Moderado"),
             severe: t("Forte")
           };
-          list2.forEach(function (g) {
+          list3.forEach(function (g) {
             return guideEl.appendChild(h("span", {
               cls: "lv-" + g.level
             }, [h("b", {
@@ -19534,20 +20130,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         provEl: provEl
       });
     }
-    function renderRatings(el2, list2) {
+    function renderRatings(el2, list3) {
       clear(el2);
-      list2.forEach(function (r) {
+      list3.forEach(function (r) {
         return el2.appendChild(h("span.rating", {
           cls: r.cls
         }, [h("b", {
           text: r.label
         }), r.value]));
       });
-      el2.style.display = list2.length ? "" : "none";
+      el2.style.display = list3.length ? "" : "none";
     }
     function loadExtras(ui) {
-      ratings(meta, isAnime(meta)).then(function (list2) {
-        return alive && renderRatings(ui.ratingsEl, list2);
+      ratings(meta, isAnime(meta)).then(function (list3) {
+        return alive && renderRatings(ui.ratingsEl, list3);
       }).catch(function () {});
       awards(meta.imdb_id || (/^tt\d+/.exec(meta.id) || [])[0]).then(function (a) {
         if (!alive || !a || !ui.ratingsEl.parentNode) return;
@@ -19705,13 +20301,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }));
       panel.appendChild(chips);
-      var list2 = h("div.list", {
+      var list3 = h("div.list", {
         "data-scroll-y": "",
         "data-pad-y": "120",
         "data-group": "",
         "data-vertical": ""
       });
-      list2.style.top = "190px";
+      list3.style.top = "190px";
       var li = libraryItem(meta.id);
       var focusEl = null;
       sortedVideos(meta).filter(function (v) {
@@ -19762,10 +20358,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         })])]);
         row2.__episode = v.episode;
         if (v.id === focusVideoId || !focusVideoId && inProgress) focusEl = row2;
-        list2.appendChild(row2);
+        list3.appendChild(row2);
       });
-      panel.appendChild(list2);
-      list2.__last = focusEl || list2.firstChild;
+      panel.appendChild(list3);
+      list3.__last = focusEl || list3.firstChild;
       localizeEpisodes();
       loadVisibleImages(panel, 300);
       if (focusEl && focusVideoId) setTimeout(function () {
@@ -19915,14 +20511,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var barFill = h("i");
       panel.appendChild(sub);
       panel.appendChild(h("div.load-bar", null, barFill));
-      var list2 = h("div.list", {
+      var list3 = h("div.list", {
         "data-scroll-y": "",
         "data-pad-y": "120",
         "data-group": "",
         "data-vertical": ""
       });
-      list2.style.top = "178px";
-      panel.appendChild(list2);
+      list3.style.top = "178px";
+      panel.appendChild(list3);
       var srcs = withResource("stream", meta.type, video.id).map(function (a, i) {
         return {
           a: a,
@@ -19934,14 +20530,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return x.a;
       });
       if (!srcs.length) {
-        list2.appendChild(h("div.loading-line", {
+        list3.appendChild(h("div.loading-line", {
           text: t("Nenhum addon de streams instalado (ex.: Torrentio). Instale pela sua conta Stremio.")
         }));
         return;
       }
       var groups = srcs.map(function (a) {
         var el2 = h("div.stream-group");
-        list2.appendChild(el2);
+        list3.appendChild(el2);
         return {
           addon: a,
           el: el2,
@@ -19950,10 +20546,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         };
       });
       var loadingLine = spinnerLine(t("Buscando fontes nos addons..."));
-      list2.appendChild(loadingLine);
+      list3.appendChild(loadingLine);
       var filter = "all";
       var pendingCount = srcs.length;
-      var all2 = [];
+      var all3 = [];
       var autoFocused = null;
       var serverOk = isAvailable();
       var smartActive = !!smart;
@@ -19995,11 +20591,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       function decideSmart(timedOut) {
         if (!smartActive || !alive || streamsVideo !== video) return;
         if (focusFirst2 && autoFocused && current2() !== autoFocused) return stopSmart();
-        var list3 = smartCandidates();
+        var list4 = smartCandidates();
         var debridPending = groups.some(function (g) {
           return addonRank(g.addon) === 0 && !g.done;
         });
-        var best2 = list3[0];
+        var best2 = list4[0];
         var clean = best2 && !needsServer(best2) && !streamBadges(best2).some(function (b) {
           return b.warn;
         });
@@ -20012,7 +20608,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
         if (pendingCount > 0 && !timedOut && (debridPending || !clean)) return;
         stopSmart();
-        play(video, best2, all2, list3.slice(1, 1 + SMART_FALLBACKS));
+        play(video, best2, all3, list4.slice(1, 1 + SMART_FALLBACKS));
       }
       function status2() {
         if (smartActive) {
@@ -20024,7 +20620,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         sub.textContent = srv + (pendingCount > 0 ? "  ·  " + t("{n} addon(s) ainda carregando", {
           n: pendingCount
         }) : "  ·  " + t("{n} fontes", {
-          n: all2.length
+          n: all3.length
         }));
         barFill.style.width = Math.round((srcs.length - pendingCount) / srcs.length * 100) + "%";
         var g = groups.find(function (x) {
@@ -20033,7 +20629,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         filterBtn.textContent = (g ? g.addon.manifest.name : t("Todos")) + " ▾";
       }
       function firstVisibleItem() {
-        var items3 = list2.querySelectorAll(".stream");
+        var items3 = list3.querySelectorAll(".stream");
         for (var i = 0; i < items3.length; i++) if (items3[i].offsetParent !== null && !items3[i].classList.contains("disabled")) return items3[i];
         return null;
       }
@@ -20041,7 +20637,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         groups.forEach(function (g) {
           return g.el.style.display = filter === "all" || filter === g.addon.transportUrl ? "" : "none";
         });
-        list2.scrollTop = 0;
+        list3.scrollTop = 0;
         status2();
         var first = firstVisibleItem();
         if (first) focus(first);
@@ -20050,7 +20646,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var opts2 = [{
           label: t("Todos"),
           sub: t("{n} fontes", {
-            n: all2.length
+            n: all3.length
           }),
           value: "all",
           checked: filter === "all"
@@ -20092,8 +20688,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }));
             g.streams = streams2;
             streams2.forEach(function (s) {
-              all2.push(s);
-              g.el.appendChild(streamItem(s, video, serverOk, all2));
+              all3.push(s);
+              g.el.appendChild(streamItem(s, video, serverOk, all3));
             });
           }
           if (focusFirst2 && (!autoFocused || current2() === autoFocused)) {
@@ -20104,8 +20700,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }
           }
           if (pendingCount <= 0) {
-            if (loadingLine.parentNode) list2.removeChild(loadingLine);
-            if (!all2.length) list2.appendChild(h("div.loading-line", {
+            if (loadingLine.parentNode) list3.removeChild(loadingLine);
+            if (!all3.length) list3.appendChild(h("div.loading-line", {
               text: t("Nenhuma fonte encontrada.")
             }));
           }
@@ -20114,7 +20710,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }).catch(function () {});
     }
-    function streamItem(s, video, serverOk, all2) {
+    function streamItem(s, video, serverOk, all3) {
       var playableType = isPlayableType(s);
       var needs = needsServer(s);
       var disabled = !playableType || needs && !serverOk;
@@ -20151,7 +20747,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         onSelect: function onSelect() {
           if (!playableType) return toast(t("Esse tipo de fonte não abre na TV."));
           if (needs && !serverOk) return toast(t("Torrent precisa do stremio-service rodando no PC. Configure em Ajustes."), 5e3);
-          play(video, s, all2);
+          play(video, s, all3);
         }
       }, [h("div.s-addon", {
         text: (s.name || s.addon || "").trim()
@@ -20159,7 +20755,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: shownTitle
       }), h("div.s-tags", null, tags)])]);
     }
-    function play(video, stream, all2, fallbacks) {
+    function play(video, stream, all3, fallbacks) {
       var li = libraryItem(meta.id);
       var resumeMs = li && li.state && li.state.video_id === video.id ? li.state.timeOffset : 0;
       var start4 = function start4(ms) {
@@ -20167,7 +20763,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           meta: meta,
           video: video,
           stream: stream,
-          streams: all2,
+          streams: all3,
           startTime: ms,
           isSeries: isSeries(),
           fallbacks: fallbacks || []
@@ -20655,11 +21251,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/data/franchiseLive.js
-  var KEY3 = "franchiseLive";
+  var KEY4 = "franchiseLive";
   var FRESH = 3 * 864e5;
   var MCU_KEYWORD = "180547";
   function cache7() {
-    return get(KEY3, {}) || {};
+    return get(KEY4, {}) || {};
   }
   function withLive(f) {
     var c = cache7()[f.id];
@@ -20712,15 +21308,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }).then(function (r) {
       return pick2(r, "tv");
     })]).then(function (lists) {
-      var all2 = lists[0].concat(lists[1]).sort(function (a, b) {
+      var all3 = lists[0].concat(lists[1]).sort(function (a, b) {
         return String(a.date).localeCompare(String(b.date));
       });
-      return Promise.all(all2.map(function (x) {
+      return Promise.all(all3.map(function (x) {
         return tmdbImdb(x.type, x.id).catch(function () {
           return null;
         });
       })).then(function (ids2) {
-        return all2.map(function (x, i) {
+        return all3.map(function (x, i) {
           return ids2[i] ? x.type === "tv" ? [ids2[i], x.title, yearOf(x.date), "s"] : [ids2[i], x.title, yearOf(x.date)] : null;
         }).filter(Boolean);
       });
@@ -20728,10 +21324,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function collection(f) {
     var name = f.name.replace(/\b(saga|collection|franchise|films?|movies?)\b/gi, "").trim();
-    return searchCollections(name).then(function (list2) {
+    return searchCollections(name).then(function (list3) {
       var best2 = null;
       var score = 0;
-      list2.forEach(function (c) {
+      list3.forEach(function (c) {
         var s = likeness(name, String(c.name).replace(/\b(collection|coleção)\b/gi, ""));
         if (s > score) {
           score = s;
@@ -20757,14 +21353,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       f.items.forEach(function (it) {
         return have[it[0]] = 1;
       });
-      var all2 = cache7();
-      all2[f.id] = {
+      var all3 = cache7();
+      all3[f.id] = {
         at: Date.now(),
         items: (items3 || []).filter(function (it) {
           return !have[it[0]];
         })
       };
-      set(KEY3, all2);
+      set(KEY4, all3);
       return withLive(f);
     }).catch(function () {
       return withLive(f);
@@ -20789,18 +21385,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function toggleFav2(f) {
-    var list2 = favs2();
-    var i = list2.findIndex(function (x) {
+    var list3 = favs2();
+    var i = list3.findIndex(function (x) {
       return x.id === f.id;
     });
-    if (i >= 0) list2.splice(i, 1);else list2.push(findFranchise(f.id) ? {
+    if (i >= 0) list3.splice(i, 1);else list3.push(findFranchise(f.id) ? {
       id: f.id
     } : {
       id: f.id,
       name: f.name,
       poster: f.items[0][0]
     });
-    set(FAV_KEY, list2);
+    set(FAV_KEY, list3);
     return i < 0;
   }
   function favEntries() {
@@ -20825,23 +21421,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function myCollections() {
     return get(MINE_KEY, []) || [];
   }
-  function saveMine(list2) {
-    set(MINE_KEY, list2);
+  function saveMine(list3) {
+    set(MINE_KEY, list3);
   }
   function newCollection(name, first) {
-    var list2 = myCollections();
+    var list3 = myCollections();
     var c = {
       id: "my" + Date.now().toString(36),
       name: name,
       items: first ? [first] : []
     };
-    list2.push(c);
-    saveMine(list2);
+    list3.push(c);
+    saveMine(list3);
     return c;
   }
   function toggleInCollection(id, item2) {
-    var list2 = myCollections();
-    var c = list2.find(function (x) {
+    var list3 = myCollections();
+    var c = list3.find(function (x) {
       return x.id === id;
     });
     if (!c) return false;
@@ -20849,7 +21445,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return x.id === item2.id;
     });
     if (i >= 0) c.items.splice(i, 1);else c.items.push(item2);
-    saveMine(list2);
+    saveMine(list3);
     return i < 0;
   }
   function collectionMenu(meta, tmdbCollection2) {
@@ -20958,12 +21554,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: t("Renomear"),
         onSelect: function onSelect() {
           return promptText(t("Renomear"), c.name, "", function (name) {
-            var list2 = myCollections();
-            var x = list2.find(function (y) {
+            var list3 = myCollections();
+            var x = list3.find(function (y) {
               return y.id === id;
             });
             if (x) x.name = name;
-            saveMine(list2);
+            saveMine(list3);
             render();
           });
         }
@@ -21038,13 +21634,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return f.items.filter(itemWatched).length;
   }
   function orderOf(f) {
-    var all2 = get(ORDER_KEY, {}) || {};
-    return f.chrono && all2[f.id] === "chrono" ? "chrono" : "release";
+    var all3 = get(ORDER_KEY, {}) || {};
+    return f.chrono && all3[f.id] === "chrono" ? "chrono" : "release";
   }
   function setOrder(f, order2) {
-    var all2 = get(ORDER_KEY, {}) || {};
-    all2[f.id] = order2;
-    set(ORDER_KEY, all2);
+    var all3 = get(ORDER_KEY, {}) || {};
+    all3[f.id] = order2;
+    set(ORDER_KEY, all3);
   }
   function ordered(f, order2) {
     if (order2 !== "chrono" || !f.chrono) return f.items.slice();
@@ -21207,17 +21803,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       results.appendChild(spinnerLine(t('Buscando "{q}"...', {
         q: query
       })));
-      searchCollections(query).then(function (list2) {
+      searchCollections(query).then(function (list3) {
         if (my !== token) return;
         clear(results);
-        if (!list2.length) return results.appendChild(h("div.hint", {
+        if (!list3.length) return results.appendChild(h("div.hint", {
           text: t("Nenhuma coleção encontrada.")
         }));
         var track = h("div.row-track", {
           "data-scroll-x": "",
           "data-group": ""
         });
-        list2.forEach(function (c) {
+        list3.forEach(function (c) {
           return track.appendChild(card({
             name: c.name,
             poster: c.poster
@@ -21297,12 +21893,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       })])]));
       addRow(t("Minhas coleções"), "", mine);
       CATS2.forEach(function (c) {
-        var list2 = ALL.filter(function (f) {
+        var list3 = ALL.filter(function (f) {
           return catOf(f) === c.id;
         });
         addRow(t(c.label), t("{n} coleções", {
-          n: list2.length
-        }), list2.map(function (f) {
+          n: list3.length
+        }), list3.map(function (f) {
           return franchiseTile(f);
         }));
       });
@@ -21352,8 +21948,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       if (sagaFilter === "mcu_core") return (!XMEN_IDS.has(id) || id === "tt6263850") && !SPIDEY_LEGACY_IDS.has(id);
       return true;
     }
-    function nextUp(list2) {
-      return list2.find(function (it) {
+    function nextUp(list3) {
+      return list3.find(function (it) {
         if (!matchSaga(it[0])) return false;
         if (mediaFilter === "movies" && isSeriesItem(it)) return false;
         if (mediaFilter === "series" && !isSeriesItem(it)) return false;
@@ -21364,8 +21960,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       openDetails(isSeriesItem(it) ? "series" : "movie", it[0]);
     }
     function render(keepFocus) {
-      var list2 = ordered(f, order2);
-      var done = list2.filter(itemWatched).length;
+      var list3 = ordered(f, order2);
+      var done = list3.filter(itemWatched).length;
       clear(head);
       var art = (f.items.find(function (it) {
         return /^tt\d+/.test(it[0]);
@@ -21386,14 +21982,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));
       head.appendChild(h("div.franchise-sub", {
         text: t("{n} títulos", {
-          n: list2.length
+          n: list3.length
         }) + "  ·  " + t("Assistidos: {done} de {n}", {
           done: done,
-          n: list2.length
+          n: list3.length
         }) + (order2 === "chrono" ? "  ·  " + t("Ordem da história") : "  ·  " + t("Ordem de lançamento"))
       }));
       clear(filters);
-      var next = nextUp(list2);
+      var next = nextUp(list3);
       if (next) filters.appendChild(h("div.chip.primary-chip", {
         focusable: true,
         onSelect: function onSelect() {
@@ -21490,7 +22086,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       clear(grid);
       var count = 0;
-      list2.forEach(function (it, i) {
+      list3.forEach(function (it, i) {
         if (!matchSaga(it[0])) return;
         if (mediaFilter === "movies" && isSeriesItem(it)) return;
         if (mediaFilter === "series" && !isSeriesItem(it)) return;
@@ -21560,8 +22156,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     return cache8[query];
   }
-  function toMetas2(list2) {
-    return (list2 || []).map(function (m) {
+  function toMetas2(list3) {
+    return (list3 || []).map(function (m) {
       return {
         id: "anilist:" + m.id,
         anilist: m.id,
@@ -21747,13 +22343,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     function drawShelves() {
       clear(shelves);
-      var mk = function mk(title, list2) {
-        if (!list2.length) return;
+      var mk = function mk(title, list3) {
+        if (!list3.length) return;
         var track = h("div.row-track", {
           "data-scroll-x": "",
           "data-group": ""
         });
-        list2.forEach(function (x) {
+        list3.forEach(function (x) {
           var c = card({
             id: x.key,
             name: x.name,
@@ -22006,8 +22602,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       poster: cover ? COVER(cover, "M") : ""
     };
   }
-  var withCovers = function withCovers(list2) {
-    return list2.filter(function (m) {
+  var withCovers = function withCovers(list3) {
+    return list3.filter(function (m) {
       return m.poster;
     });
   };
@@ -22152,13 +22748,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function drawShelves() {
       clear(shelves);
-      var mk = function mk(title, list2) {
-        if (!list2.length) return;
+      var mk = function mk(title, list3) {
+        if (!list3.length) return;
         var track = h("div.row-track", {
           "data-scroll-x": "",
           "data-group": ""
         });
-        list2.forEach(function (x) {
+        list3.forEach(function (x) {
           var open2 = function open2() {
             return x.ref.olKey ? openBookDetails(Object.assign({
               id: "ol:" + x.ref.olKey,
@@ -22173,7 +22769,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             onSelect: open2
           });
           if (x.cont) c.__long = holdMenu(x.name, open2, function () {
-            return forget(x.key), toast(t("Tirado de Continuar lendo.")), drawShelves();
+            return forget(x.key), forgetListen(x.key), toast(t("Tirado de Continuar lendo.")), drawShelves();
           }, t("Tirar de Continuar lendo"));
           track.appendChild(c);
         });
@@ -22184,11 +22780,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }), track]));
         loadVisibleImages(track);
       };
-      mk(t("Continuar lendo"), continueList(60).filter(function (p) {
+      var seen = {};
+      var cont = continueList(60).filter(function (p) {
         return tabOf2(p) === "books";
-      }).slice(0, 15).map(function (p) {
+      }).map(function (p) {
         return {
           cont: true,
+          at: p.at,
           key: p.key,
           ref: p.ref,
           name: (p.title || "") + " · " + t("Cap. {n}", {
@@ -22196,7 +22794,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }),
           poster: p.poster
         };
-      }));
+      }).concat(listenList().map(function (p) {
+        return {
+          cont: true,
+          listen: true,
+          at: p.at,
+          key: p.key,
+          ref: p.ref,
+          name: "🎧 " + (p.title || ""),
+          poster: p.poster
+        };
+      })).sort(function (a, b) {
+        return b.at - a.at;
+      }).filter(function (x) {
+        return !seen[x.key] && (seen[x.key] = 1);
+      }).slice(0, 15);
+      mk(t("Continuar lendo"), cont);
       mk(t("Favoritos"), favs().filter(function (f) {
         return tabOf2(f) === "books";
       }).map(function (f) {
@@ -22350,9 +22963,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return get("bookLinks", {}) || {};
   }
   function saveLink3(id, v) {
-    var all2 = links3();
-    if (v) all2[id] = v;else delete all2[id];
-    set("bookLinks", all2);
+    var all3 = links3();
+    if (v) all3[id] = v;else delete all3[id];
+    set("bookLinks", all3);
   }
   function openBookDetails(m) {
     push(BookDetailsView(m));
@@ -22362,14 +22975,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var key4 = "ol" + m.olKey;
     var el = h("div.view.md-view");
     var info2 = h("div.md-info");
-    var list2 = h("div.md-list", {
+    var list3 = h("div.md-list", {
       "data-scroll-y": "",
       "data-pad-y": "120",
       "data-group": "",
       "data-vertical": ""
     });
     el.appendChild(info2);
-    el.appendChild(list2);
+    el.appendChild(list3);
     var chapters4 = [];
     var chunk = 0;
     var _alive2 = true;
@@ -22377,6 +22990,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var found = null;
     var scanning = null;
     var picked = false;
+    var audio = [];
+    var audioFor = "";
     var status2 = h("div.loading-line", {
       text: t("Procurando nas suas fontes...")
     });
@@ -22423,6 +23038,109 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         } : void 0
       });
     }
+    var bookRef = function bookRef() {
+      return {
+        olKey: m.olKey,
+        name: m.name,
+        title: m.title,
+        poster: m.poster,
+        author: m.author,
+        tab: "books"
+      };
+    };
+    function chapterForTrack(lp) {
+      if (lp.chapter != null) {
+        var i = chapters4.findIndex(function (c) {
+          return c.chapter != null && String(c.chapter) === String(lp.chapter);
+        });
+        if (i >= 0) return i;
+      }
+      return chapters4.length && chapters4.length === audio.length ? Math.min(lp.track, chapters4.length - 1) : -1;
+    }
+    function trackForChapter(ci) {
+      var c = chapters4[ci];
+      if (!c) return -1;
+      var i = audio.findIndex(function (tr) {
+        return tr.chapter != null && String(tr.chapter) === String(c.chapter);
+      });
+      if (i >= 0) return i;
+      return audio.length === chapters4.length ? ci : -1;
+    }
+    function listen(i, at2) {
+      openListen({
+        key: key4,
+        title: m.name,
+        poster: m.cover || m.poster,
+        tracks: audio,
+        index: i,
+        startTime: at2 || 0,
+        ref: bookRef(),
+        chapters: chapters4,
+        pagesFn: source && chapters4.length ? function (cid) {
+          return pages(source.pid, cid);
+        } : null,
+        rtl: source ? /^ar/i.test(langOf(source.pid)) : false
+      });
+    }
+    function startRead() {
+      var p = progress2();
+      var lp = listenProgress(key4);
+      var idx = indexOfProgress();
+      var li = lp ? chapterForTrack(lp) : -1;
+      var fromRead = function fromRead() {
+        return idx >= 0 ? read(idx, p.page) : read(0, 0);
+      };
+      if (lp && (!p || lp.at > p.at) && li >= 0 && li !== idx) return menu(t("Ler"), [{
+        label: "🎧 " + t("Continuar do cap. {n} (onde você ouviu)", {
+          n: chapters4[li].chapter != null ? chapters4[li].chapter : li + 1
+        }),
+        value: "l"
+      }, {
+        label: "📖 " + (idx >= 0 ? t("Continuar: cap. {n}", {
+          n: chapters4[idx].chapter
+        }) : t("Do começo")),
+        value: "r"
+      }], {
+        onPick: function onPick(v) {
+          return v === "l" ? read(li, 0) : fromRead();
+        }
+      });
+      fromRead();
+    }
+    function startListen() {
+      var p = progress2();
+      var lp = listenProgress(key4);
+      var idx = indexOfProgress();
+      var ri = idx >= 0 ? trackForChapter(idx) : -1;
+      var fromListen = function fromListen() {
+        return lp ? listen(Math.min(lp.track, audio.length - 1), lp.time) : listen(0, 0);
+      };
+      if (p && (!lp || p.at > lp.at) && ri >= 0 && (!lp || ri !== lp.track)) return menu(t("Ouvir"), [{
+        label: "📖 " + t("Ouvir do cap. {n} (onde você leu)", {
+          n: chapters4[idx].chapter != null ? chapters4[idx].chapter : idx + 1
+        }),
+        value: "r"
+      }, {
+        label: "🎧 " + (lp ? t("Continuar de onde parei") : t("Do começo")),
+        value: "l"
+      }], {
+        onPick: function onPick(v) {
+          return v === "r" ? listen(ri, 0) : fromListen();
+        }
+      });
+      fromListen();
+    }
+    function loadAudio() {
+      if (!source || audioFor === source.pid + ":" + source.mid) return;
+      audioFor = source.pid + ":" + source.mid;
+      var mine = audioFor;
+      audioTracks(source.pid, source.mid).then(function (tr) {
+        if (!_alive2 || mine !== audioFor) return;
+        audio = tr;
+        renderInfo();
+        if (!chapters4.length) renderList();
+      });
+    }
     function renderInfo() {
       clear(info2);
       var cover = h("img.md-cover", {
@@ -22442,17 +23160,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));
       var p = progress2();
       var idx = indexOfProgress();
-      var btns = [h("div.btn.primary", {
+      var lp = listenProgress(key4);
+      var btns = [];
+      if (chapters4.length || !audio.length) btns.push(h("div.btn.primary", {
         focusable: true,
         "data-autofocus": "",
-        onSelect: function onSelect() {
-          return idx >= 0 ? read(idx, p.page) : read(0, 0);
-        }
+        onSelect: startRead
       }, [h("span.ico", {
         text: "📖"
       }), idx >= 0 ? t("Continuar: cap. {n}", {
         n: chapters4[idx].chapter
-      }) : t("Ler")]), h("div.btn", {
+      }) : t("Ler")]));
+      if (audio.length) btns.push(h("div.btn" + (chapters4.length ? "" : ".primary"), {
+        focusable: true,
+        "data-autofocus": chapters4.length ? null : "",
+        onSelect: startListen
+      }, [h("span.ico", {
+        text: "🎧"
+      }), lp ? t("Continuar ouvindo") : t("Ouvir")]));
+      btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
           return toggleFav(key4, "ol", Object.assign({}, m, {
@@ -22461,7 +23187,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       }, [h("span.ico", {
         text: isFav(key4) ? "♥" : "♡"
-      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")])];
+      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]));
       if (installed("books").length) btns.push(h("div.btn", {
         focusable: true,
         onSelect: pickSource
@@ -22485,8 +23211,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       loadVisibleImages(info2);
     }
     function renderList() {
-      clear(list2);
-      if (!chapters4.length) return list2.appendChild(status2);
+      clear(list3);
+      if (!chapters4.length && audio.length) {
+        audio.forEach(function (tr, i) {
+          return list3.appendChild(h("div.stream", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return listen(i, 0);
+            }
+          }, [h("div.s-main", {
+            text: "🎧 " + (tr.title || t("Faixa {n}", {
+              n: i + 1
+            }))
+          })]));
+        });
+        return;
+      }
+      if (!chapters4.length) return list3.appendChild(status2);
       var start4 = chunk * CHUNK4;
       var end = Math.min(chapters4.length, start4 + CHUNK4);
       var p = progress2();
@@ -22500,19 +23241,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: label
         })]);
       };
-      if (chapters4.length > 8) list2.appendChild(chapterSearchRow(function () {
+      if (chapters4.length > 8) list3.appendChild(chapterSearchRow(function () {
         return chapters4;
       }, function (i) {
-        return chunk = Math.floor(i / CHUNK4), renderList(), focusChapter(list2, i);
+        return chunk = Math.floor(i / CHUNK4), renderList(), focusChapter(list3, i);
       }));
-      if (chunk > 0) list2.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
+      if (chunk > 0) list3.appendChild(nav2("◀ " + t("Capítulos {a}–{b}", {
         a: (chunk - 1) * CHUNK4 + 1,
         b: chunk * CHUNK4
       }), chunk - 1));
       var _loop11 = function _loop11(i) {
         var c = chapters4[i];
         var here = p && p.chapterId === c.id;
-        list2.appendChild(h("div.stream", {
+        list3.appendChild(h("div.stream", {
           focusable: true,
           "data-ci": String(i),
           onSelect: function onSelect() {
@@ -22529,24 +23270,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       for (var i = start4; i < end; i++) {
         _loop11(i);
       }
-      if (end < chapters4.length) list2.appendChild(nav2(t("Capítulos {a}–{b}", {
+      if (end < chapters4.length) list3.appendChild(nav2(t("Capítulos {a}–{b}", {
         a: end + 1,
         b: Math.min(chapters4.length, end + CHUNK4)
       }) + " ▶", chunk + 1));
     }
-    function showSource(ln, cs) {
+    function showSource(ln, cs, tracks2) {
       source = ln;
       chapters4 = cs;
+      if (tracks2) {
+        audio = tracks2;
+        audioFor = ln.pid + ":" + ln.mid;
+      }
       var idx = indexOfProgress();
       chunk = idx >= 0 ? Math.floor(idx / CHUNK4) : 0;
       renderInfo();
       renderList();
+      loadAudio();
     }
     function noSources(text) {
       status2.textContent = text;
       renderInfo();
       renderList();
-      list2.appendChild(h("div.stream", {
+      list3.appendChild(h("div.stream", {
         focusable: true,
         onSelect: function onSelect() {
           return openSources("books");
@@ -22555,7 +23301,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: "📚 " + t("Minhas fontes")
       })]));
       installed("books").forEach(function (p) {
-        return list2.appendChild(h("div.stream", {
+        return list3.appendChild(h("div.stream", {
           focusable: true,
           onSelect: function onSelect() {
             return searchPlugin(p.id, p.name, m.title);
@@ -22574,9 +23320,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         },
         min: 0.8,
         kind: "books"
-      }).then(function (all2) {
-        found = all2;
-        return all2;
+      }).then(function (all3) {
+        found = all3;
+        return all3;
       });
       return scanning;
     }
@@ -22588,8 +23334,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           name: ln.name
         });
         return _chapters(ln.pid, ln.mid).then(function (cs) {
+          return cs.length ? cs : audioTracks(ln.pid, ln.mid).then(function (tr) {
+            if (!tr.length) throw new Error("empty");
+            audio = tr;
+            audioFor = ln.pid + ":" + ln.mid;
+            return cs;
+          });
+        }).then(function (cs) {
           if (!_alive2) return;
-          if (!cs.length) throw new Error("empty");
           showSource(ln, cs);
         }).catch(function () {
           if (!_alive2) return;
@@ -22603,16 +23355,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       status2.textContent = t("Procurando nas suas fontes...");
       renderList();
       scan3(function (hit) {
-        if (!source && !picked) showSource(linkOf(hit), hit.cs);
-      }).then(function (all2) {
+        if (!source && !picked) showSource(linkOf(hit), hit.cs, hit.tracks);
+      }).then(function (all3) {
         if (!_alive2) return;
-        if (!all2.length) return noSources(t("Não encontrei este título nas suas fontes."));
+        if (!all3.length) return noSources(t("Não encontrei este título nas suas fontes."));
         if (picked) return;
-        var best2 = all2[0];
+        var best2 = all3[0];
         saveLink3(m.olKey, linkOf(best2));
-        if (!source || source.pid !== best2.pid) showSource(linkOf(best2), best2.cs);
-        if (all2.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
-          n: all2.length
+        if (!source || source.pid !== best2.pid) showSource(linkOf(best2), best2.cs, best2.tracks);
+        if (all3.length > 1) toast(t("Achei em {n} fontes. Troque no botão 📚.", {
+          n: all3.length
         }), 5e3);
       });
     }
@@ -22656,7 +23408,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           saveLink3(m.olKey, Object.assign(linkOf(v), {
             manual: true
           }));
-          showSource(linkOf(v), v.cs);
+          showSource(linkOf(v), v.cs, v.tracks);
         }
       });
     }
@@ -22703,10 +23455,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     878: "Ficção científica",
     53: "Suspense"
   };
-  function seeded(list2, n) {
+  function seeded(list3, n) {
     var d = /* @__PURE__ */new Date();
     var seed = d.getFullYear() * 1e3 + d.getMonth() * 40 + d.getDate();
-    var a = list2.slice();
+    var a = list3.slice();
     for (var i = a.length - 1; i > 0; i--) {
       seed = (seed * 9301 + 49297) % 233280;
       var j = Math.floor(seed / 233280 * (i + 1));
@@ -22741,11 +23493,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       load: function load() {
         return load7().then(function (items3) {
           clear(track);
-          var list2 = (items3 || []).filter(function (x) {
+          var list3 = (items3 || []).filter(function (x) {
             return x.poster_path;
           }).slice(0, 20);
-          if (!list2.length) return r.parentNode && parent.removeChild(r);
-          list2.forEach(function (x) {
+          if (!list3.length) return r.parentNode && parent.removeChild(r);
+          list3.forEach(function (x) {
             var type = x.media_type === "tv" || x.first_air_date ? "tv" : "movie";
             track.appendChild(card({
               id: "tmdb:" + x.id,
@@ -22879,31 +23631,31 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/iptv.js
-  var KEY4 = "iptvSources";
+  var KEY5 = "iptvSources";
   var FAVS2 = "iptvFavs";
   var sources2 = function sources2() {
-    return get(KEY4, []) || [];
+    return get(KEY5, []) || [];
   };
   function saveSource(src) {
-    var all2 = sources2().filter(function (x) {
+    var all3 = sources2().filter(function (x) {
       return x.id !== src.id;
     });
-    all2.push(src);
-    set(KEY4, all2);
+    all3.push(src);
+    set(KEY5, all3);
     set("iptvActive", src.id);
   }
   function removeSource(id) {
-    set(KEY4, sources2().filter(function (x) {
+    set(KEY5, sources2().filter(function (x) {
       return x.id !== id;
     }));
     if (get("iptvActive", "") === id) set("iptvActive", "");
     delete cache10[id];
   }
   function active2() {
-    var all2 = sources2();
-    return all2.find(function (x) {
+    var all3 = sources2();
+    return all3.find(function (x) {
       return x.id === get("iptvActive", "");
-    }) || all2[0] || null;
+    }) || all3[0] || null;
   }
   function setActive(id) {
     set("iptvActive", id);
@@ -22912,9 +23664,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return get(FAVS2, {}) || {};
   };
   function toggleFav3(srcId, ch) {
-    var all2 = favs3();
+    var all3 = favs3();
     var k = srcId + "|" + ch.id;
-    if (all2[k]) delete all2[k];else all2[k] = {
+    if (all3[k]) delete all3[k];else all3[k] = {
       id: ch.id,
       name: ch.name,
       logo: ch.logo,
@@ -22923,8 +23675,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       epg: ch.epg,
       src: srcId
     };
-    set(FAVS2, all2);
-    return !!all2[k];
+    set(FAVS2, all3);
+    return !!all3[k];
   }
   var isFav3 = function isFav3(srcId, chId) {
     return !!favs3()[srcId + "|" + chId];
@@ -22968,8 +23720,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     if (c.cats) return Promise.resolve(c.cats);
     if (s.type === "xtream") {
-      return get4(api(s, "get_live_categories"), true).then(function (list2) {
-        c.cats = (Array.isArray(list2) ? list2 : []).map(function (x) {
+      return get4(api(s, "get_live_categories"), true).then(function (list3) {
+        c.cats = (Array.isArray(list3) ? list3 : []).map(function (x) {
           return {
             id: String(x.category_id),
             name: String(x.category_name || "")
@@ -22988,8 +23740,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
     if (c.byCat[catId]) return Promise.resolve(c.byCat[catId]);
     if (s.type === "xtream") {
-      return get4(api(s, "get_live_streams", "&category_id=" + encodeURIComponent(catId)), true).then(function (list2) {
-        var out = (Array.isArray(list2) ? list2 : []).map(function (x) {
+      return get4(api(s, "get_live_streams", "&category_id=" + encodeURIComponent(catId)), true).then(function (list3) {
+        var out = (Array.isArray(list3) ? list3 : []).map(function (x) {
           return {
             id: String(x.stream_id),
             name: String(x.name || ""),
@@ -23076,7 +23828,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var hit = epgCache[k];
     if (hit && Date.now() - hit.at < 10 * 6e4) return Promise.resolve(hit.list);
     return get4(api(s, "get_short_epg", "&stream_id=" + encodeURIComponent(ch.id) + "&limit=2"), true).then(function (r) {
-      var list2 = (r && r.epg_listings || []).map(function (e) {
+      var list3 = (r && r.epg_listings || []).map(function (e) {
         return {
           title: b64(e.title),
           start: Number(e.start_timestamp) * 1e3,
@@ -23085,9 +23837,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       epgCache[k] = {
         at: Date.now(),
-        list: list2
+        list: list3
       };
-      return list2;
+      return list3;
     }).catch(function () {
       return [];
     });
@@ -23150,7 +23902,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }), t("Buscar canal")]) : null]));
     }
     function sourcesMenu() {
-      var list2 = sources2().map(function (s) {
+      var list3 = sources2().map(function (s) {
         return {
           label: s.name,
           sub: s.type === "xtream" ? "Xtream Codes" : "M3U",
@@ -23161,21 +23913,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           checked: src && s.id === src.id
         };
       });
-      list2.push({
+      list3.push({
         label: "＋ " + t("Conta Xtream Codes"),
         sub: t("Servidor, usuário e senha do seu IPTV"),
         value: {
           kind: "xtream"
         }
       });
-      list2.push({
+      list3.push({
         label: "＋ " + t("Lista M3U"),
         sub: t("Link da sua lista"),
         value: {
           kind: "m3u"
         }
       });
-      if (src) list2.push({
+      if (src) list3.push({
         label: "🗑 " + t("Remover {name}", {
           name: src.name
         }),
@@ -23183,7 +23935,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           kind: "rm"
         }
       });
-      menu(t("Fontes de TV ao vivo"), list2, {
+      menu(t("Fontes de TV ao vivo"), list3, {
         onPick: function onPick(v) {
           if (v.kind === "use") {
             setActive(v.s.id);
@@ -23291,8 +24043,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return categories(src).then(function () {
           var res = [];
           var seen = {};
-          loaded(src).concat([favList(src.id)]).forEach(function (list2) {
-            return list2.forEach(function (c) {
+          loaded(src).concat([favList(src.id)]).forEach(function (list3) {
+            return list3.forEach(function (c) {
               if (res.length < 200 && !seen[c.id] && String(c.name).toLowerCase().indexOf(needle) >= 0) {
                 seen[c.id] = 1;
                 res.push(c);
@@ -23317,10 +24069,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return;
       }
       grid.appendChild(spinnerLine(t("Carregando...")));
-      load7().then(function (list2) {
+      load7().then(function (list3) {
         if (my !== token) return;
         clear(grid);
-        shown = list2 || [];
+        shown = list3 || [];
         count = 0;
         if (!shown.length) grid.appendChild(h("div.live-empty", null, [h("div.t", {
           text: cat === "fav" ? t("Sem favoritos ainda") : t("Nada por aqui.")
@@ -23395,14 +24147,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       function epg() {
         if (asked) return;
         asked = true;
-        nowNext(src, ch).then(function (list2) {
-          var n = list2.find(function (e) {
+        nowNext(src, ch).then(function (list3) {
+          var n = list3.find(function (e) {
             return e.start <= Date.now() && e.end > Date.now();
-          }) || list2[0];
+          }) || list3[0];
           if (!n) return;
           now.textContent = n.title || ch.name;
           var left = Math.max(0, Math.round((n.end - Date.now()) / 6e4));
-          var nx = list2.find(function (e) {
+          var nx = list3.find(function (e) {
             return e.start >= n.end - 1e3;
           });
           meta.textContent = t("até {time}", {
@@ -23480,8 +24232,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     return files[name];
   }
-  function fromTmdb(list2, media2) {
-    return (list2 || []).filter(function (x) {
+  function fromTmdb(list3, media2) {
+    return (list3 || []).filter(function (x) {
       return x && x.poster_path;
     }).map(function (x) {
       var type = (x.media_type || media2) === "tv" ? "series" : "movie";
@@ -23548,9 +24300,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     if (src.trakt) {
       var kind = src.m === "tv" ? "show" : "movie";
-      return traktPublic("/lists/" + src.trakt + "/items/" + kind + "?limit=40&page=" + n).then(function (list2) {
+      return traktPublic("/lists/" + src.trakt + "/items/" + kind + "?limit=40&page=" + n).then(function (list3) {
         return {
-          items: (list2 || []).map(function (x) {
+          items: (list3 || []).map(function (x) {
             var m = x.movie || x.show;
             var imdb = m && m.ids && m.ids.imdb;
             return imdb ? {
@@ -23560,7 +24312,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
               poster: "https://images.metahub.space/poster/medium/" + imdb + "/img"
             } : null;
           }).filter(Boolean),
-          more: (list2 || []).length >= 40
+          more: (list3 || []).length >= 40
         };
       });
     }
@@ -23795,8 +24547,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     }
     return {
-      add: function add(list2) {
-        list2.forEach(function (p) {
+      add: function add(list3) {
+        list3.forEach(function (p) {
           return pending2.push(p);
         });
         run3();
@@ -23936,10 +24688,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var my = ++run;
     return load().then(function () {
       return scan2(my);
-    }).then(function (list2) {
+    }).then(function (list3) {
       if (my !== run) throw new Error("stopped");
-      set("newEpisodes", list2.slice(0, 40));
-      return list2;
+      set("newEpisodes", list3.slice(0, 40));
+      return list3;
     });
   }
   function stop3() {
@@ -24086,15 +24838,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     save(p);
   }
   function move2(entries, entry, delta) {
-    var list2 = sort(entries).map(key3);
+    var list3 = sort(entries).map(key3);
     var k = key3(entry);
-    var i = list2.indexOf(k);
+    var i = list3.indexOf(k);
     var j = i + delta;
-    if (i < 0 || j < 0 || j >= list2.length) return;
-    list2.splice(i, 1);
-    list2.splice(j, 0, k);
+    if (i < 0 || j < 0 || j >= list3.length) return;
+    list3.splice(i, 1);
+    list3.splice(j, 0, k);
     var p = prefs();
-    p.order = list2;
+    p.order = list3;
     save(p);
   }
   function reset() {
@@ -24149,9 +24901,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function rows() {
     return hasKey2() ? settings().mdblistRows || [] : [];
   }
-  function setRows(list2) {
+  function setRows(list3) {
     saveSettings({
-      mdblistRows: list2
+      mdblistRows: list3
     });
   }
   function items(id) {
@@ -24225,8 +24977,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var loadedBoard = false;
-    onPlayback(function (list2) {
-      if (mergeExternalProgress(list2)) {
+    onPlayback(function (list3) {
+      if (mergeExternalProgress(list3)) {
         renderContinue();
         renderSagas();
         publishBrowse();
@@ -24259,8 +25011,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function loadNew(force) {
       if (perf() || !force && Date.now() - newLoadedAt < 30 * 6e4) return;
       newLoadedAt = Date.now();
-      load6().then(function (list2) {
-        newList = list2;
+      load6().then(function (list3) {
+        newList = list3;
         renderNew();
         publishBrowse();
       }).catch(function () {});
@@ -24461,14 +25213,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           load5("home").then(function (data) {
             if (!alive()) return;
             var HOME_SKIP = ["Legendary Directors", "Actors", "Film Collections", "Networks"];
-            var list2 = collectionRows(box, data.filter(function (c) {
+            var list3 = collectionRows(box, data.filter(function (c) {
               return HOME_SKIP.indexOf(c.t) < 0;
             })).map(function (x) {
               return Object.assign(x, {
                 state: "idle"
               });
             });
-            pending2 = list2.concat(pending2);
+            pending2 = list3.concat(pending2);
             loadNearby();
           }).catch(function () {
             return box.appendChild(h("div.nc-hint", {
@@ -24683,8 +25435,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var ids2 = it.trailers && it.trailers.length ? Promise.resolve(it.trailers) : fetchMeta(it.type, it.id).then(function (m) {
           return it.trailers = trailerIds(m || {});
         });
-        ids2.then(function (list2) {
-          if (paused || items3[index2] !== it || !list2.length) return;
+        ids2.then(function (list3) {
+          if (paused || items3[index2] !== it || !list3.length) return;
           clearTimeout(timer);
           ambientOn = true;
           var frame = h("iframe", {
@@ -24722,7 +25474,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           frame.__off = function () {
             return window.removeEventListener("message", _onMsg);
           };
-          frame.src = "https://www.youtube-nocookie.com/embed/" + list2[0] + "?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5&enablejsapi=1";
+          frame.src = "https://www.youtube-nocookie.com/embed/" + list3[0] + "?autoplay=1&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1&start=5&enablejsapi=1";
           ambient.appendChild(frame);
           ambientTimer = setTimeout(function () {
             stopAmbient();
@@ -24803,8 +25555,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return {
       el: el,
       load: function load() {
-        return load2().then(function (list2) {
-          items3 = list2.slice(0, 12);
+        return load2().then(function (list3) {
+          items3 = list3.slice(0, 12);
           index2 = 0;
           render();
           schedule();
@@ -24886,12 +25638,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     function renderHistory() {
       clear(history);
       if (settings().searchHistory === false) return;
-      var list2 = get(HIST, []) || [];
-      if (!list2.length) return;
+      var list3 = get(HIST, []) || [];
+      if (!list3.length) return;
       history.appendChild(h("span.hist-label", {
         text: t("Buscas recentes:")
       }));
-      list2.forEach(function (q2) {
+      list3.forEach(function (q2) {
         return history.appendChild(h("div.chip", {
           focusable: true,
           text: q2,
@@ -24912,11 +25664,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function remember(q2) {
       if (settings().searchHistory === false) return;
-      var list2 = (get(HIST, []) || []).filter(function (x) {
+      var list3 = (get(HIST, []) || []).filter(function (x) {
         return x.toLowerCase() !== q2.toLowerCase();
       });
-      list2.unshift(q2);
-      set(HIST, list2.slice(0, 8));
+      list3.unshift(q2);
+      set(HIST, list3.slice(0, 8));
       renderHistory();
     }
     renderHistory();
@@ -24937,15 +25689,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var people = h("div.row.people-row", {
         "data-anchor": "30"
       });
-      searchPeople(query).then(function (list2) {
-        if (my !== token || !list2.length) return;
+      searchPeople(query).then(function (list3) {
+        if (my !== token || !list3.length) return;
         people.appendChild(h("div.row-title", {
           text: t("Pessoas")
         }));
         people.appendChild(h("div.row-track", {
           "data-scroll-x": "",
           "data-group": ""
-        }, list2.map(function (p) {
+        }, list3.map(function (p) {
           return h("div.cast.person-card", {
             focusable: true,
             onSelect: function onSelect() {
@@ -25105,14 +25857,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         rows2.appendChild(box);
         var groups = type === "movie" ? MOVIE_GROUPS : SERIES_GROUPS;
         load5("home").then(function (data) {
-          var list2 = collectionRows(box, data.filter(function (c) {
+          var list3 = collectionRows(box, data.filter(function (c) {
             return groups.indexOf(c.t) >= 0;
           })).map(function (x) {
             return Object.assign(x, {
               state: ""
             });
           });
-          pending2 = pending2.concat(list2);
+          pending2 = pending2.concat(list3);
           loadNearby();
         }).catch(function () {});
         loadNearby();
@@ -25237,7 +25989,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T14:30:32.351Z";
+  var BUILD = "2026-11-17T15:49:35.938Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -25606,8 +26358,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function applyLook(s) {
     document.body.classList.toggle("font-samsung", (s.appFont || "samsung") === "samsung");
     var b = document.body;
-    var set2 = function set2(prefix, value, all2) {
-      return all2.forEach(function (x) {
+    var set2 = function set2(prefix, value, all3) {
+      return all3.forEach(function (x) {
         return b.classList.toggle(prefix + x.id, x.id === value);
       });
     };
@@ -26466,8 +27218,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: t("Coloque sua chave MDBList em Ajustes → Metadados extras para usar listas.")
         }));
       } else {
-        var saveRows = function saveRows(list2) {
-          setRows(list2);
+        var saveRows = function saveRows(list3) {
+          setRows(list3);
           dropTab("home");
           render();
         };
@@ -26533,8 +27285,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: t("OK numa fileira: subir, descer ou esconder.")
       }));
       var wl = watchlistEntry();
-      var all2 = (wl ? [wl] : []).concat(boardCatalogs(), boardEntries());
-      sort(all2).forEach(function (e) {
+      var all3 = (wl ? [wl] : []).concat(boardCatalogs(), boardEntries());
+      sort(all3).forEach(function (e) {
         var hidden = isHidden(e);
         var name = e.catalog.name || e.catalog.id;
         var kind = e.fetch ? "" : ({
@@ -26554,7 +27306,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             value: 0
           }], {
             onPick: function onPick(v) {
-              if (v === 0) toggleHidden(e);else move2(all2, e, v);
+              if (v === 0) toggleHidden(e);else move2(all3, e, v);
               dropTab("home");
               render();
             }
@@ -26773,9 +27525,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return g.id === page3;
       });
       pageHeader(t(GROUP.label));
-      var choose = function choose(title, sub, list2, key4, value, label) {
+      var choose = function choose(title, sub, list3, key4, value, label) {
         return body.appendChild(row2(title, sub, t(String(label)), function () {
-          return menu(title, list2.map(function (x) {
+          return menu(title, list3.map(function (x) {
             return {
               label: t(String(x.label)),
               value: x.id,
@@ -27178,13 +27930,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             backgroundColor: curTheme.main
           }
         })));
-        var lookChoose = function lookChoose(title, sub, list2, key4, dflt) {
-          var cur = list2.find(function (x) {
+        var lookChoose = function lookChoose(title, sub, list3, key4, dflt) {
+          var cur = list3.find(function (x) {
             return x.id === s[key4];
-          }) || list2.find(function (x) {
+          }) || list3.find(function (x) {
             return x.id === dflt;
           });
-          choose(title, sub, list2, key4, cur.id, cur.label);
+          choose(title, sub, list3, key4, cur.id, cur.label);
         };
         var bg = s.bgStyle || (s.oled ? "oled" : "default");
         body.appendChild(row2(t("Fundo"), t("Escuro, preto puro ou com brilho da cor"), t((BACKGROUNDS.find(function (x) {
@@ -27595,11 +28347,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         body.appendChild(h("div.set-section", {
           text: t("Addons")
         }));
-        var list2 = list();
+        var list3 = list();
         body.appendChild(row2(t("Addons ativos"), isLoggedIn() ? t("Gerencie pela sua conta em web.stremio.com") : t("Sem conta: Cinemeta, OpenSubtitles e os adicionados aqui"), t("{n} addon(s)", {
-          n: list2.length
+          n: list3.length
         }), function () {
-          return menu(t("Addons ativos"), list2.map(function (a) {
+          return menu(t("Addons ativos"), list3.map(function (a) {
             return {
               label: a.manifest.name || a.manifest.id,
               sub: a.transportUrl
@@ -27607,7 +28359,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }), {});
         }));
         RECOMMENDED.filter(function (r) {
-          return !list2.some(function (a) {
+          return !list3.some(function (a) {
             return a.transportUrl === r.url || a.manifest && a.manifest.id === r.id;
           });
         }).forEach(function (r) {
@@ -27768,7 +28520,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function animeDay(offset) {
     var from = Math.floor(dayStart(offset).getTime() / 1e3) - 1;
     var to = from + 86400 + 1;
-    var all2 = [];
+    var all3 = [];
     var _page = function page3(p) {
       return postJSON("https://graphql.anilist.co", {
         query: ANIME_QUERY,
@@ -27781,15 +28533,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         timeout: 15e3
       }).then(function (r) {
         var pg = r && r.data && r.data.Page;
-        if (!pg) return all2;
+        if (!pg) return all3;
         pg.airingSchedules.forEach(function (s) {
-          if (s.media && !s.media.isAdult) all2.push(s);
+          if (s.media && !s.media.isAdult) all3.push(s);
         });
-        return pg.pageInfo.hasNextPage && p < 10 ? _page(p + 1) : all2;
+        return pg.pageInfo.hasNextPage && p < 10 ? _page(p + 1) : all3;
       });
     };
-    return _page(1).then(function (list2) {
-      return list2.map(function (s) {
+    return _page(1).then(function (list3) {
+      return list3.map(function (s) {
         var m = s.media;
         var name = m.title && (m.title.english || m.title.romaji) || "";
         return {
@@ -27862,12 +28614,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (seen[key4]) return;
         seen[key4] = true;
         var network = show3.webChannel && show3.webChannel.name || show3.network && show3.network.name || "";
-        var at = e.airstamp ? Date.parse(e.airstamp) : 0;
+        var at2 = e.airstamp ? Date.parse(e.airstamp) : 0;
         out.push({
           name: show3.name,
           poster: show3.image && (show3.image.original || show3.image.medium),
-          at: at,
-          slot: (at ? timeHM(new Date(at)) + " · " : "") + "S" + e.season + " E" + (e.number || "?"),
+          at: at2,
+          slot: (at2 ? timeHM(new Date(at2)) + " · " : "") + "S" + e.season + " E" + (e.number || "?"),
           score: show3.rating && show3.rating.average ? Math.round(show3.rating.average * 10) : 0,
           tag: network,
           open: function open() {
@@ -27881,9 +28633,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function moviesDay(offset) {
-    return digitalReleases(ymd(dayStart(offset)), MOVIE_REGION).then(function (list2) {
-      if (list2 === null) return null;
-      return list2.map(function (m) {
+    return digitalReleases(ymd(dayStart(offset)), MOVIE_REGION).then(function (list3) {
+      if (list3 === null) return null;
+      return list3.map(function (m) {
         return {
           name: m.name,
           poster: m.poster,
@@ -27976,23 +28728,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var my = ++token;
       clear(grid);
       grid.appendChild(spinnerLine(t("Buscando lançamentos...")));
-      FETCH[mode](current3).then(function (list2) {
+      FETCH[mode](current3).then(function (list3) {
         if (my !== token) return;
         clear(grid);
-        if (list2 === null) {
+        if (list3 === null) {
           grid.appendChild(h("div.hint", {
             text: t("As datas de streaming dos filmes vêm do TMDB: coloque sua chave grátis do TMDB em Ajustes.")
           }));
           return;
         }
-        if (!list2.length) {
+        if (!list3.length) {
           grid.appendChild(h("div.hint", {
             text: mode === "movies" ? t("Nenhum filme chega ao streaming neste dia.") : t("Nenhum episódio neste dia.")
           }));
           return;
         }
         var now = Date.now();
-        list2.forEach(function (it) {
+        list3.forEach(function (it) {
           var c = card({
             name: it.name,
             poster: it.poster

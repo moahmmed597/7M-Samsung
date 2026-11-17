@@ -578,6 +578,30 @@ export function pages(id, chapterId) {
   });
 }
 
+// Audiobook tracks of a book (optional plugin method audioTracks(bookId)):
+// [{ id, title, url (mp3/m4a/...), duration (seconds, optional), chapter (optional, to match reading) }].
+// A plugin without it (or with nothing for this book) gives [] — the book then has no 🎧 Listen.
+export function audioTracks(id, bookId) {
+  return call(id, 'audioTracks', [bookId], 30000).then(
+    (v) =>
+      (Array.isArray(v) ? v : [])
+        .map((x, i) => ({
+          id: str(x && x.id) || String(i),
+          title: str(x && x.title) || '',
+          url: str(x && (x.url || x.streamUrl)) || '',
+          duration: typeof (x && x.duration) === 'number' ? x.duration : parseDuration(x && x.duration),
+          chapter: x && x.chapter != null ? String(x.chapter) : null,
+        }))
+        .filter((x) => /^https?:\/\//i.test(x.url)),
+    () => []
+  );
+}
+// "25:40" or "1:02:03" → seconds
+function parseDuration(v) {
+  if (typeof v !== 'string' || !/^\d+(:\d+){1,2}$/.test(v)) return 0;
+  return v.split(':').reduce((a, b) => a * 60 + +b, 0);
+}
+
 // ---------- updates ----------
 // Downloads every installed plugin again from its repository (all: also when the version is the same,
 // for a plugin fixed without changing its number). Resolves with how many were updated.

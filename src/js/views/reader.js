@@ -8,6 +8,7 @@
 // Memory: one <img> on screen (two in two-page mode) plus the next page(s) preloaded; the rest is dropped.
 import { h } from '../lib/dom.js';
 import { KEY } from '../lib/nav.js';
+import * as bm from '../lib/bookmarks.js';
 import * as router from '../router.js';
 import * as store from '../lib/store.js';
 import * as md from '../api/mangadex.js';
@@ -17,7 +18,8 @@ import { t } from '../lib/i18n.js';
 const W = 1920;
 const H = 1080;
 const PAN = 300;
-const ZOOMS = [1, 1.5, 2, 3];
+// 50% at a time: 100 → 150 → 200 → 250 → 300, and back the same way.
+const ZOOMS = [1, 1.5, 2, 2.5, 3];
 const DOUBLE_MS = 450;
 
 // opts: { key, title, chapters, index, startPage, rtl }
@@ -79,7 +81,9 @@ function ReaderView(opts) {
   img2.style.display = 'none';
   const hud = h('div.rd-hud');
   const msg = h('div.rd-msg');
-  const el = h('div.view.reader', null, [img, img2, hud, msg]);
+  const ribbon = h('div.rd-ribbon'); // the colour of a bookmark on this page
+  ribbon.style.display = 'none';
+  const el = h('div.view.reader', null, [img, img2, hud, msg, ribbon]);
 
   const chapter = () => opts.chapters[ci];
   const size = () => {
@@ -163,6 +167,7 @@ function ReaderView(opts) {
       say('');
       showHud();
       save();
+      drawRibbon();
       // Preload only what comes next; the old pages are released.
       const next = pi + (both ? 2 : 1);
       pre = pre2 = null;
@@ -243,8 +248,64 @@ function ReaderView(opts) {
     showPage('top');
     toast(t(MODE_NAMES[m]));
   }
+  // ---- bookmarks ----
+  function drawRibbon() {
+    const c = chapter();
+    const b = opts.key && c ? bm.at(opts.key, c.id, pi) : null;
+    ribbon.style.display = b ? '' : 'none';
+    if (b) ribbon.style.background = bm.hexOf(b.color);
+  }
+  function markMenu() {
+    const c = chapter();
+    if (!opts.key || !c) return;
+    const cur = bm.at(opts.key, c.id, pi);
+    const items = bm.COLORS.map((x) => ({ label: '● ' + t(x.label), value: x.id, checked: !!cur && cur.color === x.id }));
+    if (cur) items.push({ label: '✕ ' + t('Tirar a marcação'), value: '' });
+    menu(t('Marcar esta página'), items, {
+      onPick: (v) => {
+        if (!v) bm.remove(opts.key, cur);
+        else bm.put(opts.key, { ci: ci, chapterId: c.id, chapter: c.chapter, page: pi, color: v });
+        drawRibbon();
+        toast(v ? t('Página marcada.') : t('Marcação tirada.'));
+      },
+    });
+  }
+  function marksMenu() {
+    const list = bm.list(opts.key).filter((b) => b.time == null);
+    if (!list.length) return toast(t('Nenhuma página marcada ainda.'));
+    menu(
+      t('Minhas marcações'),
+      list.map((b) => ({ label: '● ' + t('Cap. {n}', { n: b.chapter != null ? b.chapter : b.ci + 1 }) + ' · ' + t('Página {n}', { n: b.page + 1 }), sub: t(bm.COLORS.find((x) => x.id === b.color) ? bm.COLORS.find((x) => x.id === b.color).label : ''), value: b })),
+      {
+        onPick: (b) => {
+          let i = opts.chapters.findIndex((c) => c.id === b.chapterId);
+          if (i < 0) i = Math.min(b.ci, opts.chapters.length - 1);
+          zi = 0;
+          if (i === ci && pages.length) {
+            pi = Math.max(0, Math.min(b.page, pages.length - 1));
+            showPage('top');
+          } else loadChapter(i, b.page);
+        },
+      }
+    );
+  }
+  // OK once: bookmarks, then the reading mode.
   function modeMenu() {
-    readingModeMenu(setMode, true);
+    const c = chapter();
+    const cur = opts.key && c ? bm.at(opts.key, c.id, pi) : null;
+    const n = opts.key ? bm.list(opts.key).filter((b) => b.time == null).length : 0;
+    menu(t('Leitura'), [
+      { label: '🔖 ' + (cur ? t('Mudar a marcação desta página') : t('Marcar esta página')), value: 'mark' },
+      { label: '📑 ' + t('Minhas marcações') + (n ? ' (' + n + ')' : ''), value: 'marks' },
+      { label: '📄 ' + t('Modo de leitura'), sub: t(MODE_NAMES[mode] || 'Uma página'), value: 'mode' },
+      { label: '🔍 ' + t('OK 2x ou CH +/−: zoom'), value: '' },
+    ], {
+      onPick: (v) => {
+        if (v === 'mark') markMenu();
+        else if (v === 'marks') marksMenu();
+        else if (v === 'mode') readingModeMenu(setMode, false);
+      },
+    });
   }
 
   // to: the zoom step to go to (default: the next one, back to 100% after the last).

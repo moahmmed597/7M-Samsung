@@ -15,6 +15,7 @@ import { openSources, openSourceManga, sourceRows, searchPlugin } from './source
 import { openReader, readingModeMenu, readingModeLabel } from './reader.js';
 import * as shelf from '../lib/mangaLib.js';
 import { holdMenu } from './continueRow.js';
+import { openListen, listenProgress, listenList, forgetListen } from './listen.js';
 import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
 import { scanSources, linkOf, norm } from '../lib/sourceFind.js';
 
@@ -107,13 +108,23 @@ export function BooksView() {
       list.forEach((x) => {
         const open = () => (x.ref.olKey ? openBookDetails(Object.assign({ id: 'ol:' + x.ref.olKey, type: 'book' }, x.ref)) : openSourceManga(x.ref));
         const c = card({ id: x.key, name: x.name, poster: x.poster }, { onSelect: open });
-        if (x.cont) c.__long = holdMenu(x.name, open, () => (shelf.forget(x.key), toast(t('Tirado de Continuar lendo.')), drawShelves()), t('Tirar de Continuar lendo'));
+        if (x.cont) c.__long = holdMenu(x.name, open, () => (shelf.forget(x.key), forgetListen(x.key), toast(t('Tirado de Continuar lendo.')), drawShelves()), t('Tirar de Continuar lendo'));
         track.appendChild(c);
       });
       shelves.appendChild(h('div.row', { 'data-anchor': '30' }, [h('div.row-title', { text: title }), track]));
       loadVisibleImages(track);
     };
-    mk(t('Continuar lendo'), shelf.continueList(60).filter((p) => shelf.tabOf(p) === 'books').slice(0, 15).map((p) => ({ cont: true, key: p.key, ref: p.ref, name: (p.title || '') + ' · ' + t('Cap. {n}', { n: p.chapter }), poster: p.poster })));
+    // What you read and what you listen to, newest first (one card per book).
+    const seen = {};
+    const cont = shelf
+      .continueList(60)
+      .filter((p) => shelf.tabOf(p) === 'books')
+      .map((p) => ({ cont: true, at: p.at, key: p.key, ref: p.ref, name: (p.title || '') + ' · ' + t('Cap. {n}', { n: p.chapter }), poster: p.poster }))
+      .concat(listenList().map((p) => ({ cont: true, listen: true, at: p.at, key: p.key, ref: p.ref, name: '🎧 ' + (p.title || ''), poster: p.poster })))
+      .sort((a, b) => b.at - a.at)
+      .filter((x) => !seen[x.key] && (seen[x.key] = 1))
+      .slice(0, 15);
+    mk(t('Continuar lendo'), cont);
     mk(t('Favoritos'), shelf.favs().filter((f) => shelf.tabOf(f) === 'books').map((f) => ({ key: f.key, ref: f.ref, name: f.ref.name, poster: f.ref.poster })));
   }
   drawShelves();
@@ -228,6 +239,8 @@ function BookDetailsView(m0) {
   let found = null;
   let scanning = null;
   let picked = false;
+  let audio = []; // the source's audiobook tracks (🎧 Listen)
+  let audioFor = '';
   const status = h('div.loading-line', { text: t('Procurando nas suas fontes...') });
   const progress = () => (store.get('readProgress', {}) || {})[key] || null;
   const langOf = (pid) => ((pl.installed().find((p) => p.id === pid) || {}).lang || '');
@@ -256,6 +269,76 @@ function BookDetailsView(m0) {
     });
   }
 
+  const bookRef = () => ({ olKey: m.olKey, name: m.name, title: m.title, poster: m.poster, author: m.author, tab: 'books' });
+  // Listening place → reading chapter, and back (same chapter number, or same position when the counts match).
+  function chapterForTrack(lp) {
+    if (lp.chapter != null) {
+      const i = chapters.findIndex((c) => c.chapter != null && String(c.chapter) === String(lp.chapter));
+      if (i >= 0) return i;
+    }
+    return chapters.length && chapters.length === audio.length ? Math.min(lp.track, chapters.length - 1) : -1;
+  }
+  function trackForChapter(ci) {
+    const c = chapters[ci];
+    if (!c) return -1;
+    const i = audio.findIndex((tr) => tr.chapter != null && String(tr.chapter) === String(c.chapter));
+    if (i >= 0) return i;
+    return audio.length === chapters.length ? ci : -1;
+  }
+  function listen(i, at) {
+    openListen({
+      key: key,
+      title: m.name,
+      poster: m.cover || m.poster,
+      tracks: audio,
+      index: i,
+      startTime: at || 0,
+      ref: bookRef(),
+      chapters: chapters,
+      pagesFn: source && chapters.length ? (cid) => pl.pages(source.pid, cid) : null,
+      rtl: source ? /^ar/i.test(langOf(source.pid)) : false,
+    });
+  }
+  // 📖 Read: if you listened further on, it offers to continue from there.
+  function startRead() {
+    const p = progress();
+    const lp = listenProgress(key);
+    const idx = indexOfProgress();
+    const li = lp ? chapterForTrack(lp) : -1;
+    const fromRead = () => (idx >= 0 ? read(idx, p.page) : read(0, 0));
+    if (lp && (!p || lp.at > p.at) && li >= 0 && li !== idx)
+      return menu(t('Ler'), [
+        { label: '🎧 ' + t('Continuar do cap. {n} (onde você ouviu)', { n: chapters[li].chapter != null ? chapters[li].chapter : li + 1 }), value: 'l' },
+        { label: '📖 ' + (idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Do começo')), value: 'r' },
+      ], { onPick: (v) => (v === 'l' ? read(li, 0) : fromRead()) });
+    fromRead();
+  }
+  // 🎧 Listen: if you read further on, it offers to listen from there.
+  function startListen() {
+    const p = progress();
+    const lp = listenProgress(key);
+    const idx = indexOfProgress();
+    const ri = idx >= 0 ? trackForChapter(idx) : -1;
+    const fromListen = () => (lp ? listen(Math.min(lp.track, audio.length - 1), lp.time) : listen(0, 0));
+    if (p && (!lp || p.at > lp.at) && ri >= 0 && (!lp || ri !== lp.track))
+      return menu(t('Ouvir'), [
+        { label: '📖 ' + t('Ouvir do cap. {n} (onde você leu)', { n: chapters[idx].chapter != null ? chapters[idx].chapter : idx + 1 }), value: 'r' },
+        { label: '🎧 ' + (lp ? t('Continuar de onde parei') : t('Do começo')), value: 'l' },
+      ], { onPick: (v) => (v === 'r' ? listen(ri, 0) : fromListen()) });
+    fromListen();
+  }
+  function loadAudio() {
+    if (!source || audioFor === source.pid + ':' + source.mid) return;
+    audioFor = source.pid + ':' + source.mid;
+    const mine = audioFor;
+    pl.audioTracks(source.pid, source.mid).then((tr) => {
+      if (!alive || mine !== audioFor) return;
+      audio = tr;
+      renderInfo();
+      if (!chapters.length) renderList();
+    });
+  }
+
   function renderInfo() {
     clear(info);
     const cover = h('img.md-cover', { alt: '' });
@@ -267,10 +350,15 @@ function BookDetailsView(m0) {
     text.appendChild(h('div.md-desc', { text: String(m.description || '').replace(/\[\d+\]|\(\[source\][^)]*\)/g, '').trim() }));
     const p = progress();
     const idx = indexOfProgress();
-    const btns = [
-      h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, p.page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]),
-      h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'ol', Object.assign({}, m, { tab: 'books' })), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
-    ];
+    const lp = listenProgress(key);
+    const btns = [];
+    if (chapters.length || !audio.length)
+      btns.push(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: startRead }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]));
+    if (audio.length)
+      btns.push(h('div.btn' + (chapters.length ? '' : '.primary'), { focusable: true, 'data-autofocus': chapters.length ? null : '', onSelect: startListen }, [h('span.ico', { text: '🎧' }), lp ? t('Continuar ouvindo') : t('Ouvir')]));
+    btns.push(
+      h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'ol', Object.assign({}, m, { tab: 'books' })), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
+    );
     if (pl.installed('books').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : t('Fonte')]));
     btns.push(h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]));
     text.appendChild(h('div.details-buttons', { 'data-group': '' }, btns));
@@ -280,6 +368,10 @@ function BookDetailsView(m0) {
 
   function renderList() {
     clear(list);
+    if (!chapters.length && audio.length) {
+      audio.forEach((tr, i) => list.appendChild(h('div.stream', { focusable: true, onSelect: () => listen(i, 0) }, [h('div.s-main', { text: '🎧 ' + (tr.title || t('Faixa {n}', { n: i + 1 })) })])));
+      return;
+    }
     if (!chapters.length) return list.appendChild(status);
     const start = chunk * CHUNK;
     const end = Math.min(chapters.length, start + CHUNK);
@@ -300,13 +392,18 @@ function BookDetailsView(m0) {
     if (end < chapters.length) list.appendChild(nav2(t('Capítulos {a}–{b}', { a: end + 1, b: Math.min(chapters.length, end + CHUNK) }) + ' ▶', chunk + 1));
   }
 
-  function showSource(ln, cs) {
+  function showSource(ln, cs, tracks) {
     source = ln;
     chapters = cs;
+    if (tracks) {
+      audio = tracks;
+      audioFor = ln.pid + ':' + ln.mid;
+    }
     const idx = indexOfProgress();
     chunk = idx >= 0 ? Math.floor(idx / CHUNK) : 0;
     renderInfo();
     renderList();
+    loadAudio();
   }
 
   function noSources(text) {
@@ -333,9 +430,16 @@ function BookDetailsView(m0) {
       status.textContent = t('Carregando capítulos de {name}...', { name: ln.name });
       return pl
         .chapters(ln.pid, ln.mid)
+        .then((cs) =>
+          cs.length ? cs : pl.audioTracks(ln.pid, ln.mid).then((tr) => {
+            if (!tr.length) throw new Error('empty');
+            audio = tr;
+            audioFor = ln.pid + ':' + ln.mid;
+            return cs;
+          })
+        )
         .then((cs) => {
           if (!alive) return;
-          if (!cs.length) throw new Error('empty');
           showSource(ln, cs);
         })
         .catch(() => {
@@ -351,14 +455,14 @@ function BookDetailsView(m0) {
     status.textContent = t('Procurando nas suas fontes...');
     renderList();
     scan((hit) => {
-      if (!source && !picked) showSource(linkOf(hit), hit.cs);
+      if (!source && !picked) showSource(linkOf(hit), hit.cs, hit.tracks);
     }).then((all) => {
       if (!alive) return;
       if (!all.length) return noSources(t('Não encontrei este título nas suas fontes.'));
       if (picked) return;
       const best = all[0];
       saveLink(m.olKey, linkOf(best));
-      if (!source || source.pid !== best.pid) showSource(linkOf(best), best.cs);
+      if (!source || source.pid !== best.pid) showSource(linkOf(best), best.cs, best.tracks);
       if (all.length > 1) toast(t('Achei em {n} fontes. Troque no botão 📚.', { n: all.length }), 5000);
     });
   }
@@ -375,7 +479,7 @@ function BookDetailsView(m0) {
         picked = true;
         if (v === 'manual') return menu(t('Buscar manualmente'), pl.installed('books').map((p) => ({ label: t('Buscar em {name}', { name: p.name }), value: p })), { onPick: (p) => searchPlugin(p.id, p.name, m.title) });
         saveLink(m.olKey, Object.assign(linkOf(v), { manual: true }));
-        showSource(linkOf(v), v.cs);
+        showSource(linkOf(v), v.cs, v.tracks);
       },
     });
   }

@@ -15,6 +15,7 @@ import { t } from '../lib/i18n.js';
 import { openReader, readingModeMenu, readingModeLabel } from './reader.js';
 import * as shelf from '../lib/mangaLib.js';
 import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
+import { openListen, listenProgress } from './listen.js';
 
 const CHUNK = 50;
 
@@ -517,6 +518,13 @@ function SourceDetails(m, api) {
   let chunk = 0;
   let alive = true;
   const key = api.key(m);
+  let audio = [];
+  if (api.tab === 'books' && m.plId)
+    pl.audioTracks(m.plId, m.mid).then((tr) => {
+      if (!alive || !tr.length) return;
+      audio = tr;
+      renderInfo();
+    });
   const status = h('div.loading-line', { text: t('Procurando capítulos...') });
   const progress = () => (store.get('readProgress', {}) || {})[key] || null;
   const idxOf = () => {
@@ -541,6 +549,16 @@ function SourceDetails(m, api) {
       h('div.details-buttons', { 'data-group': '' }, [
         h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, progress().page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]),
         h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, api.kind, m), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
+        // Books with sound: 🎧 Listen (continues where you stopped).
+        audio.length
+          ? h('div.btn', {
+              focusable: true,
+              onSelect: () => {
+                const lp = listenProgress(key);
+                openListen({ key: key, title: m.name, poster: m.poster, tracks: audio, index: lp ? Math.min(lp.track, audio.length - 1) : 0, startTime: lp ? lp.time : 0, ref: Object.assign({}, m, { tab: api.tab }), chapters: chapters, pagesFn: chapters.length ? api.pagesFn : null, rtl: /^ar/i.test(api.lang || '') });
+              },
+            }, [h('span.ico', { text: '🎧' }), listenProgress(key) ? t('Continuar ouvindo') : t('Ouvir')])
+          : null,
         h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]),
       ])
     );

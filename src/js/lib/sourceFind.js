@@ -35,7 +35,12 @@ export function scanSources(names, onHit, opts) {
           if (!best || score < min) return next();
           return pluginApi(p.id, p.name)
             .chapters({ mid: best.id })
-            .then((cs) => (cs.length ? { pid: p.id, name: p.name, mid: best.id, title: best.title, count: cs.length, cs: cs } : next()), next);
+            .then((cs) => {
+              if (cs.length) return { pid: p.id, name: p.name, mid: best.id, title: best.title, count: cs.length, cs: cs };
+              // Audiobooks: a book that only has sound (no text pages) still counts.
+              if (o.kind !== 'books') return next();
+              return pl.audioTracks(p.id, best.id).then((tr) => (tr.length ? { pid: p.id, name: p.name, mid: best.id, title: best.title, count: tr.length, cs: [], tracks: tr } : next()));
+            }, next);
         },
         () => next()
       );
