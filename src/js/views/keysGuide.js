@@ -37,5 +37,20 @@ export function keysGuide(holder, opts) {
   box.appendChild(h('div.kg-title', { text: '🎮 ' + t('Teclas do controle') }));
   box.appendChild(h('div.kg-cols', null, [readCol(), opts && opts.listen ? listenCol() : null]));
   box.classList.toggle('two', !!(opts && opts.listen));
+  // Never on top of the title's text and buttons (the TV's fonts are wider than a PC's, so the
+  // buttons may take more rows): smaller first, hidden if it still doesn't fit.
+  const fit = () => {
+    const info = box.parentNode && box.parentNode.querySelector('.md-info');
+    if (!info) return;
+    box.classList.remove('compact');
+    box.style.visibility = '';
+    const clash = () => info.getBoundingClientRect().bottom + 16 > box.getBoundingClientRect().top;
+    if (!clash()) return;
+    box.classList.add('compact');
+    if (clash()) box.style.visibility = 'hidden';
+  };
+  setTimeout(fit, 0);
+  setTimeout(fit, 700);
+  setTimeout(fit, 2500);
   return box;
 }

@@ -17490,6 +17490,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }));
     box.appendChild(h("div.kg-cols", null, [readCol(), opts && opts.listen ? listenCol() : null]));
     box.classList.toggle("two", !!(opts && opts.listen));
+    var fit = function fit() {
+      var info3 = box.parentNode && box.parentNode.querySelector(".md-info");
+      if (!info3) return;
+      box.classList.remove("compact");
+      box.style.visibility = "";
+      var clash = function clash() {
+        return info3.getBoundingClientRect().bottom + 16 > box.getBoundingClientRect().top;
+      };
+      if (!clash()) return;
+      box.classList.add("compact");
+      if (clash()) box.style.visibility = "hidden";
+    };
+    setTimeout(fit, 0);
+    setTimeout(fit, 700);
+    setTimeout(fit, 2500);
     return box;
   }
 
@@ -18554,7 +18569,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var m = String(videoId).match(/:(\d+):(\d+)$/);
     return m ? epLabel(m[1], m[2]) : "";
   }
-  function holdMenu(title, onOpen2, onRemove, removeLabel) {
+  function holdMenu(title, onOpen2, onRemove, removeLabel, onRemoveAll) {
     return function () {
       return menu(title, [{
         label: "▶ " + t("Abrir"),
@@ -18562,9 +18577,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, {
         label: "✕ " + (removeLabel || t("Tirar de Continuar assistindo")),
         value: "rm"
-      }], {
+      }, onRemoveAll ? {
+        label: "🗑 " + t("Tirar todos"),
+        value: "all"
+      } : null].filter(Boolean), {
         onPick: function onPick(v) {
-          return v === "open" ? onOpen2() : onRemove();
+          return v === "open" ? onOpen2() : v === "all" ? onRemoveAll() : onRemove();
         }
       });
     };
@@ -18579,6 +18597,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return !only || tabOf(it) === only;
       });
       var items3 = all3.slice(0, 20);
+      var clearAll = function clearAll() {
+        return confirmDialog(t("Tirar todos ({n}) de Continuar assistindo?", {
+          n: all3.length
+        }), t("Tirar todos"), function () {
+          dismissContinueMany(all3.map(function (it) {
+            return it._id;
+          }));
+          toast(t("Continuar assistindo está vazio."));
+          render();
+        });
+      };
       if (!items3.length) {
         row3.style.display = "none";
         return;
@@ -18625,27 +18654,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           dismissContinue(it._id);
           toast(t("Tirado de Continuar assistindo."));
           render();
-        });
+        }, null, clearAll);
         track.appendChild(c);
       });
-      track.appendChild(h("div.card.see-all.wide.cw-clear", {
-        focusable: true,
-        onSelect: function onSelect() {
-          return confirmDialog(t("Tirar todos ({n}) de Continuar assistindo?", {
-            n: all3.length
-          }), t("Tirar todos"), function () {
-            dismissContinueMany(all3.map(function (it) {
-              return it._id;
-            }));
-            toast(t("Continuar assistindo está vazio."));
-            render();
-          });
-        }
-      }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
-        text: "🗑"
-      }), t("Tirar todos")])), h("div.name", {
-        text: ""
-      })]));
       row3.appendChild(track);
       loadVisibleImages(row3);
     }
@@ -20733,9 +20744,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       }, [h("span.ico", {
         text: "📖"
-      }), idx >= 0 ? t("Continuar: cap. {n}", {
-        n: chapters4[idx].chapter
-      }) : t("Ler")]),
+      }), h("span.lbl", {
+        text: idx >= 0 ? t("Continuar: cap. {n}", {
+          n: chapters4[idx].chapter
+        }) : t("Ler")
+      })]),
       // Books with sound: 🎧 Listen (continues where you stopped).
       audio.length ? h("div.btn", {
         focusable: true,
@@ -20758,7 +20771,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       }, [h("span.ico", {
         text: "🎧"
-      }), listenProgress(key4) ? t("Continuar ouvindo") : t("Ouvir")]) : null]));
+      }), h("span.lbl", {
+        text: listenProgress(key4) ? t("Continuar ouvindo") : t("Ouvir")
+      })]) : null]));
       text.appendChild(h("div.details-buttons.more-buttons", {
         "data-group": ""
       }, [h("div.btn", {
@@ -21559,16 +21574,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         onSelect: startRead
       }, [h("span.ico", {
         text: "📖"
-      }), idx >= 0 ? t("Continuar: cap. {n}", {
-        n: chapters4[idx].chapter
-      }) : t("Ler")]));
+      }), h("span.lbl", {
+        text: idx >= 0 ? t("Continuar: cap. {n}", {
+          n: chapters4[idx].chapter
+        }) : t("Ler")
+      })]));
       if (audio.length) main.push(h("div.btn" + (chapters4.length ? "" : ".primary"), {
         focusable: true,
         "data-autofocus": chapters4.length ? null : "",
         onSelect: startListen
       }, [h("span.ico", {
         text: "🎧"
-      }), lp ? t("Continuar ouvindo") : t("Ouvir")]));
+      }), h("span.lbl", {
+        text: lp ? t("Continuar ouvindo") : t("Ouvir")
+      })]));
       btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
@@ -29218,7 +29237,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T23:29:32.439Z";
+  var BUILD = "2026-11-17T23:55:06.801Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

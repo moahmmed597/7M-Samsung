@@ -1022,3 +1022,29 @@ body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000
 .md-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .md-text .details-buttons .btn { max-width: 100%; overflow: hidden; }
 .md-text .details-buttons .btn .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+
+/* Title pages on the TV (its fonts are wider than a PC's): a smaller cover gives the text more room,
+   Read / Listen stay side by side, the small buttons stay on one row, long names are cut. */
+.md-info { width: 840px; }
+.md-cover { width: 200px; height: 300px; margin-right: 28px; }
+[dir="rtl"] .md-cover { margin-right: 0; margin-left: 28px; }
+.md-desc { -webkit-line-clamp: 5; max-height: 160px; font-size: 20px; margin-bottom: 18px; }
+.md-text .details-buttons { -webkit-flex-wrap: wrap; flex-wrap: wrap; }
+.md-text .main-buttons .btn { height: 64px; padding: 0 26px; font-size: 23px; min-width: 0; border-radius: 32px; margin-right: 12px; margin-bottom: 12px; }
+.md-text .main-buttons .btn .ico { font-size: 24px; margin-right: 8px; }
+.md-text .more-buttons .btn { height: 44px; padding: 0 16px; font-size: 17px; margin-right: 10px; margin-bottom: 10px; border-radius: 22px; }
+.md-text .more-buttons .btn .ico { font-size: 18px; margin-right: 6px; }
+.md-text .more-buttons .btn .lbl { max-width: 210px; display: inline-block; vertical-align: middle; }
+[dir="rtl"] .md-text .main-buttons .btn, [dir="rtl"] .md-text .more-buttons .btn { margin-right: 0; margin-left: 10px; }
+/* The keys guide: smaller when space is short, hidden when it would still touch the buttons */
+.keys-guide.compact { padding: 12px 18px 8px; }
+.keys-guide.compact .kg-title { font-size: 18px; margin-bottom: 4px; }
+.keys-guide.compact .kg-head { font-size: 15px; margin-bottom: 2px; }
+.keys-guide.compact .kg-row { height: 26px; }
+.keys-guide.compact .kg-key { height: 22px; line-height: 22px; min-width: 24px; font-size: 13px; padding: 0 5px; }
+.keys-guide.compact .kg-label { font-size: 14px; }
+.keys-guide.compact .kg-keys { width: 104px; }
+/* Read and Listen always side by side: a label that doesn't fit is cut with "…" */
+.md-text .main-buttons { -webkit-flex-wrap: nowrap; flex-wrap: nowrap; }
+.md-text .main-buttons .btn { -webkit-flex: 0 1 auto; flex: 0 1 auto; min-width: 0; overflow: hidden; }
+.md-text .main-buttons .btn .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }

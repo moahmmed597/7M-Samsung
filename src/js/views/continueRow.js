@@ -30,12 +30,13 @@ function episodeLabel(videoId, metaId) {
 }
 
 // Hold OK on a card: open it, or take it off "Continue watching".
-export function holdMenu(title, onOpen, onRemove, removeLabel) {
+export function holdMenu(title, onOpen, onRemove, removeLabel, onRemoveAll) {
   return () =>
     menu(title, [
       { label: '▶ ' + t('Abrir'), value: 'open' },
       { label: '✕ ' + (removeLabel || t('Tirar de Continuar assistindo')), value: 'rm' },
-    ], { onPick: (v) => (v === 'open' ? onOpen() : onRemove()) });
+      onRemoveAll ? { label: '🗑 ' + t('Tirar todos'), value: 'all' } : null,
+    ].filter(Boolean), { onPick: (v) => (v === 'open' ? onOpen() : v === 'all' ? onRemoveAll() : onRemove()) });
 }
 
 // only: null (everything), 'anime', 'movie' or 'series'.
@@ -45,6 +46,13 @@ export function ContinueRow(only) {
     clear(row);
     const all = sortContinue(stremio.continueWatching()).filter((it) => !only || tabOf(it) === only);
     const items = all.slice(0, 20);
+    // Hold OK → "Remove all": empties the row in one go (asks first).
+    const clearAll = () =>
+      confirmDialog(t('Tirar todos ({n}) de Continuar assistindo?', { n: all.length }), t('Tirar todos'), () => {
+        stremio.dismissContinueMany(all.map((it) => it._id));
+        toast(t('Continuar assistindo está vazio.'));
+        render();
+      });
     if (!items.length) {
       row.style.display = 'none';
       return;
@@ -76,21 +84,9 @@ export function ContinueRow(only) {
         stremio.dismissContinue(it._id);
         toast(t('Tirado de Continuar assistindo.'));
         render();
-      });
+      }, null, clearAll);
       track.appendChild(c);
     });
-    // The last card: empty the whole row in one go (asks first).
-    track.appendChild(
-      h('div.card.see-all.wide.cw-clear', {
-        focusable: true,
-        onSelect: () =>
-          confirmDialog(t('Tirar todos ({n}) de Continuar assistindo?', { n: all.length }), t('Tirar todos'), () => {
-            stremio.dismissContinueMany(all.map((it) => it._id));
-            toast(t('Continuar assistindo está vazio.'));
-            render();
-          }),
-      }, [h('div.poster-wrap', null, h('div.see-all-label', null, [h('b', { text: '🗑' }), t('Tirar todos')])), h('div.name', { text: '' })])
-    );
     row.appendChild(track);
     loadVisibleImages(row);
   }

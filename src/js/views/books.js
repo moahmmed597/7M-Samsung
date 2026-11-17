@@ -438,9 +438,9 @@ function BookDetailsView(m0) {
     const btns = [];
     const main = [];
     if (chapters.length || !audio.length)
-      main.push(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: startRead }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]));
+      main.push(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: startRead }, [h('span.ico', { text: '📖' }), h('span.lbl', { text: idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler') })]));
     if (audio.length)
-      main.push(h('div.btn' + (chapters.length ? '' : '.primary'), { focusable: true, 'data-autofocus': chapters.length ? null : '', onSelect: startListen }, [h('span.ico', { text: '🎧' }), lp ? t('Continuar ouvindo') : t('Ouvir')]));
+      main.push(h('div.btn' + (chapters.length ? '' : '.primary'), { focusable: true, 'data-autofocus': chapters.length ? null : '', onSelect: startListen }, [h('span.ico', { text: '🎧' }), h('span.lbl', { text: lp ? t('Continuar ouvindo') : t('Ouvir') })]));
     btns.push(
       h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'ol', Object.assign({}, m, { tab: 'books' })), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );

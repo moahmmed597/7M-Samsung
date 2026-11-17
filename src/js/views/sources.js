@@ -585,7 +585,7 @@ function SourceDetails(m, api) {
     // Read and Listen big on top; the rest smaller underneath.
     text.appendChild(
       h('div.details-buttons.main-buttons', { 'data-group': '' }, [
-        h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, progress().page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]),
+        h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, progress().page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), h('span.lbl', { text: idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler') })]),
         // Books with sound: 🎧 Listen (continues where you stopped).
         audio.length
           ? h('div.btn', {
@@ -594,7 +594,7 @@ function SourceDetails(m, api) {
                 const lp = listenProgress(key);
                 openListen({ key: key, title: m.name, poster: m.poster, tracks: audio, index: lp ? Math.min(lp.track, audio.length - 1) : 0, startTime: lp ? lp.time : 0, ref: Object.assign({}, m, { tab: api.tab }), chapters: chapters, pagesFn: chapters.length ? api.pagesFn : null, rtl: /^ar/i.test(api.lang || '') });
               },
-            }, [h('span.ico', { text: '🎧' }), listenProgress(key) ? t('Continuar ouvindo') : t('Ouvir')])
+            }, [h('span.ico', { text: '🎧' }), h('span.lbl', { text: listenProgress(key) ? t('Continuar ouvindo') : t('Ouvir') })])
           : null,
       ])
     );
