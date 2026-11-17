@@ -4713,6 +4713,189 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
+  // src/js/lib/backup.js
+  var SVC = "http://127.0.0.1:8095";
+  var PREFIX = "kai.";
+  var SKIP = /(Art\d*$|Famous\d*$|GenreArt$|[Cc]ache|^kai\.devlog)/;
+  var LAST = "kai.backupAt";
+  function xhr(method, url2, body, timeout) {
+    return new Promise(function (resolve2, reject) {
+      var x = new XMLHttpRequest();
+      x.open(method, url2);
+      x.timeout = timeout || 15e3;
+      if (body) x.setRequestHeader("Content-Type", "application/json");
+      x.onload = function () {
+        return x.status >= 200 && x.status < 300 ? resolve2(x.responseText) : reject(new Error("HTTP " + x.status));
+      };
+      x.onerror = x.ontimeout = function () {
+        return reject(new Error("service"));
+      };
+      x.send(body || null);
+    });
+  }
+  function collect() {
+    var data = {};
+    var n = 0;
+    for (var i = 0; i < window.localStorage.length; i++) {
+      var k = window.localStorage.key(i);
+      if (!k || k.indexOf(PREFIX) !== 0 || SKIP.test(k)) continue;
+      data[k] = window.localStorage.getItem(k);
+      n++;
+    }
+    return {
+      app: "stremio7m",
+      v: 1,
+      at: Date.now(),
+      count: n,
+      data: data
+    };
+  }
+  function save() {
+    var b = collect();
+    return xhr("POST", SVC + "/api/backup", JSON.stringify(b), 3e4).then(function (r) {
+      var out = {};
+      try {
+        out = JSON.parse(r);
+      } catch (e) {}
+      try {
+        window.localStorage.setItem(LAST, String(b.at));
+      } catch (e) {}
+      return {
+        onTv: !!out.onTv,
+        count: b.count,
+        at: b.at
+      };
+    });
+  }
+  function lastAt() {
+    try {
+      return parseInt(window.localStorage.getItem(LAST), 10) || 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+  function onTv() {
+    return xhr("GET", SVC + "/api/backup", null, 1e4).then(function (r) {
+      var b = JSON.parse(r);
+      return b && b.app === "stremio7m" ? b : null;
+    }).catch(function () {
+      return null;
+    });
+  }
+  function previousOnTv() {
+    return xhr("GET", SVC + "/api/backup-prev", null, 1e4).then(function (r) {
+      var b = JSON.parse(r);
+      return b && b.app === "stremio7m" ? b : null;
+    }).catch(function () {
+      return null;
+    });
+  }
+  function fromPhone() {
+    return xhr("GET", SVC + "/api/restore-data", null, 1e4).then(function (r) {
+      var b = JSON.parse(r);
+      if (!b || b.app !== "stremio7m") throw new Error("bad");
+      return b;
+    });
+  }
+  function apply(b) {
+    if (!b || b.app !== "stremio7m" || !b.data) return false;
+    Object.keys(b.data).forEach(function (k) {
+      if (k.indexOf(PREFIX) !== 0) return;
+      try {
+        window.localStorage.setItem(k, b.data[k]);
+      } catch (e) {}
+    });
+    try {
+      window.localStorage.setItem(LAST, String(b.at || Date.now()));
+    } catch (e) {}
+    setTimeout(function () {
+      return window.location.reload();
+    }, 600);
+    return true;
+  }
+  function info() {
+    return xhr("GET", SVC + "/api/backup-info", null, 8e3).then(function (r) {
+      return JSON.parse(r);
+    }).catch(function () {
+      return null;
+    });
+  }
+  function auto(offer) {
+    if (lastAt()) {
+      if (Date.now() - lastAt() < 24 * 3600 * 1e3) return;
+      return save().catch(function () {});
+    }
+    return onTv().then(function (b) {
+      if (b && b.count) return offer && offer(b);
+      return save().catch(function () {});
+    });
+  }
+
+  // src/js/lib/log.js
+  var remoteUrl = "";
+  var buffer = [];
+  var flushing = false;
+  function redact(text) {
+    return text.replace(/((?:realdebrid|alldebrid|premiumize|debridlink|easydebrid|offcloud|torbox|putio|apikey|api_key|token|authKey)(?:=|%3D|:|\/))[A-Za-z0-9._-]{8,}/gi, "$1***");
+  }
+  function send(level, args) {
+    var raw = Array.prototype.map.call(args, function (a) {
+      if (a instanceof Error) return a.message + (a.stack ? "\n" + a.stack : "");
+      if (_typeof(a) === "object") {
+        try {
+          return JSON.stringify(a);
+        } catch (e) {
+          return String(a);
+        }
+      }
+      return String(a);
+    }).join(" ");
+    var text = redact(raw);
+    try {
+      (console[level] || console.log).call(console, "[kai] " + text);
+    } catch (e) {}
+    if (!remoteUrl) return;
+    buffer.push({
+      t: Date.now(),
+      level: level,
+      text: text
+    });
+    if (buffer.length > 200) buffer.shift();
+    flush();
+  }
+  function flush() {
+    if (flushing || !buffer.length || !remoteUrl) return;
+    flushing = true;
+    var batch2 = buffer.splice(0, buffer.length);
+    var xhr3 = new XMLHttpRequest();
+    xhr3.open("POST", remoteUrl, true);
+    xhr3.setRequestHeader("Content-Type", "application/json");
+    xhr3.timeout = 5e3;
+    xhr3.onloadend = function () {
+      flushing = false;
+      if (buffer.length) setTimeout(flush, 200);
+    };
+    xhr3.send(JSON.stringify(batch2));
+  }
+  var log = {
+    info: function info() {
+      send("log", arguments);
+    },
+    warn: function warn() {
+      send("warn", arguments);
+    },
+    error: function error() {
+      send("error", arguments);
+    },
+    setRemote: function setRemote(url2) {
+      remoteUrl = url2 || "";
+      flush();
+    }
+  };
+  window.onerror = function (msg, src, line, col, err) {
+    log.error("ERRO JS:", msg, (src || "") + ":" + line + ":" + col, err && err.stack ? err.stack : "");
+  };
+
   // src/js/lib/i18n-en.js
   var EN = {
     // Navegação e geral
@@ -5986,7 +6169,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "No celular": "On the phone",
     "Aponte a câmera: baixe a cópia para o celular, ou mande uma de volta para esta TV.": "Point the camera: download the copy to the phone, or send one back to this TV.",
     "Guarda tudo para voltar depois de reinstalar": "Keeps everything to come back after a reinstall",
-    "Nunca": "Never"
+    "Nunca": "Never",
+    "Achei uma cópia de segurança de {date} nesta TV. Restaurar tudo agora?": "I found a backup from {date} on this TV. Restore everything now?",
+    "Guardada no armazenamento da TV (não se perde ao reinstalar).": "Kept in the TV's storage (not lost when reinstalling).",
+    "Só na memória até a TV desligar: baixe no celular antes de reinstalar.": "Only in memory until the TV turns off: download it to your phone before reinstalling.",
+    "Restaurar a cópia anterior": "Restore the previous copy"
   };
 
   // src/js/lib/i18n-ar.js
@@ -7262,7 +7449,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "No celular": "من الجوال",
     "Aponte a câmera: baixe a cópia para o celular, ou mande uma de volta para esta TV.": "وجّه الكاميرا: نزّل النسخة لجوالك، أو رجّع نسخة لهذا التلفزيون.",
     "Guarda tudo para voltar depois de reinstalar": "تحفظ كل شي عشان ترجعه بعد إعادة التثبيت",
-    "Nunca": "أبداً"
+    "Nunca": "أبداً",
+    "Achei uma cópia de segurança de {date} nesta TV. Restaurar tudo agora?": "لقيت نسخة احتياطية من {date} في هذا التلفزيون. ترجّع كل شي الحين؟",
+    "Guardada no armazenamento da TV (não se perde ao reinstalar).": "محفوظة في ذاكرة التلفزيون (ما تضيع لو أعدت التثبيت).",
+    "Só na memória até a TV desligar: baixe no celular antes de reinstalar.": "محفوظة مؤقتاً لين يطفي التلفزيون بس: نزّلها في جوالك قبل ما تعيد التثبيت.",
+    "Restaurar a cópia anterior": "استرجع النسخة اللي قبلها"
   };
 
   // src/js/lib/i18n-es.js
@@ -7573,11 +7764,268 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return "S" + season + " E" + episode;
   }
 
+  // src/js/lib/http.js
+  function request(method, url2, body, opts) {
+    var o = opts || {};
+    return new Promise(function (resolve2, reject) {
+      var xhr3 = new XMLHttpRequest();
+      xhr3.open(method, url2, true);
+      xhr3.timeout = o.timeout || 2e4;
+      var hasBody = body !== void 0 && body !== null;
+      var payload = !hasBody ? null : o.form ? formEncode(body) : JSON.stringify(body);
+      if (hasBody) xhr3.setRequestHeader("Content-Type", o.form ? "application/x-www-form-urlencoded" : "application/json");
+      if (o.headers) for (var k in o.headers) xhr3.setRequestHeader(k, o.headers[k]);
+      xhr3.onload = function () {
+        if (xhr3.status >= 200 && xhr3.status < 300) {
+          if (o.raw) return resolve2(xhr3.responseText);
+          try {
+            resolve2(xhr3.responseText ? JSON.parse(xhr3.responseText) : null);
+          } catch (e) {
+            reject(new Error(t("JSON inválido de {url}", {
+              url: url2
+            })));
+          }
+        } else {
+          var err = new Error(t("HTTP {code} em {url}", {
+            code: xhr3.status,
+            url: url2
+          }));
+          err.status = xhr3.status;
+          reject(err);
+        }
+      };
+      xhr3.onerror = function () {
+        var err = new Error(t("Falha de rede em {url}", {
+          url: url2
+        }));
+        err.status = 0;
+        reject(err);
+      };
+      xhr3.ontimeout = function () {
+        var err = new Error(t("Tempo esgotado em {url}", {
+          url: url2
+        }));
+        err.status = 0;
+        err.timeout = true;
+        reject(err);
+      };
+      xhr3.send(payload);
+    }).catch(function (err) {
+      if (!o.quiet) log.warn(err.message);
+      throw err;
+    });
+  }
+  function formEncode(obj) {
+    return Object.keys(obj).filter(function (k) {
+      return obj[k] !== void 0 && obj[k] !== null;
+    }).map(function (k) {
+      return encodeURIComponent(k) + "=" + encodeURIComponent(obj[k]);
+    }).join("&");
+  }
+  function getJSON(url2, opts) {
+    return request("GET", url2, null, opts);
+  }
+  function postJSON(url2, body, opts) {
+    return request("POST", url2, body, opts);
+  }
+  function getText(url2, opts) {
+    return request("GET", url2, null, Object.assign({
+      raw: true
+    }, opts));
+  }
+  var cache = /* @__PURE__ */new Map();
+  function cachedJSON(url2, ttlMs, opts) {
+    var hit = cache.get(url2);
+    var now = Date.now();
+    if (hit && now - hit.t < (ttlMs || 6e5)) return hit.p;
+    var p = getJSON(url2, opts).catch(function (e) {
+      cache.delete(url2);
+      throw e;
+    });
+    cache.set(url2, {
+      t: now,
+      p: p
+    });
+    if (cache.size > 60) cache.delete(cache.keys().next().value);
+    return p;
+  }
+
+  // src/js/lib/img.js
+  function smallPoster(url2) {
+    if (!url2) return url2;
+    return String(url2).replace(/(images\.metahub\.space\/poster\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w185/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?posters\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2").replace(/(static\.tvmaze\.com\/uploads\/images\/)(original_untouched|large_landscape|medium_landscape)\//, "$1medium_portrait/").replace(/(kitsu\.app\/anime\/poster_images\/\d+\/)(original|large|medium)\.(jpg|jpeg|png)/, "$1small.jpg");
+  }
+  function ratedPoster(id, key4) {
+    var k = String(key4 || "").trim();
+    var m = String(id || "").match(/^tt\d+/);
+    if (!k || !m || !/^[\w-]+$/.test(k)) return null;
+    return "https://api.ratingposterdb.com/" + k + "/imdb/poster-default/" + m[0] + ".jpg?fallback=true";
+  }
+  function smallBackground(url2) {
+    if (!url2) return url2;
+    return String(url2).replace(/(images\.metahub\.space\/background\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w300/").replace(/(kitsu\.app\/anime\/(?:poster|cover)_images\/\d+\/)(original|large)\.(jpg|jpeg|png)/, "$1small.jpg").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?(?:posters|fanart)\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2");
+  }
+  function smallThumb(url2) {
+    if (!url2) return url2;
+    return String(url2).replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w300/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?episodes\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2");
+  }
+  var KITSU_RE = /(?:media\.kitsu\.app|kitsu-production-media\.[^/]+)\/anime\/(?:poster_images\/)?(\d+)\/(poster_image|cover_image)\/(?!small-|tiny-|medium-|large-)/;
+  var kitsuCache = {};
+  var batch = {};
+  var batchTimer = null;
+  function kitsuInfo(url2) {
+    var m = String(url2 || "").match(KITSU_RE);
+    return m ? {
+      id: m[1],
+      kind: m[2] === "cover_image" ? "cover" : "poster"
+    } : null;
+  }
+  function flush2() {
+    var ids2 = Object.keys(batch);
+    var waiting = batch;
+    batch = {};
+    batchTimer = null;
+    var _loop2 = function _loop2() {
+      var chunk = ids2.slice(i, i + 20);
+      getJSON("https://kitsu.io/api/edge/anime?filter%5Bid%5D=" + chunk.join(",") + "&fields%5Banime%5D=posterImage,coverImage&page%5Blimit%5D=20", {
+        quiet: true,
+        timeout: 15e3
+      }).then(function (r) {
+        var found = {};
+        (r && r.data || []).forEach(function (a) {
+          return found[a.id] = a.attributes || {};
+        });
+        chunk.forEach(function (id) {
+          var at2 = found[id] || {};
+          var p = at2.posterImage || {};
+          var c = at2.coverImage || {};
+          waiting[id].forEach(function (w) {
+            return w.resolve(w.kind === "cover" ? c.small || c.tiny || null : p.small || p.tiny || null);
+          });
+        });
+      }).catch(function () {
+        return chunk.forEach(function (id) {
+          return waiting[id].forEach(function (w) {
+            return w.resolve(null);
+          });
+        });
+      });
+    };
+    for (var i = 0; i < ids2.length; i += 20) {
+      _loop2();
+    }
+  }
+  function kitsuSmall(info3) {
+    var key4 = info3.id + ":" + info3.kind;
+    if (!kitsuCache[key4]) {
+      kitsuCache[key4] = new Promise(function (resolve2) {
+        (batch[info3.id] = batch[info3.id] || []).push({
+          kind: info3.kind,
+          resolve: resolve2
+        });
+        if (!batchTimer) batchTimer = setTimeout(flush2, 60);
+      });
+    }
+    return kitsuCache[key4];
+  }
+
+  // src/js/lib/dom.js
+  function h(tag, props, children) {
+    var parts = tag.split(/(?=[.#])/);
+    var el = document.createElement(parts[0] || "div");
+    for (var i = 1; i < parts.length; i++) {
+      var p = parts[i];
+      if (p[0] === ".") el.classList.add(p.slice(1));else if (p[0] === "#") el.id = p.slice(1);
+    }
+    if (props) {
+      for (var key4 in props) {
+        var val = props[key4];
+        if (val === void 0 || val === null || val === false) continue;
+        if (key4 === "text") el.textContent = val;else if (key4 === "html") el.innerHTML = val;else if (key4 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key4 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key4 === "onSelect") el.__select = val;else if (key4 === "onFocus") el.__focus = val;else if (key4 === "focusable") el.setAttribute("data-focus", "");else if (key4 === "cls") String(val).split(" ").forEach(function (c) {
+          return c && el.classList.add(c);
+        });else el.setAttribute(key4, val === true ? "" : val);
+      }
+    }
+    append(el, children);
+    return el;
+  }
+  function append(el, children) {
+    if (children === void 0 || children === null || children === false) return el;
+    if (Array.isArray(children)) children.forEach(function (c) {
+      return append(el, c);
+    });else if (typeof children === "string" || typeof children === "number") el.appendChild(document.createTextNode(String(children)));else el.appendChild(children);
+    return el;
+  }
+  function clear(el) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    return el;
+  }
+  function $$(sel, root2) {
+    return Array.prototype.slice.call((root2 || document).querySelectorAll(sel));
+  }
+  var BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+  function setOn(el, on) {
+    if (on && !el.__on) {
+      el.__on = true;
+      var url2 = el.getAttribute("data-lazy");
+      if (/\/api\/pimg\?u=https%3A%2F%2Fuploads\.mangadex\.org/.test(url2) && url2.indexOf("&ua=") < 0) url2 += "&ua=stremio-7m-tizen";
+      var kitsu = kitsuInfo(url2);
+      if (!kitsu) {
+        el.src = url2;
+        return;
+      }
+      kitsuSmall(kitsu).then(function (small) {
+        if (!el.__on) return;
+        if (small) {
+          el.setAttribute("data-lazy", small);
+          el.src = small;
+        } else if (el.onerror) el.onerror();
+      });
+    } else if (!on && el.__on) {
+      el.__on = false;
+      el.src = BLANK;
+    }
+  }
+  function loadVisibleImages(root2, margin) {
+    var m = margin === void 0 ? 400 : margin;
+    var W2 = window.innerWidth;
+    var H2 = window.innerHeight;
+    var isFar = function isFar(r) {
+      return r.right < -W2 * 0.5 || r.left > W2 * 1.6 || r.bottom < -H2 * 0.8 || r.top > H2 * 1.8;
+    };
+    var handled = [];
+    $$("[data-scroll-x]", root2).forEach(function (track) {
+      if (track.offsetParent === null) return;
+      var tr = track.getBoundingClientRect();
+      if (tr.bottom < -H2 * 0.8 || tr.top > H2 * 1.8) {
+        $$("img[data-lazy]", track).forEach(function (el) {
+          return setOn(el, false);
+        });
+        handled.push(track);
+      }
+    });
+    $$("img[data-lazy]", root2).forEach(function (el) {
+      if (el.offsetParent === null) return;
+      for (var i = 0; i < handled.length; i++) if (handled[i].contains(el)) return;
+      var r = el.getBoundingClientRect();
+      var near = r.right > -m && r.left < W2 + m && r.bottom > -m && r.top < H2 + m;
+      if (near) setOn(el, true);else if (isFar(r)) setOn(el, false);
+    });
+  }
+  function unloadImages(root2) {
+    $$("img[data-lazy]", root2).forEach(function (el) {
+      if (el.__on) {
+        el.__on = false;
+        el.src = BLANK;
+      }
+    });
+  }
+
   // src/js/lib/store.js
-  var PREFIX = "kai.";
+  var PREFIX2 = "kai.";
   function rawGet(key4, fallback) {
     try {
-      var raw = window.localStorage.getItem(PREFIX + key4);
+      var raw = window.localStorage.getItem(PREFIX2 + key4);
       return raw === null ? fallback : JSON.parse(raw);
     } catch (e) {
       return fallback;
@@ -7585,7 +8033,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function rawSet(key4, value) {
     try {
-      if (value === void 0 || value === null) window.localStorage.removeItem(PREFIX + key4);else window.localStorage.setItem(PREFIX + key4, JSON.stringify(value));
+      if (value === void 0 || value === null) window.localStorage.removeItem(PREFIX2 + key4);else window.localStorage.setItem(PREFIX2 + key4, JSON.stringify(value));
     } catch (e) {}
   }
   var COLORS = ["#7b5bf5", "#e5508c", "#2bb6a3", "#f0a030", "#3d8bfd", "#e55353", "#8bc34a", "#9e9e9e"];
@@ -7796,416 +8244,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     rawSet("device", dev);
     set("settings", prof);
     return settings();
-  }
-
-  // src/js/lib/backup.js
-  var SVC = "http://127.0.0.1:8095";
-  var PREFIX2 = "kai.";
-  var SKIP = /(Art\d*$|Famous\d*$|GenreArt$|[Cc]ache|^kai\.devlog)/;
-  var LAST = "backupAt";
-  function xhr(method, url2, body, timeout) {
-    return new Promise(function (resolve2, reject) {
-      var x = new XMLHttpRequest();
-      x.open(method, url2);
-      x.timeout = timeout || 15e3;
-      if (body) x.setRequestHeader("Content-Type", "application/json");
-      x.onload = function () {
-        return x.status >= 200 && x.status < 300 ? resolve2(x.responseText) : reject(new Error("HTTP " + x.status));
-      };
-      x.onerror = x.ontimeout = function () {
-        return reject(new Error("service"));
-      };
-      x.send(body || null);
-    });
-  }
-  function collect() {
-    var data = {};
-    var n = 0;
-    for (var i = 0; i < window.localStorage.length; i++) {
-      var k = window.localStorage.key(i);
-      if (!k || k.indexOf(PREFIX2) !== 0 || SKIP.test(k)) continue;
-      data[k] = window.localStorage.getItem(k);
-      n++;
-    }
-    return {
-      app: "stremio7m",
-      v: 1,
-      at: Date.now(),
-      count: n,
-      data: data
-    };
-  }
-  function save() {
-    var b = collect();
-    return xhr("POST", SVC + "/api/backup", JSON.stringify(b), 3e4).then(function (r) {
-      var out = {};
-      try {
-        out = JSON.parse(r);
-      } catch (e) {}
-      set(LAST, b.at);
-      return {
-        onTv: !!out.onTv,
-        count: b.count,
-        at: b.at
-      };
-    });
-  }
-  var lastAt = function lastAt() {
-    return get(LAST, 0) || 0;
-  };
-  function onTv() {
-    return xhr("GET", SVC + "/api/backup", null, 1e4).then(function (r) {
-      var b = JSON.parse(r);
-      return b && b.app === "stremio7m" ? b : null;
-    }).catch(function () {
-      return null;
-    });
-  }
-  function fromPhone() {
-    return xhr("GET", SVC + "/api/restore-data", null, 1e4).then(function (r) {
-      var b = JSON.parse(r);
-      if (!b || b.app !== "stremio7m") throw new Error("bad");
-      return b;
-    });
-  }
-  function apply(b) {
-    if (!b || b.app !== "stremio7m" || !b.data) return false;
-    Object.keys(b.data).forEach(function (k) {
-      if (k.indexOf(PREFIX2) !== 0) return;
-      try {
-        window.localStorage.setItem(k, b.data[k]);
-      } catch (e) {}
-    });
-    setTimeout(function () {
-      return window.location.reload();
-    }, 600);
-    return true;
-  }
-  function auto() {
-    if (Date.now() - lastAt() < 24 * 3600 * 1e3) return;
-    save().catch(function () {});
-  }
-
-  // src/js/lib/log.js
-  var remoteUrl = "";
-  var buffer = [];
-  var flushing = false;
-  function redact(text) {
-    return text.replace(/((?:realdebrid|alldebrid|premiumize|debridlink|easydebrid|offcloud|torbox|putio|apikey|api_key|token|authKey)(?:=|%3D|:|\/))[A-Za-z0-9._-]{8,}/gi, "$1***");
-  }
-  function send(level, args) {
-    var raw = Array.prototype.map.call(args, function (a) {
-      if (a instanceof Error) return a.message + (a.stack ? "\n" + a.stack : "");
-      if (_typeof(a) === "object") {
-        try {
-          return JSON.stringify(a);
-        } catch (e) {
-          return String(a);
-        }
-      }
-      return String(a);
-    }).join(" ");
-    var text = redact(raw);
-    try {
-      (console[level] || console.log).call(console, "[kai] " + text);
-    } catch (e) {}
-    if (!remoteUrl) return;
-    buffer.push({
-      t: Date.now(),
-      level: level,
-      text: text
-    });
-    if (buffer.length > 200) buffer.shift();
-    flush();
-  }
-  function flush() {
-    if (flushing || !buffer.length || !remoteUrl) return;
-    flushing = true;
-    var batch2 = buffer.splice(0, buffer.length);
-    var xhr3 = new XMLHttpRequest();
-    xhr3.open("POST", remoteUrl, true);
-    xhr3.setRequestHeader("Content-Type", "application/json");
-    xhr3.timeout = 5e3;
-    xhr3.onloadend = function () {
-      flushing = false;
-      if (buffer.length) setTimeout(flush, 200);
-    };
-    xhr3.send(JSON.stringify(batch2));
-  }
-  var log = {
-    info: function info() {
-      send("log", arguments);
-    },
-    warn: function warn() {
-      send("warn", arguments);
-    },
-    error: function error() {
-      send("error", arguments);
-    },
-    setRemote: function setRemote(url2) {
-      remoteUrl = url2 || "";
-      flush();
-    }
-  };
-  window.onerror = function (msg, src, line, col, err) {
-    log.error("ERRO JS:", msg, (src || "") + ":" + line + ":" + col, err && err.stack ? err.stack : "");
-  };
-
-  // src/js/lib/http.js
-  function request(method, url2, body, opts) {
-    var o = opts || {};
-    return new Promise(function (resolve2, reject) {
-      var xhr3 = new XMLHttpRequest();
-      xhr3.open(method, url2, true);
-      xhr3.timeout = o.timeout || 2e4;
-      var hasBody = body !== void 0 && body !== null;
-      var payload = !hasBody ? null : o.form ? formEncode(body) : JSON.stringify(body);
-      if (hasBody) xhr3.setRequestHeader("Content-Type", o.form ? "application/x-www-form-urlencoded" : "application/json");
-      if (o.headers) for (var k in o.headers) xhr3.setRequestHeader(k, o.headers[k]);
-      xhr3.onload = function () {
-        if (xhr3.status >= 200 && xhr3.status < 300) {
-          if (o.raw) return resolve2(xhr3.responseText);
-          try {
-            resolve2(xhr3.responseText ? JSON.parse(xhr3.responseText) : null);
-          } catch (e) {
-            reject(new Error(t("JSON inválido de {url}", {
-              url: url2
-            })));
-          }
-        } else {
-          var err = new Error(t("HTTP {code} em {url}", {
-            code: xhr3.status,
-            url: url2
-          }));
-          err.status = xhr3.status;
-          reject(err);
-        }
-      };
-      xhr3.onerror = function () {
-        var err = new Error(t("Falha de rede em {url}", {
-          url: url2
-        }));
-        err.status = 0;
-        reject(err);
-      };
-      xhr3.ontimeout = function () {
-        var err = new Error(t("Tempo esgotado em {url}", {
-          url: url2
-        }));
-        err.status = 0;
-        err.timeout = true;
-        reject(err);
-      };
-      xhr3.send(payload);
-    }).catch(function (err) {
-      if (!o.quiet) log.warn(err.message);
-      throw err;
-    });
-  }
-  function formEncode(obj) {
-    return Object.keys(obj).filter(function (k) {
-      return obj[k] !== void 0 && obj[k] !== null;
-    }).map(function (k) {
-      return encodeURIComponent(k) + "=" + encodeURIComponent(obj[k]);
-    }).join("&");
-  }
-  function getJSON(url2, opts) {
-    return request("GET", url2, null, opts);
-  }
-  function postJSON(url2, body, opts) {
-    return request("POST", url2, body, opts);
-  }
-  function getText(url2, opts) {
-    return request("GET", url2, null, Object.assign({
-      raw: true
-    }, opts));
-  }
-  var cache = /* @__PURE__ */new Map();
-  function cachedJSON(url2, ttlMs, opts) {
-    var hit = cache.get(url2);
-    var now = Date.now();
-    if (hit && now - hit.t < (ttlMs || 6e5)) return hit.p;
-    var p = getJSON(url2, opts).catch(function (e) {
-      cache.delete(url2);
-      throw e;
-    });
-    cache.set(url2, {
-      t: now,
-      p: p
-    });
-    if (cache.size > 60) cache.delete(cache.keys().next().value);
-    return p;
-  }
-
-  // src/js/lib/img.js
-  function smallPoster(url2) {
-    if (!url2) return url2;
-    return String(url2).replace(/(images\.metahub\.space\/poster\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w185/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?posters\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2").replace(/(static\.tvmaze\.com\/uploads\/images\/)(original_untouched|large_landscape|medium_landscape)\//, "$1medium_portrait/").replace(/(kitsu\.app\/anime\/poster_images\/\d+\/)(original|large|medium)\.(jpg|jpeg|png)/, "$1small.jpg");
-  }
-  function ratedPoster(id, key4) {
-    var k = String(key4 || "").trim();
-    var m = String(id || "").match(/^tt\d+/);
-    if (!k || !m || !/^[\w-]+$/.test(k)) return null;
-    return "https://api.ratingposterdb.com/" + k + "/imdb/poster-default/" + m[0] + ".jpg?fallback=true";
-  }
-  function smallBackground(url2) {
-    if (!url2) return url2;
-    return String(url2).replace(/(images\.metahub\.space\/background\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w300/").replace(/(kitsu\.app\/anime\/(?:poster|cover)_images\/\d+\/)(original|large)\.(jpg|jpeg|png)/, "$1small.jpg").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?(?:posters|fanart)\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2");
-  }
-  function smallThumb(url2) {
-    if (!url2) return url2;
-    return String(url2).replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w300/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?episodes\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2");
-  }
-  var KITSU_RE = /(?:media\.kitsu\.app|kitsu-production-media\.[^/]+)\/anime\/(?:poster_images\/)?(\d+)\/(poster_image|cover_image)\/(?!small-|tiny-|medium-|large-)/;
-  var kitsuCache = {};
-  var batch = {};
-  var batchTimer = null;
-  function kitsuInfo(url2) {
-    var m = String(url2 || "").match(KITSU_RE);
-    return m ? {
-      id: m[1],
-      kind: m[2] === "cover_image" ? "cover" : "poster"
-    } : null;
-  }
-  function flush2() {
-    var ids2 = Object.keys(batch);
-    var waiting = batch;
-    batch = {};
-    batchTimer = null;
-    var _loop2 = function _loop2() {
-      var chunk = ids2.slice(i, i + 20);
-      getJSON("https://kitsu.io/api/edge/anime?filter%5Bid%5D=" + chunk.join(",") + "&fields%5Banime%5D=posterImage,coverImage&page%5Blimit%5D=20", {
-        quiet: true,
-        timeout: 15e3
-      }).then(function (r) {
-        var found = {};
-        (r && r.data || []).forEach(function (a) {
-          return found[a.id] = a.attributes || {};
-        });
-        chunk.forEach(function (id) {
-          var at2 = found[id] || {};
-          var p = at2.posterImage || {};
-          var c = at2.coverImage || {};
-          waiting[id].forEach(function (w) {
-            return w.resolve(w.kind === "cover" ? c.small || c.tiny || null : p.small || p.tiny || null);
-          });
-        });
-      }).catch(function () {
-        return chunk.forEach(function (id) {
-          return waiting[id].forEach(function (w) {
-            return w.resolve(null);
-          });
-        });
-      });
-    };
-    for (var i = 0; i < ids2.length; i += 20) {
-      _loop2();
-    }
-  }
-  function kitsuSmall(info2) {
-    var key4 = info2.id + ":" + info2.kind;
-    if (!kitsuCache[key4]) {
-      kitsuCache[key4] = new Promise(function (resolve2) {
-        (batch[info2.id] = batch[info2.id] || []).push({
-          kind: info2.kind,
-          resolve: resolve2
-        });
-        if (!batchTimer) batchTimer = setTimeout(flush2, 60);
-      });
-    }
-    return kitsuCache[key4];
-  }
-
-  // src/js/lib/dom.js
-  function h(tag, props, children) {
-    var parts = tag.split(/(?=[.#])/);
-    var el = document.createElement(parts[0] || "div");
-    for (var i = 1; i < parts.length; i++) {
-      var p = parts[i];
-      if (p[0] === ".") el.classList.add(p.slice(1));else if (p[0] === "#") el.id = p.slice(1);
-    }
-    if (props) {
-      for (var key4 in props) {
-        var val = props[key4];
-        if (val === void 0 || val === null || val === false) continue;
-        if (key4 === "text") el.textContent = val;else if (key4 === "html") el.innerHTML = val;else if (key4 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key4 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key4 === "onSelect") el.__select = val;else if (key4 === "onFocus") el.__focus = val;else if (key4 === "focusable") el.setAttribute("data-focus", "");else if (key4 === "cls") String(val).split(" ").forEach(function (c) {
-          return c && el.classList.add(c);
-        });else el.setAttribute(key4, val === true ? "" : val);
-      }
-    }
-    append(el, children);
-    return el;
-  }
-  function append(el, children) {
-    if (children === void 0 || children === null || children === false) return el;
-    if (Array.isArray(children)) children.forEach(function (c) {
-      return append(el, c);
-    });else if (typeof children === "string" || typeof children === "number") el.appendChild(document.createTextNode(String(children)));else el.appendChild(children);
-    return el;
-  }
-  function clear(el) {
-    while (el.firstChild) el.removeChild(el.firstChild);
-    return el;
-  }
-  function $$(sel, root2) {
-    return Array.prototype.slice.call((root2 || document).querySelectorAll(sel));
-  }
-  var BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-  function setOn(el, on) {
-    if (on && !el.__on) {
-      el.__on = true;
-      var url2 = el.getAttribute("data-lazy");
-      if (/\/api\/pimg\?u=https%3A%2F%2Fuploads\.mangadex\.org/.test(url2) && url2.indexOf("&ua=") < 0) url2 += "&ua=stremio-7m-tizen";
-      var kitsu = kitsuInfo(url2);
-      if (!kitsu) {
-        el.src = url2;
-        return;
-      }
-      kitsuSmall(kitsu).then(function (small) {
-        if (!el.__on) return;
-        if (small) {
-          el.setAttribute("data-lazy", small);
-          el.src = small;
-        } else if (el.onerror) el.onerror();
-      });
-    } else if (!on && el.__on) {
-      el.__on = false;
-      el.src = BLANK;
-    }
-  }
-  function loadVisibleImages(root2, margin) {
-    var m = margin === void 0 ? 400 : margin;
-    var W2 = window.innerWidth;
-    var H2 = window.innerHeight;
-    var isFar = function isFar(r) {
-      return r.right < -W2 * 0.5 || r.left > W2 * 1.6 || r.bottom < -H2 * 0.8 || r.top > H2 * 1.8;
-    };
-    var handled = [];
-    $$("[data-scroll-x]", root2).forEach(function (track) {
-      if (track.offsetParent === null) return;
-      var tr = track.getBoundingClientRect();
-      if (tr.bottom < -H2 * 0.8 || tr.top > H2 * 1.8) {
-        $$("img[data-lazy]", track).forEach(function (el) {
-          return setOn(el, false);
-        });
-        handled.push(track);
-      }
-    });
-    $$("img[data-lazy]", root2).forEach(function (el) {
-      if (el.offsetParent === null) return;
-      for (var i = 0; i < handled.length; i++) if (handled[i].contains(el)) return;
-      var r = el.getBoundingClientRect();
-      var near = r.right > -m && r.left < W2 + m && r.bottom > -m && r.top < H2 + m;
-      if (near) setOn(el, true);else if (isFar(r)) setOn(el, false);
-    });
-  }
-  function unloadImages(root2) {
-    $$("img[data-lazy]", root2).forEach(function (el) {
-      if (el.__on) {
-        el.__on = false;
-        el.src = BLANK;
-      }
-    });
   }
 
   // src/js/lib/sounds.js
@@ -9785,7 +9823,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     request2(BASE + "/api/info", 3e3).then(function (r) {
       if (r) last = r.last || 0;
       svcVersion = r && r.version || 1;
-      if (svcVersion < 6) {
+      if (svcVersion < 7) {
         request2(BASE + "/api/exit", 3e3).then(function () {
           return setTimeout(startService, 1500);
         }, function () {});
@@ -9800,7 +9838,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return poll(0);
     });
   }
-  function info() {
+  function info2() {
     var get5 = function get5() {
       return request2(BASE + "/api/info", 4e3).then(function (r) {
         return r && r.ip ? {
@@ -10045,10 +10083,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }).then(function (added) {
       var id = added && added.id;
       if (!id) throw new Error("Real-Debrid: addMagnet");
-      var info2 = function info2() {
+      var info3 = function info3() {
         return rd(key4, "GET", "torrents/info/" + encodeURIComponent(id));
       };
-      return info2().then(function (tor) {
+      return info3().then(function (tor) {
         var files2 = (tor.files || []).map(function (f) {
           return {
             id: f.id,
@@ -10063,7 +10101,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }).then(function poll2(_, n) {
         n = n || 0;
-        return info2().then(function (tor) {
+        return info3().then(function (tor) {
           if (tor.status === "downloaded" && tor.links && tor.links.length) return tor.links[0];
           if (n >= 3 || /error|dead|virus|magnet_error/.test(tor.status)) {
             rd(key4, "DELETE", "torrents/delete/" + encodeURIComponent(id)).catch(function () {});
@@ -11351,7 +11389,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       address: normalizeAddress(address)
     };
     if (!draft.address) return Promise.reject(new Error(t("Endereço inválido")));
-    return call2(draft, "GET", "/System/Info/Public").then(function (info2) {
+    return call2(draft, "GET", "/System/Info/Public").then(function (info3) {
       return call2(draft, "POST", "/Users/AuthenticateByName", {
         Username: username,
         Pw: password || ""
@@ -11363,7 +11401,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           token: auth2.AccessToken,
           userId: auth2.User.Id,
           user: auth2.User.Name || username,
-          name: info2 && info2.ServerName || draft.address
+          name: info3 && info3.ServerName || draft.address
         };
         saveSettings({
           mediaServer: c,
@@ -11493,7 +11531,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                   }), call2(draft, "POST", "/Users/AuthenticateWithQuickConnect", {
                     Secret: r.Secret
                   })]).then(function (x) {
-                    var info2 = x[0];
+                    var info3 = x[0];
                     var auth2 = x[1];
                     if (!auth2 || !auth2.AccessToken) return "pending";
                     saveSettings({
@@ -11503,7 +11541,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                         token: auth2.AccessToken,
                         userId: auth2.User.Id,
                         user: auth2.User.Name,
-                        name: info2 && info2.ServerName || draft.address
+                        name: info3 && info3.ServerName || draft.address
                       },
                       mediaServerEnabled: true
                     });
@@ -12740,15 +12778,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (then) then();
       }
     }
-    function parseExtra(info2) {
-      if (!info2) return {};
-      if (_typeof(info2) === "object") return info2;
-      if (typeof info2 === "string") {
+    function parseExtra(info3) {
+      if (!info3) return {};
+      if (_typeof(info3) === "object") return info3;
+      if (typeof info3 === "string") {
         try {
-          return JSON.parse(info2);
+          return JSON.parse(info3);
         } catch (e) {
           var res = {};
-          info2.replace(/([^,=;]+)=([^,;]+)/g, function (_, k, v) {
+          info3.replace(/([^,=;]+)=([^,;]+)/g, function (_, k, v) {
             res[k.trim()] = v.trim().replace(/^['"]|['"]$/g, "");
           });
           return res;
@@ -13246,23 +13284,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         expires: Date.now() + (r.expires_in || 900) * 1e3
       };
     });
-    var _poll2 = function poll2(info2) {
+    var _poll2 = function poll2(info3) {
       if (stopped) return;
-      if (Date.now() > info2.expires) return finish(onFail, "expired");
+      if (Date.now() > info3.expires) return finish(onFail, "expired");
       timer = setTimeout(function () {
         var check3 = provider === "trakt" ? request("POST", TRAKT_API + "/oauth/device/token", withSecret({
-          code: info2.device,
+          code: info3.device,
           client_id: k.traktId
         }, k), {
           headers: traktHeaders(),
           quiet: true
-        }) : request("GET", SIMKL_API + "/oauth/pin/" + encodeURIComponent(info2.code) + "?client_id=" + encodeURIComponent(k.simklId), null, {
+        }) : request("GET", SIMKL_API + "/oauth/pin/" + encodeURIComponent(info3.code) + "?client_id=" + encodeURIComponent(k.simklId), null, {
           quiet: true
         });
         check3.then(function (r) {
           if (stopped) return;
           var token = r && r.access_token;
-          if (!token) return _poll2(info2);
+          if (!token) return _poll2(info3);
           saveAccount(provider, Object.assign({
             provider: provider
           }, tokenFields(r)));
@@ -13277,12 +13315,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             syncNow();
           });
         }).catch(function (e) {
-          if (e.status === 400 || e.status === 429 || e.status === 0) return _poll2(e.status === 429 ? Object.assign({}, info2, {
-            interval: info2.interval + 1e3
-          }) : info2);
+          if (e.status === 400 || e.status === 429 || e.status === 0) return _poll2(e.status === 429 ? Object.assign({}, info3, {
+            interval: info3.interval + 1e3
+          }) : info3);
           finish(onFail, e.status === 418 ? "denied" : e.status === 410 ? "expired" : e.message);
         });
-      }, info2.interval);
+      }, info3.interval);
     };
     var handle2 = {
       code: "",
@@ -13291,10 +13329,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return finish(function () {});
       }
     };
-    handle2.ready = begin.then(function (info2) {
-      handle2.code = info2.code;
-      handle2.url = info2.url;
-      _poll2(info2);
+    handle2.ready = begin.then(function (info3) {
+      handle2.code = info3.code;
+      handle2.url = info3.url;
+      _poll2(info3);
       return handle2;
     });
     handle2.ready.catch(function (e) {
@@ -15475,11 +15513,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var list3 = [];
       if (av.length) {
         list3 = av.map(function (tr, i) {
-          var info2 = embedded && embedded.audio[i];
+          var info3 = embedded && embedded.audio[i];
           return {
-            label: trackName(info2 && info2.lang || tr.language, [info2 && info2.label, tr.label].filter(Boolean).join(" "), i) + (info2 && info2.label ? " · " + info2.label : tr.label ? " · " + tr.label : ""),
-            sub: [info2 && info2.codec || tr.codec, tr.channels || info2 && info2.channels ? t("{n} canais", {
-              n: tr.channels || info2.channels
+            label: trackName(info3 && info3.lang || tr.language, [info3 && info3.label, tr.label].filter(Boolean).join(" "), i) + (info3 && info3.label ? " · " + info3.label : tr.label ? " · " + tr.label : ""),
+            sub: [info3 && info3.codec || tr.codec, tr.channels || info3 && info3.channels ? t("{n} canais", {
+              n: tr.channels || info3.channels
             }) : ""].filter(Boolean).join(" · "),
             value: i,
             checked: tr.enabled
@@ -15528,11 +15566,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }];
       var avText = videoEl.isAVPlay ? videoEl.textTrackList() : [];
       avText.forEach(function (tr, i) {
-        var info2 = embedded && embedded.subs.length === avText.length ? embedded.subs[i] : null;
-        var codec = info2 && info2.codec || tr.codec || "";
+        var info3 = embedded && embedded.subs.length === avText.length ? embedded.subs[i] : null;
+        var codec = info3 && info3.codec || tr.codec || "";
         if (/PGS|VOBSUB|DVD/i.test(codec)) return;
-        var rawLang = info2 && info2.lang || tr.language || "";
-        var rawLabel = info2 && info2.label || tr.label || "";
+        var rawLang = info3 && info3.lang || tr.language || "";
+        var rawLabel = info3 && info3.label || tr.label || "";
         var detected = detectLang(rawLang, rawLabel);
         var title = "";
         if (detected && detected !== "und") {
@@ -20009,14 +20047,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function SourceDetails(m, api2) {
     var el = h("div.view.md-view");
-    var info2 = h("div.md-info");
+    var info3 = h("div.md-info");
     var listEl = h("div.md-list", {
       "data-scroll-y": "",
       "data-pad-y": "120",
       "data-group": "",
       "data-vertical": ""
     });
-    el.appendChild(info2);
+    el.appendChild(info3);
     var guide2 = keysGuide(null, {});
     el.appendChild(guide2);
     el.appendChild(listEl);
@@ -20060,7 +20098,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function renderInfo() {
-      clear(info2);
+      clear(info3);
       keysGuide(guide2, {
         listen: audio.length > 0
       });
@@ -20068,7 +20106,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         alt: ""
       });
       c.setAttribute("data-lazy", m.poster || "");
-      info2.appendChild(c);
+      info3.appendChild(c);
       var text = h("div.md-text");
       text.appendChild(h("div.md-title", {
         text: m.name
@@ -20134,8 +20172,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: readingModeLabel().icon
       }), readingModeLabel().text])]));
-      info2.appendChild(text);
-      loadVisibleImages(info2);
+      info3.appendChild(text);
+      loadVisibleImages(info3);
     }
     function renderList() {
       clear(listEl);
@@ -20695,14 +20733,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var m = Object.assign({}, m0);
     var key4 = "ol" + m.olKey;
     var el = h("div.view.md-view");
-    var info2 = h("div.md-info");
+    var info3 = h("div.md-info");
     var list3 = h("div.md-list", {
       "data-scroll-y": "",
       "data-pad-y": "120",
       "data-group": "",
       "data-vertical": ""
     });
-    el.appendChild(info2);
+    el.appendChild(info3);
     var guide2 = keysGuide(null, {});
     el.appendChild(guide2);
     el.appendChild(list3);
@@ -20866,7 +20904,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function renderInfo() {
-      clear(info2);
+      clear(info3);
       keysGuide(guide2, {
         listen: audio.length > 0
       });
@@ -20874,7 +20912,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         alt: ""
       });
       cover.setAttribute("data-lazy", m.cover || m.poster || "");
-      info2.appendChild(cover);
+      info3.appendChild(cover);
       var text = h("div.md-text");
       text.appendChild(h("div.md-title", {
         text: m.name
@@ -20944,8 +20982,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text.appendChild(h("div.details-buttons", {
         "data-group": ""
       }, btns));
-      info2.appendChild(text);
-      loadVisibleImages(info2);
+      info3.appendChild(text);
+      loadVisibleImages(info3);
     }
     function renderList() {
       clear(list3);
@@ -21387,14 +21425,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var m = Object.assign({}, m0);
     var key4 = "cv" + m.cvId;
     var el = h("div.view.md-view");
-    var info2 = h("div.md-info");
+    var info3 = h("div.md-info");
     var list3 = h("div.md-list", {
       "data-scroll-y": "",
       "data-pad-y": "120",
       "data-group": "",
       "data-vertical": ""
     });
-    el.appendChild(info2);
+    el.appendChild(info3);
     var guide2 = keysGuide(null, {});
     el.appendChild(guide2);
     el.appendChild(list3);
@@ -21448,7 +21486,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function renderInfo() {
-      clear(info2);
+      clear(info3);
       keysGuide(guide2, {
         listen: false
       });
@@ -21456,7 +21494,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         alt: ""
       });
       cover.setAttribute("data-lazy", m.poster || "");
-      info2.appendChild(cover);
+      info3.appendChild(cover);
       var text = h("div.md-text");
       text.appendChild(h("div.md-title", {
         text: m.name
@@ -21518,8 +21556,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text.appendChild(h("div.details-buttons", {
         "data-group": ""
       }, btns));
-      info2.appendChild(text);
-      loadVisibleImages(info2);
+      info3.appendChild(text);
+      loadVisibleImages(info3);
     }
     function moviesMenu() {
       menu(t("Filmes e séries"), movies.map(function (x) {
@@ -22050,14 +22088,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var media2 = m.media || {};
     var key4 = "al" + m.anilist;
     var el = h("div.view.md-view");
-    var info2 = h("div.md-info");
+    var info3 = h("div.md-info");
     var list3 = h("div.md-list", {
       "data-scroll-y": "",
       "data-pad-y": "120",
       "data-group": "",
       "data-vertical": ""
     });
-    el.appendChild(info2);
+    el.appendChild(info3);
     var guide2 = keysGuide(null, {});
     el.appendChild(guide2);
     el.appendChild(list3);
@@ -22111,7 +22149,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function renderInfo() {
-      clear(info2);
+      clear(info3);
       keysGuide(guide2, {
         listen: false
       });
@@ -22119,7 +22157,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         alt: ""
       });
       cover.setAttribute("data-lazy", m.poster || "");
-      info2.appendChild(cover);
+      info3.appendChild(cover);
       var text = h("div.md-text");
       text.appendChild(h("div.md-title", {
         text: m.name
@@ -22246,8 +22284,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text.appendChild(h("div.details-buttons", {
         "data-group": ""
       }, btns));
-      info2.appendChild(text);
-      loadVisibleImages(info2);
+      info3.appendChild(text);
+      loadVisibleImages(info3);
     }
     function renderList(focusFirst2) {
       clear(list3);
@@ -23110,11 +23148,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var bg = h("img.details-bg", {
       alt: ""
     });
-    var info2 = h("div.details-info", null, spinnerLine(t("Carregando...")));
+    var info3 = h("div.details-info", null, spinnerLine(t("Carregando...")));
     var panel = h("div.details-panel");
     el.appendChild(bg);
     el.appendChild(h("div.details-shade"));
-    el.appendChild(info2);
+    el.appendChild(info3);
     el.appendChild(panel);
     var meta = null;
     var mode = "none";
@@ -23172,7 +23210,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       })[0] || vids[0];
     }
     function renderInfo() {
-      clear(info2);
+      clear(info3);
       var logo2 = h("img.details-logo", {
         alt: ""
       });
@@ -23266,15 +23304,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }), t("Coleção")]);
       ui_collBtn = collBtn;
       updateButtons();
-      info2.appendChild(logo2);
-      info2.appendChild(title);
-      info2.appendChild(metaLine);
-      info2.appendChild(ratingsEl);
-      info2.appendChild(genres);
+      info3.appendChild(logo2);
+      info3.appendChild(title);
+      info3.appendChild(metaLine);
+      info3.appendChild(ratingsEl);
+      info3.appendChild(genres);
       if (settings().parentalGuide) {
         var guideEl = h("div.details-guide");
         guideEl.style.display = "none";
-        info2.appendChild(guideEl);
+        info3.appendChild(guideEl);
         guide(meta.imdb_id || meta.id).then(function (list3) {
           if (!list3.length) return;
           var LV = {
@@ -23292,9 +23330,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           guideEl.style.display = "";
         });
       }
-      info2.appendChild(provEl);
-      info2.appendChild(desc);
-      info2.appendChild(castLine);
+      info3.appendChild(provEl);
+      info3.appendChild(desc);
+      info3.appendChild(castLine);
       var mangaBtn = isAnime(meta) ? h("div.btn", {
         focusable: true,
         onSelect: openMangaFromEpisode
@@ -23338,7 +23376,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         linkBtn.style.display = "";
       };
-      info2.appendChild(h("div.details-buttons", {
+      info3.appendChild(h("div.details-buttons", {
         "data-group": ""
       }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, comicBtn, bookBtn, linkBtn, collBtn, libBtn]));
       if (isAnime(meta)) anilistIdOf(meta.id).then(function (al) {
@@ -24069,14 +24107,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
       if (!opts.autoStreams) focus(watchBtn);
     }).catch(function (e) {
-      clear(info2);
-      info2.appendChild(h("div.details-title", {
+      clear(info3);
+      info3.appendChild(h("div.details-title", {
         text: t("Não foi possível abrir")
       }));
-      info2.appendChild(h("div.details-desc", {
+      info3.appendChild(h("div.details-desc", {
         text: e.message
       }));
-      info2.appendChild(h("div.btn", {
+      info3.appendChild(h("div.btn", {
         focusable: true,
         "data-autofocus": "",
         text: t("Voltar"),
@@ -26166,7 +26204,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var cats = [];
       var seen = {};
       var lines = String(text || "").split(/\r?\n/);
-      var info2 = null;
+      var info3 = null;
       var n = 0;
       var _loop12 = function _loop12() {
         var l = lines[i].trim();
@@ -26177,14 +26215,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             return m ? m[1] : "";
           };
           var comma = l.lastIndexOf(",");
-          info2 = {
+          info3 = {
             name: comma >= 0 ? l.slice(comma + 1).trim() : "",
             logo: attr("tvg-logo"),
             group: attr("group-title") || "—",
             epg: attr("tvg-id")
           };
-        } else if (l.charAt(0) !== "#" && info2) {
-          var g = info2.group;
+        } else if (l.charAt(0) !== "#" && info3) {
+          var g = info3.group;
           if (!seen[g]) {
             seen[g] = 1;
             cats.push({
@@ -26195,15 +26233,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
           c.byCat[g].push({
             id: "m" + n,
-            name: info2.name || l,
-            logo: info2.logo,
+            name: info3.name || l,
+            logo: info3.logo,
             url: l,
             cat: g,
-            epg: info2.epg,
+            epg: info3.epg,
             num: String(n + 1)
           });
           n++;
-          info2 = null;
+          info3 = null;
         }
       };
       for (var i = 0; i < lines.length && n < 3e4; i++) {
@@ -26418,8 +26456,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           format: "m3u8"
         };
         toast(t("Entrando..."));
-        checkXtream(s).then(function (info2) {
-          if (info2 && info2.username) s.name = s.name + " · " + info2.username;
+        checkXtream(s).then(function (info3) {
+          if (info3 && info3.username) s.name = s.name + " · " + info3.username;
           saveSource(s);
           src = s;
           cat = "fav";
@@ -28485,7 +28523,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T21:57:17.722Z";
+  var BUILD = "2026-11-17T22:06:51.847Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -28511,11 +28549,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function check2() {
-    return latest().then(function (info2) {
+    return latest().then(function (info3) {
       saveSettings({
         lastUpdateCheck: Date.now()
       });
-      return info2.build && info2.build !== BUILD && Date.parse(info2.build) > Date.parse(BUILD) ? info2 : null;
+      return info3.build && info3.build !== BUILD && Date.parse(info3.build) > Date.parse(BUILD) ? info3 : null;
     });
   }
   function apply3() {
@@ -29229,14 +29267,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function checkForUpdate() {
       toast(t("Procurando atualização..."));
-      check2().then(function (info2) {
-        if (!info2) return toast(t("Você já tem a versão mais nova."));
+      check2().then(function (info3) {
+        if (!info3) return toast(t("Você já tem a versão mais nova."));
         confirmDialog(t("Atualização disponível ({date}): {msg}", {
-          date: shortDate(info2.date),
-          msg: info2.message || ""
+          date: shortDate(info3.date),
+          msg: info3.message || ""
         }), t("Atualizar agora"), function () {
           toast(t("Atualizando... o app vai recarregar."), 6e4);
-          apply3(info2).then(function (ok) {
+          apply3(info3).then(function (ok) {
             if (!ok) toast(t("A atualização ainda está chegando. Tente de novo em alguns minutos."), 6e3);
           });
         });
@@ -29352,13 +29390,32 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           date: new Date(b.at).toLocaleString()
         }) : t("Não há cópia na TV.");
       });
+      var where = h("div.hint");
+      body.appendChild(where);
+      info().then(function (i) {
+        if (!i || !i.at) return;
+        where.textContent = i.file ? "✅ " + t("Guardada no armazenamento da TV (não se perde ao reinstalar).") : "⚠️ " + t("Só na memória até a TV desligar: baixe no celular antes de reinstalar.");
+        if (i.prevAt) body.insertBefore(row3("⏮ " + t("Restaurar a cópia anterior"), t("Cópia de {date}", {
+          date: new Date(i.prevAt).toLocaleString()
+        }), "", function () {
+          return previousOnTv().then(function (b) {
+            if (!b) return toast(t("Não há cópia na TV."), 5e3);
+            confirmDialog(t("Restaurar a cópia de {date}? Substitui as configurações desta TV.", {
+              date: new Date(b.at).toLocaleString()
+            }), t("Restaurar"), function () {
+              apply(b);
+              toast(t("Restaurado. Reiniciando..."));
+            });
+          });
+        }), where);
+      });
       var box = h("div.set-row.phone-remote", {
         focusable: true
       }, h("div.phone-sub", {
         text: t("Carregando...")
       }));
       body.appendChild(box);
-      info().then(function (i) {
+      info2().then(function (i) {
         clear(box);
         var url2 = backupUrl(i);
         if (!url2) return box.appendChild(h("div.phone-sub", {
@@ -29404,7 +29461,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, h("div.phone-sub", {
         text: t("Carregando...")
       }));
-      info().then(function (i) {
+      info2().then(function (i) {
         clear(box);
         var url2 = setupUrl(i);
         if (!url2) {
@@ -29432,7 +29489,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return box;
     }
     function keyQr(key4, name) {
-      info().then(function (i) {
+      info2().then(function (i) {
         var url2 = setupUrl(i);
         if (!url2) return toast(t("O serviço da TV não está rodando. Feche o app e abra de novo."), 5e3);
         var close = h("div.btn.primary", {
@@ -30406,7 +30463,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: t("Carregando...")
         }));
         body.appendChild(phoneBox);
-        info().then(function (i) {
+        info2().then(function (i) {
           clear(phoneBox);
           if (!i) {
             phoneBox.appendChild(h("div.phone-sub", {
@@ -31043,12 +31100,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return checkForUpdate();
         });
         body.appendChild(latestRow);
-        latest().then(function (info2) {
+        latest().then(function (info3) {
           var v = latestRow.querySelector(".value");
           if (!v) return;
-          var newer = info2.build && info2.build !== BUILD && Date.parse(info2.build) > Date.parse(BUILD);
-          v.textContent = shortDate(info2.date) + (newer ? "  ·  " + t("nova!") : "  ·  " + t("em dia"));
-          if (info2.message) latestRow.querySelector(".label small").textContent = info2.message;
+          var newer = info3.build && info3.build !== BUILD && Date.parse(info3.build) > Date.parse(BUILD);
+          v.textContent = shortDate(info3.date) + (newer ? "  ·  " + t("nova!") : "  ·  " + t("em dia"));
+          if (info3.message) latestRow.querySelector(".label small").textContent = info3.message;
         }).catch(function () {
           var v = latestRow.querySelector(".value");
           if (v) v.textContent = t("sem conexão");
@@ -31762,8 +31819,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
     setTimeout(function () {
-      return auto();
-    }, 3e4);
+      return auto(function (b) {
+        return confirmDialog(t("Achei uma cópia de segurança de {date} nesta TV. Restaurar tudo agora?", {
+          date: new Date(b.at).toLocaleString()
+        }), t("Restaurar"), function () {
+          apply(b);
+          toast(t("Restaurado. Reiniciando..."));
+        });
+      });
+    }, 8e3);
     onKeys(function (keys2) {
       if (keys2.iptvHost && keys2.iptvUser && keys2.iptvPass) {
         var host = keys2.iptvHost.replace(/\/+$/, "");
@@ -31776,8 +31840,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           name: host.replace(/^https?:\/\//, "").split(/[:/]/)[0],
           format: "m3u8"
         };
-        checkXtream(src).then(function (info2) {
-          if (info2 && info2.username) src.name += " · " + info2.username;
+        checkXtream(src).then(function (info3) {
+          if (info3 && info3.username) src.name += " · " + info3.username;
           saveSource(src);
           dropTab("live");
           toast(t("Conta IPTV adicionada. Abra TV ao vivo."), 6e3);
@@ -31902,8 +31966,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       devLaunch();
       if (shouldAutoCheck()) {
         setTimeout(function () {
-          check2().then(function (info2) {
-            return info2 && toast(t("Atualização disponível: Ajustes → Procurar atualização"), 7e3);
+          check2().then(function (info3) {
+            return info3 && toast(t("Atualização disponível: Ajustes → Procurar atualização"), 7e3);
           }).catch(function () {});
         }, 8e3);
       }

@@ -1280,4 +1280,8 @@ export const EN = {
   "Aponte a câmera: baixe a cópia para o celular, ou mande uma de volta para esta TV.": "Point the camera: download the copy to the phone, or send one back to this TV.",
   "Guarda tudo para voltar depois de reinstalar": "Keeps everything to come back after a reinstall",
   "Nunca": "Never",
+  "Achei uma cópia de segurança de {date} nesta TV. Restaurar tudo agora?": "I found a backup from {date} on this TV. Restore everything now?",
+  "Guardada no armazenamento da TV (não se perde ao reinstalar).": "Kept in the TV's storage (not lost when reinstalling).",
+  "Só na memória até a TV desligar: baixe no celular antes de reinstalar.": "Only in memory until the TV turns off: download it to your phone before reinstalling.",
+  "Restaurar a cópia anterior": "Restore the previous copy",
 };

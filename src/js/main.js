@@ -90,7 +90,17 @@ function boot() {
       )
       .catch(() => toast(t('Não consegui ler a cópia do celular.'), 5000))
   );
-  setTimeout(() => backup.auto(), 30000);
+  // Daily copy; right after a reinstall, the copy found on the TV is offered instead (asked once).
+  setTimeout(
+    () =>
+      backup.auto((b) =>
+        confirmDialog(t('Achei uma cópia de segurança de {date} nesta TV. Restaurar tudo agora?', { date: new Date(b.at).toLocaleString() }), t('Restaurar'), () => {
+          backup.apply(b);
+          toast(t('Restaurado. Reiniciando...'));
+        })
+      ),
+    8000
+  );
   phone.onKeys((keys) => {
     // IPTV account and manga repository from the phone: added as sources, not kept as settings.
     if (keys.iptvHost && keys.iptvUser && keys.iptvPass) {

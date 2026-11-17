@@ -1280,4 +1280,8 @@ export const AR = {
   "Aponte a câmera: baixe a cópia para o celular, ou mande uma de volta para esta TV.": "وجّه الكاميرا: نزّل النسخة لجوالك، أو رجّع نسخة لهذا التلفزيون.",
   "Guarda tudo para voltar depois de reinstalar": "تحفظ كل شي عشان ترجعه بعد إعادة التثبيت",
   "Nunca": "أبداً",
+  "Achei uma cópia de segurança de {date} nesta TV. Restaurar tudo agora?": "لقيت نسخة احتياطية من {date} في هذا التلفزيون. ترجّع كل شي الحين؟",
+  "Guardada no armazenamento da TV (não se perde ao reinstalar).": "محفوظة في ذاكرة التلفزيون (ما تضيع لو أعدت التثبيت).",
+  "Só na memória até a TV desligar: baixe no celular antes de reinstalar.": "محفوظة مؤقتاً لين يطفي التلفزيون بس: نزّلها في جوالك قبل ما تعيد التثبيت.",
+  "Restaurar a cópia anterior": "استرجع النسخة اللي قبلها",
 };

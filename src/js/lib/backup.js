@@ -2,12 +2,11 @@
 // listening places, bookmarks, Live TV sources, collections. Saved through the TV service into a file
 // in the TV's home folder (reinstalling the app doesn't touch it), and downloadable to the phone.
 // Caches (covers, art) are left out: they come back by themselves.
-import * as store from './store.js';
 
 const SVC = 'http://127.0.0.1:8095';
 const PREFIX = 'kai.';
 const SKIP = /(Art\d*$|Famous\d*$|GenreArt$|[Cc]ache|^kai\.devlog)/;
-const LAST = 'backupAt';
+const LAST = 'kai.backupAt'; // per TV, not per profile
 
 function xhr(method, url, body, timeout) {
   return new Promise((resolve, reject) => {
@@ -41,16 +40,34 @@ export function save() {
     try {
       out = JSON.parse(r);
     } catch (e) {}
-    store.set(LAST, b.at);
+    try {
+      window.localStorage.setItem(LAST, String(b.at));
+    } catch (e) {}
     return { onTv: !!out.onTv, count: b.count, at: b.at };
   });
 }
 
-export const lastAt = () => store.get(LAST, 0) || 0;
+export function lastAt() {
+  try {
+    return parseInt(window.localStorage.getItem(LAST), 10) || 0;
+  } catch (e) {
+    return 0;
+  }
+}
 
 // The copy kept on the TV: { at, count } or null.
 export function onTv() {
   return xhr('GET', SVC + '/api/backup', null, 10000)
+    .then((r) => {
+      const b = JSON.parse(r);
+      return b && b.app === 'stremio7m' ? b : null;
+    })
+    .catch(() => null);
+}
+
+// The copy before the last one (kept by the service when a new one is saved), or null.
+export function previousOnTv() {
+  return xhr('GET', SVC + '/api/backup-prev', null, 10000)
     .then((r) => {
       const b = JSON.parse(r);
       return b && b.app === 'stremio7m' ? b : null;
@@ -78,12 +95,30 @@ export function apply(b) {
       /* full: keep going */
     }
   });
+  // This install now holds that copy: daily saves go on (and it won't offer the same copy again).
+  try {
+    window.localStorage.setItem(LAST, String(b.at || Date.now()));
+  } catch (e) {}
   setTimeout(() => window.location.reload(), 600);
   return true;
 }
 
-// Once a day, quietly: so a reinstall never loses anything even if you forgot.
-export function auto() {
-  if (Date.now() - lastAt() < 24 * 3600 * 1000) return;
-  save().catch(() => {});
+// Where the TV keeps it: { file (path, '' = only in memory until the TV turns off), at, prevAt }.
+export function info() {
+  return xhr('GET', SVC + '/api/backup-info', null, 8000)
+    .then((r) => JSON.parse(r))
+    .catch(() => null);
+}
+
+// Once a day, quietly, so a reinstall never loses anything even if you forgot. A fresh install (this
+// copy of the app never saved one) must NOT overwrite the copy on the TV: it offers to restore it.
+export function auto(offer) {
+  if (lastAt()) {
+    if (Date.now() - lastAt() < 24 * 3600 * 1000) return;
+    return save().catch(() => {});
+  }
+  return onTv().then((b) => {
+    if (b && b.count) return offer && offer(b);
+    return save().catch(() => {});
+  });
 }

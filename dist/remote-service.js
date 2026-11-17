@@ -11,7 +11,7 @@ var http = require('http');
 var os = require('os');
 
 // Bump when the service changes: a running copy compares it with the newest one on GitHub.
-var SERVICE_VERSION = 6;
+var SERVICE_VERSION = 7;
 var PORT = 8095;
 var HOLD_MS = 25000; // long-poll hold time
 var KEEP = 50; // events kept for late pollers
@@ -161,16 +161,32 @@ function backupFiles() {
   var dirs = [process.env.HOME, '/home/owner', '/opt/usr/home/owner'].filter(function (d, i, a) { return d && a.indexOf(d) === i; });
   return dirs.map(function (d) { return path.join(d, '.stremio7m-backup.json'); });
 }
+// The copy before is kept too (".prev"), so one bad save can never wipe a good backup.
 function saveBackupFile(text) {
   var fs = require('fs');
   var list = backupFiles();
   for (var i = 0; i < list.length; i++) {
     try {
+      try { fs.writeFileSync(list[i] + '.prev', fs.readFileSync(list[i])); } catch (e0) { /* first copy */ }
       fs.writeFileSync(list[i], text);
       return list[i];
     } catch (e) { /* not writable: try the next folder */ }
   }
   return '';
+}
+function backupInfo() {
+  var fs = require('fs');
+  var list = backupFiles();
+  var at = function (t) { try { return JSON.parse(t).at || 0; } catch (e) { return 0; } };
+  for (var i = 0; i < list.length; i++) {
+    try {
+      var cur = fs.readFileSync(list[i], 'utf8');
+      var prev = '';
+      try { prev = fs.readFileSync(list[i] + '.prev', 'utf8'); } catch (e1) { /* none */ }
+      return { file: list[i], at: at(cur), prevAt: prev ? at(prev) : 0 };
+    } catch (e) { /* not here */ }
+  }
+  return { file: '', at: backupBlob ? at(backupBlob) : 0, prevAt: 0 };
 }
 function loadBackupFile() {
   var fs = require('fs');
@@ -711,6 +727,17 @@ function handle(req, res) {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
     var b = backupBlob || loadBackupFile();
     return b ? send(res, 200, b) : send(res, 404, { error: 'no backup' });
+  }
+  if (url.pathname === '/api/backup-info') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    return send(res, 200, backupInfo());
+  }
+  // The copy before the last one (in case the last save was a mistake).
+  if (url.pathname === '/api/backup-prev') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    var pv = null;
+    backupFiles().some(function (f) { try { pv = require('fs').readFileSync(f + '.prev', 'utf8'); return true; } catch (e) { return false; } });
+    return pv ? send(res, 200, pv) : send(res, 404, { error: 'none' });
   }
   // A backup sent from the phone, waiting for the app to take it.
   if (url.pathname === '/api/restore-data') {

@@ -230,6 +230,26 @@ export function SettingsView() {
       const sm = tvRow.querySelector('small');
       if (sm) sm.textContent = b ? t('Cópia de {date}', { date: new Date(b.at).toLocaleString() }) : t('Não há cópia na TV.');
     });
+    // Is it really in the TV's storage (or only in memory until the TV turns off)?
+    const where = h('div.hint');
+    body.appendChild(where);
+    backup.info().then((i) => {
+      if (!i || !i.at) return;
+      where.textContent = i.file ? '✅ ' + t('Guardada no armazenamento da TV (não se perde ao reinstalar).') : '⚠️ ' + t('Só na memória até a TV desligar: baixe no celular antes de reinstalar.');
+      if (i.prevAt)
+        body.insertBefore(
+          row('⏮ ' + t('Restaurar a cópia anterior'), t('Cópia de {date}', { date: new Date(i.prevAt).toLocaleString() }), '', () =>
+            backup.previousOnTv().then((b) => {
+              if (!b) return toast(t('Não há cópia na TV.'), 5000);
+              confirmDialog(t('Restaurar a cópia de {date}? Substitui as configurações desta TV.', { date: new Date(b.at).toLocaleString() }), t('Restaurar'), () => {
+                backup.apply(b);
+                toast(t('Restaurado. Reiniciando...'));
+              });
+            })
+          ),
+          where
+        );
+    });
     // The phone: download the file, or send one back.
     const box = h('div.set-row.phone-remote', { focusable: true }, h('div.phone-sub', { text: t('Carregando...') }));
     body.appendChild(box);
