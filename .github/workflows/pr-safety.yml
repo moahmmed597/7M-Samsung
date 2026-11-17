@@ -1,0 +1,26 @@
+# Runs scripts/pr-safety.sh on every pull request and every push to main: a change that adds TV
+# privileges, widens the security policy, runs outside programs or code built from text, adds install
+# scripts or writes a key into the code is refused unless its commit / PR text says "safety-ok: <reason>".
+name: pr-safety
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check the change
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: bash scripts/pr-safety.sh "$BASE" "$HEAD_SHA"
