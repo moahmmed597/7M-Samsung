@@ -1233,4 +1233,6 @@ export const AR = {
   "Segurar: velocidade, marcações": "مطوّل: السرعة والعلامات",
   "Voltar: salva onde parou": "رجوع: يحفظ وين وقفت",
   "Teclas do controle": "أزرار الريموت",
+  "Ligado a esta história": "مرتبط بنفس القصة",
+  "Ligado ({n})": "مرتبط ({n})",
 };

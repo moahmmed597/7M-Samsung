@@ -1233,4 +1233,6 @@ export const EN = {
   "Segurar: velocidade, marcações": "Hold: speed, bookmarks",
   "Voltar: salva onde parou": "Back: saves your place",
   "Teclas do controle": "Remote keys",
+  "Ligado a esta história": "Linked to this story",
+  "Ligado ({n})": "Linked ({n})",
 };

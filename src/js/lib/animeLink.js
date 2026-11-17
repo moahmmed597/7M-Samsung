@@ -51,7 +51,15 @@ export function anilistIdOf(stremioId) {
   let id = null;
   if ((m = /^kitsu:(\d+)/.exec(s))) (src = 'kitsu'), (id = m[1]);
   else if ((m = /^mal:(\d+)/.exec(s))) (src = 'myanimelist'), (id = m[1]);
-  else if ((m = /^(tt\d+)/.exec(s))) (src = 'imdb'), (id = m[1]);
+  else if ((m = /^(tt\d+)/.exec(s)))
+    // IMDb has its own endpoint, a list (one entry per season / special): the first TV season.
+    return getJSON('https://arm.haglund.dev/api/v2/imdb?id=' + m[1], { timeout: 10000, quiet: true })
+      .then((l) => {
+        l = (Array.isArray(l) ? l : []).filter((x) => x && x.anilist);
+        const tv = l.filter((x) => x.media === 'TV').sort((a, b) => (a['themoviedb-season'] || 99) - (b['themoviedb-season'] || 99));
+        return (tv[0] || l[0] || {}).anilist || null;
+      })
+      .catch(() => null);
   if (!src) return Promise.resolve(null);
   return getJSON(ARM + src + '&id=' + id, { timeout: 10000, quiet: true })
     .then((r) => (r && r.anilist) || null)

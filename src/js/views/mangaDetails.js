@@ -12,6 +12,7 @@ import { keysGuide } from './keysGuide.js';
 import { openReader, readingModeMenu, readingModeLabel } from './reader.js';
 import { openAnime } from './anime.js';
 import { chapterToEpisode, animeMeta } from '../lib/animeLink.js';
+import * as links2 from '../lib/crossLinks.js';
 import * as pl from '../api/plugins.js';
 import { searchPlugin, pluginApi } from './sources.js';
 import * as shelf from '../lib/mangaLib.js';
@@ -100,6 +101,7 @@ function MangaDetailsView(m) {
   let langSet = LANG_SETS.find((x) => x.id === store.settings().mangaLangs) || LANG_SETS[0];
   let alive = true;
   let anime = null;
+  let linked = []; // light novel, other versions, live action
   let focusIdx = -1;
   // Chapters from one of your sources (when MangaDex doesn't have the title): { pid, name, mid, title }.
   let source = null;
@@ -180,6 +182,7 @@ function MangaDetailsView(m) {
           },
         }, [h('span.ico', { text: '▶' }), t('Ver no anime')])
       );
+    if (linked.length) btns.push(h('div.btn', { focusable: true, onSelect: () => links2.linkedMenu(linked) }, [h('span.ico', { text: '🔗' }), t('Ligado ({n})', { n: linked.length })]));
     btns.push(
       h('div.btn', {
         focusable: true,
@@ -480,6 +483,14 @@ function MangaDetailsView(m) {
     anime = a;
     renderInfo();
   });
+  links2
+    .forManga(m.anilist, m.name)
+    .then((l) => {
+      if (!alive || !l.length) return;
+      linked = l;
+      renderInfo();
+    })
+    .catch(() => {});
 
   return {
     el: el,

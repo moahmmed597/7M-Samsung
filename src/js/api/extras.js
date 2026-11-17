@@ -220,14 +220,18 @@ export function bookOf(imdb) {
   });
 }
 
-// The films and shows made from this book: same title (or the title then more), checked against the
-// "based on a book" keyword. [{ id, media_type, title|name, poster_path, release_date|first_air_date }]
-export function adaptationsOf(title) {
+// The films and shows made from this book / manga: same title (or the title then more), checked against
+// the TMDB "based on ..." keyword. kind: 'book' (default) or 'manga'; liveOnly drops the animated ones
+// (the anime come from AniList). [{ id, media_type, title|name, poster_path, release_date|first_air_date }]
+const MANGA_KW = /^based on (a )?(manga|light novel|manhwa|webtoon|anime)/i;
+export function adaptationsOf(title, kind, liveOnly) {
   const n = simple(title);
   if (!tmdbKey() || n.length < 2) return Promise.resolve([]);
+  const ok = kind === 'manga' ? (k) => ((k.keywords || k.results) || []).some((w) => MANGA_KW.test(w.name || '')) : (k) => isFromBook({ keywords: k });
   return tmdb('search/multi', { query: title, include_adult: 'false', language: apiLang() }).then((r) => {
     const cands = ((r && r.results) || [])
       .filter((x) => (x.media_type === 'movie' || x.media_type === 'tv') && x.poster_path)
+      .filter((x) => !liveOnly || (x.genre_ids || []).indexOf(16) < 0)
       .filter((x) => [x.title, x.name, x.original_title, x.original_name].some((s) => {
         const m = simple(s);
         return m === n || m.indexOf(n + ' ') === 0;
@@ -236,10 +240,22 @@ export function adaptationsOf(title) {
     return Promise.all(
       cands.map((x) =>
         tmdb(x.media_type + '/' + x.id + '/keywords', {})
-          .then((k) => (isFromBook({ keywords: k }) ? x : null))
+          .then((k) => (ok(k) ? x : null))
           .catch(() => null)
       )
     ).then((l) => l.filter(Boolean).sort((a, b) => (b.popularity || 0) - (a.popularity || 0)));
+  });
+}
+
+// A film or show based on a manga (live action, e.g. One Piece): the title to look for on AniList, or ''.
+export function mangaOf(imdb) {
+  return tmdbFind(imdb).then((f) => {
+    if (!f) return '';
+    return tmdb(f.type + '/' + f.id, { append_to_response: 'keywords', language: 'en-US' }).then((d) => {
+      const kw = (d.keywords && (d.keywords.keywords || d.keywords.results)) || [];
+      if (!kw.some((k) => MANGA_KW.test(k.name || ''))) return '';
+      return String(d.title || d.name || '').split(':')[0].trim();
+    });
   });
 }
 

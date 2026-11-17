@@ -19,8 +19,7 @@ import { holdMenu } from './continueRow.js';
 import { openListen, listenProgress, listenList, forgetListen } from './listen.js';
 import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
 import { scanSources, linkOf, norm } from '../lib/sourceFind.js';
-import * as extras from '../api/extras.js';
-import { openTmdb } from './comicDetails.js';
+import * as links2 from '../lib/crossLinks.js';
 
 // Open Library subjects: [subject, Portuguese label for t()]
 const GENRES = [
@@ -231,13 +230,17 @@ export function openBookDetails(m) {
 // search results to choose from).
 export function openBookFor(title) {
   const n = norm(title);
+  const base = String(title || '').split(/[:：]/)[0].trim();
+  const grid = (q) => router.push(BookGridView('🔍 ' + q, (p) => ol.search(q, p)));
   ol.search(title, 0)
     .then((r) => {
       const hit = r.items.find((b) => norm(b.title) === n);
-      if (hit) openBookDetails(hit);
-      else router.push(BookGridView('🔍 ' + title, (p) => ol.search(title, p)));
+      if (hit) return openBookDetails(hit);
+      // Nothing under the full name of a spin-off ("Series: Part")? The series itself.
+      if (!r.items.length && base && base !== title) return grid(base);
+      grid(title);
     })
-    .catch(() => router.push(BookGridView('🔍 ' + title, (p) => ol.search(title, p))));
+    .catch(() => grid(title));
 }
 
 function BookDetailsView(m0) {
@@ -259,7 +262,7 @@ function BookDetailsView(m0) {
   let picked = false;
   let audio = []; // the source's audiobook tracks (🎧 Listen)
   let audioFor = '';
-  let movies = null; // the films and shows made from this book
+  let linked = []; // films, shows, anime, manga of the same story
   const status = h('div.loading-line', { text: t('Procurando nas suas fontes...') });
   const progress = () => (store.get('readProgress', {}) || {})[key] || null;
   const langOf = (pid) => ((pl.installed().find((p) => p.id === pid) || {}).lang || '');
@@ -379,21 +382,12 @@ function BookDetailsView(m0) {
     btns.push(
       h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'ol', Object.assign({}, m, { tab: 'books' })), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );
-    if (movies && movies.length) btns.push(h('div.btn', { focusable: true, onSelect: moviesMenu }, [h('span.ico', { text: '🎬' }), t('Filmes e séries ({n})', { n: movies.length })]));
+    if (linked.length) btns.push(h('div.btn', { focusable: true, onSelect: () => (linked.length === 1 ? linked[0].open() : links2.linkedMenu(linked)) }, [h('span.ico', { text: '🔗' }), t('Ligado ({n})', { n: linked.length })]));
     if (pl.installed('books').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : t('Fonte')]));
     btns.push(h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]));
     text.appendChild(h('div.details-buttons', { 'data-group': '' }, btns));
     info.appendChild(text);
     loadVisibleImages(info);
-  }
-
-  function moviesMenu() {
-    if (movies.length === 1) return openTmdb(movies[0]);
-    menu(
-      t('Filmes e séries'),
-      movies.map((x) => ({ label: x.title || x.name, sub: ((x.release_date || x.first_air_date || '').slice(0, 4) + '  ·  ' + (x.media_type === 'tv' ? t('Série') : t('Filme'))).trim(), value: x })),
-      { onPick: openTmdb }
-    );
   }
 
   function renderList() {
@@ -523,16 +517,15 @@ function BookDetailsView(m0) {
       renderInfo();
     })
     .catch(() => {});
-  // Made into a film or a show? (needs the TMDB key)
-  if (extras.hasTmdb())
-    extras
-      .adaptationsOf(m.title)
-      .then((l) => {
-        if (!alive || !l.length) return;
-        movies = l;
-        renderInfo();
-      })
-      .catch(() => {});
+  // Made into a film, a show, an anime or a manga?
+  links2
+    .forBook(m.title)
+    .then((l) => {
+      if (!alive || !l.length) return;
+      linked = l;
+      renderInfo();
+    })
+    .catch(() => {});
 
   return {
     el: el,

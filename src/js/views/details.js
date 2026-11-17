@@ -24,6 +24,7 @@ import * as animeLink from '../lib/animeLink.js';
 import { openMangaDetails } from './mangaDetails.js';
 import { openComicsFor } from './comics.js';
 import { openBookFor } from './books.js';
+import * as links2 from '../lib/crossLinks.js';
 import * as cv from '../api/comicvine.js';
 
 export function openDetails(type, id, opts) {
@@ -204,7 +205,31 @@ function DetailsView(type, id, opts) {
     let bookTitle = '';
     const bookBtn = h('div.btn', { focusable: true, onSelect: () => openBookFor(bookTitle) }, [h('span.ico', { text: '📕' }), t('Ler o livro')]);
     bookBtn.style.display = 'none';
-    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, comicBtn, bookBtn, collBtn, libBtn]));
+    let linked = [];
+    const linkBtn = h('div.btn', { focusable: true, onSelect: () => (linked.length === 1 ? linked[0].open() : links2.linkedMenu(linked)) }, [h('span.ico', { text: '🔗' }), h('span')]);
+    linkBtn.style.display = 'none';
+    const showLinked = (l) => {
+      if (!alive || !l || !l.length) return;
+      linked = l;
+      linkBtn.lastChild.textContent = t('Ligado ({n})', { n: l.length });
+      linkBtn.style.display = '';
+    };
+    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, comicBtn, bookBtn, linkBtn, collBtn, libBtn]));
+    // Everything of the same story: for an anime its AniList relations (manga, light novel, live action);
+    // for a live-action film / show based on a manga, that manga and its anime.
+    if (isAnime(meta))
+      animeLink
+        .anilistIdOf(meta.id)
+        .then((al) => (al ? links2.forAnime(al, meta.name) : []))
+        .then(showLinked)
+        .catch(() => {});
+    else if (extras.hasTmdb())
+      extras
+        .mangaOf(meta.imdb_id || (/^tt\d+/.exec(meta.id) || [])[0])
+        .then((title) => (title ? links2.findAniList(title, 'MANGA') : null))
+        .then((n) => (n ? links2.fromAniList(n.id).then((l) => [links2.alItem(n)].concat(l)) : []))
+        .then(showLinked)
+        .catch(() => {});
     // Based on a book (TMDB keyword)? Offer the book in the Books tab.
     if (extras.hasTmdb() && !isAnime(meta))
       extras
