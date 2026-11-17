@@ -969,3 +969,27 @@ body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000
 [dir="rtl"] .live-preview { right: auto; left: 50px; }
 .live-preview video { width: 100%; height: 100%; object-fit: contain; background: #000; }
 .live-preview .lp-name { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 14px; font-size: 18px; font-weight: 700; background: linear-gradient(transparent, rgba(0,0,0,0.85)); }
+
+/* Book page: Read / Listen big on top, the other buttons smaller below */
+.md-text .main-buttons .btn { height: 76px; padding: 0 44px; font-size: 28px; border-radius: 38px; min-width: 200px; -webkit-justify-content: center; justify-content: center; }
+.md-text .main-buttons .btn .ico { font-size: 30px; }
+.md-text .more-buttons .btn { height: 50px; padding: 0 22px; font-size: 19px; margin-right: 12px; border-radius: 25px; }
+.md-text .more-buttons .btn .ico { font-size: 20px; margin-right: 8px; }
+[dir="rtl"] .md-text .more-buttons .btn { margin-right: 0; margin-left: 12px; }
+.md-list .stream.near .s-tag { max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Book reader: the text laid out on paper, two pages like an open book */
+.bk-view { background: #14110d; }
+.bk-book { position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); border-radius: 6px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 0 120px rgba(120,90,40,0.12); }
+.bk-book.dark { box-shadow: 0 30px 80px rgba(0,0,0,0.7), inset 0 0 120px rgba(0,0,0,0.4); }
+.bk-sheet { position: absolute; overflow: hidden; }
+.bk-flow { height: 100%; font-family: Georgia, 'Times New Roman', 'Noto Naskh Arabic', 'Amiri', serif; line-height: 1.6; text-align: justify; -webkit-column-fill: auto; column-fill: auto; -webkit-hyphens: auto; hyphens: auto; }
+.bk-flow p { margin: 0 0 0.55em; text-indent: 1.6em; }
+.bk-flow h2.bk-title { font-size: 1.35em; font-weight: 700; text-align: center; margin: 0.4em 0 1.1em; text-indent: 0; }
+.bk-book[dir="rtl"] .bk-flow { direction: rtl; line-height: 1.85; }
+.bk-spine { position: absolute; left: 50%; top: 0; bottom: 0; width: 80px; margin-left: -40px; background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.10) 40%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.10) 60%, rgba(0,0,0,0) 100%); pointer-events: none; }
+.bk-book.one .bk-spine { display: none; }
+.bk-head { position: absolute; left: 80px; right: 80px; top: 30px; text-align: center; font-size: 17px; opacity: 0.55; font-family: Georgia, serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bk-num { position: absolute; bottom: 30px; font-size: 18px; opacity: 0.6; font-family: Georgia, serif; }
+.bk-num.l { left: 80px; }
+.bk-num.r { right: 80px; }

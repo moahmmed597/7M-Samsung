@@ -333,7 +333,11 @@ function BookDetailsView(m0) {
   }
 
   function read(index, page) {
-    if (!chapters.length) return toast(t('Nenhum capítulo encontrado.'));
+    if (!chapters.length) {
+      const first = list.querySelector('.stream.near') || list.querySelector('.stream');
+      if (first) nav.focus(first);
+      return toast(source ? t('Nenhum capítulo encontrado.') : t('Escolha o livro na lista ao lado.'), 4000);
+    }
     openReader({
       key: key,
       title: m.name,
@@ -432,17 +436,20 @@ function BookDetailsView(m0) {
     const idx = indexOfProgress();
     const lp = listenProgress(key);
     const btns = [];
+    const main = [];
     if (chapters.length || !audio.length)
-      btns.push(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: startRead }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]));
+      main.push(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: startRead }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]));
     if (audio.length)
-      btns.push(h('div.btn' + (chapters.length ? '' : '.primary'), { focusable: true, 'data-autofocus': chapters.length ? null : '', onSelect: startListen }, [h('span.ico', { text: '🎧' }), lp ? t('Continuar ouvindo') : t('Ouvir')]));
+      main.push(h('div.btn' + (chapters.length ? '' : '.primary'), { focusable: true, 'data-autofocus': chapters.length ? null : '', onSelect: startListen }, [h('span.ico', { text: '🎧' }), lp ? t('Continuar ouvindo') : t('Ouvir')]));
     btns.push(
       h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'ol', Object.assign({}, m, { tab: 'books' })), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );
     if (linked.length) btns.push(h('div.btn', { focusable: true, onSelect: () => (linked.length === 1 ? linked[0].open() : links2.linkedMenu(linked)) }, [h('span.ico', { text: '🔗' }), t('Ligado ({n})', { n: linked.length })]));
     if (pl.installed('books').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : t('Fonte')]));
     btns.push(h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]));
-    text.appendChild(h('div.details-buttons', { 'data-group': '' }, btns));
+    // Read and Listen big on top; the rest smaller underneath.
+    if (main.length) text.appendChild(h('div.details-buttons.main-buttons', { 'data-group': '' }, main));
+    text.appendChild(h('div.details-buttons.more-buttons', { 'data-group': '' }, btns));
     info.appendChild(text);
     loadVisibleImages(info);
   }
@@ -487,17 +494,44 @@ function BookDetailsView(m0) {
     loadAudio();
   }
 
+  // Nothing matched well: what your sources did find for this title, one press to open it here.
+  function useNear(c) {
+    toast(t('Abrindo de {name}...', { name: c.name }));
+    pl.chapters(c.pid, c.mid)
+      .then((cs) => (cs.length ? { cs: cs } : pl.audioTracks(c.pid, c.mid).then((tr) => ({ cs: [], tracks: tr }))))
+      .then((r) => {
+        if (!alive) return;
+        if (!r.cs.length && !(r.tracks && r.tracks.length)) return toast(t('Este não tem capítulos.'), 4000);
+        const ln = { pid: c.pid, name: c.name, mid: c.mid, title: c.title, count: r.cs.length || r.tracks.length, manual: true };
+        picked = true;
+        saveLink(m.olKey, ln);
+        showSource(ln, r.cs, r.tracks);
+      })
+      .catch(() => toast(t('Não consegui abrir.'), 4000));
+  }
   function noSources(text) {
-    status.textContent = text;
     renderInfo();
-    renderList();
-    list.appendChild(h('div.stream', { focusable: true, onSelect: () => openSources('books') }, [h('div.s-main', { text: '📚 ' + t('Minhas fontes') })]));
+    clear(list);
+    const seen = {};
+    const offers = near
+      .filter((c) => !seen[c.pid + c.mid] && (seen[c.pid + c.mid] = 1))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12);
+    if (offers.length) {
+      list.appendChild(h('div.loading-line', { text: t('Achei nas suas fontes:') }));
+      offers.forEach((c) =>
+        list.appendChild(h('div.stream.near', { focusable: true, onSelect: () => useNear(c) }, [h('div.s-main', { text: '📕 ' + c.title }), h('span.s-tag', { text: c.name })]))
+      );
+    } else list.appendChild(h('div.loading-line', { text: text }));
+    list.appendChild(h('div.loading-line', { text: t('Ou procure você mesmo:') }));
     pl.installed('books').forEach((p) => list.appendChild(h('div.stream', { focusable: true, onSelect: () => searchPlugin(p.id, p.name, m.title) }, [h('div.s-main', { text: '🔎 ' + t('Buscar em {name}', { name: p.name }) })])));
+    list.appendChild(h('div.stream', { focusable: true, onSelect: () => openSources('books') }, [h('div.s-main', { text: '📚 ' + t('Minhas fontes') })]));
   }
 
+  const near = []; // near misses from every source, offered when nothing matches well enough
   function scan(onHit) {
     if (!scanning)
-      scanning = scanSources([m.title], onHit, { alive: () => alive, min: 0.8, kind: 'books' }).then((all) => {
+      scanning = scanSources([m.title], onHit, { alive: () => alive, min: 0.8, kind: 'books', candidates: near }).then((all) => {
         found = all;
         return all;
       });

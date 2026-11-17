@@ -6,7 +6,18 @@ import { pluginApi } from '../views/sources.js';
 import { norm, likeness } from './titles.js';
 export { norm, likeness };
 
+// A source's title without the extras around the name: "Dracula (رواية دراكولا - اقرأ واستمع)" → "Dracula".
+export function bareTitle(x) {
+  const t = String(x || '')
+    .replace(/\([^)]*\)|\[[^\]]*\]|【[^】]*】/g, ' ')
+    .split(/\s[-–—|]\s|\s*\|\s*/)[0]
+    .trim();
+  return t || String(x || '');
+}
+const scoreOf = (n, title) => Math.max(likeness(n, title), likeness(n, bareTitle(title)));
+
 // names: the titles to try (first two are searched); year: prefer results that carry it.
+// o.candidates: an array that collects the near misses ({ pid, name, mid, title, cover, score }), to offer them.
 // onHit(hit) for each source that has it; resolves with all hits, most chapters first.
 // hit: { pid, name, mid, title, count, cs }
 export function scanSources(names, onHit, opts) {
@@ -25,7 +36,8 @@ export function scanSources(names, onHit, opts) {
           let best = null;
           let score = 0;
           (items || []).slice(0, 40).forEach((it) => {
-            let s = Math.max.apply(null, names.map((n) => likeness(n, it.title)));
+            let s = Math.max.apply(null, names.map((n) => scoreOf(n, it.title)));
+            if (o.candidates && s >= 0.4) o.candidates.push({ pid: p.id, name: p.name, mid: it.id, title: it.title, cover: it.cover, score: s });
             if (o.year && String(it.title).indexOf(String(o.year)) >= 0) s += 0.05;
             if (s > score) {
               score = s;

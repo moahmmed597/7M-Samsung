@@ -14,6 +14,7 @@ import * as store from '../lib/store.js';
 import * as md from '../api/mangadex.js';
 import { toast, menu } from '../ui.js';
 import { t } from '../lib/i18n.js';
+import { BookReaderView } from './bookReader.js';
 
 const W = 1920;
 const H = 1080;
@@ -24,6 +25,17 @@ const DOUBLE_MS = 450;
 
 // opts: { key, title, chapters, index, startPage, rtl }
 export function openReader(opts) {
+  // Text books (Books tab) read on paper, laid out by the app; scans fall back to the picture reader.
+  if (opts.ref && opts.ref.tab === 'books' && opts.pagesFn && store.settings().bookLook !== 'pictures') {
+    let replaced = false;
+    const v = BookReaderView(opts, () => {
+      if (replaced) return;
+      replaced = true;
+      router.pop();
+      router.push(ReaderView(opts));
+    });
+    return router.push(v);
+  }
   router.push(ReaderView(opts));
 }
 

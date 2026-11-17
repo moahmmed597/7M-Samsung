@@ -582,10 +582,10 @@ function SourceDetails(m, api) {
     text.appendChild(h('div.md-meta', { text: [m.author, m.status, chapters.length ? t('{n} capítulos', { n: chapters.length }) : ''].filter(Boolean).join('  ·  ') }));
     text.appendChild(h('div.md-desc', { text: m.description || '' }));
     const idx = idxOf();
+    // Read and Listen big on top; the rest smaller underneath.
     text.appendChild(
-      h('div.details-buttons', { 'data-group': '' }, [
+      h('div.details-buttons.main-buttons', { 'data-group': '' }, [
         h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => (idx >= 0 ? read(idx, progress().page) : read(0, 0)) }, [h('span.ico', { text: '📖' }), idx >= 0 ? t('Continuar: cap. {n}', { n: chapters[idx].chapter }) : t('Ler')]),
-        h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, api.kind, m), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
         // Books with sound: 🎧 Listen (continues where you stopped).
         audio.length
           ? h('div.btn', {
@@ -596,6 +596,11 @@ function SourceDetails(m, api) {
               },
             }, [h('span.ico', { text: '🎧' }), listenProgress(key) ? t('Continuar ouvindo') : t('Ouvir')])
           : null,
+      ])
+    );
+    text.appendChild(
+      h('div.details-buttons.more-buttons', { 'data-group': '' }, [
+        h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, api.kind, m), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')]),
         h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]),
       ])
     );

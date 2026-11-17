@@ -6178,7 +6178,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Escolha o arquivo stremio7m-backup.json e envie para esta TV": "Pick the stremio7m-backup.json file and send it to this TV",
     "1. Celular: aponte a câmera. PC: abra {url} e digite o PIN {pin}.": "1. Phone: point the camera. PC: open {url} and type the PIN {pin}.",
     '2. Em "Devolver uma cópia", escolha o arquivo stremio7m-backup.json (o maior) e toque em Enviar.': '2. Under "Send a copy back", pick stremio7m-backup.json (the bigger one) and tap Send.',
-    "3. Aqui na TV, confirme Restaurar.": "3. Here on the TV, confirm Restore."
+    "3. Aqui na TV, confirme Restaurar.": "3. Here on the TV, confirm Restore.",
+    "Escolha o livro na lista ao lado.": "Pick the book in the list on the side.",
+    "Abrindo de {name}...": "Opening from {name}...",
+    "Este não tem capítulos.": "This one has no chapters.",
+    "Não consegui abrir.": "Couldn't open it.",
+    "Achei nas suas fontes:": "Found in your sources:",
+    "Ou procure você mesmo:": "Or search yourself:",
+    "Papel": "Paper",
+    "Noite": "Night",
+    "Texto: {n}": "Text: {n}",
+    "Tamanho do texto": "Text size",
+    "Cor do papel": "Paper colour"
   };
 
   // src/js/lib/i18n-ar.js
@@ -7463,7 +7474,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Escolha o arquivo stremio7m-backup.json e envie para esta TV": "اختر ملف stremio7m-backup.json وأرسله لهذا التلفزيون",
     "1. Celular: aponte a câmera. PC: abra {url} e digite o PIN {pin}.": "١. الجوال: وجّه الكاميرا. الكمبيوتر: افتح {url} واكتب الرقم السري {pin}.",
     '2. Em "Devolver uma cópia", escolha o arquivo stremio7m-backup.json (o maior) e toque em Enviar.': '٢. في "رجّع نسخة للتلفزيون" اختر ملف stremio7m-backup.json (الأكبر حجماً) واضغط أرسل للتلفزيون.',
-    "3. Aqui na TV, confirme Restaurar.": "٣. هنا في التلفزيون اضغط استرجاع."
+    "3. Aqui na TV, confirme Restaurar.": "٣. هنا في التلفزيون اضغط استرجاع.",
+    "Escolha o livro na lista ao lado.": "اختر الكتاب من القائمة اللي جنب.",
+    "Abrindo de {name}...": "يفتح من {name}...",
+    "Este não tem capítulos.": "هذا ما فيه فصول.",
+    "Não consegui abrir.": "ما قدرت أفتحه.",
+    "Achei nas suas fontes:": "لقيته في مصادرك:",
+    "Ou procure você mesmo:": "أو دوّر بنفسك:",
+    "Papel": "ورق",
+    "Noite": "ليلي",
+    "Texto: {n}": "حجم الخط: {n}",
+    "Tamanho do texto": "حجم الخط",
+    "Cor do papel": "لون الورق"
   };
 
   // src/js/lib/i18n-es.js
@@ -17508,6 +17530,370 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     set(KEY3, a);
   }
 
+  // src/js/views/bookReader.js
+  var SIZES2 = [24, 28, 32, 36, 42];
+  var PAPERS = [{
+    id: "paper",
+    label: "Papel",
+    bg: "#f3ead6",
+    fg: "#2b2217"
+  }, {
+    id: "white",
+    label: "Branco",
+    bg: "#fbfaf7",
+    fg: "#1d1d1f"
+  }, {
+    id: "night",
+    label: "Noite",
+    bg: "#1d1c21",
+    fg: "#d9d3c7"
+  }];
+  function pageText(url2) {
+    if (!/^data:image\/svg\+xml/i.test(url2 || "")) return null;
+    var svg = "";
+    try {
+      var i = url2.indexOf(",");
+      svg = /;base64,/i.test(url2.slice(0, i + 1)) ? decodeURIComponent(escape(atob(url2.slice(i + 1)))) : decodeURIComponent(url2.slice(i + 1));
+    } catch (e) {
+      return null;
+    }
+    var doc = new DOMParser().parseFromString(svg, "image/svg+xml");
+    var fo = doc.getElementsByTagName("foreignObject")[0];
+    var html = "";
+    if (fo) html = new XMLSerializer().serializeToString(fo);else {
+      var lines = Array.prototype.map.call(doc.getElementsByTagName("text"), function (x) {
+        return x.textContent.trim();
+      }).filter(Boolean);
+      if (lines.length < 3) return null;
+      html = lines.slice(1, -1).join("<br/>");
+    }
+    var box = document.createElement("div");
+    box.innerHTML = html.replace(/<br\s*\/?>\s*<br\s*\/?>/gi, "\n\n").replace(/<\/p>/gi, "\n\n").replace(/<br\s*\/?>/gi, "\n");
+    var text = (box.textContent || "").replace(/\r/g, "");
+    var paras = text.split(/\n\s*\n/).map(function (p) {
+      return p.replace(/\s*\n\s*/g, " ").trim();
+    }).filter(Boolean);
+    return paras.length ? paras : null;
+  }
+  function BookReaderView(opts, fallback) {
+    var ci = opts.index;
+    var page3 = 0;
+    var count = 1;
+    var token = 0;
+    var alive = true;
+    var startAt = opts.startPage || 0;
+    var s0 = settings();
+    var size = SIZES2.indexOf(s0.bookFont) >= 0 ? s0.bookFont : 32;
+    var paper = PAPERS.find(function (p) {
+      return p.id === s0.bookPaper;
+    }) || PAPERS[0];
+    var spread = s0.bookSpread !== false;
+    var flow = h("div.bk-flow");
+    var sheet = h("div.bk-sheet", null, flow);
+    var spine = h("div.bk-spine");
+    var left = h("div.bk-num.l");
+    var right = h("div.bk-num.r");
+    var head = h("div.bk-head");
+    var ribbon = h("div.rd-ribbon");
+    ribbon.style.display = "none";
+    var book = h("div.bk-book", null, [sheet, spine, head, left, right, ribbon]);
+    var msg = h("div.rd-msg");
+    var el = h("div.view.reader.bk-view", null, [book, msg]);
+    var chapter = function chapter() {
+      return opts.chapters[ci];
+    };
+    function say(text) {
+      msg.textContent = text || "";
+      msg.style.display = text ? "" : "none";
+    }
+    function geometry() {
+      var bw = spread ? 1680 : 1060;
+      var bh = 940;
+      book.style.width = bw + "px";
+      book.style.height = bh + "px";
+      book.classList.toggle("one", !spread);
+      var padX = 80;
+      var padY = 80;
+      var gap = 2 * padX;
+      var colW = spread ? (bw - 2 * padX - gap) / 2 : bw - 2 * padX;
+      sheet.style.left = padX + "px";
+      sheet.style.top = padY + "px";
+      sheet.style.width = bw - 2 * padX + "px";
+      sheet.style.height = bh - 2 * padY + "px";
+      flow.style.height = bh - 2 * padY + "px";
+      flow.style.webkitColumnWidth = flow.style.columnWidth = colW + "px";
+      flow.style.webkitColumnGap = flow.style.columnGap = gap + "px";
+      return {
+        colStep: colW + gap,
+        per: spread ? 2 : 1
+      };
+    }
+    function paint() {
+      el.style.background = paper.id === "night" ? "#0b0b0e" : "#14110d";
+      book.style.background = paper.bg;
+      book.style.color = paper.fg;
+      book.classList.toggle("dark", paper.id === "night");
+      flow.style.fontSize = size + "px";
+    }
+    function measure() {
+      var g = geometry();
+      count = Math.max(1, Math.round(flow.scrollWidth / g.colStep));
+      return g;
+    }
+    function show3() {
+      var g = measure();
+      page3 = Math.max(0, Math.min(page3 - page3 % g.per, count - 1));
+      var x = page3 * g.colStep * (opts.rtl ? -1 : 1);
+      flow.style.webkitTransform = flow.style.transform = "translateX(" + -x + "px)";
+      var c = chapter();
+      head.textContent = (opts.title || "") + (c ? "  ·  " + (c.title || t("Cap. {n}", {
+        n: c.chapter != null ? c.chapter : ci + 1
+      })) : "");
+      var a = page3 + 1;
+      var b = page3 + 2 <= count ? page3 + 2 : "";
+      if (spread) {
+        left.textContent = opts.rtl ? b : a;
+        right.textContent = opts.rtl ? a : b;
+      } else {
+        left.textContent = "";
+        right.textContent = a + " / " + count;
+      }
+      drawRibbon();
+      save3();
+    }
+    function save3() {
+      if (!opts.key || !chapter()) return;
+      var all3 = get("readProgress", {}) || {};
+      all3[opts.key] = {
+        chapterId: chapter().id,
+        chapter: chapter().chapter,
+        page: page3,
+        title: opts.title,
+        poster: opts.poster,
+        kind: opts.kind,
+        ref: opts.ref,
+        at: Date.now()
+      };
+      var keys2 = Object.keys(all3);
+      if (keys2.length > 200) delete all3[keys2[0]];
+      set("readProgress", all3);
+    }
+    function loadChapter(i, start4) {
+      var my = ++token;
+      ci = i;
+      clear(flow);
+      say(t("Carregando..."));
+      opts.pagesFn(chapter().id).then(function (list3) {
+        if (my !== token || !alive) return;
+        if (!list3.length) return say(t("Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚."));
+        var paras = [];
+        for (var k = 0; k < list3.length; k++) {
+          var p = pageText(list3[k]);
+          if (!p) return fallback();
+          p.forEach(function (x) {
+            return paras.push(x);
+          });
+        }
+        if (!opts.rtl && paras.some(function (x) {
+          return /[؀-ۿ]/.test(x);
+        })) opts.rtl = true;
+        book.setAttribute("dir", opts.rtl ? "rtl" : "ltr");
+        var c = chapter();
+        if (c && c.title) flow.appendChild(h("h2.bk-title", {
+          text: c.title
+        }));
+        paras.forEach(function (x) {
+          return flow.appendChild(h("p", {
+            text: x
+          }));
+        });
+        say("");
+        measure();
+        page3 = start4 === "last" ? count - 1 : Math.max(0, Math.min(start4 || 0, count - 1));
+        show3();
+      }).catch(function () {
+        return alive && say(t("Não foi possível abrir este capítulo agora."));
+      });
+    }
+    function chapterStep(d) {
+      var n = ci + d;
+      if (n < 0 || n >= opts.chapters.length) return toast(d > 0 ? t("Este é o último capítulo.") : t("Este é o primeiro capítulo."));
+      loadChapter(n, d > 0 ? 0 : "last");
+    }
+    function turn(d) {
+      var per = spread ? 2 : 1;
+      if (d > 0) {
+        if (page3 + per < count) {
+          page3 += per;
+          show3();
+        } else chapterStep(1);
+      } else if (page3 > 0) {
+        page3 = Math.max(0, page3 - per);
+        show3();
+      } else chapterStep(-1);
+    }
+    function setSize(d) {
+      var i = Math.max(0, Math.min(SIZES2.length - 1, SIZES2.indexOf(size) + d));
+      if (SIZES2[i] === size) return;
+      var share = count > 1 ? page3 / count : 0;
+      size = SIZES2[i];
+      saveSettings({
+        bookFont: size
+      });
+      paint();
+      measure();
+      page3 = Math.floor(share * count);
+      show3();
+      toast(t("Texto: {n}", {
+        n: size
+      }));
+    }
+    function drawRibbon() {
+      var c = chapter();
+      var b = opts.key && c ? at(opts.key, c.id, page3) : null;
+      ribbon.style.display = b ? "" : "none";
+      if (b) ribbon.style.background = hexOf(b.color);
+    }
+    function markMenu() {
+      var c = chapter();
+      if (!opts.key || !c) return;
+      var cur = at(opts.key, c.id, page3);
+      var items3 = COLORS3.map(function (x) {
+        return {
+          label: "● " + t(x.label),
+          value: x.id,
+          checked: !!cur && cur.color === x.id
+        };
+      });
+      if (cur) items3.push({
+        label: "✕ " + t("Tirar a marcação"),
+        value: ""
+      });
+      menu(t("Marcar esta página"), items3, {
+        onPick: function onPick(v) {
+          if (!v) remove(opts.key, cur);else put(opts.key, {
+            ci: ci,
+            chapterId: c.id,
+            chapter: c.chapter,
+            page: page3,
+            color: v
+          });
+          drawRibbon();
+          toast(v ? t("Página marcada.") : t("Marcação tirada."));
+        }
+      });
+    }
+    function marksMenu() {
+      var list3 = list2(opts.key).filter(function (b) {
+        return b.time == null;
+      });
+      if (!list3.length) return toast(t("Nenhuma página marcada ainda."));
+      menu(t("Minhas marcações"), list3.map(function (b) {
+        return {
+          label: "● " + t("Cap. {n}", {
+            n: b.chapter != null ? b.chapter : b.ci + 1
+          }) + " · " + t("Página {n}", {
+            n: b.page + 1
+          }),
+          value: b
+        };
+      }), {
+        onPick: function onPick(b) {
+          var i = opts.chapters.findIndex(function (c) {
+            return c.id === b.chapterId;
+          });
+          if (i < 0) i = Math.min(b.ci, opts.chapters.length - 1);
+          if (i === ci) {
+            page3 = b.page;
+            show3();
+          } else loadChapter(i, b.page);
+        }
+      });
+    }
+    function okMenu() {
+      var c = chapter();
+      var cur = opts.key && c ? at(opts.key, c.id, page3) : null;
+      menu(t("Leitura"), [{
+        label: "🔖 " + (cur ? t("Mudar a marcação desta página") : t("Marcar esta página")),
+        value: "mark"
+      }, {
+        label: "📑 " + t("Minhas marcações"),
+        value: "marks"
+      }, {
+        label: "🔠 " + t("Tamanho do texto"),
+        sub: String(size),
+        value: "size"
+      }, {
+        label: "🎨 " + t("Cor do papel"),
+        sub: t(paper.label),
+        value: "paper"
+      }, {
+        label: (spread ? "📄 " : "📖 ") + (spread ? t("Uma página") : t("Duas páginas")),
+        value: "spread"
+      }], {
+        onPick: function onPick(v) {
+          if (v === "mark") markMenu();else if (v === "marks") marksMenu();else if (v === "size") menu(t("Tamanho do texto"), SIZES2.map(function (x) {
+            return {
+              label: String(x),
+              value: x,
+              checked: x === size
+            };
+          }), {
+            onPick: function onPick(x) {
+              return setSize(SIZES2.indexOf(x) - SIZES2.indexOf(size));
+            }
+          });else if (v === "paper") menu(t("Cor do papel"), PAPERS.map(function (p) {
+            return {
+              label: t(p.label),
+              value: p.id,
+              checked: p.id === paper.id
+            };
+          }), {
+            onPick: function onPick(id) {
+              paper = PAPERS.find(function (p) {
+                return p.id === id;
+              }) || PAPERS[0];
+              saveSettings({
+                bookPaper: paper.id
+              });
+              paint();
+            }
+          });else if (v === "spread") {
+            spread = !spread;
+            saveSettings({
+              bookSpread: spread
+            });
+            var share = count > 1 ? page3 / count : 0;
+            measure();
+            page3 = Math.floor(share * count);
+            show3();
+          }
+        }
+      });
+    }
+    paint();
+    loadChapter(ci, startAt);
+    return {
+      el: el,
+      onKey: function onKey(e) {
+        var k = e.keyCode;
+        if (k === KEY.ENTER) return okMenu(), true;
+        if (k === KEY.CH_UP) return setSize(1), true;
+        if (k === KEY.CH_DOWN) return setSize(-1), true;
+        if (k === KEY.YELLOW) return chapterStep(1), true;
+        if (k === KEY.BLUE) return chapterStep(-1), true;
+        if (k === KEY.LEFT || k === KEY.RIGHT) return turn(k === KEY.RIGHT !== !!opts.rtl ? 1 : -1), true;
+        if (k === KEY.DOWN) return turn(1), true;
+        if (k === KEY.UP) return turn(-1), true;
+        return false;
+      },
+      destroy: function destroy() {
+        alive = false;
+        save3();
+      }
+    };
+  }
+
   // src/js/views/reader.js
   var W = 1920;
   var H = 1080;
@@ -17515,6 +17901,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var ZOOMS = [1, 1.5, 2, 2.5, 3];
   var DOUBLE_MS = 450;
   function openReader(opts) {
+    if (opts.ref && opts.ref.tab === "books" && opts.pagesFn && settings().bookLook !== "pictures") {
+      var replaced = false;
+      var v = BookReaderView(opts, function () {
+        if (replaced) return;
+        replaced = true;
+        pop();
+        push(ReaderView(opts));
+      });
+      return push(v);
+    }
     push(ReaderView(opts));
   }
   var MODE_NAMES = {
@@ -20130,7 +20526,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: m.description || ""
       }));
       var idx = idxOf();
-      text.appendChild(h("div.details-buttons", {
+      text.appendChild(h("div.details-buttons.main-buttons", {
         "data-group": ""
       }, [h("div.btn.primary", {
         focusable: true,
@@ -20142,14 +20538,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: "📖"
       }), idx >= 0 ? t("Continuar: cap. {n}", {
         n: chapters4[idx].chapter
-      }) : t("Ler")]), h("div.btn", {
-        focusable: true,
-        onSelect: function onSelect() {
-          return toggleFav(key4, api2.kind, m), renderInfo();
-        }
-      }, [h("span.ico", {
-        text: isFav(key4) ? "♥" : "♡"
-      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]),
+      }) : t("Ler")]),
       // Books with sound: 🎧 Listen (continues where you stopped).
       audio.length ? h("div.btn", {
         focusable: true,
@@ -20172,7 +20561,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       }, [h("span.ico", {
         text: "🎧"
-      }), listenProgress(key4) ? t("Continuar ouvindo") : t("Ouvir")]) : null, h("div.btn", {
+      }), listenProgress(key4) ? t("Continuar ouvindo") : t("Ouvir")]) : null]));
+      text.appendChild(h("div.details-buttons.more-buttons", {
+        "data-group": ""
+      }, [h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return toggleFav(key4, api2.kind, m), renderInfo();
+        }
+      }, [h("span.ico", {
+        text: isFav(key4) ? "♥" : "♡"
+      }), isFav(key4) ? t("Nos favoritos") : t("Favoritar")]), h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
           return readingModeMenu(function () {
@@ -20275,6 +20674,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/lib/sourceFind.js
+  function bareTitle(x) {
+    var t2 = String(x || "").replace(/\([^)]*\)|\[[^\]]*\]|【[^】]*】/g, " ").split(/\s[-–—|]\s|\s*\|\s*/)[0].trim();
+    return t2 || String(x || "");
+  }
+  var scoreOf = function scoreOf(n, title) {
+    return Math.max(likeness(n, title), likeness(n, bareTitle(title)));
+  };
   function scanSources(names2, onHit, opts) {
     var o = opts || {};
     var plugins = installed(o.kind || "manga");
@@ -20291,8 +20697,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var score = 0;
           (items3 || []).slice(0, 40).forEach(function (it) {
             var s = Math.max.apply(null, names2.map(function (n) {
-              return likeness(n, it.title);
+              return scoreOf(n, it.title);
             }));
+            if (o.candidates && s >= 0.4) o.candidates.push({
+              pid: p.id,
+              name: p.name,
+              mid: it.id,
+              title: it.title,
+              cover: it.cover,
+              score: s
+            });
             if (o.year && String(it.title).indexOf(String(o.year)) >= 0) s += 0.05;
             if (s > score) {
               score = s;
@@ -20787,7 +21201,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     }
     function read(index2, page3) {
-      if (!chapters4.length) return toast(t("Nenhum capítulo encontrado."));
+      if (!chapters4.length) {
+        var first = list3.querySelector(".stream.near") || list3.querySelector(".stream");
+        if (first) focus(first);
+        return toast(source ? t("Nenhum capítulo encontrado.") : t("Escolha o livro na lista ao lado."), 4e3);
+      }
       openReader({
         key: key4,
         title: m.name,
@@ -20937,7 +21355,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var idx = indexOfProgress();
       var lp = listenProgress(key4);
       var btns = [];
-      if (chapters4.length || !audio.length) btns.push(h("div.btn.primary", {
+      var main = [];
+      if (chapters4.length || !audio.length) main.push(h("div.btn.primary", {
         focusable: true,
         "data-autofocus": "",
         onSelect: startRead
@@ -20946,7 +21365,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }), idx >= 0 ? t("Continuar: cap. {n}", {
         n: chapters4[idx].chapter
       }) : t("Ler")]));
-      if (audio.length) btns.push(h("div.btn" + (chapters4.length ? "" : ".primary"), {
+      if (audio.length) main.push(h("div.btn" + (chapters4.length ? "" : ".primary"), {
         focusable: true,
         "data-autofocus": chapters4.length ? null : "",
         onSelect: startListen
@@ -20989,7 +21408,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }, [h("span.ico", {
         text: readingModeLabel().icon
       }), readingModeLabel().text]));
-      text.appendChild(h("div.details-buttons", {
+      if (main.length) text.appendChild(h("div.details-buttons.main-buttons", {
+        "data-group": ""
+      }, main));
+      text.appendChild(h("div.details-buttons.more-buttons", {
         "data-group": ""
       }, btns));
       info3.appendChild(text);
@@ -21073,18 +21495,68 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       renderList();
       loadAudio();
     }
+    function useNear(c) {
+      toast(t("Abrindo de {name}...", {
+        name: c.name
+      }));
+      _chapters(c.pid, c.mid).then(function (cs) {
+        return cs.length ? {
+          cs: cs
+        } : audioTracks(c.pid, c.mid).then(function (tr) {
+          return {
+            cs: [],
+            tracks: tr
+          };
+        });
+      }).then(function (r) {
+        if (!_alive) return;
+        if (!r.cs.length && !(r.tracks && r.tracks.length)) return toast(t("Este não tem capítulos."), 4e3);
+        var ln = {
+          pid: c.pid,
+          name: c.name,
+          mid: c.mid,
+          title: c.title,
+          count: r.cs.length || r.tracks.length,
+          manual: true
+        };
+        picked = true;
+        saveLink(m.olKey, ln);
+        showSource(ln, r.cs, r.tracks);
+      }).catch(function () {
+        return toast(t("Não consegui abrir."), 4e3);
+      });
+    }
     function noSources(text) {
-      status2.textContent = text;
       renderInfo();
-      renderList();
-      list3.appendChild(h("div.stream", {
-        focusable: true,
-        onSelect: function onSelect() {
-          return openSources("books");
-        }
-      }, [h("div.s-main", {
-        text: "📚 " + t("Minhas fontes")
-      })]));
+      clear(list3);
+      var seen = {};
+      var offers = near.filter(function (c) {
+        return !seen[c.pid + c.mid] && (seen[c.pid + c.mid] = 1);
+      }).sort(function (a, b) {
+        return b.score - a.score;
+      }).slice(0, 12);
+      if (offers.length) {
+        list3.appendChild(h("div.loading-line", {
+          text: t("Achei nas suas fontes:")
+        }));
+        offers.forEach(function (c) {
+          return list3.appendChild(h("div.stream.near", {
+            focusable: true,
+            onSelect: function onSelect() {
+              return useNear(c);
+            }
+          }, [h("div.s-main", {
+            text: "📕 " + c.title
+          }), h("span.s-tag", {
+            text: c.name
+          })]));
+        });
+      } else list3.appendChild(h("div.loading-line", {
+        text: text
+      }));
+      list3.appendChild(h("div.loading-line", {
+        text: t("Ou procure você mesmo:")
+      }));
       installed("books").forEach(function (p) {
         return list3.appendChild(h("div.stream", {
           focusable: true,
@@ -21097,14 +21569,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           })
         })]));
       });
+      list3.appendChild(h("div.stream", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return openSources("books");
+        }
+      }, [h("div.s-main", {
+        text: "📚 " + t("Minhas fontes")
+      })]));
     }
+    var near = [];
     function scan3(onHit) {
       if (!scanning) scanning = scanSources([m.title], onHit, {
         alive: function alive() {
           return _alive;
         },
         min: 0.8,
-        kind: "books"
+        kind: "books",
+        candidates: near
       }).then(function (all3) {
         found = all3;
         return all3;
@@ -28533,7 +29015,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T22:18:10.240Z";
+  var BUILD = "2026-11-17T22:31:41.371Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -28862,7 +29344,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     id: "soft",
     label: "Bem redondo"
   }];
-  var SIZES2 = [{
+  var SIZES3 = [{
     id: "small",
     label: "Pequeno"
   }, {
@@ -28908,7 +29390,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     };
     set2("shape-", s.cardShape || "rounded", SHAPES);
-    set2("cards-", s.cardSize || "medium", SIZES2);
+    set2("cards-", s.cardSize || "medium", SIZES3);
     set2("focus-", s.focusStyle || "glow", FOCUS);
     var bg = s.bgStyle || (s.oled ? "oled" : "default");
     b.classList.toggle("oled", bg === "oled");
@@ -30635,7 +31117,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
         }));
         lookChoose(t("Formato dos cartões"), t("Cantos dos pôsteres e botões"), SHAPES, "cardShape", "rounded");
-        lookChoose(t("Tamanho dos pôsteres"), t("Mais pôsteres por linha ou pôsteres maiores"), SIZES2, "cardSize", "medium");
+        lookChoose(t("Tamanho dos pôsteres"), t("Mais pôsteres por linha ou pôsteres maiores"), SIZES3, "cardSize", "medium");
         lookChoose(t("Estilo do foco"), t("Como o item selecionado aparece"), FOCUS, "focusStyle", "glow");
         lookChoose(t("Fonte do app"), t("Letra dos menus e textos"), FONTS2, "appFont", "samsung");
         body.appendChild(h("div.set-section", {
