@@ -6245,11 +6245,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         el.src = url2;
         return;
       }
-      kitsuSmall(kitsu).then(function (small2) {
+      kitsuSmall(kitsu).then(function (small) {
         if (!el.__on) return;
-        if (small2) {
-          el.setAttribute("data-lazy", small2);
-          el.src = small2;
+        if (small) {
+          el.setAttribute("data-lazy", small);
+          el.src = small;
         } else if (el.onerror) el.onerror();
       });
     } else if (!on && el.__on) {
@@ -18433,12 +18433,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
-  var small = function small(u) {
-    return u ? "https://wsrv.nl/?url=" + encodeURIComponent(u) + "&w=300&h=169&fit=cover&a=top&output=jpg&q=72" : "";
-  };
   var seriesArt = function seriesArt(name) {
     return searchVolumes(name, 0).then(function (r) {
-      return r.items[0] ? small(r.items[0].art || r.items[0].poster) : "";
+      return r.items[0] ? r.items[0].poster || r.items[0].art : "";
     });
   };
   function heroTiles(parent, title, names2, cacheKey) {
@@ -18637,11 +18634,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }));
       });
       seriesRow(ROWS[0]);
-      heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel2");
+      heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel3");
       seriesRow(ROWS[1]);
-      heroTiles(rows2, t("Heróis da DC"), DC, "comicArtDC2");
+      heroTiles(rows2, t("Heróis da DC"), DC, "comicArtDC3");
       seriesRow(ROWS[2]);
-      heroTiles(rows2, t("Independentes"), INDIE, "comicArtIndie2");
+      heroTiles(rows2, t("Independentes"), INDIE, "comicArtIndie3");
       ROWS.slice(3).forEach(seriesRow);
       setTimeout(loadNearby, 50);
     }
@@ -22328,8 +22325,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         alt: ""
       });
       var size = shape === "landscape" ? "&w=400&h=225&fit=cover" : shape === "square" ? "&w=260&h=260&fit=contain&cbg=f2f0f8" : "&w=230&h=345&fit=cover";
-      var small2 = "https://wsrv.nl/?url=" + encodeURIComponent(f.c) + size + "&output=jpg&q=80";
-      im.setAttribute("data-lazy", small2);
+      var small = "https://wsrv.nl/?url=" + encodeURIComponent(f.c) + size + "&output=jpg&q=80";
+      im.setAttribute("data-lazy", small);
       var triedFull = false;
       im.onerror = function () {
         if (!triedFull) {
@@ -23965,7 +23962,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T07:52:10.875Z";
+  var BUILD = "2026-11-17T07:58:07.706Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

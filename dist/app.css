@@ -891,3 +891,7 @@ body .card.anime-tile.publisher .poster-wrap { width: 300px; height: 169px; }
 .pub-mark.m-boom { font-size: 64px; letter-spacing: -2px; }
 .pub-mark.m-dynamite { font-size: 42px; letter-spacing: 1px; }
 .pub-mark.m-valiant { font-size: 46px; letter-spacing: 3px; }
+/* Comic covers on the hero tiles: show the top of the cover (titles and faces) */
+.anime-tile .tile-art.cover-top { object-position: center 18%; }
+/* The sidebar (and its box) above everything on the page: tile names must never show over it */
+.side-anchor { z-index: 300 !important; }
