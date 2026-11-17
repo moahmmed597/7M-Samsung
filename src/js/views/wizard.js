@@ -77,7 +77,7 @@ function WizardView() {
   }
 
   function stepAccount() {
-    card.appendChild(h('h1', { text: t('Bem-vindo ao Stremio Kai') }));
+    card.appendChild(h('h1', { text: t('Bem-vindo ao Stremio 7M') }));
     if (stremio.isLoggedIn()) {
       card.appendChild(h('p', { text: t('Você já está conectado à sua conta Stremio. Seus addons e sua biblioteca já estão aqui.') }));
       card.appendChild(h('div.actions', { 'data-group': '' }, [btn(t('Continuar'), true, next)]));

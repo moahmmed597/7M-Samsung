@@ -1,8 +1,8 @@
 {
   "name": "stremio-kai-7m",
-  "version": "1.3.2-tizen.1",
+  "version": "1.3.4-tizen.1",
   "private": true,
-  "description": "Stremio Kai 7M - Custom Edition for Samsung OLED / Tizen Smart TVs",
+  "description": "Stremio 7M - for Samsung Tizen Smart TVs",
   "license": "GPL-3.0",
   "type": "module",
   "scripts": {
@@ -31,7 +31,7 @@
     "url": "https://github.com/moahmmed597/Stremio-Kai-7M.git"
   },
   "packageType": "app",
-  "appName": "Stremio Kai 7M",
+  "appName": "Stremio 7M",
   "appPath": "dist/index.html",
   "keys": [
     "MediaPlayPause",

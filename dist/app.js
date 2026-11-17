@@ -4844,7 +4844,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Escolha inteligente: nenhuma fonte que a TV toque. Escolha na lista.": "Smart Choice: no source the TV can play. Pick one from the list.",
     "Essa fonte não tocou. Tentando outra...": "That source didn't play. Trying another...",
     "carregando...": "loading...",
-    "Sair do Stremio Kai?": "Exit Stremio Kai?",
+    "Sair do Stremio 7M?": "Exit Stremio 7M?",
     "Desconhecido": "Unknown",
     "Desligado": "Off",
     "Desligada": "Off",
@@ -4907,7 +4907,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "PASSO {n} DE {total}": "STEP {n} OF {total}",
     "Bem-vindo! Quem vai usar este perfil?": "Welcome! Who will use this profile?",
     "Dê um nome ao perfil. Depois você pode criar outros perfis, cada um com a própria conta Stremio e histórico.": "Give this profile a name. Later you can create other profiles, each with its own Stremio account and history.",
-    "Bem-vindo ao Stremio Kai": "Welcome to Stremio Kai",
+    "Bem-vindo ao Stremio 7M": "Welcome to Stremio 7M",
     "Você já está conectado à sua conta Stremio. Seus addons e sua biblioteca já estão aqui.": "You're already signed in to Stremio. Your add-ons and library are here.",
     "Entre com a sua conta Stremio para trazer seus addons (Torrentio, debrid, Anime Kitsu...) e a biblioteca.": "Sign in with your Stremio account to bring your add-ons (Torrentio, debrid, Anime Kitsu...) and library.",
     "Entrar na conta": "Sign in",
@@ -5043,6 +5043,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Atualizar todos": "Update all",
+    "baixa de novo do GitHub": "downloads them again from GitHub",
+    "Atualizando...": "Updating...",
+    "{n} plugins atualizados.": "{n} plugins updated.",
     "Anime": "Anime",
     "Personagens": "Characters",
     "Animais": "Animals",
@@ -5321,7 +5325,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Escolha inteligente: nenhuma fonte que a TV toque. Escolha na lista.": "الاختيار الذكي: لا يوجد مصدر يمكن للتلفاز تشغيله. اختر من القائمة.",
     "Essa fonte não tocou. Tentando outra...": "تعذّر تشغيل هذا المصدر. جارٍ تجربة مصدر آخر...",
     "carregando...": "جارٍ التحميل...",
-    "Sair do Stremio Kai?": "الخروج من Stremio Kai؟",
+    "Sair do Stremio 7M?": "الخروج من Stremio 7M؟",
     "Desconhecido": "غير معروف",
     "Desligado": "إيقاف",
     "Desligada": "إيقاف",
@@ -5384,7 +5388,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "PASSO {n} DE {total}": "الخطوة {n} من {total}",
     "Bem-vindo! Quem vai usar este perfil?": "مرحبًا! من سيستخدم هذا الملف؟",
     "Dê um nome ao perfil. Depois você pode criar outros perfis, cada um com a própria conta Stremio e histórico.": "اختر اسمًا لهذا الملف. لاحقًا يمكنك إنشاء ملفات أخرى، لكل منها حساب Stremio وسجل خاص به.",
-    "Bem-vindo ao Stremio Kai": "مرحبًا بك في Stremio Kai",
+    "Bem-vindo ao Stremio 7M": "مرحبًا بك في Stremio 7M",
     "Você já está conectado à sua conta Stremio. Seus addons e sua biblioteca já estão aqui.": "أنت مسجّل الدخول إلى Stremio بالفعل. إضافاتك ومكتبتك موجودة هنا.",
     "Entre com a sua conta Stremio para trazer seus addons (Torrentio, debrid, Anime Kitsu...) e a biblioteca.": "سجّل الدخول بحساب Stremio لجلب إضافاتك (Torrentio، debrid، Anime Kitsu...) ومكتبتك.",
     "Entrar na conta": "تسجيل الدخول",
@@ -5520,6 +5524,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Atualizar todos": "تحديث الكل",
+    "baixa de novo do GitHub": "يحمّلها من جديد من GitHub",
+    "Atualizando...": "جاري التحديث...",
+    "{n} plugins atualizados.": "تم تحديث {n} إضافة.",
     "Anime": "أنمي",
     "Personagens": "شخصيات كرتونية",
     "Animais": "حيوانات",
@@ -7392,7 +7400,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       text: t("Adicionar perfil")
     })]));
     var el = h("div.view.profile-picker", null, [h("div.boot-logo", {
-      html: "Stremio <b>Kai 7M</b>"
+      html: "Stremio <b>7M</b>"
     }), h("h1", {
       text: t("Quem está assistindo?")
     }), h("div.profile-row", {
@@ -8420,7 +8428,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (id === "torbox") return {
       name: p.name,
       start: function start() {
-        return getJSONViaProxy(TB + "user/auth/device/start?app=" + encodeURIComponent("Stremio Kai"), {
+        return getJSONViaProxy(TB + "user/auth/device/start?app=" + encodeURIComponent("Stremio 7M"), {
           timeout: 15e3
         }).then(function (r) {
           var d = r && r.data;
@@ -9316,7 +9324,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       goTab("home");
       return;
     }
-    confirmDialog(t("Sair do Stremio Kai?"), t("Sair"), function () {
+    confirmDialog(t("Sair do Stremio 7M?"), t("Sair"), function () {
       return platformBack();
     });
   }
@@ -14633,6 +14641,44 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }).filter(Boolean);
     });
   }
+  function updateAll(kind, all2) {
+    var list2 = installed(kind);
+    var byRepo = {};
+    list2.forEach(function (p) {
+      return p.repoUrl && (byRepo[p.repoUrl] = byRepo[p.repoUrl] || []).push(p);
+    });
+    return Promise.all(Object.keys(byRepo).map(function (url2) {
+      return fetchRepo(url2).then(function (r) {
+        return Promise.all(byRepo[url2].map(function (p) {
+          var man = (r.plugins || []).find(function (x) {
+            return x.id === p.id;
+          });
+          if (!man || !all2 && String(man.version) === String(p.version)) return 0;
+          return install2(url2, man).then(function () {
+            return 1;
+          }, function () {
+            return 0;
+          });
+        }));
+      }, function () {
+        return [0];
+      });
+    })).then(function (rs) {
+      return rs.reduce(function (a, b) {
+        return a.concat(b);
+      }, []).reduce(function (a, b) {
+        return a + b;
+      }, 0);
+    });
+  }
+  function autoUpdate() {
+    var last2 = get("pluginsChecked", 0) || 0;
+    if (Date.now() - last2 < 864e5 || !installed().length) return Promise.resolve(0);
+    set("pluginsChecked", Date.now());
+    return updateAll(null, false).catch(function () {
+      return 0;
+    });
+  }
 
   // src/js/lib/titles.js
   function norm(x) {
@@ -16713,6 +16759,14 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         r.insertBefore(sourceIcon(p), r.firstChild);
         body.appendChild(r);
       });
+      installed(kind).length && body.appendChild(row2("🔄 " + t("Atualizar todos"), t("baixa de novo do GitHub"), function () {
+        toast(t("Atualizando..."));
+        updateAll(kind, true).then(function (n) {
+          return toast(t("{n} plugins atualizados.", {
+            n: n
+          }), 4e3), load7();
+        });
+      }));
       installed(kind).length && body.appendChild(row2("🩺 " + t("Testar plugins"), t("mostra onde falha"), diagnose));
       installed(kind).length && body.appendChild(row2("⚙ " + t("Gerenciar plugins"), "", function () {
         return menu(t("Plugins"), installed(kind).map(function (p) {
@@ -23962,7 +24016,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T07:58:07.706Z";
+  var BUILD = "2026-11-17T08:13:30.219Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -26854,7 +26908,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function stepAccount() {
       card2.appendChild(h("h1", {
-        text: t("Bem-vindo ao Stremio Kai")
+        text: t("Bem-vindo ao Stremio 7M")
       }));
       if (isLoggedIn()) {
         card2.appendChild(h("p", {
@@ -27209,6 +27263,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function start3() {
+    setTimeout(function () {
+      return autoUpdate();
+    }, 2e4);
     reloadProfile();
     var s = settings();
     if (!s.navyLook1) s = saveSettings({

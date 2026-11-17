@@ -324,6 +324,13 @@ function SourcesView(kind) {
       r.insertBefore(sourceIcon(p), r.firstChild);
       body.appendChild(r);
     });
+    pl.installed(kind).length &&
+      body.appendChild(
+        row('🔄 ' + t('Atualizar todos'), t('baixa de novo do GitHub'), () => {
+          toast(t('Atualizando...'));
+          pl.updateAll(kind, true).then((n) => (toast(t('{n} plugins atualizados.', { n: n }), 4000), load()));
+        })
+      );
     pl.installed(kind).length && body.appendChild(row('🩺 ' + t('Testar plugins'), t('mostra onde falha'), diagnose));
     pl.installed(kind).length &&
       body.appendChild(row('⚙ ' + t('Gerenciar plugins'), '', () =>

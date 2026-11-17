@@ -65,7 +65,7 @@ export function back() {
     goTab('home');
     return;
   }
-  confirmDialog(t('Sair do Stremio Kai?'), t('Sair'), () => platformBack());
+  confirmDialog(t('Sair do Stremio 7M?'), t('Sair'), () => platformBack());
 }
 
 // Troca de aba principal: limpa a pilha e mostra a aba (mantida viva).

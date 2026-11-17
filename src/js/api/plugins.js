@@ -552,3 +552,35 @@ export function pages(id, chapterId) {
       .filter(Boolean);
   });
 }
+
+// ---------- updates ----------
+// Downloads every installed plugin again from its repository (all: also when the version is the same,
+// for a plugin fixed without changing its number). Resolves with how many were updated.
+export function updateAll(kind, all) {
+  const list = installed(kind);
+  const byRepo = {};
+  list.forEach((p) => p.repoUrl && (byRepo[p.repoUrl] = byRepo[p.repoUrl] || []).push(p));
+  return Promise.all(
+    Object.keys(byRepo).map((url) =>
+      fetchRepo(url).then(
+        (r) =>
+          Promise.all(
+            byRepo[url].map((p) => {
+              const man = (r.plugins || []).find((x) => x.id === p.id);
+              if (!man || (!all && String(man.version) === String(p.version))) return 0;
+              return install(url, man).then(() => 1, () => 0);
+            })
+          ),
+        () => [0]
+      )
+    )
+  ).then((rs) => rs.reduce((a, b) => a.concat(b), []).reduce((a, b) => a + b, 0));
+}
+// Once a day, quietly: plugins whose repository has a newer version are updated.
+export function autoUpdate() {
+  const last = store.get('pluginsChecked', 0) || 0;
+  if (Date.now() - last < 864e5 || !installed().length) return Promise.resolve(0);
+  store.set('pluginsChecked', Date.now());
+  return updateAll(null, false).catch(() => 0);
+}
+

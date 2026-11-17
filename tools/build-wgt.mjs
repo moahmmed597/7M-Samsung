@@ -28,7 +28,7 @@ const config = `<?xml version="1.0" encoding="UTF-8"?>
     <feature name="http://tizen.org/feature/screen.size.all"/>
     <feature name="http://tizen.org/feature/web.service"/>
     <icon src="icon.png"/>
-    <name>Stremio Kai 7M</name>
+    <name>Stremio 7M</name>
     <tizen:metadata key="http://samsung.com/tv/metadata/prelaunch.support" value="false"/>
     <tizen:privilege name="http://tizen.org/privilege/internet"/>
     <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>

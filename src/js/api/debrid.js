@@ -179,7 +179,7 @@ export function signInFlow(id) {
     return {
       name: p.name,
       start: () =>
-        server.getJSONViaProxy(TB + 'user/auth/device/start?app=' + encodeURIComponent('Stremio Kai'), { timeout: 15000 }).then((r) => {
+        server.getJSONViaProxy(TB + 'user/auth/device/start?app=' + encodeURIComponent('Stremio 7M'), { timeout: 15000 }).then((r) => {
           const d = r && r.data;
           if (!d || !d.device_code) throw new Error('TorBox');
           return {

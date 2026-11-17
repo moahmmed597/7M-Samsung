@@ -6,6 +6,7 @@ import { ComicsView } from './views/comics.js';
 import { DiscoverView } from './views/discover.js';
 import { LiveView } from './views/live.js';
 import * as iptv from './api/iptv.js';
+import * as plugins from './api/plugins.js';
 import { addRepoUrl } from './views/sources.js';
 import { MoviesView, SeriesView } from './views/typeTab.js';
 import { AnimeView } from './views/anime.js';
@@ -153,6 +154,8 @@ function boot() {
 
 // Carrega o perfil escolhido: conta, biblioteca, addons e a tela inicial.
 function start() {
+  // Plugins with a newer version in their repository update themselves (once a day, in the background).
+  setTimeout(() => plugins.autoUpdate(), 20000);
   stremio.reloadProfile();
   let s = store.settings();
   // Navy blue is the main look now: everyone gets it once (black stays one tap away in Appearance → Theme).
