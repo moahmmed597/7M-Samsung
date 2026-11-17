@@ -248,3 +248,5 @@ This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**
 
 - Profile pictures in `src/static/avatars/` come from [Harbor](https://github.com/Harborofficial/Harbor) (MIT licence, Copyright (c) 2026 Harbor).
 - Sidebar icons are Harbor's navigation glyphs ([Harbor](https://github.com/Harborofficial/Harbor), MIT).
+- Episode ↔ chapter tables are read at runtime from [anime2manga.net](https://anime2manga.net/) and [mangaepisodeguide.com](https://mangaepisodeguide.com/) (not copied into this repository).
+- Comics catalog: [ComicVine](https://comicvine.gamespot.com/api/) with your own key. The Comics tab icon is Lucide's `book-open` (ISC).
