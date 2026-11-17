@@ -216,6 +216,8 @@ export function SettingsView() {
         });
     });
     body.appendChild(saveRow);
+    // Import: a file from the phone or the PC (same Wi-Fi), through the backup page.
+    body.appendChild(row('📲 ' + t('Importar do celular ou do PC'), t('Escolha o arquivo stremio7m-backup.json e envie para esta TV'), '', () => importQr()));
     const tvRow = row('↩️ ' + t('Restaurar a cópia da TV'), t('Procurando...'), '', () => {
       backup.onTv().then((b) => {
         if (!b) return toast(t('Não há cópia na TV.'), 5000);
@@ -266,6 +268,30 @@ export function SettingsView() {
           h('div.phone-sub', { text: t('PIN: {pin}', { pin: i.pin }) }),
         ])
       );
+    });
+  }
+
+  function importQr() {
+    phone.info().then((i) => {
+      const url = phone.backupUrl(i);
+      if (!url) return toast(t('O serviço da TV não está rodando. Feche o app e abra de novo.'), 5000);
+      const close = h('div.btn.primary', { focusable: true, 'data-autofocus': '', text: t('Fechar'), onSelect: () => done() });
+      const box = h('div.modal-box.center.qr-modal', null, [
+        h('h3', { text: t('Importar do celular ou do PC') }),
+        h('img.phone-qr', { src: phone.qrImage(url, 320), alt: '' }),
+        h('div.modal-text', { text: t('1. Celular: aponte a câmera. PC: abra {url} e digite o PIN {pin}.', { url: 'http://' + i.ip + ':' + i.port + '/backup', pin: i.pin }) }),
+        h('div.modal-text', { text: t('2. Em "Devolver uma cópia", escolha o arquivo stremio7m-backup.json (o maior) e toque em Enviar.') }),
+        h('div.modal-text', { text: t('3. Aqui na TV, confirme Restaurar.') }),
+        h('div.modal-actions', null, close),
+      ]);
+      const modal = h('div.modal', null, box);
+      document.getElementById('app').appendChild(modal);
+      const layer = nav.pushLayer(modal, { onBack: () => done() });
+      nav.focusFirst(modal);
+      function done() {
+        nav.popLayer(layer);
+        if (modal.parentNode) modal.parentNode.removeChild(modal);
+      }
     });
   }
 

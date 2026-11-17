@@ -1284,4 +1284,9 @@ export const EN = {
   "Guardada no armazenamento da TV (não se perde ao reinstalar).": "Kept in the TV's storage (not lost when reinstalling).",
   "Só na memória até a TV desligar: baixe no celular antes de reinstalar.": "Only in memory until the TV turns off: download it to your phone before reinstalling.",
   "Restaurar a cópia anterior": "Restore the previous copy",
+  "Importar do celular ou do PC": "Import from the phone or PC",
+  "Escolha o arquivo stremio7m-backup.json e envie para esta TV": "Pick the stremio7m-backup.json file and send it to this TV",
+  "1. Celular: aponte a câmera. PC: abra {url} e digite o PIN {pin}.": "1. Phone: point the camera. PC: open {url} and type the PIN {pin}.",
+  "2. Em \"Devolver uma cópia\", escolha o arquivo stremio7m-backup.json (o maior) e toque em Enviar.": "2. Under \"Send a copy back\", pick stremio7m-backup.json (the bigger one) and tap Send.",
+  "3. Aqui na TV, confirme Restaurar.": "3. Here on the TV, confirm Restore.",
 };

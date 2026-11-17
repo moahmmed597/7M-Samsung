@@ -1284,4 +1284,9 @@ export const AR = {
   "Guardada no armazenamento da TV (não se perde ao reinstalar).": "محفوظة في ذاكرة التلفزيون (ما تضيع لو أعدت التثبيت).",
   "Só na memória até a TV desligar: baixe no celular antes de reinstalar.": "محفوظة مؤقتاً لين يطفي التلفزيون بس: نزّلها في جوالك قبل ما تعيد التثبيت.",
   "Restaurar a cópia anterior": "استرجع النسخة اللي قبلها",
+  "Importar do celular ou do PC": "استيراد من الجوال أو الكمبيوتر",
+  "Escolha o arquivo stremio7m-backup.json e envie para esta TV": "اختر ملف stremio7m-backup.json وأرسله لهذا التلفزيون",
+  "1. Celular: aponte a câmera. PC: abra {url} e digite o PIN {pin}.": "١. الجوال: وجّه الكاميرا. الكمبيوتر: افتح {url} واكتب الرقم السري {pin}.",
+  "2. Em \"Devolver uma cópia\", escolha o arquivo stremio7m-backup.json (o maior) e toque em Enviar.": "٢. في \"رجّع نسخة للتلفزيون\" اختر ملف stremio7m-backup.json (الأكبر حجماً) واضغط أرسل للتلفزيون.",
+  "3. Aqui na TV, confirme Restaurar.": "٣. هنا في التلفزيون اضغط استرجاع.",
 };

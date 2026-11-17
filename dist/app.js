@@ -6173,7 +6173,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Achei uma cópia de segurança de {date} nesta TV. Restaurar tudo agora?": "I found a backup from {date} on this TV. Restore everything now?",
     "Guardada no armazenamento da TV (não se perde ao reinstalar).": "Kept in the TV's storage (not lost when reinstalling).",
     "Só na memória até a TV desligar: baixe no celular antes de reinstalar.": "Only in memory until the TV turns off: download it to your phone before reinstalling.",
-    "Restaurar a cópia anterior": "Restore the previous copy"
+    "Restaurar a cópia anterior": "Restore the previous copy",
+    "Importar do celular ou do PC": "Import from the phone or PC",
+    "Escolha o arquivo stremio7m-backup.json e envie para esta TV": "Pick the stremio7m-backup.json file and send it to this TV",
+    "1. Celular: aponte a câmera. PC: abra {url} e digite o PIN {pin}.": "1. Phone: point the camera. PC: open {url} and type the PIN {pin}.",
+    '2. Em "Devolver uma cópia", escolha o arquivo stremio7m-backup.json (o maior) e toque em Enviar.': '2. Under "Send a copy back", pick stremio7m-backup.json (the bigger one) and tap Send.',
+    "3. Aqui na TV, confirme Restaurar.": "3. Here on the TV, confirm Restore."
   };
 
   // src/js/lib/i18n-ar.js
@@ -7453,7 +7458,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Achei uma cópia de segurança de {date} nesta TV. Restaurar tudo agora?": "لقيت نسخة احتياطية من {date} في هذا التلفزيون. ترجّع كل شي الحين؟",
     "Guardada no armazenamento da TV (não se perde ao reinstalar).": "محفوظة في ذاكرة التلفزيون (ما تضيع لو أعدت التثبيت).",
     "Só na memória até a TV desligar: baixe no celular antes de reinstalar.": "محفوظة مؤقتاً لين يطفي التلفزيون بس: نزّلها في جوالك قبل ما تعيد التثبيت.",
-    "Restaurar a cópia anterior": "استرجع النسخة اللي قبلها"
+    "Restaurar a cópia anterior": "استرجع النسخة اللي قبلها",
+    "Importar do celular ou do PC": "استيراد من الجوال أو الكمبيوتر",
+    "Escolha o arquivo stremio7m-backup.json e envie para esta TV": "اختر ملف stremio7m-backup.json وأرسله لهذا التلفزيون",
+    "1. Celular: aponte a câmera. PC: abra {url} e digite o PIN {pin}.": "١. الجوال: وجّه الكاميرا. الكمبيوتر: افتح {url} واكتب الرقم السري {pin}.",
+    '2. Em "Devolver uma cópia", escolha o arquivo stremio7m-backup.json (o maior) e toque em Enviar.': '٢. في "رجّع نسخة للتلفزيون" اختر ملف stremio7m-backup.json (الأكبر حجماً) واضغط أرسل للتلفزيون.',
+    "3. Aqui na TV, confirme Restaurar.": "٣. هنا في التلفزيون اضغط استرجاع."
   };
 
   // src/js/lib/i18n-es.js
@@ -28523,7 +28533,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T22:06:51.847Z";
+  var BUILD = "2026-11-17T22:18:10.240Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -29372,6 +29382,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       });
       body.appendChild(saveRow);
+      body.appendChild(row3("📲 " + t("Importar do celular ou do PC"), t("Escolha o arquivo stremio7m-backup.json e envie para esta TV"), "", function () {
+        return importQr();
+      }));
       var tvRow = row3("↩️ " + t("Restaurar a cópia da TV"), t("Procurando..."), "", function () {
         onTv().then(function (b) {
           if (!b) return toast(t("Não há cópia na TV."), 5e3);
@@ -29436,6 +29449,47 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             pin: i.pin
           })
         })]));
+      });
+    }
+    function importQr() {
+      info2().then(function (i) {
+        var url2 = backupUrl(i);
+        if (!url2) return toast(t("O serviço da TV não está rodando. Feche o app e abra de novo."), 5e3);
+        var close = h("div.btn.primary", {
+          focusable: true,
+          "data-autofocus": "",
+          text: t("Fechar"),
+          onSelect: function onSelect() {
+            return done();
+          }
+        });
+        var box = h("div.modal-box.center.qr-modal", null, [h("h3", {
+          text: t("Importar do celular ou do PC")
+        }), h("img.phone-qr", {
+          src: qrImage(url2, 320),
+          alt: ""
+        }), h("div.modal-text", {
+          text: t("1. Celular: aponte a câmera. PC: abra {url} e digite o PIN {pin}.", {
+            url: "http://" + i.ip + ":" + i.port + "/backup",
+            pin: i.pin
+          })
+        }), h("div.modal-text", {
+          text: t('2. Em "Devolver uma cópia", escolha o arquivo stremio7m-backup.json (o maior) e toque em Enviar.')
+        }), h("div.modal-text", {
+          text: t("3. Aqui na TV, confirme Restaurar.")
+        }), h("div.modal-actions", null, close)]);
+        var modal = h("div.modal", null, box);
+        document.getElementById("app").appendChild(modal);
+        var layer = pushLayer(modal, {
+          onBack: function onBack() {
+            return done();
+          }
+        });
+        focusFirst(modal);
+        function done() {
+          popLayer(layer);
+          if (modal.parentNode) modal.parentNode.removeChild(modal);
+        }
       });
     }
     function openPage(name, focus2) {
