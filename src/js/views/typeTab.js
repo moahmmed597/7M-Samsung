@@ -9,6 +9,7 @@ import * as addons from '../api/addons.js';
 import * as nc from '../api/nuvioCollections.js';
 import { collectionRows } from './nuvioHome.js';
 import { buildRow } from './home.js';
+import { SearchView } from './search.js';
 
 // Collection groups shown in each tab (names as in collections/home.json).
 export const MOVIE_GROUPS = ['Film Collections', 'Legendary Directors', 'Actors', 'Studios', 'By Decade', 'Awards', 'International Cinema', 'Documentaries'];
@@ -24,6 +25,11 @@ function TypeView(type) {
   const rows = h('div.rows');
   scroller.appendChild(bar);
   scroller.appendChild(h('div.row-title.catalog-title', { text: type === 'movie' ? t('Filmes') : t('Séries') }));
+  scroller.appendChild(
+    h('div.details-buttons', { 'data-group': '' }, [
+      h('div.btn', { focusable: true, onSelect: () => router.push(SearchView(type)) }, [h('span.ico', { text: '🔍' }), type === 'movie' ? t('Buscar filmes') : t('Buscar séries')]),
+    ])
+  );
   scroller.appendChild(rows);
   el.appendChild(scroller);
 

@@ -5043,6 +5043,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Relacionadas": "Related",
+    "Saga": "Saga",
+    "Ordem": "Order",
+    "Coleções ligadas": "Related collections",
+    "Buscar filmes...": "Search movies...",
+    "Buscar séries...": "Search series...",
+    "Buscar filmes": "Search movies",
+    "Buscar séries": "Search series",
+    "Buscar animes": "Search anime",
+    "Buscar mangás": "Search manga",
     "Atualizar todos": "Update all",
     "baixa de novo do GitHub": "downloads them again from GitHub",
     "Atualizando...": "Updating...",
@@ -5524,6 +5534,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Relacionadas": "مرتبطة",
+    "Saga": "السلسلة",
+    "Ordem": "الترتيب",
+    "Coleções ligadas": "سلاسل مرتبطة",
+    "Buscar filmes...": "ابحث عن فيلم...",
+    "Buscar séries...": "ابحث عن مسلسل...",
+    "Buscar filmes": "ابحث في الأفلام",
+    "Buscar séries": "ابحث في المسلسلات",
+    "Buscar animes": "ابحث في الأنمي",
+    "Buscar mangás": "ابحث في المانجا",
     "Atualizar todos": "تحديث الكل",
     "baixa de novo do GitHub": "يحمّلها من جديد من GitHub",
     "Atualizando...": "جاري التحديث...",
@@ -15925,6 +15945,19 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var bar = topbar("anime", goTab);
     var rows2 = h("div.rows");
     scroller.appendChild(bar);
+    scroller.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return promptText(t("Buscar animes"), "", "Naruto, One Piece...", function (q2) {
+          var v = q2.trim();
+          if (v) push(AnimeGridView("🔍 " + v, "search: " + JSON.stringify(v) + ", sort: SEARCH_MATCH"));
+        });
+      }
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar animes")])]));
     scroller.appendChild(rows2);
     el.appendChild(scroller);
     var pending2 = [];
@@ -20888,6 +20921,20 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var list2 = ordered(f, order2);
       var done = list2.filter(itemWatched).length;
       clear(head);
+      var art = (f.items.find(function (it) {
+        return /^tt\d+/.test(it[0]);
+      }) || [])[0];
+      if (art) {
+        var im = h("img.fh-art", {
+          alt: ""
+        });
+        im.onerror = function () {
+          return im.parentNode && im.parentNode.removeChild(im);
+        };
+        im.src = "https://wsrv.nl/?url=" + encodeURIComponent("https://images.metahub.space/background/medium/" + art + "/img") + "&w=1280&h=420&fit=cover&output=jpg&q=70";
+        head.appendChild(im);
+        head.appendChild(h("div.fh-shade"));
+      }
       head.appendChild(h("h1", {
         text: displayName(f)
       }));
@@ -20901,17 +20948,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }));
       clear(filters);
       var next = nextUp(list2);
-      if (next) {
-        filters.appendChild(h("div.chip.primary-chip", {
-          focusable: true,
-          onSelect: function onSelect() {
-            return open2(next);
-          }
-        }, "▶ " + t("Próximo: {title}", {
-          title: next[1]
-        })));
-      }
-      var chip = function chip(key4, label, active3, onSelect) {
+      if (next) filters.appendChild(h("div.chip.primary-chip", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return open2(next);
+        }
+      }, "▶ " + t("Próximo: {title}", {
+        title: next[1]
+      })));
+      var btn = function btn(key4, label, onSelect, active3) {
         var c = h("div.chip", {
           focusable: true,
           cls: active3 ? "active" : "",
@@ -20919,25 +20964,31 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           onSelect: onSelect
         });
         c.__key = key4;
-        return c;
+        filters.appendChild(c);
+      };
+      var choose = function choose(key4, title, options, cur, set2) {
+        return menu(title, options.map(function (o) {
+          return {
+            label: o[1],
+            value: o[0],
+            checked: o[0] === cur
+          };
+        }), {
+          onPick: function onPick(v) {
+            set2(v);
+            render(key4);
+          }
+        });
       };
       if (f.id === "mcu") {
-        filters.appendChild(chip("saga_all", t("Todos"), sagaFilter === "all", function () {
-          sagaFilter = "all";
-          render("saga_all");
-        }));
-        filters.appendChild(chip("saga_mcu", t("Marvel Studios"), sagaFilter === "mcu_core", function () {
-          sagaFilter = "mcu_core";
-          render("saga_mcu");
-        }));
-        filters.appendChild(chip("saga_xmen", "X-Men", sagaFilter === "xmen", function () {
-          sagaFilter = "xmen";
-          render("saga_xmen");
-        }));
-        filters.appendChild(chip("saga_spidey", "Spider-Man", sagaFilter === "spiderman", function () {
-          sagaFilter = "spiderman";
-          render("saga_spidey");
-        }));
+        var SAGAS = [["all", t("Todos")], ["mcu_core", t("Marvel Studios")], ["xmen", "X-Men"], ["spiderman", "Spider-Man"]];
+        btn("saga", t("Saga") + ": " + SAGAS.find(function (x) {
+          return x[0] === sagaFilter;
+        })[1] + " ▾", function () {
+          return choose("saga", t("Saga"), SAGAS, sagaFilter, function (v) {
+            return sagaFilter = v;
+          });
+        }, sagaFilter !== "all");
       }
       var hasMovies = f.items.some(function (it) {
         return !isSeriesItem(it);
@@ -20946,50 +20997,51 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return isSeriesItem(it);
       });
       if (hasMovies && hasSeries) {
-        filters.appendChild(chip("type_all", t("Todos"), mediaFilter === "all", function () {
-          mediaFilter = "all";
-          render("type_all");
-        }));
-        filters.appendChild(chip("type_movies", t("Só filmes"), mediaFilter === "movies", function () {
-          mediaFilter = "movies";
-          render("type_movies");
-        }));
-        filters.appendChild(chip("type_series", t("Só séries"), mediaFilter === "series", function () {
-          mediaFilter = "series";
-          render("type_series");
-        }));
+        var KINDS3 = [["all", t("Todos")], ["movies", t("Só filmes")], ["series", t("Só séries")]];
+        btn("type", t("Mostrar") + ": " + KINDS3.find(function (x) {
+          return x[0] === mediaFilter;
+        })[1] + " ▾", function () {
+          return choose("type", t("Mostrar"), KINDS3, mediaFilter, function (v) {
+            return mediaFilter = v;
+          });
+        }, mediaFilter !== "all");
       }
-      filters.appendChild(chip("release", t("Ordem de lançamento"), order2 === "release", function () {
-        order2 = "release";
-        setOrder(f, order2);
-        render("release");
-      }));
       if (f.chrono) {
-        filters.appendChild(chip("chrono", t("Ordem da história"), order2 === "chrono", function () {
-          order2 = "chrono";
-          setOrder(f, order2);
-          render("chrono");
-        }));
+        var ORDERS = [["release", t("Ordem de lançamento")], ["chrono", t("Ordem da história")]];
+        btn("order", ORDERS.find(function (x) {
+          return x[0] === order2;
+        })[1] + " ▾", function () {
+          return choose("order", t("Ordem"), ORDERS, order2, function (v) {
+            order2 = v;
+            setOrder(f, v);
+          });
+        });
       }
-      filters.appendChild(chip("hide", t("Esconder assistidos"), hideWatched, function () {
+      btn("hide", (hideWatched ? "☑ " : "☐ ") + t("Esconder assistidos"), function () {
         hideWatched = !hideWatched;
         render("hide");
-      }));
-      filters.appendChild(chip("fav", isFav2(f.id) ? "★ " + t("Fixada no topo") : "☆ " + t("Fixar no topo"), isFav2(f.id), function () {
+      }, hideWatched);
+      btn("fav", isFav2(f.id) ? "★ " + t("Fixada no topo") : "☆ " + t("Fixar no topo"), function () {
         var on = toggleFav2(f);
         toast(on ? t("Fixada no topo da aba Coleções") : t("Removida das favoritas"));
         render("fav");
-      }));
-      if (f.related && f.related.length) {
-        f.related.forEach(function (relId) {
-          var relF = findFranchise(relId);
-          if (relF) {
-            filters.appendChild(chip("rel_" + relId, "🔗 " + displayName(relF), false, function () {
-              return push(FranchiseView(relF));
-            }));
+      }, isFav2(f.id));
+      var rel = (f.related || []).map(findFranchise).filter(Boolean);
+      if (rel.length) btn("rel", "🔗 " + t("Relacionadas") + " ▾", function () {
+        return menu(t("Coleções ligadas"), rel.map(function (r) {
+          return {
+            label: displayName(r),
+            sub: t("{n} títulos", {
+              n: r.items.length
+            }),
+            value: r
+          };
+        }), {
+          onPick: function onPick(r) {
+            return openFranchise(r);
           }
         });
-      }
+      });
       clear(grid);
       var count = 0;
       list2.forEach(function (it, i) {
@@ -21219,6 +21271,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(h("div.details-buttons", {
       "data-group": ""
     }, [h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return promptText(t("Buscar mangás"), "", "One Piece, Solo Leveling...", function (q2) {
+          var v = q2.trim();
+          if (v) push(MangaGridView("🔍 " + v, "search: " + JSON.stringify(v) + ", sort: SEARCH_MATCH"));
+        });
+      }
+    }, [h("span.ico", {
+      text: "🔍"
+    }), t("Buscar mangás")]), h("div.btn", {
       focusable: true,
       onSelect: function onSelect() {
         return openSources("manga");
@@ -23678,120 +23740,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
-  // src/js/views/typeTab.js
-  var MOVIE_GROUPS = ["Film Collections", "Legendary Directors", "Actors", "Studios", "By Decade", "Awards", "International Cinema", "Documentaries"];
-  var SERIES_GROUPS = ["Streaming Services", "Networks", "Reality TV"];
-  function TypeView(type) {
-    var tab = type === "movie" ? "movies" : "series";
-    var el = h("div.view");
-    var scroller = h("div.scroll-y", {
-      "data-scroll-y": ""
-    });
-    var bar = topbar(tab, goTab);
-    var rows2 = h("div.rows");
-    scroller.appendChild(bar);
-    scroller.appendChild(h("div.row-title.catalog-title", {
-      text: type === "movie" ? t("Filmes") : t("Séries")
-    }));
-    scroller.appendChild(rows2);
-    el.appendChild(scroller);
-    var pending2 = [];
-    var active3 = 0;
-    function loadNearby() {
-      if (el.offsetParent === null) return;
-      var limit = window.innerHeight * 2.2;
-      var _loop14 = function _loop14() {
-          var p = pending2[i];
-          if (p.state) return 0; // continue
-          if (p.row.getBoundingClientRect().top > limit) return 1; // break
-          p.state = "loading";
-          active3++;
-          Promise.resolve(p.load()).then(function () {
-            p.state = "done";
-            active3--;
-            loadNearby();
-          }, function () {
-            p.state = "done";
-            active3--;
-            loadNearby();
-          });
-        },
-        _ret8;
-      for (var i = 0; i < pending2.length && active3 < 2; i++) {
-        _ret8 = _loop14();
-        if (_ret8 === 0) continue;
-        if (_ret8 === 1) break;
-      }
-    }
-    var loaded2 = false;
-    function render() {
-      loaded2 = true;
-      clear(rows2);
-      rows2.appendChild(spinnerLine(t("Carregando catálogos...")));
-      load().then(function () {
-        clear(rows2);
-        var cats = boardCatalogs().filter(function (c) {
-          return c.catalog && c.catalog.type === type;
-        });
-        pending2 = cats.map(function (c) {
-          return Object.assign(buildRow(c, rows2), {
-            state: ""
-          });
-        });
-        var box = h("div");
-        rows2.appendChild(box);
-        var groups = type === "movie" ? MOVIE_GROUPS : SERIES_GROUPS;
-        load5("home").then(function (data) {
-          var list2 = collectionRows(box, data.filter(function (c) {
-            return groups.indexOf(c.t) >= 0;
-          })).map(function (x) {
-            return Object.assign(x, {
-              state: ""
-            });
-          });
-          pending2 = pending2.concat(list2);
-          loadNearby();
-        }).catch(function () {});
-        loadNearby();
-      });
-    }
-    return {
-      el: el,
-      onShow: function onShow() {
-        if (!loaded2) render();
-        loadNearby();
-        loadVisibleImages(el);
-      },
-      onScroll: function onScroll() {
-        return loadNearby();
-      },
-      freeMemory: function freeMemory() {
-        pending2 = [];
-        clear(rows2);
-        loaded2 = false;
-      },
-      destroy: function destroy() {
-        return bar.__destroy && bar.__destroy();
-      }
-    };
-  }
-  var MoviesView = function MoviesView() {
-    return TypeView("movie");
-  };
-  var SeriesView = function SeriesView() {
-    return TypeView("series");
-  };
-
   // src/js/views/search.js
-  function SearchView() {
+  function SearchView(only) {
     var el = h("div.view");
     var scroller = h("div.scroll-y", {
       "data-scroll-y": ""
     });
-    var bar = topbar("search", goTab);
+    var bar = topbar(only === "movie" ? "movies" : only === "series" ? "series" : "search", goTab);
     var input = h("input.input", {
       type: "text",
-      placeholder: t("Buscar filmes e séries..."),
+      placeholder: only === "movie" ? t("Buscar filmes...") : only === "series" ? t("Buscar séries...") : t("Buscar filmes e séries..."),
       focusable: true,
       "data-autofocus": ""
     });
@@ -23890,7 +23848,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (my !== token) return;
         clear(results);
         if (people.firstChild) results.appendChild(people);
-        var cats = searchCatalogs();
+        var cats = searchCatalogs().filter(function (c) {
+          return !only || c.catalog && c.catalog.type === only;
+        });
         if (!cats.length) results.appendChild(h("div.hint", {
           text: t("Nenhum addon com busca instalado.")
         }));
@@ -23952,6 +23912,120 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     };
   }
+
+  // src/js/views/typeTab.js
+  var MOVIE_GROUPS = ["Film Collections", "Legendary Directors", "Actors", "Studios", "By Decade", "Awards", "International Cinema", "Documentaries"];
+  var SERIES_GROUPS = ["Streaming Services", "Networks", "Reality TV"];
+  function TypeView(type) {
+    var tab = type === "movie" ? "movies" : "series";
+    var el = h("div.view");
+    var scroller = h("div.scroll-y", {
+      "data-scroll-y": ""
+    });
+    var bar = topbar(tab, goTab);
+    var rows2 = h("div.rows");
+    scroller.appendChild(bar);
+    scroller.appendChild(h("div.row-title.catalog-title", {
+      text: type === "movie" ? t("Filmes") : t("Séries")
+    }));
+    scroller.appendChild(h("div.details-buttons", {
+      "data-group": ""
+    }, [h("div.btn", {
+      focusable: true,
+      onSelect: function onSelect() {
+        return push(SearchView(type));
+      }
+    }, [h("span.ico", {
+      text: "🔍"
+    }), type === "movie" ? t("Buscar filmes") : t("Buscar séries")])]));
+    scroller.appendChild(rows2);
+    el.appendChild(scroller);
+    var pending2 = [];
+    var active3 = 0;
+    function loadNearby() {
+      if (el.offsetParent === null) return;
+      var limit = window.innerHeight * 2.2;
+      var _loop14 = function _loop14() {
+          var p = pending2[i];
+          if (p.state) return 0; // continue
+          if (p.row.getBoundingClientRect().top > limit) return 1; // break
+          p.state = "loading";
+          active3++;
+          Promise.resolve(p.load()).then(function () {
+            p.state = "done";
+            active3--;
+            loadNearby();
+          }, function () {
+            p.state = "done";
+            active3--;
+            loadNearby();
+          });
+        },
+        _ret8;
+      for (var i = 0; i < pending2.length && active3 < 2; i++) {
+        _ret8 = _loop14();
+        if (_ret8 === 0) continue;
+        if (_ret8 === 1) break;
+      }
+    }
+    var loaded2 = false;
+    function render() {
+      loaded2 = true;
+      clear(rows2);
+      rows2.appendChild(spinnerLine(t("Carregando catálogos...")));
+      load().then(function () {
+        clear(rows2);
+        var cats = boardCatalogs().filter(function (c) {
+          return c.catalog && c.catalog.type === type;
+        });
+        pending2 = cats.map(function (c) {
+          return Object.assign(buildRow(c, rows2), {
+            state: ""
+          });
+        });
+        var box = h("div");
+        rows2.appendChild(box);
+        var groups = type === "movie" ? MOVIE_GROUPS : SERIES_GROUPS;
+        load5("home").then(function (data) {
+          var list2 = collectionRows(box, data.filter(function (c) {
+            return groups.indexOf(c.t) >= 0;
+          })).map(function (x) {
+            return Object.assign(x, {
+              state: ""
+            });
+          });
+          pending2 = pending2.concat(list2);
+          loadNearby();
+        }).catch(function () {});
+        loadNearby();
+      });
+    }
+    return {
+      el: el,
+      onShow: function onShow() {
+        if (!loaded2) render();
+        loadNearby();
+        loadVisibleImages(el);
+      },
+      onScroll: function onScroll() {
+        return loadNearby();
+      },
+      freeMemory: function freeMemory() {
+        pending2 = [];
+        clear(rows2);
+        loaded2 = false;
+      },
+      destroy: function destroy() {
+        return bar.__destroy && bar.__destroy();
+      }
+    };
+  }
+  var MoviesView = function MoviesView() {
+    return TypeView("movie");
+  };
+  var SeriesView = function SeriesView() {
+    return TypeView("series");
+  };
 
   // src/js/views/library.js
   var FILTERS = [{
@@ -24044,7 +24118,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T08:18:13.128Z";
+  var BUILD = "2026-11-17T08:24:10.846Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

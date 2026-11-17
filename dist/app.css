@@ -895,3 +895,10 @@ body .card.anime-tile.publisher .poster-wrap { width: 300px; height: 169px; }
 .anime-tile .tile-art.cover-top { object-position: center 18%; }
 /* The sidebar (and its box) above everything on the page: tile names must never show over it */
 .side-anchor { z-index: 300 !important; }
+
+/* A collection's page: a picture behind the title, one tidy row of choices */
+.franchise-head { position: relative; overflow: hidden; min-height: 230px; padding-top: 40px; padding-bottom: 26px; }
+.franchise-head .fh-art { position: absolute; right: 0; top: 0; width: 1280px; height: 420px; object-fit: cover; z-index: 0; opacity: 0.55; }
+.franchise-head .fh-shade { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 1; background: linear-gradient(to right, #0b0f19 18%, rgba(11,15,25,0.6) 55%, rgba(11,15,25,0.15)), linear-gradient(to top, #0b0f19, rgba(11,15,25,0) 60%); }
+.franchise-head h1, .franchise-head .franchise-sub { position: relative; z-index: 2; }
+body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000 18%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0.15)), linear-gradient(to top, #000, rgba(0,0,0,0) 60%); }

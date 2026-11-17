@@ -10,11 +10,12 @@ import * as extras from '../api/extras.js';
 import { PersonView } from './person.js';
 import * as store from '../lib/store.js';
 
-export function SearchView() {
+// only: 'movie' or 'series' to search one kind (the Search button of the Movies / Series tabs).
+export function SearchView(only) {
   const el = h('div.view');
   const scroller = h('div.scroll-y', { 'data-scroll-y': '' });
-  const bar = topbar('search', router.goTab);
-  const input = h('input.input', { type: 'text', placeholder: t('Buscar filmes e séries...'), focusable: true, 'data-autofocus': '' });
+  const bar = topbar(only === 'movie' ? 'movies' : only === 'series' ? 'series' : 'search', router.goTab);
+  const input = h('input.input', { type: 'text', placeholder: only === 'movie' ? t('Buscar filmes...') : only === 'series' ? t('Buscar séries...') : t('Buscar filmes e séries...'), focusable: true, 'data-autofocus': '' });
   const results = h('div.rows');
   scroller.appendChild(bar);
   const history = h('div.filters.search-history', { 'data-group': '' });
@@ -102,7 +103,7 @@ export function SearchView() {
       if (my !== token) return;
       clear(results);
       if (people.firstChild) results.appendChild(people);
-      const cats = addons.searchCatalogs();
+      const cats = addons.searchCatalogs().filter((c) => !only || (c.catalog && c.catalog.type === only));
       if (!cats.length) results.appendChild(h('div.hint', { text: t('Nenhum addon com busca instalado.') }));
       let found = 0;
       let pending = cats.length;

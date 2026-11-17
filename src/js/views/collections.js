@@ -496,6 +496,14 @@ function FranchiseView(f) {
     const list = ordered(f, order);
     const done = list.filter(itemWatched).length;
     clear(head);
+    const art = (f.items.find((it) => /^tt\d+/.test(it[0])) || [])[0];
+    if (art) {
+      const im = h('img.fh-art', { alt: '' });
+      im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
+      im.src = 'https://wsrv.nl/?url=' + encodeURIComponent('https://images.metahub.space/background/medium/' + art + '/img') + '&w=1280&h=420&fit=cover&output=jpg&q=70';
+      head.appendChild(im);
+      head.appendChild(h('div.fh-shade'));
+    }
     head.appendChild(h('h1', { text: displayName(f) }));
     head.appendChild(
       h('div.franchise-sub', {
@@ -508,104 +516,54 @@ function FranchiseView(f) {
     );
 
     clear(filters);
+    // One tidy row: "Next" first, then each choice as one button that opens its menu.
     const next = nextUp(list);
-    if (next) {
-      filters.appendChild(
-        h('div.chip.primary-chip', { focusable: true, onSelect: () => open(next) }, '▶ ' + t('Próximo: {title}', { title: next[1] }))
-      );
-    }
-    const chip = (key, label, active, onSelect) => {
+    if (next) filters.appendChild(h('div.chip.primary-chip', { focusable: true, onSelect: () => open(next) }, '▶ ' + t('Próximo: {title}', { title: next[1] })));
+    const btn = (key, label, onSelect, active) => {
       const c = h('div.chip', { focusable: true, cls: active ? 'active' : '', text: label, onSelect: onSelect });
       c.__key = key;
-      return c;
+      filters.appendChild(c);
     };
+    const choose = (key, title, options, cur, set) =>
+      menu(title, options.map((o) => ({ label: o[1], value: o[0], checked: o[0] === cur })), {
+        onPick: (v) => {
+          set(v);
+          render(key);
+        },
+      });
     if (f.id === 'mcu') {
-      filters.appendChild(
-        chip('saga_all', t('Todos'), sagaFilter === 'all', () => {
-          sagaFilter = 'all';
-          render('saga_all');
-        })
-      );
-      filters.appendChild(
-        chip('saga_mcu', t('Marvel Studios'), sagaFilter === 'mcu_core', () => {
-          sagaFilter = 'mcu_core';
-          render('saga_mcu');
-        })
-      );
-      filters.appendChild(
-        chip('saga_xmen', 'X-Men', sagaFilter === 'xmen', () => {
-          sagaFilter = 'xmen';
-          render('saga_xmen');
-        })
-      );
-      filters.appendChild(
-        chip('saga_spidey', 'Spider-Man', sagaFilter === 'spiderman', () => {
-          sagaFilter = 'spiderman';
-          render('saga_spidey');
-        })
-      );
+      const SAGAS = [['all', t('Todos')], ['mcu_core', t('Marvel Studios')], ['xmen', 'X-Men'], ['spiderman', 'Spider-Man']];
+      btn('saga', t('Saga') + ': ' + SAGAS.find((x) => x[0] === sagaFilter)[1] + ' ▾', () => choose('saga', t('Saga'), SAGAS, sagaFilter, (v) => (sagaFilter = v)), sagaFilter !== 'all');
     }
     const hasMovies = f.items.some((it) => !isSeriesItem(it));
     const hasSeries = f.items.some((it) => isSeriesItem(it));
     if (hasMovies && hasSeries) {
-      filters.appendChild(
-        chip('type_all', t('Todos'), mediaFilter === 'all', () => {
-          mediaFilter = 'all';
-          render('type_all');
-        })
-      );
-      filters.appendChild(
-        chip('type_movies', t('Só filmes'), mediaFilter === 'movies', () => {
-          mediaFilter = 'movies';
-          render('type_movies');
-        })
-      );
-      filters.appendChild(
-        chip('type_series', t('Só séries'), mediaFilter === 'series', () => {
-          mediaFilter = 'series';
-          render('type_series');
-        })
-      );
+      const KINDS = [['all', t('Todos')], ['movies', t('Só filmes')], ['series', t('Só séries')]];
+      btn('type', t('Mostrar') + ': ' + KINDS.find((x) => x[0] === mediaFilter)[1] + ' ▾', () => choose('type', t('Mostrar'), KINDS, mediaFilter, (v) => (mediaFilter = v)), mediaFilter !== 'all');
     }
-    filters.appendChild(
-      chip('release', t('Ordem de lançamento'), order === 'release', () => {
-        order = 'release';
-        setOrder(f, order);
-        render('release');
-      })
-    );
     if (f.chrono) {
-      filters.appendChild(
-        chip('chrono', t('Ordem da história'), order === 'chrono', () => {
-          order = 'chrono';
-          setOrder(f, order);
-          render('chrono');
+      const ORDERS = [['release', t('Ordem de lançamento')], ['chrono', t('Ordem da história')]];
+      btn('order', ORDERS.find((x) => x[0] === order)[1] + ' ▾', () =>
+        choose('order', t('Ordem'), ORDERS, order, (v) => {
+          order = v;
+          setOrder(f, v);
         })
       );
     }
-    filters.appendChild(
-      chip('hide', t('Esconder assistidos'), hideWatched, () => {
-        hideWatched = !hideWatched;
-        render('hide');
-      })
-    );
-    filters.appendChild(
-      chip('fav', isFav(f.id) ? '★ ' + t('Fixada no topo') : '☆ ' + t('Fixar no topo'), isFav(f.id), () => {
-        const on = toggleFav(f);
-        toast(on ? t('Fixada no topo da aba Coleções') : t('Removida das favoritas'));
-        render('fav');
-      })
-    );
-    if (f.related && f.related.length) {
-      f.related.forEach((relId) => {
-        const relF = findFranchise(relId);
-        if (relF) {
-          filters.appendChild(
-            chip('rel_' + relId, '🔗 ' + displayName(relF), false, () => router.push(FranchiseView(relF)))
-          );
-        }
-      });
-    }
+    btn('hide', (hideWatched ? '☑ ' : '☐ ') + t('Esconder assistidos'), () => {
+      hideWatched = !hideWatched;
+      render('hide');
+    }, hideWatched);
+    btn('fav', isFav(f.id) ? '★ ' + t('Fixada no topo') : '☆ ' + t('Fixar no topo'), () => {
+      const on = toggleFav(f);
+      toast(on ? t('Fixada no topo da aba Coleções') : t('Removida das favoritas'));
+      render('fav');
+    }, isFav(f.id));
+    const rel = (f.related || []).map(findFranchise).filter(Boolean);
+    if (rel.length)
+      btn('rel', '🔗 ' + t('Relacionadas') + ' ▾', () =>
+        menu(t('Coleções ligadas'), rel.map((r) => ({ label: displayName(r), sub: t('{n} títulos', { n: r.items.length }), value: r })), { onPick: (r) => openFranchise(r) })
+      );
 
     clear(grid);
     let count = 0;

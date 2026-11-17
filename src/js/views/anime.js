@@ -5,7 +5,7 @@
 import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
 import { postJSON, getJSON } from '../lib/http.js';
-import { topbar, card, spinnerLine, toast } from '../ui.js';
+import { topbar, card, spinnerLine, toast, promptText } from '../ui.js';
 import * as router from '../router.js';
 import * as addons from '../api/addons.js';
 import { openDetails } from './details.js';
@@ -260,6 +260,18 @@ export function AnimeView() {
   const bar = topbar('anime', router.goTab);
   const rows = h('div.rows');
   scroller.appendChild(bar);
+  scroller.appendChild(
+    h('div.details-buttons', { 'data-group': '' }, [
+      h('div.btn', {
+        focusable: true,
+        onSelect: () =>
+          promptText(t('Buscar animes'), '', 'Naruto, One Piece...', (q) => {
+            const v = q.trim();
+            if (v) router.push(AnimeGridView('🔍 ' + v, 'search: ' + JSON.stringify(v) + ', sort: SEARCH_MATCH'));
+          }),
+      }, [h('span.ico', { text: '🔍' }), t('Buscar animes')]),
+    ])
+  );
   scroller.appendChild(rows);
   el.appendChild(scroller);
 

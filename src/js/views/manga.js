@@ -5,7 +5,7 @@ import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as nav from '../lib/nav.js';
 import { postJSON } from '../lib/http.js';
 import * as store from '../lib/store.js';
-import { topbar, card, spinnerLine, toast } from '../ui.js';
+import { topbar, card, spinnerLine, toast, promptText } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { tileRow, setTileArt, slug, SEASONS, SEASON_ART_URLS, SEASON_FALLBACK_URLS } from './anime.js';
@@ -142,7 +142,19 @@ export function MangaView() {
   const rows = h('div.rows');
   scroller.appendChild(bar);
   // Sources of your own Suwayomi server (the app ships none).
-  scroller.appendChild(h('div.details-buttons', { 'data-group': '' }, [h('div.btn', { focusable: true, onSelect: () => openSources('manga') }, [h('span.ico', { text: '📚' }), t('Minhas fontes')])]));
+  scroller.appendChild(
+    h('div.details-buttons', { 'data-group': '' }, [
+      h('div.btn', {
+        focusable: true,
+        onSelect: () =>
+          promptText(t('Buscar mangás'), '', 'One Piece, Solo Leveling...', (q) => {
+            const v = q.trim();
+            if (v) router.push(MangaGridView('🔍 ' + v, 'search: ' + JSON.stringify(v) + ', sort: SEARCH_MATCH'));
+          }),
+      }, [h('span.ico', { text: '🔍' }), t('Buscar mangás')]),
+      h('div.btn', { focusable: true, onSelect: () => openSources('manga') }, [h('span.ico', { text: '📚' }), t('Minhas fontes')]),
+    ])
+  );
   const shelves = h('div');
   scroller.appendChild(shelves);
   scroller.appendChild(rows);
