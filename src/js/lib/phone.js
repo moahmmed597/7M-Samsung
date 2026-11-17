@@ -163,7 +163,7 @@ export function start() {
       if (r) last = r.last || 0;
       svcVersion = (r && r.version) || 1;
       // An old copy keeps running after an app update: ask it to quit (newer ones can), then start the new one.
-      if (svcVersion < 4) {
+      if (svcVersion < 5) {
         request(BASE + '/api/exit', 3000).then(
           () => setTimeout(startService, 1500),
           () => {}

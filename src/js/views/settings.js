@@ -951,6 +951,25 @@ export function SettingsView() {
 
     if (page === 'c-appearance') {
       body.appendChild(h('div.set-section', { text: t('Cores e formas') }));
+      // The two main looks: navy blue (the default) and pure black.
+      const bgNow = s.bgStyle || (s.oled ? 'oled' : 'default');
+      const looks = [
+        { id: 'navy', label: t('Azul-marinho (principal)'), sub: t('Fundo azul-escuro com destaques azuis') },
+        { id: 'black', label: t('Preto'), sub: t('Fundo preto puro, bom para telas OLED') },
+      ];
+      const lookNow = (!s.themePicked || s.theme === 'graphite') && bgNow === 'oled' ? 'black' : (!s.themePicked || s.theme === 'graphite') && bgNow === 'default' ? 'navy' : '';
+      body.appendChild(
+        row(t('Tema'), t('Azul-marinho ou preto'), lookNow ? (looks.find((x) => x.id === lookNow) || {}).label : t('Personalizado'), () =>
+          menu(t('Tema'), looks.map((x) => ({ label: x.label, sub: x.sub, value: x.id, checked: x.id === lookNow })), {
+            onPick: (v) => {
+              store.saveSettings({ theme: 'graphite', themePicked: false, bgStyle: v === 'black' ? 'oled' : 'default', oled: v === 'black' });
+              theme.apply('graphite');
+              theme.applyLook(store.settings());
+              render();
+            },
+          })
+        )
+      );
       const curTheme = theme.THEMES.find((x) => x.id === (s.themePicked ? s.theme : 'graphite')) || theme.THEMES[0];
       body.appendChild(
         row(t('Cor do app'), t('Cor de destaque de botões, foco e barras'), t(curTheme.label), () =>

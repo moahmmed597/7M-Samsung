@@ -10,7 +10,7 @@ var http = require('http');
 var os = require('os');
 
 // Bump when the service changes: a running copy compares it with the newest one on GitHub.
-var SERVICE_VERSION = 4;
+var SERVICE_VERSION = 5;
 var PORT = 8095;
 var HOLD_MS = 25000; // long-poll hold time
 var KEEP = 50; // events kept for late pollers
@@ -160,6 +160,224 @@ function readBody(req, cb, limit) {
 
 // ---- Web requests of manga plugins (see /api/phttp) ----
 var BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
+// ---------- Subtitle timeline of a video file (for automatic subtitle sync) ----------
+// A Matroska (.mkv) file keeps an index ("Cues") that mkvmerge fills with one entry per subtitle line:
+// when it starts and how long it stays. Reading only the file's start and that index (a few hundred KB,
+// with HTTP range requests) gives the timing of every line of the film's own subtitles, without
+// downloading the film. The app lines its add-on subtitle up against it. Written from the Matroska spec.
+var MKV = {
+  EBML: 0x1A45DFA3, SEGMENT: 0x18538067, SEEKHEAD: 0x114D9B74, SEEK: 0x4DBB, SEEKID: 0x53AB, SEEKPOS: 0x53AC,
+  INFO: 0x1549A966, TIMESCALE: 0x2AD7B1, TRACKS: 0x1654AE6B, TRACK: 0xAE, TNUM: 0xD7, TTYPE: 0x83, CODEC: 0x86,
+  LANG: 0x22B59C, LANGBCP: 0x22B59D, TNAME: 0x536E, FORCED: 0x55AA, CUES: 0x1C53BB6B, CUEPOINT: 0xBB,
+  CUETIME: 0xB3, CUEPOS: 0xB7, CUETRACK: 0xF7, CUEDUR: 0xB2, CLUSTER: 0x1F43B675
+};
+var subTimelineCache = {};
+var subTimelineOrder = [];
+
+function rangeGet(target, start, end, hops, done) {
+  var mod = target.protocol === 'http:' ? require('http') : require('https');
+  var finished = false;
+  var finish = function (err, buf, total) {
+    if (finished) return;
+    finished = true;
+    done(err, buf, total);
+  };
+  var r = mod.request({ method: 'GET', hostname: target.hostname, port: target.port || (target.protocol === 'http:' ? 80 : 443), path: target.path, headers: { 'User-Agent': BROWSER_UA, Range: 'bytes=' + start + '-' + end, Accept: '*/*' }, timeout: 20000 }, function (resp) {
+    var loc = resp.headers.location;
+    if (resp.statusCode >= 300 && resp.statusCode < 400 && loc && hops < 6) {
+      resp.resume();
+      return rangeGet(require('url').parse(require('url').resolve(target.protocol + '//' + target.host + target.path, loc)), start, end, hops + 1, finish);
+    }
+    if (resp.statusCode !== 206 && resp.statusCode !== 200) {
+      resp.resume();
+      return finish(new Error('HTTP ' + resp.statusCode));
+    }
+    var total = 0;
+    var cr = /\/(\d+)\s*$/.exec(String(resp.headers['content-range'] || ''));
+    if (cr) total = +cr[1];
+    else if (resp.statusCode === 200) total = +resp.headers['content-length'] || 0;
+    var want = end - start + 1;
+    var chunks = [];
+    var size = 0;
+    resp.on('data', function (c) {
+      chunks.push(c);
+      size += c.length;
+      // A server that ignores Range sends the whole file: stop once we have the part we asked for.
+      if (size >= want) {
+        try { r.abort(); } catch (e) {}
+        var b = Buffer.concat(chunks);
+        finish(null, resp.statusCode === 200 ? b.slice(start, start + want) : b.slice(0, want), total);
+      }
+    });
+    resp.on('end', function () { finish(null, Buffer.concat(chunks).slice(0, want), total); });
+    resp.on('error', function (e) { finish(e); });
+  });
+  r.on('timeout', function () { r.abort(); finish(new Error('timeout')); });
+  r.on('error', function (e) { finish(e); });
+  r.end();
+}
+
+// EBML variable-length numbers. Ids keep their marker bits; sizes drop them.
+function ebmlId(b, p) {
+  var f = b[p];
+  if (f === undefined) return null;
+  var len = f & 0x80 ? 1 : f & 0x40 ? 2 : f & 0x20 ? 3 : f & 0x10 ? 4 : 0;
+  if (!len || p + len > b.length) return null;
+  var v = 0;
+  for (var i = 0; i < len; i++) v = v * 256 + b[p + i];
+  return { v: v, len: len };
+}
+function ebmlSize(b, p) {
+  var f = b[p];
+  if (f === undefined) return null;
+  var len = 1;
+  var mask = 0x80;
+  while (len <= 8 && !(f & mask)) { len++; mask >>= 1; }
+  if (len > 8 || p + len > b.length) return null;
+  var v = f & (mask - 1);
+  var all = v === mask - 1;
+  for (var i = 1; i < len; i++) { v = v * 256 + b[p + i]; if (b[p + i] !== 0xff) all = false; }
+  return { v: all ? -1 : v, len: len };
+}
+// Elements between `from` and `to`: [{ id, start (data), end }]; stops at the first one cut off.
+function ebmlChildren(b, from, to) {
+  var out = [];
+  var p = from;
+  while (p < to) {
+    var id = ebmlId(b, p);
+    if (!id) break;
+    var sz = ebmlSize(b, p + id.len);
+    if (!sz) break;
+    var ds = p + id.len + sz.len;
+    var de = sz.v < 0 ? to : ds + sz.v;
+    out.push({ id: id.v, start: ds, end: de, cut: de > b.length });
+    if (de > b.length) break;
+    p = de;
+  }
+  return out;
+}
+function ebmlUint(b, e) {
+  var v = 0;
+  for (var i = e.start; i < e.end && i < b.length; i++) v = v * 256 + b[i];
+  return v;
+}
+function ebmlStr(b, e) {
+  return b.slice(e.start, Math.min(e.end, b.length)).toString('utf8').replace(/\u0000+$/, '');
+}
+function firstOf(list, id) {
+  for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+  return null;
+}
+
+function parseTracks(b, el) {
+  var out = [];
+  ebmlChildren(b, el.start, Math.min(el.end, b.length)).forEach(function (te) {
+    if (te.id !== MKV.TRACK) return;
+    var k = ebmlChildren(b, te.start, Math.min(te.end, b.length));
+    var g = function (id) { return firstOf(k, id); };
+    var type = g(MKV.TTYPE) ? ebmlUint(b, g(MKV.TTYPE)) : 0;
+    if (type !== 17) return; // subtitles only
+    out.push({
+      number: g(MKV.TNUM) ? ebmlUint(b, g(MKV.TNUM)) : 0,
+      codec: g(MKV.CODEC) ? ebmlStr(b, g(MKV.CODEC)) : '',
+      lang: g(MKV.LANGBCP) ? ebmlStr(b, g(MKV.LANGBCP)) : g(MKV.LANG) ? ebmlStr(b, g(MKV.LANG)) : 'eng',
+      name: g(MKV.TNAME) ? ebmlStr(b, g(MKV.TNAME)) : '',
+      forced: g(MKV.FORCED) ? ebmlUint(b, g(MKV.FORCED)) === 1 : false
+    });
+  });
+  return out;
+}
+
+// done(err, { tracks: [{ number, codec, lang, name, forced, cues: [[startMs, durationMs], ...] }] })
+function subtitleTimeline(mediaUrl, done) {
+  if (subTimelineCache[mediaUrl]) return done(null, subTimelineCache[mediaUrl]);
+  var target = require('url').parse(mediaUrl);
+  if ((target.protocol !== 'http:' && target.protocol !== 'https:') || !target.hostname) return done(new Error('bad url'));
+  var HEAD = 262143;
+  rangeGet(target, 0, HEAD, 0, function (err, b, total) {
+    if (err) return done(err);
+    var top = ebmlChildren(b, 0, b.length);
+    if (!top.length || top[0].id !== MKV.EBML) return done(new Error('not a Matroska file'));
+    var seg = firstOf(top, MKV.SEGMENT);
+    if (!seg) return done(new Error('no segment'));
+    var segStart = seg.start;
+    var kids = ebmlChildren(b, segStart, b.length);
+    var scale = 1000000;
+    var info = firstOf(kids, MKV.INFO);
+    if (info && !info.cut) {
+      var ts = firstOf(ebmlChildren(b, info.start, info.end), MKV.TIMESCALE);
+      if (ts) scale = ebmlUint(b, ts) || scale;
+    }
+    var seeks = {};
+    var sh = firstOf(kids, MKV.SEEKHEAD);
+    if (sh) {
+      ebmlChildren(b, sh.start, Math.min(sh.end, b.length)).forEach(function (s) {
+        if (s.id !== MKV.SEEK) return;
+        var k = ebmlChildren(b, s.start, s.end);
+        var idEl = firstOf(k, MKV.SEEKID);
+        var posEl = firstOf(k, MKV.SEEKPOS);
+        if (idEl && posEl) seeks[ebmlUint(b, idEl)] = segStart + ebmlUint(b, posEl);
+      });
+    }
+    // Read an element at an absolute position (its header first, then the whole thing, up to 12 MB).
+    function readAt(pos, cb) {
+      rangeGet(target, pos, pos + 31, 0, function (e1, h) {
+        if (e1 || !h || h.length < 4) return cb(e1 || new Error('short'));
+        var id = ebmlId(h, 0);
+        var sz = id && ebmlSize(h, id.len);
+        if (!sz || sz.v < 0 || sz.v > 12582912) return cb(new Error('bad element'));
+        var hl = id.len + sz.len;
+        rangeGet(target, pos, pos + hl + sz.v - 1, 0, function (e2, full) {
+          if (e2 || !full) return cb(e2 || new Error('read'));
+          cb(null, full, { id: id.v, start: hl, end: hl + sz.v });
+        });
+      });
+    }
+    function withTracks(cb) {
+      var tr = firstOf(kids, MKV.TRACKS);
+      if (tr && !tr.cut) return cb(parseTracks(b, tr));
+      if (!seeks[MKV.TRACKS]) return cb([]);
+      readAt(seeks[MKV.TRACKS], function (e, buf, el) { cb(e ? [] : parseTracks(buf, el)); });
+    }
+    withTracks(function (tracks) {
+      tracks = tracks.filter(function (t) { return !/PGS|VOBSUB|DVB/i.test(t.codec); });
+      if (!tracks.length) return done(new Error('no text subtitles in the file'));
+      var cuesPos = seeks[MKV.CUES];
+      if (!cuesPos) return done(new Error('no index'));
+      readAt(cuesPos, function (e, buf, el) {
+        if (e) return done(e);
+        if (el.id !== MKV.CUES) return done(new Error('index not found'));
+        var byTrack = {};
+        tracks.forEach(function (t) { byTrack[t.number] = t; t.cues = []; });
+        var ms = scale / 1000000;
+        ebmlChildren(buf, el.start, el.end).forEach(function (cp) {
+          if (cp.id !== MKV.CUEPOINT) return;
+          var k = ebmlChildren(buf, cp.start, cp.end);
+          var timeEl = firstOf(k, MKV.CUETIME);
+          if (!timeEl) return;
+          var tm = ebmlUint(buf, timeEl) * ms;
+          k.forEach(function (p) {
+            if (p.id !== MKV.CUEPOS) return;
+            var pk = ebmlChildren(buf, p.start, p.end);
+            var trEl = firstOf(pk, MKV.CUETRACK);
+            var t = trEl && byTrack[ebmlUint(buf, trEl)];
+            if (!t) return;
+            var durEl = firstOf(pk, MKV.CUEDUR);
+            t.cues.push([Math.round(tm), durEl ? Math.round(ebmlUint(buf, durEl) * ms) : 0]);
+          });
+        });
+        var out = { tracks: tracks.filter(function (t) { return t.cues.length >= 20; }) };
+        if (!out.tracks.length) return done(new Error('the index has no subtitle lines'));
+        out.tracks.forEach(function (t) { t.cues.sort(function (a, c) { return a[0] - c[0]; }); });
+        subTimelineCache[mediaUrl] = out;
+        subTimelineOrder.push(mediaUrl);
+        if (subTimelineOrder.length > 4) delete subTimelineCache[subTimelineOrder.shift()];
+        done(null, out);
+      });
+    });
+  });
+}
+
 var SKIP_HEADERS = { host: 1, 'content-length': 1, connection: 1, 'accept-encoding': 1, 'transfer-encoding': 1 };
 function pluginFetch(target, o, hops, done) {
   var mod = target.protocol === 'http:' ? require('http') : require('https');
@@ -329,6 +547,14 @@ function handle(req, res) {
   // A plugin runs in a sandboxed worker in the app; its web requests come here because the sites refuse
   // the app's origin. Local only (the app on this TV). Any http(s) site, GET or POST, the plugin's
   // headers (Referer, Cookie, User-Agent...), redirects followed, 15 MB at most.
+  // Subtitle timing of a video file (automatic subtitle sync): local only.
+  if (url.pathname === '/api/subtimeline') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    return subtitleTimeline(String(url.query.url || ''), function (err, out) {
+      if (err) return send(res, 200, { error: String(err.message || err) });
+      send(res, 200, out);
+    });
+  }
   if (url.pathname === '/api/phttp' && req.method === 'POST') {
     if (!isLocal(req)) return send(res, 403, { error: 'local only' });
     return readBody(req, function (raw) {

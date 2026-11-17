@@ -22,6 +22,7 @@ import * as avvideo from '../lib/avvideo.js';
 import * as tracker from '../api/tracker.js';
 import * as chapters from '../lib/chapters.js';
 import * as subdl from '../api/subdl.js';
+import { align, rescale } from '../lib/subAlign.js';
 
 const HIDE_MS = 5000;
 const SAVE_MS = 15000;
@@ -584,10 +585,10 @@ function PlayerView(opts) {
   // seconds while playing; the value is remembered per episode/film.
   const SUB_STEP = 0.25;
   const SUB_DELAYS = 'subDelays';
-  // The first automatic sync could save wrong delays: they are cleared once.
-  if (!store.get('subDelaysFixed1', false)) {
+  // The old automatic sync could save wrong delays: they are cleared once more.
+  if (!store.get('subDelaysFixed2', false)) {
     store.set(SUB_DELAYS, {});
-    store.set('subDelaysFixed1', true);
+    store.set('subDelaysFixed2', true);
   }
 
   function savedDelay() {
@@ -1203,8 +1204,9 @@ function PlayerView(opts) {
         if (!alive || currentSub.id !== (s.id || s.url)) return;
         currentCues = cues;
         renderer.set(cues);
-        // Automatic sync (like Nuvio): quietly compared with the file's own subtitle; applied only when sure.
-        if (settings.subAutoSync !== false && !savedDelay()) setTimeout(() => alive && currentSub.id === (s.id || s.url) && autoSync(true), 4000);
+        // Automatic sync (like Nuvio): lined up with the film's own subtitle timing; applied only when sure.
+        // A delay you set by hand for this film wins.
+        if (settings.subAutoSync !== false && !savedDelay()) fileSync(true);
         if (!silent) toast(t('Legenda: {lang}', { lang: langName(s.lang) }));
       })
       .catch(() => toast(t('Não foi possível baixar a legenda.')));
@@ -1332,8 +1334,7 @@ function PlayerView(opts) {
       })
     );
     if (currentSub.kind === 'addon') {
-      opts2.push({ label: '⚡ ' + t('Sincronizar automaticamente'), sub: autoSyncedId === currentSub.id ? t('Sincronizada automaticamente') : t('Compara com a legenda do arquivo ou outras legendas'), value: { kind: 'autosync' } });
-      opts2.push({ label: '👂 ' + t('Sincronizar de ouvido'), sub: t('Escolha a frase que você acabou de ouvir'), value: { kind: 'byear' } });
+      opts2.push({ label: '🔄 ' + t('Sincronizar com o filme'), sub: autoSyncedId === currentSub.id ? t('Sincronizada automaticamente') : t('Usa o tempo da legenda que vem dentro do arquivo'), value: { kind: 'autosync' } });
       if (syncedBefore !== null) opts2.push({ label: '↩ ' + t('Desfazer sincronização'), sub: t('Volta ao atraso de antes'), value: { kind: 'undosync' } });
     }
     opts2.push({ label: t('Atraso da legenda: {n}s', { n: renderer.offset().toFixed(1) }), sub: t('Ajustar sincronia'), value: { kind: 'delay' } });
@@ -1354,8 +1355,7 @@ function PlayerView(opts) {
         else if (v.kind === 'avtext') selectAvText(v.index);
         else if (v.kind === 'addon') selectAddonSub(v.sub);
         else if (v.kind === 'delay') delayMenu();
-        else if (v.kind === 'autosync') autoSync(false);
-        else if (v.kind === 'byear') syncByEar();
+        else if (v.kind === 'autosync') fileSync(false);
         else if (v.kind === 'undosync') undoSync();
         else if (v.kind === 'size') sizeMenu();
       },
@@ -1371,192 +1371,82 @@ function PlayerView(opts) {
     );
   }
 
-  // ---- Automatic subtitle sync ----
-  // The add-on subtitle is compared with a reference that is in sync with this video: the file's own
-  // subtitle track (Samsung player: listened to for a while as it plays), or else other add-on subtitles.
-  // The best shift is the most common gap between the start times of the two (a histogram of the gaps).
-  function bestShift(target, ref) {
-    const T = target.map((c) => c.start).filter((x) => isFinite(x)).sort((a, b) => a - b);
-    const R = ref.map((c) => c.start).filter((x) => isFinite(x)).sort((a, b) => a - b);
-    if (T.length < 5 || R.length < 5) return null;
-    const MAX = 15; // largest shift looked for (seconds)
-    const TOL = 0.35; // a cue "matches" when the shifted starts are this close
-    // Only the part of the target that can line up with the reference (a reference taken while
-    // listening covers ~40 s; the rest of the target would only add false matches).
-    const lo = R[0] - MAX - 1;
-    const hi = R[R.length - 1] + MAX + 1;
-    const Tw = T.filter((x) => x >= lo && x <= hi);
-    if (Tw.length < 5) return null;
-    // Candidate shifts: every gap between a reference start and a target start nearby.
-    const cand = [];
-    let j0 = 0;
-    for (let i = 0; i < R.length; i++) {
-      while (j0 < Tw.length && Tw[j0] < R[i] - MAX) j0++;
-      for (let j = j0; j < Tw.length && Tw[j] <= R[i] + MAX; j++) cand.push(R[i] - Tw[j]);
-    }
-    // For a shift, how many reference cues have a target cue starting within TOL after shifting.
-    function matches(s) {
-      let n = 0;
-      let k = 0;
-      for (let i = 0; i < R.length; i++) {
-        const want = R[i] - s;
-        while (k < Tw.length && Tw[k] < want - TOL) k++;
-        if (k < Tw.length && Math.abs(Tw[k] - want) <= TOL) n++;
-      }
-      return n;
-    }
-    // Score candidates on a 0.05 s grid (deduplicated), keep the best and the best clearly different one.
-    const seen = {};
-    let best = 0;
-    let bestN = -1;
-    cand.forEach((c) => {
-      const s = Math.round(c / 0.05) * 0.05;
-      const key = s.toFixed(2);
-      if (seen[key]) return;
-      seen[key] = 1;
-      const n = matches(s);
-      if (n > bestN || (n === bestN && Math.abs(s) < Math.abs(best))) {
-        bestN = n;
-        best = s;
-      }
-    });
-    let second = 0;
-    Object.keys(seen).forEach((key) => {
-      const s = +key;
-      if (Math.abs(s - best) < 1) return;
-      const n = matches(s);
-      if (n > second) second = n;
-    });
-    // Refine: mean gap of the matched pairs.
-    let sum = 0;
-    let cnt = 0;
-    let k = 0;
-    for (let i = 0; i < R.length; i++) {
-      const want = R[i] - best;
-      while (k < Tw.length && Tw[k] < want - TOL) k++;
-      if (k < Tw.length && Math.abs(Tw[k] - want) <= TOL) {
-        sum += R[i] - Tw[k];
-        cnt++;
-      }
-    }
-    const shift = cnt ? sum / cnt : best;
-    const frac = bestN / R.length;
-    // Trust it only when many reference lines line up AND no other shift comes close.
-    const ok = bestN >= 6 && frac >= 0.45 && bestN >= second * 1.6 + 2;
-    return { shift: Math.round(shift * 100) / 100, score: ok ? frac : 0, matched: bestN, second: second };
-  }
-
-  // Start times of the file's own subtitle while it plays (Samsung player), for `sec` seconds.
-  // Nothing is drawn: the app only notes when each line appears.
-  function listenEmbedded(sec, isAlive) {
-    return new Promise((resolve) => {
-      const list = videoEl.isAVPlay ? videoEl.textTrackList() : [];
-      const idx = list.findIndex((tr) => !/PGS|VOBSUB|DVD/i.test(tr.codec || ''));
-      if (idx < 0) return resolve(null);
-      const starts = [];
-      let last = '';
-      videoEl.onSubtitle((s) => {
-        if (currentSub.kind === 'avtext') return;
-        const text = String((s && s.text) || '').trim();
-        if (text && text !== last && !videoEl.paused) starts.push({ start: videoEl.currentTime || 0 });
-        last = text;
-      });
-      if (!videoEl.selectText(idx)) return resolve(null);
-      setTimeout(() => {
-        if (currentSub.kind !== 'avtext') videoEl.disableText();
-        resolve(isAlive() && starts.length >= 6 ? starts : null);
-      }, sec * 1000);
-    });
-  }
-
-  // Applies a found shift; the previous delay is kept so "Undo" can bring it back.
+  // ---- Automatic subtitle sync (like Nuvio) ----
+  // The TV service reads the timing of every line of the film's own subtitle from the video file's
+  // index (MKV), and the add-on subtitle is lined up with it: one shift for the whole film, and a
+  // stretch when it was made for another frame rate. Nothing changes unless the match is clear.
   let syncedBefore = null;
   let autoSyncedId = '';
-  function applySync(r, from) {
-    syncedBefore = renderer.offset();
-    const v = setSubDelay(r.shift);
-    autoSyncedId = currentSub.id;
-    toast(t('Sincronizada: {n}s', { n: (v > 0 ? '+' : '') + v.toFixed(2) }) + ' · ' + from, 4000);
+  let timeline = null; // { url, data } for this file
+  const LANG3 = { en: 'eng', ar: 'ara', pt: 'por', es: 'spa', fr: 'fre', de: 'ger', it: 'ita', tr: 'tur', ru: 'rus', ja: 'jpn', ko: 'kor', zh: 'chi' };
+  const sameLang = (a, b) => {
+    const x = String(a || '').toLowerCase().split('-')[0];
+    const y = String(b || '').toLowerCase().split('-')[0];
+    return !!x && !!y && (x === y || LANG3[x] === y || LANG3[y] === x || (x === 'fre' && y === 'fra') || (x === 'ger' && y === 'deu'));
+  };
+  function fileTimeline() {
+    const urls = [stream && stream.url, mediaUrl].filter((u, i, a) => /^https?:\/\//i.test(u || '') && a.indexOf(u) === i);
+    if (!urls.length) return Promise.reject(new Error('no link'));
+    if (timeline && urls.indexOf(timeline.url) >= 0) return Promise.resolve(timeline.data);
+    const tryAt = (i) =>
+      getJSON('http://127.0.0.1:8095/api/subtimeline?url=' + encodeURIComponent(urls[i]), { timeout: 45000, quiet: true }).then((r) => {
+        if (r && r.tracks && r.tracks.length) {
+          timeline = { url: urls[i], data: r };
+          return r;
+        }
+        if (i + 1 < urls.length) return tryAt(i + 1);
+        throw new Error((r && r.error) || 'no timeline');
+      });
+    return tryAt(0);
   }
   function undoSync() {
     if (syncedBefore === null) return toast(t('Nada para desfazer.'));
+    if (currentCues) renderer.set(currentCues);
     const v = setSubDelay(syncedBefore);
     syncedBefore = null;
     autoSyncedId = '';
     toast(t('Atraso da legenda: {n}s', { n: (v > 0 ? '+' : '') + v.toFixed(2) }));
   }
-
-  // quiet: started by the app when a subtitle is chosen (no messages unless it worked).
-  function autoSync(quiet) {
+  // quiet: started by the app when a subtitle is loaded (a message only when it worked).
+  function fileSync(quiet) {
     if (currentSub.kind !== 'addon' || !currentCues || !currentCues.length) return quiet ? null : toast(t('Ligue uma legenda de addon primeiro.'));
-    const target = currentCues;
     const mine = currentSub.id;
-    const still = () => alive && currentSub.id === mine;
-    const say = (msg, ms) => !quiet && toast(msg, ms);
-    // 1) the file's own subtitle (same timing as the video): the most reliable reference
-    const hasEmbedded = videoEl.isAVPlay && videoEl.textTrackList().some((tr) => !/PGS|VOBSUB|DVD/i.test(tr.codec || ''));
-    if (hasEmbedded) {
-      say(t('Ouvindo a legenda do arquivo por 60 segundos... continue assistindo.'), 5000);
-      listenEmbedded(60, still).then((ref) => {
-        if (!still()) return;
-        const r = ref && bestShift(target, ref);
-        if (r && r.score > 0) return applySync(r, t('legenda do arquivo'));
-        if (quiet) return;
-        fromAddons();
-      });
-      return;
-    }
-    if (quiet) return;
-    fromAddons();
-    // 2) other add-on subtitles of the same video: applied only when they agree with each other
-    function fromAddons() {
-      const others = (addonSubs || []).filter((x) => (x.id || x.url) !== mine && x.url);
-      if (!others.length) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5000);
-      const rank = (x) => (/^(en|eng)$/i.test(x.lang) ? 0 : 1);
-      const pick = others.sort((a, b) => rank(a) - rank(b)).slice(0, 4);
-      say(t('Comparando com {n} legendas...', { n: pick.length }), 3000);
-      Promise.all(pick.map((x) => subs.load(x.url, server.subtitlesProxy(x.url)).then((c) => bestShift(target, c), () => null))).then((rs) => {
-        if (!still()) return;
-        const ok = rs.filter((r) => r && r.score > 0);
-        // at least two references within 0.3 s of each other, or one very strong match
+    const cues = currentCues;
+    const lang = ((addonSubs || []).find((x) => (x.id || x.url) === mine) || {}).lang;
+    if (!quiet) toast(t('Sincronizando com o filme...'), 3000);
+    fileTimeline()
+      .then((tl) => {
+        if (!alive || currentSub.id !== mine) return;
+        // The film's subtitle in the same language first (most alike), then the others.
+        const tracks = tl.tracks.slice().sort((a, b) => (sameLang(b.lang, lang) ? 1 : 0) - (sameLang(a.lang, lang) ? 1 : 0) || (a.forced ? 1 : 0) - (b.forced ? 1 : 0));
         let best = null;
-        ok.forEach((r) => {
-          const agree = ok.filter((o) => Math.abs(o.shift - r.shift) <= 0.3).length;
-          if ((agree >= 2 || r.score >= 0.8) && (!best || r.score > best.score)) best = r;
+        tracks.slice(0, 4).forEach((tr) => {
+          if (best) return;
+          const r = align(tr.cues, cues);
+          if (r && r.score > 0) best = r;
         });
-        if (!best) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5000);
-        applySync(best, t('outras legendas'));
+        if (!best) return !quiet && toast(t('Não deu para sincronizar com segurança: a legenda não bate com a do filme. Tente outra legenda.'), 6000);
+        syncedBefore = renderer.offset();
+        if (best.scale !== 1) renderer.set(rescale(cues, best.scale));
+        // Applied, not saved: it is worked out again each time (a delay you set by hand is saved).
+        renderer.setOffset(Math.round(best.offset * 100) / 100);
+        autoSyncedId = mine;
+        const v = renderer.offset();
+        if (Math.abs(v) < 0.15 && best.scale === 1) return !quiet && toast(t('A legenda já está sincronizada com o filme.'), 4000);
+        toast(t('Legenda sincronizada com o filme: {n}s', { n: (v > 0 ? '+' : '') + v.toFixed(2) }) + (best.scale !== 1 ? ' · ' + t('taxa de quadros corrigida') : ''), 4500);
+      })
+      .catch((e) => {
+        if (quiet || !alive) return;
+        const m = String((e && e.message) || '');
+        toast(
+          /Matroska|no index|index|no text subtitles|no subtitle/i.test(m)
+            ? t('Este arquivo não traz legenda própria para comparar. Ajuste o atraso à mão.')
+            : /no link/.test(m)
+              ? t('A sincronização automática funciona com arquivos tocados por link.')
+              : t('Não consegui ler o arquivo agora.'),
+          6000
+        );
       });
-    }
-  }
-
-  // Sync by ear (idea from Nuvio): pick the line you just heard; its start is moved to now.
-  function syncByEar() {
-    if (currentSub.kind !== 'addon' || !currentCues || !currentCues.length) return toast(t('Ligue uma legenda de addon primeiro.'));
-    const now = videoEl.currentTime || 0;
-    const off = renderer.offset();
-    // lines around the moment, as the subtitle would show them now
-    const near = currentCues
-      .map((c, i) => ({ c: c, i: i, at: c.start + off }))
-      .filter((x) => x.at > now - 90 && x.at < now + 90)
-      .sort((a, b) => Math.abs(a.at - now) - Math.abs(b.at - now))
-      .slice(0, 24)
-      .sort((a, b) => a.at - b.at);
-    if (!near.length) return toast(t('Nenhuma linha perto deste momento.'));
-    const closest = near.reduce((b, x) => (Math.abs(x.at - now) < Math.abs(b.at - now) ? x : b), near[0]);
-    menu(
-      t('Qual frase você acabou de ouvir?'),
-      near.map((x) => ({ label: String(x.c.text || '').replace(/<[^>]+>/g, '').replace(/\n/g, ' ').slice(0, 90), sub: fmtTime(x.c.start), value: x.c, checked: x === closest })),
-      {
-        onPick: (c) => {
-          // 0.3 s for the time it takes to recognise the line and press OK (as Nuvio does)
-          syncedBefore = renderer.offset();
-          const v = setSubDelay(now - c.start - 0.3);
-          autoSyncedId = currentSub.id;
-          toast(t('Sincronizada: {n}s', { n: (v > 0 ? '+' : '') + v.toFixed(2) }) + ' · ' + t('de ouvido'), 4000);
-        },
-      }
-    );
   }
 
   function sizeMenu() {

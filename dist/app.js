@@ -5043,6 +5043,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Azul-marinho (principal)": "Navy blue (main)",
+    "Fundo azul-escuro com destaques azuis": "Dark blue background with blue highlights",
+    "Preto": "Black",
+    "Fundo preto puro, bom para telas OLED": "Pure black background, good for OLED screens",
+    "Tema": "Theme",
+    "Azul-marinho ou preto": "Navy blue or black",
+    "Personalizado": "Custom",
+    "Sincronizar com o filme": "Sync with the film",
+    "Usa o tempo da legenda que vem dentro do arquivo": "Uses the timing of the subtitle inside the file",
+    "Sincronizando com o filme...": "Syncing with the film...",
+    "Não deu para sincronizar com segurança: a legenda não bate com a do filme. Tente outra legenda.": "Couldn't sync safely: this subtitle doesn't match the film. Try another one.",
+    "A legenda já está sincronizada com o filme.": "The subtitle is already in sync with the film.",
+    "Legenda sincronizada com o filme: {n}s": "Subtitle synced with the film: {n}s",
+    "taxa de quadros corrigida": "frame rate fixed",
+    "Este arquivo não traz legenda própria para comparar. Ajuste o atraso à mão.": "This file has no subtitle of its own to compare with. Adjust the delay by hand.",
+    "A sincronização automática funciona com arquivos tocados por link.": "Automatic sync works with files played from a link.",
+    "Não consegui ler o arquivo agora.": "Couldn't read the file right now.",
     "O anime ainda não chegou neste capítulo (vai até o cap. {c}). Abrindo o último: episódio {n}.": "The anime hasn't reached this chapter yet (it goes up to ch. {c}). Opening the latest: episode {n}.",
     "Adicione sua chave do ComicVine em Ajustes → Chaves.": "Add your ComicVine key in Settings → Keys.",
     "Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).": "Comics use the ComicVine catalog. Get a free key at comicvine.gamespot.com/api and put it in Settings → Keys (or on the phone page).",
@@ -5484,6 +5501,23 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Azul-marinho (principal)": "أزرق كحلي (الأساسي)",
+    "Fundo azul-escuro com destaques azuis": "خلفية زرقاء غامقة مع لمسات زرقاء",
+    "Preto": "أسود",
+    "Fundo preto puro, bom para telas OLED": "خلفية سوداء صافية، مناسبة لشاشات OLED",
+    "Tema": "الثيم",
+    "Azul-marinho ou preto": "أزرق كحلي أو أسود",
+    "Personalizado": "مخصص",
+    "Sincronizar com o filme": "مزامنة مع الفيلم",
+    "Usa o tempo da legenda que vem dentro do arquivo": "يستخدم توقيت الترجمة اللي داخل ملف الفيلم",
+    "Sincronizando com o filme...": "جاري المزامنة مع الفيلم...",
+    "Não deu para sincronizar com segurança: a legenda não bate com a do filme. Tente outra legenda.": "ما قدرت أزامنها بثقة: الترجمة ما تطابق الفيلم. جرّب ترجمة ثانية.",
+    "A legenda já está sincronizada com o filme.": "الترجمة متزامنة مع الفيلم أصلاً.",
+    "Legenda sincronizada com o filme: {n}s": "تمت مزامنة الترجمة مع الفيلم: {n}ث",
+    "taxa de quadros corrigida": "تم تصحيح معدل الإطارات",
+    "Este arquivo não traz legenda própria para comparar. Ajuste o atraso à mão.": "هذا الملف ما فيه ترجمة داخلية أقارن معها. عدّل التأخير يدوي.",
+    "A sincronização automática funciona com arquivos tocados por link.": "المزامنة التلقائية تشتغل مع الملفات اللي تشتغل من رابط.",
+    "Não consegui ler o arquivo agora.": "ما قدرت أقرأ الملف الحين.",
     "O anime ainda não chegou neste capítulo (vai até o cap. {c}). Abrindo o último: episódio {n}.": "الأنمي ما وصل لهذا الفصل للحين (واصل لين الفصل {c}). بفتح لك آخر حلقة: {n}.",
     "Adicione sua chave do ComicVine em Ajustes → Chaves.": "أضف مفتاح ComicVine من الإعدادات ← المفاتيح.",
     "Os quadrinhos usam o catálogo do ComicVine. Pegue uma chave grátis em comicvine.gamespot.com/api e coloque em Ajustes → Chaves (ou pela página do celular).": "الكوميكس تستخدم كتالوج ComicVine. خذ مفتاح مجاني من comicvine.gamespot.com/api وحطه في الإعدادات ← المفاتيح (أو من صفحة الجوال).",
@@ -7874,7 +7908,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     request2(BASE + "/api/info", 3e3).then(function (r) {
       if (r) last = r.last || 0;
       svcVersion = r && r.version || 1;
-      if (svcVersion < 4) {
+      if (svcVersion < 5) {
         request2(BASE + "/api/exit", 3e3).then(function () {
           return setTimeout(startService, 1500);
         }, function () {});
@@ -11681,6 +11715,119 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/lib/subAlign.js
+  var SCALES = [1, 25 / 23.976, 23.976 / 25, 25 / 24, 24 / 25, 24 / 23.976, 23.976 / 24];
+  var WINDOW = 180;
+  var BIN = 0.2;
+  var TOL = 0.35;
+  function nearest(sorted, x) {
+    var lo = 0;
+    var hi = sorted.length - 1;
+    while (lo < hi) {
+      var mid = lo + hi >> 1;
+      if (sorted[mid] < x) lo = mid + 1;else hi = mid;
+    }
+    var best2 = sorted[lo] - x;
+    if (lo > 0 && Math.abs(sorted[lo - 1] - x) < Math.abs(best2)) best2 = sorted[lo - 1] - x;
+    return best2;
+  }
+  function meet(R, T, scale, offset, tol) {
+    var gaps = [];
+    for (var i = 0; i < T.length; i++) {
+      var g = nearest(R, T[i] * scale + offset);
+      if (Math.abs(g) <= tol) gaps.push(g);
+    }
+    return gaps;
+  }
+  function median(a) {
+    if (!a.length) return 0;
+    var s = a.slice().sort(function (x, y) {
+      return x - y;
+    });
+    return s[s.length >> 1];
+  }
+  function align(ref, cues) {
+    var R = ref.map(function (c) {
+      return c[0] / 1e3;
+    }).filter(isFinite).sort(function (a, b) {
+      return a - b;
+    });
+    var T = cues.map(function (c) {
+      return c.start;
+    }).filter(isFinite).sort(function (a, b) {
+      return a - b;
+    });
+    if (R.length < 20 || T.length < 20) return null;
+    var step = Math.max(1, Math.floor(T.length / 400));
+    var sample = T.filter(function (_, i) {
+      return i % step === 0;
+    });
+    var found = [];
+    SCALES.forEach(function (scale) {
+      var votes = {};
+      var j0 = 0;
+      for (var i = 0; i < sample.length; i++) {
+        var t2 = sample[i] * scale;
+        while (j0 < R.length && R[j0] < t2 - WINDOW) j0++;
+        for (var j = j0; j < R.length && R[j] <= t2 + WINDOW; j++) {
+          var b = Math.round((R[j] - t2) / BIN);
+          votes[b] = (votes[b] || 0) + 1;
+        }
+      }
+      Object.keys(votes).sort(function (a, b) {
+        return votes[b] - votes[a];
+      }).slice(0, 6).forEach(function (b) {
+        var off = +b * BIN;
+        var gaps = meet(R, T, scale, off, TOL + BIN);
+        off += median(gaps);
+        gaps = meet(R, T, scale, off, TOL);
+        off += median(gaps);
+        gaps = meet(R, T, scale, off, TOL);
+        var lo = T[0] * scale + off;
+        var hi = T[T.length - 1] * scale + off;
+        var inSpan = R.filter(function (x) {
+          return x >= lo - 1 && x <= hi + 1;
+        }).length;
+        var score = gaps.length / Math.max(1, Math.min(T.length, inSpan));
+        found.push({
+          scale: scale,
+          offset: Math.round(off * 100) / 100,
+          score: score,
+          matched: gaps.length
+        });
+      });
+    });
+    if (!found.length) return null;
+    found.sort(function (a, b) {
+      return b.score - a.score || (a.scale === 1 ? -1 : b.scale === 1 ? 1 : 0);
+    });
+    var best2 = found[0];
+    var at = function at(f) {
+      return f.scale * 1800 + f.offset;
+    };
+    var rival = found.find(function (f) {
+      return Math.abs(at(f) - at(best2)) > 2;
+    });
+    var second = rival ? rival.score : 0;
+    var sure = best2.matched >= 20 && best2.score >= 0.45 && best2.score >= second + 0.15;
+    return {
+      scale: best2.scale,
+      offset: best2.offset,
+      score: sure ? best2.score : 0,
+      matched: best2.matched,
+      second: second
+    };
+  }
+  function rescale(cues, scale) {
+    if (!scale || scale === 1) return cues;
+    return cues.map(function (c) {
+      return Object.assign({}, c, {
+        start: c.start * scale,
+        end: c.end * scale
+      });
+    });
+  }
+
   // src/js/views/player.js
   var HIDE_MS = 5e3;
   var SAVE_MS = 15e3;
@@ -12442,9 +12589,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     var SUB_STEP = 0.25;
     var SUB_DELAYS = "subDelays";
-    if (!get("subDelaysFixed1", false)) {
+    if (!get("subDelaysFixed2", false)) {
       set(SUB_DELAYS, {});
-      set("subDelaysFixed1", true);
+      set("subDelaysFixed2", true);
     }
     function savedDelay() {
       return (get(SUB_DELAYS, {}) || {})[video.id] || 0;
@@ -13061,9 +13208,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (!alive || currentSub.id !== (s.id || s.url)) return;
         currentCues = cues;
         renderer.set(cues);
-        if (settings2.subAutoSync !== false && !savedDelay()) setTimeout(function () {
-          return alive && currentSub.id === (s.id || s.url) && autoSync(true);
-        }, 4e3);
+        if (settings2.subAutoSync !== false && !savedDelay()) fileSync(true);
         if (!silent) toast(t("Legenda: {lang}", {
           lang: langName(s.lang)
         }));
@@ -13220,17 +13365,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
       if (currentSub.kind === "addon") {
         opts2.push({
-          label: "⚡ " + t("Sincronizar automaticamente"),
-          sub: autoSyncedId === currentSub.id ? t("Sincronizada automaticamente") : t("Compara com a legenda do arquivo ou outras legendas"),
+          label: "🔄 " + t("Sincronizar com o filme"),
+          sub: autoSyncedId === currentSub.id ? t("Sincronizada automaticamente") : t("Usa o tempo da legenda que vem dentro do arquivo"),
           value: {
             kind: "autosync"
-          }
-        });
-        opts2.push({
-          label: "👂 " + t("Sincronizar de ouvido"),
-          sub: t("Escolha a frase que você acabou de ouvir"),
-          value: {
-            kind: "byear"
           }
         });
         if (syncedBefore !== null) opts2.push({
@@ -13269,7 +13407,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             currentSub = {
               kind: "off"
             };
-          } else if (v.kind === "embedded") selectEmbeddedSub(v.index);else if (v.kind === "avtext") selectAvText(v.index);else if (v.kind === "addon") selectAddonSub(v.sub);else if (v.kind === "delay") delayMenu();else if (v.kind === "autosync") autoSync(false);else if (v.kind === "byear") syncByEar();else if (v.kind === "undosync") undoSync();else if (v.kind === "size") sizeMenu();
+          } else if (v.kind === "embedded") selectEmbeddedSub(v.index);else if (v.kind === "avtext") selectAvText(v.index);else if (v.kind === "addon") selectAddonSub(v.sub);else if (v.kind === "delay") delayMenu();else if (v.kind === "autosync") fileSync(false);else if (v.kind === "undosync") undoSync();else if (v.kind === "size") sizeMenu();
         }
       });
     }
@@ -13288,124 +13426,55 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }
       });
     }
-    function bestShift(target, ref) {
-      var T = target.map(function (c) {
-        return c.start;
-      }).filter(function (x) {
-        return isFinite(x);
-      }).sort(function (a, b) {
-        return a - b;
-      });
-      var R = ref.map(function (c) {
-        return c.start;
-      }).filter(function (x) {
-        return isFinite(x);
-      }).sort(function (a, b) {
-        return a - b;
-      });
-      if (T.length < 5 || R.length < 5) return null;
-      var MAX2 = 15;
-      var TOL = 0.35;
-      var lo = R[0] - MAX2 - 1;
-      var hi = R[R.length - 1] + MAX2 + 1;
-      var Tw = T.filter(function (x) {
-        return x >= lo && x <= hi;
-      });
-      if (Tw.length < 5) return null;
-      var cand = [];
-      var j0 = 0;
-      for (var i = 0; i < R.length; i++) {
-        while (j0 < Tw.length && Tw[j0] < R[i] - MAX2) j0++;
-        for (var j = j0; j < Tw.length && Tw[j] <= R[i] + MAX2; j++) cand.push(R[i] - Tw[j]);
-      }
-      function matches(s) {
-        var n = 0;
-        var k2 = 0;
-        for (var _i = 0; _i < R.length; _i++) {
-          var want = R[_i] - s;
-          while (k2 < Tw.length && Tw[k2] < want - TOL) k2++;
-          if (k2 < Tw.length && Math.abs(Tw[k2] - want) <= TOL) n++;
-        }
-        return n;
-      }
-      var seen = {};
-      var best2 = 0;
-      var bestN = -1;
-      cand.forEach(function (c) {
-        var s = Math.round(c / 0.05) * 0.05;
-        var key4 = s.toFixed(2);
-        if (seen[key4]) return;
-        seen[key4] = 1;
-        var n = matches(s);
-        if (n > bestN || n === bestN && Math.abs(s) < Math.abs(best2)) {
-          bestN = n;
-          best2 = s;
-        }
-      });
-      var second = 0;
-      Object.keys(seen).forEach(function (key4) {
-        var s = +key4;
-        if (Math.abs(s - best2) < 1) return;
-        var n = matches(s);
-        if (n > second) second = n;
-      });
-      var sum = 0;
-      var cnt = 0;
-      var k = 0;
-      for (var _i2 = 0; _i2 < R.length; _i2++) {
-        var want = R[_i2] - best2;
-        while (k < Tw.length && Tw[k] < want - TOL) k++;
-        if (k < Tw.length && Math.abs(Tw[k] - want) <= TOL) {
-          sum += R[_i2] - Tw[k];
-          cnt++;
-        }
-      }
-      var shift = cnt ? sum / cnt : best2;
-      var frac2 = bestN / R.length;
-      var ok = bestN >= 6 && frac2 >= 0.45 && bestN >= second * 1.6 + 2;
-      return {
-        shift: Math.round(shift * 100) / 100,
-        score: ok ? frac2 : 0,
-        matched: bestN,
-        second: second
-      };
-    }
-    function listenEmbedded(sec, isAlive) {
-      return new Promise(function (resolve2) {
-        var list2 = videoEl.isAVPlay ? videoEl.textTrackList() : [];
-        var idx = list2.findIndex(function (tr) {
-          return !/PGS|VOBSUB|DVD/i.test(tr.codec || "");
-        });
-        if (idx < 0) return resolve2(null);
-        var starts = [];
-        var last2 = "";
-        videoEl.onSubtitle(function (s) {
-          if (currentSub.kind === "avtext") return;
-          var text = String(s && s.text || "").trim();
-          if (text && text !== last2 && !videoEl.paused) starts.push({
-            start: videoEl.currentTime || 0
-          });
-          last2 = text;
-        });
-        if (!videoEl.selectText(idx)) return resolve2(null);
-        setTimeout(function () {
-          if (currentSub.kind !== "avtext") videoEl.disableText();
-          resolve2(isAlive() && starts.length >= 6 ? starts : null);
-        }, sec * 1e3);
-      });
-    }
     var syncedBefore = null;
     var autoSyncedId = "";
-    function applySync(r, from) {
-      syncedBefore = renderer.offset();
-      var v = setSubDelay(r.shift);
-      autoSyncedId = currentSub.id;
-      toast(t("Sincronizada: {n}s", {
-        n: (v > 0 ? "+" : "") + v.toFixed(2)
-      }) + " · " + from, 4e3);
+    var timeline = null;
+    var LANG3 = {
+      en: "eng",
+      ar: "ara",
+      pt: "por",
+      es: "spa",
+      fr: "fre",
+      de: "ger",
+      it: "ita",
+      tr: "tur",
+      ru: "rus",
+      ja: "jpn",
+      ko: "kor",
+      zh: "chi"
+    };
+    var sameLang = function sameLang(a, b) {
+      var x = String(a || "").toLowerCase().split("-")[0];
+      var y = String(b || "").toLowerCase().split("-")[0];
+      return !!x && !!y && (x === y || LANG3[x] === y || LANG3[y] === x || x === "fre" && y === "fra" || x === "ger" && y === "deu");
+    };
+    function fileTimeline() {
+      var urls = [stream && stream.url, mediaUrl].filter(function (u, i, a) {
+        return /^https?:\/\//i.test(u || "") && a.indexOf(u) === i;
+      });
+      if (!urls.length) return Promise.reject(new Error("no link"));
+      if (timeline && urls.indexOf(timeline.url) >= 0) return Promise.resolve(timeline.data);
+      var _tryAt = function tryAt(i) {
+        return getJSON("http://127.0.0.1:8095/api/subtimeline?url=" + encodeURIComponent(urls[i]), {
+          timeout: 45e3,
+          quiet: true
+        }).then(function (r) {
+          if (r && r.tracks && r.tracks.length) {
+            timeline = {
+              url: urls[i],
+              data: r
+            };
+            return r;
+          }
+          if (i + 1 < urls.length) return _tryAt(i + 1);
+          throw new Error(r && r.error || "no timeline");
+        });
+      };
+      return _tryAt(0);
     }
     function undoSync() {
       if (syncedBefore === null) return toast(t("Nada para desfazer."));
+      if (currentCues) renderer.set(currentCues);
       var v = setSubDelay(syncedBefore);
       syncedBefore = null;
       autoSyncedId = "";
@@ -13413,106 +13482,39 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         n: (v > 0 ? "+" : "") + v.toFixed(2)
       }));
     }
-    function autoSync(quiet) {
+    function fileSync(quiet) {
       if (currentSub.kind !== "addon" || !currentCues || !currentCues.length) return quiet ? null : toast(t("Ligue uma legenda de addon primeiro."));
-      var target = currentCues;
       var mine = currentSub.id;
-      var still = function still() {
-        return alive && currentSub.id === mine;
-      };
-      var say = function say(msg, ms) {
-        return !quiet && toast(msg, ms);
-      };
-      var hasEmbedded = videoEl.isAVPlay && videoEl.textTrackList().some(function (tr) {
-        return !/PGS|VOBSUB|DVD/i.test(tr.codec || "");
-      });
-      if (hasEmbedded) {
-        say(t("Ouvindo a legenda do arquivo por 60 segundos... continue assistindo."), 5e3);
-        listenEmbedded(60, still).then(function (ref) {
-          if (!still()) return;
-          var r = ref && bestShift(target, ref);
-          if (r && r.score > 0) return applySync(r, t("legenda do arquivo"));
-          if (quiet) return;
-          fromAddons();
+      var cues = currentCues;
+      var lang3 = ((addonSubs || []).find(function (x) {
+        return (x.id || x.url) === mine;
+      }) || {}).lang;
+      if (!quiet) toast(t("Sincronizando com o filme..."), 3e3);
+      fileTimeline().then(function (tl) {
+        if (!alive || currentSub.id !== mine) return;
+        var tracks2 = tl.tracks.slice().sort(function (a, b) {
+          return (sameLang(b.lang, lang3) ? 1 : 0) - (sameLang(a.lang, lang3) ? 1 : 0) || (a.forced ? 1 : 0) - (b.forced ? 1 : 0);
         });
-        return;
-      }
-      if (quiet) return;
-      fromAddons();
-      function fromAddons() {
-        var others = (addonSubs || []).filter(function (x) {
-          return (x.id || x.url) !== mine && x.url;
+        var best2 = null;
+        tracks2.slice(0, 4).forEach(function (tr) {
+          if (best2) return;
+          var r = align(tr.cues, cues);
+          if (r && r.score > 0) best2 = r;
         });
-        if (!others.length) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5e3);
-        var rank2 = function rank2(x) {
-          return /^(en|eng)$/i.test(x.lang) ? 0 : 1;
-        };
-        var pick2 = others.sort(function (a, b) {
-          return rank2(a) - rank2(b);
-        }).slice(0, 4);
-        say(t("Comparando com {n} legendas...", {
-          n: pick2.length
-        }), 3e3);
-        Promise.all(pick2.map(function (x) {
-          return load3(x.url, subtitlesProxy(x.url)).then(function (c) {
-            return bestShift(target, c);
-          }, function () {
-            return null;
-          });
-        })).then(function (rs) {
-          if (!still()) return;
-          var ok = rs.filter(function (r) {
-            return r && r.score > 0;
-          });
-          var best2 = null;
-          ok.forEach(function (r) {
-            var agree = ok.filter(function (o) {
-              return Math.abs(o.shift - r.shift) <= 0.3;
-            }).length;
-            if ((agree >= 2 || r.score >= 0.8) && (!best2 || r.score > best2.score)) best2 = r;
-          });
-          if (!best2) return say(t('Não deu para sincronizar com segurança. Use "Sincronizar de ouvido".'), 5e3);
-          applySync(best2, t("outras legendas"));
-        });
-      }
-    }
-    function syncByEar() {
-      if (currentSub.kind !== "addon" || !currentCues || !currentCues.length) return toast(t("Ligue uma legenda de addon primeiro."));
-      var now = videoEl.currentTime || 0;
-      var off = renderer.offset();
-      var near = currentCues.map(function (c, i) {
-        return {
-          c: c,
-          i: i,
-          at: c.start + off
-        };
-      }).filter(function (x) {
-        return x.at > now - 90 && x.at < now + 90;
-      }).sort(function (a, b) {
-        return Math.abs(a.at - now) - Math.abs(b.at - now);
-      }).slice(0, 24).sort(function (a, b) {
-        return a.at - b.at;
-      });
-      if (!near.length) return toast(t("Nenhuma linha perto deste momento."));
-      var closest = near.reduce(function (b, x) {
-        return Math.abs(x.at - now) < Math.abs(b.at - now) ? x : b;
-      }, near[0]);
-      menu(t("Qual frase você acabou de ouvir?"), near.map(function (x) {
-        return {
-          label: String(x.c.text || "").replace(/<[^>]+>/g, "").replace(/\n/g, " ").slice(0, 90),
-          sub: fmtTime(x.c.start),
-          value: x.c,
-          checked: x === closest
-        };
-      }), {
-        onPick: function onPick(c) {
-          syncedBefore = renderer.offset();
-          var v = setSubDelay(now - c.start - 0.3);
-          autoSyncedId = currentSub.id;
-          toast(t("Sincronizada: {n}s", {
-            n: (v > 0 ? "+" : "") + v.toFixed(2)
-          }) + " · " + t("de ouvido"), 4e3);
-        }
+        if (!best2) return !quiet && toast(t("Não deu para sincronizar com segurança: a legenda não bate com a do filme. Tente outra legenda."), 6e3);
+        syncedBefore = renderer.offset();
+        if (best2.scale !== 1) renderer.set(rescale(cues, best2.scale));
+        renderer.setOffset(Math.round(best2.offset * 100) / 100);
+        autoSyncedId = mine;
+        var v = renderer.offset();
+        if (Math.abs(v) < 0.15 && best2.scale === 1) return !quiet && toast(t("A legenda já está sincronizada com o filme."), 4e3);
+        toast(t("Legenda sincronizada com o filme: {n}s", {
+          n: (v > 0 ? "+" : "") + v.toFixed(2)
+        }) + (best2.scale !== 1 ? " · " + t("taxa de quadros corrigida") : ""), 4500);
+      }).catch(function (e) {
+        if (quiet || !alive) return;
+        var m = String(e && e.message || "");
+        toast(/Matroska|no index|index|no text subtitles|no subtitle/i.test(m) ? t("Este arquivo não traz legenda própria para comparar. Ajuste o atraso à mão.") : /no link/.test(m) ? t("A sincronização automática funciona com arquivos tocados por link.") : t("Não consegui ler o arquivo agora."), 6e3);
       });
     }
     function sizeMenu() {
@@ -14241,8 +14243,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var c = [];
     if (depth < 200) {
       var kids2 = el.childNodes;
-      for (var _i3 = 0; _i3 < kids2.length && budget.n < 6e4; _i3++) {
-        var k = kids2[_i3];
+      for (var _i = 0; _i < kids2.length && budget.n < 6e4; _i++) {
+        var k = kids2[_i];
         if (k.nodeType === 1) {
           if (DROP[k.tagName.toLowerCase()]) continue;
           budget.n++;
@@ -15683,8 +15685,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function artUrl(file) {
     if (!file) return null;
-    var align = /^studio-/.test(file) ? "center" : /^genre-/.test(file) ? "top" : "center";
-    return "https://wsrv.nl/?url=" + encodeURIComponent(ART + file + ".jpg") + "&w=300&h=169&fit=cover&a=" + align + "&output=jpg&q=80";
+    var align2 = /^studio-/.test(file) ? "center" : /^genre-/.test(file) ? "top" : "center";
+    return "https://wsrv.nl/?url=" + encodeURIComponent(ART + file + ".jpg") + "&w=300&h=169&fit=cover&a=" + align2 + "&output=jpg&q=80";
   }
   function tileRow(parent, title, tiles, cls) {
     var row2 = h("div.row", {
@@ -23641,7 +23643,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T07:04:55.070Z";
+  var BUILD = "2026-11-17T07:15:59.645Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -25517,6 +25519,41 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         body.appendChild(h("div.set-section", {
           text: t("Cores e formas")
         }));
+        var bgNow = s.bgStyle || (s.oled ? "oled" : "default");
+        var looks = [{
+          id: "navy",
+          label: t("Azul-marinho (principal)"),
+          sub: t("Fundo azul-escuro com destaques azuis")
+        }, {
+          id: "black",
+          label: t("Preto"),
+          sub: t("Fundo preto puro, bom para telas OLED")
+        }];
+        var lookNow = (!s.themePicked || s.theme === "graphite") && bgNow === "oled" ? "black" : (!s.themePicked || s.theme === "graphite") && bgNow === "default" ? "navy" : "";
+        body.appendChild(row2(t("Tema"), t("Azul-marinho ou preto"), lookNow ? (looks.find(function (x) {
+          return x.id === lookNow;
+        }) || {}).label : t("Personalizado"), function () {
+          return menu(t("Tema"), looks.map(function (x) {
+            return {
+              label: x.label,
+              sub: x.sub,
+              value: x.id,
+              checked: x.id === lookNow
+            };
+          }), {
+            onPick: function onPick(v) {
+              saveSettings({
+                theme: "graphite",
+                themePicked: false,
+                bgStyle: v === "black" ? "oled" : "default",
+                oled: v === "black"
+              });
+              apply3("graphite");
+              applyLook(settings());
+              render();
+            }
+          });
+        }));
         var curTheme = THEMES2.find(function (x) {
           return x.id === (s.themePicked ? s.theme : "graphite");
         }) || THEMES2[0];
@@ -26850,6 +26887,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function start3() {
     reloadProfile();
     var s = settings();
+    if (!s.navyLook1) s = saveSettings({
+      theme: "graphite",
+      themePicked: false,
+      bgStyle: "default",
+      oled: false,
+      navyLook1: true
+    });
     applyLook(s);
     apply3(s.themePicked ? s.theme : "graphite");
     document.body.classList.toggle("perf", s.perfMode !== false);

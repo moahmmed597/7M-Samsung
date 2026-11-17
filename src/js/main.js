@@ -154,7 +154,9 @@ function boot() {
 // Carrega o perfil escolhido: conta, biblioteca, addons e a tela inicial.
 function start() {
   stremio.reloadProfile();
-  const s = store.settings();
+  let s = store.settings();
+  // Navy blue is the main look now: everyone gets it once (black stays one tap away in Appearance → Theme).
+  if (!s.navyLook1) s = store.saveSettings({ theme: 'graphite', themePicked: false, bgStyle: 'default', oled: false, navyLook1: true });
   theme.applyLook(s);
   // The dark Graphite look for everyone until they pick a colour in Settings → Appearance.
   theme.apply(s.themePicked ? s.theme : 'graphite');
