@@ -336,19 +336,35 @@ function SourcesView(kind) {
       body.appendChild(row('⚙ ' + t('Gerenciar plugins'), '', () =>
         menu(t('Plugins'), pl.installed(kind).map((p) => ({ label: p.name, sub: 'v' + p.version, value: p })), { onPick: pluginMenu })
       ));
-    pl.repos(kind).forEach((u) =>
+    pl.repos(kind).forEach((u) => {
+      const mine = pl.installed(kind).filter((p) => p.repoUrl === u);
+      const other = kind === 'comics' ? 'manga' : 'comics';
       body.appendChild(
-        row('📦 ' + u.replace(/^https?:\/\//, ''), '', () =>
-          menu(t('Repositório'), [{ label: t('Ver plugins'), value: 'list' }, { label: t('Remover repositório'), value: 'rm' }], {
+        row('📦 ' + u.replace(/^https?:\/\//, ''), mine.length ? t('{n} plugins', { n: mine.length }) : '', () =>
+          menu(t('Repositório'), [
+            { label: t('Ver plugins'), value: 'list' },
+            { label: other === 'comics' ? t('Mover tudo para Quadrinhos') : t('Mover tudo para Mangá'), sub: t('O repositório e os plugins dele'), value: 'move' },
+            { label: '🗑 ' + t('Remover repositório e plugins'), sub: t('Apaga tudo o que veio dele'), value: 'rm' },
+          ], {
             onPick: (v) => {
-              if (v === 'rm') return pl.removeRepo(u, kind), load();
+              if (v === 'rm')
+                return confirmDialog(t('Remover o repositório e os {n} plugins dele?', { n: mine.length }), t('Remover'), () => {
+                  const n = pl.removeRepoAll(u, kind);
+                  toast(t('Repositório removido com {n} plugins.', { n: n }), 4000);
+                  load();
+                });
+              if (v === 'move') {
+                pl.moveRepo(u, kind, other);
+                toast(other === 'comics' ? t('Movido para Quadrinhos.') : t('Movido para Mangá.'), 4000);
+                return load();
+              }
               toast(t('Lendo o repositório...'));
               pl.fetchRepo(u).then((r) => pickPlugins(u, r), () => toast(t('Não consegui abrir o repositório.')));
             },
           })
         )
-      )
-    );
+      );
+    });
     // Suwayomi
     section(t('Servidor Suwayomi (extensões Tachiyomi/Mihon)'));
     body.appendChild(row('🔌 ' + (sw.enabled() ? sw.base() : t('Conectar servidor Suwayomi')), '', () => connectServer(load, kind)));

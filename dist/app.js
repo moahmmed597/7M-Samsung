@@ -5043,6 +5043,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "{n} plugins": "{n} plugins",
+    "Mover tudo para Quadrinhos": "Move all to Comics",
+    "Mover tudo para Mangá": "Move all to Manga",
+    "O repositório e os plugins dele": "The repository and its plugins",
+    "Remover repositório e plugins": "Remove repository and plugins",
+    "Apaga tudo o que veio dele": "Deletes everything that came from it",
+    "Remover o repositório e os {n} plugins dele?": "Remove the repository and its {n} plugins?",
+    "Repositório removido com {n} plugins.": "Repository removed with {n} plugins.",
+    "Movido para Quadrinhos.": "Moved to Comics.",
+    "Movido para Mangá.": "Moved to Manga.",
     "Relacionadas": "Related",
     "Saga": "Saga",
     "Ordem": "Order",
@@ -5534,6 +5544,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "{n} plugins": "{n} إضافة",
+    "Mover tudo para Quadrinhos": "انقل الكل للكوميكس",
+    "Mover tudo para Mangá": "انقل الكل للمانجا",
+    "O repositório e os plugins dele": "المستودع وإضافاته",
+    "Remover repositório e plugins": "احذف المستودع وإضافاته",
+    "Apaga tudo o que veio dele": "يحذف كل شي جا منه",
+    "Remover o repositório e os {n} plugins dele?": "تحذف المستودع و{n} إضافة منه؟",
+    "Repositório removido com {n} plugins.": "انحذف المستودع مع {n} إضافة.",
+    "Movido para Quadrinhos.": "انتقل للكوميكس.",
+    "Movido para Mangá.": "انتقل للمانجا.",
     "Relacionadas": "مرتبطة",
     "Saga": "السلسلة",
     "Ordem": "الترتيب",
@@ -14216,6 +14236,25 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return x !== url2;
     }));
   }
+  function removeRepoAll(url2, kind) {
+    var gone = installed(kind).filter(function (p) {
+      return p.repoUrl === url2;
+    });
+    gone.forEach(function (p) {
+      return uninstall(p.id);
+    });
+    removeRepo(url2, kind);
+    return gone.length;
+  }
+  function moveRepo(url2, from, to) {
+    installed(from).filter(function (p) {
+      return p.repoUrl === url2;
+    }).forEach(function (p) {
+      return setKind(p.id, to);
+    });
+    removeRepo(url2, from);
+    addRepo(url2, to);
+  }
   function setKind(id, kind) {
     saveInstalled(installed().map(function (p) {
       return p.id === id ? Object.assign({}, p, {
@@ -16814,16 +16853,40 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }));
       repos(kind).forEach(function (u) {
-        return body.appendChild(row2("📦 " + u.replace(/^https?:\/\//, ""), "", function () {
+        var mine = installed(kind).filter(function (p) {
+          return p.repoUrl === u;
+        });
+        var other = kind === "comics" ? "manga" : "comics";
+        body.appendChild(row2("📦 " + u.replace(/^https?:\/\//, ""), mine.length ? t("{n} plugins", {
+          n: mine.length
+        }) : "", function () {
           return menu(t("Repositório"), [{
             label: t("Ver plugins"),
             value: "list"
           }, {
-            label: t("Remover repositório"),
+            label: other === "comics" ? t("Mover tudo para Quadrinhos") : t("Mover tudo para Mangá"),
+            sub: t("O repositório e os plugins dele"),
+            value: "move"
+          }, {
+            label: "🗑 " + t("Remover repositório e plugins"),
+            sub: t("Apaga tudo o que veio dele"),
             value: "rm"
           }], {
             onPick: function onPick(v) {
-              if (v === "rm") return removeRepo(u, kind), load7();
+              if (v === "rm") return confirmDialog(t("Remover o repositório e os {n} plugins dele?", {
+                n: mine.length
+              }), t("Remover"), function () {
+                var n = removeRepoAll(u, kind);
+                toast(t("Repositório removido com {n} plugins.", {
+                  n: n
+                }), 4e3);
+                load7();
+              });
+              if (v === "move") {
+                moveRepo(u, kind, other);
+                toast(other === "comics" ? t("Movido para Quadrinhos.") : t("Movido para Mangá."), 4e3);
+                return load7();
+              }
               toast(t("Lendo o repositório..."));
               fetchRepo(u).then(function (r) {
                 return pickPlugins(u, r);
@@ -24118,7 +24181,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T08:24:10.846Z";
+  var BUILD = "2026-11-17T08:25:51.343Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

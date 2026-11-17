@@ -35,6 +35,21 @@ export function removeRepo(url, kind) {
   const key = REPOS[kind === 'comics' ? 'comics' : 'manga'];
   store.set(key, (store.get(key, []) || []).filter((x) => x !== url));
 }
+// Removes a repository and every plugin installed from it (in that tab). Returns how many plugins went.
+export function removeRepoAll(url, kind) {
+  const gone = installed(kind).filter((p) => p.repoUrl === url);
+  gone.forEach((p) => uninstall(p.id));
+  removeRepo(url, kind);
+  return gone.length;
+}
+// Moves a whole repository (and its plugins) to the other tab.
+export function moveRepo(url, from, to) {
+  installed(from)
+    .filter((p) => p.repoUrl === url)
+    .forEach((p) => setKind(p.id, to));
+  removeRepo(url, from);
+  addRepo(url, to);
+}
 // Moves a plugin to the other tab.
 export function setKind(id, kind) {
   saveInstalled(installed().map((p) => (p.id === id ? Object.assign({}, p, { kind: kind === 'comics' ? 'comics' : 'manga' }) : p)));
