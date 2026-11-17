@@ -154,6 +154,8 @@ export function ensureVisible(el) {
       target = Math.max(0, Math.min(target, node.scrollHeight - node.clientHeight));
       if (target !== node.scrollTop) animateScroll(node, 'scrollTop', target);
     }
+    // The sidebar scrolls on its own; the page behind it stays where it is.
+    if (node.hasAttribute('data-scroll-stop')) break;
     node = node.parentNode;
   }
 }

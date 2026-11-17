@@ -799,3 +799,29 @@ body.oled .view { background: #000; }
 .anime-tile.publisher .poster-wrap { background: #f2f0f8; }
 .anime-tile.publisher .tile-art { object-fit: contain; padding: 16px 22px; box-sizing: border-box; }
 .anime-tile.publisher .poster-wrap.has-art-label .tile-label { display: none !important; }
+
+/* Lighter screens: the blue glow is its own layer, drawn once, not repainted on every scroll step */
+.view { z-index: 0; background: #0b0f19; }
+body.bg-glow .view { background: #0b0f19; }
+.view:before { content: ''; position: absolute; right: -260px; top: -420px; width: 1500px; height: 1000px; z-index: -1; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(47,91,211,0.20), rgba(47,91,211,0)); -webkit-transform: translateZ(0); transform: translateZ(0); }
+body.oled .view { background: #000; }
+body.oled .view:before { display: none; }
+.view.reader:before, .view.player:before, .player-view:before { display: none; }
+
+/* Sidebar: the profile keeps its size; the tabs scroll with the focus */
+.sidebar .profile-chip { -webkit-flex: none; flex: none; }
+.sidebar .side-nav { -webkit-flex: 1; flex: 1; min-height: 0; overflow: hidden; position: relative; padding: 4px 0; }
+
+/* Motion (cheap: only transform and opacity, so the TV draws it without effort) */
+.perf .card .poster-wrap, .perf .live-cell, .perf .btn, .perf .chip, .perf .sidebar .tab {
+  -webkit-transition: -webkit-transform 0.16s ease-out !important; transition: transform 0.16s ease-out !important; }
+.perf .sidebar { -webkit-transition: width 0.16s ease-out !important; transition: width 0.16s ease-out !important; }
+.perf .sidebar .tab-label, .perf .sidebar .profile-chip span { -webkit-transition: opacity 0.14s ease-out !important; transition: opacity 0.14s ease-out !important; }
+.btn.focused, .chip.focused { -webkit-transform: scale(1.05); transform: scale(1.05); }
+.live-cell.focused { -webkit-transform: scale(1.03); transform: scale(1.03); }
+@-webkit-keyframes kai-rise { from { opacity: 0; -webkit-transform: translateY(14px); } to { opacity: 1; -webkit-transform: none; } }
+@keyframes kai-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+body.no-motion *, body.no-motion *:before, body.no-motion *:after { -webkit-animation: none !important; animation: none !important; -webkit-transition: none !important; transition: none !important; }
+.view.player, .view.trailer, .view.reader { background: #000; }
+.view.trailer:before { display: none; }
