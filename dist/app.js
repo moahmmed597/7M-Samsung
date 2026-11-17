@@ -17973,6 +17973,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return m;
     });
   }
+  var WESTERN = /marvel|dc|dc comics|image|dark horse|idw|boom|dynamite|valiant|vertigo|oni press|titan|aftershock|archie|mad cave|ahoy|skybound|top cow|zenescope|vault|scout|abstract studio|fantagraphics|drawn & quarterly|first second|humanoids|ablaze|aspen|black mask|awa|massive|bad idea|keenspot|antarctic|action lab|lion forge|magnetic|source point|whatnot/i;
   function newThisWeek(days) {
     var d = function d(n) {
       return new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
@@ -17984,12 +17985,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       field_list: "id,issue_number,image,volume,store_date"
     }).then(function (j) {
       var seen = {};
-      var out = [];
+      var list2 = [];
       (j.results || []).forEach(function (i) {
         var v = i.volume || {};
         if (!v.id || seen[v.id] || !i.image) return;
         seen[v.id] = 1;
-        out.push({
+        list2.push({
           id: "cv:" + v.id,
           cvId: v.id,
           type: "comic",
@@ -17999,7 +18000,26 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           art: wide(i.image)
         });
       });
-      return out;
+      if (!list2.length) return list2;
+      return get2("volumes/", {
+        filter: "id:" + list2.map(function (m) {
+          return m.cvId;
+        }).join("|"),
+        field_list: "id,publisher",
+        limit: 100
+      }).then(function (v) {
+        var pub = {};
+        (v.results || []).forEach(function (x) {
+          return pub[x.id] = x.publisher && x.publisher.name || "";
+        });
+        return list2.filter(function (m) {
+          return WESTERN.test(pub[m.cvId] || "");
+        });
+      }).catch(function () {
+        return list2.filter(function (m) {
+          return !/weekly|monthly|shonen|shōnen|jump|young|magazine|gekkan|comic beam|morning|afternoon|sunday|champion|gangan/i.test(m.title);
+        });
+      });
     });
   }
 
@@ -18821,6 +18841,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           text: p.mark.text
         }));
       });
+      var fit = function fit() {
+        return Array.prototype.forEach.call(pubRow.querySelectorAll(".pub-mark"), function (m) {
+          var box = m.parentNode.clientWidth * 0.86;
+          var size = parseFloat(getComputedStyle(m).fontSize) || 60;
+          for (var i = 0; i < 30 && m.scrollWidth > box && size > 14; i++) {
+            size *= 0.92;
+            m.style.fontSize = size + "px";
+          }
+        });
+      };
+      setTimeout(fit, 0);
+      setTimeout(fit, 1500);
       seriesRow(ROWS[0]);
       heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel3");
       seriesRow(ROWS[1]);
@@ -24218,7 +24250,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T08:46:40.711Z";
+  var BUILD = "2026-11-17T11:58:19.418Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

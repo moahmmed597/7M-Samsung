@@ -170,6 +170,18 @@ export function ComicsView() {
       w.classList.add('has-mark');
       w.appendChild(h('div.pub-mark.m-' + p.mark.cls, { text: p.mark.text }));
     });
+    // The TV has other fonts than a PC: shrink a name until it fits its tile (MARVEL was cut to MARVE).
+    const fit = () =>
+      Array.prototype.forEach.call(pubRow.querySelectorAll('.pub-mark'), (m) => {
+        const box = m.parentNode.clientWidth * 0.86;
+        let size = parseFloat(getComputedStyle(m).fontSize) || 60;
+        for (let i = 0; i < 30 && m.scrollWidth > box && size > 14; i++) {
+          size *= 0.92;
+          m.style.fontSize = size + 'px';
+        }
+      });
+    setTimeout(fit, 0);
+    setTimeout(fit, 1500);
     seriesRow(ROWS[0]);
     heroTiles(rows, t('Heróis da Marvel'), MARVEL, 'comicArtMarvel3');
     seriesRow(ROWS[1]);

@@ -77,19 +77,31 @@ export function volume(id) {
   });
 }
 
-// Issues out in the last `days` days, one card per series (newest first).
+// Western comic publishers: "New issues this week" keeps only these (ComicVine also lists Japanese
+// manga magazines, which belong in the Manga tab).
+const WESTERN = /marvel|dc|dc comics|image|dark horse|idw|boom|dynamite|valiant|vertigo|oni press|titan|aftershock|archie|mad cave|ahoy|skybound|top cow|zenescope|vault|scout|abstract studio|fantagraphics|drawn & quarterly|first second|humanoids|ablaze|aspen|black mask|awa|massive|bad idea|keenspot|antarctic|action lab|lion forge|magnetic|source point|whatnot/i;
+
+// Issues out in the last `days` days, one card per series (newest first), Western publishers only.
 export function newThisWeek(days) {
   const d = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
   return get('issues/', { filter: 'store_date:' + d(days || 7) + '|' + d(-1), sort: 'store_date:desc', limit: 100, field_list: 'id,issue_number,image,volume,store_date' }).then((j) => {
     const seen = {};
-    const out = [];
+    const list = [];
     (j.results || []).forEach((i) => {
       const v = i.volume || {};
       if (!v.id || seen[v.id] || !i.image) return;
       seen[v.id] = 1;
-      out.push({ id: 'cv:' + v.id, cvId: v.id, type: 'comic', title: v.name || '', name: (v.name || '') + ' #' + (i.issue_number || ''), poster: img(i.image), art: wide(i.image) });
+      list.push({ id: 'cv:' + v.id, cvId: v.id, type: 'comic', title: v.name || '', name: (v.name || '') + ' #' + (i.issue_number || ''), poster: img(i.image), art: wide(i.image) });
     });
-    return out;
+    if (!list.length) return list;
+    // Issues don't carry their publisher: one request for the publishers of those series.
+    return get('volumes/', { filter: 'id:' + list.map((m) => m.cvId).join('|'), field_list: 'id,publisher', limit: 100 })
+      .then((v) => {
+        const pub = {};
+        (v.results || []).forEach((x) => (pub[x.id] = (x.publisher && x.publisher.name) || ''));
+        return list.filter((m) => WESTERN.test(pub[m.cvId] || ''));
+      })
+      .catch(() => list.filter((m) => !/weekly|monthly|shonen|shōnen|jump|young|magazine|gekkan|comic beam|morning|afternoon|sunday|champion|gangan/i.test(m.title)));
   });
 }
 
