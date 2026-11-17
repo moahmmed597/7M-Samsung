@@ -4,7 +4,7 @@ import { h, clear, loadVisibleImages } from '../lib/dom.js';
 import * as stremio from '../api/stremio.js';
 import * as hero from '../api/hero.js';
 import * as store from '../lib/store.js';
-import { card, menu, toast } from '../ui.js';
+import { card, menu, toast, confirmDialog } from '../ui.js';
 import { openDetails } from './details.js';
 import { t, epLabel } from '../lib/i18n.js';
 
@@ -43,9 +43,8 @@ export function ContinueRow(only) {
   const row = h('div.row', { 'data-anchor': '30' });
   function render() {
     clear(row);
-    const items = sortContinue(stremio.continueWatching())
-      .filter((it) => !only || tabOf(it) === only)
-      .slice(0, 20);
+    const all = sortContinue(stremio.continueWatching()).filter((it) => !only || tabOf(it) === only);
+    const items = all.slice(0, 20);
     if (!items.length) {
       row.style.display = 'none';
       return;
@@ -80,6 +79,18 @@ export function ContinueRow(only) {
       });
       track.appendChild(c);
     });
+    // The last card: empty the whole row in one go (asks first).
+    track.appendChild(
+      h('div.card.see-all.wide.cw-clear', {
+        focusable: true,
+        onSelect: () =>
+          confirmDialog(t('Tirar todos ({n}) de Continuar assistindo?', { n: all.length }), t('Tirar todos'), () => {
+            stremio.dismissContinueMany(all.map((it) => it._id));
+            toast(t('Continuar assistindo está vazio.'));
+            render();
+          }),
+      }, [h('div.poster-wrap', null, h('div.see-all-label', null, [h('b', { text: '🗑' }), t('Tirar todos')])), h('div.name', { text: '' })])
+    );
     row.appendChild(track);
     loadVisibleImages(row);
   }

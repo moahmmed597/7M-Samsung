@@ -6189,7 +6189,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Noite": "Night",
     "Texto: {n}": "Text: {n}",
     "Tamanho do texto": "Text size",
-    "Cor do papel": "Paper colour"
+    "Cor do papel": "Paper colour",
+    "Tirar todos ({n}) de Continuar assistindo?": "Remove all ({n}) from Continue watching?",
+    "Tirar todos": "Remove all",
+    "Continuar assistindo está vazio.": "Continue watching is empty."
   };
 
   // src/js/lib/i18n-ar.js
@@ -7485,7 +7488,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Noite": "ليلي",
     "Texto: {n}": "حجم الخط: {n}",
     "Tamanho do texto": "حجم الخط",
-    "Cor do papel": "لون الورق"
+    "Cor do papel": "لون الورق",
+    "Tirar todos ({n}) de Continuar assistindo?": "تشيل الكل ({n}) من كمّل المشاهدة؟",
+    "Tirar todos": "شيل الكل",
+    "Continuar assistindo está vazio.": "كمّل المشاهدة صار فاضي."
   };
 
   // src/js/lib/i18n-es.js
@@ -8983,6 +8989,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     item2.state.lastWatched = nowIso();
     item2._mtime = nowIso();
     return putLibraryItems([item2]);
+  }
+  function dismissContinueMany(ids2) {
+    var items3 = (ids2 || []).map(function (id) {
+      return libraryItem(id);
+    }).filter(Boolean).map(function (existing) {
+      var item2 = clone(existing);
+      item2.state.timeOffset = 0;
+      item2.state.lastWatched = nowIso();
+      item2._mtime = nowIso();
+      return item2;
+    });
+    return items3.length ? putLibraryItems(items3) : Promise.resolve();
   }
   function continueWatching() {
     return cachedLibrary().filter(function (it) {
@@ -18432,9 +18450,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     function render() {
       clear(row3);
-      var items3 = sortContinue(continueWatching()).filter(function (it) {
+      var all3 = sortContinue(continueWatching()).filter(function (it) {
         return !only || tabOf(it) === only;
-      }).slice(0, 20);
+      });
+      var items3 = all3.slice(0, 20);
       if (!items3.length) {
         row3.style.display = "none";
         return;
@@ -18484,6 +18503,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
         track.appendChild(c);
       });
+      track.appendChild(h("div.card.see-all.wide.cw-clear", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return confirmDialog(t("Tirar todos ({n}) de Continuar assistindo?", {
+            n: all3.length
+          }), t("Tirar todos"), function () {
+            dismissContinueMany(all3.map(function (it) {
+              return it._id;
+            }));
+            toast(t("Continuar assistindo está vazio."));
+            render();
+          });
+        }
+      }, [h("div.poster-wrap", null, h("div.see-all-label", null, [h("b", {
+        text: "🗑"
+      }), t("Tirar todos")])), h("div.name", {
+        text: ""
+      })]));
       row3.appendChild(track);
       loadVisibleImages(row3);
     }
@@ -29015,7 +29052,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T22:31:41.371Z";
+  var BUILD = "2026-11-17T22:43:08.755Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

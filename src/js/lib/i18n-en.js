@@ -1300,4 +1300,7 @@ export const EN = {
   "Texto: {n}": "Text: {n}",
   "Tamanho do texto": "Text size",
   "Cor do papel": "Paper colour",
+  "Tirar todos ({n}) de Continuar assistindo?": "Remove all ({n}) from Continue watching?",
+  "Tirar todos": "Remove all",
+  "Continuar assistindo está vazio.": "Continue watching is empty.",
 };

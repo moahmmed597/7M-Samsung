@@ -285,6 +285,21 @@ export function dismissContinue(id) {
   return putLibraryItems([item]);
 }
 
+// Several at once (the "Clear all" of a Continue row): one save to the account.
+export function dismissContinueMany(ids) {
+  const items = (ids || [])
+    .map((id) => libraryItem(id))
+    .filter(Boolean)
+    .map((existing) => {
+      const item = clone(existing);
+      item.state.timeOffset = 0;
+      item.state.lastWatched = nowIso();
+      item._mtime = nowIso();
+      return item;
+    });
+  return items.length ? putLibraryItems(items) : Promise.resolve();
+}
+
 export function continueWatching() {
   return cachedLibrary()
     .filter((it) => it.type !== 'other' && !/^live:/.test(it._id) && (!it.removed || it.temp) && it.state && it.state.timeOffset > 0)

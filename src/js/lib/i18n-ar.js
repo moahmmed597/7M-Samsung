@@ -1300,4 +1300,7 @@ export const AR = {
   "Texto: {n}": "حجم الخط: {n}",
   "Tamanho do texto": "حجم الخط",
   "Cor do papel": "لون الورق",
+  "Tirar todos ({n}) de Continuar assistindo?": "تشيل الكل ({n}) من كمّل المشاهدة؟",
+  "Tirar todos": "شيل الكل",
+  "Continuar assistindo está vazio.": "كمّل المشاهدة صار فاضي.",
 };
