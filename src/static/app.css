@@ -871,3 +871,11 @@ body .card.anime-tile.publisher .poster-wrap { width: 440px; height: 248px; }
 .pub-mark.m-darkhorse { font-size: 60px; letter-spacing: 8px; white-space: normal; width: 300px; line-height: 1.05; }
 .pub-mark.m-marvel { font-size: 128px; }
 .pub-mark { max-width: 92%; overflow: hidden; }
+
+/* Plugin test: the list scrolls inside the window instead of running off the screen */
+.diag-box { max-height: 900px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
+.diag { -webkit-flex: 1; flex: 1; min-height: 0; max-height: 780px; overflow: hidden; padding-right: 8px; }
+
+/* Profile pictures picker: one heading per kind */
+.av-sec { display: block; margin: 18px 0 12px 4px; font-size: 24px; font-weight: 700; color: rgba(255,255,255,0.85); }
+.av-sec:first-of-type { margin-top: 6px; }

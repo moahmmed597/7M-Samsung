@@ -33,6 +33,27 @@ export function avatarUrl(file) {
 export function avatarFiles() {
   return AVAILABLE.slice();
 }
+// The pictures by kind, for the picker: each group under its own heading.
+const GROUPS = [
+  { label: 'Pessoas', test: /person_/ },
+  { label: 'Anime', test: /manga_eyes|kawaii_/ },
+  { label: 'Personagens', test: /misc_|element_/ },
+  { label: 'Animais', test: /animal_/ },
+  { label: 'Gatos', test: /cat_/ },
+  { label: 'Espaço', test: /space_/ },
+  { label: 'Carinhas', test: /face_/ },
+];
+export function avatarGroups() {
+  const used = {};
+  const out = GROUPS.map((g) => {
+    const files = AVAILABLE.filter((f) => !used[f] && g.test.test(f));
+    files.forEach((f) => (used[f] = 1));
+    return { label: g.label, files: files };
+  });
+  const rest = AVAILABLE.filter((f) => !used[f]);
+  if (rest.length) out.push({ label: 'Outras', files: rest });
+  return out.filter((g) => g.files.length);
+}
 const AVAILABLE = ["eboy_manga_eyes_bw_zoomed.webp", "egirl_manga_eyes_bw_zoomed_distinct.webp", "harbor_animal_01.webp", "harbor_animal_02.webp", "harbor_animal_04.webp", "harbor_animal_05.webp", "harbor_animal_06.webp", "harbor_animal_07.webp", "harbor_animal_08.webp", "harbor_cat_01.webp", "harbor_cat_02.webp", "harbor_cat_03.webp", "harbor_cat_04.webp", "harbor_element_01.webp", "harbor_element_02.webp", "harbor_element_03.webp", "harbor_element_04.webp", "harbor_face_01.webp", "harbor_face_02.webp", "harbor_face_03.webp", "harbor_face_04.webp", "harbor_face_05.webp", "harbor_face_06.webp", "harbor_face_07.webp", "harbor_face_08.webp", "harbor_face_09.webp", "harbor_face_10.webp", "harbor_face_11.webp", "harbor_face_12.webp", "harbor_kawaii_01.webp", "harbor_kawaii_02.webp", "harbor_kawaii_03.webp", "harbor_kawaii_04.webp", "harbor_kawaii_05.webp", "harbor_kawaii_06.webp", "harbor_kawaii_07.webp", "harbor_kawaii_08.webp", "harbor_kawaii_10.webp", "harbor_misc_01.webp", "harbor_misc_02.webp", "harbor_misc_03.webp", "harbor_misc_04.webp", "harbor_misc_05.webp", "harbor_misc_06.webp", "harbor_misc_08.webp", "harbor_person_01.webp", "harbor_person_02.webp", "harbor_person_03.webp", "harbor_person_04.webp", "harbor_person_05.webp", "harbor_person_06.webp", "harbor_person_07.webp", "harbor_person_08.webp", "harbor_person_09.webp", "harbor_person_10.webp", "harbor_person_11.webp", "harbor_person_12.webp", "harbor_person_13.webp", "harbor_person_14.webp", "harbor_person_15.webp", "harbor_person_16.webp", "harbor_person_17.webp", "harbor_space_01.webp", "harbor_space_02.webp", "harbor_space_03.webp"];
 
 

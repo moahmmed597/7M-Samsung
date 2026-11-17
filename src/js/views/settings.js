@@ -14,7 +14,7 @@ import * as hero from '../api/hero.js';
 import { topbar, toast, menu, confirmDialog, refreshProfileChips } from '../ui.js';
 import * as router from '../router.js';
 import { openLogin } from './login.js';
-import { avatar, switchProfile, createProfile, checkPin, pinDialog, showPicker, avatarFiles, avatarUrl } from './profiles.js';
+import { avatar, switchProfile, createProfile, checkPin, pinDialog, showPicker, avatarFiles, avatarUrl, avatarGroups } from './profiles.js';
 import { t } from '../lib/i18n.js';
 import * as phone from '../lib/phone.js';
 import * as theme from '../lib/theme.js';
@@ -88,10 +88,13 @@ function avatarPicker(current, onPick) {
     onPick(f);
   };
   grid.appendChild(h('div.av-tile.none', { focusable: true, cls: current ? '' : 'checked', 'data-autofocus': current ? null : '', onSelect: () => pick('') }, 'Aa'));
-  avatarFiles().forEach((f) => {
-    const im = h('img', { alt: '' });
-    im.setAttribute('data-lazy', avatarUrl(f));
-    grid.appendChild(h('div.av-tile', { focusable: true, cls: f === current ? 'checked' : '', 'data-autofocus': f === current ? '' : null, onSelect: () => pick(f) }, im));
+  avatarGroups().forEach((g) => {
+    grid.appendChild(h('div.av-sec', { text: t(g.label) }));
+    g.files.forEach((f) => {
+      const im = h('img', { alt: '' });
+      im.setAttribute('data-lazy', avatarUrl(f));
+      grid.appendChild(h('div.av-tile', { focusable: true, cls: f === current ? 'checked' : '', 'data-autofocus': f === current ? '' : null, onSelect: () => pick(f) }, im));
+    });
   });
   const layer = nav.pushLayer(modal, { onBack: () => close() });
   nav.focusFirst(modal);

@@ -5043,6 +5043,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Anime": "Anime",
+    "Personagens": "Characters",
+    "Animais": "Animals",
+    "Gatos": "Cats",
+    "Espaço": "Space",
+    "Carinhas": "Smileys",
+    "Outras": "Others",
     "Continue a saga": "Continue the saga",
     "Buscar coleção": "Search collections",
     "Ex.: Shrek, Rambo, Saw": "E.g. Shrek, Rambo, Saw",
@@ -5513,6 +5520,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Anime": "أنمي",
+    "Personagens": "شخصيات كرتونية",
+    "Animais": "حيوانات",
+    "Gatos": "قطط",
+    "Espaço": "فضاء",
+    "Carinhas": "وجوه مبتسمة",
+    "Outras": "أخرى",
     "Continue a saga": "كمّل السلسلة",
     "Buscar coleção": "ابحث عن سلسلة",
     "Ex.: Shrek, Rambo, Saw": "مثال: Shrek، Rambo، Saw",
@@ -7168,6 +7182,53 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function avatarFiles() {
     return AVAILABLE.slice();
+  }
+  var GROUPS = [{
+    label: "Pessoas",
+    test: /person_/
+  }, {
+    label: "Anime",
+    test: /manga_eyes|kawaii_/
+  }, {
+    label: "Personagens",
+    test: /misc_|element_/
+  }, {
+    label: "Animais",
+    test: /animal_/
+  }, {
+    label: "Gatos",
+    test: /cat_/
+  }, {
+    label: "Espaço",
+    test: /space_/
+  }, {
+    label: "Carinhas",
+    test: /face_/
+  }];
+  function avatarGroups() {
+    var used = {};
+    var out = GROUPS.map(function (g) {
+      var files2 = AVAILABLE.filter(function (f) {
+        return !used[f] && g.test.test(f);
+      });
+      files2.forEach(function (f) {
+        return used[f] = 1;
+      });
+      return {
+        label: g.label,
+        files: files2
+      };
+    });
+    var rest = AVAILABLE.filter(function (f) {
+      return !used[f];
+    });
+    if (rest.length) out.push({
+      label: "Outras",
+      files: rest
+    });
+    return out.filter(function (g) {
+      return g.files.length;
+    });
   }
   var AVAILABLE = ["eboy_manga_eyes_bw_zoomed.webp", "egirl_manga_eyes_bw_zoomed_distinct.webp", "harbor_animal_01.webp", "harbor_animal_02.webp", "harbor_animal_04.webp", "harbor_animal_05.webp", "harbor_animal_06.webp", "harbor_animal_07.webp", "harbor_animal_08.webp", "harbor_cat_01.webp", "harbor_cat_02.webp", "harbor_cat_03.webp", "harbor_cat_04.webp", "harbor_element_01.webp", "harbor_element_02.webp", "harbor_element_03.webp", "harbor_element_04.webp", "harbor_face_01.webp", "harbor_face_02.webp", "harbor_face_03.webp", "harbor_face_04.webp", "harbor_face_05.webp", "harbor_face_06.webp", "harbor_face_07.webp", "harbor_face_08.webp", "harbor_face_09.webp", "harbor_face_10.webp", "harbor_face_11.webp", "harbor_face_12.webp", "harbor_kawaii_01.webp", "harbor_kawaii_02.webp", "harbor_kawaii_03.webp", "harbor_kawaii_04.webp", "harbor_kawaii_05.webp", "harbor_kawaii_06.webp", "harbor_kawaii_07.webp", "harbor_kawaii_08.webp", "harbor_kawaii_10.webp", "harbor_misc_01.webp", "harbor_misc_02.webp", "harbor_misc_03.webp", "harbor_misc_04.webp", "harbor_misc_05.webp", "harbor_misc_06.webp", "harbor_misc_08.webp", "harbor_person_01.webp", "harbor_person_02.webp", "harbor_person_03.webp", "harbor_person_04.webp", "harbor_person_05.webp", "harbor_person_06.webp", "harbor_person_07.webp", "harbor_person_08.webp", "harbor_person_09.webp", "harbor_person_10.webp", "harbor_person_11.webp", "harbor_person_12.webp", "harbor_person_13.webp", "harbor_person_14.webp", "harbor_person_15.webp", "harbor_person_16.webp", "harbor_person_17.webp", "harbor_space_01.webp", "harbor_space_02.webp", "harbor_space_03.webp"];
   function switchProfile(id) {
@@ -16539,16 +16600,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         text: t("Teste dos plugins")
       }), out]));
       document.getElementById("app").appendChild(modal);
+      var follow = true;
       var layer = pushLayer(modal, {
         onBack: function onBack() {
           return popLayer(layer), modal.parentNode && modal.parentNode.removeChild(modal);
+        },
+        onKey: function onKey(e) {
+          if (e.keyCode !== KEY.UP && e.keyCode !== KEY.DOWN) return false;
+          out.scrollTop += e.keyCode === KEY.DOWN ? 160 : -160;
+          follow = out.scrollTop + out.clientHeight >= out.scrollHeight - 4;
+          return true;
         }
       });
       var line = function line(ok, text) {
-        return out.appendChild(h("div", {
+        out.appendChild(h("div", {
           cls: ok === true ? "ok" : ok === false ? "bad" : "",
           text: (ok === true ? "✓ " : ok === false ? "✗ " : "… ") + text
         }));
+        if (follow) out.scrollTop = out.scrollHeight;
       };
       var ua = navigator.userAgent || "";
       line(null, "Chrome " + ((/Chrome\/(\d+)/.exec(ua) || /\) (\d+)\.\d+\.\d+\.\d+/.exec(ua) || [])[1] || "?") + " · Tizen " + ((/Tizen ([\d.]+)/.exec(ua) || [])[1] || "?") + " · " + t("serviço da TV") + " v" + (serviceVersion() || "?"));
@@ -23760,7 +23829,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T07:39:32.449Z";
+  var BUILD = "2026-11-17T07:47:24.265Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -24444,19 +24513,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return pick2("");
       }
     }, "Aa"));
-    avatarFiles().forEach(function (f) {
-      var im = h("img", {
-        alt: ""
+    avatarGroups().forEach(function (g) {
+      grid.appendChild(h("div.av-sec", {
+        text: t(g.label)
+      }));
+      g.files.forEach(function (f) {
+        var im = h("img", {
+          alt: ""
+        });
+        im.setAttribute("data-lazy", avatarUrl(f));
+        grid.appendChild(h("div.av-tile", {
+          focusable: true,
+          cls: f === current3 ? "checked" : "",
+          "data-autofocus": f === current3 ? "" : null,
+          onSelect: function onSelect() {
+            return pick2(f);
+          }
+        }, im));
       });
-      im.setAttribute("data-lazy", avatarUrl(f));
-      grid.appendChild(h("div.av-tile", {
-        focusable: true,
-        cls: f === current3 ? "checked" : "",
-        "data-autofocus": f === current3 ? "" : null,
-        onSelect: function onSelect() {
-          return pick2(f);
-        }
-      }, im));
     });
     var layer = pushLayer(modal, {
       onBack: function onBack() {
@@ -25206,7 +25280,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         });
       }));
     }
-    var GROUPS = [{
+    var GROUPS2 = [{
       id: "c-account",
       icon: "👤",
       label: "Conta e perfis",
@@ -25238,7 +25312,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       sub: "Atualizações, teste de internet, log"
     }];
     var railTimer = null;
-    var railItems = GROUPS.map(function (g) {
+    var railItems = GROUPS2.map(function (g) {
       var el2 = h("div.rail-item", {
         focusable: true,
         onSelect: function onSelect() {
@@ -25287,7 +25361,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         placeFocus();
         return;
       }
-      var GROUP = GROUPS.find(function (g) {
+      var GROUP = GROUPS2.find(function (g) {
         return g.id === page3;
       });
       pageHeader(t(GROUP.label));

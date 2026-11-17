@@ -241,8 +241,21 @@ function SourcesView(kind) {
     const out = h('div.diag');
     const modal = h('div.modal', null, h('div.modal-box.diag-box', null, [h('h3', { text: t('Teste dos plugins') }), out]));
     document.getElementById('app').appendChild(modal);
-    const layer = nav.pushLayer(modal, { onBack: () => (nav.popLayer(layer), modal.parentNode && modal.parentNode.removeChild(modal)) });
-    const line = (ok, text) => out.appendChild(h('div', { cls: ok === true ? 'ok' : ok === false ? 'bad' : '', text: (ok === true ? '✓ ' : ok === false ? '✗ ' : '… ') + text }));
+    // The list scrolls inside the window: it follows the newest line; Up / Down scroll it by hand.
+    let follow = true;
+    const layer = nav.pushLayer(modal, {
+      onBack: () => (nav.popLayer(layer), modal.parentNode && modal.parentNode.removeChild(modal)),
+      onKey: (e) => {
+        if (e.keyCode !== nav.KEY.UP && e.keyCode !== nav.KEY.DOWN) return false;
+        out.scrollTop += e.keyCode === nav.KEY.DOWN ? 160 : -160;
+        follow = out.scrollTop + out.clientHeight >= out.scrollHeight - 4;
+        return true;
+      },
+    });
+    const line = (ok, text) => {
+      out.appendChild(h('div', { cls: ok === true ? 'ok' : ok === false ? 'bad' : '', text: (ok === true ? '✓ ' : ok === false ? '✗ ' : '… ') + text }));
+      if (follow) out.scrollTop = out.scrollHeight;
+    };
     const ua = navigator.userAgent || '';
     line(null, 'Chrome ' + ((/Chrome\/(\d+)/.exec(ua) || /\) (\d+)\.\d+\.\d+\.\d+/.exec(ua) || [])[1] || '?') + ' · Tizen ' + ((/Tizen ([\d.]+)/.exec(ua) || [])[1] || '?') + ' · ' + t('serviço da TV') + ' v' + (serviceVersion() || '?'));
     // Each step with its own time limit and the exact error; then every plugin in turn.
