@@ -948,3 +948,24 @@ body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000
 .kg-key.yellow { background: #facc15; border-color: #b8950c; min-width: 26px; width: 26px; padding: 0; }
 .kg-key.blue { background: #3b82f6; border-color: #1d4ed8; min-width: 26px; width: 26px; padding: 0; }
 .kg-label { font-size: 17px; color: rgba(255,255,255,0.82); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Age notice as a film starts */
+.p-age { position: absolute; left: 70px; top: 70px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 14px 24px 14px 18px; border-left: 5px solid var(--accent, #2f5bd3); background: rgba(0,0,0,0.55); border-radius: 0 12px 12px 0; opacity: 0; -webkit-transform: translateX(-20px); transform: translateX(-20px); -webkit-transition: opacity .4s, -webkit-transform .4s; transition: opacity .4s, transform .4s; pointer-events: none; z-index: 20; max-width: 900px; }
+.p-age.show { opacity: 1; -webkit-transform: none; transform: none; }
+[dir="rtl"] .p-age { left: auto; right: 70px; border-left: 0; border-right: 5px solid var(--accent, #2f5bd3); border-radius: 12px 0 0 12px; padding: 14px 18px 14px 24px; }
+.p-age b { font-size: 34px; font-weight: 900; margin-right: 18px; }
+[dir="rtl"] .p-age b { margin-right: 0; margin-left: 18px; }
+.p-age span { display: block; font-size: 20px; font-weight: 700; color: rgba(255,255,255,0.9); }
+.p-age small { display: block; font-size: 18px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+
+/* No spoilers: unwatched episodes have a blurred picture and summary */
+.episode.spoiler .thumb img { -webkit-filter: blur(14px) brightness(0.8); filter: blur(14px) brightness(0.8); -webkit-transform: scale(1.12); transform: scale(1.12); }
+.episode.spoiler .thumb { overflow: hidden; }
+.episode.spoiler .ep-desc { -webkit-filter: blur(6px); filter: blur(6px); opacity: 0.7; }
+
+/* Live TV preview: the focused channel, small and muted, bottom right */
+.live-preview { position: fixed; right: 50px; bottom: 60px; width: 480px; height: 270px; border-radius: 14px; overflow: hidden; background: #000; box-shadow: 0 10px 40px rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.15); opacity: 0; -webkit-transition: opacity .3s; transition: opacity .3s; pointer-events: none; z-index: 50; }
+.live-preview.show { opacity: 1; }
+[dir="rtl"] .live-preview { right: auto; left: 50px; }
+.live-preview video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+.live-preview .lp-name { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 14px; font-size: 18px; font-weight: 700; background: linear-gradient(transparent, rgba(0,0,0,0.85)); }

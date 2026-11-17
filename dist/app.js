@@ -1,12 +1,12 @@
 var _templateObject, _templateObject2;
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 function _taggedTemplateLiteral(e, t) { return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } })); }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, e) { if ("object" != _typeof(t) || !t) return t; var r; if ("undefined" != typeof Symbol && void 0 !== (r = t[Symbol.toPrimitive])) { var i = r.call(t, e || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === e ? String : Number)(t); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
 function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
@@ -3695,13 +3695,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             }
             return ascii.substring(0, ascii.length - 1);
           };
-          _this.renderTo2dContext = function (context, cellSize) {
+          _this.renderTo2dContext = function (context2, cellSize) {
             cellSize = cellSize || 2;
             var length = _this.getModuleCount();
             for (var row3 = 0; row3 < length; row3++) {
               for (var col = 0; col < length; col++) {
-                context.fillStyle = _this.isDark(row3, col) ? "black" : "white";
-                context.fillRect(row3 * cellSize, col * cellSize, cellSize, cellSize);
+                context2.fillStyle = _this.isDark(row3, col) ? "black" : "white";
+                context2.fillRect(row3 * cellSize, col * cellSize, cellSize, cellSize);
               }
             }
           };
@@ -6013,7 +6013,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Livros famosos": "Famous books",
     "Viraram filmes e séries": "Made into films and series",
     "Clássicos que todo mundo conhece": "Classics everyone knows",
-    "Mistério e suspense famosos": "Famous mystery and thrillers"
+    "Mistério e suspense famosos": "Famous mystery and thrillers",
+    "Tela": "Screen",
+    "Tamanho da imagem": "Picture size",
+    "Livre": "All ages",
+    "Original": "Original",
+    "Esticar na tela": "Stretch to the screen",
+    "Ampliar (corta as bordas)": "Zoom (crops the edges)",
+    "Próximo filme da saga": "Next film of the saga",
+    "Nos créditos, oferece o filme seguinte da coleção (com chave TMDB)": "At the credits, offers the next film of the collection (with a TMDB key)",
+    "Aviso de idade": "Age notice",
+    "No começo do filme: a classificação e o porquê (com o guia dos pais ligado)": "As a film starts: its rating and why (with the parental guide on)",
+    "Vistos recentemente": "Recently watched",
+    "Prévia: ligada": "Preview: on",
+    "Prévia: desligada": "Preview: off",
+    "Sem spoilers": "No spoilers",
+    "Desfoca a imagem e o resumo dos episódios que você ainda não viu": "Blurs the picture and summary of episodes you haven't watched yet",
+    "Sons da interface": "Interface sounds",
+    "Um som curto ao mover e ao apertar OK": "A short sound when you move and press OK"
   };
 
   // src/js/lib/i18n-ar.js
@@ -7251,7 +7268,24 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Livros famosos": "كتب مشهورة",
     "Viraram filmes e séries": "صارت أفلام ومسلسلات",
     "Clássicos que todo mundo conhece": "كلاسيكيات يعرفها الكل",
-    "Mistério e suspense famosos": "غموض وإثارة مشهورة"
+    "Mistério e suspense famosos": "غموض وإثارة مشهورة",
+    "Tela": "الشاشة",
+    "Tamanho da imagem": "حجم الصورة",
+    "Livre": "لكل الأعمار",
+    "Original": "الأصلي",
+    "Esticar na tela": "تمديد على الشاشة",
+    "Ampliar (corta as bordas)": "تكبير (يقص الأطراف)",
+    "Próximo filme da saga": "الفيلم التالي في السلسلة",
+    "Nos créditos, oferece o filme seguinte da coleção (com chave TMDB)": "عند التترات يعرض الفيلم اللي بعده في السلسلة (يحتاج مفتاح TMDB)",
+    "Aviso de idade": "تنبيه العمر",
+    "No começo do filme: a classificação e o porquê (com o guia dos pais ligado)": "أول الفيلم: التصنيف العمري وسببه (مع تفعيل دليل الأهل)",
+    "Vistos recentemente": "شوهدت مؤخراً",
+    "Prévia: ligada": "المعاينة: تشتغل",
+    "Prévia: desligada": "المعاينة: طافية",
+    "Sem spoilers": "بدون حرق",
+    "Desfoca a imagem e o resumo dos episódios que você ainda não viu": "يغبّش صورة ووصف الحلقات اللي ما شفتها",
+    "Sons da interface": "أصوات الواجهة",
+    "Um som curto ao mover e ao apertar OK": "صوت قصير وقت التنقل والضغط على OK"
   };
 
   // src/js/lib/i18n-es.js
@@ -7819,364 +7853,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
-  // src/js/lib/platform.js
-  function isTizen() {
-    return _typeof(window.tizen) === "object" || /Tizen/i.test(navigator.userAgent || "");
-  }
-  function registerTizenKeys() {
-    var input = window.tizen && window.tizen.tvinputdevice;
-    if (!input) return;
-    ["MediaPlayPause", "MediaPlay", "MediaPause", "MediaStop", "MediaFastForward", "MediaRewind", "ColorF0Red", "ColorF1Green", "ColorF2Yellow", "ColorF3Blue", "ChannelUp", "ChannelDown"].forEach(function (k) {
-      try {
-        input.registerKey(k);
-      } catch (e) {}
-    });
-  }
-
-  // src/js/lib/nav.js
-  var TIZEN = isTizen();
-  var KEY = {
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40,
-    ENTER: 13,
-    IME_DONE: 65376,
-    // Samsung on-screen keyboard Done (not the remote's OK)
-    IME_CANCEL: 65385,
-    // Samsung on-screen keyboard Cancel
-    BACK: TIZEN ? 10009 : 461,
-    // Samsung Return / LG Back
-    ESC: 27,
-    BACKSPACE: 8,
-    PLAY: 415,
-    PAUSE: 19,
-    PLAYPAUSE: TIZEN ? 10252 : 179,
-    STOP: 413,
-    FF: 417,
-    RW: 412,
-    RED: 403,
-    GREEN: 404,
-    YELLOW: 405,
-    BLUE: 406,
-    CH_UP: TIZEN ? 427 : 33,
-    CH_DOWN: TIZEN ? 428 : 34
-  };
-  var layers = [];
-  var scrollHook = null;
-  var pointerMode = false;
-  var smooth = false;
-  function setSmooth(on) {
-    smooth = !!on;
-  }
-  function top() {
-    return layers[layers.length - 1] || null;
-  }
-  function isVisible(el) {
-    if (!el || el.offsetParent === null) return false;
-    if (el.hasAttribute("disabled")) return false;
-    return true;
-  }
-  function candidates(root2) {
-    return $$("[data-focus]", root2).filter(isVisible);
-  }
-  function center(r) {
-    return {
-      x: (r.left + r.right) / 2,
-      y: (r.top + r.bottom) / 2
-    };
-  }
-  function pick(list3, cur, dir) {
-    var cr = cur.getBoundingClientRect();
-    var cc = center(cr);
-    var tol = 8;
-    var best2 = null;
-    var bestScore = Infinity;
-    for (var i = 0; i < list3.length; i++) {
-      var el = list3[i];
-      var r = el.getBoundingClientRect();
-      var primary = void 0;
-      var secondary = void 0;
-      if (dir === "right") {
-        if (r.left < cr.right - tol && center(r).x <= cc.x + tol) continue;
-        if (center(r).x <= cc.x) continue;
-        primary = Math.max(0, r.left - cr.right);
-        secondary = overlap(r.top, r.bottom, cr.top, cr.bottom) ? 0 : Math.abs(center(r).y - cc.y);
-      } else if (dir === "left") {
-        if (center(r).x >= cc.x) continue;
-        if (r.right > cr.left + tol && center(r).x >= cc.x - tol) continue;
-        primary = Math.max(0, cr.left - r.right);
-        secondary = overlap(r.top, r.bottom, cr.top, cr.bottom) ? 0 : Math.abs(center(r).y - cc.y);
-      } else if (dir === "down") {
-        if (r.top < cr.bottom - tol) continue;
-        primary = Math.max(0, r.top - cr.bottom);
-        secondary = overlap(r.left, r.right, cr.left, cr.right) ? Math.abs(r.left - cr.left) / 10 : Math.abs(center(r).x - cc.x);
-      } else {
-        if (r.bottom > cr.top + tol) continue;
-        primary = Math.max(0, cr.top - r.bottom);
-        secondary = overlap(r.left, r.right, cr.left, cr.right) ? Math.abs(r.left - cr.left) / 10 : Math.abs(center(r).x - cc.x);
-      }
-      var score = primary + secondary * 2.5;
-      if (score < bestScore) {
-        bestScore = score;
-        best2 = el;
-      }
-    }
-    return best2;
-  }
-  function overlap(a1, a2, b1, b2) {
-    return Math.min(a2, b2) - Math.max(a1, b1) > 4;
-  }
-  function animateScroll(node, prop, target) {
-    if (node.__anim) cancelAnimationFrame(node.__anim);
-    var start4 = node[prop];
-    var delta = target - start4;
-    if (!smooth || Math.abs(delta) < 2) {
-      node[prop] = target;
-      if (scrollHook) scrollHook(node);
-      return;
-    }
-    var dur = 160;
-    var t0 = Date.now();
-    var _step2 = function step() {
-      var k = Math.min(1, (Date.now() - t0) / dur);
-      node[prop] = start4 + delta * (1 - Math.pow(1 - k, 3));
-      if (k < 1) node.__anim = requestAnimationFrame(_step2);else {
-        node.__anim = null;
-        if (scrollHook) scrollHook(node);
-      }
-    };
-    node.__anim = requestAnimationFrame(_step2);
-  }
-  function ensureVisible(el) {
-    var node = el.parentNode;
-    while (node && node.nodeType === 1) {
-      if (node.hasAttribute("data-scroll-x")) {
-        var pad = parseInt(node.getAttribute("data-pad") || "96", 10);
-        var er = el.getBoundingClientRect();
-        var nr = node.getBoundingClientRect();
-        var target = node.scrollLeft;
-        if (er.left < nr.left + pad) target -= nr.left + pad - er.left;else if (er.right > nr.right - pad) target += er.right - (nr.right - pad);
-        target = Math.max(0, Math.min(target, node.scrollWidth - node.clientWidth));
-        if (target !== node.scrollLeft) animateScroll(node, "scrollLeft", target);
-      }
-      if (node.hasAttribute("data-scroll-y")) {
-        var _pad = parseInt(node.getAttribute("data-pad-y") || "140", 10);
-        var _er = el.getBoundingClientRect();
-        var _nr = node.getBoundingClientRect();
-        var _target = node.scrollTop;
-        var anchor = el.closest("[data-anchor]");
-        if (anchor && node.contains(anchor)) {
-          var ar = anchor.getBoundingClientRect();
-          _target += ar.top - _nr.top - parseInt(anchor.getAttribute("data-anchor") || "0", 10);
-        } else if (_er.top < _nr.top + _pad) _target -= _nr.top + _pad - _er.top;else if (_er.bottom > _nr.bottom - _pad) _target += _er.bottom - (_nr.bottom - _pad);
-        _target = Math.max(0, Math.min(_target, node.scrollHeight - node.clientHeight));
-        if (_target !== node.scrollTop) animateScroll(node, "scrollTop", _target);
-      }
-      if (node.hasAttribute("data-scroll-stop")) break;
-      node = node.parentNode;
-    }
-  }
-  function focus(el, opts) {
-    var layer = top();
-    if (!layer || !el) return;
-    var prev = layer.current;
-    if (prev && prev !== el) {
-      prev.classList.remove("focused");
-      if (prev.__blur) prev.__blur();
-    }
-    layer.current = el;
-    el.classList.add("focused");
-    var group = el.closest("[data-group]");
-    if (group) group.__last = el;
-    if (!(opts && opts.noScroll)) ensureVisible(el);
-    if (el.__focus && prev !== el) el.__focus(el);
-  }
-  function current2() {
-    var layer = top();
-    return layer ? layer.current : null;
-  }
-  function focusFirst(root2) {
-    var layer = top();
-    if (!layer) return;
-    var scope = root2 || layer.root;
-    var pref = $$("[data-autofocus]", scope).filter(isVisible)[0];
-    var el = pref || candidates(scope)[0];
-    if (el) focus(el);
-  }
-  function move(dir) {
-    var layer = top();
-    if (!layer) return false;
-    var cur = layer.current;
-    if (!cur || !document.body.contains(cur) || !isVisible(cur)) {
-      focusFirst();
-      return true;
-    }
-    var group = cur.closest("[data-group]");
-    var horizontal = dir === "left" || dir === "right";
-    if (group && horizontal === !group.hasAttribute("data-vertical")) {
-      var inGroup = candidates(group).filter(function (e) {
-        return e !== cur;
-      });
-      var g = pick(inGroup, cur, dir);
-      if (g) {
-        focus(g);
-        return true;
-      }
-      if (group.hasAttribute("data-trap")) return false;
-    }
-    var all3 = candidates(layer.root).filter(function (e) {
-      return e !== cur;
-    });
-    var best2 = pick(all3, cur, dir);
-    if (!best2) return false;
-    var bg = best2.closest("[data-group]");
-    if (bg && bg !== group && bg.__last && bg.contains(bg.__last) && isVisible(bg.__last)) best2 = bg.__last;
-    focus(best2);
-    return true;
-  }
-  function select(el) {
-    var target = el || current2();
-    if (!target) return;
-    if (target.tagName === "INPUT") {
-      target.focus();
-      return;
-    }
-    if (target.__select) target.__select(target);
-  }
-  function pushLayer(root2, handlers) {
-    var layer = Object.assign({
-      root: root2,
-      current: null
-    }, handlers || {});
-    layers.push(layer);
-    return layer;
-  }
-  function popLayer(layer) {
-    var i = layers.indexOf(layer);
-    if (i >= 0) layers.splice(i, 1);
-    var t2 = top();
-    if (t2 && t2.current) {
-      t2.current.classList.add("focused");
-    }
-  }
-  function topLayer() {
-    return top();
-  }
-  function onScroll(fn) {
-    scrollHook = fn;
-  }
-  var hold = null;
-  function onKeyUp(e) {
-    if (e.keyCode !== KEY.ENTER || !hold) return;
-    clearTimeout(hold.timer);
-    var h0 = hold;
-    hold = null;
-    if (!h0.fired && current2() === h0.el) select(h0.el);
-  }
-  function onKeyDown(e) {
-    var layer = top();
-    if (!layer) return;
-    var code = e.keyCode;
-    var active3 = document.activeElement;
-    var typing = active3 && (active3.tagName === "INPUT" || active3.tagName === "TEXTAREA");
-    if (typing) {
-      if (code === KEY.ENTER || code === KEY.IME_DONE) {
-        if (code === KEY.ENTER) e.preventDefault();
-        active3.blur();
-        if (active3.__submit) active3.__submit(active3.value);
-        return;
-      } else if (code === KEY.BACK || code === KEY.ESC || code === KEY.IME_CANCEL) {
-        if (code !== KEY.IME_CANCEL) e.preventDefault();
-        active3.blur();
-        return;
-      } else if (code === KEY.UP || code === KEY.DOWN) {
-        active3.blur();
-      } else return;
-    }
-    if (code >= 37 && code <= 40 && pointerMode) pointerMode = false;
-    if (layer.onKey && layer.onKey(e) === true) {
-      e.preventDefault();
-      return;
-    }
-    switch (code) {
-      case KEY.LEFT:
-        move("left");
-        break;
-      case KEY.RIGHT:
-        move("right");
-        break;
-      case KEY.UP:
-        move("up");
-        break;
-      case KEY.DOWN:
-        move("down");
-        break;
-      case KEY.ENTER:
-        {
-          var cur = layer.current;
-          if (cur && cur.__long) {
-            if (e.repeat || hold) break;
-            var h1 = {
-              el: cur,
-              fired: false,
-              timer: 0
-            };
-            h1.timer = setTimeout(function () {
-              h1.fired = true;
-              cur.__long(cur);
-            }, 650);
-            hold = h1;
-            break;
-          }
-          select();
-          break;
-        }
-      case KEY.BACK:
-      case KEY.ESC:
-      case KEY.BACKSPACE:
-        if (layer.onBack) layer.onBack();
-        break;
-      default:
-        return;
-    }
-    e.preventDefault();
-  }
-  function onMouseOver(e) {
-    var layer = top();
-    if (!layer) return;
-    pointerMode = true;
-    var el = e.target.closest ? e.target.closest("[data-focus]") : null;
-    if (el && layer.root.contains(el) && el !== layer.current) focus(el, {
-      noScroll: true
-    });
-  }
-  function onClick(e) {
-    var layer = top();
-    if (!layer) return;
-    var el = e.target.closest ? e.target.closest("[data-focus]") : null;
-    if (el && layer.root.contains(el)) {
-      focus(el, {
-        noScroll: true
-      });
-      select(el);
-    }
-  }
-  var wheelLock = 0;
-  function onWheel(e) {
-    var now = Date.now();
-    if (now - wheelLock < 120) return;
-    wheelLock = now;
-    move(e.deltaY > 0 ? "down" : "up");
-  }
-  function install() {
-    document.addEventListener("keydown", onKeyDown, true);
-    document.addEventListener("keyup", onKeyUp, true);
-    document.addEventListener("mouseover", onMouseOver);
-    document.addEventListener("click", onClick);
-    document.addEventListener("mousewheel", onWheel);
-  }
-
   // src/js/lib/store.js
   var PREFIX = "kai.";
   function rawGet(key4, fallback) {
@@ -8400,6 +8076,412 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     rawSet("device", dev);
     set("settings", prof);
     return settings();
+  }
+
+  // src/js/lib/sounds.js
+  var ctx = null;
+  function context() {
+    if (ctx) return ctx;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    try {
+      ctx = new AC();
+    } catch (e) {
+      ctx = null;
+    }
+    return ctx;
+  }
+  function busy() {
+    return !!document.querySelector(".view.player:not(.hidden), .view.reader:not(.hidden), .view.listen:not(.hidden)");
+  }
+  function beep(freq, ms, vol) {
+    if (!settings().uiSounds || busy()) return;
+    var c = context();
+    if (!c) return;
+    try {
+      if (c.state === "suspended" && c.resume) c.resume();
+      var o = c.createOscillator();
+      var g = c.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      var now = c.currentTime;
+      g.gain.setValueAtTime(1e-4, now);
+      g.gain.exponentialRampToValueAtTime(vol, now + 8e-3);
+      g.gain.exponentialRampToValueAtTime(1e-4, now + ms / 1e3);
+      o.connect(g);
+      g.connect(c.destination);
+      o.start(now);
+      o.stop(now + ms / 1e3 + 0.02);
+    } catch (e) {}
+  }
+  var move = function move() {
+    return beep(880, 45, 0.05);
+  };
+  var press = function press() {
+    return beep(1320, 70, 0.08);
+  };
+
+  // src/js/lib/platform.js
+  function isTizen() {
+    return _typeof(window.tizen) === "object" || /Tizen/i.test(navigator.userAgent || "");
+  }
+  function registerTizenKeys() {
+    var input = window.tizen && window.tizen.tvinputdevice;
+    if (!input) return;
+    ["MediaPlayPause", "MediaPlay", "MediaPause", "MediaStop", "MediaFastForward", "MediaRewind", "ColorF0Red", "ColorF1Green", "ColorF2Yellow", "ColorF3Blue", "ChannelUp", "ChannelDown"].forEach(function (k) {
+      try {
+        input.registerKey(k);
+      } catch (e) {}
+    });
+  }
+
+  // src/js/lib/nav.js
+  var TIZEN = isTizen();
+  var KEY = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40,
+    ENTER: 13,
+    IME_DONE: 65376,
+    // Samsung on-screen keyboard Done (not the remote's OK)
+    IME_CANCEL: 65385,
+    // Samsung on-screen keyboard Cancel
+    BACK: TIZEN ? 10009 : 461,
+    // Samsung Return / LG Back
+    ESC: 27,
+    BACKSPACE: 8,
+    PLAY: 415,
+    PAUSE: 19,
+    PLAYPAUSE: TIZEN ? 10252 : 179,
+    STOP: 413,
+    FF: 417,
+    RW: 412,
+    RED: 403,
+    GREEN: 404,
+    YELLOW: 405,
+    BLUE: 406,
+    CH_UP: TIZEN ? 427 : 33,
+    CH_DOWN: TIZEN ? 428 : 34
+  };
+  var layers = [];
+  var scrollHook = null;
+  var pointerMode = false;
+  var smooth = false;
+  function setSmooth(on) {
+    smooth = !!on;
+  }
+  function top() {
+    return layers[layers.length - 1] || null;
+  }
+  function isVisible(el) {
+    if (!el || el.offsetParent === null) return false;
+    if (el.hasAttribute("disabled")) return false;
+    return true;
+  }
+  function candidates(root2) {
+    return $$("[data-focus]", root2).filter(isVisible);
+  }
+  function center(r) {
+    return {
+      x: (r.left + r.right) / 2,
+      y: (r.top + r.bottom) / 2
+    };
+  }
+  function pick(list3, cur, dir) {
+    var cr = cur.getBoundingClientRect();
+    var cc = center(cr);
+    var tol = 8;
+    var best2 = null;
+    var bestScore = Infinity;
+    for (var i = 0; i < list3.length; i++) {
+      var el = list3[i];
+      var r = el.getBoundingClientRect();
+      var primary = void 0;
+      var secondary = void 0;
+      if (dir === "right") {
+        if (r.left < cr.right - tol && center(r).x <= cc.x + tol) continue;
+        if (center(r).x <= cc.x) continue;
+        primary = Math.max(0, r.left - cr.right);
+        secondary = overlap(r.top, r.bottom, cr.top, cr.bottom) ? 0 : Math.abs(center(r).y - cc.y);
+      } else if (dir === "left") {
+        if (center(r).x >= cc.x) continue;
+        if (r.right > cr.left + tol && center(r).x >= cc.x - tol) continue;
+        primary = Math.max(0, cr.left - r.right);
+        secondary = overlap(r.top, r.bottom, cr.top, cr.bottom) ? 0 : Math.abs(center(r).y - cc.y);
+      } else if (dir === "down") {
+        if (r.top < cr.bottom - tol) continue;
+        primary = Math.max(0, r.top - cr.bottom);
+        secondary = overlap(r.left, r.right, cr.left, cr.right) ? Math.abs(r.left - cr.left) / 10 : Math.abs(center(r).x - cc.x);
+      } else {
+        if (r.bottom > cr.top + tol) continue;
+        primary = Math.max(0, cr.top - r.bottom);
+        secondary = overlap(r.left, r.right, cr.left, cr.right) ? Math.abs(r.left - cr.left) / 10 : Math.abs(center(r).x - cc.x);
+      }
+      var score = primary + secondary * 2.5;
+      if (score < bestScore) {
+        bestScore = score;
+        best2 = el;
+      }
+    }
+    return best2;
+  }
+  function overlap(a1, a2, b1, b2) {
+    return Math.min(a2, b2) - Math.max(a1, b1) > 4;
+  }
+  function animateScroll(node, prop, target) {
+    if (node.__anim) cancelAnimationFrame(node.__anim);
+    var start4 = node[prop];
+    var delta = target - start4;
+    if (!smooth || Math.abs(delta) < 2) {
+      node[prop] = target;
+      if (scrollHook) scrollHook(node);
+      return;
+    }
+    var dur = 160;
+    var t0 = Date.now();
+    var _step2 = function step() {
+      var k = Math.min(1, (Date.now() - t0) / dur);
+      node[prop] = start4 + delta * (1 - Math.pow(1 - k, 3));
+      if (k < 1) node.__anim = requestAnimationFrame(_step2);else {
+        node.__anim = null;
+        if (scrollHook) scrollHook(node);
+      }
+    };
+    node.__anim = requestAnimationFrame(_step2);
+  }
+  function ensureVisible(el) {
+    var node = el.parentNode;
+    while (node && node.nodeType === 1) {
+      if (node.hasAttribute("data-scroll-x")) {
+        var pad = parseInt(node.getAttribute("data-pad") || "96", 10);
+        var er = el.getBoundingClientRect();
+        var nr = node.getBoundingClientRect();
+        var target = node.scrollLeft;
+        if (er.left < nr.left + pad) target -= nr.left + pad - er.left;else if (er.right > nr.right - pad) target += er.right - (nr.right - pad);
+        target = Math.max(0, Math.min(target, node.scrollWidth - node.clientWidth));
+        if (target !== node.scrollLeft) animateScroll(node, "scrollLeft", target);
+      }
+      if (node.hasAttribute("data-scroll-y")) {
+        var _pad = parseInt(node.getAttribute("data-pad-y") || "140", 10);
+        var _er = el.getBoundingClientRect();
+        var _nr = node.getBoundingClientRect();
+        var _target = node.scrollTop;
+        var anchor = el.closest("[data-anchor]");
+        if (anchor && node.contains(anchor)) {
+          var ar = anchor.getBoundingClientRect();
+          _target += ar.top - _nr.top - parseInt(anchor.getAttribute("data-anchor") || "0", 10);
+        } else if (_er.top < _nr.top + _pad) _target -= _nr.top + _pad - _er.top;else if (_er.bottom > _nr.bottom - _pad) _target += _er.bottom - (_nr.bottom - _pad);
+        _target = Math.max(0, Math.min(_target, node.scrollHeight - node.clientHeight));
+        if (_target !== node.scrollTop) animateScroll(node, "scrollTop", _target);
+      }
+      if (node.hasAttribute("data-scroll-stop")) break;
+      node = node.parentNode;
+    }
+  }
+  function focus(el, opts) {
+    var layer = top();
+    if (!layer || !el) return;
+    var prev = layer.current;
+    if (prev && prev !== el) {
+      prev.classList.remove("focused");
+      if (prev.__blur) prev.__blur();
+    }
+    layer.current = el;
+    el.classList.add("focused");
+    var group = el.closest("[data-group]");
+    if (group) group.__last = el;
+    if (!(opts && opts.noScroll)) ensureVisible(el);
+    if (el.__focus && prev !== el) el.__focus(el);
+  }
+  function current2() {
+    var layer = top();
+    return layer ? layer.current : null;
+  }
+  function focusFirst(root2) {
+    var layer = top();
+    if (!layer) return;
+    var scope = root2 || layer.root;
+    var pref = $$("[data-autofocus]", scope).filter(isVisible)[0];
+    var el = pref || candidates(scope)[0];
+    if (el) focus(el);
+  }
+  function move2(dir) {
+    var layer = top();
+    if (!layer) return false;
+    var cur = layer.current;
+    if (!cur || !document.body.contains(cur) || !isVisible(cur)) {
+      focusFirst();
+      return true;
+    }
+    var group = cur.closest("[data-group]");
+    var horizontal = dir === "left" || dir === "right";
+    if (group && horizontal === !group.hasAttribute("data-vertical")) {
+      var inGroup = candidates(group).filter(function (e) {
+        return e !== cur;
+      });
+      var g = pick(inGroup, cur, dir);
+      if (g) {
+        focus(g);
+        move();
+        return true;
+      }
+      if (group.hasAttribute("data-trap")) return false;
+    }
+    var all3 = candidates(layer.root).filter(function (e) {
+      return e !== cur;
+    });
+    var best2 = pick(all3, cur, dir);
+    if (!best2) return false;
+    var bg = best2.closest("[data-group]");
+    if (bg && bg !== group && bg.__last && bg.contains(bg.__last) && isVisible(bg.__last)) best2 = bg.__last;
+    focus(best2);
+    move();
+    return true;
+  }
+  function select(el) {
+    var target = el || current2();
+    if (!target) return;
+    if (target.tagName === "INPUT") {
+      target.focus();
+      return;
+    }
+    if (target.__select) {
+      press();
+      target.__select(target);
+    }
+  }
+  function pushLayer(root2, handlers) {
+    var layer = Object.assign({
+      root: root2,
+      current: null
+    }, handlers || {});
+    layers.push(layer);
+    return layer;
+  }
+  function popLayer(layer) {
+    var i = layers.indexOf(layer);
+    if (i >= 0) layers.splice(i, 1);
+    var t2 = top();
+    if (t2 && t2.current) {
+      t2.current.classList.add("focused");
+    }
+  }
+  function topLayer() {
+    return top();
+  }
+  function onScroll(fn) {
+    scrollHook = fn;
+  }
+  var hold = null;
+  function onKeyUp(e) {
+    if (e.keyCode !== KEY.ENTER || !hold) return;
+    clearTimeout(hold.timer);
+    var h0 = hold;
+    hold = null;
+    if (!h0.fired && current2() === h0.el) select(h0.el);
+  }
+  function onKeyDown(e) {
+    var layer = top();
+    if (!layer) return;
+    var code = e.keyCode;
+    var active3 = document.activeElement;
+    var typing = active3 && (active3.tagName === "INPUT" || active3.tagName === "TEXTAREA");
+    if (typing) {
+      if (code === KEY.ENTER || code === KEY.IME_DONE) {
+        if (code === KEY.ENTER) e.preventDefault();
+        active3.blur();
+        if (active3.__submit) active3.__submit(active3.value);
+        return;
+      } else if (code === KEY.BACK || code === KEY.ESC || code === KEY.IME_CANCEL) {
+        if (code !== KEY.IME_CANCEL) e.preventDefault();
+        active3.blur();
+        return;
+      } else if (code === KEY.UP || code === KEY.DOWN) {
+        active3.blur();
+      } else return;
+    }
+    if (code >= 37 && code <= 40 && pointerMode) pointerMode = false;
+    if (layer.onKey && layer.onKey(e) === true) {
+      e.preventDefault();
+      return;
+    }
+    switch (code) {
+      case KEY.LEFT:
+        move2("left");
+        break;
+      case KEY.RIGHT:
+        move2("right");
+        break;
+      case KEY.UP:
+        move2("up");
+        break;
+      case KEY.DOWN:
+        move2("down");
+        break;
+      case KEY.ENTER:
+        {
+          var cur = layer.current;
+          if (cur && cur.__long) {
+            if (e.repeat || hold) break;
+            var h1 = {
+              el: cur,
+              fired: false,
+              timer: 0
+            };
+            h1.timer = setTimeout(function () {
+              h1.fired = true;
+              cur.__long(cur);
+            }, 650);
+            hold = h1;
+            break;
+          }
+          select();
+          break;
+        }
+      case KEY.BACK:
+      case KEY.ESC:
+      case KEY.BACKSPACE:
+        if (layer.onBack) layer.onBack();
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+  }
+  function onMouseOver(e) {
+    var layer = top();
+    if (!layer) return;
+    pointerMode = true;
+    var el = e.target.closest ? e.target.closest("[data-focus]") : null;
+    if (el && layer.root.contains(el) && el !== layer.current) focus(el, {
+      noScroll: true
+    });
+  }
+  function onClick(e) {
+    var layer = top();
+    if (!layer) return;
+    var el = e.target.closest ? e.target.closest("[data-focus]") : null;
+    if (el && layer.root.contains(el)) {
+      focus(el, {
+        noScroll: true
+      });
+      select(el);
+    }
+  }
+  var wheelLock = 0;
+  function onWheel(e) {
+    var now = Date.now();
+    if (now - wheelLock < 120) return;
+    wheelLock = now;
+    move2(e.deltaY > 0 ? "down" : "up");
+  }
+  function install() {
+    document.addEventListener("keydown", onKeyDown, true);
+    document.addEventListener("keyup", onKeyUp, true);
+    document.addEventListener("mouseover", onMouseOver);
+    document.addEventListener("click", onClick);
+    document.addEventListener("mousewheel", onWheel);
   }
 
   // src/js/api/stremio.js
@@ -10694,6 +10776,80 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       });
     });
   }
+  function nextInSaga(imdb) {
+    return tmdbFind(imdb).then(function (f) {
+      if (!f || f.type !== "movie") return null;
+      return tmdb("movie/" + f.id, {
+        language: apiLang()
+      }).then(function (d) {
+        var c = d && d.belongs_to_collection;
+        if (!c) return null;
+        return tmdb("collection/" + c.id, {
+          language: apiLang()
+        }).then(function (col) {
+          var today = (/* @__PURE__ */new Date()).toISOString().slice(0, 10);
+          var parts = (col && col.parts || []).filter(function (x) {
+            return x.release_date && x.release_date <= today;
+          }).sort(function (a, b) {
+            return String(a.release_date).localeCompare(String(b.release_date));
+          });
+          var i = parts.findIndex(function (x) {
+            return x.id === f.id;
+          });
+          var nx = i >= 0 ? parts[i + 1] : null;
+          if (!nx) return null;
+          return tmdbImdb("movie", nx.id).then(function (id) {
+            return id ? {
+              imdb: id,
+              name: nx.title,
+              year: parseInt(nx.release_date, 10),
+              poster: nx.poster_path ? TMDB_IMG + "w342" + nx.poster_path : null
+            } : null;
+          });
+        });
+      });
+    });
+  }
+  var AGES = {
+    G: 0,
+    PG: 8,
+    "PG-13": 13,
+    R: 17,
+    "NC-17": 18,
+    "TV-Y": 0,
+    "TV-Y7": 7,
+    "TV-G": 0,
+    "TV-PG": 10,
+    "TV-14": 14,
+    "TV-MA": 17
+  };
+  function ageRating(imdb) {
+    return tmdbFind(imdb).then(function (f) {
+      if (!f) return null;
+      var path = f.type === "movie" ? "movie/" + f.id + "/release_dates" : "tv/" + f.id + "/content_ratings";
+      return tmdb(path, {}).then(function (r) {
+        var list3 = r && r.results || [];
+        var pick2 = function pick2(cc) {
+          var x = list3.find(function (y) {
+            return y.iso_3166_1 === cc;
+          });
+          if (!x) return "";
+          if (x.rating != null) return x.rating;
+          var rd2 = (x.release_dates || []).find(function (y) {
+            return y.certification;
+          });
+          return rd2 ? rd2.certification : "";
+        };
+        var label = pick2("US") || pick2(region());
+        if (!label) return null;
+        var n = AGES[label] != null ? AGES[label] : parseInt(String(label).replace(/\D/g, ""), 10);
+        return {
+          label: label,
+          age: isFinite(n) ? n : null
+        };
+      });
+    });
+  }
   function tmdbGet(path, params) {
     if (!tmdbKey()) return Promise.reject(new Error("no TMDB key"));
     return tmdb(path, Object.assign({
@@ -12136,6 +12292,71 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
 
+  // src/js/api/parental.js
+  var API2 = "https://api.tiffara.com/titles/";
+  var CATS = [{
+    key: "SEXUAL_CONTENT",
+    label: "Nudez"
+  }, {
+    key: "VIOLENCE",
+    label: "Violência"
+  }, {
+    key: "PROFANITY",
+    label: "Palavrões"
+  }, {
+    key: "ALCOHOL_DRUGS",
+    label: "Álcool e drogas"
+  }, {
+    key: "FRIGHTENING_INTENSE_SCENES",
+    label: "Cenas assustadoras"
+  }];
+  var cache3 = {};
+  function severity(cat) {
+    var list3 = (cat && cat.severityBreakdowns || []).map(function (x) {
+      return {
+        level: String(x.severityLevel || "").toLowerCase(),
+        votes: +x.voteCount || 0
+      };
+    });
+    var none = (list3.find(function (x) {
+      return x.level === "none";
+    }) || {
+      votes: 0
+    }).votes;
+    var top2 = list3.filter(function (x) {
+      return x.level && x.level !== "none";
+    }).sort(function (a, b) {
+      return b.votes - a.votes;
+    })[0];
+    return top2 && top2.votes > none ? top2.level : null;
+  }
+  function guide(imdbId) {
+    var id = (String(imdbId || "").match(/^tt\d+/) || [])[0];
+    if (!id) return Promise.resolve([]);
+    if (cache3[id]) return cache3[id];
+    var p = getJSONViaProxy(API2 + id + "/parentsGuide", {
+      timeout: 6e3
+    }).then(function (r) {
+      var map = {};
+      (r && r.parentsGuide || []).forEach(function (c) {
+        return map[String(c.category || "").toUpperCase()] = c;
+      });
+      return CATS.map(function (c) {
+        return {
+          label: c.label,
+          level: severity(map[c.key])
+        };
+      }).filter(function (x) {
+        return x.level;
+      });
+    }).catch(function () {
+      delete cache3[id];
+      return [];
+    });
+    cache3[id] = p;
+    return p;
+  }
+
   // src/js/lib/avvideo.js
   function available() {
     try {
@@ -12300,10 +12521,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         AV.open(url2);
         opened = true;
         setListener(gen);
-        AV.setDisplayRect(0, 0, 1920, 1080);
-        try {
-          AV.setDisplayMethod("PLAYER_DISPLAY_MODE_LETTER_BOX");
-        } catch (e) {}
+        applyFit();
       } catch (e) {
         setTimeout(function () {
           return gen === generation && fail("open: " + (e && e.message));
@@ -12469,8 +12687,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return false;
       }
     }
+    var fit = "original";
+    function applyFit() {
+      try {
+        if (fit === "zoom") {
+          AV.setDisplayMethod("PLAYER_DISPLAY_MODE_LETTER_BOX");
+          AV.setDisplayRect(-192, -108, 2304, 1296);
+          return;
+        }
+        AV.setDisplayRect(0, 0, 1920, 1080);
+        AV.setDisplayMethod(fit === "fill" ? "PLAYER_DISPLAY_MODE_FULL_SCREEN" : "PLAYER_DISPLAY_MODE_LETTER_BOX");
+      } catch (e) {
+        try {
+          AV.setDisplayRect(0, 0, 1920, 1080);
+        } catch (e2) {}
+      }
+    }
     var api2 = {
       node: node,
+      setFit: function setFit(mode) {
+        fit = mode || "original";
+        if (opened) applyFit();
+      },
       isAVPlay: true,
       mediaId: "",
       preload: "auto",
@@ -13377,7 +13615,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/subdl.js
-  var API2 = "https://api.subdl.com/api/v1/subtitles";
+  var API3 = "https://api.subdl.com/api/v1/subtitles";
   var DL = "https://dl.subdl.com";
   var LANGS = {
     AR: "ara",
@@ -13434,7 +13672,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var params = ["api_key=" + encodeURIComponent(k), "imdb_id=" + imdbId, "type=" + (isSeries ? "tv" : "movie"), "languages=" + prefLangs(), "subs_per_page=30"];
     if (season !== null && episode !== null) params.push("season_number=" + season, "episode_number=" + episode);
     var ep = season !== null && episode !== null ? "S" + ("0" + season).slice(-2) + "E" + ("0" + episode).slice(-2) : "";
-    return getJSONViaProxy(API2 + "?" + params.join("&"), {
+    return getJSONViaProxy(API3 + "?" + params.join("&"), {
       timeout: 12e3
     }).then(function (r) {
       return (r && r.subtitles || []).filter(function (s) {
@@ -13769,9 +14007,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return sleepMenu();
       }
     });
+    var fitBtn = h("div.btn", {
+      focusable: true,
+      html: '<span class="ico">⛶</span>' + t("Tela"),
+      onSelect: function onSelect() {
+        return fitMenu();
+      }
+    });
     var buttons = h("div.p-buttons", {
       "data-group": ""
-    }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, sleepBtn, nextBtn]);
+    }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, fitBtn, sleepBtn, nextBtn]);
     var spinner = h("div.p-center", null, h("div.spinner"));
     var msgEl = h("div.p-msg");
     var skipFill = h("i");
@@ -13799,9 +14044,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return upNextStop(true);
       }
     }, t("Cancelar"));
-    var upNextBox = h("div.p-upnext", null, [h("div.un-label", {
+    var upNextLabel = h("div.un-label", {
       text: t("A seguir")
-    }), upNextTitle, upNextCount, h("div.un-buttons", {
+    });
+    var upNextBox = h("div.p-upnext", null, [upNextLabel, upNextTitle, upNextCount, h("div.un-buttons", {
       "data-group": ""
     }, [upNextPlay, upNextCancel])]);
     var postTrack = h("div.row-track", {
@@ -13819,9 +14065,89 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }), postTrack, h("div.un-buttons", {
       "data-group": ""
     }, [postClose])]);
-    var el = h("div.view.player", null, [videoNode, subsEl, overlay2, clockEl, skipBox, upNextBox, postBox, spinner, msgEl]);
+    var ageEl = h("div.p-age");
+    var el = h("div.view.player", null, [videoNode, subsEl, overlay2, clockEl, skipBox, upNextBox, postBox, spinner, msgEl, ageEl]);
     var renderer = Renderer(subsEl);
     apply(subsEl, settings2);
+    var FITS = [{
+      id: "original",
+      label: "Original"
+    }, {
+      id: "fill",
+      label: "Esticar na tela"
+    }, {
+      id: "zoom",
+      label: "Ampliar (corta as bordas)"
+    }];
+    function applyFit(mode) {
+      if (useAV) return videoEl.setFit && videoEl.setFit(mode);
+      videoNode.style.objectFit = mode === "fill" ? "fill" : mode === "zoom" ? "cover" : "contain";
+    }
+    function fitMenu() {
+      var cur = settings().pictureSize || "original";
+      menu(t("Tamanho da imagem"), FITS.map(function (f) {
+        return {
+          label: t(f.label),
+          value: f.id,
+          checked: f.id === cur
+        };
+      }), {
+        onPick: function onPick(v) {
+          saveSettings({
+            pictureSize: v
+          });
+          applyFit(v);
+        }
+      });
+    }
+    applyFit(settings2.pictureSize || "original");
+    var nextFilm = null;
+    var filmCardShown = false;
+    var imdbOf2 = function imdbOf2() {
+      return meta.imdb_id || (/^tt\d+/.exec(String(meta.id || "")) || [])[0];
+    };
+    if (!isLive && !opts.isSeries && hasTmdb() && settings2.nextInSaga !== false) nextInSaga(imdbOf2()).then(function (x) {
+      return nextFilm = x;
+    }).catch(function () {});
+    var ageShown = false;
+    function showAge() {
+      if (ageShown || isLive || settings2.ageNotice === false || (opts.startTime || 0) > 120 || !hasTmdb()) return;
+      ageShown = true;
+      var g = settings2.parentalGuide ? guide(imdbOf2()).catch(function () {
+        return [];
+      }) : Promise.resolve([]);
+      Promise.all([ageRating(imdbOf2()).catch(function () {
+        return null;
+      }), g]).then(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+          r = _ref2[0],
+          list3 = _ref2[1];
+        if (!alive || !r) return;
+        var LV = {
+          mild: t("Leve"),
+          moderate: t("Moderado"),
+          severe: t("Forte")
+        };
+        var why = (list3 || []).filter(function (x) {
+          return x.level !== "mild";
+        }).map(function (x) {
+          return t(x.label) + " (" + (LV[x.level] || x.level) + ")";
+        });
+        clear(ageEl);
+        ageEl.appendChild(h("b", {
+          text: r.age != null ? r.age ? r.age + "+" : t("Livre") : r.label
+        }));
+        ageEl.appendChild(h("div", null, [h("span", {
+          text: r.label
+        }), why.length ? h("small", {
+          text: why.join(" · ")
+        }) : null]));
+        ageEl.classList.add("show");
+        setTimeout(function () {
+          return ageEl.classList.remove("show");
+        }, 8e3);
+      });
+    }
     var alive = true;
     var controlsOn = false;
     var hideTimer = null;
@@ -14069,6 +14395,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     videoEl.addEventListener("playing", function () {
       if (!hasPlayed) scheduleAudioPick();
+      if (!hasPlayed) showAge();
       hasPlayed = true;
       if (meta.id !== "dev" && !isLive) onPlay(meta, video, frac());
       showSpinner(false);
@@ -14110,6 +14437,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         toast(t("Boa noite!"), 5e3);
         return pop();
       }
+      if (!opts.isSeries && nextFilm && !upNextCancelled) return filmCardShown ? focus(upNextPlay, {
+        noScroll: true
+      }) : showFilmCard();
       if (opts.isSeries && nextVideo() && !upNextCancelled && settings2.autoNext !== false) playNext();else if (!(opts.isSeries && nextVideo()) && settings().postPlay !== false) showPostPlay();else pop();
     });
     var postPlayOn = false;
@@ -14284,7 +14614,29 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var d = videoEl.duration;
       return outro ? outro.start : d - UP_NEXT_SECONDS;
     }
+    function checkNextFilm() {
+      if (filmCardShown || upNextCancelled || !nextFilm || seekTarget !== null || videoEl.paused) return;
+      var d = videoEl.duration;
+      if (!(d > 1200) || !isFinite(d)) return;
+      var outro = segments.find(function (s) {
+        return s.type === "outro";
+      });
+      if (videoEl.currentTime < (outro ? outro.start : d - Math.max(180, d * 0.06))) return;
+      showFilmCard();
+    }
+    function showFilmCard() {
+      filmCardShown = true;
+      hideSkip();
+      upNextLabel.textContent = t("Próximo filme da saga");
+      upNextTitle.textContent = nextFilm.name + (nextFilm.year ? " (" + nextFilm.year + ")" : "");
+      upNextCount.textContent = "";
+      upNextBox.classList.add("show");
+      focus(upNextPlay, {
+        noScroll: true
+      });
+    }
     function checkUpNext() {
+      if (!opts.isSeries) return checkNextFilm();
       if (upNextTimer || upNextCancelled || !opts.isSeries || seekTarget !== null || videoEl.paused || settings2.autoNext === false || sleepAt === -1) return;
       var d = videoEl.duration;
       var nv = nextVideo();
@@ -14319,6 +14671,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       }
     }
     function upNextGo() {
+      if (!opts.isSeries && nextFilm) {
+        upNextStop(false);
+        saveProgress2();
+        record(video.id, 1);
+        onStop(frac());
+        var nf = nextFilm;
+        pop();
+        return openDetails("movie", nf.imdb, {
+          autoStreams: true
+        });
+      }
       upNextStop(false);
       record(video.id, 1);
       upNextCancelled = false;
@@ -15681,71 +16044,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         frame.src = "about:blank";
       }
     };
-  }
-
-  // src/js/api/parental.js
-  var API3 = "https://api.tiffara.com/titles/";
-  var CATS = [{
-    key: "SEXUAL_CONTENT",
-    label: "Nudez"
-  }, {
-    key: "VIOLENCE",
-    label: "Violência"
-  }, {
-    key: "PROFANITY",
-    label: "Palavrões"
-  }, {
-    key: "ALCOHOL_DRUGS",
-    label: "Álcool e drogas"
-  }, {
-    key: "FRIGHTENING_INTENSE_SCENES",
-    label: "Cenas assustadoras"
-  }];
-  var cache3 = {};
-  function severity(cat) {
-    var list3 = (cat && cat.severityBreakdowns || []).map(function (x) {
-      return {
-        level: String(x.severityLevel || "").toLowerCase(),
-        votes: +x.voteCount || 0
-      };
-    });
-    var none = (list3.find(function (x) {
-      return x.level === "none";
-    }) || {
-      votes: 0
-    }).votes;
-    var top2 = list3.filter(function (x) {
-      return x.level && x.level !== "none";
-    }).sort(function (a, b) {
-      return b.votes - a.votes;
-    })[0];
-    return top2 && top2.votes > none ? top2.level : null;
-  }
-  function guide(imdbId) {
-    var id = (String(imdbId || "").match(/^tt\d+/) || [])[0];
-    if (!id) return Promise.resolve([]);
-    if (cache3[id]) return cache3[id];
-    var p = getJSONViaProxy(API3 + id + "/parentsGuide", {
-      timeout: 6e3
-    }).then(function (r) {
-      var map = {};
-      (r && r.parentsGuide || []).forEach(function (c) {
-        return map[String(c.category || "").toUpperCase()] = c;
-      });
-      return CATS.map(function (c) {
-        return {
-          label: c.label,
-          level: severity(map[c.key])
-        };
-      }).filter(function (x) {
-        return x.level;
-      });
-    }).catch(function () {
-      delete cache3[id];
-      return [];
-    });
-    cache3[id] = p;
-    return p;
   }
 
   // src/js/lib/badges.js
@@ -21509,10 +21807,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var tm = hasTmdb() ? adaptationsOf(title, "book").catch(function () {
       return [];
     }) : Promise.resolve([]);
-    return Promise.all([al, tm]).then(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-        a = _ref2[0],
-        f = _ref2[1];
+    return Promise.all([al, tm]).then(function (_ref3) {
+      var _ref4 = _slicedToArray(_ref3, 2),
+        a = _ref4[0],
+        f = _ref4[1];
       var hasAnime = a.some(function (x) {
         return x.icon === "📺";
       });
@@ -21527,10 +21825,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }) : Promise.resolve([]);
     return Promise.all([fromAniList(anilistId).catch(function () {
       return [];
-    }), tm]).then(function (_ref3) {
-      var _ref4 = _slicedToArray(_ref3, 2),
-        a = _ref4[0],
-        f = _ref4[1];
+    }), tm]).then(function (_ref5) {
+      var _ref6 = _slicedToArray(_ref5, 2),
+        a = _ref6[0],
+        f = _ref6[1];
       return a.concat(tmdbItems(f));
     });
   }
@@ -23147,9 +23445,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             width: Math.round(part * 100) + "%"
           }
         })));
+        var spoiler = !done && !inProgress && !(part > 0) && settings().spoilerBlur !== false;
         var row3 = h("div.episode", {
           focusable: true,
-          cls: done ? "watched" : "",
+          cls: (done ? "watched" : "") + (spoiler ? " spoiler" : ""),
           onSelect: function onSelect() {
             return showStreams(v, true);
           }
@@ -25621,6 +25920,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return c.src === srcId;
     });
   };
+  var RECENT = "iptvRecent";
+  function addRecent(srcId, ch) {
+    var all3 = get(RECENT, {}) || {};
+    var l = (all3[srcId] || []).filter(function (c) {
+      return c.id !== ch.id;
+    });
+    l.unshift({
+      id: ch.id,
+      name: ch.name,
+      logo: ch.logo,
+      url: ch.url,
+      cat: ch.cat,
+      epg: ch.epg,
+      num: ch.num,
+      src: srcId
+    });
+    all3[srcId] = l.slice(0, 20);
+    set(RECENT, all3);
+  }
+  var recentList = function recentList(srcId) {
+    return (get(RECENT, {}) || {})[srcId] || [];
+  };
   function get4(url2, json) {
     return httpRaw(url2, {
       timeoutMs: 3e4
@@ -25810,6 +26131,46 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     scroller.appendChild(grid);
     el.appendChild(scroller);
     el.appendChild(hint);
+    var pvVideo = h("video", {
+      muted: true,
+      playsinline: true
+    });
+    pvVideo.muted = true;
+    var pvName = h("div.lp-name");
+    var preview = h("div.live-preview", null, [pvVideo, pvName]);
+    el.appendChild(preview);
+    var pvTimer = null;
+    var pvFor = null;
+    var previewOn = function previewOn() {
+      return settings().livePreview !== false;
+    };
+    function stopPreview() {
+      clearTimeout(pvTimer);
+      pvTimer = null;
+      pvFor = null;
+      preview.classList.remove("show");
+      try {
+        pvVideo.pause();
+        pvVideo.removeAttribute("src");
+        pvVideo.load();
+      } catch (e) {}
+    }
+    function schedulePreview(ch) {
+      clearTimeout(pvTimer);
+      if (!previewOn() || !ch || !ch.url) return;
+      if (pvFor && pvFor.id === ch.id) return;
+      pvTimer = setTimeout(function () {
+        pvFor = ch;
+        pvName.textContent = ch.name;
+        pvVideo.src = ch.url;
+        var p = pvVideo.play();
+        if (p && p.catch) p.catch(function () {});
+        preview.classList.add("show");
+      }, 1500);
+    }
+    pvVideo.onerror = function () {
+      return preview.classList.remove("show");
+    };
     var src = active2();
     var cat = "fav";
     var shown = [];
@@ -25832,7 +26193,16 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         onSelect: search4
       }, [h("span.ico", {
         text: "🔍"
-      }), t("Buscar canal")]) : null]));
+      }), t("Buscar canal")]) : null, src ? h("div.btn", {
+        focusable: true,
+        onSelect: function onSelect() {
+          return saveSettings({
+            livePreview: !previewOn()
+          }), previewOn() || stopPreview(), drawHead();
+        }
+      }, [h("span.ico", {
+        text: "👁"
+      }), previewOn() ? t("Prévia: ligada") : t("Prévia: desligada")]) : null]));
     }
     function sourcesMenu() {
       var list3 = sources2().map(function (s) {
@@ -25960,6 +26330,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       clear(chips);
       if (!src) return;
       chips.appendChild(chip("★ " + t("Favoritos"), "fav"));
+      chips.appendChild(chip("🕘 " + t("Vistos recentemente"), "recent"));
       categories(src).then(function (cats) {
         if (!src) return;
         cats.slice(0, 80).forEach(function (c) {
@@ -25971,6 +26342,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function load7() {
       if (cat === "fav") return Promise.resolve(favList(src.id));
+      if (cat === "recent") return Promise.resolve(recentList(src.id));
       if (cat.indexOf("search:") === 0) {
         var needle = cat.slice(7);
         return categories(src).then(function () {
@@ -26067,7 +26439,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           return play(ch);
         },
         onFocus: function onFocus() {
-          return epg();
+          return epg(), schedulePreview(ch);
         }
       }, [h("div.lc-top", null, [logo2, h("div.lc-id", null, [h("div.lc-name", {
         text: ch.name
@@ -26105,6 +26477,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return el2;
     }
     function play(ch) {
+      stopPreview();
+      addRecent(src.id, ch);
       var id = "live:" + src.id + ":" + ch.id;
       openPlayer({
         meta: {
@@ -26144,8 +26518,11 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       onShow: function onShow() {
         return loadVisibleImages(el);
       },
+      onHide: function onHide() {
+        return stopPreview();
+      },
       destroy: function destroy() {
-        return bar.__destroy && bar.__destroy();
+        return stopPreview(), bar.__destroy && bar.__destroy();
       }
     };
   }
@@ -26770,7 +27147,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (i >= 0) p.hidden.splice(i, 1);else p.hidden.push(k);
     save(p);
   }
-  function move2(entries, entry, delta) {
+  function move3(entries, entry, delta) {
     var list3 = sort(entries).map(key3);
     var k = key3(entry);
     var i = list3.indexOf(k);
@@ -27971,7 +28348,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T21:07:11.396Z";
+  var BUILD = "2026-11-17T21:21:38.706Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -29288,7 +29665,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
             value: 0
           }], {
             onPick: function onPick(v) {
-              if (v === 0) toggleHidden(e);else move2(all3, e, v);
+              if (v === 0) toggleHidden(e);else move3(all3, e, v);
               dropTab("home");
               render();
             }
@@ -30011,6 +30388,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
           render();
         }, toggle(s.searchHistory !== false)));
+        body.appendChild(row3(t("Sem spoilers"), t("Desfoca a imagem e o resumo dos episódios que você ainda não viu"), "", function () {
+          saveSettings({
+            spoilerBlur: settings().spoilerBlur === false
+          });
+          render();
+        }, toggle(s.spoilerBlur !== false)));
+        body.appendChild(row3(t("Sons da interface"), t("Um som curto ao mover e ao apertar OK"), "", function () {
+          saveSettings({
+            uiSounds: !settings().uiSounds
+          });
+          render();
+        }, toggle(!!s.uiSounds)));
         var SS = [0, 5, 10, 15, 30].map(function (m) {
           return {
             id: m,
@@ -30201,6 +30590,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           });
           render();
         }, toggle(s.postPlay !== false)));
+        body.appendChild(row3(t("Próximo filme da saga"), t("Nos créditos, oferece o filme seguinte da coleção (com chave TMDB)"), "", function () {
+          saveSettings({
+            nextInSaga: settings().nextInSaga === false
+          });
+          render();
+        }, toggle(s.nextInSaga !== false)));
+        body.appendChild(row3(t("Aviso de idade"), t("No começo do filme: a classificação e o porquê (com o guia dos pais ligado)"), "", function () {
+          saveSettings({
+            ageNotice: settings().ageNotice === false
+          });
+          render();
+        }, toggle(s.ageNotice !== false)));
         body.appendChild(row3(t("Selos das fontes"), t("Qualidade, HDR, áudio, idioma, tamanho..."), "", function () {
           return openPage("badges");
         }));

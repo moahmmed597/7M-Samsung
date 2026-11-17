@@ -13,6 +13,8 @@ import * as addons from '../api/addons.js';
 import * as stremio from '../api/stremio.js';
 import * as skip from '../api/skip.js';
 import { menu, toast, fmtTime, timeHM, card } from '../ui.js';
+import * as extras from '../api/extras.js';
+import * as parental from '../api/parental.js';
 import * as router from '../router.js';
 import { sortedVideos, openDetails } from './details.js';
 import { t, epLabel } from '../lib/i18n.js';
@@ -112,7 +114,8 @@ function PlayerView(opts) {
   const nextBtn = h('div.btn', { focusable: true, html: '<span class="ico">⏭</span>' + t('Próximo'), onSelect: () => playNext() });
   const chapBtn = h('div.btn', { focusable: true, html: '<span class="ico">☰</span>' + t('Capítulos'), onSelect: () => chaptersMenu() });
   const sleepBtn = h('div.btn', { focusable: true, html: '<span class="ico">☾</span>' + t('Dormir'), onSelect: () => sleepMenu() });
-  const buttons = h('div.p-buttons', { 'data-group': '' }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, sleepBtn, nextBtn]);
+  const fitBtn = h('div.btn', { focusable: true, html: '<span class="ico">⛶</span>' + t('Tela'), onSelect: () => fitMenu() });
+  const buttons = h('div.p-buttons', { 'data-group': '' }, [playBtn, audioBtn, subsBtn, srcBtn, chapBtn, fitBtn, sleepBtn, nextBtn]);
   const spinner = h('div.p-center', null, h('div.spinner'));
   const msgEl = h('div.p-msg');
   const skipFill = h('i');
@@ -127,8 +130,9 @@ function PlayerView(opts) {
   const upNextCount = h('div.un-count');
   const upNextPlay = h('div.btn.primary', { focusable: true, onSelect: () => upNextGo() }, [h('span.ico', { text: '▶' }), t('Assistir agora')]);
   const upNextCancel = h('div.btn', { focusable: true, onSelect: () => upNextStop(true) }, t('Cancelar'));
+  const upNextLabel = h('div.un-label', { text: t('A seguir') });
   const upNextBox = h('div.p-upnext', null, [
-    h('div.un-label', { text: t('A seguir') }),
+    upNextLabel,
     upNextTitle,
     upNextCount,
     h('div.un-buttons', { 'data-group': '' }, [upNextPlay, upNextCancel]),
@@ -137,10 +141,59 @@ function PlayerView(opts) {
   const postTrack = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
   const postClose = h('div.btn', { focusable: true, onSelect: () => router.pop() }, t('Fechar'));
   const postBox = h('div.p-postplay', null, [h('div.un-label', { text: t('Mais como este') }), postTrack, h('div.un-buttons', { 'data-group': '' }, [postClose])]);
-  const el = h('div.view.player', null, [videoNode, subsEl, overlay, clockEl, skipBox, upNextBox, postBox, spinner, msgEl]);
+  // Age notice as a film starts (like Netflix): the rating and, with the parental guide on, why.
+  const ageEl = h('div.p-age');
+  const el = h('div.view.player', null, [videoNode, subsEl, overlay, clockEl, skipBox, upNextBox, postBox, spinner, msgEl, ageEl]);
 
   const renderer = subs.Renderer(subsEl);
   substyle.apply(subsEl, settings);
+
+  // ---------- Picture size ----------
+  const FITS = [
+    { id: 'original', label: 'Original' },
+    { id: 'fill', label: 'Esticar na tela' },
+    { id: 'zoom', label: 'Ampliar (corta as bordas)' },
+  ];
+  function applyFit(mode) {
+    if (useAV) return videoEl.setFit && videoEl.setFit(mode);
+    videoNode.style.objectFit = mode === 'fill' ? 'fill' : mode === 'zoom' ? 'cover' : 'contain';
+  }
+  function fitMenu() {
+    const cur = store.settings().pictureSize || 'original';
+    menu(t('Tamanho da imagem'), FITS.map((f) => ({ label: t(f.label), value: f.id, checked: f.id === cur })), {
+      onPick: (v) => {
+        store.saveSettings({ pictureSize: v });
+        applyFit(v);
+      },
+    });
+  }
+  applyFit(settings.pictureSize || 'original');
+
+  // ---------- Next film of the saga and the age notice (films and shows, not live) ----------
+  let nextFilm = null;
+  let filmCardShown = false;
+  const imdbOf = () => meta.imdb_id || (/^tt\d+/.exec(String(meta.id || '')) || [])[0];
+  if (!isLive && !opts.isSeries && extras.hasTmdb() && settings.nextInSaga !== false)
+    extras
+      .nextInSaga(imdbOf())
+      .then((x) => (nextFilm = x))
+      .catch(() => {});
+  let ageShown = false;
+  function showAge() {
+    if (ageShown || isLive || settings.ageNotice === false || (opts.startTime || 0) > 120 || !extras.hasTmdb()) return;
+    ageShown = true;
+    const g = settings.parentalGuide ? parental.guide(imdbOf()).catch(() => []) : Promise.resolve([]);
+    Promise.all([extras.ageRating(imdbOf()).catch(() => null), g]).then(([r, list]) => {
+      if (!alive || !r) return;
+      const LV = { mild: t('Leve'), moderate: t('Moderado'), severe: t('Forte') };
+      const why = (list || []).filter((x) => x.level !== 'mild').map((x) => t(x.label) + ' (' + (LV[x.level] || x.level) + ')');
+      clear(ageEl);
+      ageEl.appendChild(h('b', { text: r.age != null ? (r.age ? r.age + '+' : t('Livre')) : r.label }));
+      ageEl.appendChild(h('div', null, [h('span', { text: r.label }), why.length ? h('small', { text: why.join(' · ') }) : null]));
+      ageEl.classList.add('show');
+      setTimeout(() => ageEl.classList.remove('show'), 8000);
+    });
+  }
 
   let alive = true;
   let controlsOn = false;
@@ -368,6 +421,7 @@ function PlayerView(opts) {
   });
   videoEl.addEventListener('playing', () => {
     if (!hasPlayed) scheduleAudioPick();
+    if (!hasPlayed) showAge();
     hasPlayed = true;
     if (meta.id !== 'dev' && !isLive) tracker.onPlay(meta, video, frac());
     showSpinner(false);
@@ -405,6 +459,7 @@ function PlayerView(opts) {
       toast(t('Boa noite!'), 5000);
       return router.pop();
     }
+    if (!opts.isSeries && nextFilm && !upNextCancelled) return filmCardShown ? nav.focus(upNextPlay, { noScroll: true }) : showFilmCard();
     if (opts.isSeries && nextVideo() && !upNextCancelled && settings.autoNext !== false) playNext();
     else if (!(opts.isSeries && nextVideo()) && store.settings().postPlay !== false) showPostPlay();
     else router.pop();
@@ -545,7 +600,27 @@ function PlayerView(opts) {
     return outro ? outro.start : d - UP_NEXT_SECONDS;
   }
 
+  // A film: at the credits, the next one of its saga (no countdown: a new film is your choice).
+  function checkNextFilm() {
+    if (filmCardShown || upNextCancelled || !nextFilm || seekTarget !== null || videoEl.paused) return;
+    const d = videoEl.duration;
+    if (!(d > 1200) || !isFinite(d)) return;
+    const outro = segments.find((s) => s.type === 'outro');
+    if (videoEl.currentTime < (outro ? outro.start : d - Math.max(180, d * 0.06))) return;
+    showFilmCard();
+  }
+  function showFilmCard() {
+    filmCardShown = true;
+    hideSkip();
+    upNextLabel.textContent = t('Próximo filme da saga');
+    upNextTitle.textContent = nextFilm.name + (nextFilm.year ? ' (' + nextFilm.year + ')' : '');
+    upNextCount.textContent = '';
+    upNextBox.classList.add('show');
+    nav.focus(upNextPlay, { noScroll: true });
+  }
+
   function checkUpNext() {
+    if (!opts.isSeries) return checkNextFilm();
     if (upNextTimer || upNextCancelled || !opts.isSeries || seekTarget !== null || videoEl.paused || settings.autoNext === false || sleepAt === -1) return;
     const d = videoEl.duration;
     const nv = nextVideo();
@@ -574,6 +649,15 @@ function PlayerView(opts) {
   }
 
   function upNextGo() {
+    if (!opts.isSeries && nextFilm) {
+      upNextStop(false);
+      saveProgress();
+      watched.record(video.id, 1);
+      tracker.onStop(frac());
+      const nf = nextFilm;
+      router.pop();
+      return openDetails('movie', nf.imdb, { autoStreams: true });
+    }
     upNextStop(false);
     watched.record(video.id, 1); // reached the credits
     upNextCancelled = false;

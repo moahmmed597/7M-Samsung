@@ -175,12 +175,7 @@ export function create() {
       AV.open(url);
       opened = true;
       setListener(gen);
-      AV.setDisplayRect(0, 0, 1920, 1080);
-      try {
-        AV.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX');
-      } catch (e) {
-        /* older firmware */
-      }
+      applyFit();
     } catch (e) {
       setTimeout(() => gen === generation && fail('open: ' + (e && e.message)), 0);
       return;
@@ -358,8 +353,31 @@ export function create() {
     }
   }
 
+  // Picture size: 'original' (letterbox), 'fill' (stretched to the screen), 'zoom' (cropped to fill).
+  let fit = 'original';
+  function applyFit() {
+    try {
+      if (fit === 'zoom') {
+        AV.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX');
+        AV.setDisplayRect(-192, -108, 2304, 1296); // 20% larger, the edges outside the screen
+        return;
+      }
+      AV.setDisplayRect(0, 0, 1920, 1080);
+      AV.setDisplayMethod(fit === 'fill' ? 'PLAYER_DISPLAY_MODE_FULL_SCREEN' : 'PLAYER_DISPLAY_MODE_LETTER_BOX');
+    } catch (e) {
+      /* older firmware */
+      try {
+        AV.setDisplayRect(0, 0, 1920, 1080);
+      } catch (e2) {}
+    }
+  }
+
   const api = {
     node: node,
+    setFit(mode) {
+      fit = mode || 'original';
+      if (opened) applyFit();
+    },
     isAVPlay: true,
     mediaId: '',
     preload: 'auto',

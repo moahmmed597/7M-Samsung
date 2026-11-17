@@ -9,6 +9,7 @@ import { topbar, toast, promptText, menu, confirmDialog, timeHM, spinnerLine, fo
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
 import { openPlayer } from './player.js';
+import * as store from '../lib/store.js';
 
 const PAGE = 40;
 
@@ -27,6 +28,41 @@ export function LiveView() {
   el.appendChild(scroller);
   el.appendChild(hint);
 
+  // Preview: rest on a channel for a moment and it plays small and muted in the corner.
+  const pvVideo = h('video', { muted: true, playsinline: true });
+  pvVideo.muted = true;
+  const pvName = h('div.lp-name');
+  const preview = h('div.live-preview', null, [pvVideo, pvName]);
+  el.appendChild(preview);
+  let pvTimer = null;
+  let pvFor = null;
+  const previewOn = () => store.settings().livePreview !== false;
+  function stopPreview() {
+    clearTimeout(pvTimer);
+    pvTimer = null;
+    pvFor = null;
+    preview.classList.remove('show');
+    try {
+      pvVideo.pause();
+      pvVideo.removeAttribute('src');
+      pvVideo.load();
+    } catch (e) {}
+  }
+  function schedulePreview(ch) {
+    clearTimeout(pvTimer);
+    if (!previewOn() || !ch || !ch.url) return;
+    if (pvFor && pvFor.id === ch.id) return;
+    pvTimer = setTimeout(() => {
+      pvFor = ch;
+      pvName.textContent = ch.name;
+      pvVideo.src = ch.url;
+      const p = pvVideo.play();
+      if (p && p.catch) p.catch(() => {});
+      preview.classList.add('show');
+    }, 1500);
+  }
+  pvVideo.onerror = () => preview.classList.remove('show');
+
   let src = iptv.active();
   let cat = 'fav';
   let shown = [];
@@ -40,6 +76,12 @@ export function LiveView() {
       h('div.details-buttons', { 'data-group': '' }, [
         h('div.btn', { focusable: true, onSelect: sourcesMenu }, [h('span.ico', { text: '📡' }), src ? src.name : t('Adicionar fonte')]),
         src ? h('div.btn', { focusable: true, onSelect: search }, [h('span.ico', { text: '🔍' }), t('Buscar canal')]) : null,
+        src
+          ? h('div.btn', { focusable: true, onSelect: () => (store.saveSettings({ livePreview: !previewOn() }), previewOn() || stopPreview(), drawHead()) }, [
+              h('span.ico', { text: '👁' }),
+              previewOn() ? t('Prévia: ligada') : t('Prévia: desligada'),
+            ])
+          : null,
       ])
     );
   }
@@ -121,6 +163,7 @@ export function LiveView() {
     clear(chips);
     if (!src) return;
     chips.appendChild(chip('★ ' + t('Favoritos'), 'fav'));
+    chips.appendChild(chip('🕘 ' + t('Vistos recentemente'), 'recent'));
     iptv
       .categories(src)
       .then((cats) => {
@@ -132,6 +175,7 @@ export function LiveView() {
 
   function load() {
     if (cat === 'fav') return Promise.resolve(iptv.favList(src.id));
+    if (cat === 'recent') return Promise.resolve(iptv.recentList(src.id));
     if (cat.indexOf('search:') === 0) {
       // Search the channels already loaded (M3U: the whole list; Xtream: the categories you opened, and favourites).
       const needle = cat.slice(7);
@@ -205,7 +249,7 @@ export function LiveView() {
     const meta = h('div.lc-meta');
     const prog = h('div.lc-prog', null, h('i'));
     const star = h('span.lc-star', { text: iptv.isFav(src.id, ch.id) ? '★' : '' });
-    const el2 = h('div.live-cell', { focusable: true, onSelect: () => play(ch), onFocus: () => epg() }, [
+    const el2 = h('div.live-cell', { focusable: true, onSelect: () => play(ch), onFocus: () => (epg(), schedulePreview(ch)) }, [
       h('div.lc-top', null, [logo, h('div.lc-id', null, [h('div.lc-name', { text: ch.name }), h('div.lc-cat', { text: ch.num ? '#' + ch.num : '' })]), star]),
       now,
       h('div.lc-bottom', null, [meta, prog]),
@@ -233,6 +277,8 @@ export function LiveView() {
   }
 
   function play(ch) {
+    stopPreview();
+    iptv.addRecent(src.id, ch);
     const id = 'live:' + src.id + ':' + ch.id;
     openPlayer({ meta: { id: id, type: 'tv', name: ch.name, poster: ch.logo }, video: { id: id, title: ch.name }, stream: { url: ch.url, name: ch.name }, live: true });
   }
@@ -256,6 +302,7 @@ export function LiveView() {
       return true;
     },
     onShow: () => loadVisibleImages(el),
-    destroy: () => bar.__destroy && bar.__destroy(),
+    onHide: () => stopPreview(),
+    destroy: () => (stopPreview(), bar.__destroy && bar.__destroy()),
   };
 }

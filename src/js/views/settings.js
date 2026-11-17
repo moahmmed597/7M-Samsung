@@ -1063,6 +1063,18 @@ export function SettingsView() {
           render();
         }, toggle(s.searchHistory !== false))
       );
+      body.appendChild(
+        row(t('Sem spoilers'), t('Desfoca a imagem e o resumo dos episódios que você ainda não viu'), '', () => {
+          store.saveSettings({ spoilerBlur: store.settings().spoilerBlur === false });
+          render();
+        }, toggle(s.spoilerBlur !== false))
+      );
+      body.appendChild(
+        row(t('Sons da interface'), t('Um som curto ao mover e ao apertar OK'), '', () => {
+          store.saveSettings({ uiSounds: !store.settings().uiSounds });
+          render();
+        }, toggle(!!s.uiSounds))
+      );
       const SS = [0, 5, 10, 15, 30].map((m) => ({ id: m, label: m ? t('Depois de {n} min', { n: m }) : t('Desligada') }));
       const ssCur = SS.find((x) => x.id === (+s.screensaver || 0)) || SS[0];
       body.appendChild(
@@ -1214,6 +1226,18 @@ export function SettingsView() {
           store.saveSettings({ postPlay: store.settings().postPlay === false });
           render();
         }, toggle(s.postPlay !== false))
+      );
+      body.appendChild(
+        row(t('Próximo filme da saga'), t('Nos créditos, oferece o filme seguinte da coleção (com chave TMDB)'), '', () => {
+          store.saveSettings({ nextInSaga: store.settings().nextInSaga === false });
+          render();
+        }, toggle(s.nextInSaga !== false))
+      );
+      body.appendChild(
+        row(t('Aviso de idade'), t('No começo do filme: a classificação e o porquê (com o guia dos pais ligado)'), '', () => {
+          store.saveSettings({ ageNotice: store.settings().ageNotice === false });
+          render();
+        }, toggle(s.ageNotice !== false))
       );
       body.appendChild(
         row(t('Selos das fontes'), t('Qualidade, HDR, áudio, idioma, tamanho...'), '', () => openPage('badges'))

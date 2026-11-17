@@ -44,6 +44,17 @@ export const favList = (srcId) =>
     .map((k) => favs()[k])
     .filter((c) => c.src === srcId);
 
+// The channels you watched last, per source (newest first, 20 at most).
+const RECENT = 'iptvRecent';
+export function addRecent(srcId, ch) {
+  const all = store.get(RECENT, {}) || {};
+  const l = (all[srcId] || []).filter((c) => c.id !== ch.id);
+  l.unshift({ id: ch.id, name: ch.name, logo: ch.logo, url: ch.url, cat: ch.cat, epg: ch.epg, num: ch.num, src: srcId });
+  all[srcId] = l.slice(0, 20);
+  store.set(RECENT, all);
+}
+export const recentList = (srcId) => (store.get(RECENT, {}) || {})[srcId] || [];
+
 function get(url, json) {
   return httpRaw(url, { timeoutMs: 30000 }).then((r) => {
     if (!r || !r.ok) throw new Error('HTTP ' + (r ? r.status : '?'));

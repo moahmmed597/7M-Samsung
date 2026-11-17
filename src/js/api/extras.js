@@ -259,6 +259,50 @@ export function mangaOf(imdb) {
   });
 }
 
+// The next film of the same saga (TMDB collection, release order): { imdb, name, year, poster } or null.
+export function nextInSaga(imdb) {
+  return tmdbFind(imdb).then((f) => {
+    if (!f || f.type !== 'movie') return null;
+    return tmdb('movie/' + f.id, { language: apiLang() }).then((d) => {
+      const c = d && d.belongs_to_collection;
+      if (!c) return null;
+      return tmdb('collection/' + c.id, { language: apiLang() }).then((col) => {
+        const today = new Date().toISOString().slice(0, 10);
+        const parts = ((col && col.parts) || []).filter((x) => x.release_date && x.release_date <= today).sort((a, b) => String(a.release_date).localeCompare(String(b.release_date)));
+        const i = parts.findIndex((x) => x.id === f.id);
+        const nx = i >= 0 ? parts[i + 1] : null;
+        if (!nx) return null;
+        return tmdbImdb('movie', nx.id).then((id) =>
+          id ? { imdb: id, name: nx.title, year: parseInt(nx.release_date, 10), poster: nx.poster_path ? TMDB_IMG + 'w342' + nx.poster_path : null } : null
+        );
+      });
+    });
+  });
+}
+
+// The age rating (US first, else your country's): { label: 'PG-13', age: 13 } or null.
+const AGES = { G: 0, PG: 8, 'PG-13': 13, R: 17, 'NC-17': 18, 'TV-Y': 0, 'TV-Y7': 7, 'TV-G': 0, 'TV-PG': 10, 'TV-14': 14, 'TV-MA': 17 };
+export function ageRating(imdb) {
+  return tmdbFind(imdb).then((f) => {
+    if (!f) return null;
+    const path = f.type === 'movie' ? 'movie/' + f.id + '/release_dates' : 'tv/' + f.id + '/content_ratings';
+    return tmdb(path, {}).then((r) => {
+      const list = (r && r.results) || [];
+      const pick = (cc) => {
+        const x = list.find((y) => y.iso_3166_1 === cc);
+        if (!x) return '';
+        if (x.rating != null) return x.rating;
+        const rd = (x.release_dates || []).find((y) => y.certification);
+        return rd ? rd.certification : '';
+      };
+      const label = pick('US') || pick(region());
+      if (!label) return null;
+      const n = AGES[label] != null ? AGES[label] : parseInt(String(label).replace(/\D/g, ''), 10);
+      return { label: label, age: isFinite(n) ? n : null };
+    });
+  });
+}
+
 // Any TMDB v3 path (for the imported Nuvio collections); rejects without a key.
 export function tmdbGet(path, params) {
   if (!tmdbKey()) return Promise.reject(new Error('no TMDB key'));

@@ -2,6 +2,7 @@
 // Elementos navegáveis têm [data-focus]. Fileiras usam [data-group] para lembrar a última posição.
 // Contêineres com [data-scroll-x] / [data-scroll-y] rolam para manter o foco visível.
 import { $$ } from './dom.js';
+import * as sounds from './sounds.js';
 import { isTizen } from './platform.js';
 
 const TIZEN = isTizen();
@@ -205,6 +206,7 @@ export function move(dir) {
     const g = pick(inGroup, cur, dir);
     if (g) {
       focus(g);
+      sounds.move();
       return true;
     }
     if (group.hasAttribute('data-trap')) return false;
@@ -215,6 +217,7 @@ export function move(dir) {
   const bg = best.closest('[data-group]');
   if (bg && bg !== group && bg.__last && bg.contains(bg.__last) && isVisible(bg.__last)) best = bg.__last;
   focus(best);
+  sounds.move();
   return true;
 }
 
@@ -225,7 +228,10 @@ export function select(el) {
     target.focus();
     return;
   }
-  if (target.__select) target.__select(target);
+  if (target.__select) {
+    sounds.press();
+    target.__select(target);
+  }
 }
 
 // Camadas: cada tela/modal empilha a sua; o foco fica preso na de cima.

@@ -435,7 +435,9 @@ function DetailsView(type, id, opts) {
         const part = done ? 0 : watched.progress(v.id) || (inProgress && li.state.duration ? li.state.timeOffset / li.state.duration : 0);
         if (done) thumb.appendChild(h('div.ep-watched'));
         else if (part > 0) thumb.appendChild(h('div.progress', null, h('i', { style: { width: Math.round(part * 100) + '%' } })));
-        const row = h('div.episode', { focusable: true, cls: done ? 'watched' : '', onSelect: () => showStreams(v, true) }, [
+        // No spoilers: the picture and summary of an episode you haven't watched are blurred (Settings → Appearance).
+        const spoiler = !done && !inProgress && !(part > 0) && store.settings().spoilerBlur !== false;
+        const row = h('div.episode', { focusable: true, cls: (done ? 'watched' : '') + (spoiler ? ' spoiler' : ''), onSelect: () => showStreams(v, true) }, [
           thumb,
           h('div.ep-info', null, [
             h('div.ep-title', { text: (v.episode ? v.episode + '. ' : '') + (v.name || v.title || t('Episódio')) }),
