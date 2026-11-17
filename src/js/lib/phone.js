@@ -88,6 +88,14 @@ let keysHandler = null;
 export function onKeys(fn) {
   keysHandler = fn;
 }
+// A backup file sent from the phone's backup page.
+let restoreHandler = null;
+export function onRestore(fn) {
+  restoreHandler = fn;
+}
+export function backupUrl(i) {
+  return i ? 'http://' + i.ip + ':' + i.port + '/backup#pin=' + i.pin : null;
+}
 
 // The phone page where the user pastes their own API keys; null when the service isn't running.
 export function setupUrl(i) {
@@ -105,6 +113,7 @@ function handle(ev) {
   else if (ev.type === 'seek' && seekHandler) seekHandler(ev.to);
   else if (ev.type === 'open' && openHandler && ev.item) openHandler(ev);
   else if (ev.type === 'keys' && keysHandler && ev.keys) keysHandler(ev.keys);
+  else if (ev.type === 'restore' && restoreHandler) restoreHandler();
 }
 
 // Polls forever; when the service isn't running (e.g. outside TizenBrew) it checks again slowly.
@@ -163,7 +172,7 @@ export function start() {
       if (r) last = r.last || 0;
       svcVersion = (r && r.version) || 1;
       // An old copy keeps running after an app update: ask it to quit (newer ones can), then start the new one.
-      if (svcVersion < 5) {
+      if (svcVersion < 6) {
         request(BASE + '/api/exit', 3000).then(
           () => setTimeout(startService, 1500),
           () => {}

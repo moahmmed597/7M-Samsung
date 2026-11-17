@@ -4713,71 +4713,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     };
   }
 
-  // src/js/lib/log.js
-  var remoteUrl = "";
-  var buffer = [];
-  var flushing = false;
-  function redact(text) {
-    return text.replace(/((?:realdebrid|alldebrid|premiumize|debridlink|easydebrid|offcloud|torbox|putio|apikey|api_key|token|authKey)(?:=|%3D|:|\/))[A-Za-z0-9._-]{8,}/gi, "$1***");
-  }
-  function send(level, args) {
-    var raw = Array.prototype.map.call(args, function (a) {
-      if (a instanceof Error) return a.message + (a.stack ? "\n" + a.stack : "");
-      if (_typeof(a) === "object") {
-        try {
-          return JSON.stringify(a);
-        } catch (e) {
-          return String(a);
-        }
-      }
-      return String(a);
-    }).join(" ");
-    var text = redact(raw);
-    try {
-      (console[level] || console.log).call(console, "[kai] " + text);
-    } catch (e) {}
-    if (!remoteUrl) return;
-    buffer.push({
-      t: Date.now(),
-      level: level,
-      text: text
-    });
-    if (buffer.length > 200) buffer.shift();
-    flush();
-  }
-  function flush() {
-    if (flushing || !buffer.length || !remoteUrl) return;
-    flushing = true;
-    var batch2 = buffer.splice(0, buffer.length);
-    var xhr2 = new XMLHttpRequest();
-    xhr2.open("POST", remoteUrl, true);
-    xhr2.setRequestHeader("Content-Type", "application/json");
-    xhr2.timeout = 5e3;
-    xhr2.onloadend = function () {
-      flushing = false;
-      if (buffer.length) setTimeout(flush, 200);
-    };
-    xhr2.send(JSON.stringify(batch2));
-  }
-  var log = {
-    info: function info() {
-      send("log", arguments);
-    },
-    warn: function warn() {
-      send("warn", arguments);
-    },
-    error: function error() {
-      send("error", arguments);
-    },
-    setRemote: function setRemote(url2) {
-      remoteUrl = url2 || "";
-      flush();
-    }
-  };
-  window.onerror = function (msg, src, line, col, err) {
-    log.error("ERRO JS:", msg, (src || "") + ":" + line + ":" + col, err && err.stack ? err.stack : "");
-  };
-
   // src/js/lib/i18n-en.js
   var EN = {
     // Navegação e geral
@@ -6030,7 +5965,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Sem spoilers": "No spoilers",
     "Desfoca a imagem e o resumo dos episódios que você ainda não viu": "Blurs the picture and summary of episodes you haven't watched yet",
     "Sons da interface": "Interface sounds",
-    "Um som curto ao mover e ao apertar OK": "A short sound when you move and press OK"
+    "Um som curto ao mover e ao apertar OK": "A short sound when you move and press OK",
+    "Restaurar a cópia do celular ({date})? Substitui as configurações desta TV.": "Restore the copy from the phone ({date})? It replaces this TV's settings.",
+    "Restaurar": "Restore",
+    "Restaurado. Reiniciando...": "Restored. Restarting...",
+    "Não consegui ler a cópia do celular.": "Couldn't read the copy from the phone.",
+    "Cópia de segurança": "Backup",
+    "Guarda os perfis, as chaves, as fontes, onde você parou na leitura e no áudio, as marcações, as fontes de TV ao vivo e as configurações. Fica numa pasta da TV que a reinstalação não apaga, e uma cópia nova é feita sozinha uma vez por dia.": "Keeps the profiles, keys, sources, where you stopped reading and listening, bookmarks, Live TV sources and settings. It stays in a TV folder that reinstalling doesn't erase, and a new copy is made by itself once a day.",
+    "Salvar uma cópia agora": "Save a copy now",
+    "Última: {date}": "Last: {date}",
+    "Ainda não há cópia": "No copy yet",
+    "Salvando...": "Saving...",
+    "Cópia salva na TV ({n} itens).": "Copy saved on the TV ({n} items).",
+    "Cópia guardada até a TV desligar. Baixe no celular para não perder.": "Copy kept until the TV turns off. Download it to your phone so it isn't lost.",
+    "Restaurar a cópia da TV": "Restore the TV copy",
+    "Procurando...": "Looking...",
+    "Não há cópia na TV.": "No copy on the TV.",
+    "Restaurar a cópia de {date}? Substitui as configurações desta TV.": "Restore the copy from {date}? It replaces this TV's settings.",
+    "Cópia de {date}": "Copy from {date}",
+    "No celular": "On the phone",
+    "Aponte a câmera: baixe a cópia para o celular, ou mande uma de volta para esta TV.": "Point the camera: download the copy to the phone, or send one back to this TV.",
+    "Guarda tudo para voltar depois de reinstalar": "Keeps everything to come back after a reinstall",
+    "Nunca": "Never"
   };
 
   // src/js/lib/i18n-ar.js
@@ -7285,7 +7241,28 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Sem spoilers": "بدون حرق",
     "Desfoca a imagem e o resumo dos episódios que você ainda não viu": "يغبّش صورة ووصف الحلقات اللي ما شفتها",
     "Sons da interface": "أصوات الواجهة",
-    "Um som curto ao mover e ao apertar OK": "صوت قصير وقت التنقل والضغط على OK"
+    "Um som curto ao mover e ao apertar OK": "صوت قصير وقت التنقل والضغط على OK",
+    "Restaurar a cópia do celular ({date})? Substitui as configurações desta TV.": "ترجّع النسخة اللي من الجوال ({date})؟ بتحل محل إعدادات هذا التلفزيون.",
+    "Restaurar": "استرجاع",
+    "Restaurado. Reiniciando...": "تم الاسترجاع. يعيد التشغيل...",
+    "Não consegui ler a cópia do celular.": "ما قدرت أقرأ النسخة اللي من الجوال.",
+    "Cópia de segurança": "النسخة الاحتياطية",
+    "Guarda os perfis, as chaves, as fontes, onde você parou na leitura e no áudio, as marcações, as fontes de TV ao vivo e as configurações. Fica numa pasta da TV que a reinstalação não apaga, e uma cópia nova é feita sozinha uma vez por dia.": "تحفظ الملفات الشخصية والمفاتيح والمصادر، ووين وقفت في القراءة والاستماع، والعلامات، ومصادر البث المباشر، والإعدادات. تنحفظ في مجلد في التلفزيون ما ينمسح لو أعدت التثبيت، وتنسوّى نسخة جديدة بروحها مرة كل يوم.",
+    "Salvar uma cópia agora": "احفظ نسخة الحين",
+    "Última: {date}": "آخر نسخة: {date}",
+    "Ainda não há cópia": "ما في نسخة للحين",
+    "Salvando...": "يحفظ...",
+    "Cópia salva na TV ({n} itens).": "انحفظت النسخة في التلفزيون ({n} عنصر).",
+    "Cópia guardada até a TV desligar. Baixe no celular para não perder.": "النسخة محفوظة لين يطفي التلفزيون بس. نزّلها في جوالك عشان ما تضيع.",
+    "Restaurar a cópia da TV": "استرجع نسخة التلفزيون",
+    "Procurando...": "يدوّر...",
+    "Não há cópia na TV.": "ما في نسخة في التلفزيون.",
+    "Restaurar a cópia de {date}? Substitui as configurações desta TV.": "ترجّع نسخة {date}؟ بتحل محل إعدادات هذا التلفزيون.",
+    "Cópia de {date}": "نسخة {date}",
+    "No celular": "من الجوال",
+    "Aponte a câmera: baixe a cópia para o celular, ou mande uma de volta para esta TV.": "وجّه الكاميرا: نزّل النسخة لجوالك، أو رجّع نسخة لهذا التلفزيون.",
+    "Guarda tudo para voltar depois de reinstalar": "تحفظ كل شي عشان ترجعه بعد إعادة التثبيت",
+    "Nunca": "أبداً"
   };
 
   // src/js/lib/i18n-es.js
@@ -7596,263 +7573,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return "S" + season + " E" + episode;
   }
 
-  // src/js/lib/http.js
-  function request(method, url2, body, opts) {
-    var o = opts || {};
-    return new Promise(function (resolve2, reject) {
-      var xhr2 = new XMLHttpRequest();
-      xhr2.open(method, url2, true);
-      xhr2.timeout = o.timeout || 2e4;
-      var hasBody = body !== void 0 && body !== null;
-      var payload = !hasBody ? null : o.form ? formEncode(body) : JSON.stringify(body);
-      if (hasBody) xhr2.setRequestHeader("Content-Type", o.form ? "application/x-www-form-urlencoded" : "application/json");
-      if (o.headers) for (var k in o.headers) xhr2.setRequestHeader(k, o.headers[k]);
-      xhr2.onload = function () {
-        if (xhr2.status >= 200 && xhr2.status < 300) {
-          if (o.raw) return resolve2(xhr2.responseText);
-          try {
-            resolve2(xhr2.responseText ? JSON.parse(xhr2.responseText) : null);
-          } catch (e) {
-            reject(new Error(t("JSON inválido de {url}", {
-              url: url2
-            })));
-          }
-        } else {
-          var err = new Error(t("HTTP {code} em {url}", {
-            code: xhr2.status,
-            url: url2
-          }));
-          err.status = xhr2.status;
-          reject(err);
-        }
-      };
-      xhr2.onerror = function () {
-        var err = new Error(t("Falha de rede em {url}", {
-          url: url2
-        }));
-        err.status = 0;
-        reject(err);
-      };
-      xhr2.ontimeout = function () {
-        var err = new Error(t("Tempo esgotado em {url}", {
-          url: url2
-        }));
-        err.status = 0;
-        err.timeout = true;
-        reject(err);
-      };
-      xhr2.send(payload);
-    }).catch(function (err) {
-      if (!o.quiet) log.warn(err.message);
-      throw err;
-    });
-  }
-  function formEncode(obj) {
-    return Object.keys(obj).filter(function (k) {
-      return obj[k] !== void 0 && obj[k] !== null;
-    }).map(function (k) {
-      return encodeURIComponent(k) + "=" + encodeURIComponent(obj[k]);
-    }).join("&");
-  }
-  function getJSON(url2, opts) {
-    return request("GET", url2, null, opts);
-  }
-  function postJSON(url2, body, opts) {
-    return request("POST", url2, body, opts);
-  }
-  function getText(url2, opts) {
-    return request("GET", url2, null, Object.assign({
-      raw: true
-    }, opts));
-  }
-  var cache = /* @__PURE__ */new Map();
-  function cachedJSON(url2, ttlMs, opts) {
-    var hit = cache.get(url2);
-    var now = Date.now();
-    if (hit && now - hit.t < (ttlMs || 6e5)) return hit.p;
-    var p = getJSON(url2, opts).catch(function (e) {
-      cache.delete(url2);
-      throw e;
-    });
-    cache.set(url2, {
-      t: now,
-      p: p
-    });
-    if (cache.size > 60) cache.delete(cache.keys().next().value);
-    return p;
-  }
-
-  // src/js/lib/img.js
-  function smallPoster(url2) {
-    if (!url2) return url2;
-    return String(url2).replace(/(images\.metahub\.space\/poster\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w185/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?posters\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2").replace(/(static\.tvmaze\.com\/uploads\/images\/)(original_untouched|large_landscape|medium_landscape)\//, "$1medium_portrait/").replace(/(kitsu\.app\/anime\/poster_images\/\d+\/)(original|large|medium)\.(jpg|jpeg|png)/, "$1small.jpg");
-  }
-  function ratedPoster(id, key4) {
-    var k = String(key4 || "").trim();
-    var m = String(id || "").match(/^tt\d+/);
-    if (!k || !m || !/^[\w-]+$/.test(k)) return null;
-    return "https://api.ratingposterdb.com/" + k + "/imdb/poster-default/" + m[0] + ".jpg?fallback=true";
-  }
-  function smallBackground(url2) {
-    if (!url2) return url2;
-    return String(url2).replace(/(images\.metahub\.space\/background\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w300/").replace(/(kitsu\.app\/anime\/(?:poster|cover)_images\/\d+\/)(original|large)\.(jpg|jpeg|png)/, "$1small.jpg").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?(?:posters|fanart)\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2");
-  }
-  function smallThumb(url2) {
-    if (!url2) return url2;
-    return String(url2).replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w300/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?episodes\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2");
-  }
-  var KITSU_RE = /(?:media\.kitsu\.app|kitsu-production-media\.[^/]+)\/anime\/(?:poster_images\/)?(\d+)\/(poster_image|cover_image)\/(?!small-|tiny-|medium-|large-)/;
-  var kitsuCache = {};
-  var batch = {};
-  var batchTimer = null;
-  function kitsuInfo(url2) {
-    var m = String(url2 || "").match(KITSU_RE);
-    return m ? {
-      id: m[1],
-      kind: m[2] === "cover_image" ? "cover" : "poster"
-    } : null;
-  }
-  function flush2() {
-    var ids2 = Object.keys(batch);
-    var waiting = batch;
-    batch = {};
-    batchTimer = null;
-    var _loop2 = function _loop2() {
-      var chunk = ids2.slice(i, i + 20);
-      getJSON("https://kitsu.io/api/edge/anime?filter%5Bid%5D=" + chunk.join(",") + "&fields%5Banime%5D=posterImage,coverImage&page%5Blimit%5D=20", {
-        quiet: true,
-        timeout: 15e3
-      }).then(function (r) {
-        var found = {};
-        (r && r.data || []).forEach(function (a) {
-          return found[a.id] = a.attributes || {};
-        });
-        chunk.forEach(function (id) {
-          var at2 = found[id] || {};
-          var p = at2.posterImage || {};
-          var c = at2.coverImage || {};
-          waiting[id].forEach(function (w) {
-            return w.resolve(w.kind === "cover" ? c.small || c.tiny || null : p.small || p.tiny || null);
-          });
-        });
-      }).catch(function () {
-        return chunk.forEach(function (id) {
-          return waiting[id].forEach(function (w) {
-            return w.resolve(null);
-          });
-        });
-      });
-    };
-    for (var i = 0; i < ids2.length; i += 20) {
-      _loop2();
-    }
-  }
-  function kitsuSmall(info2) {
-    var key4 = info2.id + ":" + info2.kind;
-    if (!kitsuCache[key4]) {
-      kitsuCache[key4] = new Promise(function (resolve2) {
-        (batch[info2.id] = batch[info2.id] || []).push({
-          kind: info2.kind,
-          resolve: resolve2
-        });
-        if (!batchTimer) batchTimer = setTimeout(flush2, 60);
-      });
-    }
-    return kitsuCache[key4];
-  }
-
-  // src/js/lib/dom.js
-  function h(tag, props, children) {
-    var parts = tag.split(/(?=[.#])/);
-    var el = document.createElement(parts[0] || "div");
-    for (var i = 1; i < parts.length; i++) {
-      var p = parts[i];
-      if (p[0] === ".") el.classList.add(p.slice(1));else if (p[0] === "#") el.id = p.slice(1);
-    }
-    if (props) {
-      for (var key4 in props) {
-        var val = props[key4];
-        if (val === void 0 || val === null || val === false) continue;
-        if (key4 === "text") el.textContent = val;else if (key4 === "html") el.innerHTML = val;else if (key4 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key4 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key4 === "onSelect") el.__select = val;else if (key4 === "onFocus") el.__focus = val;else if (key4 === "focusable") el.setAttribute("data-focus", "");else if (key4 === "cls") String(val).split(" ").forEach(function (c) {
-          return c && el.classList.add(c);
-        });else el.setAttribute(key4, val === true ? "" : val);
-      }
-    }
-    append(el, children);
-    return el;
-  }
-  function append(el, children) {
-    if (children === void 0 || children === null || children === false) return el;
-    if (Array.isArray(children)) children.forEach(function (c) {
-      return append(el, c);
-    });else if (typeof children === "string" || typeof children === "number") el.appendChild(document.createTextNode(String(children)));else el.appendChild(children);
-    return el;
-  }
-  function clear(el) {
-    while (el.firstChild) el.removeChild(el.firstChild);
-    return el;
-  }
-  function $$(sel, root2) {
-    return Array.prototype.slice.call((root2 || document).querySelectorAll(sel));
-  }
-  var BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
-  function setOn(el, on) {
-    if (on && !el.__on) {
-      el.__on = true;
-      var url2 = el.getAttribute("data-lazy");
-      if (/\/api\/pimg\?u=https%3A%2F%2Fuploads\.mangadex\.org/.test(url2) && url2.indexOf("&ua=") < 0) url2 += "&ua=stremio-7m-tizen";
-      var kitsu = kitsuInfo(url2);
-      if (!kitsu) {
-        el.src = url2;
-        return;
-      }
-      kitsuSmall(kitsu).then(function (small) {
-        if (!el.__on) return;
-        if (small) {
-          el.setAttribute("data-lazy", small);
-          el.src = small;
-        } else if (el.onerror) el.onerror();
-      });
-    } else if (!on && el.__on) {
-      el.__on = false;
-      el.src = BLANK;
-    }
-  }
-  function loadVisibleImages(root2, margin) {
-    var m = margin === void 0 ? 400 : margin;
-    var W2 = window.innerWidth;
-    var H2 = window.innerHeight;
-    var isFar = function isFar(r) {
-      return r.right < -W2 * 0.5 || r.left > W2 * 1.6 || r.bottom < -H2 * 0.8 || r.top > H2 * 1.8;
-    };
-    var handled = [];
-    $$("[data-scroll-x]", root2).forEach(function (track) {
-      if (track.offsetParent === null) return;
-      var tr = track.getBoundingClientRect();
-      if (tr.bottom < -H2 * 0.8 || tr.top > H2 * 1.8) {
-        $$("img[data-lazy]", track).forEach(function (el) {
-          return setOn(el, false);
-        });
-        handled.push(track);
-      }
-    });
-    $$("img[data-lazy]", root2).forEach(function (el) {
-      if (el.offsetParent === null) return;
-      for (var i = 0; i < handled.length; i++) if (handled[i].contains(el)) return;
-      var r = el.getBoundingClientRect();
-      var near = r.right > -m && r.left < W2 + m && r.bottom > -m && r.top < H2 + m;
-      if (near) setOn(el, true);else if (isFar(r)) setOn(el, false);
-    });
-  }
-  function unloadImages(root2) {
-    $$("img[data-lazy]", root2).forEach(function (el) {
-      if (el.__on) {
-        el.__on = false;
-        el.src = BLANK;
-      }
-    });
-  }
-
   // src/js/lib/store.js
   var PREFIX = "kai.";
   function rawGet(key4, fallback) {
@@ -8076,6 +7796,416 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     rawSet("device", dev);
     set("settings", prof);
     return settings();
+  }
+
+  // src/js/lib/backup.js
+  var SVC = "http://127.0.0.1:8095";
+  var PREFIX2 = "kai.";
+  var SKIP = /(Art\d*$|Famous\d*$|GenreArt$|[Cc]ache|^kai\.devlog)/;
+  var LAST = "backupAt";
+  function xhr(method, url2, body, timeout) {
+    return new Promise(function (resolve2, reject) {
+      var x = new XMLHttpRequest();
+      x.open(method, url2);
+      x.timeout = timeout || 15e3;
+      if (body) x.setRequestHeader("Content-Type", "application/json");
+      x.onload = function () {
+        return x.status >= 200 && x.status < 300 ? resolve2(x.responseText) : reject(new Error("HTTP " + x.status));
+      };
+      x.onerror = x.ontimeout = function () {
+        return reject(new Error("service"));
+      };
+      x.send(body || null);
+    });
+  }
+  function collect() {
+    var data = {};
+    var n = 0;
+    for (var i = 0; i < window.localStorage.length; i++) {
+      var k = window.localStorage.key(i);
+      if (!k || k.indexOf(PREFIX2) !== 0 || SKIP.test(k)) continue;
+      data[k] = window.localStorage.getItem(k);
+      n++;
+    }
+    return {
+      app: "stremio7m",
+      v: 1,
+      at: Date.now(),
+      count: n,
+      data: data
+    };
+  }
+  function save() {
+    var b = collect();
+    return xhr("POST", SVC + "/api/backup", JSON.stringify(b), 3e4).then(function (r) {
+      var out = {};
+      try {
+        out = JSON.parse(r);
+      } catch (e) {}
+      set(LAST, b.at);
+      return {
+        onTv: !!out.onTv,
+        count: b.count,
+        at: b.at
+      };
+    });
+  }
+  var lastAt = function lastAt() {
+    return get(LAST, 0) || 0;
+  };
+  function onTv() {
+    return xhr("GET", SVC + "/api/backup", null, 1e4).then(function (r) {
+      var b = JSON.parse(r);
+      return b && b.app === "stremio7m" ? b : null;
+    }).catch(function () {
+      return null;
+    });
+  }
+  function fromPhone() {
+    return xhr("GET", SVC + "/api/restore-data", null, 1e4).then(function (r) {
+      var b = JSON.parse(r);
+      if (!b || b.app !== "stremio7m") throw new Error("bad");
+      return b;
+    });
+  }
+  function apply(b) {
+    if (!b || b.app !== "stremio7m" || !b.data) return false;
+    Object.keys(b.data).forEach(function (k) {
+      if (k.indexOf(PREFIX2) !== 0) return;
+      try {
+        window.localStorage.setItem(k, b.data[k]);
+      } catch (e) {}
+    });
+    setTimeout(function () {
+      return window.location.reload();
+    }, 600);
+    return true;
+  }
+  function auto() {
+    if (Date.now() - lastAt() < 24 * 3600 * 1e3) return;
+    save().catch(function () {});
+  }
+
+  // src/js/lib/log.js
+  var remoteUrl = "";
+  var buffer = [];
+  var flushing = false;
+  function redact(text) {
+    return text.replace(/((?:realdebrid|alldebrid|premiumize|debridlink|easydebrid|offcloud|torbox|putio|apikey|api_key|token|authKey)(?:=|%3D|:|\/))[A-Za-z0-9._-]{8,}/gi, "$1***");
+  }
+  function send(level, args) {
+    var raw = Array.prototype.map.call(args, function (a) {
+      if (a instanceof Error) return a.message + (a.stack ? "\n" + a.stack : "");
+      if (_typeof(a) === "object") {
+        try {
+          return JSON.stringify(a);
+        } catch (e) {
+          return String(a);
+        }
+      }
+      return String(a);
+    }).join(" ");
+    var text = redact(raw);
+    try {
+      (console[level] || console.log).call(console, "[kai] " + text);
+    } catch (e) {}
+    if (!remoteUrl) return;
+    buffer.push({
+      t: Date.now(),
+      level: level,
+      text: text
+    });
+    if (buffer.length > 200) buffer.shift();
+    flush();
+  }
+  function flush() {
+    if (flushing || !buffer.length || !remoteUrl) return;
+    flushing = true;
+    var batch2 = buffer.splice(0, buffer.length);
+    var xhr3 = new XMLHttpRequest();
+    xhr3.open("POST", remoteUrl, true);
+    xhr3.setRequestHeader("Content-Type", "application/json");
+    xhr3.timeout = 5e3;
+    xhr3.onloadend = function () {
+      flushing = false;
+      if (buffer.length) setTimeout(flush, 200);
+    };
+    xhr3.send(JSON.stringify(batch2));
+  }
+  var log = {
+    info: function info() {
+      send("log", arguments);
+    },
+    warn: function warn() {
+      send("warn", arguments);
+    },
+    error: function error() {
+      send("error", arguments);
+    },
+    setRemote: function setRemote(url2) {
+      remoteUrl = url2 || "";
+      flush();
+    }
+  };
+  window.onerror = function (msg, src, line, col, err) {
+    log.error("ERRO JS:", msg, (src || "") + ":" + line + ":" + col, err && err.stack ? err.stack : "");
+  };
+
+  // src/js/lib/http.js
+  function request(method, url2, body, opts) {
+    var o = opts || {};
+    return new Promise(function (resolve2, reject) {
+      var xhr3 = new XMLHttpRequest();
+      xhr3.open(method, url2, true);
+      xhr3.timeout = o.timeout || 2e4;
+      var hasBody = body !== void 0 && body !== null;
+      var payload = !hasBody ? null : o.form ? formEncode(body) : JSON.stringify(body);
+      if (hasBody) xhr3.setRequestHeader("Content-Type", o.form ? "application/x-www-form-urlencoded" : "application/json");
+      if (o.headers) for (var k in o.headers) xhr3.setRequestHeader(k, o.headers[k]);
+      xhr3.onload = function () {
+        if (xhr3.status >= 200 && xhr3.status < 300) {
+          if (o.raw) return resolve2(xhr3.responseText);
+          try {
+            resolve2(xhr3.responseText ? JSON.parse(xhr3.responseText) : null);
+          } catch (e) {
+            reject(new Error(t("JSON inválido de {url}", {
+              url: url2
+            })));
+          }
+        } else {
+          var err = new Error(t("HTTP {code} em {url}", {
+            code: xhr3.status,
+            url: url2
+          }));
+          err.status = xhr3.status;
+          reject(err);
+        }
+      };
+      xhr3.onerror = function () {
+        var err = new Error(t("Falha de rede em {url}", {
+          url: url2
+        }));
+        err.status = 0;
+        reject(err);
+      };
+      xhr3.ontimeout = function () {
+        var err = new Error(t("Tempo esgotado em {url}", {
+          url: url2
+        }));
+        err.status = 0;
+        err.timeout = true;
+        reject(err);
+      };
+      xhr3.send(payload);
+    }).catch(function (err) {
+      if (!o.quiet) log.warn(err.message);
+      throw err;
+    });
+  }
+  function formEncode(obj) {
+    return Object.keys(obj).filter(function (k) {
+      return obj[k] !== void 0 && obj[k] !== null;
+    }).map(function (k) {
+      return encodeURIComponent(k) + "=" + encodeURIComponent(obj[k]);
+    }).join("&");
+  }
+  function getJSON(url2, opts) {
+    return request("GET", url2, null, opts);
+  }
+  function postJSON(url2, body, opts) {
+    return request("POST", url2, body, opts);
+  }
+  function getText(url2, opts) {
+    return request("GET", url2, null, Object.assign({
+      raw: true
+    }, opts));
+  }
+  var cache = /* @__PURE__ */new Map();
+  function cachedJSON(url2, ttlMs, opts) {
+    var hit = cache.get(url2);
+    var now = Date.now();
+    if (hit && now - hit.t < (ttlMs || 6e5)) return hit.p;
+    var p = getJSON(url2, opts).catch(function (e) {
+      cache.delete(url2);
+      throw e;
+    });
+    cache.set(url2, {
+      t: now,
+      p: p
+    });
+    if (cache.size > 60) cache.delete(cache.keys().next().value);
+    return p;
+  }
+
+  // src/js/lib/img.js
+  function smallPoster(url2) {
+    if (!url2) return url2;
+    return String(url2).replace(/(images\.metahub\.space\/poster\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w185/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?posters\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2").replace(/(static\.tvmaze\.com\/uploads\/images\/)(original_untouched|large_landscape|medium_landscape)\//, "$1medium_portrait/").replace(/(kitsu\.app\/anime\/poster_images\/\d+\/)(original|large|medium)\.(jpg|jpeg|png)/, "$1small.jpg");
+  }
+  function ratedPoster(id, key4) {
+    var k = String(key4 || "").trim();
+    var m = String(id || "").match(/^tt\d+/);
+    if (!k || !m || !/^[\w-]+$/.test(k)) return null;
+    return "https://api.ratingposterdb.com/" + k + "/imdb/poster-default/" + m[0] + ".jpg?fallback=true";
+  }
+  function smallBackground(url2) {
+    if (!url2) return url2;
+    return String(url2).replace(/(images\.metahub\.space\/background\/)(medium|large)\//, "$1small/").replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w300/").replace(/(kitsu\.app\/anime\/(?:poster|cover)_images\/\d+\/)(original|large)\.(jpg|jpeg|png)/, "$1small.jpg").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?(?:posters|fanart)\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2");
+  }
+  function smallThumb(url2) {
+    if (!url2) return url2;
+    return String(url2).replace(/(image\.tmdb\.org\/t\/p\/)[^/]+\//, "$1w300/").replace(/(artworks\.thetvdb\.com\/banners\/(?:[^?]*\/)?episodes\/[^/?]+?)(?:_t)?\.(jpg|png)/, "$1_t.$2");
+  }
+  var KITSU_RE = /(?:media\.kitsu\.app|kitsu-production-media\.[^/]+)\/anime\/(?:poster_images\/)?(\d+)\/(poster_image|cover_image)\/(?!small-|tiny-|medium-|large-)/;
+  var kitsuCache = {};
+  var batch = {};
+  var batchTimer = null;
+  function kitsuInfo(url2) {
+    var m = String(url2 || "").match(KITSU_RE);
+    return m ? {
+      id: m[1],
+      kind: m[2] === "cover_image" ? "cover" : "poster"
+    } : null;
+  }
+  function flush2() {
+    var ids2 = Object.keys(batch);
+    var waiting = batch;
+    batch = {};
+    batchTimer = null;
+    var _loop2 = function _loop2() {
+      var chunk = ids2.slice(i, i + 20);
+      getJSON("https://kitsu.io/api/edge/anime?filter%5Bid%5D=" + chunk.join(",") + "&fields%5Banime%5D=posterImage,coverImage&page%5Blimit%5D=20", {
+        quiet: true,
+        timeout: 15e3
+      }).then(function (r) {
+        var found = {};
+        (r && r.data || []).forEach(function (a) {
+          return found[a.id] = a.attributes || {};
+        });
+        chunk.forEach(function (id) {
+          var at2 = found[id] || {};
+          var p = at2.posterImage || {};
+          var c = at2.coverImage || {};
+          waiting[id].forEach(function (w) {
+            return w.resolve(w.kind === "cover" ? c.small || c.tiny || null : p.small || p.tiny || null);
+          });
+        });
+      }).catch(function () {
+        return chunk.forEach(function (id) {
+          return waiting[id].forEach(function (w) {
+            return w.resolve(null);
+          });
+        });
+      });
+    };
+    for (var i = 0; i < ids2.length; i += 20) {
+      _loop2();
+    }
+  }
+  function kitsuSmall(info2) {
+    var key4 = info2.id + ":" + info2.kind;
+    if (!kitsuCache[key4]) {
+      kitsuCache[key4] = new Promise(function (resolve2) {
+        (batch[info2.id] = batch[info2.id] || []).push({
+          kind: info2.kind,
+          resolve: resolve2
+        });
+        if (!batchTimer) batchTimer = setTimeout(flush2, 60);
+      });
+    }
+    return kitsuCache[key4];
+  }
+
+  // src/js/lib/dom.js
+  function h(tag, props, children) {
+    var parts = tag.split(/(?=[.#])/);
+    var el = document.createElement(parts[0] || "div");
+    for (var i = 1; i < parts.length; i++) {
+      var p = parts[i];
+      if (p[0] === ".") el.classList.add(p.slice(1));else if (p[0] === "#") el.id = p.slice(1);
+    }
+    if (props) {
+      for (var key4 in props) {
+        var val = props[key4];
+        if (val === void 0 || val === null || val === false) continue;
+        if (key4 === "text") el.textContent = val;else if (key4 === "html") el.innerHTML = val;else if (key4 === "style" && _typeof(val) === "object") Object.assign(el.style, val);else if (key4 === "on") for (var ev in val) el.addEventListener(ev, val[ev]);else if (key4 === "onSelect") el.__select = val;else if (key4 === "onFocus") el.__focus = val;else if (key4 === "focusable") el.setAttribute("data-focus", "");else if (key4 === "cls") String(val).split(" ").forEach(function (c) {
+          return c && el.classList.add(c);
+        });else el.setAttribute(key4, val === true ? "" : val);
+      }
+    }
+    append(el, children);
+    return el;
+  }
+  function append(el, children) {
+    if (children === void 0 || children === null || children === false) return el;
+    if (Array.isArray(children)) children.forEach(function (c) {
+      return append(el, c);
+    });else if (typeof children === "string" || typeof children === "number") el.appendChild(document.createTextNode(String(children)));else el.appendChild(children);
+    return el;
+  }
+  function clear(el) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    return el;
+  }
+  function $$(sel, root2) {
+    return Array.prototype.slice.call((root2 || document).querySelectorAll(sel));
+  }
+  var BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==";
+  function setOn(el, on) {
+    if (on && !el.__on) {
+      el.__on = true;
+      var url2 = el.getAttribute("data-lazy");
+      if (/\/api\/pimg\?u=https%3A%2F%2Fuploads\.mangadex\.org/.test(url2) && url2.indexOf("&ua=") < 0) url2 += "&ua=stremio-7m-tizen";
+      var kitsu = kitsuInfo(url2);
+      if (!kitsu) {
+        el.src = url2;
+        return;
+      }
+      kitsuSmall(kitsu).then(function (small) {
+        if (!el.__on) return;
+        if (small) {
+          el.setAttribute("data-lazy", small);
+          el.src = small;
+        } else if (el.onerror) el.onerror();
+      });
+    } else if (!on && el.__on) {
+      el.__on = false;
+      el.src = BLANK;
+    }
+  }
+  function loadVisibleImages(root2, margin) {
+    var m = margin === void 0 ? 400 : margin;
+    var W2 = window.innerWidth;
+    var H2 = window.innerHeight;
+    var isFar = function isFar(r) {
+      return r.right < -W2 * 0.5 || r.left > W2 * 1.6 || r.bottom < -H2 * 0.8 || r.top > H2 * 1.8;
+    };
+    var handled = [];
+    $$("[data-scroll-x]", root2).forEach(function (track) {
+      if (track.offsetParent === null) return;
+      var tr = track.getBoundingClientRect();
+      if (tr.bottom < -H2 * 0.8 || tr.top > H2 * 1.8) {
+        $$("img[data-lazy]", track).forEach(function (el) {
+          return setOn(el, false);
+        });
+        handled.push(track);
+      }
+    });
+    $$("img[data-lazy]", root2).forEach(function (el) {
+      if (el.offsetParent === null) return;
+      for (var i = 0; i < handled.length; i++) if (handled[i].contains(el)) return;
+      var r = el.getBoundingClientRect();
+      var near = r.right > -m && r.left < W2 + m && r.bottom > -m && r.top < H2 + m;
+      if (near) setOn(el, true);else if (isFar(r)) setOn(el, false);
+    });
+  }
+  function unloadImages(root2) {
+    $$("img[data-lazy]", root2).forEach(function (el) {
+      if (el.__on) {
+        el.__on = false;
+        el.src = BLANK;
+      }
+    });
   }
 
   // src/js/lib/sounds.js
@@ -9586,6 +9716,13 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function onKeys(fn) {
     keysHandler = fn;
   }
+  var restoreHandler = null;
+  function onRestore(fn) {
+    restoreHandler = fn;
+  }
+  function backupUrl(i) {
+    return i ? "http://" + i.ip + ":" + i.port + "/backup#pin=" + i.pin : null;
+  }
   function setupUrl(i) {
     return i ? "http://" + i.ip + ":" + i.port + "/setup#pin=" + i.pin : null;
   }
@@ -9593,7 +9730,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     searchHandler = fn;
   }
   function handle(ev) {
-    if (ev.type === "key") fireKey(ev.code);else if (ev.type === "text") typeText(ev.text, ev.submit);else if (ev.type === "search" && searchHandler && ev.text) searchHandler(ev.text);else if (ev.type === "seek" && seekHandler) seekHandler(ev.to);else if (ev.type === "open" && openHandler && ev.item) openHandler(ev);else if (ev.type === "keys" && keysHandler && ev.keys) keysHandler(ev.keys);
+    if (ev.type === "key") fireKey(ev.code);else if (ev.type === "text") typeText(ev.text, ev.submit);else if (ev.type === "search" && searchHandler && ev.text) searchHandler(ev.text);else if (ev.type === "seek" && seekHandler) seekHandler(ev.to);else if (ev.type === "open" && openHandler && ev.item) openHandler(ev);else if (ev.type === "keys" && keysHandler && ev.keys) keysHandler(ev.keys);else if (ev.type === "restore" && restoreHandler) restoreHandler();
   }
   function poll(wait2) {
     setTimeout(function () {
@@ -9648,7 +9785,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     request2(BASE + "/api/info", 3e3).then(function (r) {
       if (r) last = r.last || 0;
       svcVersion = r && r.version || 1;
-      if (svcVersion < 5) {
+      if (svcVersion < 6) {
         request2(BASE + "/api/exit", 3e3).then(function () {
           return setTimeout(startService, 1500);
         }, function () {});
@@ -11976,7 +12113,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return x.id === id;
     }) || list3[0];
   }
-  function apply(el, s) {
+  function apply2(el, s) {
     var font = find(FONTS, s.subtitleFont);
     var pos = find(POSITIONS, s.subtitlePosition);
     el.style.fontFamily = font.css;
@@ -13527,22 +13664,22 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function range(url2, start4, length) {
     return new Promise(function (resolve2) {
-      var xhr2 = new XMLHttpRequest();
-      xhr2.open("GET", url2, true);
-      xhr2.responseType = "arraybuffer";
-      xhr2.timeout = 8e3;
-      xhr2.setRequestHeader("Range", "bytes=" + start4 + "-" + (start4 + length - 1));
-      xhr2.onload = function () {
-        var ok = xhr2.status === 206 || xhr2.status === 200 && start4 === 0;
-        if (!ok || !xhr2.response) return resolve2(null);
-        var b = new Uint8Array(xhr2.response);
+      var xhr3 = new XMLHttpRequest();
+      xhr3.open("GET", url2, true);
+      xhr3.responseType = "arraybuffer";
+      xhr3.timeout = 8e3;
+      xhr3.setRequestHeader("Range", "bytes=" + start4 + "-" + (start4 + length - 1));
+      xhr3.onload = function () {
+        var ok = xhr3.status === 206 || xhr3.status === 200 && start4 === 0;
+        if (!ok || !xhr3.response) return resolve2(null);
+        var b = new Uint8Array(xhr3.response);
         if (b.length > length) b = b.subarray(0, length);
         resolve2(b);
       };
-      xhr2.onerror = xhr2.ontimeout = function () {
+      xhr3.onerror = xhr3.ontimeout = function () {
         return resolve2(null);
       };
-      xhr2.send();
+      xhr3.send();
     });
   }
   function elementAt(url2, head, pos, max) {
@@ -14068,7 +14205,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var ageEl = h("div.p-age");
     var el = h("div.view.player", null, [videoNode, subsEl, overlay2, clockEl, skipBox, upNextBox, postBox, spinner, msgEl, ageEl]);
     var renderer = Renderer(subsEl);
-    apply(subsEl, settings2);
+    apply2(subsEl, settings2);
     var FITS = [{
       id: "original",
       label: "Original"
@@ -15631,7 +15768,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var next = saveSettings({
             subtitleSize: v
           });
-          apply(subsEl, next);
+          apply2(subsEl, next);
           if (currentSub.kind === "embedded") applyNative(mediaId(), next);
         }
       });
@@ -16097,7 +16234,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
 
   // src/js/api/plugins.js
-  var SVC = "http://127.0.0.1:" + PORT;
+  var SVC2 = "http://127.0.0.1:" + PORT;
   var REPOS = {
     manga: "mangaRepos",
     comics: "comicRepos",
@@ -16181,7 +16318,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   }
   function httpRaw(url2, opts) {
     var o = opts || {};
-    return request("POST", SVC + "/api/phttp", {
+    return request("POST", SVC2 + "/api/phttp", {
       url: url2,
       method: o.method,
       headers: o.headers,
@@ -16197,7 +16334,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
   }
   function serviceOnly(url2) {
-    return request("POST", SVC + "/api/phttp", {
+    return request("POST", SVC2 + "/api/phttp", {
       url: url2
     }, {
       timeout: 2e4,
@@ -16238,7 +16375,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     if (!url2) return "";
     if (/^data:image\//i.test(url2)) return url2;
     var ua = /^https?:\/\/uploads\.mangadex\.org\//i.test(url2) ? "&ua=" + encodeURIComponent("stremio-7m-tizen") : "";
-    return SVC + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "") + ua;
+    return SVC2 + "/api/pimg?u=" + encodeURIComponent(url2) + (referer ? "&r=" + encodeURIComponent(referer) : "") + ua;
   }
   function classify(parsed) {
     if (parsed && Array.isArray(parsed.plugins)) return "harbor";
@@ -17447,7 +17584,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return hud.classList.remove("show");
       }, 3e3);
     }
-    function apply4() {
+    function apply5() {
       var z = size();
       px = z.w <= W ? (W - z.w) / 2 : Math.max(W - z.w, Math.min(0, px));
       py = z.h <= H ? (H - z.h) / 2 : Math.max(H - z.h, Math.min(0, py));
@@ -17471,9 +17608,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var z = size();
       px = opts.rtl ? W - z.w : 0;
       py = anchor === "bottom" ? H - z.h : 0;
-      apply4();
+      apply5();
     }
-    function save2() {
+    function save3() {
       if (!opts.key || !chapter()) return;
       var all3 = get("readProgress", {}) || {};
       all3[opts.key] = {
@@ -17520,7 +17657,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         img22.style.visibility = "";
         say("");
         showHud();
-        save2();
+        save3();
         drawRibbon();
         var next = pi + (both ? 2 : 1);
         pre = pre2 = null;
@@ -17706,7 +17843,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       var z1 = size();
       px = W / 2 - cx * z1.w;
       py = H / 2 - cy * z1.h;
-      apply4();
+      apply5();
       showHud(t("Zoom {n}%", {
         n: Math.round(ZOOMS[zi] * 100)
       }));
@@ -17742,7 +17879,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (k === KEY.DOWN) py = Math.max(Math.min(0, H - z.h), py - PAN);
         if (!panX) px = (W - z.w) / 2;
         if (!panY) py = (H - z.h) / 2;
-        apply4();
+        apply5();
         return true;
       }
       if (k === KEY.GREEN) return setMode(MODES2[(MODES2.indexOf(mode) + 1) % MODES2.length]), true;
@@ -17755,7 +17892,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var atEdge = toRight ? px <= W - z.w + 1 : px >= -1;
           if (!atEdge) {
             px += toRight ? -PAN : PAN;
-            apply4();
+            apply5();
             return true;
           }
         }
@@ -17768,7 +17905,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           var _atEdge = down ? py <= H - z.h + 1 : py >= -1;
           if (!_atEdge) {
             py += down ? -PAN : PAN;
-            apply4();
+            apply5();
             return true;
           }
           if (ZOOMS[zi] > 1) return true;
@@ -18845,7 +18982,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     var panel = h("div.ls-panel", null, [cover, h("div.ls-info", null, [titleEl, trackEl, bar, h("div.ls-row", null, [stateEl, timeEl, speedEl])])]);
     var el = h("div.view.listen", null, [bg, page3, panel, hint, audio]);
-    function save2() {
+    function save3() {
       if (!opts.key || !tracks2[ti]) return;
       var all3 = get(KEY_LISTEN, {}) || {};
       all3[opts.key] = {
@@ -18921,26 +19058,26 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       audio.load();
       drawInfo();
       loadPages();
-      save2();
+      save3();
     }
     audio.ontimeupdate = function () {
       return alive && drawTime();
     };
     audio.onplay = audio.onpause = function () {
-      return alive && (drawTime(), save2());
+      return alive && (drawTime(), save3());
     };
     audio.onended = function () {
       if (!alive) return;
       if (ti + 1 < tracks2.length) playTrack(ti + 1, 0);else {
         toast(t("Fim do livro."));
-        save2();
+        save3();
       }
     };
     audio.onerror = function () {
       return alive && toast(t("Não consegui tocar este capítulo."), 5e3);
     };
     var saver = setInterval(function () {
-      return alive && !audio.paused && save2();
+      return alive && !audio.paused && save3();
     }, 5e3);
     var onHide = function onHide() {
       if (document.hidden && !audio.paused) audio.pause();
@@ -19101,7 +19238,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       },
       destroy: function destroy() {
         alive = false;
-        save2();
+        save3();
         clearInterval(saver);
         document.removeEventListener("visibilitychange", onHide);
         document.removeEventListener("keyup", onKeyUp2, true);
@@ -27109,7 +27246,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       hidden: p.hidden || []
     };
   }
-  function save(p) {
+  function save2(p) {
     saveSettings({
       homeRows: {
         order: p.order,
@@ -27145,7 +27282,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     var k = key3(entry);
     var i = p.hidden.indexOf(k);
     if (i >= 0) p.hidden.splice(i, 1);else p.hidden.push(k);
-    save(p);
+    save2(p);
   }
   function move3(entries, entry, delta) {
     var list3 = sort(entries).map(key3);
@@ -27157,7 +27294,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     list3.splice(j, 0, k);
     var p = prefs();
     p.order = list3;
-    save(p);
+    save2(p);
   }
   function reset() {
     saveSettings({
@@ -28348,7 +28485,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T21:21:38.706Z";
+  var BUILD = "2026-11-17T21:57:17.722Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -28381,7 +28518,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return info2.build && info2.build !== BUILD && Date.parse(info2.build) > Date.parse(BUILD) ? info2 : null;
     });
   }
-  function apply2() {
+  function apply3() {
     return Promise.all(FILES.map(function (f) {
       return getJSON(PURGE + f, {
         timeout: 8e3,
@@ -28741,7 +28878,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     });
     return css;
   }
-  function apply3(id) {
+  function apply4(id) {
     var old = document.getElementById("theme-css");
     if (old) old.parentNode.removeChild(old);
     var th = THEMES2.find(function (x2) {
@@ -28927,7 +29064,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   // src/js/lib/speedtest.js
   var TRACE = "https://cloudflare.com/cdn-cgi/trace";
   var DOWN = "https://speed.cloudflare.com/__down?bytes=";
-  function xhr(url2, binary, timeout) {
+  function xhr2(url2, binary, timeout) {
     return new Promise(function (resolve2, reject) {
       var x = new XMLHttpRequest();
       x.open("GET", url2 + (url2.indexOf("?") >= 0 ? "&" : "?") + "_=" + Date.now() + Math.random(), true);
@@ -28952,18 +29089,18 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   function run2(onStep) {
     var pings = [];
     var ping2 = function ping2() {
-      return xhr(TRACE, false, 5e3).then(function (r) {
+      return xhr2(TRACE, false, 5e3).then(function (r) {
         return pings.push(r.ms);
       });
     };
     onStep && onStep("ping");
     return ping2().then(ping2).then(ping2).then(function () {
       onStep && onStep("download");
-      return xhr(DOWN + 2e6, true, 2e4);
+      return xhr2(DOWN + 2e6, true, 2e4);
     }).then(function (warm) {
       var firstMbps = warm.bytes * 8 / (warm.ms / 1e3) / 1e6;
       var size = firstMbps > 40 ? 5e7 : firstMbps > 10 ? 2e7 : 5e6;
-      return xhr(DOWN + size, true, 45e3).then(function (r) {
+      return xhr2(DOWN + size, true, 45e3).then(function (r) {
         return r.bytes * 8 / (r.ms / 1e3) / 1e6;
       });
     }).then(function (mbps) {
@@ -29099,7 +29236,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           msg: info2.message || ""
         }), t("Atualizar agora"), function () {
           toast(t("Atualizando... o app vai recarregar."), 6e4);
-          apply2(info2).then(function (ok) {
+          apply3(info2).then(function (ok) {
             if (!ok) toast(t("A atualização ainda está chegando. Tente de novo em alguns minutos."), 6e3);
           });
         });
@@ -29168,6 +29305,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       })]), input]);
     }
     var PARENT = {
+      backup: "c-about",
       tracking: "c-integrations",
       skip: "c-integrations",
       debrid: "c-integrations",
@@ -29175,6 +29313,74 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       home: "c-appearance",
       badges: "c-playback"
     };
+    function renderBackup() {
+      pageHeader(t("Cópia de segurança"));
+      body.appendChild(h("div.hint", {
+        text: t("Guarda os perfis, as chaves, as fontes, onde você parou na leitura e no áudio, as marcações, as fontes de TV ao vivo e as configurações. Fica numa pasta da TV que a reinstalação não apaga, e uma cópia nova é feita sozinha uma vez por dia.")
+      }));
+      var lastB = lastAt();
+      var saveRow = row3("💾 " + t("Salvar uma cópia agora"), lastB ? t("Última: {date}", {
+        date: new Date(lastB).toLocaleString()
+      }) : t("Ainda não há cópia"), "", function () {
+        saveRow.querySelector(".value").textContent = t("Salvando...");
+        save().then(function (r) {
+          toast(r.onTv ? t("Cópia salva na TV ({n} itens).", {
+            n: r.count
+          }) : t("Cópia guardada até a TV desligar. Baixe no celular para não perder."), 6e3);
+          render();
+        }).catch(function () {
+          toast(t("O serviço da TV não está rodando. Feche o app e abra de novo."), 6e3);
+          render();
+        });
+      });
+      body.appendChild(saveRow);
+      var tvRow = row3("↩️ " + t("Restaurar a cópia da TV"), t("Procurando..."), "", function () {
+        onTv().then(function (b) {
+          if (!b) return toast(t("Não há cópia na TV."), 5e3);
+          confirmDialog(t("Restaurar a cópia de {date}? Substitui as configurações desta TV.", {
+            date: new Date(b.at).toLocaleString()
+          }), t("Restaurar"), function () {
+            apply(b);
+            toast(t("Restaurado. Reiniciando..."));
+          });
+        });
+      });
+      body.appendChild(tvRow);
+      onTv().then(function (b) {
+        var sm = tvRow.querySelector("small");
+        if (sm) sm.textContent = b ? t("Cópia de {date}", {
+          date: new Date(b.at).toLocaleString()
+        }) : t("Não há cópia na TV.");
+      });
+      var box = h("div.set-row.phone-remote", {
+        focusable: true
+      }, h("div.phone-sub", {
+        text: t("Carregando...")
+      }));
+      body.appendChild(box);
+      info().then(function (i) {
+        clear(box);
+        var url2 = backupUrl(i);
+        if (!url2) return box.appendChild(h("div.phone-sub", {
+          text: t("O serviço da TV não está rodando. Feche o app e abra de novo.")
+        }));
+        box.appendChild(h("img.phone-qr", {
+          src: qrImage(url2, 300),
+          alt: ""
+        }));
+        box.appendChild(h("div.phone-text", null, [h("div.phone-title", {
+          text: t("No celular")
+        }), h("div.phone-sub", {
+          text: t("Aponte a câmera: baixe a cópia para o celular, ou mande uma de volta para esta TV.")
+        }), h("div.phone-url", {
+          text: "http://" + i.ip + ":" + i.port + "/backup"
+        }), h("div.phone-sub", {
+          text: t("PIN: {pin}", {
+            pin: i.pin
+          })
+        })]));
+      });
+    }
     function openPage(name, focus2) {
       page3 = name;
       focusContent = focus2 !== false;
@@ -29386,9 +29592,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     }
     function renderSkip(s) {
       pageHeader(t("Pular trechos"));
-      var flip = function flip(title, sub, on, apply4) {
+      var flip = function flip(title, sub, on, apply5) {
         return body.appendChild(row3(title, sub, "", function () {
-          apply4(!on);
+          apply5(!on);
           render();
         }, toggle(on)));
       };
@@ -29876,7 +30082,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         if (keepIndex >= 0 && rows2[keepIndex]) focus(rows2[keepIndex]);else if (wantFocus && rows2[0]) focus(rows2[PARENT[page3] ? 1 : 0] || rows2[0]);
       };
       if (page3.indexOf("c-") !== 0) {
-        if (page3 === "tracking") renderTracking(s);else if (page3 === "debrid") renderDebrid(s);else if (page3 === "servers") renderServers(s);else if (page3 === "home") renderHomePage(s);else if (page3 === "badges") renderBadges(s);else renderSkip(s);
+        if (page3 === "tracking") renderTracking(s);else if (page3 === "debrid") renderDebrid(s);else if (page3 === "servers") renderServers(s);else if (page3 === "home") renderHomePage(s);else if (page3 === "badges") renderBadges(s);else if (page3 === "backup") renderBackup();else renderSkip(s);
         placeFocus();
         return;
       }
@@ -30123,7 +30329,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                   from: from.name
                 }), t("Copiar"), function () {
                   copySettingsFrom(id);
-                  apply3(settings().themePicked ? settings().theme : "graphite");
+                  apply4(settings().themePicked ? settings().theme : "graphite");
                   document.body.classList.toggle("oled", !!settings().oled);
                   dropTab("home");
                   toast(t("Ajustes copiados de {name}", {
@@ -30258,7 +30464,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                 bgStyle: v === "black" ? "oled" : "default",
                 oled: v === "black"
               });
-              apply3("graphite");
+              apply4("graphite");
               applyLook(settings());
               render();
             }
@@ -30280,7 +30486,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
                 theme: v,
                 themePicked: true
               });
-              apply3(v);
+              apply4(v);
               render();
             }
           });
@@ -30518,7 +30724,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         var preview = h("div.subs", null, h("span", {
           html: t("Oi. Meu nome é Peter Parker.") + "\n<i>" + t("Você não lembra de mim...") + "</i>"
         }));
-        apply(preview, s);
+        apply2(preview, s);
         body.appendChild(h("div.sub-preview", null, preview));
         var lb = labels(s);
         choose(t("Fonte"), t("Vale para legendas de addons (OpenSubtitles etc.)"), FONTS, "subtitleFont", s.subtitleFont, lb.font);
@@ -30780,6 +30986,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         })]), addInput]));
       }
       if (page3 === "c-about") {
+        var lastB = lastAt();
+        body.appendChild(row3("💾 " + t("Cópia de segurança"), t("Guarda tudo para voltar depois de reinstalar"), lastB ? new Date(lastB).toLocaleDateString() : t("Nunca"), function () {
+          return openPage("backup");
+        }));
         body.appendChild(h("div.set-section", {
           text: t("Sobre e depuração")
         }));
@@ -31242,7 +31452,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         focusable: true,
         "data-autofocus": ""
       });
-      var save2 = function save2() {
+      var save3 = function save3() {
         var name = String(input.value || "").trim();
         if (!name) {
           err.textContent = t("Digite um nome para o perfil.");
@@ -31255,12 +31465,12 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         refreshProfileChips();
         next();
       };
-      input.__submit = save2;
+      input.__submit = save3;
       card2.appendChild(input);
       card2.appendChild(err);
       card2.appendChild(h("div.actions", {
         "data-group": ""
-      }, [btn(t("Continuar"), true, save2)]));
+      }, [btn(t("Continuar"), true, save3)]));
     }
     function stepAccount() {
       card2.appendChild(h("h1", {
@@ -31539,6 +31749,21 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         autoStreams: true
       } : {});
     });
+    onRestore(function () {
+      return fromPhone().then(function (b) {
+        return confirmDialog(t("Restaurar a cópia do celular ({date})? Substitui as configurações desta TV.", {
+          date: new Date(b.at).toLocaleString()
+        }), t("Restaurar"), function () {
+          apply(b);
+          toast(t("Restaurado. Reiniciando..."));
+        });
+      }).catch(function () {
+        return toast(t("Não consegui ler a cópia do celular."), 5e3);
+      });
+    });
+    setTimeout(function () {
+      return auto();
+    }, 3e4);
     onKeys(function (keys2) {
       if (keys2.iptvHost && keys2.iptvUser && keys2.iptvPass) {
         var host = keys2.iptvHost.replace(/\/+$/, "");
@@ -31651,7 +31876,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       navyLook1: true
     });
     applyLook(s);
-    apply3(s.themePicked ? s.theme : "graphite");
+    apply4(s.themePicked ? s.theme : "graphite");
     document.body.classList.toggle("perf", s.perfMode !== false);
     log.info("Perfil", activeProfile().name);
     if (isLoggedIn()) {

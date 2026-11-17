@@ -17,6 +17,7 @@ import { openLogin } from './login.js';
 import { avatar, switchProfile, createProfile, checkPin, pinDialog, showPicker, avatarFiles, avatarUrl, avatarGroups } from './profiles.js';
 import { t } from '../lib/i18n.js';
 import * as phone from '../lib/phone.js';
+import * as backup from '../lib/backup.js';
 import * as theme from '../lib/theme.js';
 import * as tracker from '../api/tracker.js';
 import * as avvideo from '../lib/avvideo.js';
@@ -191,7 +192,63 @@ export function SettingsView() {
   }
 
   // Sub-pages go back to their group; groups go back to the main list.
-  const PARENT = { tracking: 'c-integrations', skip: 'c-integrations', debrid: 'c-integrations', servers: 'c-integrations', home: 'c-appearance', badges: 'c-playback' };
+  const PARENT = { backup: 'c-about', tracking: 'c-integrations', skip: 'c-integrations', debrid: 'c-integrations', servers: 'c-integrations', home: 'c-appearance', badges: 'c-playback' };
+  // Backup: saved on the TV (survives a reinstall) and to the phone with a QR.
+  function renderBackup() {
+    pageHeader(t('Cópia de segurança'));
+    body.appendChild(
+      h('div.hint', {
+        text: t('Guarda os perfis, as chaves, as fontes, onde você parou na leitura e no áudio, as marcações, as fontes de TV ao vivo e as configurações. Fica numa pasta da TV que a reinstalação não apaga, e uma cópia nova é feita sozinha uma vez por dia.'),
+      })
+    );
+    const lastB = backup.lastAt();
+    const saveRow = row('💾 ' + t('Salvar uma cópia agora'), lastB ? t('Última: {date}', { date: new Date(lastB).toLocaleString() }) : t('Ainda não há cópia'), '', () => {
+      saveRow.querySelector('.value').textContent = t('Salvando...');
+      backup
+        .save()
+        .then((r) => {
+          toast(r.onTv ? t('Cópia salva na TV ({n} itens).', { n: r.count }) : t('Cópia guardada até a TV desligar. Baixe no celular para não perder.'), 6000);
+          render();
+        })
+        .catch(() => {
+          toast(t('O serviço da TV não está rodando. Feche o app e abra de novo.'), 6000);
+          render();
+        });
+    });
+    body.appendChild(saveRow);
+    const tvRow = row('↩️ ' + t('Restaurar a cópia da TV'), t('Procurando...'), '', () => {
+      backup.onTv().then((b) => {
+        if (!b) return toast(t('Não há cópia na TV.'), 5000);
+        confirmDialog(t('Restaurar a cópia de {date}? Substitui as configurações desta TV.', { date: new Date(b.at).toLocaleString() }), t('Restaurar'), () => {
+          backup.apply(b);
+          toast(t('Restaurado. Reiniciando...'));
+        });
+      });
+    });
+    body.appendChild(tvRow);
+    backup.onTv().then((b) => {
+      const sm = tvRow.querySelector('small');
+      if (sm) sm.textContent = b ? t('Cópia de {date}', { date: new Date(b.at).toLocaleString() }) : t('Não há cópia na TV.');
+    });
+    // The phone: download the file, or send one back.
+    const box = h('div.set-row.phone-remote', { focusable: true }, h('div.phone-sub', { text: t('Carregando...') }));
+    body.appendChild(box);
+    phone.info().then((i) => {
+      clear(box);
+      const url = phone.backupUrl(i);
+      if (!url) return box.appendChild(h('div.phone-sub', { text: t('O serviço da TV não está rodando. Feche o app e abra de novo.') }));
+      box.appendChild(h('img.phone-qr', { src: phone.qrImage(url, 300), alt: '' }));
+      box.appendChild(
+        h('div.phone-text', null, [
+          h('div.phone-title', { text: t('No celular') }),
+          h('div.phone-sub', { text: t('Aponte a câmera: baixe a cópia para o celular, ou mande uma de volta para esta TV.') }),
+          h('div.phone-url', { text: 'http://' + i.ip + ':' + i.port + '/backup' }),
+          h('div.phone-sub', { text: t('PIN: {pin}', { pin: i.pin }) }),
+        ])
+      );
+    });
+  }
+
   function openPage(name, focus) {
     page = name;
     focusContent = focus !== false;
@@ -699,6 +756,7 @@ export function SettingsView() {
       else if (page === 'servers') renderServers(s);
       else if (page === 'home') renderHomePage(s);
       else if (page === 'badges') renderBadges(s);
+      else if (page === 'backup') renderBackup();
       else renderSkip(s);
       placeFocus();
       return;
@@ -1377,6 +1435,8 @@ export function SettingsView() {
     }
 
     if (page === 'c-about') {
+      const lastB = backup.lastAt();
+      body.appendChild(row('💾 ' + t('Cópia de segurança'), t('Guarda tudo para voltar depois de reinstalar'), lastB ? new Date(lastB).toLocaleDateString() : t('Nunca'), () => openPage('backup')));
       body.appendChild(h('div.set-section', { text: t('Sobre e depuração') }));
       const logInput = h('input.input', { type: 'text', value: s.devlogUrl || '', placeholder: 'http://IP-DO-PC:8099/log' });
       logInput.__submit = (v) => {

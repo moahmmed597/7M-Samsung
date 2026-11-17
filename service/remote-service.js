@@ -8,7 +8,7 @@ var http = require('http');
 var os = require('os');
 
 // Bump when the service changes: a running copy compares it with the newest one on GitHub.
-var SERVICE_VERSION = 5;
+var SERVICE_VERSION = 6;
 var PORT = 8095;
 var HOLD_MS = 25000; // long-poll hold time
 var KEEP = 50; // events kept for late pollers
@@ -145,6 +145,45 @@ function push(ev) {
 
 function since(id) {
   return events.filter(function (e) { return e.id > id; });
+}
+
+// ---- Backup of the app's settings (Settings → About → Backup) ----
+// Kept in memory and in a file in the TV's home folder, which reinstalling the app does not touch
+// (the service belongs to TizenBrew). The phone can download it and send one back (PIN).
+var BACKUP_MAX = 6 * 1024 * 1024;
+var backupBlob = null;
+var restoreBlob = null;
+function backupFiles() {
+  var path = require('path');
+  var dirs = [process.env.HOME, '/home/owner', '/opt/usr/home/owner'].filter(function (d, i, a) { return d && a.indexOf(d) === i; });
+  return dirs.map(function (d) { return path.join(d, '.stremio7m-backup.json'); });
+}
+function saveBackupFile(text) {
+  var fs = require('fs');
+  var list = backupFiles();
+  for (var i = 0; i < list.length; i++) {
+    try {
+      fs.writeFileSync(list[i], text);
+      return list[i];
+    } catch (e) { /* not writable: try the next folder */ }
+  }
+  return '';
+}
+function loadBackupFile() {
+  var fs = require('fs');
+  var list = backupFiles();
+  for (var i = 0; i < list.length; i++) {
+    try { return fs.readFileSync(list[i], 'utf8'); } catch (e) { /* not there */ }
+  }
+  return null;
+}
+function isBackup(text) {
+  try {
+    var o = JSON.parse(text);
+    return !!(o && o.app === 'stremio7m' && o.data && typeof o.data === 'object');
+  } catch (e) {
+    return false;
+  }
 }
 
 function readBody(req, cb, limit) {
@@ -655,7 +694,51 @@ function handle(req, res) {
     }, 500000);
   }
 
+  // The app saves its backup here, and reads it back (this TV only).
+  if (url.pathname === '/api/backup' && req.method === 'POST') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    return readBody(req, function (body) {
+      if (!isBackup(body)) return send(res, 400, { ok: false });
+      backupBlob = body;
+      var where = saveBackupFile(body);
+      send(res, 200, { ok: true, onTv: !!where });
+    }, BACKUP_MAX);
+  }
+  if (url.pathname === '/api/backup') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    var b = backupBlob || loadBackupFile();
+    return b ? send(res, 200, b) : send(res, 404, { error: 'no backup' });
+  }
+  // A backup sent from the phone, waiting for the app to take it.
+  if (url.pathname === '/api/restore-data') {
+    if (!isLocal(req)) return send(res, 403, { error: 'local only' });
+    var r = restoreBlob;
+    restoreBlob = null;
+    return r ? send(res, 200, r) : send(res, 404, { error: 'nothing' });
+  }
+
   // ---- Phone side ----
+  if (url.pathname === '/backup' || url.pathname === '/backup.html') {
+    return send(res, 200, typeof BACKUP_PAGE === 'string' ? BACKUP_PAGE : 'Backup page missing', 'text/html; charset=utf-8');
+  }
+  // The phone downloads the last backup as a file.
+  if (url.pathname === '/api/backup-file') {
+    if (q.pin !== PIN) return send(res, 401, { ok: false });
+    var f = backupBlob || loadBackupFile();
+    if (!f) return send(res, 404, { ok: false });
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Content-Disposition': 'attachment; filename="stremio7m-backup.json"', 'Cache-Control': 'no-store' });
+    return res.end(f);
+  }
+  // The phone sends a backup file back: the app is told and asks for it.
+  if (url.pathname === '/api/restore' && req.method === 'POST') {
+    if (q.pin !== PIN) return send(res, 401, { ok: false });
+    return readBody(req, function (body) {
+      if (!isBackup(body)) return send(res, 400, { ok: false });
+      restoreBlob = body;
+      push({ type: 'restore' });
+      send(res, 200, { ok: true });
+    }, BACKUP_MAX);
+  }
   if (url.pathname === '/' || url.pathname === '/index.html') {
     return send(res, 200, remotePage(), 'text/html; charset=utf-8');
   }

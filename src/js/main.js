@@ -1,5 +1,6 @@
 // Ponto de entrada do Stremio Kai para webOS.
 import './polyfills.js';
+import * as backup from './lib/backup.js';
 import { CollectionsView } from './views/collections.js';
 import { MangaView } from './views/manga.js';
 import { ComicsView } from './views/comics.js';
@@ -29,7 +30,7 @@ import { CalendarView } from './views/calendar.js';
 import { maybeShowWizard } from './views/wizard.js';
 import { openPlayer } from './views/player.js';
 import * as update from './api/update.js';
-import { toast } from './ui.js';
+import { toast, confirmDialog } from './ui.js';
 import * as profiles from './views/profiles.js';
 import { openLogin } from './views/login.js';
 import { registerTizenKeys } from './lib/platform.js';
@@ -77,6 +78,19 @@ function boot() {
   });
   // Keys pasted on the phone's setup page: saved on this TV only. With new Trakt/Simkl keys and no
   // account linked yet, the link screen opens right away (scan its QR, sign in, done).
+  // A backup sent from the phone: asks first, then puts it back and restarts.
+  phone.onRestore(() =>
+    backup
+      .fromPhone()
+      .then((b) =>
+        confirmDialog(t('Restaurar a cópia do celular ({date})? Substitui as configurações desta TV.', { date: new Date(b.at).toLocaleString() }), t('Restaurar'), () => {
+          backup.apply(b);
+          toast(t('Restaurado. Reiniciando...'));
+        })
+      )
+      .catch(() => toast(t('Não consegui ler a cópia do celular.'), 5000))
+  );
+  setTimeout(() => backup.auto(), 30000);
   phone.onKeys((keys) => {
     // IPTV account and manga repository from the phone: added as sources, not kept as settings.
     if (keys.iptvHost && keys.iptvUser && keys.iptvPass) {
