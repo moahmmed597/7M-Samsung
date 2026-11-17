@@ -192,7 +192,7 @@ function MangaDetailsView(m) {
         },
       }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );
-    if (pl.installed('manga').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : 'MangaDex']));
+    if (pl.installed('manga').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), h('span.lbl', { text: source ? source.name : 'MangaDex' })]));
     if (!source) btns.push(
       h('div.btn', {
         focusable: true,

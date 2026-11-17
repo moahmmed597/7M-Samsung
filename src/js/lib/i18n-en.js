@@ -1303,4 +1303,5 @@ export const EN = {
   "Tirar todos ({n}) de Continuar assistindo?": "Remove all ({n}) from Continue watching?",
   "Tirar todos": "Remove all",
   "Continuar assistindo está vazio.": "Continue watching is empty.",
+  "Escolher fonte": "Source",
 };

@@ -1175,9 +1175,9 @@ export function SettingsView() {
       );
       body.appendChild(
         row(t('Sons da interface'), t('Um som curto ao mover e ao apertar OK'), '', () => {
-          store.saveSettings({ uiSounds: !store.settings().uiSounds });
+          store.saveSettings({ uiSounds: store.settings().uiSounds === false });
           render();
-        }, toggle(!!s.uiSounds))
+        }, toggle(s.uiSounds !== false))
       );
       const SS = [0, 5, 10, 15, 30].map((m) => ({ id: m, label: m ? t('Depois de {n} min', { n: m }) : t('Desligada') }));
       const ssCur = SS.find((x) => x.id === (+s.screensaver || 0)) || SS[0];

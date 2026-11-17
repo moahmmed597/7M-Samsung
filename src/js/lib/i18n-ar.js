@@ -1303,4 +1303,5 @@ export const AR = {
   "Tirar todos ({n}) de Continuar assistindo?": "تشيل الكل ({n}) من كمّل المشاهدة؟",
   "Tirar todos": "شيل الكل",
   "Continuar assistindo está vazio.": "كمّل المشاهدة صار فاضي.",
+  "Escolher fonte": "المصدر",
 };

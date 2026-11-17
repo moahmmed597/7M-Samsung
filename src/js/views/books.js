@@ -445,7 +445,7 @@ function BookDetailsView(m0) {
       h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'ol', Object.assign({}, m, { tab: 'books' })), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );
     if (linked.length) btns.push(h('div.btn', { focusable: true, onSelect: () => (linked.length === 1 ? linked[0].open() : links2.linkedMenu(linked)) }, [h('span.ico', { text: '🔗' }), t('Ligado ({n})', { n: linked.length })]));
-    if (pl.installed('books').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : t('Fonte')]));
+    if (pl.installed('books').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), h('span.lbl', { text: source ? source.name : t('Escolher fonte') })]));
     btns.push(h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]));
     // Read and Listen big on top; the rest smaller underneath.
     if (main.length) text.appendChild(h('div.details-buttons.main-buttons', { 'data-group': '' }, main));

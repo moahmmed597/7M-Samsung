@@ -152,7 +152,7 @@ function ComicDetailsView(m0) {
         shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar'),
       ])
     );
-    if (pl.installed('comics').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : t('Fonte')]));
+    if (pl.installed('comics').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), h('span.lbl', { text: source ? source.name : t('Escolher fonte') })]));
     btns.push(h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]));
     text.appendChild(h('div.details-buttons', { 'data-group': '' }, btns));
     info.appendChild(text);

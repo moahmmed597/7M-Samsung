@@ -6192,7 +6192,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Cor do papel": "Paper colour",
     "Tirar todos ({n}) de Continuar assistindo?": "Remove all ({n}) from Continue watching?",
     "Tirar todos": "Remove all",
-    "Continuar assistindo está vazio.": "Continue watching is empty."
+    "Continuar assistindo está vazio.": "Continue watching is empty.",
+    "Escolher fonte": "Source"
   };
 
   // src/js/lib/i18n-ar.js
@@ -7491,7 +7492,8 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Cor do papel": "لون الورق",
     "Tirar todos ({n}) de Continuar assistindo?": "تشيل الكل ({n}) من كمّل المشاهدة؟",
     "Tirar todos": "شيل الكل",
-    "Continuar assistindo está vazio.": "كمّل المشاهدة صار فاضي."
+    "Continuar assistindo está vazio.": "كمّل المشاهدة صار فاضي.",
+    "Escolher fonte": "المصدر"
   };
 
   // src/js/lib/i18n-es.js
@@ -8301,7 +8303,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     return !!document.querySelector(".view.player:not(.hidden), .view.reader:not(.hidden), .view.listen:not(.hidden)");
   }
   function beep(freq, ms, vol) {
-    if (!settings().uiSounds || busy()) return;
+    if (settings().uiSounds === false || busy()) return;
     var c = context();
     if (!c) return;
     try {
@@ -21592,7 +21594,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         onSelect: pickSource
       }, [h("span.ico", {
         text: "📚"
-      }), source ? source.name : t("Fonte")]));
+      }), h("span.lbl", {
+        text: source ? source.name : t("Escolher fonte")
+      })]));
       btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
@@ -22229,7 +22233,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         onSelect: pickSource
       }, [h("span.ico", {
         text: "📚"
-      }), source ? source.name : t("Fonte")]));
+      }), h("span.lbl", {
+        text: source ? source.name : t("Escolher fonte")
+      })]));
       btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
@@ -22935,7 +22941,9 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         onSelect: pickSource
       }, [h("span.ico", {
         text: "📚"
-      }), source ? source.name : "MangaDex"]));
+      }), h("span.lbl", {
+        text: source ? source.name : "MangaDex"
+      })]));
       if (!source) btns.push(h("div.btn", {
         focusable: true,
         onSelect: function onSelect() {
@@ -29210,7 +29218,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T23:12:21.852Z";
+  var BUILD = "2026-11-17T23:23:07.914Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];
@@ -31390,10 +31398,10 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         }, toggle(s.spoilerBlur !== false)));
         body.appendChild(row3(t("Sons da interface"), t("Um som curto ao mover e ao apertar OK"), "", function () {
           saveSettings({
-            uiSounds: !settings().uiSounds
+            uiSounds: settings().uiSounds === false
           });
           render();
-        }, toggle(!!s.uiSounds)));
+        }, toggle(s.uiSounds !== false)));
         var SS = [0, 5, 10, 15, 30].map(function (m) {
           return {
             id: m,

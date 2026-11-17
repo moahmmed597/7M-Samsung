@@ -1015,3 +1015,10 @@ body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000
 .view.listen.has-paper .ls-title { font-size: 32px; }
 .view.listen.has-paper .ls-track { font-size: 22px; margin: 6px 0 12px; }
 .view.listen.has-paper .ls-hint { bottom: 16px; font-size: 18px; }
+
+/* Title pages: the text column never runs under the chapter list on the right */
+.md-text { -webkit-flex: 1; flex: 1; min-width: 0; overflow: hidden; }
+.md-title { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.md-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.md-text .details-buttons .btn { max-width: 100%; overflow: hidden; }
+.md-text .details-buttons .btn .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }

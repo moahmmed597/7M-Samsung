@@ -1,4 +1,4 @@
-// Interface sounds (Settings → Appearance, off by default): a soft tick when the focus moves and a
+// Interface sounds (Settings → Appearance, on by default): a soft tick when the focus moves and a
 // short blip on OK. Made on the fly with Web Audio, so the app carries no sound files. Silent while a
 // video, a book or an audiobook is open.
 import * as store from './store.js';
@@ -21,7 +21,7 @@ function busy() {
 }
 
 function beep(freq, ms, vol) {
-  if (!store.settings().uiSounds || busy()) return;
+  if (store.settings().uiSounds === false || busy()) return;
   const c = context();
   if (!c) return;
   try {
