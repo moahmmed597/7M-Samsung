@@ -273,6 +273,7 @@ export const EN = {
   'Não foi possível baixar a legenda.': "Couldn't download the subtitle.",
   'Lendo as faixas do arquivo...': "Reading the file's tracks...",
   'Faixa {n}': 'Track {n}',
+  "Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚.": "This source has no pages to read here (some sites only offer downloads). Go back and try another source with the 📚 button.",
   "{n} plugins": "{n} plugins",
   "Mover tudo para Quadrinhos": "Move all to Comics",
   "Mover tudo para Mangá": "Move all to Manga",

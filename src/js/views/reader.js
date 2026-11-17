@@ -204,7 +204,8 @@ function ReaderView(opts) {
     (opts.pagesFn || md.pages)(chapter().id)
       .then((list) => {
         if (my !== token || !alive) return;
-        if (!list.length) return say(t('Este capítulo não tem páginas.'));
+        // The source gave no pictures for it (some sites only offer downloads): say so, and how to get out.
+        if (!list.length) return say(t('Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚.'));
         pages = list;
         pi = start === 'last' ? list.length - 1 : Math.max(0, Math.min(start || 0, list.length - 1));
         showPage(start === 'last' ? 'bottom' : 'top');

@@ -5043,6 +5043,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "Couldn't download the subtitle.",
     "Lendo as faixas do arquivo...": "Reading the file's tracks...",
     "Faixa {n}": "Track {n}",
+    "Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚.": "This source has no pages to read here (some sites only offer downloads). Go back and try another source with the 📚 button.",
     "{n} plugins": "{n} plugins",
     "Mover tudo para Quadrinhos": "Move all to Comics",
     "Mover tudo para Mangá": "Move all to Manga",
@@ -5544,6 +5545,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
     "Não foi possível baixar a legenda.": "تعذّر تنزيل الترجمة.",
     "Lendo as faixas do arquivo...": "جارٍ قراءة مسارات الملف...",
     "Faixa {n}": "المسار {n}",
+    "Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚.": "هذا المصدر ما فيه صفحات تنقرأ هنا (بعض المواقع تعطي تحميل بس). ارجع وجرّب مصدر ثاني من زر 📚.",
     "{n} plugins": "{n} إضافة",
     "Mover tudo para Quadrinhos": "انقل الكل للكوميكس",
     "Mover tudo para Mangá": "انقل الكل للمانجا",
@@ -15521,7 +15523,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       say(t("Carregando..."));
       (opts.pagesFn || pages2)(chapter().id).then(function (list2) {
         if (my !== token || !alive) return;
-        if (!list2.length) return say(t("Este capítulo não tem páginas."));
+        if (!list2.length) return say(t("Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚."));
         pages4 = list2;
         pi = start4 === "last" ? list2.length - 1 : Math.max(0, Math.min(start4 || 0, list2.length - 1));
         showPage(start4 === "last" ? "bottom" : "top");
@@ -16514,10 +16516,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         status: it.status
       };
     };
+    var p0 = installed().find(function (x) {
+      return x.id === pid;
+    });
     return {
       name: name,
       latest: false,
       kind: "pl",
+      // Manga or Comics: decides the words on the screen ("Search comics").
+      tab: kindOf(p0),
       browse: function browse(k, page3, q2) {
         if (page3 === 1) offset = 0;
         var p = k === "search" ? search2(pid, q2, offset) : popular(pid, offset);
@@ -16972,16 +16979,17 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
         return reload("latest");
       }
     }, t("Recentes")));
+    var searchLabel = api2.tab === "comics" ? t("Buscar quadrinhos") : t("Buscar mangá");
     bar.appendChild(h("div.btn", {
       focusable: true,
       onSelect: function onSelect() {
-        return promptText(t("Buscar mangá"), "", "", function (q2) {
+        return promptText(searchLabel, "", "", function (q2) {
           return reload("search", q2);
         });
       }
     }, [h("span.ico", {
       text: "🔍"
-    }), t("Buscar mangá")]));
+    }), searchLabel]));
     function next() {
       if (more && more.parentNode) gridEl.removeChild(more);
       var sp = spinnerLine(t("Carregando..."));
@@ -24181,7 +24189,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T08:25:51.343Z";
+  var BUILD = "2026-11-17T08:32:10.546Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

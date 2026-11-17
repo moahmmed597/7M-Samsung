@@ -103,10 +103,13 @@ export function pluginApi(pid, name) {
     author: it.author,
     status: it.status,
   });
+  const p0 = pl.installed().find((x) => x.id === pid);
   return {
     name: name,
     latest: false,
     kind: 'pl',
+    // Manga or Comics: decides the words on the screen ("Search comics").
+    tab: pl.kindOf(p0),
     browse: (k, page, q) => {
       if (page === 1) offset = 0;
       const p = k === 'search' ? pl.search(pid, q, offset) : pl.popular(pid, offset);
@@ -421,7 +424,8 @@ function SourceGrid(api, startQuery) {
   }
   bar.appendChild(h('div.btn.primary', { focusable: true, 'data-autofocus': '', onSelect: () => reload('popular') }, t('Populares')));
   if (api.latest) bar.appendChild(h('div.btn', { focusable: true, onSelect: () => reload('latest') }, t('Recentes')));
-  bar.appendChild(h('div.btn', { focusable: true, onSelect: () => promptText(t('Buscar mangá'), '', '', (q) => reload('search', q)) }, [h('span.ico', { text: '🔍' }), t('Buscar mangá')]));
+  const searchLabel = api.tab === 'comics' ? t('Buscar quadrinhos') : t('Buscar mangá');
+  bar.appendChild(h('div.btn', { focusable: true, onSelect: () => promptText(searchLabel, '', '', (q) => reload('search', q)) }, [h('span.ico', { text: '🔍' }), searchLabel]));
 
   function next() {
     if (more && more.parentNode) gridEl.removeChild(more);

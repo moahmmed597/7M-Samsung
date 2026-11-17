@@ -273,6 +273,7 @@ export const AR = {
   'Não foi possível baixar a legenda.': 'تعذّر تنزيل الترجمة.',
   'Lendo as faixas do arquivo...': 'جارٍ قراءة مسارات الملف...',
   'Faixa {n}': 'المسار {n}',
+  "Esta fonte não tem páginas para ler aqui (alguns sites só oferecem download). Volte e tente outra fonte no botão 📚.": "هذا المصدر ما فيه صفحات تنقرأ هنا (بعض المواقع تعطي تحميل بس). ارجع وجرّب مصدر ثاني من زر 📚.",
   "{n} plugins": "{n} إضافة",
   "Mover tudo para Quadrinhos": "انقل الكل للكوميكس",
   "Mover tudo para Mangá": "انقل الكل للمانجا",
