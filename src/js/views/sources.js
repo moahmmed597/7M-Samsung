@@ -12,6 +12,7 @@ import * as store from '../lib/store.js';
 import { card, spinnerLine, toast, promptText, menu, confirmDialog } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
+import { keysGuide } from './keysGuide.js';
 import { openReader, readingModeMenu, readingModeLabel } from './reader.js';
 import * as shelf from '../lib/mangaLib.js';
 import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
@@ -513,6 +514,8 @@ function SourceDetails(m, api) {
   const info = h('div.md-info');
   const listEl = h('div.md-list', { 'data-scroll-y': '', 'data-pad-y': '120', 'data-group': '', 'data-vertical': '' });
   el.appendChild(info);
+  const guide = keysGuide(null, {});
+  el.appendChild(guide);
   el.appendChild(listEl);
   let chapters = [];
   let chunk = 0;
@@ -537,6 +540,7 @@ function SourceDetails(m, api) {
   }
   function renderInfo() {
     clear(info);
+    keysGuide(guide, { listen: audio.length > 0 });
     const c = h('img.md-cover', { alt: '' });
     c.setAttribute('data-lazy', m.poster || '');
     info.appendChild(c);

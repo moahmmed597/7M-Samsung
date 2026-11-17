@@ -8,6 +8,7 @@ import * as md from '../api/mangadex.js';
 import { toast, menu } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
+import { keysGuide } from './keysGuide.js';
 import { openReader, readingModeMenu, readingModeLabel } from './reader.js';
 import { openAnime } from './anime.js';
 import { chapterToEpisode, animeMeta } from '../lib/animeLink.js';
@@ -90,6 +91,8 @@ function MangaDetailsView(m) {
   const info = h('div.md-info');
   const list = h('div.md-list', { 'data-scroll-y': '', 'data-pad-y': '120', 'data-group': '', 'data-vertical': '' });
   el.appendChild(info);
+  const guide = keysGuide(null, {});
+  el.appendChild(guide);
   el.appendChild(list);
 
   let chapters = [];
@@ -131,6 +134,7 @@ function MangaDetailsView(m) {
 
   function renderInfo() {
     clear(info);
+    keysGuide(guide, { listen: false });
     const cover = h('img.md-cover', { alt: '' });
     cover.setAttribute('data-lazy', m.poster || '');
     info.appendChild(cover);

@@ -23,6 +23,7 @@ import { streamBadgeSettings } from '../lib/badges.js';
 import * as animeLink from '../lib/animeLink.js';
 import { openMangaDetails } from './mangaDetails.js';
 import { openComicsFor } from './comics.js';
+import { openBookFor } from './books.js';
 import * as cv from '../api/comicvine.js';
 
 export function openDetails(type, id, opts) {
@@ -200,7 +201,20 @@ function DetailsView(type, id, opts) {
     const mangaBtn = isAnime(meta) ? h('div.btn', { focusable: true, onSelect: openMangaFromEpisode }, [h('span.ico', { text: '📖' }), t('Ler o mangá')]) : null;
     const comicBtn = h('div.btn', { focusable: true, onSelect: () => openComicsFor(comicHero) }, [h('span.ico', { text: '🦸' }), t('Ler os quadrinhos')]);
     comicBtn.style.display = 'none';
-    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, comicBtn, collBtn, libBtn]));
+    let bookTitle = '';
+    const bookBtn = h('div.btn', { focusable: true, onSelect: () => openBookFor(bookTitle) }, [h('span.ico', { text: '📕' }), t('Ler o livro')]);
+    bookBtn.style.display = 'none';
+    info.appendChild(h('div.details-buttons', { 'data-group': '' }, [watchBtn, sourcesBtn, trailerBtn, mangaBtn, comicBtn, bookBtn, collBtn, libBtn]));
+    // Based on a book (TMDB keyword)? Offer the book in the Books tab.
+    if (extras.hasTmdb() && !isAnime(meta))
+      extras
+        .bookOf(meta.imdb_id || (/^tt\d+/.exec(meta.id) || [])[0])
+        .then((b) => {
+          if (!alive || !b) return;
+          bookTitle = b;
+          bookBtn.style.display = '';
+        })
+        .catch(() => {});
     // Based on a comic (TMDB keyword)? Offer the comics of the same hero.
     if (cv.hasKey() && !isAnime(meta))
       extras

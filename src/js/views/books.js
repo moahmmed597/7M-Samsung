@@ -10,6 +10,7 @@ import * as pl from '../api/plugins.js';
 import { topbar, card, spinnerLine, toast, promptText, menu } from '../ui.js';
 import * as router from '../router.js';
 import { t } from '../lib/i18n.js';
+import { keysGuide } from './keysGuide.js';
 import { tileRow, setTileArt } from './anime.js';
 import { openSources, openSourceManga, sourceRows, searchPlugin } from './sources.js';
 import { openReader, readingModeMenu, readingModeLabel } from './reader.js';
@@ -18,6 +19,8 @@ import { holdMenu } from './continueRow.js';
 import { openListen, listenProgress, listenList, forgetListen } from './listen.js';
 import { chapterSearchRow, focusChapter } from '../lib/chapterJump.js';
 import { scanSources, linkOf, norm } from '../lib/sourceFind.js';
+import * as extras from '../api/extras.js';
+import { openTmdb } from './comicDetails.js';
 
 // Open Library subjects: [subject, Portuguese label for t()]
 const GENRES = [
@@ -224,6 +227,19 @@ export function openBookDetails(m) {
   router.push(BookDetailsView(m));
 }
 
+// From a film or a show: the book of the same title (straight to it when one clearly matches, else the
+// search results to choose from).
+export function openBookFor(title) {
+  const n = norm(title);
+  ol.search(title, 0)
+    .then((r) => {
+      const hit = r.items.find((b) => norm(b.title) === n);
+      if (hit) openBookDetails(hit);
+      else router.push(BookGridView('🔍 ' + title, (p) => ol.search(title, p)));
+    })
+    .catch(() => router.push(BookGridView('🔍 ' + title, (p) => ol.search(title, p))));
+}
+
 function BookDetailsView(m0) {
   const m = Object.assign({}, m0);
   const key = 'ol' + m.olKey;
@@ -231,6 +247,8 @@ function BookDetailsView(m0) {
   const info = h('div.md-info');
   const list = h('div.md-list', { 'data-scroll-y': '', 'data-pad-y': '120', 'data-group': '', 'data-vertical': '' });
   el.appendChild(info);
+  const guide = keysGuide(null, {});
+  el.appendChild(guide);
   el.appendChild(list);
   let chapters = [];
   let chunk = 0;
@@ -241,6 +259,7 @@ function BookDetailsView(m0) {
   let picked = false;
   let audio = []; // the source's audiobook tracks (🎧 Listen)
   let audioFor = '';
+  let movies = null; // the films and shows made from this book
   const status = h('div.loading-line', { text: t('Procurando nas suas fontes...') });
   const progress = () => (store.get('readProgress', {}) || {})[key] || null;
   const langOf = (pid) => ((pl.installed().find((p) => p.id === pid) || {}).lang || '');
@@ -341,6 +360,7 @@ function BookDetailsView(m0) {
 
   function renderInfo() {
     clear(info);
+    keysGuide(guide, { listen: audio.length > 0 });
     const cover = h('img.md-cover', { alt: '' });
     cover.setAttribute('data-lazy', m.cover || m.poster || '');
     info.appendChild(cover);
@@ -359,11 +379,21 @@ function BookDetailsView(m0) {
     btns.push(
       h('div.btn', { focusable: true, onSelect: () => (shelf.toggleFav(key, 'ol', Object.assign({}, m, { tab: 'books' })), renderInfo()) }, [h('span.ico', { text: shelf.isFav(key) ? '♥' : '♡' }), shelf.isFav(key) ? t('Nos favoritos') : t('Favoritar')])
     );
+    if (movies && movies.length) btns.push(h('div.btn', { focusable: true, onSelect: moviesMenu }, [h('span.ico', { text: '🎬' }), t('Filmes e séries ({n})', { n: movies.length })]));
     if (pl.installed('books').length) btns.push(h('div.btn', { focusable: true, onSelect: pickSource }, [h('span.ico', { text: '📚' }), source ? source.name : t('Fonte')]));
     btns.push(h('div.btn', { focusable: true, onSelect: () => readingModeMenu(() => renderInfo()) }, [h('span.ico', { text: readingModeLabel().icon }), readingModeLabel().text]));
     text.appendChild(h('div.details-buttons', { 'data-group': '' }, btns));
     info.appendChild(text);
     loadVisibleImages(info);
+  }
+
+  function moviesMenu() {
+    if (movies.length === 1) return openTmdb(movies[0]);
+    menu(
+      t('Filmes e séries'),
+      movies.map((x) => ({ label: x.title || x.name, sub: ((x.release_date || x.first_air_date || '').slice(0, 4) + '  ·  ' + (x.media_type === 'tv' ? t('Série') : t('Filme'))).trim(), value: x })),
+      { onPick: openTmdb }
+    );
   }
 
   function renderList() {
@@ -493,6 +523,16 @@ function BookDetailsView(m0) {
       renderInfo();
     })
     .catch(() => {});
+  // Made into a film or a show? (needs the TMDB key)
+  if (extras.hasTmdb())
+    extras
+      .adaptationsOf(m.title)
+      .then((l) => {
+        if (!alive || !l.length) return;
+        movies = l;
+        renderInfo();
+      })
+      .catch(() => {});
 
   return {
     el: el,

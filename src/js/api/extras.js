@@ -202,6 +202,47 @@ export function comicHero(imdb) {
   });
 }
 
+// Films and shows based on a book (TMDB keyword "based on novel or book" and its kin).
+const BOOK_KW = /^based on (a |an )?(novel|book|short story|young adult novel|children's book|memoir|play)/i;
+const isFromBook = (d) => ((d.keywords && (d.keywords.keywords || d.keywords.results)) || []).some((k) => k.id === 818 || BOOK_KW.test(k.name || ''));
+const simple = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9؀-ۿ]+/g, ' ').trim();
+
+// The book's title to look for in the Books tab, or '' when the title is not from a book.
+export function bookOf(imdb) {
+  return tmdbFind(imdb).then((f) => {
+    if (!f) return '';
+    return tmdb(f.type + '/' + f.id, { append_to_response: 'keywords', language: 'en-US' }).then((d) => {
+      if (!isFromBook(d)) return '';
+      const coll = d.belongs_to_collection && d.belongs_to_collection.name;
+      const base = coll ? coll.replace(/\s*(\(.*\)|collection|saga|series|trilogy)\s*$/i, '') : d.title || d.name;
+      return String(base || '').split(':')[0].replace(/\s*[-–]\s*part\s+\w+$/i, '').replace(/\s+\d+$/, '').trim();
+    });
+  });
+}
+
+// The films and shows made from this book: same title (or the title then more), checked against the
+// "based on a book" keyword. [{ id, media_type, title|name, poster_path, release_date|first_air_date }]
+export function adaptationsOf(title) {
+  const n = simple(title);
+  if (!tmdbKey() || n.length < 2) return Promise.resolve([]);
+  return tmdb('search/multi', { query: title, include_adult: 'false', language: apiLang() }).then((r) => {
+    const cands = ((r && r.results) || [])
+      .filter((x) => (x.media_type === 'movie' || x.media_type === 'tv') && x.poster_path)
+      .filter((x) => [x.title, x.name, x.original_title, x.original_name].some((s) => {
+        const m = simple(s);
+        return m === n || m.indexOf(n + ' ') === 0;
+      }))
+      .slice(0, 8);
+    return Promise.all(
+      cands.map((x) =>
+        tmdb(x.media_type + '/' + x.id + '/keywords', {})
+          .then((k) => (isFromBook({ keywords: k }) ? x : null))
+          .catch(() => null)
+      )
+    ).then((l) => l.filter(Boolean).sort((a, b) => (b.popularity || 0) - (a.popularity || 0)));
+  });
+}
+
 // Any TMDB v3 path (for the imported Nuvio collections); rejects without a key.
 export function tmdbGet(path, params) {
   if (!tmdbKey()) return Promise.reject(new Error('no TMDB key'));

@@ -930,3 +930,21 @@ body.oled .franchise-head .fh-shade { background: linear-gradient(to right, #000
 .ls-speed { padding: 4px 14px; border-radius: 10px; background: rgba(255,255,255,0.12); }
 .ls-hint { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; font-size: 20px; color: rgba(255,255,255,0.5); }
 [dir="rtl"] .ls-cover { margin-right: 0; margin-left: 34px; }
+
+/* Remote keys guide on the title page (manga, comics, books) */
+.keys-guide { position: absolute; left: 96px; bottom: 44px; width: 820px; padding: 18px 24px 14px; border-radius: 18px; background: linear-gradient(135deg, rgba(124,92,255,0.16), rgba(56,189,248,0.08)); border: 1px solid rgba(255,255,255,0.10); box-sizing: border-box; pointer-events: none; }
+[dir="rtl"] .keys-guide { left: auto; right: 96px; }
+.kg-title { font-size: 21px; font-weight: 800; color: #fff; margin-bottom: 10px; letter-spacing: 0.3px; }
+.kg-cols { display: -webkit-flex; display: flex; }
+.kg-col { -webkit-flex: 1; flex: 1; min-width: 0; }
+.keys-guide.two .kg-col + .kg-col { margin-left: 22px; padding-left: 22px; border-left: 1px solid rgba(255,255,255,0.12); }
+[dir="rtl"] .keys-guide.two .kg-col + .kg-col { margin-left: 0; padding-left: 0; border-left: 0; margin-right: 22px; padding-right: 22px; border-right: 1px solid rgba(255,255,255,0.12); }
+.kg-head { font-size: 18px; font-weight: 700; color: #c9bbff; margin-bottom: 6px; }
+.kg-row { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; height: 34px; }
+.kg-keys { width: 128px; -webkit-flex-shrink: 0; flex-shrink: 0; white-space: nowrap; }
+.keys-guide:not(.two) .kg-keys { width: 150px; }
+.kg-key { display: inline-block; min-width: 30px; height: 28px; line-height: 28px; padding: 0 8px; margin-right: 6px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: 800; color: #fff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); border-bottom-width: 3px; box-sizing: border-box; vertical-align: middle; }
+[dir="rtl"] .kg-key { margin-right: 0; margin-left: 6px; }
+.kg-key.yellow { background: #facc15; border-color: #b8950c; min-width: 26px; width: 26px; padding: 0; }
+.kg-key.blue { background: #3b82f6; border-color: #1d4ed8; min-width: 26px; width: 26px; padding: 0; }
+.kg-label { font-size: 17px; color: rgba(255,255,255,0.82); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
