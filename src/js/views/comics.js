@@ -19,15 +19,15 @@ const DC = ['Batman', 'Superman', 'Wonder Woman', 'Joker', 'Flash', 'Green Lante
 const INDIE = ['Invincible', 'The Walking Dead', 'Spawn', 'Saga', 'Hellboy', 'Teenage Mutant Ninja Turtles', 'The Boys', 'Sandman', 'Watchmen', 'Sin City', 'Umbrella Academy', 'Locke & Key'];
 // Publishers: the name ComicVine uses, and the series to show for each.
 const PUBLISHERS = [
-  { name: 'Marvel', match: 'Marvel', series: MARVEL },
-  { name: 'DC Comics', match: 'DC Comics', series: DC },
-  { name: 'Image', match: 'Image', series: ['Invincible', 'The Walking Dead', 'Spawn', 'Saga', 'Paper Girls', 'Chew', 'Monstress', 'Deadly Class'] },
-  { name: 'Dark Horse Comics', match: 'Dark Horse', series: ['Hellboy', 'Sin City', 'Umbrella Academy', 'Usagi Yojimbo', 'B.P.R.D.', 'Black Hammer'] },
-  { name: 'Vertigo', match: 'Vertigo', series: ['Sandman', 'Fables', 'Preacher', 'Y: The Last Man', 'Hellblazer', 'Transmetropolitan', '100 Bullets'] },
-  { name: 'IDW Publishing', match: 'IDW', series: ['Teenage Mutant Ninja Turtles', 'Transformers', 'G.I. Joe', 'Locke & Key', 'Star Trek'] },
-  { name: 'BOOM! Studios', match: 'BOOM', series: ['Something is Killing the Children', 'Power Rangers', 'Lumberjanes', 'Once & Future'] },
-  { name: 'Dynamite Entertainment', match: 'Dynamite', series: ['The Boys', 'Red Sonja', 'Vampirella', 'The Shadow'] },
-  { name: 'Valiant', match: 'Valiant', series: ['X-O Manowar', 'Bloodshot', 'Harbinger', 'Shadowman'] },
+  { name: 'Marvel', match: 'Marvel', bg: '#ec1d24', mark: { cls: 'marvel', text: 'MARVEL' }, series: MARVEL },
+  { name: 'DC Comics', match: 'DC Comics', bg: '#0476f2', mark: { cls: 'dc', text: 'DC' }, series: DC },
+  { name: 'Image', match: 'Image', bg: '#141414', mark: { cls: 'image', text: 'Image' }, series: ['Invincible', 'The Walking Dead', 'Spawn', 'Saga', 'Paper Girls', 'Chew', 'Monstress', 'Deadly Class'] },
+  { name: 'Dark Horse Comics', match: 'Dark Horse', bg: '#000000', mark: { cls: 'darkhorse', text: 'DARK HORSE' }, series: ['Hellboy', 'Sin City', 'Umbrella Academy', 'Usagi Yojimbo', 'B.P.R.D.', 'Black Hammer'] },
+  { name: 'Vertigo', match: 'Vertigo', bg: '#2b2b2b', mark: { cls: 'vertigo', text: 'VERTIGO' }, series: ['Sandman', 'Fables', 'Preacher', 'Y: The Last Man', 'Hellblazer', 'Transmetropolitan', '100 Bullets'] },
+  { name: 'IDW Publishing', match: 'IDW', bg: '#1c1c1c', mark: { cls: 'idw', text: 'IDW' }, series: ['Teenage Mutant Ninja Turtles', 'Transformers', 'G.I. Joe', 'Locke & Key', 'Star Trek'] },
+  { name: 'BOOM! Studios', match: 'BOOM', bg: '#ff6b00', mark: { cls: 'boom', text: 'BOOM!' }, series: ['Something is Killing the Children', 'Power Rangers', 'Lumberjanes', 'Once & Future'] },
+  { name: 'Dynamite Entertainment', match: 'Dynamite', bg: '#111111', mark: { cls: 'dynamite', text: 'DYNAMITE' }, series: ['The Boys', 'Red Sonja', 'Vampirella', 'The Shadow'] },
+  { name: 'Valiant', match: 'Valiant', bg: '#9e1b20', mark: { cls: 'valiant', text: 'VALIANT' }, series: ['X-O Manowar', 'Bloodshot', 'Harbinger', 'Shadowman'] },
 ];
 const ROWS = ['Spider-Man', 'Batman', 'X-Men', 'Superman', 'Avengers', 'The Walking Dead'];
 const MONTH = 30 * 864e5;
@@ -159,22 +159,15 @@ export function ComicsView() {
     );
   } else {
     add(t('Novas edições da semana'), () => cv.newThisWeek(7));
-    // Publishers: the art of their best-known series fills the tile, their logo sits big in the middle.
+    // Publishers: their colour fills the tile and their name is drawn big, like their logo.
     const pubRow = tileRow(rows, t('Editoras'), PUBLISHERS.map((p) => ({ label: p.name, open: () => router.push(ComicGridView(p.name, p)) })), 'publisher');
-    const pubArt = [];
-    artFor('comicPublisherArt', PUBLISHERS.length, (i) => seriesArt(PUBLISHERS[i].series[0]), (i, u) => {
-      pubArt[i] = u;
-      setTileArt(pubRow, pubArt);
-    });
     const wraps = pubRow.querySelectorAll('.poster-wrap');
-    artFor('comicPublisherLogos', PUBLISHERS.length, (i) => cv.publisherLogo(PUBLISHERS[i].name), (i, u) => {
+    PUBLISHERS.forEach((p, i) => {
       const w = wraps[i];
-      if (!w || w.querySelector('.pub-logo')) return;
-      const im = h('img.pub-logo', { alt: '' });
-      im.onload = () => w.classList.add('has-logo');
-      im.onerror = () => im.parentNode && im.parentNode.removeChild(im);
-      im.src = u;
-      w.appendChild(im);
+      if (!w) return;
+      w.style.background = p.bg;
+      w.classList.add('has-mark');
+      w.appendChild(h('div.pub-mark.m-' + p.mark.cls, { text: p.mark.text }));
     });
     seriesRow(ROWS[0]);
     heroTiles(rows, t('Heróis da Marvel'), MARVEL, 'comicArtMarvel');

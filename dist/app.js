@@ -17745,24 +17745,6 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
       return out;
     });
   }
-  function publisherLogo(name) {
-    return get2("publishers/", {
-      filter: "name:" + name,
-      field_list: "id,name,image",
-      limit: 20
-    }).then(function (j) {
-      var list2 = (j.results || []).filter(function (p2) {
-        return p2.image;
-      });
-      var low = String(name).toLowerCase();
-      var p = list2.find(function (x) {
-        return String(x.name).toLowerCase() === low;
-      }) || list2.sort(function (a, b) {
-        return String(a.name).length - String(b.name).length;
-      })[0];
-      return p ? p.image.original_url || p.image.super_url || p.image.medium_url || "" : "";
-    });
-  }
 
   // src/js/lib/sourceFind.js
   function scanSources(names2, onHit, opts) {
@@ -18274,38 +18256,83 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var PUBLISHERS = [{
     name: "Marvel",
     match: "Marvel",
+    bg: "#ec1d24",
+    mark: {
+      cls: "marvel",
+      text: "MARVEL"
+    },
     series: MARVEL
   }, {
     name: "DC Comics",
     match: "DC Comics",
+    bg: "#0476f2",
+    mark: {
+      cls: "dc",
+      text: "DC"
+    },
     series: DC
   }, {
     name: "Image",
     match: "Image",
+    bg: "#141414",
+    mark: {
+      cls: "image",
+      text: "Image"
+    },
     series: ["Invincible", "The Walking Dead", "Spawn", "Saga", "Paper Girls", "Chew", "Monstress", "Deadly Class"]
   }, {
     name: "Dark Horse Comics",
     match: "Dark Horse",
+    bg: "#000000",
+    mark: {
+      cls: "darkhorse",
+      text: "DARK HORSE"
+    },
     series: ["Hellboy", "Sin City", "Umbrella Academy", "Usagi Yojimbo", "B.P.R.D.", "Black Hammer"]
   }, {
     name: "Vertigo",
     match: "Vertigo",
+    bg: "#2b2b2b",
+    mark: {
+      cls: "vertigo",
+      text: "VERTIGO"
+    },
     series: ["Sandman", "Fables", "Preacher", "Y: The Last Man", "Hellblazer", "Transmetropolitan", "100 Bullets"]
   }, {
     name: "IDW Publishing",
     match: "IDW",
+    bg: "#1c1c1c",
+    mark: {
+      cls: "idw",
+      text: "IDW"
+    },
     series: ["Teenage Mutant Ninja Turtles", "Transformers", "G.I. Joe", "Locke & Key", "Star Trek"]
   }, {
     name: "BOOM! Studios",
     match: "BOOM",
+    bg: "#ff6b00",
+    mark: {
+      cls: "boom",
+      text: "BOOM!"
+    },
     series: ["Something is Killing the Children", "Power Rangers", "Lumberjanes", "Once & Future"]
   }, {
     name: "Dynamite Entertainment",
     match: "Dynamite",
+    bg: "#111111",
+    mark: {
+      cls: "dynamite",
+      text: "DYNAMITE"
+    },
     series: ["The Boys", "Red Sonja", "Vampirella", "The Shadow"]
   }, {
     name: "Valiant",
     match: "Valiant",
+    bg: "#9e1b20",
+    mark: {
+      cls: "valiant",
+      text: "VALIANT"
+    },
     series: ["X-O Manowar", "Bloodshot", "Harbinger", "Shadowman"]
   }];
   var ROWS = ["Spider-Man", "Batman", "X-Men", "Superman", "Avengers", "The Walking Dead"];
@@ -18527,30 +18554,15 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
           }
         };
       }), "publisher");
-      var pubArt = [];
-      artFor("comicPublisherArt", PUBLISHERS.length, function (i) {
-        return seriesArt(PUBLISHERS[i].series[0]);
-      }, function (i, u) {
-        pubArt[i] = u;
-        setTileArt(pubRow, pubArt);
-      });
       var wraps = pubRow.querySelectorAll(".poster-wrap");
-      artFor("comicPublisherLogos", PUBLISHERS.length, function (i) {
-        return publisherLogo(PUBLISHERS[i].name);
-      }, function (i, u) {
+      PUBLISHERS.forEach(function (p, i) {
         var w = wraps[i];
-        if (!w || w.querySelector(".pub-logo")) return;
-        var im = h("img.pub-logo", {
-          alt: ""
-        });
-        im.onload = function () {
-          return w.classList.add("has-logo");
-        };
-        im.onerror = function () {
-          return im.parentNode && im.parentNode.removeChild(im);
-        };
-        im.src = u;
-        w.appendChild(im);
+        if (!w) return;
+        w.style.background = p.bg;
+        w.classList.add("has-mark");
+        w.appendChild(h("div.pub-mark.m-" + p.mark.cls, {
+          text: p.mark.text
+        }));
       });
       seriesRow(ROWS[0]);
       heroTiles(rows2, t("Heróis da Marvel"), MARVEL, "comicArtMarvel");
@@ -23748,7 +23760,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
   var REPO = "moahmmed597/7M-Samsung";
   var REPO_URL = "https://github.com/" + REPO;
   var VERSION = "1.2.0";
-  var BUILD = "2026-11-17T07:32:30.455Z";
+  var BUILD = "2026-11-17T07:39:32.449Z";
   var RAW = "https://raw.githubusercontent.com/" + REPO + "/main/";
   var PURGE = "https://purge.jsdelivr.net/gh/" + REPO + "/";
   var FILES = ["package.json", "dist/index.html", "dist/loader.js", "dist/app.js", "dist/app.css", "dist/remote-service.js", "dist/build.json"];

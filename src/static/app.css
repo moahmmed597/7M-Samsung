@@ -853,3 +853,21 @@ body .row-track .card.coll-tile { width: 420px !important; margin-right: 26px !i
 .anime-tile.publisher .poster-wrap:not(.has-logo) .tile-label { display: block !important; z-index: 6; }
 body .card.anime-tile.publisher { width: 440px; }
 body .card.anime-tile.publisher .poster-wrap { width: 440px; height: 248px; }
+
+/* Comics publishers: brand colour + big wordmark (no pictures to wait for) */
+.anime-tile.publisher .poster-wrap.has-mark:after { display: none; }
+.anime-tile.publisher .poster-wrap.has-mark .tile-label, .anime-tile.publisher .poster-wrap.has-mark .tile-art { display: none !important; }
+.pub-mark { position: relative; z-index: 3; color: #fff; font-weight: 900; line-height: 1; white-space: nowrap; text-align: center; }
+.pub-mark.m-marvel { font-size: 104px; letter-spacing: -4px; -webkit-transform: scaleX(0.82); transform: scaleX(0.82); font-family: Impact, 'Arial Black', sans-serif; }
+.pub-mark.m-dc { width: 168px; height: 168px; line-height: 168px; border-radius: 50%; background: #fff; color: #0476f2; font-size: 84px; letter-spacing: -6px; font-family: 'Arial Black', sans-serif; }
+.pub-mark.m-image { font-size: 92px; font-style: italic; letter-spacing: -2px; font-family: Georgia, serif; }
+.pub-mark.m-darkhorse { font-size: 52px; letter-spacing: 6px; }
+.pub-mark.m-vertigo { font-size: 60px; font-weight: 300; letter-spacing: 14px; }
+.pub-mark.m-idw { font-size: 120px; color: #e4002b; letter-spacing: -4px; font-family: 'Arial Black', sans-serif; }
+.pub-mark.m-boom { font-size: 96px; font-style: italic; letter-spacing: -3px; font-family: Impact, 'Arial Black', sans-serif; }
+.pub-mark.m-dynamite { font-size: 62px; color: #e2231a; letter-spacing: 2px; font-family: Impact, 'Arial Black', sans-serif; }
+.pub-mark.m-valiant { font-size: 70px; letter-spacing: 4px; }
+.anime-tile.publisher.focused .poster-wrap { box-shadow: 0 0 0 4px #ffffff; }
+.pub-mark.m-darkhorse { font-size: 60px; letter-spacing: 8px; white-space: normal; width: 300px; line-height: 1.05; }
+.pub-mark.m-marvel { font-size: 128px; }
+.pub-mark { max-width: 92%; overflow: hidden; }
