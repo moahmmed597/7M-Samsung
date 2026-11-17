@@ -87,6 +87,12 @@ export function findAniList(title, type, format) {
     .catch(() => null);
 }
 
+// A plain AniList search (type MANGA or ANIME), for the global Search: [node].
+export function searchAniList(text, type) {
+  const q = 'query($s:String){ Page(perPage:20){ media(search:$s, type:' + type + ', isAdult:false, sort:SEARCH_MATCH){ ' + NODE + ' } } }';
+  return ql(q, { s: text }).then((d) => (d.Page && d.Page.media) || []);
+}
+
 // TMDB films / shows → menu entries.
 export function tmdbItems(list) {
   return (list || []).map((x) => ({

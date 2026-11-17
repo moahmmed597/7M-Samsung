@@ -9,6 +9,13 @@ import { t } from '../lib/i18n.js';
 import * as extras from '../api/extras.js';
 import { PersonView } from './person.js';
 import * as store from '../lib/store.js';
+import * as links2 from '../lib/crossLinks.js';
+import { mangaMeta } from '../lib/animeLink.js';
+import { openMangaDetails } from './mangaDetails.js';
+import * as ol from '../api/openlibrary.js';
+import { openBookDetails } from './books.js';
+import * as cv from '../api/comicvine.js';
+import { openComicDetails } from './comicDetails.js';
 
 // only: 'movie' or 'series' to search one kind (the Search button of the Movies / Series tabs).
 export function SearchView(only) {
@@ -107,6 +114,29 @@ export function SearchView(only) {
       if (!cats.length) results.appendChild(h('div.hint', { text: t('Nenhum addon com busca instalado.') }));
       let found = 0;
       let pending = cats.length;
+      // The whole app, not only films and shows: the same story as manga, book or comic (below).
+      let tail = null;
+      if (!only) {
+        tail = h('div');
+        results.appendChild(tail);
+        const extra = (title, load, open) => {
+          const row = h('div.row', { 'data-anchor': '30' });
+          const track = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
+          row.appendChild(h('div.row-title', { text: title }));
+          row.appendChild(track);
+          return load()
+            .then((list) => {
+              if (my !== token || !list.length) return;
+              list.slice(0, 20).forEach((m) => track.appendChild(card(m, { onSelect: () => open(m) })));
+              tail.appendChild(row);
+              loadVisibleImages(row);
+            })
+            .catch(() => {});
+        };
+        extra(t('Mangá'), () => links2.searchAniList(query, 'MANGA').then((l) => l.filter((n) => n.format !== 'NOVEL').map(mangaMeta)), openMangaDetails)
+          .then(() => extra(t('Livros'), () => ol.search(query, 0).then((r) => r.items), openBookDetails))
+          .then(() => cv.hasKey() && extra(t('Quadrinhos'), () => cv.searchVolumes(query, 0).then((r) => r.items), openComicDetails));
+      }
       cats.forEach((entry) => {
         const row = h('div.row', { 'data-anchor': '30' });
         const track = h('div.row-track', { 'data-scroll-x': '', 'data-group': '' });
@@ -118,7 +148,8 @@ export function SearchView(only) {
             if (my !== token || !metas.length) return;
             found++;
             metas.slice(0, 30).forEach((m) => track.appendChild(card(m, { onSelect: () => openDetails(m.type || entry.catalog.type, m.id) })));
-            results.appendChild(row);
+            if (tail && tail.parentNode === results) results.insertBefore(row, tail);
+            else results.appendChild(row);
             loadVisibleImages(row);
           })
           .catch(() => {})
